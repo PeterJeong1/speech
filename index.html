@@ -1,0 +1,1063 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Witches Shadowing Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English:ital@0;1&display=swap">
+<style>
+:root{
+  --ground:#F1F2F4; --surface:#FFFFFF; --ink:#191C24; --muted:#565E70; --faint:#8C93A2;
+  --rule:#D5D9E0; --track:#C3C9D3; --lantern:#94600F; --lantern-ink:#7A4E0B;
+  --glow:#FBE3AE; --glow-soft:#FBF3E1; --btn-ink:#FFFFFF; --wrong:#B3382B;
+  --display:"IM Fell English","Iowan Old Style",Georgia,serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --gutter:clamp(16px,4vw,40px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111319; --surface:#191C24; --ink:#E6E8EE; --muted:#A2A9B8; --faint:#6F7686;
+    --rule:#2A2F3A; --track:#3A404D; --lantern:#E3A843; --lantern-ink:#F0C06A;
+    --glow:#4A3A18; --glow-soft:#1F1B14; --btn-ink:#17120A; --wrong:#E0705F;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111319; --surface:#191C24; --ink:#E6E8EE; --muted:#A2A9B8; --faint:#6F7686;
+  --rule:#2A2F3A; --track:#3A404D; --lantern:#E3A843; --lantern-ink:#F0C06A;
+  --glow:#4A3A18; --glow-soft:#1F1B14; --btn-ink:#17120A; --wrong:#E0705F;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-inline:var(--gutter);padding-block:0 72px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--lantern);outline-offset:2px}
+
+/* header */
+.top{padding-block:48px 28px;display:grid;gap:14px}
+.eyebrow{margin:0;font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(40px,7.4vw,68px);line-height:1;letter-spacing:-.005em;text-wrap:balance}
+.lede{margin:0;max-width:62ch;color:var(--muted);font-size:17px}
+.facts{display:flex;flex-wrap:wrap;gap:14px 36px;margin:8px 0 0;padding-top:18px;border-top:1px solid var(--rule)}
+.facts div{display:grid;gap:2px}
+.facts dt{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font:500 21px/1.2 var(--mono);font-variant-numeric:tabular-nums}
+.facts small{font-size:13px;font-weight:400;color:var(--muted)}
+
+/* player */
+.player{position:sticky;top:0;z-index:10;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);
+  padding-block:12px 10px;background:var(--ground);border-block:1px solid var(--rule)}
+@supports (backdrop-filter:blur(4px)){.player{background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:blur(10px)}}
+.controls{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
+.play{flex:none;width:50px;height:50px;border:0;border-radius:50%;background:var(--lantern);color:var(--btn-ink);display:grid;place-items:center;cursor:pointer}
+.play svg{width:20px;height:20px;fill:currentColor}
+.clock{font:500 16px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.clock .of{color:var(--muted)}
+.hint{font-size:14px;color:var(--muted)}
+.turn{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--lantern-ink)}
+.turn-bar{width:96px;height:6px;border-radius:3px;background:var(--rule);overflow:hidden}
+.turn-bar i{display:block;height:100%;width:0;background:var(--lantern)}
+.mode{margin:0 0 0 auto;padding:3px;border:1px solid var(--rule);border-radius:999px;display:flex;gap:2px;background:var(--surface)}
+.mode input{position:absolute;opacity:0;pointer-events:none}
+.mode label{padding:6px 14px;border-radius:999px;font-size:14px;cursor:pointer;color:var(--muted);white-space:nowrap}
+.mode input:checked + label{background:var(--ink);color:var(--ground)}
+.mode input:focus-visible + label{outline:2px solid var(--lantern);outline-offset:2px}
+.track{position:relative;height:22px;margin-top:12px;cursor:pointer;touch-action:none}
+.blocks{position:absolute;inset:6px 0}
+.blk{position:absolute;top:0;bottom:0;border-radius:2px;background:var(--track)}
+.blk.done{background:var(--faint)}
+.blk.live{background:var(--lantern)}
+.margin{position:absolute;top:6px;bottom:6px;right:0;background:repeating-linear-gradient(135deg,var(--track) 0 1.5px,transparent 1.5px 6px)}
+.wall{position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--ink)}
+.head{position:absolute;top:0;bottom:0;left:0;width:2px;margin-left:-1px;background:var(--ink)}
+.ticks{display:flex;justify-content:space-between;margin-top:3px;font:12px var(--mono);color:var(--muted)}
+
+/* script */
+.sec{padding-block:40px 10px;padding-left:62px}
+.sec h2{margin:0;font:italic 400 28px/1.1 var(--display)}
+.sec p{margin:4px 0 0;font-size:15px;color:var(--muted)}
+.line{display:grid;grid-template-columns:44px minmax(0,1fr) 156px;gap:6px 18px;padding:16px 10px;margin-inline:-10px;border-top:1px solid var(--rule);cursor:pointer}
+.line:hover{background:var(--surface)}
+.line.live{background:var(--glow-soft)}
+.num{width:38px;height:38px;border:1px solid var(--rule);border-radius:50%;background:transparent;font:500 14px var(--mono);color:var(--muted);cursor:pointer}
+.line.live .num{border-color:var(--lantern);color:var(--lantern-ink)}
+.say{margin:0;font-size:clamp(19px,2.6vw,23px);line-height:1.5}
+.w{border-radius:3px}
+.w.s{font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;text-decoration-color:var(--faint)}
+.w.on{background:var(--glow);box-shadow:0 0 0 3px var(--glow)}
+.end{margin-left:6px;font:500 17px var(--mono);color:var(--muted)}
+.note{margin:4px 0 0;max-width:62ch;font-size:15px;line-height:1.45;color:var(--muted)}
+.tune{margin:10px 0 0}
+.tune svg{display:block;width:100%;height:auto}
+.tune .grid{stroke:var(--rule);stroke-dasharray:3 5}
+.tune .zero{stroke:var(--track)}
+.tune .area{fill:var(--glow-soft)}
+.tune .curve{fill:none;stroke:var(--lantern);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
+.line.live .tune .curve{opacity:1}
+.tune .band{fill:transparent}
+.tune .band.s{fill:var(--glow);opacity:.6}
+.tune .band.miss{fill:var(--wrong);opacity:.16}
+.tune .band.on{fill:var(--lantern);opacity:.3}
+.tune .mine{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:5 4;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.tune .ax{font:8px var(--mono);fill:var(--faint)}
+.tune .lab{font-family:var(--mono);fill:var(--faint)}
+.tune .lab.s{fill:var(--lantern-ink);font-weight:500}
+.meta{display:grid;gap:12px;align-content:start;padding-top:8px;font:13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.tempo b{font-weight:500;color:var(--ink)}
+.rest{display:flex;align-items:center;gap:8px}
+.rest i{flex:none;height:7px;border-radius:1px;background:var(--ink)}
+
+/* your own take */
+.take{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:10px 0 0}
+.mic{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border:1px solid var(--rule);border-radius:999px;
+  background:var(--surface);color:var(--muted);font-size:14px;cursor:pointer}
+.mic:hover{border-color:var(--lantern);color:var(--ink)}
+.mic svg{width:12px;height:12px;fill:currentColor}
+.mic.rec{background:var(--wrong);border-color:transparent;color:#fff}
+.mic.rec svg{border-radius:2px}
+.mic[disabled]{opacity:.45;cursor:default}
+@keyframes blink{50%{opacity:.35}}
+.mic.rec svg{animation:blink 1s steps(1,end) infinite}
+.score{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font:13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.score b{font-size:16px;font-weight:500;color:var(--ink)}
+.score .bad{color:var(--wrong)}
+.score .link{border:0;background:none;padding:0;font:13px var(--mono);color:var(--muted);text-decoration:underline;
+  text-underline-offset:3px;cursor:pointer}
+.score .link:hover{color:var(--ink)}
+.legend{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:16px;height:0;border-top:2px dashed var(--ink)}
+
+/* the name gate */
+.gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:var(--gutter);background:var(--ground)}
+@supports (backdrop-filter:blur(4px)){.gate{background:color-mix(in srgb,var(--ground) 88%,transparent);backdrop-filter:blur(8px)}}
+.gate[hidden]{display:none}
+.gate form{width:min(430px,100%);display:grid;gap:15px;padding:30px;background:var(--surface);
+  border:1px solid var(--rule);border-radius:16px}
+.gate h2{margin:0;font:400 31px/1.05 var(--display)}
+.gate p{margin:0;max-width:44ch;font-size:15px;color:var(--muted)}
+.gate label{display:grid;gap:7px;font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.gate input{font-family:var(--body);font-size:18px;padding:11px 13px;color:var(--ink);
+  background:var(--ground);border:1px solid var(--rule);border-radius:9px}
+.gate button{justify-self:start;padding:11px 24px;border:0;border-radius:999px;background:var(--lantern);
+  color:var(--btn-ink);font-weight:700;cursor:pointer}
+.gate .again{font-size:13px;color:var(--faint)}
+
+/* rubric */
+.rubric{margin-top:64px;padding-top:28px;border-top:2px solid var(--ink);display:grid;gap:30px}
+.rubric h2{margin:0;font:400 clamp(30px,4.6vw,40px)/1.05 var(--display);text-wrap:balance}
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px 44px}
+.groups h3,.steps h3{margin:0 0 12px;font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.groups dl{margin:0;display:grid;gap:16px}
+.groups dt{font-weight:700}
+.groups dd{margin:2px 0 0;max-width:60ch;color:var(--muted)}
+.steps ol{margin:0;padding-left:22px;display:grid;gap:8px;max-width:64ch}
+footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:640px){
+  .line{grid-template-columns:38px minmax(0,1fr);gap:8px 12px}
+  .num{width:34px;height:34px}
+  .meta{grid-column:2;grid-template-columns:1fr 1fr;gap:12px;padding-top:2px}
+  .sec{padding-left:50px}
+  .mode{margin-left:0}
+  .hint{flex-basis:100%}
+}
+</style>
+
+<div class="gate" id="gate" hidden>
+  <form id="gate-form">
+    <h2>Before you start</h2>
+    <p>Type your name so your teacher can see when you practised and how each take went.</p>
+    <label for="who">Your name
+      <input id="who" name="who" type="text" autocomplete="name" maxlength="40" required spellcheck="false">
+    </label>
+    <button type="submit">Start practising</button>
+    <p class="again" id="again" hidden></p>
+  </form>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">2026 YBM English Speech Contest &middot; Middle School &middot; Guide recording</p>
+    <h1>Do You Believe in Witches?</h1>
+    <p class="lede">Your final script read in British English, paced for the delivery items DEEP Y scores. Listen to it once all the way through, then shadow it line by line.</p>
+    <dl class="facts">
+      <div><dt>Length</dt><dd><span id="f-len"></span><small> / 2:00</small></dd></div>
+      <div><dt>Words</dt><dd id="f-words"></dd></div>
+      <div><dt>Average pace</dt><dd><span id="f-avg"></span><small> WPM</small></dd></div>
+      <div><dt>Longest pause</dt><dd><span id="f-long"></span><small> s</small></dd></div>
+      <div><dt>Planned silence</dt><dd><span id="f-sil"></span><small> s</small></dd></div>
+    </dl>
+  </header>
+</div>
+
+<div class="player" id="player">
+  <div class="wrap">
+    <div class="controls">
+      <button id="play" class="play" type="button" aria-label="Play">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path id="icon" d="M5 3.5v13l11-6.5z"></path></svg>
+      </button>
+      <div class="clock"><span id="now">0:00</span><span class="of"> / <span id="dur"></span></span></div>
+      <div class="turn" id="turn" hidden><span>Your turn</span><span class="turn-bar"><i id="turn-fill"></i></span></div>
+      <span class="hint" id="hint"></span>
+      <fieldset class="mode">
+        <legend class="sr">Playback mode</legend>
+        <input type="radio" name="mode" id="mode-listen" value="listen" checked><label for="mode-listen">Listen</label>
+        <input type="radio" name="mode" id="mode-repeat" value="repeat"><label for="mode-repeat">Repeat after me</label>
+      </fieldset>
+    </div>
+    <div class="track" id="track" role="slider" tabindex="0" aria-label="Position in the recording" aria-valuemin="0" aria-valuemax="120" aria-valuenow="0">
+      <div class="blocks" id="blocks"></div>
+      <div class="margin" id="margin"></div>
+      <div class="wall"></div>
+      <div class="head" id="head"></div>
+    </div>
+    <div class="ticks"><span>0:00</span><span>1:00</span><span>2:00 limit</span></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="script"></div>
+
+  <section class="rubric">
+    <h2>What DEEP Y listens for</h2>
+    <div class="groups">
+      <div>
+        <h3>Delivery &middot; set by your voice</h3>
+        <dl>
+          <div><dt>Speed</dt><dd>The whole reading sits at <span id="r-avg"></span> WPM, the pace the report calls appropriate. No line moves more than a tenth away from it, so nothing lurches. Keep one gear and let the rests do the work.</dd></div>
+          <div><dt>Pause</dt><dd><span id="r-sil"></span> seconds of planned silence. The longest stops come after lines <span id="r-long"></span>. Count them in your head; they always feel too long to the speaker.</dd></div>
+          <div><dt>Rhythm</dt><dd>Sentences run from <span id="r-len"></span> words, so the beat keeps changing. Do not smooth it out.</dd></div>
+          <div><dt>Empathy</dt><dd>The voice drops in pitch and volume from line 7 to line 16, line 12 is acted in her voice, and line 17 snaps back up. A calm, even reading loses the most points here.</dd></div>
+        </dl>
+      </div>
+      <div>
+        <h3>Accuracy &middot; set by your pronunciation</h3>
+        <dl>
+          <div><dt>Phonemes and words</dt><dd>Standard Southern British. Drill these on their own first: condemned, birthmark, evidence, screenshot, actually. Keep one accent from the first word to the last.</dd></div>
+          <div><dt>Syllable stress</dt><dd>Underlined words carry the stress. Make them louder, longer and higher than the words around them.</dd></div>
+          <div><dt>Intonation</dt><dd>DEEP Y compares your rise and fall with an AI reading, word by word &mdash; so the curve under every line is exactly what you are being measured against. It runs left to right across the words: above Flat is higher than this voice's middle, below it is lower. Shaded columns are the stressed words, and the column lights up as the word is spoken. Copy the shape, not only the words, and mind the arrow at the end: only line 1 rises. Record a line and your own curve is drawn over it as a dashed line, measured the same way, so a lower voice is no disadvantage &mdash; only a flatter one is.</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="steps">
+      <h3>How to practise</h3>
+      <ol>
+        <li>Listen once with your eyes on the script. Do not speak yet.</li>
+        <li>Switch to <strong>Repeat after me</strong>. Copy each line in the gap, matching the speed and the melody, not only the words.</li>
+        <li>Press <strong>Record this line</strong> on a line you find hard. Your own melody is drawn over the guide's as a dashed line, and any word that moves the wrong way is marked in red. Try the line again until the two curves sit on top of each other.</li>
+        <li>When a take sounds right, press <strong>Save this take</strong> and send the file to your teacher.</li>
+        <li>Record the whole speech with a stopwatch. Finish between 1:50 and 1:58. The recording must stay under 2:00.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>Voice: Microsoft Sonia, British English neural text-to-speech. Script version of 13 September 2026. The same recording is saved as Witches_Guide_Recording_British.mp3.</footer>
+</main>
+
+<audio id="aud" preload="auto" src="guide.mp3"></audio>
+
+<script>
+const D = {"voice": "en-GB-SoniaNeural", "limit": 120.0, "duration": 107.76, "words": 217, "speaking": 70.3, "silence": 36.6, "avg_wpm": 185, "longest": 2.7, "sections": {"Hook": "Ask, wait, then answer.", "History": "Narrator's voice. Clean numbers.", "Turn": "Drop the volume. This part is yours.", "Rumour": "The fastest section. Gossip speed.", "Reversal": "Slow, quiet, guilty.", "Now": "Snap back up. Short, sharp lines.", "Point": "The slowest section of the speech.", "Close": "Build, ask, land low."}, "sentences": [{"n": 1, "section": "Hook", "text": "Do you believe in witches?", "tokens": ["Do", "you", "believe", "in", "witches?"], "times": [[0.4, 0.455], [0.467, 0.646], [0.659, 1.105], [1.118, 1.246], [1.258, 1.947]], "stress": ["believe", "witches"], "note": "A real question. Look at the audience and let the end rise.", "end": "rise", "words": 5, "dur": 1.57, "band": "steady", "start": 0.4, "stop": 1.97, "pause": 1.8, "pitch": [null, {"st": 4.77, "head": 4.25, "tail": 7.5, "dir": "rise"}, {"st": 4.43, "head": 7.18, "tail": -0.31, "dir": "fall"}, {"st": -1.56, "head": -2.33, "tail": -1.7, "dir": "flat"}, {"st": -1.38, "head": -1.2, "tail": -4.19, "dir": "fall"}]}, {"n": 2, "section": "Hook", "text": "I don't.", "tokens": ["I", "don't."], "times": [[3.77, 3.836], [3.848, 4.412]], "stress": ["don't"], "note": "Flat and certain. The contrast is the point.", "end": "fall", "words": 2, "dur": 0.65, "band": "slower", "start": 3.77, "stop": 4.418, "pause": 1.55, "pitch": [{"st": 3.85, "head": 4.77, "tail": 3.99, "dir": "flat"}, {"st": 2.22, "head": 5.05, "tail": -3.41, "dir": "fall"}]}, {"n": 3, "section": "Hook", "text": "But in Salem, in 1692, everybody did.", "tokens": ["But", "in", "Salem,", "in", "1692,", "everybody", "did."], "times": [[5.968, 6.069], [6.082, 6.239], [6.252, 6.812], [7.033, 7.163], [7.176, 8.387], [8.673, 9.207], [9.22, 9.646]], "stress": ["salem", "everybody"], "note": "Drop into storytelling. Say the year as sixteen ninety-two.", "end": "fall", "words": 8, "dur": 3.68, "band": "steady", "start": 5.968, "stop": 9.646, "pause": 0.9, "pitch": [{"st": 2.02, "head": 3.13, "tail": 1.17, "dir": "fall"}, {"st": 1.55, "head": 2.48, "tail": 1.16, "dir": "fall"}, {"st": 0.65, "head": 5.26, "tail": -5.16, "dir": "fall"}, {"st": 0.19, "head": 0.31, "tail": 0.19, "dir": "flat"}, {"st": -0.79, "head": 1.53, "tail": -2.36, "dir": "fall"}, {"st": -0.08, "head": 5.21, "tail": -3.81, "dir": "fall"}, {"st": -4.24, "head": -4.12, "tail": -5.23, "dir": "fall"}]}, {"n": 4, "section": "History", "text": "Nineteen were hanged, and not one was a witch.", "tokens": ["Nineteen", "were", "hanged,", "and", "not", "one", "was", "a", "witch."], "times": [[10.546, 11.055], [11.067, 11.165], [11.177, 11.631], [11.9, 12.023], [12.035, 12.28], [12.293, 12.501], [12.513, 12.66], [12.672, 12.721], [12.734, 13.224]], "stress": ["nineteen", "not", "one"], "note": "Say the number cleanly. A small break before 'and not one'.", "end": "fall", "words": 9, "dur": 2.7, "band": "faster", "start": 10.546, "stop": 13.246, "pause": 1.1, "pitch": [{"st": 4.52, "head": 2.73, "tail": 3.72, "dir": "rise"}, {"st": -0.69, "head": 0.18, "tail": -1.0, "dir": "fall"}, {"st": -1.44, "head": -1.33, "tail": -4.57, "dir": "fall"}, {"st": 2.93, "head": 2.67, "tail": 3.07, "dir": "flat"}, {"st": 5.48, "head": 3.11, "tail": 7.56, "dir": "rise"}, {"st": -1.63, "head": 0.08, "tail": -2.57, "dir": "fall"}, {"st": -2.86, "head": -2.86, "tail": -2.79, "dir": "flat"}, null, {"st": -1.3, "head": -1.48, "tail": -3.38, "dir": "fall"}]}, {"n": 5, "section": "History", "text": "What condemned them was a whisper, a birthmark, a dream.", "tokens": ["What", "condemned", "them", "was", "a", "whisper,", "a", "birthmark,", "a", "dream."], "times": [[14.346, 14.538], [14.55, 15.004], [15.016, 15.2], [15.212, 15.347], [15.359, 15.408], [15.42, 15.947], [16.217, 16.278], [16.29, 16.977], [17.173, 17.209], [17.222, 17.687]], "stress": ["whisper", "birthmark", "dream"], "note": "Three beats, each a little quieter.", "end": "fall", "words": 10, "dur": 3.37, "band": "steady", "start": 14.346, "stop": 17.719, "pause": 0.65, "pitch": [{"st": 4.06, "head": 1.45, "tail": 6.82, "dir": "rise"}, {"st": 3.07, "head": 3.47, "tail": 3.29, "dir": "flat"}, {"st": -2.39, "head": -0.26, "tail": -3.62, "dir": "fall"}, {"st": -2.96, "head": -3.41, "tail": -2.55, "dir": "rise"}, null, {"st": -2.44, "head": -2.15, "tail": -5.71, "dir": "fall"}, {"st": 0.84, "head": 0.34, "tail": 1.2, "dir": "rise"}, {"st": -0.3, "head": 3.51, "tail": -5.2, "dir": "fall"}, null, {"st": -0.66, "head": 1.24, "tail": -5.65, "dir": "fall"}]}, {"n": 6, "section": "History", "text": "Nobody asked for proof, because everybody already believed.", "tokens": ["Nobody", "asked", "for", "proof,", "because", "everybody", "already", "believed."], "times": [[18.369, 18.888], [18.903, 19.334], [19.349, 19.513], [19.528, 20.123], [20.436, 20.837], [20.852, 21.492], [21.507, 21.998], [22.013, 22.787]], "stress": ["proof", "believed"], "note": "Slow down on the last three words.", "end": "fall", "words": 8, "dur": 4.42, "band": "steady", "start": 18.369, "stop": 22.791, "pause": 2.0, "pitch": [{"st": 4.27, "head": 2.63, "tail": 2.23, "dir": "flat"}, {"st": -1.53, "head": -0.49, "tail": -2.24, "dir": "fall"}, {"st": -1.4, "head": 0.81, "tail": -2.28, "dir": "fall"}, {"st": -1.8, "head": 0.37, "tail": -5.53, "dir": "fall"}, {"st": 3.1, "head": 2.63, "tail": 2.62, "dir": "flat"}, {"st": 0.59, "head": 6.0, "tail": -3.65, "dir": "fall"}, {"st": -2.12, "head": -4.13, "tail": -1.4, "dir": "rise"}, {"st": -2.76, "head": -2.9, "tail": -5.05, "dir": "fall"}]}, {"n": 7, "section": "Turn", "text": "I know that feeling better than I want to admit.", "tokens": ["I", "know", "that", "feeling", "better", "than", "I", "want", "to", "admit."], "times": [[24.791, 24.864], [24.879, 25.188], [25.203, 25.467], [25.482, 25.938], [25.953, 26.35], [26.364, 26.57], [26.585, 26.688], [26.703, 26.982], [26.997, 27.129], [27.144, 27.835]], "stress": ["know", "admit"], "note": "Drop the volume. A confession, not a line.", "end": "fall", "words": 10, "dur": 3.06, "band": "slower", "start": 24.791, "stop": 27.853, "pause": 1.1, "pitch": [{"st": 3.14, "head": 6.33, "tail": 3.31, "dir": "fall"}, {"st": 5.24, "head": 4.87, "tail": 7.15, "dir": "rise"}, {"st": 1.46, "head": 5.37, "tail": -1.17, "dir": "fall"}, {"st": 0.24, "head": 2.36, "tail": -1.45, "dir": "fall"}, {"st": 1.51, "head": -2.31, "tail": 2.32, "dir": "rise"}, {"st": -3.4, "head": -3.35, "tail": -3.51, "dir": "flat"}, {"st": -3.21, "head": -3.26, "tail": -3.27, "dir": "flat"}, {"st": -2.56, "head": -2.73, "tail": -2.37, "dir": "flat"}, null, {"st": -1.69, "head": -2.49, "tail": -1.23, "dir": "rise"}]}, {"n": 8, "section": "Rumour", "text": "In sixth grade, a rumor spread that a new girl stole a phone.", "tokens": ["In", "sixth", "grade,", "a", "rumor", "spread", "that", "a", "new", "girl", "stole", "a", "phone."], "times": [[28.953, 29.071], [29.083, 29.402], [29.414, 29.807], [30.076, 30.113], [30.125, 30.493], [30.505, 30.909], [30.922, 31.069], [31.081, 31.13], [31.142, 31.375], [31.387, 31.718], [31.731, 32.025], [32.037, 32.074], [32.086, 32.539]], "stress": ["rumor", "stole"], "note": "Speed up. Tell it the way gossip travels.", "end": "fall", "words": 13, "dur": 3.61, "band": "faster", "start": 28.953, "stop": 32.566, "pause": 0.45, "pitch": [{"st": 0.82, "head": 0.98, "tail": 0.78, "dir": "flat"}, {"st": 5.37, "head": -0.24, "tail": 7.68, "dir": "rise"}, {"st": -4.48, "head": -1.88, "tail": -4.91, "dir": "fall"}, null, {"st": 3.96, "head": 2.34, "tail": 3.38, "dir": "rise"}, {"st": -1.67, "head": 1.02, "tail": -3.22, "dir": "fall"}, {"st": -2.47, "head": -1.25, "tail": -3.39, "dir": "fall"}, null, {"st": -0.4, "head": -1.94, "tail": 3.23, "dir": "rise"}, {"st": 1.28, "head": 3.28, "tail": -4.44, "dir": "fall"}, {"st": -4.02, "head": -4.19, "tail": -4.18, "dir": "flat"}, {"st": -3.51, "head": -4.13, "tail": -3.04, "dir": "rise"}, {"st": -4.35, "head": -0.6, "tail": -5.84, "dir": "fall"}]}, {"n": 9, "section": "Rumour", "text": "I saw no evidence, only everyone avoiding her.", "tokens": ["I", "saw", "no", "evidence,", "only", "everyone", "avoiding", "her."], "times": [[33.016, 33.106], [33.118, 33.39], [33.403, 33.613], [33.625, 34.257], [34.529, 34.789], [34.801, 35.247], [35.259, 35.717], [35.729, 36.026]], "stress": ["no", "evidence", "avoiding"], "note": "Fast and flat, in one breath.", "end": "fall", "words": 8, "dur": 3.03, "band": "faster", "start": 33.016, "stop": 36.043, "pause": 0.65, "pitch": [{"st": 1.16, "head": -0.89, "tail": 1.48, "dir": "rise"}, {"st": 4.37, "head": 2.05, "tail": 4.47, "dir": "rise"}, {"st": 1.38, "head": 3.1, "tail": 0.79, "dir": "fall"}, {"st": 0.64, "head": 1.21, "tail": -5.87, "dir": "fall"}, {"st": 5.89, "head": 4.37, "tail": 5.99, "dir": "rise"}, {"st": -0.28, "head": 4.8, "tail": -3.65, "dir": "fall"}, {"st": -2.7, "head": -3.54, "tail": -2.29, "dir": "rise"}, {"st": -5.4, "head": -5.34, "tail": -6.21, "dir": "fall"}]}, {"n": 10, "section": "Rumour", "text": "So I did the same.", "tokens": ["So", "I", "did", "the", "same."], "times": [[36.693, 36.898], [36.91, 36.996], [37.008, 37.253], [37.265, 37.363], [37.376, 37.866]], "stress": ["same"], "note": "Brake hard. Quiet, then a real pause.", "end": "fall", "words": 5, "dur": 1.19, "band": "slower", "start": 36.693, "stop": 37.885, "pause": 2.25, "pitch": [{"st": 3.88, "head": 4.7, "tail": 3.43, "dir": "fall"}, {"st": 3.0, "head": 3.0, "tail": 3.07, "dir": "flat"}, {"st": 3.41, "head": 3.42, "tail": 3.09, "dir": "flat"}, null, {"st": -4.27, "head": 0.89, "tail": -7.55, "dir": "fall"}]}, {"n": 11, "section": "Reversal", "text": "Two weeks later, the phone turned up in a locker.", "tokens": ["Two", "weeks", "later,", "the", "phone", "turned", "up", "in", "a", "locker."], "times": [[40.135, 40.283], [40.296, 40.583], [40.596, 41.058], [41.321, 41.421], [41.433, 41.796], [41.808, 42.096], [42.108, 42.258], [42.271, 42.358], [42.371, 42.408], [42.421, 42.908]], "stress": ["locker"], "note": "Neutral. Just the fact.", "end": "fall", "words": 10, "dur": 2.8, "band": "steady", "start": 40.135, "stop": 42.938, "pause": 0.9, "pitch": [{"st": 7.57, "head": 6.87, "tail": 8.16, "dir": "rise"}, {"st": 3.82, "head": 7.85, "tail": -1.46, "dir": "fall"}, {"st": 1.07, "head": 1.19, "tail": -4.67, "dir": "fall"}, null, {"st": 3.98, "head": 5.12, "tail": 0.01, "dir": "fall"}, {"st": 0.04, "head": -2.19, "tail": -0.02, "dir": "rise"}, {"st": -2.28, "head": -1.29, "tail": -4.04, "dir": "fall"}, {"st": -1.67, "head": -1.25, "tail": -2.69, "dir": "fall"}, {"st": -1.6, "head": -1.83, "tail": -1.31, "dir": "flat"}, {"st": -2.18, "head": -0.49, "tail": -5.45, "dir": "fall"}]}, {"n": 12, "section": "Reversal", "text": "\"I told you it wasn't me,\" she said.", "tokens": ["\"I", "told", "you", "it", "wasn't", "me,\"", "she", "said."], "times": [[43.838, 43.906], [43.918, 44.261], [44.273, 44.42], [44.433, 44.58], [44.592, 44.984], [44.996, 45.291], [45.432, 45.665], [45.677, 46.142]], "stress": ["wasn't", "me"], "note": "Act her voice: tired, not angry. Then 'she said' in your own voice.", "end": "fall", "words": 8, "dur": 2.3, "band": "slower", "start": 43.838, "stop": 46.142, "pause": 1.8, "pitch": [{"st": 2.1, "head": 2.02, "tail": 2.27, "dir": "flat"}, {"st": 6.42, "head": 3.16, "tail": 7.38, "dir": "rise"}, {"st": 0.6, "head": 3.61, "tail": -1.02, "dir": "fall"}, {"st": -2.35, "head": -2.24, "tail": -0.86, "dir": "rise"}, {"st": -0.51, "head": -1.13, "tail": -2.64, "dir": "fall"}, {"st": -3.78, "head": -2.39, "tail": -4.55, "dir": "fall"}, {"st": 3.55, "head": 3.86, "tail": 3.15, "dir": "flat"}, {"st": -1.15, "head": 3.15, "tail": -5.69, "dir": "fall"}]}, {"n": 13, "section": "Reversal", "text": "She did not look at me.", "tokens": ["She", "did", "not", "look", "at", "me."], "times": [[47.942, 48.103], [48.118, 48.294], [48.309, 48.603], [48.618, 48.839], [48.853, 49.03], [49.044, 49.368]], "stress": ["look"], "note": "The slowest line so far.", "end": "fall", "words": 6, "dur": 1.45, "band": "slower", "start": 47.942, "stop": 49.396, "pause": 2.0, "pitch": [null, {"st": 4.32, "head": 4.5, "tail": 4.26, "dir": "flat"}, {"st": 2.68, "head": 1.42, "tail": 3.55, "dir": "rise"}, {"st": 1.21, "head": -1.4, "tail": 2.01, "dir": "rise"}, {"st": -1.8, "head": 0.51, "tail": -4.35, "dir": "fall"}, {"st": -6.38, "head": -4.77, "tail": -7.39, "dir": "fall"}]}, {"n": 14, "section": "Reversal", "text": "I never called her a thief.", "tokens": ["I", "never", "called", "her", "a", "thief."], "times": [[51.396, 51.449], [51.463, 51.846], [51.86, 52.213], [52.228, 52.419], [52.434, 52.507], [52.522, 53.169]], "stress": ["never"], "note": "Almost defensive.", "end": "fall", "words": 6, "dur": 1.8, "band": "steady", "start": 51.396, "stop": 53.194, "pause": 0.45, "pitch": [null, {"st": 4.28, "head": 3.72, "tail": 5.11, "dir": "rise"}, {"st": 0.77, "head": 0.53, "tail": -0.42, "dir": "fall"}, {"st": -3.13, "head": -3.32, "tail": -3.18, "dir": "flat"}, {"st": -4.0, "head": -3.96, "tail": -4.0, "dir": "flat"}, {"st": -3.83, "head": -4.1, "tail": -5.88, "dir": "fall"}]}, {"n": 15, "section": "Reversal", "text": "I just avoided her.", "tokens": ["I", "just", "avoided", "her."], "times": [[53.644, 53.737], [53.751, 54.094], [54.108, 54.643], [54.657, 55.028]], "stress": ["just"], "note": "Bitter on 'just'.", "end": "fall", "words": 4, "dur": 1.41, "band": "slower", "start": 53.644, "stop": 55.053, "pause": 0.9, "pitch": [{"st": 2.42, "head": 1.45, "tail": 2.87, "dir": "rise"}, {"st": 5.56, "head": 4.05, "tail": 5.56, "dir": "rise"}, {"st": 0.21, "head": -1.42, "tail": -1.36, "dir": "flat"}, {"st": -6.15, "head": -5.24, "tail": -7.42, "dir": "fall"}]}, {"n": 16, "section": "Reversal", "text": "And I still cannot forget it.", "tokens": ["And", "I", "still", "cannot", "forget", "it."], "times": [[55.953, 56.064], [56.078, 56.189], [56.203, 56.578], [56.592, 57.009], [57.023, 57.453], [57.467, 57.856]], "stress": ["still"], "note": "Very quiet. The longest silence of the first half.", "end": "fall", "words": 6, "dur": 1.92, "band": "slower", "start": 55.953, "stop": 57.878, "pause": 2.45, "pitch": [{"st": 1.49, "head": 1.39, "tail": 1.71, "dir": "flat"}, {"st": 2.22, "head": 1.7, "tail": 2.36, "dir": "flat"}, {"st": 6.72, "head": 2.89, "tail": 6.87, "dir": "rise"}, {"st": -1.5, "head": 1.07, "tail": -4.14, "dir": "fall"}, {"st": -1.3, "head": -3.09, "tail": -0.94, "dir": "rise"}, {"st": -5.59, "head": -3.66, "tail": -7.54, "dir": "fall"}]}, {"n": 17, "section": "Now", "text": "We do not burn witches now.", "tokens": ["We", "do", "not", "burn", "witches", "now."], "times": [[60.328, 60.43], [60.442, 60.577], [60.589, 60.847], [60.859, 61.165], [61.178, 61.582], [61.594, 61.974]], "stress": ["burn"], "note": "Snap back up. New energy.", "end": "fall", "words": 6, "dur": 1.68, "band": "faster", "start": 60.328, "stop": 62.005, "pause": 0.45, "pitch": [{"st": 3.13, "head": 2.49, "tail": 4.27, "dir": "rise"}, {"st": 4.73, "head": 4.73, "tail": 5.71, "dir": "rise"}, {"st": 5.82, "head": 5.31, "tail": 6.47, "dir": "rise"}, {"st": 1.09, "head": 3.24, "tail": -2.66, "dir": "fall"}, {"st": -2.61, "head": -2.9, "tail": -3.44, "dir": "flat"}, {"st": -4.13, "head": -2.43, "tail": -4.82, "dir": "fall"}]}, {"n": 18, "section": "Now", "text": "We screenshot them instead.", "tokens": ["We", "screenshot", "them", "instead."], "times": [[62.455, 62.581], [62.593, 63.218], [63.231, 63.39], [63.402, 64.038]], "stress": ["screenshot"], "note": "Hit it hard, then stop dead.", "end": "fall", "words": 4, "dur": 1.58, "band": "faster", "start": 62.455, "stop": 64.038, "pause": 1.8, "pitch": [{"st": 2.98, "head": 1.27, "tail": 4.46, "dir": "rise"}, {"st": 6.29, "head": 4.65, "tail": -1.38, "dir": "fall"}, {"st": -3.95, "head": -2.13, "tail": -4.65, "dir": "fall"}, {"st": -4.27, "head": -4.36, "tail": -4.87, "dir": "flat"}]}, {"n": 19, "section": "Now", "text": "When a rumor travels faster than evidence, the truth arrives too late.", "tokens": ["When", "a", "rumor", "travels", "faster", "than", "evidence,", "the", "truth", "arrives", "too", "late."], "times": [[65.838, 65.992], [66.004, 66.065], [66.078, 66.445], [66.458, 66.96], [66.972, 67.364], [67.377, 67.524], [67.536, 68.087], [68.345, 68.443], [68.455, 68.823], [68.835, 69.288], [69.301, 69.497], [69.509, 69.999]], "stress": ["faster", "too", "late"], "note": "Quick and clear, like a headline. Then let it land.", "end": "fall", "words": 12, "dur": 4.17, "band": "faster", "start": 65.838, "stop": 70.01, "pause": 1.1, "pitch": [{"st": 2.74, "head": 1.5, "tail": 2.97, "dir": "rise"}, {"st": 2.82, "head": 2.82, "tail": 2.55, "dir": "flat"}, {"st": 2.84, "head": 0.88, "tail": 3.17, "dir": "rise"}, {"st": -2.86, "head": 0.32, "tail": -3.87, "dir": "fall"}, {"st": 2.37, "head": 2.13, "tail": 1.7, "dir": "flat"}, {"st": -2.7, "head": -1.73, "tail": -2.86, "dir": "fall"}, {"st": -0.02, "head": 1.91, "tail": -0.53, "dir": "fall"}, null, {"st": 4.53, "head": 4.25, "tail": 0.61, "dir": "fall"}, {"st": -2.07, "head": 0.14, "tail": -4.42, "dir": "fall"}, {"st": -0.94, "head": -0.59, "tail": -1.39, "dir": "flat"}, {"st": -1.86, "head": -1.85, "tail": -5.32, "dir": "fall"}]}, {"n": 20, "section": "Point", "text": "Here is what that silence taught me.", "tokens": ["Here", "is", "what", "that", "silence", "taught", "me."], "times": [[71.11, 71.314], [71.327, 71.462], [71.474, 71.658], [71.67, 71.89], [71.903, 72.43], [72.442, 72.761], [72.773, 73.018]], "stress": ["silence"], "note": "Slow. Signal the conclusion.", "end": "fall", "words": 7, "dur": 1.95, "band": "slower", "start": 71.11, "stop": 73.06, "pause": 0.9, "pitch": [{"st": 7.07, "head": 4.82, "tail": 7.76, "dir": "rise"}, {"st": 5.59, "head": 6.75, "tail": 3.05, "dir": "fall"}, {"st": 1.49, "head": 1.5, "tail": 0.44, "dir": "fall"}, {"st": -0.76, "head": 0.27, "tail": -1.3, "dir": "fall"}, {"st": 0.42, "head": 2.68, "tail": -5.37, "dir": "fall"}, {"st": -1.28, "head": -0.56, "tail": -3.73, "dir": "fall"}, {"st": -5.45, "head": -3.65, "tail": -6.06, "dir": "fall"}]}, {"n": 21, "section": "Point", "text": "A crowd is not evidence.", "tokens": ["A", "crowd", "is", "not", "evidence."], "times": [[73.96, 74.002], [74.015, 74.472], [74.485, 74.646], [74.658, 74.906], [74.918, 75.636]], "stress": ["crowd", "not"], "note": "The main sentence of the speech. Slowest line, longest pause after.", "end": "fall", "words": 5, "dur": 1.69, "band": "slower", "start": 73.96, "stop": 75.65, "pause": 2.7, "pitch": [null, {"st": 4.29, "head": 4.91, "tail": -2.49, "dir": "fall"}, {"st": -1.19, "head": 0.02, "tail": -2.98, "dir": "fall"}, {"st": 2.09, "head": 1.46, "tail": 2.0, "dir": "flat"}, {"st": -0.33, "head": 1.61, "tail": -4.81, "dir": "fall"}]}, {"n": 22, "section": "Point", "text": "It is noise that agrees with itself.", "tokens": ["It", "is", "noise", "that", "agrees", "with", "itself."], "times": [[78.35, 78.445], [78.458, 78.605], [78.617, 79.009], [79.021, 79.168], [79.181, 79.622], [79.634, 79.781], [79.794, 80.468]], "stress": ["noise"], "note": "Let the image land.", "end": "fall", "words": 7, "dur": 2.13, "band": "slower", "start": 78.35, "stop": 80.482, "pause": 1.35, "pitch": [{"st": 3.15, "head": 2.39, "tail": 2.22, "dir": "flat"}, {"st": 4.48, "head": 4.52, "tail": 2.26, "dir": "fall"}, {"st": 4.05, "head": 4.11, "tail": -2.13, "dir": "fall"}, {"st": -1.2, "head": -0.19, "tail": -2.0, "dir": "fall"}, {"st": 0.3, "head": -0.5, "tail": -2.2, "dir": "fall"}, {"st": -2.43, "head": -2.17, "tail": -3.35, "dir": "fall"}, {"st": -2.75, "head": -3.48, "tail": -4.7, "dir": "fall"}]}, {"n": 23, "section": "Point", "text": "Salem never needed a witch.", "tokens": ["Salem", "never", "needed", "a", "witch."], "times": [[81.832, 82.301], [82.314, 82.589], [82.601, 82.939], [82.951, 83.014], [83.026, 83.551]], "stress": ["never"], "note": "Callback. A little warmer.", "end": "fall", "words": 5, "dur": 1.75, "band": "steady", "start": 81.832, "stop": 83.582, "pause": 0.45, "pitch": [{"st": 6.34, "head": 7.45, "tail": -0.44, "dir": "fall"}, {"st": 2.8, "head": 0.28, "tail": 3.6, "dir": "rise"}, {"st": 1.75, "head": 1.42, "tail": 0.25, "dir": "fall"}, {"st": -1.99, "head": -4.03, "tail": -2.19, "dir": "rise"}, {"st": -3.0, "head": -3.16, "tail": -3.48, "dir": "flat"}]}, {"n": 24, "section": "Point", "text": "It only needed people who did not ask.", "tokens": ["It", "only", "needed", "people", "who", "did", "not", "ask."], "times": [[84.032, 84.137], [84.151, 84.433], [84.446, 84.89], [84.903, 85.347], [85.36, 85.495], [85.508, 85.669], [85.683, 85.965], [85.979, 86.529]], "stress": ["ask"], "note": "Press down on 'ask'.", "end": "fall", "words": 8, "dur": 2.5, "band": "slower", "start": 84.032, "stop": 86.529, "pause": 1.8, "pitch": [{"st": 2.74, "head": 2.74, "tail": 1.52, "dir": "fall"}, {"st": 7.27, "head": 5.47, "tail": 7.42, "dir": "rise"}, {"st": 3.26, "head": 3.99, "tail": -2.43, "dir": "fall"}, {"st": 0.28, "head": 1.9, "tail": -4.62, "dir": "fall"}, {"st": -4.77, "head": -4.77, "tail": -2.52, "dir": "rise"}, {"st": -1.7, "head": -1.35, "tail": -2.07, "dir": "flat"}, {"st": -1.45, "head": -1.51, "tail": -1.23, "dir": "flat"}, {"st": -2.38, "head": 1.13, "tail": -5.61, "dir": "fall"}]}, {"n": 25, "section": "Close", "text": "So now, when everybody already believes, I ask six words.", "tokens": ["So", "now,", "when", "everybody", "already", "believes,", "I", "ask", "six", "words."], "times": [[88.329, 88.521], [88.533, 88.925], [89.134, 89.281], [89.293, 89.771], [89.783, 90.151], [90.163, 90.739], [90.984, 91.119], [91.131, 91.45], [91.462, 91.768], [91.781, 92.357]], "stress": ["six", "words"], "note": "Build speed into 'six words'.", "end": "fall", "words": 10, "dur": 4.05, "band": "steady", "start": 88.329, "stop": 92.382, "pause": 0.65, "pitch": [{"st": 2.89, "head": 4.24, "tail": 2.08, "dir": "fall"}, {"st": 1.82, "head": 1.82, "tail": -3.52, "dir": "fall"}, {"st": 0.92, "head": 0.18, "tail": 0.93, "dir": "flat"}, {"st": 2.56, "head": 4.44, "tail": -1.33, "dir": "fall"}, {"st": -1.97, "head": -2.96, "tail": -1.53, "dir": "rise"}, {"st": -2.44, "head": -2.73, "tail": -4.41, "dir": "fall"}, {"st": 4.77, "head": 3.63, "tail": 5.77, "dir": "rise"}, {"st": 1.1, "head": 5.17, "tail": -2.37, "dir": "fall"}, {"st": 3.13, "head": 3.58, "tail": 6.49, "dir": "rise"}, {"st": -3.94, "head": -0.99, "tail": -5.48, "dir": "fall"}]}, {"n": 26, "section": "Close", "text": "How do I actually know this?", "tokens": ["How", "do", "I", "actually", "know", "this?"], "times": [[93.032, 93.17], [93.184, 93.355], [93.369, 93.525], [93.539, 94.051], [94.065, 94.335], [94.349, 94.889]], "stress": ["actually", "know"], "note": "Six words, one at a time. Then hold the silence.", "end": "fall", "words": 6, "dur": 1.89, "band": "slower", "start": 93.032, "stop": 94.92, "pause": 2.25, "pitch": [{"st": 5.67, "head": 4.61, "tail": 6.61, "dir": "rise"}, {"st": 8.13, "head": 8.0, "tail": 9.18, "dir": "rise"}, {"st": 5.41, "head": 7.71, "tail": 3.14, "dir": "fall"}, {"st": -1.5, "head": -1.23, "tail": -1.65, "dir": "flat"}, {"st": -1.23, "head": -2.54, "tail": 1.75, "dir": "rise"}, {"st": -4.75, "head": 1.43, "tail": -5.43, "dir": "fall"}]}, {"n": 27, "section": "Close", "text": "It is the only thing between a rumor and a witch hunt.", "tokens": ["It", "is", "the", "only", "thing", "between", "a", "rumor", "and", "a", "witch", "hunt."], "times": [[97.17, 97.252], [97.266, 97.407], [97.421, 97.589], [97.603, 97.912], [97.926, 98.249], [98.263, 98.643], [98.657, 98.713], [98.727, 99.275], [99.289, 99.485], [99.499, 99.541], [99.555, 99.85], [99.864, 100.426]], "stress": ["only", "witch", "hunt"], "note": "Firm.", "end": "fall", "words": 12, "dur": 3.27, "band": "steady", "start": 97.17, "stop": 100.441, "pause": 1.1, "pitch": [{"st": 2.79, "head": 2.18, "tail": 2.61, "dir": "flat"}, {"st": 4.05, "head": 4.01, "tail": 3.6, "dir": "flat"}, {"st": 3.65, "head": 3.01, "tail": 3.65, "dir": "flat"}, {"st": 7.13, "head": 4.21, "tail": 7.71, "dir": "rise"}, {"st": 2.13, "head": 5.11, "tail": -0.62, "dir": "fall"}, {"st": -1.92, "head": -2.52, "tail": -1.22, "dir": "rise"}, {"st": -2.03, "head": -2.01, "tail": -2.11, "dir": "flat"}, {"st": -2.7, "head": -2.96, "tail": -5.56, "dir": "fall"}, {"st": -0.25, "head": -2.0, "tail": 0.31, "dir": "rise"}, {"st": 0.87, "head": 0.95, "tail": 1.15, "dir": "flat"}, {"st": -0.75, "head": 0.96, "tail": -0.77, "dir": "fall"}, {"st": -1.1, "head": 1.05, "tail": -6.21, "dir": "fall"}]}, {"n": 28, "section": "Close", "text": "I am not brave enough to stop a crowd yet.", "tokens": ["I", "am", "not", "brave", "enough", "to", "stop", "a", "crowd", "yet."], "times": [[101.54, 101.605], [101.617, 101.746], [101.759, 102.03], [102.043, 102.339], [102.352, 102.687], [102.7, 102.816], [102.829, 103.099], [103.112, 103.177], [103.19, 103.563], [103.576, 104.014]], "stress": ["yet"], "note": "Honest, a little small.", "end": "fall", "words": 10, "dur": 2.5, "band": "slower", "start": 101.54, "stop": 104.037, "pause": 1.1, "pitch": [{"st": 1.78, "head": 1.07, "tail": 2.07, "dir": "rise"}, {"st": 3.02, "head": 2.78, "tail": 3.1, "dir": "flat"}, {"st": 5.82, "head": 3.23, "tail": 7.76, "dir": "rise"}, {"st": 3.51, "head": 3.5, "tail": 3.58, "dir": "flat"}, {"st": -4.05, "head": -0.81, "tail": -5.99, "dir": "fall"}, null, {"st": -2.2, "head": -2.2, "tail": -2.65, "dir": "flat"}, null, {"st": 0.36, "head": -2.84, "tail": -1.56, "dir": "rise"}, {"st": -5.58, "head": -4.24, "tail": -6.41, "dir": "fall"}]}, {"n": 29, "section": "Close", "text": "But I am learning to stop myself.", "tokens": ["But", "I", "am", "learning", "to", "stop", "myself."], "times": [[105.137, 105.267], [105.281, 105.389], [105.403, 105.566], [105.58, 106.014], [106.028, 106.137], [106.15, 106.476], [106.49, 107.251]], "stress": ["myself"], "note": "Slow, firm, then stop. Do not let the pitch drift up.", "end": "fall", "words": 7, "dur": 2.13, "band": "slower", "start": 105.137, "stop": 107.264, "pause": 0.0, "pitch": [{"st": 2.88, "head": 3.44, "tail": 2.44, "dir": "fall"}, {"st": 4.1, "head": 4.49, "tail": 4.24, "dir": "flat"}, {"st": 4.49, "head": 4.65, "tail": 3.59, "dir": "fall"}, {"st": 3.06, "head": 2.92, "tail": -2.62, "dir": "fall"}, {"st": -4.85, "head": -4.54, "tail": -5.49, "dir": "fall"}, {"st": 1.52, "head": -3.21, "tail": 1.52, "dir": "rise"}, {"st": -4.56, "head": -3.72, "tail": -6.34, "dir": "fall"}]}], "pitch_ref": 203.6, "pitch_span": [-5.45, 7.07]};
+const LOG_URL = "";      /* the teacher's Apps Script web app; empty = keep the log in this browser */
+const S = D.sentences, LIMIT = D.limit;
+const $ = (id) => document.getElementById(id);
+const aud = $("aud");
+const takes = [];                   /* what the student recorded, one entry per line */
+const MICON = '<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5"></circle></svg>';
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fmt = (t) => { t = Math.max(0, t); return Math.floor(t / 60) + ":" + String(Math.floor(t % 60)).padStart(2, "0"); };
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const norm = (w) => w.toLowerCase().replace(/’/g, "'").replace(/[^a-z0-9']/g, "");
+
+/* facts and rubric numbers */
+$("f-len").textContent = fmt(D.duration);
+$("f-words").textContent = D.words;
+$("f-avg").textContent = D.avg_wpm;
+$("f-long").textContent = D.longest.toFixed(1);
+$("f-sil").textContent = D.silence.toFixed(1);
+$("dur").textContent = fmt(D.duration);
+$("r-avg").textContent = D.avg_wpm;
+$("r-sil").textContent = D.silence.toFixed(1);
+const longest = [...S].sort((a, b) => b.pause - a.pause).slice(0, 3).map((s) => s.n).sort((a, b) => a - b);
+$("r-long").textContent = longest.slice(0, -1).join(", ") + " and " + longest[longest.length - 1];
+const lens = S.map((s) => s.tokens.length);
+$("r-len").textContent = Math.min(...lens) + " to " + Math.max(...lens);
+$("track").setAttribute("aria-valuemax", String(D.duration));
+
+/* the melody of each line: where the guide voice starts and lands on every word */
+const AX = 32, TH = 80, TOP = 11, BOT = 47, BASE = 54;
+const span = D.pitch_span || [-6, 6];
+const ty = (st) => TOP + (span[1] - Math.max(span[0], Math.min(span[1], st))) / ((span[1] - span[0]) || 1) * (BOT - TOP);
+const xy = (p) => p[0].toFixed(1) + "," + p[1].toFixed(1);
+
+/* Catmull-Rom through the points, written as cubic beziers: a sung line, not a bar chart */
+function smooth(pts) {
+  let d = "M" + xy(pts[0]);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || pts[i + 1];
+    d += "C" + xy([p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6]) +
+         " " + xy([p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6]) + " " + xy(p2);
+  }
+  return d;
+}
+
+/* drawn to the exact pixel width of its column: the whole line at once, never a sideways drag */
+function tune(s, w, take) {
+  const pts = s.pitch;
+  if (!pts || !pts.some((p) => p)) return "";
+  const n = pts.length;
+  const TW = Math.max(14, (w - AX) / n);
+  const cell = (i) => AX + i * TW;
+  const ins = Math.min(8, TW * 0.14);
+  const FS = Math.max(6.5, Math.min(9, TW / 4.6));
+  const stress = new Set(s.stress);
+  const hit = s.tokens.map((t) => stress.has(norm(t)));
+  const wrong = (i) => take && take.words && take.words[i] === false;
+
+  const bands = s.tokens.map((t, i) =>
+    '<rect class="band' + (hit[i] ? " s" : "") + (wrong(i) ? " miss" : "") + '" x="' + cell(i).toFixed(1) +
+    '" y="' + (TOP - 5) + '" width="' + TW.toFixed(1) + '" height="' + (BASE - TOP + 5) +
+    '" rx="4"></rect>').join("");
+
+  const rows3 = [["Rise", span[1], "grid"], ["Flat", 0, "zero"], ["Fall", span[0], "grid"]];
+  const axis = rows3.map(([lab, st, cls]) => {
+    const y = ty(st).toFixed(1);
+    return '<line class="' + cls + '" x1="' + AX + '" y1="' + y + '" x2="' + w + '" y2="' + y + '"></line>' +
+      '<text class="ax" x="' + (AX - 6) + '" y="' + (ty(st) + 3).toFixed(1) + '" text-anchor="end">' + lab + "</text>";
+  }).join("");
+
+  /* a word with no voiced sound breaks the line, so the curve is drawn in runs */
+  const arcs = (list) => {
+    const segs = [];
+    let cur = [];
+    list.forEach((p, i) => {
+      if (!p) { if (cur.length > 1) segs.push(cur); cur = []; return; }
+      cur.push([cell(i) + ins, ty(p.head)], [cell(i) + TW - ins, ty(p.tail)]);
+    });
+    if (cur.length > 1) segs.push(cur);
+    return segs;
+  };
+
+  const segs = arcs(pts);
+  const paint = segs.map((seg) =>
+    '<path class="area" d="' + smooth(seg) + "L" + xy([seg[seg.length - 1][0], BASE]) +
+    "L" + xy([seg[0][0], BASE]) + 'Z"></path>').join("") +
+    segs.map((seg) => '<path class="curve" d="' + smooth(seg) + '"></path>').join("") +
+    (take && take.mine
+      ? arcs(take.mine).map((seg) => '<path class="mine" d="' + smooth(seg) + '"></path>').join("")
+      : "");
+
+  /* the word stays whole: when the cell is narrower than the word, the glyphs are squeezed, not cut */
+  const labs = s.tokens.map((t, i) => {
+    const word = t.replace(/^[^A-Za-z']+|[^A-Za-z']+$/g, "") || t;
+    const room = TW - 3, natural = word.length * FS * 0.6;
+    const fit = natural > room ? ' textLength="' + room.toFixed(1) + '" lengthAdjust="spacingAndGlyphs"' : "";
+    return '<text class="lab' + (hit[i] ? " s" : "") + '" x="' + (cell(i) + TW / 2).toFixed(1) +
+      '" y="' + (TH - 7) + '" font-size="' + FS.toFixed(2) + '" text-anchor="middle"' + fit + ">" +
+      esc(word) + "</text>";
+  }).join("");
+
+  return '<svg width="100%" height="' + TH + '" viewBox="0 0 ' + w.toFixed(1) + " " + TH +
+    '" role="img" aria-label="How the guide voice rises and falls across this line">' +
+    bands + axis + paint + labs + "</svg>";
+}
+
+/* script */
+const rows = [], words = [], tunes = [];
+let sec = null;
+S.forEach((s, i) => {
+  if (s.section !== sec) {
+    sec = s.section;
+    const h = document.createElement("div");
+    h.className = "sec";
+    h.innerHTML = "<h2>" + esc(sec) + "</h2><p>" + esc(D.sections[sec]) + "</p>";
+    $("script").appendChild(h);
+  }
+  const stress = new Set(s.stress);
+  const toks = s.tokens.map((tk, k) =>
+    '<span class="w' + (stress.has(norm(tk)) ? " s" : "") + '">' + esc(tk) + "</span>").join(" ");
+  const rest = s.pause > 0
+    ? '<span class="rest"><i style="width:' + Math.round(s.pause * 60) + 'px"></i>rest ' + s.pause.toFixed(2).replace(/0$/, "") + " s</span>"
+    : '<span class="rest">end</span>';
+  const row = document.createElement("div");
+  row.className = "line";
+  row.innerHTML =
+    '<button class="num" type="button" aria-label="Play line ' + s.n + '">' + s.n + "</button>" +
+    '<div><p class="say">' + toks + '<span class="end" title="' + s.end + 'ing ending">' + (s.end === "rise" ? "↗" : "↘") + "</span></p>" +
+    '<p class="note">' + esc(s.note) + "</p>" +
+    (s.pitch && s.pitch.some((p) => p) ? '<div class="tune"></div>' : "") +
+    '<div class="take"><button class="mic" type="button">' + MICON + "Record this line</button>" +
+    '<span class="score"></span></div></div>' +
+    '<div class="meta"><span class="tempo"><b>' + s.dur.toFixed(1) + " s</b> &middot; " + s.band +
+    "</span>" + rest + "</div>";
+  row.addEventListener("click", (e) => { if (!e.target.closest(".take")) playLine(i); });
+  $("script").appendChild(row);
+  rows.push(row);
+  words.push([...row.querySelectorAll(".w")]);
+  tunes.push([]);
+});
+
+/* the melody panels are filled in at the width their column actually has, and refilled when it changes */
+const panels = rows.map((row) => row.querySelector(".tune"));
+let tuneW = 0;
+function drawTunes() {
+  const host = panels.find(Boolean);
+  if (!host) return;
+  const w = Math.round(host.clientWidth);
+  if (!w || w === tuneW) return;
+  tuneW = w;
+  panels.forEach((el, i) => {
+    if (!el) return;
+    el.innerHTML = tune(S[i], w, takes[i]);
+    tunes[i] = [...el.querySelectorAll(".band")];
+  });
+  if (live >= 0) { liveDot = null; setWord(live, aud.currentTime); }
+}
+
+/* timeline */
+const blks = S.map((s) => {
+  const b = document.createElement("div");
+  b.className = "blk";
+  b.style.left = (s.start / LIMIT * 100) + "%";
+  b.style.width = ((s.stop - s.start) / LIMIT * 100) + "%";
+  $("blocks").appendChild(b);
+  return b;
+});
+$("margin").style.left = (D.duration / LIMIT * 100) + "%";
+
+/* state */
+let mode = "listen";
+try { const m = localStorage.getItem("witches-mode"); if (m === "listen" || m === "repeat") mode = m; } catch (e) {}
+$("mode-" + mode).checked = true;
+let stopAt = null, single = -1, gated = new Set();
+let waitEnd = 0, waitLen = 0, afterWait = null;
+let live = -1, liveWord = null, liveDot = null;
+
+function setHint() {
+  $("hint").textContent = mode === "listen" ? "Click any line to play from there." : "Click a line to drill it on its own.";
+}
+setHint();
+document.querySelectorAll('input[name="mode"]').forEach((r) => r.addEventListener("change", () => {
+  mode = r.value;
+  try { localStorage.setItem("witches-mode", mode); } catch (e) {}
+  gated.clear();
+  setHint();
+}));
+
+function setIcon(playing) {
+  $("icon").setAttribute("d", playing ? "M5 3.5h3.5v13H5zM11.5 3.5H15v13h-3.5z" : "M5 3.5v13l11-6.5z");
+  $("play").setAttribute("aria-label", playing ? "Pause" : "Play");
+}
+function indexAt(t) {
+  for (let i = S.length - 1; i >= 0; i--) if (t >= S[i].start - 0.05) return i;
+  return -1;
+}
+function follow(el) {
+  const r = el.getBoundingClientRect(), top = $("player").getBoundingClientRect().bottom;
+  if (r.top < top + 8 || r.bottom > innerHeight - 24) el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+}
+function setLive(i, scroll) {
+  if (i === live) return;
+  if (live >= 0) { rows[live].classList.remove("live"); blks[live].classList.remove("live"); }
+  live = i;
+  blks.forEach((b, k) => b.classList.toggle("done", k < i));
+  if (i >= 0) {
+    rows[i].classList.add("live");
+    blks[i].classList.add("live");
+    if (scroll) follow(rows[i]);
+  }
+}
+function setWord(i, t) {
+  let el = null, dot = null;
+  if (i >= 0 && t <= S[i].stop + 0.15) {
+    const tm = S[i].times;
+    for (let k = 0; k < tm.length; k++) {
+      const until = k + 1 < tm.length ? tm[k + 1][0] - 0.02 : tm[k][1] + 0.15;
+      if (t >= tm[k][0] - 0.02 && t < until) {
+        el = words[i][k];
+        dot = tunes[i][k] || null;
+        break;
+      }
+    }
+  }
+  if (el !== liveWord) {
+    if (liveWord) liveWord.classList.remove("on");
+    if (el) el.classList.add("on");
+    liveWord = el;
+  }
+  if (dot !== liveDot) {
+    if (liveDot) liveDot.classList.remove("on");
+    if (dot) dot.classList.add("on");
+    liveDot = dot;
+  }
+}
+function tick() {
+  const t = aud.currentTime;
+  $("head").style.left = (t / LIMIT * 100) + "%";
+  $("now").textContent = fmt(t);
+  $("track").setAttribute("aria-valuenow", t.toFixed(1));
+  $("track").setAttribute("aria-valuetext", fmt(t));
+  const i = indexAt(t);
+  setLive(i, !aud.paused);
+  setWord(i, t);
+  if (!aud.paused) {
+    if (stopAt !== null && t >= stopAt) {
+      const k = single;
+      stopAt = null; single = -1;
+      aud.pause();
+      if (mode === "repeat") yourTurn(k, null);
+    } else if (stopAt === null && mode === "repeat" && i >= 0 && t >= S[i].stop && !gated.has(i)) {
+      gated.add(i);
+      aud.pause();
+      yourTurn(i, () => aud.play());
+    }
+  }
+  if (!aud.paused) requestAnimationFrame(tick);
+}
+
+function waiting() { return waitEnd > 0; }
+function endWait() {
+  waitEnd = 0; afterWait = null;
+  $("turn").hidden = true;
+  $("turn-fill").style.width = "0";
+}
+function yourTurn(i, then) {
+  waitLen = (S[i].stop - S[i].start) + 1.0;
+  waitEnd = performance.now() + waitLen * 1000;
+  afterWait = then;
+  $("turn").hidden = false;
+  setIcon(true);
+  const step = () => {
+    if (!waitEnd) return;
+    const left = (waitEnd - performance.now()) / 1000;
+    $("turn-fill").style.width = Math.min(100, (1 - left / waitLen) * 100) + "%";
+    if (left > 0) return requestAnimationFrame(step);
+    const f = afterWait;
+    endWait();
+    if (f) f(); else setIcon(false);
+  };
+  requestAnimationFrame(step);
+}
+
+function playFrom(t) {
+  endWait();
+  stopAt = null; single = -1;
+  gated = new Set([...gated].filter((k) => S[k].stop <= t + 0.01));
+  aud.currentTime = t;
+  aud.play();
+}
+function playLine(i) {
+  if (mode === "listen") return playFrom(Math.max(0, S[i].start - 0.05));
+  endWait();
+  stopAt = S[i].stop + 0.05; single = i;
+  aud.currentTime = Math.max(0, S[i].start - 0.05);
+  aud.play();
+}
+
+$("play").addEventListener("click", () => {
+  if (waiting()) { endWait(); setIcon(false); return; }
+  if (!aud.paused) { aud.pause(); return; }
+  const t = aud.currentTime >= D.duration - 0.1 ? 0 : aud.currentTime;
+  if (t === 0) gated.clear();
+  playFrom(t);
+});
+aud.addEventListener("play", () => { setIcon(true); requestAnimationFrame(tick); });
+aud.addEventListener("pause", () => { if (!waiting()) setIcon(false); tick(); });
+aud.addEventListener("ended", () => { if (!waiting()) setIcon(false); });
+aud.addEventListener("seeked", () => { if (aud.paused) tick(); });
+
+function seekTo(t) {
+  t = Math.min(D.duration, Math.max(0, t));
+  endWait();
+  if (aud.paused) setIcon(false);
+  stopAt = null; single = -1;
+  gated = new Set([...gated].filter((k) => S[k].stop <= t + 0.01));
+  aud.currentTime = t;
+  tick();
+}
+$("track").addEventListener("click", (e) => {
+  const r = e.currentTarget.getBoundingClientRect();
+  seekTo((e.clientX - r.left) / r.width * LIMIT);
+});
+$("track").addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+    e.preventDefault();
+    seekTo(aud.currentTime + (e.key === "ArrowRight" ? 5 : -5));
+  }
+});
+
+/* ======================================================================
+   Who is practising. The name rides along with every row the teacher sees.
+   ====================================================================== */
+const SESSION = Math.random().toString(36).slice(2, 10);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+let who = "", visit = 0, openedAt = 0;
+const tally = { takes: 0, lines: new Set(), best: 0 };
+
+function log(event, detail) {
+  const now = new Date();
+  const queue = store.get("witches-queue", []);
+  queue.push(Object.assign({
+    at: now.toISOString(), local: now.toLocaleString("en-GB"),
+    name: who, session: SESSION, visit: visit, event: event,
+    minutes: openedAt ? +((now - openedAt) / 60000).toFixed(1) : 0
+  }, detail));
+  store.set("witches-queue", queue.slice(-300));
+  flush(false);
+}
+
+/* nothing is lost if the wifi drops: the rows wait in this browser and go with the next one */
+function flush(beacon) {
+  const queue = store.get("witches-queue", []);
+  if (!queue.length || !LOG_URL) return;
+  store.set("witches-queue", []);
+  const putBack = () => store.set("witches-queue", queue.concat(store.get("witches-queue", [])).slice(-300));
+  const body = new Blob([JSON.stringify({ rows: queue })], { type: "text/plain;charset=utf-8" });
+  if (beacon && navigator.sendBeacon) {
+    if (!navigator.sendBeacon(LOG_URL, body)) putBack();
+    return;
+  }
+  fetch(LOG_URL, { method: "POST", mode: "no-cors", body: body, keepalive: true }).catch(putBack);
+}
+
+(function askWho() {
+  const last = store.get("witches-name", "");
+  const seen = store.get("witches-visits", {});
+  $("who").value = last;
+  if (last && seen[last.toLowerCase()]) {
+    $("again").hidden = false;
+    $("again").textContent = "Welcome back. You have opened this page " + seen[last.toLowerCase()] +
+      (seen[last.toLowerCase()] === 1 ? " time before." : " times before.");
+  }
+  $("gate").hidden = false;
+  setTimeout(() => $("who").focus(), 60);
+})();
+
+$("gate-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("who").value.trim().replace(/\s+/g, " ").slice(0, 40);
+  if (!name) { $("who").focus(); return; }
+  who = name;
+  store.set("witches-name", who);
+  const seen = store.get("witches-visits", {});
+  visit = (seen[who.toLowerCase()] || 0) + 1;
+  seen[who.toLowerCase()] = visit;
+  store.set("witches-visits", seen);
+  openedAt = Date.now();
+  $("gate").hidden = true;
+  log("opened", { detail: "visit " + visit + " from this browser" });
+});
+
+addEventListener("pagehide", () => {
+  if (!openedAt) return;
+  log("left", { takes: tally.takes, lines: tally.lines.size, score: tally.best,
+    detail: tally.takes + " takes on " + tally.lines.size + " lines" });
+  flush(true);
+});
+document.addEventListener("visibilitychange", () => { if (document.hidden) flush(true); });
+
+/* ======================================================================
+   Pitch, measured exactly the way the guide was measured (pitch.py):
+   40 ms frames every 10 ms, autocorrelation between 70 and 400 Hz.
+   ====================================================================== */
+const SR = 16000, FRAME = 0.04, HOP = 0.01, FMIN = 70, FMAX = 400, CLARITY = 0.3, QUIET = 0.006;
+const TOL = 1.4;   /* semitones of slope a word may miss by before it is called wrong */
+
+function track(x) {
+  const n = Math.round(FRAME * SR), hop = Math.round(HOP * SR);
+  const lo = Math.floor(SR / FMAX), hi = Math.min(n - 2, Math.floor(SR / FMIN));
+  const count = 1 + Math.max(0, Math.floor((x.length - n) / hop));
+  const win = new Float64Array(n);
+  for (let i = 0; i < n; i++) win[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (n - 1));
+  const f = new Float64Array(n), corr = new Float64Array(hi + 3);
+  const f0 = new Float64Array(count).fill(NaN);
+  for (let k = 0; k < count; k++) {
+    const off = k * hop;
+    let mean = 0;
+    for (let i = 0; i < n; i++) mean += x[off + i];
+    mean /= n;
+    let power = 0;
+    for (let i = 0; i < n; i++) { const v = (x[off + i] - mean) * win[i]; f[i] = v; power += v * v; }
+    if (power <= 0 || Math.sqrt(power / n) < QUIET) continue;          // silence stays silence
+    let best = -1, peak = -1;
+    for (let lag = Math.max(1, lo - 1); lag <= hi + 1 && lag < n - 1; lag++) {
+      let sum = 0;
+      for (let i = 0, m = n - lag; i < m; i++) sum += f[i] * f[i + lag];
+      corr[lag] = sum;
+      if (lag >= lo && lag <= hi && sum / power > peak) { peak = sum / power; best = lag; }
+    }
+    if (best < 0 || peak < CLARITY) continue;                          // no clear period: unvoiced
+    const a = corr[best - 1] || 0, b = corr[best], c = corr[best + 1] || 0;
+    const den = a - 2 * b + c;
+    const shift = den !== 0 ? Math.max(-1, Math.min(1, 0.5 * (a - c) / den)) : 0;
+    f0[k] = SR / (best + shift);
+  }
+  return despike(f0);
+}
+
+/* An autocorrelation tracker slips an octave now and then. One such frame is enough to
+   swamp a whole line's score, so a value that disagrees with its neighbours by more
+   than five semitones is dropped rather than believed. */
+function despike(f0) {
+  const out = Float64Array.from(f0);
+  for (let i = 0; i < f0.length; i++) {
+    if (isNaN(f0[i])) continue;
+    const near = [];
+    for (let j = Math.max(0, i - 3), end = Math.min(f0.length - 1, i + 3); j <= end; j++) {
+      if (j !== i && !isNaN(f0[j])) near.push(f0[j]);
+    }
+    if (near.length < 3) continue;
+    near.sort((a, b) => a - b);
+    if (Math.abs(12 * Math.log2(f0[i] / near[near.length >> 1])) > 5) out[i] = NaN;
+  }
+  return out;
+}
+
+/* semitones from this speaker's own middle, so a child's voice and the guide's compare fairly */
+function semitones(f0) {
+  const voiced = Array.from(f0).filter((v) => v > 0 && isFinite(v)).sort((a, b) => a - b);
+  if (voiced.length < 8) return null;
+  const ref = voiced[voiced.length >> 1];
+  const st = new Float64Array(f0.length);
+  for (let i = 0; i < f0.length; i++) st[i] = (f0[i] > 0 && isFinite(f0[i])) ? 12 * Math.log2(f0[i] / ref) : NaN;
+  return { ref: ref, st: st };
+}
+
+let actx = null;
+async function pcm16k(buf) {
+  actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+  const decoded = await actx.decodeAudioData(buf);
+  try {
+    const off = new OfflineAudioContext(1, Math.max(1, Math.ceil(decoded.duration * SR)), SR);
+    const src = off.createBufferSource();
+    src.buffer = decoded;
+    src.connect(off.destination);
+    src.start();
+    return (await off.startRendering()).getChannelData(0);
+  } catch (e) {
+    const ch = decoded.getChannelData(0), step = decoded.sampleRate / SR;   // older Safari: decimate by hand
+    const out = new Float32Array(Math.floor(ch.length / step));
+    for (let i = 0; i < out.length; i++) out[i] = ch[Math.floor(i * step)];
+    return out;
+  }
+}
+
+let guidePcm = null;
+async function guideAudio() {
+  if (!guidePcm) guidePcm = await pcm16k(await (await fetch(aud.currentSrc || aud.src)).arrayBuffer());
+  return guidePcm;
+}
+
+/* ======================================================================
+   Lining the two readings up. Nobody speaks at the guide's exact speed, so
+   the curves are stretched onto each other before they are compared.
+   ====================================================================== */
+function fill(st) {
+  const out = Float64Array.from(st);
+  const at = [];
+  for (let i = 0; i < out.length; i++) if (!isNaN(out[i])) at.push(i);
+  if (!at.length) return null;
+  for (let i = 0; i < at[0]; i++) out[i] = out[at[0]];
+  for (let i = at[at.length - 1] + 1; i < out.length; i++) out[i] = out[at[at.length - 1]];
+  for (let k = 1; k < at.length; k++) {
+    const a = at[k - 1], b = at[k];
+    for (let i = a + 1; i < b; i++) out[i] = out[a] + (out[b] - out[a]) * (i - a) / (b - a);
+  }
+  return out;
+}
+
+/* The band is deliberately narrow and a sideways step costs extra. Given a free hand,
+   the warp will bend any English sentence onto any other - a different line of this very
+   script scored in the nineties before this was tightened. */
+const BAND = 0.06, SIDESTEP = 0.4;
+
+function dtw(a, b) {
+  const A = a.length, B = b.length, W = B + 1;
+  const band = Math.max(8, Math.round(BAND * Math.max(A, B)));
+  const cost = new Float64Array((A + 1) * W).fill(Infinity);
+  cost[0] = 0;
+  for (let i = 1; i <= A; i++) {
+    const mid = Math.round(i * B / A);
+    for (let j = Math.max(1, mid - band), top = Math.min(B, mid + band); j <= top; j++) {
+      const d = Math.abs(a[i - 1] - b[j - 1]);
+      cost[i * W + j] = Math.min(cost[(i - 1) * W + j - 1] + d,
+        cost[(i - 1) * W + j] + d + SIDESTEP, cost[i * W + j - 1] + d + SIDESTEP);
+    }
+  }
+  const path = [];
+  let i = A, j = B;
+  while (i > 0 && j > 0) {
+    path.push([i - 1, j - 1]);
+    const up = cost[(i - 1) * W + j], left = cost[i * W + j - 1], both = cost[(i - 1) * W + j - 1];
+    if (!isFinite(up) && !isFinite(left) && !isFinite(both)) break;
+    if (both <= up && both <= left) { i--; j--; } else if (up <= left) { i--; } else { j--; }
+  }
+  return path.reverse();
+}
+
+/* How far apart the two melodies sit, in semitones, once each is centred on its own
+   middle. Distance, not correlation: every English sentence drifts downwards, so two
+   unrelated lines correlate at .9 while sitting three semitones apart. FAR semitones
+   of daylight is a zero; a faithful copy measures under half of one. */
+const FAR = 4;
+
+function apart(xs, ys) {
+  const n = xs.length;
+  if (n < 10) return NaN;
+  let mx = 0, my = 0;
+  for (let i = 0; i < n; i++) { mx += xs[i]; my += ys[i]; }
+  mx /= n; my /= n;
+  let sq = 0;
+  for (let i = 0; i < n; i++) {
+    const d = Math.min(6, Math.abs((xs[i] - mx) - (ys[i] - my)));   // one stray frame must not decide a line
+    sq += d * d;
+  }
+  return Math.sqrt(sq / n);
+}
+
+const median = (v) => { const c = Array.from(v).sort((a, b) => a - b); return c[c.length >> 1]; };
+const shape = (slope) => slope > 0.8 ? "rise" : slope < -0.8 ? "fall" : "flat";
+
+async function compare(i, blob) {
+  const s = S[i];
+  const mineF0 = track(await pcm16k(await blob.arrayBuffer()));
+  let lo = -1, hi = -1;
+  for (let k = 0; k < mineF0.length; k++) if (mineF0[k] > 0) { if (lo < 0) lo = k; hi = k; }
+  if (lo < 0 || hi - lo < 15) return { error: "I could not hear a voice in that. Move closer to the microphone and try again." };
+
+  /* snapped to the 10 ms grid the guide was measured on, so a frame here is the same
+     frame pitch.py measured: without this the word arcs land either side of the
+     rise/fall threshold and a perfect copy is marked wrong */
+  const g = await guideAudio();
+  const step = Math.round(HOP * SR);
+  const from = Math.max(0, Math.round((s.start - 0.1) * SR / step) * step);
+  const to = Math.min(g.length, Math.round((s.stop + 0.1) * SR));
+  const mine = semitones(mineF0.slice(lo, hi + 1));
+  const guide = semitones(track(g.subarray(from, to)));
+  if (!mine || !guide) return { error: "That take was too short to measure. Read the whole line and try again." };
+
+  /* both contours are cut back to where a voice is actually sounding before they are
+     lined up: the padding the guide slice carries is not in the take, and stretching
+     one against the other's silence drags the whole path off the words */
+  let head0 = -1, tail0 = -1;
+  for (let k = 0; k < guide.st.length; k++) if (!isNaN(guide.st[k])) { if (head0 < 0) head0 = k; tail0 = k; }
+  const path = dtw(fill(guide.st.slice(head0, tail0 + 1)), fill(mine.st));
+  const clock = (gi) => from / SR + (gi + head0) * HOP + FRAME / 2;
+
+  /* the take, redrawn on the guide's clock, for the overall match */
+  const spread = [];
+  for (let k = 0; k <= tail0 - head0; k++) spread.push([]);
+  for (let k = 0; k < path.length; k++) {
+    const v = mine.st[path[k][1]];
+    if (!isNaN(v)) spread[path[k][0]].push(v);
+  }
+  const xs = [], ys = [];
+  spread.forEach((v, k) => {
+    const a = guide.st[k + head0];
+    if (v.length && !isNaN(a)) { xs.push(a); ys.push(median(v)); }
+  });
+  const off = apart(xs, ys);
+  if (isNaN(off)) return { error: "That take was too short to measure. Read the whole line and try again." };
+  const score = Math.max(0, Math.round(100 * (1 - off / FAR)));
+
+  /* for the word arcs the warp is only used to find where each word begins and ends in
+     the take; the arc itself is then read off the student's own frames, in their order */
+  const edges = s.tokens.map(() => [Infinity, -Infinity]);
+  for (let k = 0; k < path.length; k++) {
+    const t = clock(path[k][0]);
+    for (let n = 0; n < s.times.length; n++) {
+      if (t >= s.times[n][0] && t <= Math.max(s.times[n][1], s.times[n][0] + 0.02)) {
+        edges[n][0] = Math.min(edges[n][0], path[k][1]);
+        edges[n][1] = Math.max(edges[n][1], path[k][1]);
+        break;
+      }
+    }
+  }
+  const held = edges.map(([a, b]) => {
+    const v = [];
+    if (isFinite(a)) for (let j = a; j <= b; j++) if (!isNaN(mine.st[j])) v.push(mine.st[j]);
+    return v;
+  });
+  /* the student's line is drawn against its own middle; lift it to where the guide's
+     line sits on the axis, so the same reading in a deeper voice lands on the guide,
+     and only a flatter one looks flatter */
+  const anchor = median(s.pitch.filter((p) => p).map((p) => p.st)) || 0;
+  const drawn = held.map((v) => {
+    if (v.length < 3) return null;
+    const third = Math.max(1, Math.floor(v.length / 3));
+    const head = median(v.slice(0, third)), tail = median(v.slice(-third));
+    return { head: head + anchor, tail: tail + anchor, dir: shape(tail - head), slope: tail - head };
+  });
+  /* a word counts as wrong only if it both lands in a different band and misses the
+     guide's own movement by more than TOL semitones: rise / flat / fall is a hard edge,
+     and a word sitting on it must not turn red over a tenth of a semitone */
+  const words = drawn.map((m, k) => {
+    if (!m || !s.pitch[k]) return null;
+    const want = s.pitch[k].tail - s.pitch[k].head;
+    return m.dir === s.pitch[k].dir || Math.abs(m.slope - want) <= TOL;
+  });
+
+  return {
+    score: score, off: off, mine: drawn, words: words,
+    ok: words.filter((v) => v === true).length,
+    judged: words.filter((v) => v !== null).length,
+    dur: (hi - lo) * HOP
+  };
+}
+
+/* ======================================================================
+   Recording a line, and what comes back
+   ====================================================================== */
+const canRecord = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+let stream = null, rec = null, recBtn = null, recStop = 0, idle = 0, mineAudio = null;
+
+function strip(i, html) { rows[i].querySelector(".score").innerHTML = html; }
+
+function drawOne(i) {
+  const el = panels[i];
+  if (!el || !tuneW) return;
+  el.innerHTML = tune(S[i], tuneW, takes[i]);
+  tunes[i] = [...el.querySelectorAll(".band")];
+  if (live === i) { liveDot = null; setWord(i, aud.currentTime); }
+}
+
+function extFor(type) {
+  return /mp4|m4a|aac/.test(type || "") ? "m4a" : /ogg/.test(type || "") ? "ogg" : "webm";
+}
+
+function showScore(i) {
+  const t = takes[i];
+  if (!t) return strip(i, "");
+  const off = t.dur - S[i].dur;
+  const timing = Math.abs(off) < 0.15 ? "the guide's length"
+    : Math.abs(off).toFixed(1) + " s " + (off > 0 ? "slower" : "faster") + " than the guide";
+  strip(i,
+    "<span>Take " + t.n + "</span>" +
+    '<span title="' + t.off.toFixed(2) + ' semitones away from the guide"><b>' + t.score +
+    "%</b> melody match</span>" +
+    (t.judged ? "<span>" + t.ok + " of " + t.judged + " words move the right way</span>" : "") +
+    "<span>" + timing + "</span>" +
+    '<button class="link" data-do="mine" type="button">Play mine</button>' +
+    '<button class="link" data-do="guide" type="button">Play the guide</button>' +
+    '<button class="link" data-do="save" type="button">Save this take</button>' +
+    '<span class="legend"><i></i>you</span>');
+}
+
+function playMine(i) {
+  if (mineAudio) { mineAudio.pause(); mineAudio = null; }
+  if (!takes[i]) return;
+  aud.pause();
+  mineAudio = new Audio(takes[i].url);
+  mineAudio.play();
+}
+
+function saveTake(i) {
+  const t = takes[i];
+  if (!t) return;
+  const name = "Witches_line" + String(S[i].n).padStart(2, "0") + "_take" + t.n +
+    (who ? "_" + who.replace(/[^A-Za-z0-9]+/g, "-") : "") + "." + t.ext;
+  const a = document.createElement("a");
+  a.href = t.url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  log("saved", { line: S[i].n, take: t.n, score: t.score, detail: "downloaded " + name });
+}
+
+function stopRec() { if (rec && rec.state === "recording") rec.stop(); }
+
+async function toggleRec(i, btn) {
+  if (rec && rec.state === "recording") { stopRec(); return; }
+  clearTimeout(idle);
+  aud.pause();
+  if (mineAudio) { mineAudio.pause(); mineAudio = null; }
+  strip(i, "<span>Getting the microphone ready&hellip;</span>");
+  try {
+    if (!stream || !stream.active) {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    }
+  } catch (e) {
+    strip(i, '<span class="bad">The browser would not hand over the microphone. Allow it next to the address bar, then press Record again.</span>');
+    log("mic refused", { line: S[i].n, detail: String(e && e.name || e) });
+    return;
+  }
+  const chunks = [];
+  try { rec = new MediaRecorder(stream); } catch (e) { rec = new MediaRecorder(stream, { mimeType: "audio/webm" }); }
+  recBtn = btn;
+  btn.classList.add("rec");
+  btn.innerHTML = MICON + "Stop";
+  strip(i, "<span>Listening. Read the line, then press Stop.</span>");
+  rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+  rec.onstop = async () => {
+    clearTimeout(recStop);
+    btn.classList.remove("rec");
+    btn.innerHTML = MICON + "Record again";
+    idle = setTimeout(() => {              // let go of the microphone when it is not in use
+      if (stream) { stream.getTracks().forEach((t) => t.stop()); stream = null; }
+    }, 40000);
+    const type = (rec && rec.mimeType) || "audio/webm";
+    rec = null;
+    const blob = new Blob(chunks, { type: type });
+    strip(i, "<span>Listening back&hellip;</span>");
+    let res;
+    try { res = await compare(i, blob); }
+    catch (e) { res = { error: "Something went wrong reading that take: " + (e && e.message || e) }; }
+    if (res.error) {
+      strip(i, '<span class="bad">' + esc(res.error) + "</span>");
+      log("take failed", { line: S[i].n, detail: res.error });
+      return;
+    }
+    const before = takes[i];
+    if (before && before.url) URL.revokeObjectURL(before.url);
+    takes[i] = Object.assign(res, { url: URL.createObjectURL(blob), ext: extFor(type),
+      n: before ? before.n + 1 : 1 });
+    drawOne(i);
+    showScore(i);
+    tally.takes++;
+    tally.lines.add(i);
+    tally.best = Math.max(tally.best, res.score);
+    log("take", { line: S[i].n, take: takes[i].n, score: res.score,
+      semitonesOff: +res.off.toFixed(2), words: res.ok + " of " + res.judged,
+      seconds: +res.dur.toFixed(2),
+      detail: "line " + S[i].n + ", take " + takes[i].n + ": melody " + res.score + "%" });
+  };
+  rec.start();
+  recStop = setTimeout(stopRec, (S[i].stop - S[i].start) * 1000 + 5000);
+}
+
+$("script").addEventListener("click", (e) => {
+  const btn = e.target.closest(".take button");
+  if (!btn) return;
+  e.stopPropagation();
+  const i = rows.indexOf(btn.closest(".line"));
+  if (i < 0) return;
+  if (btn.classList.contains("mic")) return toggleRec(i, btn);
+  const act = btn.dataset.do;
+  if (act === "mine") playMine(i);
+  else if (act === "guide") playLine(i);
+  else if (act === "save") saveTake(i);
+});
+
+if (!canRecord) {
+  document.querySelectorAll(".take .mic").forEach((b) => {
+    b.disabled = true;
+    b.textContent = "Recording needs Chrome or Safari on the https link";
+  });
+}
+
+drawTunes();
+const host = panels.find(Boolean);
+if (host && window.ResizeObserver) {
+  new ResizeObserver(() => requestAnimationFrame(drawTunes)).observe(host.parentElement);
+} else {
+  addEventListener("resize", drawTunes);
+}
+tick();
+</script>
