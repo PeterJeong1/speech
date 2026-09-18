@@ -144,6 +144,20 @@ h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(40px,7.4v
   color:var(--btn-ink);font-weight:700;cursor:pointer}
 .gate .again{font-size:13px;color:var(--faint)}
 
+/* the run you have just recorded */
+.run{margin-top:44px;padding:24px 26px;border:1px solid var(--rule);border-radius:14px;background:var(--surface);display:grid;gap:12px}
+.run[hidden]{display:none}
+.run h2{margin:0;font:400 27px/1.1 var(--display)}
+.run p{margin:0;color:var(--muted);font-size:15px}
+.run #run-line{font-family:var(--mono);font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.run-buttons{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:2px}
+.run-go{padding:10px 20px;border:0;border-radius:999px;background:var(--lantern);color:var(--btn-ink);font-weight:700;cursor:pointer}
+.run-go[disabled]{opacity:.5;cursor:default}
+.run .link{border:0;background:none;padding:0;font:13px var(--mono);color:var(--muted);text-decoration:underline;
+  text-underline-offset:3px;cursor:pointer}
+.run .link:hover{color:var(--ink)}
+.run-note{font-size:13px}
+
 /* rubric */
 .rubric{margin-top:64px;padding-top:28px;border-top:2px solid var(--ink);display:grid;gap:30px}
 .rubric h2{margin:0;font:400 clamp(30px,4.6vw,40px)/1.05 var(--display);text-wrap:balance}
@@ -199,7 +213,7 @@ footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-si
         <svg viewBox="0 0 20 20" aria-hidden="true"><path id="icon" d="M5 3.5v13l11-6.5z"></path></svg>
       </button>
       <div class="clock"><span id="now">0:00</span><span class="of"> / <span id="dur"></span></span></div>
-      <div class="turn" id="turn" hidden><span>Your turn</span><span class="turn-bar"><i id="turn-fill"></i></span></div>
+      <div class="turn" id="turn" hidden><span id="turn-label">Your turn</span><span class="turn-bar"><i id="turn-fill"></i></span></div>
       <span class="hint" id="hint"></span>
       <fieldset class="mode">
         <legend class="sr">Playback mode</legend>
@@ -219,6 +233,16 @@ footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-si
 
 <main class="wrap">
   <div id="script"></div>
+
+  <section class="run" id="run" hidden>
+    <h2>Your run</h2>
+    <p id="run-line"></p>
+    <div class="run-buttons">
+      <button class="run-go" id="run-save" type="button">Save the whole run as one file</button>
+      <button class="link" id="run-clear" type="button">Clear my takes</button>
+    </div>
+    <p class="run-note">Your takes stay on this computer, so the curves and the sound are still here when you come back.</p>
+  </section>
 
   <section class="rubric">
     <h2>What DEEP Y listens for</h2>
@@ -245,8 +269,8 @@ footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-si
       <h3>How to practise</h3>
       <ol>
         <li>Listen once with your eyes on the script. Do not speak yet.</li>
-        <li>Switch to <strong>Repeat after me</strong>. Copy each line in the gap, matching the speed and the melody, not only the words.</li>
-        <li>Press <strong>Record this line</strong> on a line you find hard. Your own melody is drawn over the guide's as a dashed line, and any word that moves the wrong way is marked in red. Try the line again until the two curves sit on top of each other.</li>
+        <li>Switch to <strong>Repeat after me</strong> and allow the microphone when the browser asks. The guide now stops after every line and records you in the gap, then draws your melody over its own as a dashed line and scores it. Any word that moves the wrong way is marked in red.</li>
+        <li>Work down the script until the two curves sit on top of each other. To drill one line on its own, press <strong>Record this line</strong> under it.</li>
         <li>When a take sounds right, press <strong>Save this take</strong> and send the file to your teacher.</li>
         <li>Record the whole speech with a stopwatch. Finish between 1:50 and 1:58. The recording must stay under 2:00.</li>
       </ol>
@@ -434,16 +458,26 @@ $("mode-" + mode).checked = true;
 let stopAt = null, single = -1, gated = new Set();
 let waitEnd = 0, waitLen = 0, afterWait = null;
 let live = -1, liveWord = null, liveDot = null;
+const canRecord = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+let micAsked = false, micOK = false;
+
+const GAP = 1.5;   /* the breath on top of the line's own length before the guide moves on */
 
 function setHint() {
-  $("hint").textContent = mode === "listen" ? "Click any line to play from there." : "Click a line to drill it on its own.";
+  $("hint").textContent =
+    mode === "listen" ? "Click any line to play from there."
+    : micOK ? "Every turn is recorded and scored against the guide."
+    : canRecord ? "Allow the microphone and every turn is recorded and scored."
+    : "Click a line to drill it on its own.";
 }
 setHint();
-document.querySelectorAll('input[name="mode"]').forEach((r) => r.addEventListener("change", () => {
+document.querySelectorAll('input[name="mode"]').forEach((r) => r.addEventListener("change", async () => {
   mode = r.value;
   try { localStorage.setItem("witches-mode", mode); } catch (e) {}
   gated.clear();
   setHint();
+  /* the microphone has to be in hand before the first gap arrives, so ask for it now */
+  if (mode === "repeat" && canRecord && !micAsked) { await armMic("repeat mode"); setHint(); }
 }));
 
 function setIcon(playing) {
@@ -518,24 +552,35 @@ function tick() {
 }
 
 function waiting() { return waitEnd > 0; }
-function endWait() {
+
+/* keep = the gap ran its course, so the take is worth measuring. Anything else - a pause,
+   a click on another line, a drag of the playhead - throws the half-said line away. */
+function endWait(keep) {
   waitEnd = 0; afterWait = null;
   $("turn").hidden = true;
   $("turn-fill").style.width = "0";
+  $("turn-label").textContent = "Your turn";
+  if (rec && rec.state === "recording") { rec._drop = !keep; rec.stop(); }
 }
+
 function yourTurn(i, then) {
-  waitLen = (S[i].stop - S[i].start) + 1.0;
+  waitLen = (S[i].stop - S[i].start) + GAP;
   waitEnd = performance.now() + waitLen * 1000;
   afterWait = then;
   $("turn").hidden = false;
   setIcon(true);
+  /* in Repeat after me the gap records itself: no button to find, no line missed */
+  if (mode === "repeat" && stream && stream.active && !(rec && rec.state === "recording")) {
+    beginTake(i, null);
+    $("turn-label").textContent = "Recording you";
+  }
   const step = () => {
     if (!waitEnd) return;
     const left = (waitEnd - performance.now()) / 1000;
     $("turn-fill").style.width = Math.min(100, (1 - left / waitLen) * 100) + "%";
     if (left > 0) return requestAnimationFrame(step);
     const f = afterWait;
-    endWait();
+    endWait(true);
     if (f) f(); else setIcon(false);
   };
   requestAnimationFrame(step);
@@ -556,9 +601,10 @@ function playLine(i) {
   aud.play();
 }
 
-$("play").addEventListener("click", () => {
+$("play").addEventListener("click", async () => {
   if (waiting()) { endWait(); setIcon(false); return; }
   if (!aud.paused) { aud.pause(); return; }
+  if (mode === "repeat" && canRecord && !micAsked) { await armMic("play in repeat mode"); setHint(); }
   const t = aud.currentTime >= D.duration - 0.1 ? 0 : aud.currentTime;
   if (t === 0) gated.clear();
   playFrom(t);
@@ -651,6 +697,7 @@ $("gate-form").addEventListener("submit", (e) => {
   openedAt = Date.now();
   $("gate").hidden = true;
   log("opened", { detail: "visit " + visit + " from this browser" });
+  loadTakes();          /* whatever this student recorded last time comes back */
 });
 
 addEventListener("pagehide", () => {
@@ -913,7 +960,6 @@ async function compare(i, blob) {
 /* ======================================================================
    Recording a line, and what comes back
    ====================================================================== */
-const canRecord = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
 let stream = null, rec = null, recBtn = null, recStop = 0, idle = 0, mineAudio = null;
 
 function strip(i, html) { rows[i].querySelector(".score").innerHTML = html; }
@@ -971,44 +1017,56 @@ function saveTake(i) {
 }
 
 function stopRec() { if (rec && rec.state === "recording") rec.stop(); }
+function recording() { return !!(rec && rec.state === "recording"); }
 
-async function toggleRec(i, btn) {
-  if (rec && rec.state === "recording") { stopRec(); return; }
-  clearTimeout(idle);
-  aud.pause();
-  if (mineAudio) { mineAudio.pause(); mineAudio = null; }
-  strip(i, "<span>Getting the microphone ready&hellip;</span>");
+/* Asked for once and remembered. Repeat after me needs the microphone in hand before the
+   first gap arrives, so the prompt goes up when the mode is chosen, not when time is short. */
+async function armMic(why) {
+  if (stream && stream.active) return true;
+  if (!canRecord) return false;
+  micAsked = true;
   try {
-    if (!stream || !stream.active) {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
-    }
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+    micOK = true;
   } catch (e) {
-    strip(i, '<span class="bad">The browser would not hand over the microphone. Allow it next to the address bar, then press Record again.</span>');
-    log("mic refused", { line: S[i].n, detail: String(e && e.name || e) });
-    return;
+    micOK = false;
+    log("mic refused", { detail: why + ": " + String((e && e.name) || e) });
   }
+  return micOK;
+}
+
+function letMicGo() {
+  clearTimeout(idle);
+  if (mode === "repeat") return;        // another gap is moments away; keep it
+  idle = setTimeout(() => {
+    if (stream && !recording()) { stream.getTracks().forEach((t) => t.stop()); stream = null; }
+  }, 60000);
+}
+
+/* one take: btn is the line's own Record button, or null when the gap is driving */
+function beginTake(i, btn) {
   const chunks = [];
-  try { rec = new MediaRecorder(stream); } catch (e) { rec = new MediaRecorder(stream, { mimeType: "audio/webm" }); }
-  recBtn = btn;
-  btn.classList.add("rec");
-  btn.innerHTML = MICON + "Stop";
-  strip(i, "<span>Listening. Read the line, then press Stop.</span>");
-  rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
-  rec.onstop = async () => {
+  let mine;
+  try { mine = new MediaRecorder(stream); } catch (e) { mine = new MediaRecorder(stream, { mimeType: "audio/webm" }); }
+  const type = mine.mimeType || "audio/webm";
+  rec = mine;
+  recBtn = btn || null;
+  mine._drop = false;
+  if (btn) { btn.classList.add("rec"); btn.innerHTML = MICON + "Stop"; }
+  strip(i, btn ? "<span>Listening. Read the line, then press Stop.</span>" : "<span>Listening&hellip;</span>");
+  mine.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+  mine.onstop = async () => {
     clearTimeout(recStop);
-    btn.classList.remove("rec");
-    btn.innerHTML = MICON + "Record again";
-    idle = setTimeout(() => {              // let go of the microphone when it is not in use
-      if (stream) { stream.getTracks().forEach((t) => t.stop()); stream = null; }
-    }, 40000);
-    const type = (rec && rec.mimeType) || "audio/webm";
-    rec = null;
-    const blob = new Blob(chunks, { type: type });
+    if (rec === mine) rec = null;
+    if (btn) { btn.classList.remove("rec"); btn.innerHTML = MICON + "Record again"; }
+    letMicGo();
+    if (mine._drop) { showScore(i); return; }
     strip(i, "<span>Listening back&hellip;</span>");
+    const blob = new Blob(chunks, { type: type });
     let res;
     try { res = await compare(i, blob); }
-    catch (e) { res = { error: "Something went wrong reading that take: " + (e && e.message || e) }; }
+    catch (e) { res = { error: "Something went wrong reading that take: " + ((e && e.message) || e) }; }
     if (res.error) {
       strip(i, '<span class="bad">' + esc(res.error) + "</span>");
       log("take failed", { line: S[i].n, detail: res.error });
@@ -1016,21 +1074,176 @@ async function toggleRec(i, btn) {
     }
     const before = takes[i];
     if (before && before.url) URL.revokeObjectURL(before.url);
-    takes[i] = Object.assign(res, { url: URL.createObjectURL(blob), ext: extFor(type),
-      n: before ? before.n + 1 : 1 });
+    takes[i] = Object.assign(res, { blob: blob, url: URL.createObjectURL(blob),
+      ext: extFor(type), n: before ? before.n + 1 : 1 });
     drawOne(i);
     showScore(i);
+    keepTake(i);
+    runBar();
     tally.takes++;
     tally.lines.add(i);
     tally.best = Math.max(tally.best, res.score);
     log("take", { line: S[i].n, take: takes[i].n, score: res.score,
       semitonesOff: +res.off.toFixed(2), words: res.ok + " of " + res.judged,
-      seconds: +res.dur.toFixed(2),
+      seconds: +res.dur.toFixed(2), how: btn ? "button" : "repeat gap",
       detail: "line " + S[i].n + ", take " + takes[i].n + ": melody " + res.score + "%" });
   };
-  rec.start();
+  mine.start();
+}
+
+async function toggleRec(i, btn) {
+  if (recording()) { stopRec(); return; }
+  clearTimeout(idle);
+  aud.pause();
+  if (mineAudio) { mineAudio.pause(); mineAudio = null; }
+  strip(i, "<span>Getting the microphone ready&hellip;</span>");
+  if (!(await armMic("record button"))) {
+    strip(i, '<span class="bad">The browser would not hand over the microphone. Allow it next to the address bar, then press Record again.</span>');
+    return;
+  }
+  setHint();
+  beginTake(i, btn);
   recStop = setTimeout(stopRec, (S[i].stop - S[i].start) * 1000 + 5000);
 }
+
+/* ======================================================================
+   The run: takes stay on this computer, so the curves and the sound of every
+   line are still here on the next visit, and the whole pass can leave as one file.
+   ====================================================================== */
+const VAULT = "witches-takes", SHELF = "takes";
+const slot = (i) => (who || "?").toLowerCase() + "#" + S[i].n;
+
+function vault() {
+  return new Promise((ok, no) => {
+    const req = indexedDB.open(VAULT, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(SHELF);
+    req.onsuccess = () => ok(req.result);
+    req.onerror = () => no(req.error);
+  });
+}
+
+async function keepTake(i) {
+  const t = takes[i];
+  if (!t || !t.blob) return;
+  try {
+    const db = await vault();
+    db.transaction(SHELF, "readwrite").objectStore(SHELF).put({
+      blob: t.blob, ext: t.ext, n: t.n, score: t.score, off: t.off, mine: t.mine,
+      words: t.words, ok: t.ok, judged: t.judged, dur: t.dur, at: Date.now()
+    }, slot(i));
+  } catch (e) {}
+}
+
+async function loadTakes() {
+  let found = 0;
+  try {
+    const db = await vault();
+    const shelf = db.transaction(SHELF, "readonly").objectStore(SHELF);
+    await Promise.all(S.map((s, i) => new Promise((done) => {
+      const req = shelf.get(slot(i));
+      req.onsuccess = () => {
+        const kept = req.result;
+        if (kept && kept.blob) {
+          takes[i] = Object.assign({}, kept, { url: URL.createObjectURL(kept.blob) });
+          found++;
+        }
+        done();
+      };
+      req.onerror = () => done();
+    })));
+  } catch (e) {}
+  S.forEach((s, i) => { if (takes[i]) { drawOne(i); showScore(i); tally.lines.add(i); } });
+  runBar();
+  if (found) log("takes restored", { takes: found, detail: found + " takes came back from the last visit" });
+}
+
+async function clearTakes() {
+  try {
+    const db = await vault();
+    const shelf = db.transaction(SHELF, "readwrite").objectStore(SHELF);
+    S.forEach((s, i) => shelf.delete(slot(i)));
+  } catch (e) {}
+  S.forEach((s, i) => {
+    if (!takes[i]) return;
+    if (takes[i].url) URL.revokeObjectURL(takes[i].url);
+    takes[i] = null;
+    drawOne(i);
+    showScore(i);
+  });
+  tally.lines.clear();
+  runBar();
+  log("takes cleared", { detail: "the student cleared the saved takes" });
+}
+
+function runBar() {
+  const scores = [];
+  S.forEach((s, i) => { if (takes[i]) scores.push(takes[i].score); });
+  $("run").hidden = !scores.length;
+  if (!scores.length) return;
+  const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  $("run-line").textContent = scores.length + " of " + S.length + " lines recorded  ·  " +
+    avg + "% average melody match  ·  best " + Math.max.apply(null, scores) + "%";
+}
+
+function wavOf(pcm, sr) {
+  const n = pcm.length, buf = new ArrayBuffer(44 + n * 2), view = new DataView(buf);
+  const tag = (at, s) => { for (let i = 0; i < s.length; i++) view.setUint8(at + i, s.charCodeAt(i)); };
+  tag(0, "RIFF"); view.setUint32(4, 36 + n * 2, true); tag(8, "WAVEfmt ");
+  view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+  view.setUint32(24, sr, true); view.setUint32(28, sr * 2, true);
+  view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+  tag(36, "data"); view.setUint32(40, n * 2, true);
+  for (let i = 0; i < n; i++) {
+    const v = Math.max(-1, Math.min(1, pcm[i]));
+    view.setInt16(44 + i * 2, v < 0 ? v * 0x8000 : v * 0x7fff, true);
+  }
+  return new Blob([buf], { type: "audio/wav" });
+}
+
+function today() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+/* every line you recorded, in order, as one file to hand in */
+async function saveRun() {
+  const btn = $("run-save"), label = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Putting it together…";
+  try {
+    const parts = [], quiet = new Float32Array(Math.round(0.45 * SR));
+    let total = 0, lines = 0;
+    for (let i = 0; i < S.length; i++) {
+      if (!takes[i] || !takes[i].blob) continue;
+      const pcm = await pcm16k(await takes[i].blob.arrayBuffer());
+      parts.push(pcm, quiet);
+      total += pcm.length + quiet.length;
+      lines++;
+    }
+    if (!total) return;
+    const whole = new Float32Array(total);
+    let at = 0;
+    parts.forEach((p) => { whole.set(p, at); at += p.length; });
+    const name = "Witches_run_" + (who ? who.replace(/[^A-Za-z0-9]+/g, "-") + "_" : "") + today() + ".wav";
+    const url = URL.createObjectURL(wavOf(whole, SR));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+    log("run saved", { takes: lines, detail: "downloaded " + name + " (" + lines + " lines)" });
+  } catch (e) {
+    $("run-line").textContent = "That would not save: " + ((e && e.message) || e);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = label;
+  }
+}
+
+$("run-save").addEventListener("click", saveRun);
+$("run-clear").addEventListener("click", clearTakes);
 
 $("script").addEventListener("click", (e) => {
   const btn = e.target.closest(".take button");
