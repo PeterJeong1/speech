@@ -152,7 +152,17 @@ h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(40px,7.4v
 .run #run-line{font-family:var(--mono);font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
 .run-buttons{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:2px}
 .run-go{padding:10px 20px;border:0;border-radius:999px;background:var(--lantern);color:var(--btn-ink);font-weight:700;cursor:pointer}
-.run-go[disabled]{opacity:.5;cursor:default}
+.run-go[disabled],.run-alt[disabled]{opacity:.5;cursor:default}
+.run-alt{padding:9px 18px;border:1px solid var(--rule);border-radius:999px;background:var(--surface);color:var(--ink);cursor:pointer}
+.run-alt:hover{border-color:var(--lantern)}
+.run-status{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font:14px var(--mono);color:var(--ink)}
+.run-status[hidden]{display:none}
+.run-status .bad{color:var(--wrong)}
+.run-status .good{color:var(--lantern-ink);font-weight:500}
+.run audio{width:100%}
+.run audio[hidden]{display:none}
+.score .pick{color:var(--lantern-ink)}
+.score .pick b{font-size:13px}
 .run .link{border:0;background:none;padding:0;font:13px var(--mono);color:var(--muted);text-decoration:underline;
   text-underline-offset:3px;cursor:pointer}
 .run .link:hover{color:var(--ink)}
@@ -235,13 +245,21 @@ footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-si
   <div id="script"></div>
 
   <section class="run" id="run" hidden>
-    <h2>Your run</h2>
+    <h2>Your speech</h2>
     <p id="run-line"></p>
+    <p id="run-missing" class="run-note"></p>
     <div class="run-buttons">
-      <button class="run-go" id="run-save" type="button">Save the whole run as one file</button>
+      <button class="run-go" id="run-send" type="button">Send it to my teacher</button>
+      <button class="run-alt" id="run-listen" type="button">Listen to the whole speech</button>
+      <button class="link" id="run-save" type="button">Save a copy</button>
       <button class="link" id="run-clear" type="button">Clear my takes</button>
     </div>
-    <p class="run-note">Your takes stay on this computer, so the curves and the sound are still here when you come back.</p>
+    <div class="run-status" id="run-status" hidden></div>
+    <audio id="run-audio" controls preload="none" hidden></audio>
+    <p class="run-note">Each line uses its closest take so far, not simply the last one, so a retake only
+      changes your speech when it beats the one already there. The rests between lines are the guide's own,
+      and every line is brought to the same loudness. Your takes stay on this computer, so they are still
+      here when you come back.</p>
   </section>
 
   <section class="rubric">
@@ -283,12 +301,13 @@ footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-si
 <audio id="aud" preload="auto" src="guide.mp3"></audio>
 
 <script>
-const D = {"voice": "en-GB-SoniaNeural", "limit": 120.0, "duration": 107.76, "words": 217, "speaking": 70.3, "silence": 36.6, "avg_wpm": 185, "longest": 2.7, "sections": {"Hook": "Ask, wait, then answer.", "History": "Narrator's voice. Clean numbers.", "Turn": "Drop the volume. This part is yours.", "Rumour": "The fastest section. Gossip speed.", "Reversal": "Slow, quiet, guilty.", "Now": "Snap back up. Short, sharp lines.", "Point": "The slowest section of the speech.", "Close": "Build, ask, land low."}, "sentences": [{"n": 1, "section": "Hook", "text": "Do you believe in witches?", "tokens": ["Do", "you", "believe", "in", "witches?"], "times": [[0.4, 0.455], [0.467, 0.646], [0.659, 1.105], [1.118, 1.246], [1.258, 1.947]], "stress": ["believe", "witches"], "note": "A real question. Look at the audience and let the end rise.", "end": "rise", "words": 5, "dur": 1.57, "band": "steady", "start": 0.4, "stop": 1.97, "pause": 1.8, "pitch": [null, {"st": 4.77, "head": 4.25, "tail": 7.5, "dir": "rise"}, {"st": 4.43, "head": 7.18, "tail": -0.31, "dir": "fall"}, {"st": -1.56, "head": -2.33, "tail": -1.7, "dir": "flat"}, {"st": -1.38, "head": -1.2, "tail": -4.19, "dir": "fall"}]}, {"n": 2, "section": "Hook", "text": "I don't.", "tokens": ["I", "don't."], "times": [[3.77, 3.836], [3.848, 4.412]], "stress": ["don't"], "note": "Flat and certain. The contrast is the point.", "end": "fall", "words": 2, "dur": 0.65, "band": "slower", "start": 3.77, "stop": 4.418, "pause": 1.55, "pitch": [{"st": 3.85, "head": 4.77, "tail": 3.99, "dir": "flat"}, {"st": 2.22, "head": 5.05, "tail": -3.41, "dir": "fall"}]}, {"n": 3, "section": "Hook", "text": "But in Salem, in 1692, everybody did.", "tokens": ["But", "in", "Salem,", "in", "1692,", "everybody", "did."], "times": [[5.968, 6.069], [6.082, 6.239], [6.252, 6.812], [7.033, 7.163], [7.176, 8.387], [8.673, 9.207], [9.22, 9.646]], "stress": ["salem", "everybody"], "note": "Drop into storytelling. Say the year as sixteen ninety-two.", "end": "fall", "words": 8, "dur": 3.68, "band": "steady", "start": 5.968, "stop": 9.646, "pause": 0.9, "pitch": [{"st": 2.02, "head": 3.13, "tail": 1.17, "dir": "fall"}, {"st": 1.55, "head": 2.48, "tail": 1.16, "dir": "fall"}, {"st": 0.65, "head": 5.26, "tail": -5.16, "dir": "fall"}, {"st": 0.19, "head": 0.31, "tail": 0.19, "dir": "flat"}, {"st": -0.79, "head": 1.53, "tail": -2.36, "dir": "fall"}, {"st": -0.08, "head": 5.21, "tail": -3.81, "dir": "fall"}, {"st": -4.24, "head": -4.12, "tail": -5.23, "dir": "fall"}]}, {"n": 4, "section": "History", "text": "Nineteen were hanged, and not one was a witch.", "tokens": ["Nineteen", "were", "hanged,", "and", "not", "one", "was", "a", "witch."], "times": [[10.546, 11.055], [11.067, 11.165], [11.177, 11.631], [11.9, 12.023], [12.035, 12.28], [12.293, 12.501], [12.513, 12.66], [12.672, 12.721], [12.734, 13.224]], "stress": ["nineteen", "not", "one"], "note": "Say the number cleanly. A small break before 'and not one'.", "end": "fall", "words": 9, "dur": 2.7, "band": "faster", "start": 10.546, "stop": 13.246, "pause": 1.1, "pitch": [{"st": 4.52, "head": 2.73, "tail": 3.72, "dir": "rise"}, {"st": -0.69, "head": 0.18, "tail": -1.0, "dir": "fall"}, {"st": -1.44, "head": -1.33, "tail": -4.57, "dir": "fall"}, {"st": 2.93, "head": 2.67, "tail": 3.07, "dir": "flat"}, {"st": 5.48, "head": 3.11, "tail": 7.56, "dir": "rise"}, {"st": -1.63, "head": 0.08, "tail": -2.57, "dir": "fall"}, {"st": -2.86, "head": -2.86, "tail": -2.79, "dir": "flat"}, null, {"st": -1.3, "head": -1.48, "tail": -3.38, "dir": "fall"}]}, {"n": 5, "section": "History", "text": "What condemned them was a whisper, a birthmark, a dream.", "tokens": ["What", "condemned", "them", "was", "a", "whisper,", "a", "birthmark,", "a", "dream."], "times": [[14.346, 14.538], [14.55, 15.004], [15.016, 15.2], [15.212, 15.347], [15.359, 15.408], [15.42, 15.947], [16.217, 16.278], [16.29, 16.977], [17.173, 17.209], [17.222, 17.687]], "stress": ["whisper", "birthmark", "dream"], "note": "Three beats, each a little quieter.", "end": "fall", "words": 10, "dur": 3.37, "band": "steady", "start": 14.346, "stop": 17.719, "pause": 0.65, "pitch": [{"st": 4.06, "head": 1.45, "tail": 6.82, "dir": "rise"}, {"st": 3.07, "head": 3.47, "tail": 3.29, "dir": "flat"}, {"st": -2.39, "head": -0.26, "tail": -3.62, "dir": "fall"}, {"st": -2.96, "head": -3.41, "tail": -2.55, "dir": "rise"}, null, {"st": -2.44, "head": -2.15, "tail": -5.71, "dir": "fall"}, {"st": 0.84, "head": 0.34, "tail": 1.2, "dir": "rise"}, {"st": -0.3, "head": 3.51, "tail": -5.2, "dir": "fall"}, null, {"st": -0.66, "head": 1.24, "tail": -5.65, "dir": "fall"}]}, {"n": 6, "section": "History", "text": "Nobody asked for proof, because everybody already believed.", "tokens": ["Nobody", "asked", "for", "proof,", "because", "everybody", "already", "believed."], "times": [[18.369, 18.888], [18.903, 19.334], [19.349, 19.513], [19.528, 20.123], [20.436, 20.837], [20.852, 21.492], [21.507, 21.998], [22.013, 22.787]], "stress": ["proof", "believed"], "note": "Slow down on the last three words.", "end": "fall", "words": 8, "dur": 4.42, "band": "steady", "start": 18.369, "stop": 22.791, "pause": 2.0, "pitch": [{"st": 4.27, "head": 2.63, "tail": 2.23, "dir": "flat"}, {"st": -1.53, "head": -0.49, "tail": -2.24, "dir": "fall"}, {"st": -1.4, "head": 0.81, "tail": -2.28, "dir": "fall"}, {"st": -1.8, "head": 0.37, "tail": -5.53, "dir": "fall"}, {"st": 3.1, "head": 2.63, "tail": 2.62, "dir": "flat"}, {"st": 0.59, "head": 6.0, "tail": -3.65, "dir": "fall"}, {"st": -2.12, "head": -4.13, "tail": -1.4, "dir": "rise"}, {"st": -2.76, "head": -2.9, "tail": -5.05, "dir": "fall"}]}, {"n": 7, "section": "Turn", "text": "I know that feeling better than I want to admit.", "tokens": ["I", "know", "that", "feeling", "better", "than", "I", "want", "to", "admit."], "times": [[24.791, 24.864], [24.879, 25.188], [25.203, 25.467], [25.482, 25.938], [25.953, 26.35], [26.364, 26.57], [26.585, 26.688], [26.703, 26.982], [26.997, 27.129], [27.144, 27.835]], "stress": ["know", "admit"], "note": "Drop the volume. A confession, not a line.", "end": "fall", "words": 10, "dur": 3.06, "band": "slower", "start": 24.791, "stop": 27.853, "pause": 1.1, "pitch": [{"st": 3.14, "head": 6.33, "tail": 3.31, "dir": "fall"}, {"st": 5.24, "head": 4.87, "tail": 7.15, "dir": "rise"}, {"st": 1.46, "head": 5.37, "tail": -1.17, "dir": "fall"}, {"st": 0.24, "head": 2.36, "tail": -1.45, "dir": "fall"}, {"st": 1.51, "head": -2.31, "tail": 2.32, "dir": "rise"}, {"st": -3.4, "head": -3.35, "tail": -3.51, "dir": "flat"}, {"st": -3.21, "head": -3.26, "tail": -3.27, "dir": "flat"}, {"st": -2.56, "head": -2.73, "tail": -2.37, "dir": "flat"}, null, {"st": -1.69, "head": -2.49, "tail": -1.23, "dir": "rise"}]}, {"n": 8, "section": "Rumour", "text": "In sixth grade, a rumor spread that a new girl stole a phone.", "tokens": ["In", "sixth", "grade,", "a", "rumor", "spread", "that", "a", "new", "girl", "stole", "a", "phone."], "times": [[28.953, 29.071], [29.083, 29.402], [29.414, 29.807], [30.076, 30.113], [30.125, 30.493], [30.505, 30.909], [30.922, 31.069], [31.081, 31.13], [31.142, 31.375], [31.387, 31.718], [31.731, 32.025], [32.037, 32.074], [32.086, 32.539]], "stress": ["rumor", "stole"], "note": "Speed up. Tell it the way gossip travels.", "end": "fall", "words": 13, "dur": 3.61, "band": "faster", "start": 28.953, "stop": 32.566, "pause": 0.45, "pitch": [{"st": 0.82, "head": 0.98, "tail": 0.78, "dir": "flat"}, {"st": 5.37, "head": -0.24, "tail": 7.68, "dir": "rise"}, {"st": -4.48, "head": -1.88, "tail": -4.91, "dir": "fall"}, null, {"st": 3.96, "head": 2.34, "tail": 3.38, "dir": "rise"}, {"st": -1.67, "head": 1.02, "tail": -3.22, "dir": "fall"}, {"st": -2.47, "head": -1.25, "tail": -3.39, "dir": "fall"}, null, {"st": -0.4, "head": -1.94, "tail": 3.23, "dir": "rise"}, {"st": 1.28, "head": 3.28, "tail": -4.44, "dir": "fall"}, {"st": -4.02, "head": -4.19, "tail": -4.18, "dir": "flat"}, {"st": -3.51, "head": -4.13, "tail": -3.04, "dir": "rise"}, {"st": -4.35, "head": -0.6, "tail": -5.84, "dir": "fall"}]}, {"n": 9, "section": "Rumour", "text": "I saw no evidence, only everyone avoiding her.", "tokens": ["I", "saw", "no", "evidence,", "only", "everyone", "avoiding", "her."], "times": [[33.016, 33.106], [33.118, 33.39], [33.403, 33.613], [33.625, 34.257], [34.529, 34.789], [34.801, 35.247], [35.259, 35.717], [35.729, 36.026]], "stress": ["no", "evidence", "avoiding"], "note": "Fast and flat, in one breath.", "end": "fall", "words": 8, "dur": 3.03, "band": "faster", "start": 33.016, "stop": 36.043, "pause": 0.65, "pitch": [{"st": 1.16, "head": -0.89, "tail": 1.48, "dir": "rise"}, {"st": 4.37, "head": 2.05, "tail": 4.47, "dir": "rise"}, {"st": 1.38, "head": 3.1, "tail": 0.79, "dir": "fall"}, {"st": 0.64, "head": 1.21, "tail": -5.87, "dir": "fall"}, {"st": 5.89, "head": 4.37, "tail": 5.99, "dir": "rise"}, {"st": -0.28, "head": 4.8, "tail": -3.65, "dir": "fall"}, {"st": -2.7, "head": -3.54, "tail": -2.29, "dir": "rise"}, {"st": -5.4, "head": -5.34, "tail": -6.21, "dir": "fall"}]}, {"n": 10, "section": "Rumour", "text": "So I did the same.", "tokens": ["So", "I", "did", "the", "same."], "times": [[36.693, 36.898], [36.91, 36.996], [37.008, 37.253], [37.265, 37.363], [37.376, 37.866]], "stress": ["same"], "note": "Brake hard. Quiet, then a real pause.", "end": "fall", "words": 5, "dur": 1.19, "band": "slower", "start": 36.693, "stop": 37.885, "pause": 2.25, "pitch": [{"st": 3.88, "head": 4.7, "tail": 3.43, "dir": "fall"}, {"st": 3.0, "head": 3.0, "tail": 3.07, "dir": "flat"}, {"st": 3.41, "head": 3.42, "tail": 3.09, "dir": "flat"}, null, {"st": -4.27, "head": 0.89, "tail": -7.55, "dir": "fall"}]}, {"n": 11, "section": "Reversal", "text": "Two weeks later, the phone turned up in a locker.", "tokens": ["Two", "weeks", "later,", "the", "phone", "turned", "up", "in", "a", "locker."], "times": [[40.135, 40.283], [40.296, 40.583], [40.596, 41.058], [41.321, 41.421], [41.433, 41.796], [41.808, 42.096], [42.108, 42.258], [42.271, 42.358], [42.371, 42.408], [42.421, 42.908]], "stress": ["locker"], "note": "Neutral. Just the fact.", "end": "fall", "words": 10, "dur": 2.8, "band": "steady", "start": 40.135, "stop": 42.938, "pause": 0.9, "pitch": [{"st": 7.57, "head": 6.87, "tail": 8.16, "dir": "rise"}, {"st": 3.82, "head": 7.85, "tail": -1.46, "dir": "fall"}, {"st": 1.07, "head": 1.19, "tail": -4.67, "dir": "fall"}, null, {"st": 3.98, "head": 5.12, "tail": 0.01, "dir": "fall"}, {"st": 0.04, "head": -2.19, "tail": -0.02, "dir": "rise"}, {"st": -2.28, "head": -1.29, "tail": -4.04, "dir": "fall"}, {"st": -1.67, "head": -1.25, "tail": -2.69, "dir": "fall"}, {"st": -1.6, "head": -1.83, "tail": -1.31, "dir": "flat"}, {"st": -2.18, "head": -0.49, "tail": -5.45, "dir": "fall"}]}, {"n": 12, "section": "Reversal", "text": "\"I told you it wasn't me,\" she said.", "tokens": ["\"I", "told", "you", "it", "wasn't", "me,\"", "she", "said."], "times": [[43.838, 43.906], [43.918, 44.261], [44.273, 44.42], [44.433, 44.58], [44.592, 44.984], [44.996, 45.291], [45.432, 45.665], [45.677, 46.142]], "stress": ["wasn't", "me"], "note": "Act her voice: tired, not angry. Then 'she said' in your own voice.", "end": "fall", "words": 8, "dur": 2.3, "band": "slower", "start": 43.838, "stop": 46.142, "pause": 1.8, "pitch": [{"st": 2.1, "head": 2.02, "tail": 2.27, "dir": "flat"}, {"st": 6.42, "head": 3.16, "tail": 7.38, "dir": "rise"}, {"st": 0.6, "head": 3.61, "tail": -1.02, "dir": "fall"}, {"st": -2.35, "head": -2.24, "tail": -0.86, "dir": "rise"}, {"st": -0.51, "head": -1.13, "tail": -2.64, "dir": "fall"}, {"st": -3.78, "head": -2.39, "tail": -4.55, "dir": "fall"}, {"st": 3.55, "head": 3.86, "tail": 3.15, "dir": "flat"}, {"st": -1.15, "head": 3.15, "tail": -5.69, "dir": "fall"}]}, {"n": 13, "section": "Reversal", "text": "She did not look at me.", "tokens": ["She", "did", "not", "look", "at", "me."], "times": [[47.942, 48.103], [48.118, 48.294], [48.309, 48.603], [48.618, 48.839], [48.853, 49.03], [49.044, 49.368]], "stress": ["look"], "note": "The slowest line so far.", "end": "fall", "words": 6, "dur": 1.45, "band": "slower", "start": 47.942, "stop": 49.396, "pause": 2.0, "pitch": [null, {"st": 4.32, "head": 4.5, "tail": 4.26, "dir": "flat"}, {"st": 2.68, "head": 1.42, "tail": 3.55, "dir": "rise"}, {"st": 1.21, "head": -1.4, "tail": 2.01, "dir": "rise"}, {"st": -1.8, "head": 0.51, "tail": -4.35, "dir": "fall"}, {"st": -6.38, "head": -4.77, "tail": -7.39, "dir": "fall"}]}, {"n": 14, "section": "Reversal", "text": "I never called her a thief.", "tokens": ["I", "never", "called", "her", "a", "thief."], "times": [[51.396, 51.449], [51.463, 51.846], [51.86, 52.213], [52.228, 52.419], [52.434, 52.507], [52.522, 53.169]], "stress": ["never"], "note": "Almost defensive.", "end": "fall", "words": 6, "dur": 1.8, "band": "steady", "start": 51.396, "stop": 53.194, "pause": 0.45, "pitch": [null, {"st": 4.28, "head": 3.72, "tail": 5.11, "dir": "rise"}, {"st": 0.77, "head": 0.53, "tail": -0.42, "dir": "fall"}, {"st": -3.13, "head": -3.32, "tail": -3.18, "dir": "flat"}, {"st": -4.0, "head": -3.96, "tail": -4.0, "dir": "flat"}, {"st": -3.83, "head": -4.1, "tail": -5.88, "dir": "fall"}]}, {"n": 15, "section": "Reversal", "text": "I just avoided her.", "tokens": ["I", "just", "avoided", "her."], "times": [[53.644, 53.737], [53.751, 54.094], [54.108, 54.643], [54.657, 55.028]], "stress": ["just"], "note": "Bitter on 'just'.", "end": "fall", "words": 4, "dur": 1.41, "band": "slower", "start": 53.644, "stop": 55.053, "pause": 0.9, "pitch": [{"st": 2.42, "head": 1.45, "tail": 2.87, "dir": "rise"}, {"st": 5.56, "head": 4.05, "tail": 5.56, "dir": "rise"}, {"st": 0.21, "head": -1.42, "tail": -1.36, "dir": "flat"}, {"st": -6.15, "head": -5.24, "tail": -7.42, "dir": "fall"}]}, {"n": 16, "section": "Reversal", "text": "And I still cannot forget it.", "tokens": ["And", "I", "still", "cannot", "forget", "it."], "times": [[55.953, 56.064], [56.078, 56.189], [56.203, 56.578], [56.592, 57.009], [57.023, 57.453], [57.467, 57.856]], "stress": ["still"], "note": "Very quiet. The longest silence of the first half.", "end": "fall", "words": 6, "dur": 1.92, "band": "slower", "start": 55.953, "stop": 57.878, "pause": 2.45, "pitch": [{"st": 1.49, "head": 1.39, "tail": 1.71, "dir": "flat"}, {"st": 2.22, "head": 1.7, "tail": 2.36, "dir": "flat"}, {"st": 6.72, "head": 2.89, "tail": 6.87, "dir": "rise"}, {"st": -1.5, "head": 1.07, "tail": -4.14, "dir": "fall"}, {"st": -1.3, "head": -3.09, "tail": -0.94, "dir": "rise"}, {"st": -5.59, "head": -3.66, "tail": -7.54, "dir": "fall"}]}, {"n": 17, "section": "Now", "text": "We do not burn witches now.", "tokens": ["We", "do", "not", "burn", "witches", "now."], "times": [[60.328, 60.43], [60.442, 60.577], [60.589, 60.847], [60.859, 61.165], [61.178, 61.582], [61.594, 61.974]], "stress": ["burn"], "note": "Snap back up. New energy.", "end": "fall", "words": 6, "dur": 1.68, "band": "faster", "start": 60.328, "stop": 62.005, "pause": 0.45, "pitch": [{"st": 3.13, "head": 2.49, "tail": 4.27, "dir": "rise"}, {"st": 4.73, "head": 4.73, "tail": 5.71, "dir": "rise"}, {"st": 5.82, "head": 5.31, "tail": 6.47, "dir": "rise"}, {"st": 1.09, "head": 3.24, "tail": -2.66, "dir": "fall"}, {"st": -2.61, "head": -2.9, "tail": -3.44, "dir": "flat"}, {"st": -4.13, "head": -2.43, "tail": -4.82, "dir": "fall"}]}, {"n": 18, "section": "Now", "text": "We screenshot them instead.", "tokens": ["We", "screenshot", "them", "instead."], "times": [[62.455, 62.581], [62.593, 63.218], [63.231, 63.39], [63.402, 64.038]], "stress": ["screenshot"], "note": "Hit it hard, then stop dead.", "end": "fall", "words": 4, "dur": 1.58, "band": "faster", "start": 62.455, "stop": 64.038, "pause": 1.8, "pitch": [{"st": 2.98, "head": 1.27, "tail": 4.46, "dir": "rise"}, {"st": 6.29, "head": 4.65, "tail": -1.38, "dir": "fall"}, {"st": -3.95, "head": -2.13, "tail": -4.65, "dir": "fall"}, {"st": -4.27, "head": -4.36, "tail": -4.87, "dir": "flat"}]}, {"n": 19, "section": "Now", "text": "When a rumor travels faster than evidence, the truth arrives too late.", "tokens": ["When", "a", "rumor", "travels", "faster", "than", "evidence,", "the", "truth", "arrives", "too", "late."], "times": [[65.838, 65.992], [66.004, 66.065], [66.078, 66.445], [66.458, 66.96], [66.972, 67.364], [67.377, 67.524], [67.536, 68.087], [68.345, 68.443], [68.455, 68.823], [68.835, 69.288], [69.301, 69.497], [69.509, 69.999]], "stress": ["faster", "too", "late"], "note": "Quick and clear, like a headline. Then let it land.", "end": "fall", "words": 12, "dur": 4.17, "band": "faster", "start": 65.838, "stop": 70.01, "pause": 1.1, "pitch": [{"st": 2.74, "head": 1.5, "tail": 2.97, "dir": "rise"}, {"st": 2.82, "head": 2.82, "tail": 2.55, "dir": "flat"}, {"st": 2.84, "head": 0.88, "tail": 3.17, "dir": "rise"}, {"st": -2.86, "head": 0.32, "tail": -3.87, "dir": "fall"}, {"st": 2.37, "head": 2.13, "tail": 1.7, "dir": "flat"}, {"st": -2.7, "head": -1.73, "tail": -2.86, "dir": "fall"}, {"st": -0.02, "head": 1.91, "tail": -0.53, "dir": "fall"}, null, {"st": 4.53, "head": 4.25, "tail": 0.61, "dir": "fall"}, {"st": -2.07, "head": 0.14, "tail": -4.42, "dir": "fall"}, {"st": -0.94, "head": -0.59, "tail": -1.39, "dir": "flat"}, {"st": -1.86, "head": -1.85, "tail": -5.32, "dir": "fall"}]}, {"n": 20, "section": "Point", "text": "Here is what that silence taught me.", "tokens": ["Here", "is", "what", "that", "silence", "taught", "me."], "times": [[71.11, 71.314], [71.327, 71.462], [71.474, 71.658], [71.67, 71.89], [71.903, 72.43], [72.442, 72.761], [72.773, 73.018]], "stress": ["silence"], "note": "Slow. Signal the conclusion.", "end": "fall", "words": 7, "dur": 1.95, "band": "slower", "start": 71.11, "stop": 73.06, "pause": 0.9, "pitch": [{"st": 7.07, "head": 4.82, "tail": 7.76, "dir": "rise"}, {"st": 5.59, "head": 6.75, "tail": 3.05, "dir": "fall"}, {"st": 1.49, "head": 1.5, "tail": 0.44, "dir": "fall"}, {"st": -0.76, "head": 0.27, "tail": -1.3, "dir": "fall"}, {"st": 0.42, "head": 2.68, "tail": -5.37, "dir": "fall"}, {"st": -1.28, "head": -0.56, "tail": -3.73, "dir": "fall"}, {"st": -5.45, "head": -3.65, "tail": -6.06, "dir": "fall"}]}, {"n": 21, "section": "Point", "text": "A crowd is not evidence.", "tokens": ["A", "crowd", "is", "not", "evidence."], "times": [[73.96, 74.002], [74.015, 74.472], [74.485, 74.646], [74.658, 74.906], [74.918, 75.636]], "stress": ["crowd", "not"], "note": "The main sentence of the speech. Slowest line, longest pause after.", "end": "fall", "words": 5, "dur": 1.69, "band": "slower", "start": 73.96, "stop": 75.65, "pause": 2.7, "pitch": [null, {"st": 4.29, "head": 4.91, "tail": -2.49, "dir": "fall"}, {"st": -1.19, "head": 0.02, "tail": -2.98, "dir": "fall"}, {"st": 2.09, "head": 1.46, "tail": 2.0, "dir": "flat"}, {"st": -0.33, "head": 1.61, "tail": -4.81, "dir": "fall"}]}, {"n": 22, "section": "Point", "text": "It is noise that agrees with itself.", "tokens": ["It", "is", "noise", "that", "agrees", "with", "itself."], "times": [[78.35, 78.445], [78.458, 78.605], [78.617, 79.009], [79.021, 79.168], [79.181, 79.622], [79.634, 79.781], [79.794, 80.468]], "stress": ["noise"], "note": "Let the image land.", "end": "fall", "words": 7, "dur": 2.13, "band": "slower", "start": 78.35, "stop": 80.482, "pause": 1.35, "pitch": [{"st": 3.15, "head": 2.39, "tail": 2.22, "dir": "flat"}, {"st": 4.48, "head": 4.52, "tail": 2.26, "dir": "fall"}, {"st": 4.05, "head": 4.11, "tail": -2.13, "dir": "fall"}, {"st": -1.2, "head": -0.19, "tail": -2.0, "dir": "fall"}, {"st": 0.3, "head": -0.5, "tail": -2.2, "dir": "fall"}, {"st": -2.43, "head": -2.17, "tail": -3.35, "dir": "fall"}, {"st": -2.75, "head": -3.48, "tail": -4.7, "dir": "fall"}]}, {"n": 23, "section": "Point", "text": "Salem never needed a witch.", "tokens": ["Salem", "never", "needed", "a", "witch."], "times": [[81.832, 82.301], [82.314, 82.589], [82.601, 82.939], [82.951, 83.014], [83.026, 83.551]], "stress": ["never"], "note": "Callback. A little warmer.", "end": "fall", "words": 5, "dur": 1.75, "band": "steady", "start": 81.832, "stop": 83.582, "pause": 0.45, "pitch": [{"st": 6.34, "head": 7.45, "tail": -0.44, "dir": "fall"}, {"st": 2.8, "head": 0.28, "tail": 3.6, "dir": "rise"}, {"st": 1.75, "head": 1.42, "tail": 0.25, "dir": "fall"}, {"st": -1.99, "head": -4.03, "tail": -2.19, "dir": "rise"}, {"st": -3.0, "head": -3.16, "tail": -3.48, "dir": "flat"}]}, {"n": 24, "section": "Point", "text": "It only needed people who did not ask.", "tokens": ["It", "only", "needed", "people", "who", "did", "not", "ask."], "times": [[84.032, 84.137], [84.151, 84.433], [84.446, 84.89], [84.903, 85.347], [85.36, 85.495], [85.508, 85.669], [85.683, 85.965], [85.979, 86.529]], "stress": ["ask"], "note": "Press down on 'ask'.", "end": "fall", "words": 8, "dur": 2.5, "band": "slower", "start": 84.032, "stop": 86.529, "pause": 1.8, "pitch": [{"st": 2.74, "head": 2.74, "tail": 1.52, "dir": "fall"}, {"st": 7.27, "head": 5.47, "tail": 7.42, "dir": "rise"}, {"st": 3.26, "head": 3.99, "tail": -2.43, "dir": "fall"}, {"st": 0.28, "head": 1.9, "tail": -4.62, "dir": "fall"}, {"st": -4.77, "head": -4.77, "tail": -2.52, "dir": "rise"}, {"st": -1.7, "head": -1.35, "tail": -2.07, "dir": "flat"}, {"st": -1.45, "head": -1.51, "tail": -1.23, "dir": "flat"}, {"st": -2.38, "head": 1.13, "tail": -5.61, "dir": "fall"}]}, {"n": 25, "section": "Close", "text": "So now, when everybody already believes, I ask six words.", "tokens": ["So", "now,", "when", "everybody", "already", "believes,", "I", "ask", "six", "words."], "times": [[88.329, 88.521], [88.533, 88.925], [89.134, 89.281], [89.293, 89.771], [89.783, 90.151], [90.163, 90.739], [90.984, 91.119], [91.131, 91.45], [91.462, 91.768], [91.781, 92.357]], "stress": ["six", "words"], "note": "Build speed into 'six words'.", "end": "fall", "words": 10, "dur": 4.05, "band": "steady", "start": 88.329, "stop": 92.382, "pause": 0.65, "pitch": [{"st": 2.89, "head": 4.24, "tail": 2.08, "dir": "fall"}, {"st": 1.82, "head": 1.82, "tail": -3.52, "dir": "fall"}, {"st": 0.92, "head": 0.18, "tail": 0.93, "dir": "flat"}, {"st": 2.56, "head": 4.44, "tail": -1.33, "dir": "fall"}, {"st": -1.97, "head": -2.96, "tail": -1.53, "dir": "rise"}, {"st": -2.44, "head": -2.73, "tail": -4.41, "dir": "fall"}, {"st": 4.77, "head": 3.63, "tail": 5.77, "dir": "rise"}, {"st": 1.1, "head": 5.17, "tail": -2.37, "dir": "fall"}, {"st": 3.13, "head": 3.58, "tail": 6.49, "dir": "rise"}, {"st": -3.94, "head": -0.99, "tail": -5.48, "dir": "fall"}]}, {"n": 26, "section": "Close", "text": "How do I actually know this?", "tokens": ["How", "do", "I", "actually", "know", "this?"], "times": [[93.032, 93.17], [93.184, 93.355], [93.369, 93.525], [93.539, 94.051], [94.065, 94.335], [94.349, 94.889]], "stress": ["actually", "know"], "note": "Six words, one at a time. Then hold the silence.", "end": "fall", "words": 6, "dur": 1.89, "band": "slower", "start": 93.032, "stop": 94.92, "pause": 2.25, "pitch": [{"st": 5.67, "head": 4.61, "tail": 6.61, "dir": "rise"}, {"st": 8.13, "head": 8.0, "tail": 9.18, "dir": "rise"}, {"st": 5.41, "head": 7.71, "tail": 3.14, "dir": "fall"}, {"st": -1.5, "head": -1.23, "tail": -1.65, "dir": "flat"}, {"st": -1.23, "head": -2.54, "tail": 1.75, "dir": "rise"}, {"st": -4.75, "head": 1.43, "tail": -5.43, "dir": "fall"}]}, {"n": 27, "section": "Close", "text": "It is the only thing between a rumor and a witch hunt.", "tokens": ["It", "is", "the", "only", "thing", "between", "a", "rumor", "and", "a", "witch", "hunt."], "times": [[97.17, 97.252], [97.266, 97.407], [97.421, 97.589], [97.603, 97.912], [97.926, 98.249], [98.263, 98.643], [98.657, 98.713], [98.727, 99.275], [99.289, 99.485], [99.499, 99.541], [99.555, 99.85], [99.864, 100.426]], "stress": ["only", "witch", "hunt"], "note": "Firm.", "end": "fall", "words": 12, "dur": 3.27, "band": "steady", "start": 97.17, "stop": 100.441, "pause": 1.1, "pitch": [{"st": 2.79, "head": 2.18, "tail": 2.61, "dir": "flat"}, {"st": 4.05, "head": 4.01, "tail": 3.6, "dir": "flat"}, {"st": 3.65, "head": 3.01, "tail": 3.65, "dir": "flat"}, {"st": 7.13, "head": 4.21, "tail": 7.71, "dir": "rise"}, {"st": 2.13, "head": 5.11, "tail": -0.62, "dir": "fall"}, {"st": -1.92, "head": -2.52, "tail": -1.22, "dir": "rise"}, {"st": -2.03, "head": -2.01, "tail": -2.11, "dir": "flat"}, {"st": -2.7, "head": -2.96, "tail": -5.56, "dir": "fall"}, {"st": -0.25, "head": -2.0, "tail": 0.31, "dir": "rise"}, {"st": 0.87, "head": 0.95, "tail": 1.15, "dir": "flat"}, {"st": -0.75, "head": 0.96, "tail": -0.77, "dir": "fall"}, {"st": -1.1, "head": 1.05, "tail": -6.21, "dir": "fall"}]}, {"n": 28, "section": "Close", "text": "I am not brave enough to stop a crowd yet.", "tokens": ["I", "am", "not", "brave", "enough", "to", "stop", "a", "crowd", "yet."], "times": [[101.54, 101.605], [101.617, 101.746], [101.759, 102.03], [102.043, 102.339], [102.352, 102.687], [102.7, 102.816], [102.829, 103.099], [103.112, 103.177], [103.19, 103.563], [103.576, 104.014]], "stress": ["yet"], "note": "Honest, a little small.", "end": "fall", "words": 10, "dur": 2.5, "band": "slower", "start": 101.54, "stop": 104.037, "pause": 1.1, "pitch": [{"st": 1.78, "head": 1.07, "tail": 2.07, "dir": "rise"}, {"st": 3.02, "head": 2.78, "tail": 3.1, "dir": "flat"}, {"st": 5.82, "head": 3.23, "tail": 7.76, "dir": "rise"}, {"st": 3.51, "head": 3.5, "tail": 3.58, "dir": "flat"}, {"st": -4.05, "head": -0.81, "tail": -5.99, "dir": "fall"}, null, {"st": -2.2, "head": -2.2, "tail": -2.65, "dir": "flat"}, null, {"st": 0.36, "head": -2.84, "tail": -1.56, "dir": "rise"}, {"st": -5.58, "head": -4.24, "tail": -6.41, "dir": "fall"}]}, {"n": 29, "section": "Close", "text": "But I am learning to stop myself.", "tokens": ["But", "I", "am", "learning", "to", "stop", "myself."], "times": [[105.137, 105.267], [105.281, 105.389], [105.403, 105.566], [105.58, 106.014], [106.028, 106.137], [106.15, 106.476], [106.49, 107.251]], "stress": ["myself"], "note": "Slow, firm, then stop. Do not let the pitch drift up.", "end": "fall", "words": 7, "dur": 2.13, "band": "slower", "start": 105.137, "stop": 107.264, "pause": 0.0, "pitch": [{"st": 2.88, "head": 3.44, "tail": 2.44, "dir": "fall"}, {"st": 4.1, "head": 4.49, "tail": 4.24, "dir": "flat"}, {"st": 4.49, "head": 4.65, "tail": 3.59, "dir": "fall"}, {"st": 3.06, "head": 2.92, "tail": -2.62, "dir": "fall"}, {"st": -4.85, "head": -4.54, "tail": -5.49, "dir": "fall"}, {"st": 1.52, "head": -3.21, "tail": 1.52, "dir": "rise"}, {"st": -4.56, "head": -3.72, "tail": -6.34, "dir": "fall"}]}], "pitch_ref": 203.6, "pitch_span": [-5.45, 7.07]};
+const D = {"voice": "en-GB-SoniaNeural", "limit": 120.0, "duration": 107.76, "words": 217, "speaking": 70.3, "silence": 36.6, "avg_wpm": 185, "longest": 2.7, "sections": {"Hook": "Ask, wait, then answer.", "History": "Narrator's voice. Clean numbers.", "Turn": "Drop the volume. This part is yours.", "Rumour": "The fastest section. Gossip speed.", "Reversal": "Slow, quiet, guilty.", "Now": "Snap back up. Short, sharp lines.", "Point": "The slowest section of the speech.", "Close": "Build, ask, land low."}, "sentences": [{"n": 1, "section": "Hook", "text": "Do you believe in witches?", "tokens": ["Do", "you", "believe", "in", "witches?"], "times": [[0.4, 0.455], [0.467, 0.646], [0.659, 1.105], [1.118, 1.246], [1.258, 1.947]], "stress": ["believe", "witches"], "note": "A real question. Look at the audience and let the end rise.", "end": "rise", "words": 5, "dur": 1.57, "band": "steady", "start": 0.4, "stop": 1.97, "pause": 1.8, "pitch": [null, {"st": 4.66, "head": 4.21, "tail": 7.3, "dir": "rise"}, {"st": 4.35, "head": 7.37, "tail": 0.0, "dir": "fall"}, {"st": -1.6, "head": -4.03, "tail": -1.81, "dir": "rise"}, {"st": -1.63, "head": -1.29, "tail": -4.25, "dir": "fall"}]}, {"n": 2, "section": "Hook", "text": "I don't.", "tokens": ["I", "don't."], "times": [[3.77, 3.836], [3.848, 4.412]], "stress": ["don't"], "note": "Flat and certain. The contrast is the point.", "end": "fall", "words": 2, "dur": 0.65, "band": "slower", "start": 3.77, "stop": 4.418, "pause": 1.55, "pitch": [{"st": 3.73, "head": 3.7, "tail": 3.89, "dir": "flat"}, {"st": 2.39, "head": 5.05, "tail": -3.23, "dir": "fall"}]}, {"n": 3, "section": "Hook", "text": "But in Salem, in 1692, everybody did.", "tokens": ["But", "in", "Salem,", "in", "1692,", "everybody", "did."], "times": [[5.968, 6.069], [6.082, 6.239], [6.252, 6.812], [7.033, 7.163], [7.176, 8.387], [8.673, 9.207], [9.22, 9.646]], "stress": ["salem", "everybody"], "note": "Drop into storytelling. Say the year as sixteen ninety-two.", "end": "fall", "words": 8, "dur": 3.68, "band": "steady", "start": 5.968, "stop": 9.646, "pause": 0.9, "pitch": [{"st": 2.04, "head": 2.8, "tail": 1.58, "dir": "fall"}, {"st": 1.56, "head": 2.32, "tail": 1.16, "dir": "fall"}, {"st": 0.66, "head": 5.35, "tail": -5.19, "dir": "fall"}, {"st": 0.19, "head": 0.3, "tail": 0.18, "dir": "flat"}, {"st": -0.83, "head": 0.19, "tail": -2.34, "dir": "fall"}, {"st": 1.2, "head": 5.52, "tail": -3.68, "dir": "fall"}, {"st": -4.17, "head": -4.12, "tail": -5.14, "dir": "fall"}]}, {"n": 4, "section": "History", "text": "Nineteen were hanged, and not one was a witch.", "tokens": ["Nineteen", "were", "hanged,", "and", "not", "one", "was", "a", "witch."], "times": [[10.546, 11.055], [11.067, 11.165], [11.177, 11.631], [11.9, 12.023], [12.035, 12.28], [12.293, 12.501], [12.513, 12.66], [12.672, 12.721], [12.734, 13.224]], "stress": ["nineteen", "not", "one"], "note": "Say the number cleanly. A small break before 'and not one'.", "end": "fall", "words": 9, "dur": 2.7, "band": "faster", "start": 10.546, "stop": 13.246, "pause": 1.1, "pitch": [{"st": 4.59, "head": 3.26, "tail": 3.93, "dir": "flat"}, {"st": -0.59, "head": 0.26, "tail": -1.0, "dir": "fall"}, {"st": -1.66, "head": -1.18, "tail": -4.62, "dir": "fall"}, {"st": 2.95, "head": 2.79, "tail": 3.01, "dir": "flat"}, {"st": 4.68, "head": 3.08, "tail": 7.48, "dir": "rise"}, {"st": -1.64, "head": -0.16, "tail": -2.54, "dir": "fall"}, {"st": -2.85, "head": -2.85, "tail": -2.7, "dir": "flat"}, null, {"st": -1.29, "head": -1.47, "tail": -3.23, "dir": "fall"}]}, {"n": 5, "section": "History", "text": "What condemned them was a whisper, a birthmark, a dream.", "tokens": ["What", "condemned", "them", "was", "a", "whisper,", "a", "birthmark,", "a", "dream."], "times": [[14.346, 14.538], [14.55, 15.004], [15.016, 15.2], [15.212, 15.347], [15.359, 15.408], [15.42, 15.947], [16.217, 16.278], [16.29, 16.977], [17.173, 17.209], [17.222, 17.687]], "stress": ["whisper", "birthmark", "dream"], "note": "Three beats, each a little quieter.", "end": "fall", "words": 10, "dur": 3.37, "band": "steady", "start": 14.346, "stop": 17.719, "pause": 0.65, "pitch": [{"st": 4.9, "head": 1.39, "tail": 6.84, "dir": "rise"}, {"st": 3.08, "head": 3.37, "tail": 3.31, "dir": "flat"}, {"st": -2.64, "head": 0.27, "tail": -3.53, "dir": "fall"}, {"st": -2.9, "head": -3.44, "tail": -2.52, "dir": "rise"}, null, {"st": -2.55, "head": -2.27, "tail": -5.83, "dir": "fall"}, null, {"st": -0.19, "head": 3.56, "tail": -5.25, "dir": "fall"}, null, {"st": -0.75, "head": 1.54, "tail": -5.8, "dir": "fall"}]}, {"n": 6, "section": "History", "text": "Nobody asked for proof, because everybody already believed.", "tokens": ["Nobody", "asked", "for", "proof,", "because", "everybody", "already", "believed."], "times": [[18.369, 18.888], [18.903, 19.334], [19.349, 19.513], [19.528, 20.123], [20.436, 20.837], [20.852, 21.492], [21.507, 21.998], [22.013, 22.787]], "stress": ["proof", "believed"], "note": "Slow down on the last three words.", "end": "fall", "words": 8, "dur": 4.42, "band": "steady", "start": 18.369, "stop": 22.791, "pause": 2.0, "pitch": [{"st": 4.35, "head": 2.38, "tail": 2.56, "dir": "flat"}, {"st": -1.5, "head": -0.43, "tail": -2.03, "dir": "fall"}, {"st": -1.84, "head": -0.29, "tail": -2.15, "dir": "fall"}, {"st": -2.26, "head": 4.35, "tail": -5.65, "dir": "fall"}, {"st": 3.28, "head": 2.75, "tail": 3.13, "dir": "flat"}, {"st": 0.08, "head": 6.51, "tail": -3.68, "dir": "fall"}, {"st": -2.03, "head": -4.12, "tail": -1.38, "dir": "rise"}, {"st": -2.7, "head": -2.88, "tail": -4.96, "dir": "fall"}]}, {"n": 7, "section": "Turn", "text": "I know that feeling better than I want to admit.", "tokens": ["I", "know", "that", "feeling", "better", "than", "I", "want", "to", "admit."], "times": [[24.791, 24.864], [24.879, 25.188], [25.203, 25.467], [25.482, 25.938], [25.953, 26.35], [26.364, 26.57], [26.585, 26.688], [26.703, 26.982], [26.997, 27.129], [27.144, 27.835]], "stress": ["know", "admit"], "note": "Drop the volume. A confession, not a line.", "end": "fall", "words": 10, "dur": 3.06, "band": "slower", "start": 24.791, "stop": 27.853, "pause": 1.1, "pitch": [{"st": 3.05, "head": 2.57, "tail": 3.34, "dir": "flat"}, {"st": 5.25, "head": 4.87, "tail": 7.11, "dir": "rise"}, {"st": 1.21, "head": 5.98, "tail": -1.16, "dir": "fall"}, {"st": 0.26, "head": 2.32, "tail": -1.44, "dir": "fall"}, {"st": 1.58, "head": -2.3, "tail": 3.85, "dir": "rise"}, {"st": -3.3, "head": -3.17, "tail": -3.46, "dir": "flat"}, {"st": -3.21, "head": -3.33, "tail": -3.22, "dir": "flat"}, {"st": -2.54, "head": -2.73, "tail": -2.39, "dir": "flat"}, null, {"st": -1.69, "head": -2.27, "tail": -1.32, "dir": "rise"}]}, {"n": 8, "section": "Rumour", "text": "In sixth grade, a rumor spread that a new girl stole a phone.", "tokens": ["In", "sixth", "grade,", "a", "rumor", "spread", "that", "a", "new", "girl", "stole", "a", "phone."], "times": [[28.953, 29.071], [29.083, 29.402], [29.414, 29.807], [30.076, 30.113], [30.125, 30.493], [30.505, 30.909], [30.922, 31.069], [31.081, 31.13], [31.142, 31.375], [31.387, 31.718], [31.731, 32.025], [32.037, 32.074], [32.086, 32.539]], "stress": ["rumor", "stole"], "note": "Speed up. Tell it the way gossip travels.", "end": "fall", "words": 13, "dur": 3.61, "band": "faster", "start": 28.953, "stop": 32.566, "pause": 0.45, "pitch": [{"st": 0.8, "head": 1.06, "tail": 0.78, "dir": "flat"}, {"st": 7.51, "head": 0.08, "tail": 7.66, "dir": "rise"}, {"st": -4.46, "head": -2.13, "tail": -4.81, "dir": "fall"}, null, {"st": 4.37, "head": 2.34, "tail": 3.99, "dir": "rise"}, {"st": -1.84, "head": -0.87, "tail": -3.19, "dir": "fall"}, {"st": -2.41, "head": -1.71, "tail": -3.1, "dir": "fall"}, null, {"st": -0.59, "head": -1.92, "tail": 3.1, "dir": "rise"}, {"st": 1.89, "head": 3.26, "tail": -4.36, "dir": "fall"}, {"st": -3.97, "head": -5.02, "tail": -4.14, "dir": "rise"}, {"st": -3.65, "head": -4.13, "tail": -3.09, "dir": "rise"}, {"st": -4.08, "head": -0.82, "tail": -5.8, "dir": "fall"}]}, {"n": 9, "section": "Rumour", "text": "I saw no evidence, only everyone avoiding her.", "tokens": ["I", "saw", "no", "evidence,", "only", "everyone", "avoiding", "her."], "times": [[33.016, 33.106], [33.118, 33.39], [33.403, 33.613], [33.625, 34.257], [34.529, 34.789], [34.801, 35.247], [35.259, 35.717], [35.729, 36.026]], "stress": ["no", "evidence", "avoiding"], "note": "Fast and flat, in one breath.", "end": "fall", "words": 8, "dur": 3.03, "band": "faster", "start": 33.016, "stop": 36.043, "pause": 0.65, "pitch": [{"st": 1.26, "head": 1.1, "tail": 1.51, "dir": "flat"}, {"st": 4.47, "head": 1.97, "tail": 4.56, "dir": "rise"}, {"st": 1.36, "head": 3.29, "tail": 0.82, "dir": "fall"}, {"st": 0.65, "head": 1.06, "tail": -5.48, "dir": "fall"}, {"st": 5.93, "head": 4.4, "tail": 6.04, "dir": "rise"}, {"st": -1.04, "head": 4.83, "tail": -3.63, "dir": "fall"}, {"st": -3.07, "head": -3.33, "tail": -2.46, "dir": "rise"}, {"st": -5.34, "head": -5.24, "tail": -6.21, "dir": "fall"}]}, {"n": 10, "section": "Rumour", "text": "So I did the same.", "tokens": ["So", "I", "did", "the", "same."], "times": [[36.693, 36.898], [36.91, 36.996], [37.008, 37.253], [37.265, 37.363], [37.376, 37.866]], "stress": ["same"], "note": "Brake hard. Quiet, then a real pause.", "end": "fall", "words": 5, "dur": 1.19, "band": "slower", "start": 36.693, "stop": 37.885, "pause": 2.25, "pitch": [{"st": 3.71, "head": 4.17, "tail": 3.49, "dir": "flat"}, {"st": 3.04, "head": 3.12, "tail": 3.08, "dir": "flat"}, {"st": 3.47, "head": 3.47, "tail": 3.47, "dir": "flat"}, null, {"st": -4.55, "head": 0.76, "tail": -7.64, "dir": "fall"}]}, {"n": 11, "section": "Reversal", "text": "Two weeks later, the phone turned up in a locker.", "tokens": ["Two", "weeks", "later,", "the", "phone", "turned", "up", "in", "a", "locker."], "times": [[40.135, 40.283], [40.296, 40.583], [40.596, 41.058], [41.321, 41.421], [41.433, 41.796], [41.808, 42.096], [42.108, 42.258], [42.271, 42.358], [42.371, 42.408], [42.421, 42.908]], "stress": ["locker"], "note": "Neutral. Just the fact.", "end": "fall", "words": 10, "dur": 2.8, "band": "steady", "start": 40.135, "stop": 42.938, "pause": 0.9, "pitch": [{"st": 7.55, "head": 6.97, "tail": 8.08, "dir": "rise"}, {"st": 4.08, "head": 8.05, "tail": -1.13, "dir": "fall"}, {"st": 1.14, "head": 1.15, "tail": -4.67, "dir": "fall"}, null, {"st": 4.05, "head": 5.24, "tail": 0.55, "dir": "fall"}, {"st": 0.2, "head": -2.1, "tail": -0.05, "dir": "rise"}, {"st": -1.99, "head": -0.93, "tail": -3.54, "dir": "fall"}, {"st": -1.76, "head": -1.23, "tail": -2.35, "dir": "fall"}, {"st": -1.67, "head": -1.87, "tail": -1.42, "dir": "flat"}, {"st": -1.5, "head": -0.52, "tail": -5.41, "dir": "fall"}]}, {"n": 12, "section": "Reversal", "text": "\"I told you it wasn't me,\" she said.", "tokens": ["\"I", "told", "you", "it", "wasn't", "me,\"", "she", "said."], "times": [[43.838, 43.906], [43.918, 44.261], [44.273, 44.42], [44.433, 44.58], [44.592, 44.984], [44.996, 45.291], [45.432, 45.665], [45.677, 46.142]], "stress": ["wasn't", "me"], "note": "Act her voice: tired, not angry. Then 'she said' in your own voice.", "end": "fall", "words": 8, "dur": 2.3, "band": "slower", "start": 43.838, "stop": 46.142, "pause": 1.8, "pitch": [null, {"st": 6.67, "head": 3.11, "tail": 7.41, "dir": "rise"}, {"st": 0.57, "head": 3.57, "tail": -0.79, "dir": "fall"}, {"st": -2.34, "head": -2.06, "tail": -2.47, "dir": "flat"}, {"st": -0.32, "head": 0.22, "tail": -2.9, "dir": "fall"}, {"st": -3.8, "head": -2.44, "tail": -4.54, "dir": "fall"}, {"st": 3.57, "head": 3.84, "tail": 3.27, "dir": "flat"}, {"st": -2.26, "head": 1.78, "tail": -5.7, "dir": "fall"}]}, {"n": 13, "section": "Reversal", "text": "She did not look at me.", "tokens": ["She", "did", "not", "look", "at", "me."], "times": [[47.942, 48.103], [48.118, 48.294], [48.309, 48.603], [48.618, 48.839], [48.853, 49.03], [49.044, 49.368]], "stress": ["look"], "note": "The slowest line so far.", "end": "fall", "words": 6, "dur": 1.45, "band": "slower", "start": 47.942, "stop": 49.396, "pause": 2.0, "pitch": [null, {"st": 4.33, "head": 4.55, "tail": 4.32, "dir": "flat"}, {"st": 2.86, "head": 2.13, "tail": 3.57, "dir": "rise"}, {"st": 1.55, "head": -1.08, "tail": 2.1, "dir": "rise"}, {"st": -1.88, "head": -0.14, "tail": -3.44, "dir": "fall"}, {"st": -6.37, "head": -4.86, "tail": -7.18, "dir": "fall"}]}, {"n": 14, "section": "Reversal", "text": "I never called her a thief.", "tokens": ["I", "never", "called", "her", "a", "thief."], "times": [[51.396, 51.449], [51.463, 51.846], [51.86, 52.213], [52.228, 52.419], [52.434, 52.507], [52.522, 53.169]], "stress": ["never"], "note": "Almost defensive.", "end": "fall", "words": 6, "dur": 1.8, "band": "steady", "start": 51.396, "stop": 53.194, "pause": 0.45, "pitch": [null, {"st": 4.27, "head": 3.68, "tail": 6.4, "dir": "rise"}, {"st": 0.8, "head": 0.9, "tail": -0.52, "dir": "fall"}, {"st": -2.95, "head": -3.46, "tail": -3.07, "dir": "flat"}, {"st": -3.99, "head": -3.91, "tail": -3.98, "dir": "flat"}, {"st": -3.64, "head": -4.08, "tail": -5.8, "dir": "fall"}]}, {"n": 15, "section": "Reversal", "text": "I just avoided her.", "tokens": ["I", "just", "avoided", "her."], "times": [[53.644, 53.737], [53.751, 54.094], [54.108, 54.643], [54.657, 55.028]], "stress": ["just"], "note": "Bitter on 'just'.", "end": "fall", "words": 4, "dur": 1.41, "band": "slower", "start": 53.644, "stop": 55.053, "pause": 0.9, "pitch": [{"st": 2.63, "head": 2.65, "tail": 2.91, "dir": "flat"}, {"st": 5.75, "head": 4.24, "tail": 6.35, "dir": "rise"}, {"st": 0.33, "head": -0.88, "tail": -1.76, "dir": "fall"}, {"st": -6.33, "head": -5.29, "tail": -7.47, "dir": "fall"}]}, {"n": 16, "section": "Reversal", "text": "And I still cannot forget it.", "tokens": ["And", "I", "still", "cannot", "forget", "it."], "times": [[55.953, 56.064], [56.078, 56.189], [56.203, 56.578], [56.592, 57.009], [57.023, 57.453], [57.467, 57.856]], "stress": ["still"], "note": "Very quiet. The longest silence of the first half.", "end": "fall", "words": 6, "dur": 1.92, "band": "slower", "start": 55.953, "stop": 57.878, "pause": 2.45, "pitch": [{"st": 1.53, "head": 1.33, "tail": 1.65, "dir": "flat"}, {"st": 2.24, "head": 1.7, "tail": 2.32, "dir": "flat"}, {"st": 6.71, "head": 2.89, "tail": 6.92, "dir": "rise"}, {"st": -1.05, "head": 1.19, "tail": -3.8, "dir": "fall"}, {"st": -1.22, "head": -3.33, "tail": -0.9, "dir": "rise"}, {"st": -5.76, "head": -4.23, "tail": -7.06, "dir": "fall"}]}, {"n": 17, "section": "Now", "text": "We do not burn witches now.", "tokens": ["We", "do", "not", "burn", "witches", "now."], "times": [[60.328, 60.43], [60.442, 60.577], [60.589, 60.847], [60.859, 61.165], [61.178, 61.582], [61.594, 61.974]], "stress": ["burn"], "note": "Snap back up. New energy.", "end": "fall", "words": 6, "dur": 1.68, "band": "faster", "start": 60.328, "stop": 62.005, "pause": 0.45, "pitch": [{"st": 2.97, "head": 2.02, "tail": 4.14, "dir": "rise"}, {"st": 4.69, "head": 4.74, "tail": 5.69, "dir": "rise"}, {"st": 5.98, "head": 5.63, "tail": 6.9, "dir": "rise"}, {"st": 1.15, "head": 3.23, "tail": -2.52, "dir": "fall"}, {"st": -2.83, "head": -2.98, "tail": -3.18, "dir": "flat"}, {"st": -4.41, "head": -2.8, "tail": -4.95, "dir": "fall"}]}, {"n": 18, "section": "Now", "text": "We screenshot them instead.", "tokens": ["We", "screenshot", "them", "instead."], "times": [[62.455, 62.581], [62.593, 63.218], [63.231, 63.39], [63.402, 64.038]], "stress": ["screenshot"], "note": "Hit it hard, then stop dead.", "end": "fall", "words": 4, "dur": 1.58, "band": "faster", "start": 62.455, "stop": 64.038, "pause": 1.8, "pitch": [{"st": 3.04, "head": 1.43, "tail": 4.36, "dir": "rise"}, {"st": 6.38, "head": 6.38, "tail": -1.64, "dir": "fall"}, {"st": -3.95, "head": -2.77, "tail": -4.45, "dir": "fall"}, {"st": -4.25, "head": -4.34, "tail": -4.67, "dir": "flat"}]}, {"n": 19, "section": "Now", "text": "When a rumor travels faster than evidence, the truth arrives too late.", "tokens": ["When", "a", "rumor", "travels", "faster", "than", "evidence,", "the", "truth", "arrives", "too", "late."], "times": [[65.838, 65.992], [66.004, 66.065], [66.078, 66.445], [66.458, 66.96], [66.972, 67.364], [67.377, 67.524], [67.536, 68.087], [68.345, 68.443], [68.455, 68.823], [68.835, 69.288], [69.301, 69.497], [69.509, 69.999]], "stress": ["faster", "too", "late"], "note": "Quick and clear, like a headline. Then let it land.", "end": "fall", "words": 12, "dur": 4.17, "band": "faster", "start": 65.838, "stop": 70.01, "pause": 1.1, "pitch": [{"st": 2.77, "head": 1.52, "tail": 3.03, "dir": "rise"}, {"st": 2.89, "head": 2.88, "tail": 2.71, "dir": "flat"}, {"st": 2.92, "head": 1.04, "tail": 3.59, "dir": "rise"}, {"st": -2.72, "head": 0.22, "tail": -3.85, "dir": "fall"}, {"st": 2.34, "head": 2.14, "tail": 2.35, "dir": "flat"}, {"st": -2.63, "head": -1.32, "tail": -2.87, "dir": "fall"}, {"st": -0.27, "head": 0.66, "tail": -5.21, "dir": "fall"}, null, {"st": 4.6, "head": 4.55, "tail": 1.32, "dir": "fall"}, {"st": -2.09, "head": 0.07, "tail": -4.41, "dir": "fall"}, {"st": -1.12, "head": -0.69, "tail": -1.37, "dir": "flat"}, {"st": -1.84, "head": -1.84, "tail": -4.76, "dir": "fall"}]}, {"n": 20, "section": "Point", "text": "Here is what that silence taught me.", "tokens": ["Here", "is", "what", "that", "silence", "taught", "me."], "times": [[71.11, 71.314], [71.327, 71.462], [71.474, 71.658], [71.67, 71.89], [71.903, 72.43], [72.442, 72.761], [72.773, 73.018]], "stress": ["silence"], "note": "Slow. Signal the conclusion.", "end": "fall", "words": 7, "dur": 1.95, "band": "slower", "start": 71.11, "stop": 73.06, "pause": 0.9, "pitch": [{"st": 7.1, "head": 5.11, "tail": 7.77, "dir": "rise"}, {"st": 5.72, "head": 6.88, "tail": 3.85, "dir": "fall"}, {"st": 1.45, "head": 1.44, "tail": 1.27, "dir": "flat"}, {"st": -0.85, "head": 0.08, "tail": -1.31, "dir": "fall"}, {"st": -0.04, "head": 2.46, "tail": -5.28, "dir": "fall"}, {"st": -0.84, "head": -0.55, "tail": -1.66, "dir": "fall"}, {"st": -5.49, "head": -4.09, "tail": -6.11, "dir": "fall"}]}, {"n": 21, "section": "Point", "text": "A crowd is not evidence.", "tokens": ["A", "crowd", "is", "not", "evidence."], "times": [[73.96, 74.002], [74.015, 74.472], [74.485, 74.646], [74.658, 74.906], [74.918, 75.636]], "stress": ["crowd", "not"], "note": "The main sentence of the speech. Slowest line, longest pause after.", "end": "fall", "words": 5, "dur": 1.69, "band": "slower", "start": 73.96, "stop": 75.65, "pause": 2.7, "pitch": [null, {"st": 4.88, "head": 6.98, "tail": -2.68, "dir": "fall"}, {"st": -0.79, "head": -0.71, "tail": -2.49, "dir": "fall"}, {"st": 2.13, "head": 1.45, "tail": 2.05, "dir": "flat"}, {"st": -0.55, "head": 1.9, "tail": -4.86, "dir": "fall"}]}, {"n": 22, "section": "Point", "text": "It is noise that agrees with itself.", "tokens": ["It", "is", "noise", "that", "agrees", "with", "itself."], "times": [[78.35, 78.445], [78.458, 78.605], [78.617, 79.009], [79.021, 79.168], [79.181, 79.622], [79.634, 79.781], [79.794, 80.468]], "stress": ["noise"], "note": "Let the image land.", "end": "fall", "words": 7, "dur": 2.13, "band": "slower", "start": 78.35, "stop": 80.482, "pause": 1.35, "pitch": [{"st": 3.4, "head": 2.98, "tail": 3.0, "dir": "flat"}, {"st": 4.49, "head": 4.57, "tail": 2.96, "dir": "fall"}, {"st": 4.28, "head": 4.28, "tail": -2.13, "dir": "fall"}, {"st": -1.34, "head": -0.53, "tail": -2.04, "dir": "fall"}, {"st": 0.41, "head": -0.35, "tail": -2.21, "dir": "fall"}, {"st": -2.43, "head": -2.05, "tail": -3.02, "dir": "fall"}, {"st": -2.41, "head": -2.23, "tail": -4.88, "dir": "fall"}]}, {"n": 23, "section": "Point", "text": "Salem never needed a witch.", "tokens": ["Salem", "never", "needed", "a", "witch."], "times": [[81.832, 82.301], [82.314, 82.589], [82.601, 82.939], [82.951, 83.014], [83.026, 83.551]], "stress": ["never"], "note": "Callback. A little warmer.", "end": "fall", "words": 5, "dur": 1.75, "band": "steady", "start": 81.832, "stop": 83.582, "pause": 0.45, "pitch": [{"st": 6.1, "head": 7.38, "tail": -0.45, "dir": "fall"}, {"st": 2.77, "head": 0.1, "tail": 3.72, "dir": "rise"}, {"st": 2.04, "head": 1.39, "tail": 0.12, "dir": "fall"}, {"st": -2.02, "head": -4.12, "tail": -2.02, "dir": "rise"}, {"st": -2.79, "head": -3.07, "tail": -3.12, "dir": "flat"}]}, {"n": 24, "section": "Point", "text": "It only needed people who did not ask.", "tokens": ["It", "only", "needed", "people", "who", "did", "not", "ask."], "times": [[84.032, 84.137], [84.151, 84.433], [84.446, 84.89], [84.903, 85.347], [85.36, 85.495], [85.508, 85.669], [85.683, 85.965], [85.979, 86.529]], "stress": ["ask"], "note": "Press down on 'ask'.", "end": "fall", "words": 8, "dur": 2.5, "band": "slower", "start": 84.032, "stop": 86.529, "pause": 1.8, "pitch": [{"st": 2.99, "head": 2.91, "tail": 2.56, "dir": "flat"}, {"st": 7.39, "head": 5.87, "tail": 7.39, "dir": "rise"}, {"st": 3.28, "head": 4.05, "tail": -2.09, "dir": "fall"}, {"st": 0.73, "head": 1.88, "tail": -4.63, "dir": "fall"}, {"st": -4.81, "head": -4.81, "tail": -2.75, "dir": "rise"}, {"st": -1.59, "head": -1.33, "tail": -1.95, "dir": "flat"}, {"st": -1.44, "head": -1.52, "tail": -1.26, "dir": "flat"}, {"st": -2.79, "head": 1.3, "tail": -5.54, "dir": "fall"}]}, {"n": 25, "section": "Close", "text": "So now, when everybody already believes, I ask six words.", "tokens": ["So", "now,", "when", "everybody", "already", "believes,", "I", "ask", "six", "words."], "times": [[88.329, 88.521], [88.533, 88.925], [89.134, 89.281], [89.293, 89.771], [89.783, 90.151], [90.163, 90.739], [90.984, 91.119], [91.131, 91.45], [91.462, 91.768], [91.781, 92.357]], "stress": ["six", "words"], "note": "Build speed into 'six words'.", "end": "fall", "words": 10, "dur": 4.05, "band": "steady", "start": 88.329, "stop": 92.382, "pause": 0.65, "pitch": [{"st": 2.73, "head": 3.62, "tail": 2.22, "dir": "fall"}, {"st": 1.89, "head": 1.81, "tail": -3.06, "dir": "fall"}, {"st": 0.96, "head": 0.38, "tail": 0.98, "dir": "flat"}, {"st": 2.94, "head": 3.76, "tail": -0.78, "dir": "fall"}, {"st": -1.96, "head": -2.99, "tail": -0.93, "dir": "rise"}, {"st": -2.48, "head": -2.67, "tail": -4.44, "dir": "fall"}, {"st": 4.76, "head": 3.73, "tail": 5.78, "dir": "rise"}, {"st": 1.43, "head": 5.35, "tail": -2.34, "dir": "fall"}, {"st": 2.54, "head": 3.06, "tail": 1.22, "dir": "fall"}, {"st": -4.0, "head": -1.16, "tail": -5.44, "dir": "fall"}]}, {"n": 26, "section": "Close", "text": "How do I actually know this?", "tokens": ["How", "do", "I", "actually", "know", "this?"], "times": [[93.032, 93.17], [93.184, 93.355], [93.369, 93.525], [93.539, 94.051], [94.065, 94.335], [94.349, 94.889]], "stress": ["actually", "know"], "note": "Six words, one at a time. Then hold the silence.", "end": "fall", "words": 6, "dur": 1.89, "band": "slower", "start": 93.032, "stop": 94.92, "pause": 2.25, "pitch": [{"st": 5.73, "head": 4.93, "tail": 6.47, "dir": "rise"}, {"st": 8.16, "head": 7.82, "tail": 9.21, "dir": "rise"}, {"st": 5.76, "head": 7.91, "tail": 3.39, "dir": "fall"}, {"st": -1.38, "head": -1.19, "tail": -1.69, "dir": "flat"}, {"st": -1.39, "head": -2.55, "tail": 1.64, "dir": "rise"}, {"st": -4.86, "head": 2.3, "tail": -5.73, "dir": "fall"}]}, {"n": 27, "section": "Close", "text": "It is the only thing between a rumor and a witch hunt.", "tokens": ["It", "is", "the", "only", "thing", "between", "a", "rumor", "and", "a", "witch", "hunt."], "times": [[97.17, 97.252], [97.266, 97.407], [97.421, 97.589], [97.603, 97.912], [97.926, 98.249], [98.263, 98.643], [98.657, 98.713], [98.727, 99.275], [99.289, 99.485], [99.499, 99.541], [99.555, 99.85], [99.864, 100.426]], "stress": ["only", "witch", "hunt"], "note": "Firm.", "end": "fall", "words": 12, "dur": 3.27, "band": "steady", "start": 97.17, "stop": 100.441, "pause": 1.1, "pitch": [{"st": 2.98, "head": 2.84, "tail": 2.81, "dir": "flat"}, {"st": 4.14, "head": 4.13, "tail": 3.73, "dir": "flat"}, {"st": 3.62, "head": 3.03, "tail": 3.72, "dir": "flat"}, {"st": 7.07, "head": 4.23, "tail": 7.73, "dir": "rise"}, {"st": 2.21, "head": 5.66, "tail": -0.65, "dir": "fall"}, {"st": -1.88, "head": -2.43, "tail": -1.29, "dir": "rise"}, {"st": -2.06, "head": -2.04, "tail": -2.05, "dir": "flat"}, {"st": -2.75, "head": -2.91, "tail": -5.49, "dir": "fall"}, {"st": -0.12, "head": -2.69, "tail": 0.34, "dir": "rise"}, {"st": 0.78, "head": 0.91, "tail": 0.39, "dir": "flat"}, {"st": -0.61, "head": 1.13, "tail": -0.72, "dir": "fall"}, {"st": -1.84, "head": 1.09, "tail": -6.3, "dir": "fall"}]}, {"n": 28, "section": "Close", "text": "I am not brave enough to stop a crowd yet.", "tokens": ["I", "am", "not", "brave", "enough", "to", "stop", "a", "crowd", "yet."], "times": [[101.54, 101.605], [101.617, 101.746], [101.759, 102.03], [102.043, 102.339], [102.352, 102.687], [102.7, 102.816], [102.829, 103.099], [103.112, 103.177], [103.19, 103.563], [103.576, 104.014]], "stress": ["yet"], "note": "Honest, a little small.", "end": "fall", "words": 10, "dur": 2.5, "band": "slower", "start": 101.54, "stop": 104.037, "pause": 1.1, "pitch": [{"st": 1.87, "head": 1.68, "tail": 2.02, "dir": "flat"}, {"st": 3.02, "head": 2.74, "tail": 3.13, "dir": "flat"}, {"st": 5.05, "head": 3.19, "tail": 7.75, "dir": "rise"}, {"st": 3.58, "head": 3.56, "tail": 3.65, "dir": "flat"}, {"st": -4.03, "head": -0.71, "tail": -5.99, "dir": "fall"}, null, {"st": -2.01, "head": -2.2, "tail": -2.56, "dir": "flat"}, null, {"st": 0.02, "head": -0.69, "tail": -1.82, "dir": "fall"}, {"st": -5.53, "head": -4.26, "tail": -6.35, "dir": "fall"}]}, {"n": 29, "section": "Close", "text": "But I am learning to stop myself.", "tokens": ["But", "I", "am", "learning", "to", "stop", "myself."], "times": [[105.137, 105.267], [105.281, 105.389], [105.403, 105.566], [105.58, 106.014], [106.028, 106.137], [106.15, 106.476], [106.49, 107.251]], "stress": ["myself"], "note": "Slow, firm, then stop. Do not let the pitch drift up.", "end": "fall", "words": 7, "dur": 2.13, "band": "slower", "start": 105.137, "stop": 107.264, "pause": 0.0, "pitch": [{"st": 2.9, "head": 3.13, "tail": 2.61, "dir": "flat"}, {"st": 4.15, "head": 4.09, "tail": 4.24, "dir": "flat"}, {"st": 4.55, "head": 4.7, "tail": 3.75, "dir": "fall"}, {"st": 3.11, "head": 2.91, "tail": -2.15, "dir": "fall"}, {"st": -4.8, "head": -4.51, "tail": -5.4, "dir": "fall"}, {"st": 1.87, "head": -2.74, "tail": 2.15, "dir": "rise"}, {"st": -4.69, "head": -3.95, "tail": -6.33, "dir": "fall"}]}], "pitch_ref": 203.0, "pitch_span": [-5.49, 7.11]};
 const LOG_URL = "https://script.google.com/macros/s/AKfycby32rFjJAI50Cj8M3d_UAKBWnMJYNrcHtZkwm5ozshwjX5qojyUNA322CBjCQH1rkRdlw/exec";      /* the teacher's Apps Script web app; empty = keep the log in this browser */
 const S = D.sentences, LIMIT = D.limit;
 const $ = (id) => document.getElementById(id);
 const aud = $("aud");
-const takes = [];                   /* what the student recorded, one entry per line */
+const takes = [];                   /* the latest take of each line: what the curve shows */
+const bests = [];                   /* the closest take of each line: what goes into the speech */
 const MICON = '<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5"></circle></svg>';
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const fmt = (t) => { t = Math.max(0, t); return Math.floor(t / 60) + ":" + String(Math.floor(t % 60)).padStart(2, "0"); };
@@ -710,46 +729,67 @@ document.addEventListener("visibilitychange", () => { if (document.hidden) flush
 
 /* ======================================================================
    Pitch, measured exactly the way the guide was measured (pitch.py):
-   40 ms frames every 10 ms, autocorrelation between 70 and 400 Hz.
+   YIN on 40 ms frames every 10 ms, anywhere from 70 to 900 Hz.
+
+   This used to be autocorrelation with a 400 Hz ceiling. A girl's voice sits
+   seven or more semitones above the guide's and rises past 400 Hz, where that
+   tracker grabbed the note an octave down: a perfect copy of the guide raised
+   seven semitones scored 30-77% and was marked with red words. Lifting the
+   ceiling alone made autocorrelation grab the octave above instead. YIN takes
+   the first lag whose normalised difference dips below THRESH - the period
+   itself - and holds steady across the whole range.
    ====================================================================== */
-const SR = 16000, FRAME = 0.04, HOP = 0.01, FMIN = 70, FMAX = 400, CLARITY = 0.3, QUIET = 0.006;
+const SR = 16000, FRAME = 0.04, HOP = 0.01, FMIN = 70, FMAX = 900;
+const THRESH = 0.15, APERIODIC = 0.35, QUIET = 0.006;
 const TOL = 1.4;   /* semitones of slope a word may miss by before it is called wrong */
 
 function track(x) {
   const n = Math.round(FRAME * SR), hop = Math.round(HOP * SR);
-  const lo = Math.floor(SR / FMAX), hi = Math.min(n - 2, Math.floor(SR / FMIN));
+  const tmin = Math.floor(SR / FMAX), tmax = Math.min(n >> 1, Math.ceil(SR / FMIN)), W = n - tmax;
   const count = 1 + Math.max(0, Math.floor((x.length - n) / hop));
   const win = new Float64Array(n);
   for (let i = 0; i < n; i++) win[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (n - 1));
-  const f = new Float64Array(n), corr = new Float64Array(hi + 3);
+  const dn = new Float64Array(tmax + 1);
   const f0 = new Float64Array(count).fill(NaN);
   for (let k = 0; k < count; k++) {
     const off = k * hop;
+    /* silence is decided exactly as it always was: RMS of the Hann-windowed frame */
     let mean = 0;
     for (let i = 0; i < n; i++) mean += x[off + i];
     mean /= n;
     let power = 0;
-    for (let i = 0; i < n; i++) { const v = (x[off + i] - mean) * win[i]; f[i] = v; power += v * v; }
-    if (power <= 0 || Math.sqrt(power / n) < QUIET) continue;          // silence stays silence
-    let best = -1, peak = -1;
-    for (let lag = Math.max(1, lo - 1); lag <= hi + 1 && lag < n - 1; lag++) {
-      let sum = 0;
-      for (let i = 0, m = n - lag; i < m; i++) sum += f[i] * f[i + lag];
-      corr[lag] = sum;
-      if (lag >= lo && lag <= hi && sum / power > peak) { peak = sum / power; best = lag; }
+    for (let i = 0; i < n; i++) { const v = (x[off + i] - mean) * win[i]; power += v * v; }
+    if (power <= 0 || Math.sqrt(power / n) < QUIET) continue;
+    /* difference function, then its cumulative mean normalisation */
+    let running = 0;
+    dn[0] = 1;
+    for (let t = 1; t <= tmax; t++) {
+      let d = 0;
+      for (let j = 0; j < W; j++) { const v = x[off + j] - x[off + j + t]; d += v * v; }
+      running += d;
+      dn[t] = running > 0 ? d * t / running : 1;
     }
-    if (best < 0 || peak < CLARITY) continue;                          // no clear period: unvoiced
-    const a = corr[best - 1] || 0, b = corr[best], c = corr[best + 1] || 0;
+    /* the first dip under the threshold, followed down to its bottom; failing that, the lowest point */
+    let tau = -1;
+    for (let t = tmin; t <= tmax; t++) {
+      if (dn[t] < THRESH) { tau = t; while (tau < tmax && dn[tau + 1] < dn[tau]) tau++; break; }
+    }
+    if (tau < 0) {
+      let low = Infinity;
+      for (let t = tmin; t <= tmax; t++) if (dn[t] < low) { low = dn[t]; tau = t; }
+    }
+    if (dn[tau] > APERIODIC) continue;                                  // no clear period: unvoiced
+    const a = dn[Math.max(1, tau - 1)], b = dn[tau], c = dn[Math.min(tmax, tau + 1)];
     const den = a - 2 * b + c;
     const shift = den !== 0 ? Math.max(-1, Math.min(1, 0.5 * (a - c) / den)) : 0;
-    f0[k] = SR / (best + shift);
+    f0[k] = SR / (tau + shift);
   }
   return despike(f0);
 }
 
-/* An autocorrelation tracker slips an octave now and then. One such frame is enough to
-   swamp a whole line's score, so a value that disagrees with its neighbours by more
-   than five semitones is dropped rather than believed. */
+/* A value that disagrees with its neighbours by more than five semitones is a slip, not
+   a pitch, and one such frame is enough to swamp a whole line's score. pitch.py drops
+   the same frames. */
 function despike(f0) {
   const out = Float64Array.from(f0);
   for (let i = 0; i < f0.length; i++) {
@@ -776,18 +816,21 @@ function semitones(f0) {
 }
 
 let actx = null;
-async function pcm16k(buf) {
+async function pcm16k(buf) { return pcmAt(buf, SR); }
+
+/* decoded to mono at the rate asked for: 16 kHz to measure pitch, full rate to hand in */
+async function pcmAt(buf, rate) {
   actx = actx || new (window.AudioContext || window.webkitAudioContext)();
   const decoded = await actx.decodeAudioData(buf);
   try {
-    const off = new OfflineAudioContext(1, Math.max(1, Math.ceil(decoded.duration * SR)), SR);
+    const off = new OfflineAudioContext(1, Math.max(1, Math.ceil(decoded.duration * rate)), rate);
     const src = off.createBufferSource();
     src.buffer = decoded;
     src.connect(off.destination);
     src.start();
     return (await off.startRendering()).getChannelData(0);
   } catch (e) {
-    const ch = decoded.getChannelData(0), step = decoded.sampleRate / SR;   // older Safari: decimate by hand
+    const ch = decoded.getChannelData(0), step = decoded.sampleRate / rate;   // older Safari: decimate by hand
     const out = new Float32Array(Math.floor(ch.length / step));
     for (let i = 0; i < out.length; i++) out[i] = ch[Math.floor(i * step)];
     return out;
@@ -816,6 +859,21 @@ function fill(st) {
     for (let i = a + 1; i < b; i++) out[i] = out[a] + (out[b] - out[a]) * (i - a) / (b - a);
   }
   return out;
+}
+
+/* A pause is not a melody. Every unvoiced stretch longer than PAUSE_CAP frames is cut to that
+   length on both sides before they are lined up - the narrow band below cannot absorb a comma
+   held half a second longer than the guide's, and a perfect copy that did so fell to 22%.
+   Frame numbers are kept, so everything after the alignment still reads the real clock. */
+const PAUSE_CAP = 12;
+function pausesCapped(st) {
+  const at = [];
+  let run = 0;
+  for (let i = 0; i < st.length; i++) {
+    if (isNaN(st[i])) { if (++run <= PAUSE_CAP) at.push(i); }
+    else { run = 0; at.push(i); }
+  }
+  return { st: Float64Array.from(at, (i) => st[i]), at: at };
 }
 
 /* The band is deliberately narrow and a sideways step costs extra. Given a free hand,
@@ -870,9 +928,24 @@ function apart(xs, ys) {
 const median = (v) => { const c = Array.from(v).sort((a, b) => a - b); return c[c.length >> 1]; };
 const shape = (slope) => slope > 0.8 ? "rise" : slope < -0.8 ? "fall" : "flat";
 
+/* With the microphone's own gain control off, a soft reading can sit under the silence gate the
+   guide was measured with. The copy that is measured - never the recording itself - is brought
+   up to the guide's level first. */
+const GUIDE_P99 = 0.37;
+function levelled(x) {
+  const a = [];
+  for (let i = 0; i < x.length; i += 5) a.push(Math.abs(x[i]));
+  a.sort((m, n) => m - n);
+  const p99 = a[Math.floor(0.99 * (a.length - 1))] || 0;
+  if (p99 < 1e-4) return x;
+  const g = Math.min(30, GUIDE_P99 / p99), out = new Float32Array(x.length);
+  for (let i = 0; i < x.length; i++) out[i] = x[i] * g;
+  return out;
+}
+
 async function compare(i, blob) {
   const s = S[i];
-  const mineF0 = track(await pcm16k(await blob.arrayBuffer()));
+  const mineF0 = track(levelled(await pcm16k(await blob.arrayBuffer())));
   let lo = -1, hi = -1;
   for (let k = 0; k < mineF0.length; k++) if (mineF0[k] > 0) { if (lo < 0) lo = k; hi = k; }
   if (lo < 0 || hi - lo < 15) return { error: "I could not hear a voice in that. Move closer to the microphone and try again." };
@@ -893,7 +966,8 @@ async function compare(i, blob) {
      one against the other's silence drags the whole path off the words */
   let head0 = -1, tail0 = -1;
   for (let k = 0; k < guide.st.length; k++) if (!isNaN(guide.st[k])) { if (head0 < 0) head0 = k; tail0 = k; }
-  const path = dtw(fill(guide.st.slice(head0, tail0 + 1)), fill(mine.st));
+  const gc = pausesCapped(guide.st.slice(head0, tail0 + 1)), mc = pausesCapped(mine.st);
+  const path = dtw(fill(gc.st), fill(mc.st)).map((p) => [gc.at[p[0]], mc.at[p[1]]]);
   const clock = (gi) => from / SR + (gi + head0) * HOP + FRAME / 2;
 
   /* the take, redrawn on the guide's clock, for the overall match */
@@ -943,8 +1017,16 @@ async function compare(i, blob) {
   /* a word counts as wrong only if it both lands in a different band and misses the
      guide's own movement by more than TOL semitones: rise / flat / fall is a hard edge,
      and a word sitting on it must not turn red over a tenth of a semitone */
+  const last = s.tokens.length - 1;
   const words = drawn.map((m, k) => {
     if (!m || !s.pitch[k]) return null;
+    /* The line's last word answers to the arrow the script gives it wherever the guide's own voice
+       strays from that arrow: the recording rises then drops on "witches?" though the question
+       must rise, and lifts slightly on "admit." though the line must fall. Copying the arrow is
+       right; copying the recording there is not. */
+    if (k === last && (s.end === "rise") !== (s.pitch[k].dir === "rise")) {
+      return s.end === "rise" ? m.dir === "rise" : m.dir !== "rise";
+    }
     const want = s.pitch[k].tail - s.pitch[k].head;
     return m.dir === s.pitch[k].dir || Math.abs(m.slope - want) <= TOL;
   });
@@ -991,14 +1073,20 @@ function showScore(i) {
     '<button class="link" data-do="mine" type="button">Play mine</button>' +
     '<button class="link" data-do="guide" type="button">Play the guide</button>' +
     '<button class="link" data-do="save" type="button">Save this take</button>' +
-    '<span class="legend"><i></i>you</span>');
+    '<span class="legend"><i></i>you</span>' +
+    /* which take the finished speech will use: always the closest one so far, never simply the last */
+    (bests[i] && bests[i] !== t
+      ? '<span class="pick">In your speech: take ' + bests[i].n + ", <b>" + bests[i].score + "%</b> " +
+        '<button class="link" data-do="best" type="button">Play it</button></span>'
+      : '<span class="pick">&#10003; This take is in your speech</span>'));
 }
 
-function playMine(i) {
+function playMine(i, which) {
   if (mineAudio) { mineAudio.pause(); mineAudio = null; }
-  if (!takes[i]) return;
+  const t = which === "best" ? bests[i] : takes[i];
+  if (!t) return;
   aud.pause();
-  mineAudio = new Audio(takes[i].url);
+  mineAudio = new Audio(t.url);
   mineAudio.play();
 }
 
@@ -1026,8 +1114,11 @@ async function armMic(why) {
   if (!canRecord) return false;
   micAsked = true;
   try {
+    /* the voice as it is: automatic gain would undo the quiet section the script asks for,
+       and noise suppression smears the consonants. The guide is paused while you speak,
+       so there is no echo to cancel. */
     stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 } });
     micOK = true;
   } catch (e) {
     micOK = false;
@@ -1048,7 +1139,8 @@ function letMicGo() {
 function beginTake(i, btn) {
   const chunks = [];
   let mine;
-  try { mine = new MediaRecorder(stream); } catch (e) { mine = new MediaRecorder(stream, { mimeType: "audio/webm" }); }
+  try { mine = new MediaRecorder(stream, { audioBitsPerSecond: 128000 }); }
+  catch (e) { mine = new MediaRecorder(stream); }
   const type = mine.mimeType || "audio/webm";
   rec = mine;
   recBtn = btn || null;
@@ -1072,10 +1164,15 @@ function beginTake(i, btn) {
       log("take failed", { line: S[i].n, detail: res.error });
       return;
     }
-    const before = takes[i];
-    if (before && before.url) URL.revokeObjectURL(before.url);
+    const before = takes[i], oldBest = bests[i];
     takes[i] = Object.assign(res, { blob: blob, url: URL.createObjectURL(blob),
       ext: extFor(type), n: before ? before.n + 1 : 1 });
+    /* a retake only goes into the speech if it comes closer to the guide than the one already there */
+    if (!oldBest || res.score >= oldBest.score) bests[i] = takes[i];
+    [before, oldBest].forEach((t) => {
+      if (t && t.url && t !== takes[i] && t !== bests[i]) URL.revokeObjectURL(t.url);
+    });
+    forgetSpeech();                      /* any speech put together earlier is now out of date */
     drawOne(i);
     showScore(i);
     keepTake(i);
@@ -1122,67 +1219,91 @@ function vault() {
   });
 }
 
+/* what is kept of a take: the sound, and everything needed to redraw its curve */
+function packed(t) {
+  return { blob: t.blob, ext: t.ext, n: t.n, score: t.score, off: t.off, mine: t.mine,
+    words: t.words, ok: t.ok, judged: t.judged, dur: t.dur, at: t.at || Date.now() };
+}
+
 async function keepTake(i) {
-  const t = takes[i];
-  if (!t || !t.blob) return;
   try {
     const db = await vault();
-    db.transaction(SHELF, "readwrite").objectStore(SHELF).put({
-      blob: t.blob, ext: t.ext, n: t.n, score: t.score, off: t.off, mine: t.mine,
-      words: t.words, ok: t.ok, judged: t.judged, dur: t.dur, at: Date.now()
-    }, slot(i));
+    const shelf = db.transaction(SHELF, "readwrite").objectStore(SHELF);
+    if (takes[i] && takes[i].blob) shelf.put(packed(takes[i]), slot(i));
+    if (bests[i] && bests[i].blob) shelf.put(packed(bests[i]), slot(i) + "/best");
   } catch (e) {}
 }
 
 async function loadTakes() {
   let found = 0;
+  const shelfGet = (shelf, key) => new Promise((done) => {
+    const req = shelf.get(key);
+    req.onsuccess = () => done(req.result && req.result.blob ? req.result : null);
+    req.onerror = () => done(null);
+  });
   try {
     const db = await vault();
     const shelf = db.transaction(SHELF, "readonly").objectStore(SHELF);
-    await Promise.all(S.map((s, i) => new Promise((done) => {
-      const req = shelf.get(slot(i));
-      req.onsuccess = () => {
-        const kept = req.result;
-        if (kept && kept.blob) {
-          takes[i] = Object.assign({}, kept, { url: URL.createObjectURL(kept.blob) });
-          found++;
-        }
-        done();
-      };
-      req.onerror = () => done();
-    })));
+    await Promise.all(S.map(async (s, i) => {
+      const [last, best] = await Promise.all([shelfGet(shelf, slot(i)), shelfGet(shelf, slot(i) + "/best")]);
+      if (last) { takes[i] = Object.assign({}, last, { url: URL.createObjectURL(last.blob) }); found++; }
+      /* the same take on both shelves is one take on the page */
+      if (best && last && best.n === last.n) bests[i] = takes[i];
+      else if (best) bests[i] = Object.assign({}, best, { url: URL.createObjectURL(best.blob) });
+      else if (last) bests[i] = takes[i];          /* kept before bests existed: the last take stands in */
+    }));
   } catch (e) {}
   S.forEach((s, i) => { if (takes[i]) { drawOne(i); showScore(i); tally.lines.add(i); } });
   runBar();
   if (found) log("takes restored", { takes: found, detail: found + " takes came back from the last visit" });
 }
 
+let clearArmed = 0;
 async function clearTakes() {
+  /* a second click within four seconds, so a slip of the mouse cannot wipe a whole speech */
+  const btn = $("run-clear");
+  if (!clearArmed) {
+    btn.textContent = "Click again to delete every take";
+    clearArmed = setTimeout(() => { clearArmed = 0; btn.textContent = "Clear my takes"; }, 4000);
+    return;
+  }
+  clearTimeout(clearArmed);
+  clearArmed = 0;
+  btn.textContent = "Clear my takes";
   try {
     const db = await vault();
     const shelf = db.transaction(SHELF, "readwrite").objectStore(SHELF);
-    S.forEach((s, i) => shelf.delete(slot(i)));
+    S.forEach((s, i) => { shelf.delete(slot(i)); shelf.delete(slot(i) + "/best"); });
   } catch (e) {}
   S.forEach((s, i) => {
-    if (!takes[i]) return;
-    if (takes[i].url) URL.revokeObjectURL(takes[i].url);
+    [takes[i], bests[i]].forEach((t) => { if (t && t.url) URL.revokeObjectURL(t.url); });
+    const had = takes[i] || bests[i];
     takes[i] = null;
-    drawOne(i);
-    showScore(i);
+    bests[i] = null;
+    if (had) { drawOne(i); showScore(i); }
   });
+  forgetSpeech();
   tally.lines.clear();
   runBar();
   log("takes cleared", { detail: "the student cleared the saved takes" });
 }
 
 function runBar() {
-  const scores = [];
-  S.forEach((s, i) => { if (takes[i]) scores.push(takes[i].score); });
+  const scores = [], missing = [];
+  S.forEach((s, i) => { if (bests[i]) scores.push(bests[i].score); else missing.push(s.n); });
   $("run").hidden = !scores.length;
   if (!scores.length) return;
   const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
   $("run-line").textContent = scores.length + " of " + S.length + " lines recorded  ·  " +
-    avg + "% average melody match  ·  best " + Math.max.apply(null, scores) + "%";
+    "your speech averages " + avg + "% melody match";
+  $("run-missing").textContent = missing.length
+    ? "Still to record: line" + (missing.length > 1 ? "s " : " ") + listed(missing) + "."
+    : "Every line is recorded.";
+}
+
+function listed(ns) {
+  if (ns.length < 2) return String(ns[0]);
+  return ns.slice(0, -1).join(", ") + " and " + ns[ns.length - 1];
 }
 
 function wavOf(pcm, sr) {
@@ -1205,44 +1326,404 @@ function today() {
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
 }
 
-/* every line you recorded, in order, as one file to hand in */
-async function saveRun() {
-  const btn = $("run-save"), label = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = "Putting it together…";
-  try {
-    const parts = [], quiet = new Float32Array(Math.round(0.45 * SR));
-    let total = 0, lines = 0;
-    for (let i = 0; i < S.length; i++) {
-      if (!takes[i] || !takes[i].blob) continue;
-      const pcm = await pcm16k(await takes[i].blob.arrayBuffer());
-      parts.push(pcm, quiet);
-      total += pcm.length + quiet.length;
-      lines++;
+/* ======================================================================
+   The speech, put together from the closest take of every line.
+   Each take is cut down to the voice, every line is brought to one loudness,
+   and the rests between lines are the guide's own. A rest is filled with the
+   student's own room - the take's natural tail and head, and between them a
+   stretch of that room's quiet - because dead digital silence between two
+   takes sounds like the recording dropping out.
+   ====================================================================== */
+const OUT_SR = 44100;      /* the file's rate: what every upload form and player expects */
+const LEAD = 0.4, TAIL = 0.5;   /* the guide's own air before the first word and after the last */
+const FIT = 118;           /* the whole speech must end by 1:58, two seconds inside the 2:00 limit */
+const XF = 0.08;           /* crossfade where one room meets another */
+let run = null;            /* the speech last put together, until a take changes */
+
+/* where the voice is in a take. The pitch track anchors it - clicks and breaths are not
+   voiced - then it reaches out along the energy for the consonants either side, which are */
+function voiceSpan(x, rate, f0) {
+  const hop = Math.round(0.01 * rate), n = Math.floor(x.length / hop);
+  if (n < 20) return null;
+  const db = new Float64Array(n);
+  for (let k = 0; k < n; k++) {
+    let p = 0;
+    for (let j = k * hop, end = j + hop; j < end; j++) p += x[j] * x[j];
+    db[k] = 10 * Math.log10(p / hop + 1e-12);
+  }
+  const sorted = Array.from(db).sort((a, b) => a - b);
+  const floor = sorted[Math.floor(n * 0.2)], peak = sorted[Math.floor(n * 0.99)];
+  const gate = Math.min(peak - 20, Math.max(floor + 10, peak - 38));
+
+  let v0 = -1, v1 = -1;
+  for (let k = 0; k + 2 < f0.length; k++) if (f0[k] > 0 && f0[k + 1] > 0 && f0[k + 2] > 0) { v0 = k; break; }
+  for (let k = f0.length - 1; k >= 2; k--) if (f0[k] > 0 && f0[k - 1] > 0 && f0[k - 2] > 0) { v1 = k; break; }
+  if (v0 < 0 || v1 <= v0) return null;
+  /* a pitch frame is 40 ms wide and starts every 10 ms: its middle sits two energy frames in */
+  let a = Math.min(n - 1, v0 + 1), b = Math.min(n - 1, v1 + 3);
+  /* Out along the energy for the unvoiced sounds. A final "t", "d" or "tch" is a moment of
+     silence and then a burst, so a short dip is stepped over rather than taken as the end -
+     stopping at the dip cut the release off "don't", "witch", "believed" and "admit". */
+  for (let k = a - 1, seen = a, stop = Math.max(0, a - 25); k >= stop; k--) {   /* 250 ms back, 80 ms dips */
+    if (db[k] > gate) { seen = k; a = k; } else if (seen - k > 8) break;
+  }
+  for (let k = b + 1, seen = b, stop = Math.min(n - 1, b + 35); k <= stop; k++) { /* 350 ms on, 120 ms dips */
+    if (db[k] > gate) { seen = k; b = k; } else if (k - seen > 12) break;
+  }
+
+  let e = 0, c = 0;
+  for (let k = a; k <= b; k++) if (db[k] > gate) { e += Math.pow(10, db[k] / 10); c++; }
+
+  /* the room: the quietest 300 ms outside the voice, or anywhere if the take is tight */
+  const win = 30;
+  let at = -1, low = Infinity;
+  const look = (from, to) => {
+    for (let k = from; k + win <= to; k += 2) {
+      let s = 0;
+      for (let j = k; j < k + win; j++) s += Math.pow(10, db[j] / 10);
+      if (s < low) { low = s; at = k; }
     }
-    if (!total) return;
-    const whole = new Float32Array(total);
-    let at = 0;
-    parts.forEach((p) => { whole.set(p, at); at += p.length; });
-    const name = "Witches_run_" + (who ? who.replace(/[^A-Za-z0-9]+/g, "-") + "_" : "") + today() + ".wav";
-    const url = URL.createObjectURL(wavOf(whole, SR));
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 30000);
-    log("run saved", { takes: lines, detail: "downloaded " + name + " (" + lines + " lines)" });
+  };
+  look(0, Math.max(0, a - 5));
+  look(Math.min(n, b + 20), n);
+  if (at < 0) look(0, n);
+
+  return { start: a * hop, end: Math.min(x.length, (b + 1) * hop),
+    level: 10 * Math.log10(e / Math.max(1, c)),
+    room: at < 0 ? null : [at * hop, Math.min(x.length, (at + win) * hop)] };
+}
+
+/* as long as asked, made of the take's own quiet: copies laid end to end with long
+   overlaps, every other one backwards, so no loop can be heard in it */
+function roomTone(x, room, seconds, gain) {
+  const len = Math.max(1, Math.round(seconds * OUT_SR));
+  const out = new Float32Array(len);
+  if (!room) return out;
+  const src = x.subarray(room[0], room[1]), m = src.length;
+  if (m < 64) return out;
+  const fade = Math.min(Math.floor(m / 3), Math.round(0.05 * OUT_SR));
+  const step = m - fade;
+  for (let start = 0, flip = false; start < len; start += step, flip = !flip) {
+    for (let j = 0; j < m && start + j < len; j++) {
+      const v = src[flip ? m - 1 - j : j] * gain;
+      let w = 1;
+      if (j < fade && start > 0) w = Math.sin((j / fade) * Math.PI / 2);
+      else if (j >= m - fade) w = Math.cos(((j - (m - fade)) / fade) * Math.PI / 2);
+      out[start + j] += v * w;          /* sin and cos: equal power, since the copies are unrelated noise */
+    }
+  }
+  return out;
+}
+
+/* pieces laid end to end, each seam an equal-power crossfade no longer than either side can give */
+function joined(pieces) {
+  let total = 0;
+  for (let k = 0; k < pieces.length; k++) total += pieces[k].pcm.length - (k ? pieces[k].overlap : 0);
+  const out = new Float32Array(Math.max(1, total));
+  let at = 0;
+  pieces.forEach((p, k) => {
+    const o = k ? p.overlap : 0;
+    at -= o;
+    for (let j = 0; j < p.pcm.length; j++) {
+      if (j < o) {
+        const t = (j + 0.5) / o;
+        out[at + j] = out[at + j] * Math.cos(t * Math.PI / 2) + p.pcm[j] * Math.sin(t * Math.PI / 2);
+      } else {
+        out[at + j] = p.pcm[j];
+      }
+    }
+    at += p.pcm.length;
+  });
+  return out;
+}
+
+async function buildSpeech(tell) {
+  const lines = [];
+  for (let i = 0; i < S.length; i++) {
+    const t = bests[i];
+    if (!t || !t.blob) continue;
+    tell("Listening to line " + S[i].n + "…");
+    const raw = await t.blob.arrayBuffer();
+    const x = await pcmAt(raw.slice(0), OUT_SR);
+    const span = voiceSpan(x, OUT_SR, track(levelled(await pcmAt(raw.slice(0), SR))));
+    if (span) lines.push({ i: i, x: x, span: span, take: t });
+  }
+  if (!lines.length) return null;
+
+  /* Loudness. The script wants the voice to drop from line 7 to line 16 and come back at 17, so
+     lines are NOT made equal - that would iron the quiet section flat. A line is only moved when it
+     stands out from its own neighbours, the mark of a take recorded nearer or further from the
+     microphone, and then only by what exceeds STEADY dB. A whole quiet section is its own neighbour
+     and stays quiet. */
+  /* Each side is asked separately and the line is judged by the side it agrees with better:
+     the first line of the quiet section agrees with the lines after it, the last with the lines
+     before it, so a section's edges are never dragged back toward the loud part. */
+  const STEADY = 4, LEFT_IN = 1, REACH = 8;
+  const levelOf = (from, to) => {
+    const v = [];
+    for (let j = Math.max(0, from); j <= Math.min(lines.length - 1, to); j++) v.push(lines[j].span.level);
+    return v.length ? median(v) : null;
+  };
+  lines.forEach((l, k) => {
+    const left = levelOf(k - 3, k - 1), right = levelOf(k + 1, k + 3);
+    const offs = [left, right].filter((v) => v !== null).map((v) => l.span.level - v);
+    const off = offs.length ? offs.reduce((a, b) => (Math.abs(b) < Math.abs(a) ? b : a)) : 0;
+    const fix = Math.abs(off) <= STEADY ? 0 : -(off - Math.sign(off) * LEFT_IN);
+    l.moved = Math.max(-REACH, Math.min(REACH, fix));
+    l.gain = Math.pow(10, l.moved / 20);
+  });
+
+  /* the guide's rests, pulled in evenly only if the speech would otherwise run past 1:58 */
+  const spoken = lines.reduce((s, l) => s + (l.span.end - l.span.start) / OUT_SR, 0);
+  const rests = lines.map((l, k) => (k < lines.length - 1 ? S[l.i].pause : 0));
+  const resting = rests.reduce((a, b) => a + b, 0);
+  let squeeze = 1;
+  if (LEAD + spoken + resting + TAIL > FIT && resting > 0) {
+    squeeze = Math.max(0.6, (FIT - LEAD - TAIL - spoken) / resting);
+  }
+
+  const pieces = [];
+  const xf = Math.round(XF * OUT_SR);
+  lines.forEach((l, k) => {
+    tell("Putting line " + S[l.i].n + " in place…");
+    const before = k === 0 ? LEAD : rests[k - 1] * squeeze;
+    const after = k === lines.length - 1 ? TAIL : rests[k] * squeeze;
+    /* the take's own air either side of the voice: up to half the rest less a crossfade, so there
+       is always room for a stretch of room tone between two takes and the rest comes out exact */
+    const head = Math.min(l.span.start, Math.round(Math.max(0, Math.min(before / 2 - XF, 0.35)) * OUT_SR));
+    const tail = Math.min(l.x.length - l.span.end, Math.round(Math.max(0, Math.min(after / 2 - XF, 0.6)) * OUT_SR));
+    const from = l.span.start - head, to = l.span.end + tail;
+    const pcm = new Float32Array(to - from);
+    for (let j = 0; j < pcm.length; j++) pcm[j] = l.x[from + j] * l.gain;
+
+    /* the rest before this line: its missing middle is room tone from the line before it */
+    const prev = pieces.length ? pieces[pieces.length - 1] : null;
+    const have = (prev ? prev.tail : 0) + head;
+    const lap1 = prev ? Math.min(xf, prev.tail, Math.round(0.5 * OUT_SR)) : 0;
+    const lap2 = Math.min(xf, head);
+    const needed = Math.round(before * OUT_SR) - have + lap1 + lap2;
+    if (needed > lap1 + lap2 + Math.round(0.01 * OUT_SR)) {
+      const src = prev ? prev.line : l;
+      pieces.push({ pcm: roomTone(src.x, src.span.room, needed / OUT_SR, src.gain), overlap: lap1, tail: 0 });
+      pieces.push({ pcm: pcm, overlap: lap2, tail: tail, line: l });
+    } else {
+      pieces.push({ pcm: pcm, overlap: prev ? Math.min(lap1, head) : 0, tail: tail, line: l });
+    }
+  });
+  /* the air after the last word */
+  const last = pieces[pieces.length - 1];
+  const more = Math.round(TAIL * OUT_SR) - last.tail;
+  if (more > xf) pieces.push({ pcm: roomTone(last.line.x, last.line.span.room, (more + xf) / OUT_SR, last.line.gain),
+    overlap: Math.min(xf, last.tail), tail: 0 });
+
+  tell("Mixing…");
+  const out = joined(pieces);
+  let peak = 0;
+  for (let j = 0; j < out.length; j++) peak = Math.max(peak, Math.abs(out[j]));
+  const lift = peak > 0 ? Math.min(4, 0.89 / peak) : 1;          /* peaks at -1 dB, never pushed past 12 dB */
+  const edge = Math.round(0.01 * OUT_SR);
+  for (let j = 0; j < out.length; j++) {
+    let w = lift;
+    if (j < edge) w *= j / edge;
+    else if (j >= out.length - edge) w *= (out.length - 1 - j) / edge;
+    out[j] *= w;
+  }
+  const scores = lines.map((l) => l.take.score);
+  return {
+    pcm: out, seconds: out.length / OUT_SR, lines: lines.length, squeeze: squeeze,
+    average: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length),
+    missing: S.filter((s, i) => !lines.some((l) => l.i === i)).map((s) => s.n),
+    used: lines.map((l) => ({ i: l.i, take: l.take })),
+    levels: lines.map((l) => ({ n: S[l.i].n, db: +l.span.level.toFixed(1), moved: +l.moved.toFixed(1) }))
+  };
+}
+
+/* MP3 for the file itself: small enough to send, and what upload forms accept.
+   The encoder is fetched only when a speech is first put together. */
+let lameLoad = null;
+function lame() {
+  if (window.lamejs) return Promise.resolve(window.lamejs);
+  lameLoad = lameLoad || new Promise((ok, no) => {
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";
+    s.integrity = "sha384-xuasJXVcyv3hZq0eYpelEkBC8l4yufatZXDsKuyCU2rqfhDCb+ftuE/mSfZAteiK";
+    s.crossOrigin = "anonymous";
+    s.onload = () => (window.lamejs ? ok(window.lamejs) : no(new Error("no encoder")));
+    s.onerror = () => { lameLoad = null; no(new Error("no encoder")); };
+    document.head.appendChild(s);
+  });
+  return lameLoad;
+}
+
+/* Let the page repaint between chunks of work. Not setTimeout: in a background tab the browser
+   holds timers back to once a second or slower, and the encoder crawled to a halt the moment
+   another tab was in front. A message to itself is not held back. */
+function breathe() {
+  return new Promise((ok) => {
+    const ch = new MessageChannel();
+    ch.port1.onmessage = () => ok();
+    ch.port2.postMessage(0);
+  });
+}
+
+async function encoded(pcm, tell) {
+  try {
+    const L = await lame();
+    const enc = new L.Mp3Encoder(1, OUT_SR, 128);
+    const block = 1152, chunks = [];
+    const ints = new Int16Array(pcm.length);
+    for (let j = 0; j < pcm.length; j++) {
+      const v = Math.max(-1, Math.min(1, pcm[j]));
+      ints[j] = v < 0 ? v * 0x8000 : v * 0x7fff;
+    }
+    for (let j = 0, round = 0; j < ints.length; j += block, round++) {
+      const b = enc.encodeBuffer(ints.subarray(j, j + block));
+      if (b.length) chunks.push(new Int8Array(b));
+      if (round % 300 === 0) {
+        tell("Saving as MP3… " + Math.round(100 * j / ints.length) + "%");
+        await breathe();
+      }
+    }
+    const end = enc.flush();
+    if (end.length) chunks.push(new Int8Array(end));
+    return { blob: new Blob(chunks, { type: "audio/mpeg" }), ext: "mp3" };
   } catch (e) {
-    $("run-line").textContent = "That would not save: " + ((e && e.message) || e);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = label;
+    return { blob: wavOf(pcm, OUT_SR), ext: "wav" };    /* no encoder to be had: a WAV plays everywhere */
   }
 }
 
-$("run-save").addEventListener("click", saveRun);
+function forgetSpeech() {
+  if (run && run.url) URL.revokeObjectURL(run.url);
+  run = null;
+  $("run-audio").hidden = true;
+  $("run-audio").removeAttribute("src");
+}
+
+function status(html) {
+  $("run-status").hidden = !html;
+  $("run-status").innerHTML = html || "";
+}
+
+async function speech() {
+  if (run) return run;
+  const made = await buildSpeech((m) => status("<span>" + esc(m) + "</span>"));
+  if (!made) return null;
+  const file = await encoded(made.pcm, (m) => status("<span>" + esc(m) + "</span>"));
+  made.pcm = null;
+  run = Object.assign(made, file, {
+    url: URL.createObjectURL(file.blob),
+    name: "Witches_speech_" + (who ? who.replace(/[^A-Za-z0-9]+/g, "-") + "_" : "") + today() + "." + file.ext
+  });
+  return run;
+}
+
+function describe(r) {
+  const whole = Math.round(r.seconds), m = Math.floor(whole / 60), s = whole % 60;
+  return m + ":" + String(s).padStart(2, "0") + "  ·  " + r.lines + " lines  ·  " +
+    (r.squeeze < 0.999 ? "rests shortened to " + Math.round(r.squeeze * 100) + "% to finish by 1:58"
+      : "rests as in the guide");
+}
+
+function busy(on) {
+  ["run-send", "run-listen", "run-save", "run-clear"].forEach((id) => { $(id).disabled = on; });
+}
+
+async function listenSpeech() {
+  busy(true);
+  try {
+    const r = await speech();
+    if (!r) { status('<span class="bad">No take could be used yet. Record a few lines first.</span>'); return; }
+    status("<span>" + describe(r) + "</span>" + (r.seconds > 120 ? '<span class="bad">Over 2:00: read faster or trim a rest.</span>' : ""));
+    $("run-audio").src = r.url;
+    $("run-audio").hidden = false;
+    $("run-audio").play().catch(() => {});
+    log("speech heard", { seconds: +r.seconds.toFixed(1), score: r.average, detail: describe(r) });
+  } catch (e) {
+    status('<span class="bad">That could not be put together: ' + esc(String((e && e.message) || e)) + "</span>");
+  } finally { busy(false); }
+}
+
+async function saveSpeech() {
+  busy(true);
+  try {
+    const r = await speech();
+    if (!r) return;
+    const a = document.createElement("a");
+    a.href = r.url;
+    a.download = r.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    log("speech saved", { seconds: +r.seconds.toFixed(1), score: r.average, detail: "downloaded " + r.name });
+  } finally { busy(false); }
+}
+
+function asText(blob) {
+  return new Promise((ok, no) => {
+    const fr = new FileReader();
+    fr.onload = () => ok(String(fr.result).split(",")[1] || "");
+    fr.onerror = () => no(fr.error);
+    fr.readAsDataURL(blob);
+  });
+}
+
+let sendAnyway = false;
+async function sendSpeech() {
+  if (!LOG_URL) {
+    status('<span class="bad">Sending is not set up on this copy of the page. Use Save a copy and send the file to your teacher.</span>');
+    return;
+  }
+  const missing = S.filter((s, i) => !bests[i]).map((s) => s.n);
+  if (missing.length && !sendAnyway) {
+    status('<span class="bad">Line' + (missing.length > 1 ? "s " : " ") + listed(missing) + " still have no take.</span>" +
+      '<button class="link" id="run-anyway" type="button">Send it anyway</button>');
+    $("run-anyway").addEventListener("click", () => { sendAnyway = true; sendSpeech(); });
+    return;
+  }
+  sendAnyway = false;
+  busy(true);
+  try {
+    const r = await speech();
+    if (!r) { status('<span class="bad">No take could be used yet.</span>'); return; }
+    status("<span>Sending " + describe(r) + "…</span>");
+    /* the finished file, and beside it the take each line came from, in case a line needs another look */
+    const parts = await Promise.all(r.used.map(async (u) => ({
+      name: "line" + String(S[u.i].n).padStart(2, "0") + "_take" + u.take.n + "_" + u.take.score + "pct." + (u.take.ext || "webm"),
+      mime: u.take.blob.type || "audio/webm",
+      data: await asText(u.take.blob)
+    })));
+    const body = JSON.stringify({ upload: {
+      name: r.name, mime: r.blob.type, data: await asText(r.blob),
+      student: who, seconds: +r.seconds.toFixed(1), lines: r.lines, average: r.average,
+      missing: r.missing, squeeze: +r.squeeze.toFixed(2), parts: parts
+    } });
+    let reply = null;
+    try {
+      const res = await fetch(LOG_URL, { method: "POST", body: new Blob([body], { type: "text/plain;charset=utf-8" }) });
+      reply = await res.json();
+    } catch (e) {
+      /* the browser may refuse to show the answer even when the file has arrived */
+      status('<span>Sent, but the page could not hear back. Ask your teacher whether it arrived before sending again.</span>');
+      log("speech sent", { seconds: +r.seconds.toFixed(1), score: r.average, detail: "sent, no reply read: " + r.name });
+      return;
+    }
+    if (reply && reply.ok) {
+      const at = new Date();
+      status('<span class="good">✓ Sent to your teacher at ' + String(at.getHours()).padStart(2, "0") + ":" +
+        String(at.getMinutes()).padStart(2, "0") + "</span><span>" + describe(r) + "</span>");
+      log("speech sent", { seconds: +r.seconds.toFixed(1), score: r.average, detail: "sent " + r.name });
+    } else {
+      status('<span class="bad">Your teacher\'s folder did not take it' + (reply && reply.error ? ": " + esc(reply.error) : "") +
+        ". Use Save a copy and send the file instead.</span>");
+    }
+  } catch (e) {
+    status('<span class="bad">That did not send: ' + esc(String((e && e.message) || e)) + "</span>");
+  } finally { busy(false); }
+}
+
+$("run-send").addEventListener("click", sendSpeech);
+$("run-listen").addEventListener("click", listenSpeech);
+$("run-save").addEventListener("click", saveSpeech);
 $("run-clear").addEventListener("click", clearTakes);
 
 $("script").addEventListener("click", (e) => {
@@ -1254,6 +1735,7 @@ $("script").addEventListener("click", (e) => {
   if (btn.classList.contains("mic")) return toggleRec(i, btn);
   const act = btn.dataset.do;
   if (act === "mine") playMine(i);
+  else if (act === "best") playMine(i, "best");
   else if (act === "guide") playLine(i);
   else if (act === "save") saveTake(i);
 });
