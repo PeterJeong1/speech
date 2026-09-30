@@ -167,6 +167,42 @@ h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(40px,7.4v
   text-underline-offset:3px;cursor:pointer}
 .run .link:hover{color:var(--ink)}
 .run-note{font-size:13px}
+.onego{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-top:12px;border-top:1px solid var(--rule)}
+.onego span{font:13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.use{margin:0;padding:0;border:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;font-size:15px}
+.use[hidden]{display:none}
+.use legend{float:left;margin-right:4px;padding:0;font:500 12px/2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.use label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.use input{accent-color:var(--lantern)}
+
+/* the whole speech in one go: the script on one screen, no guide playing */
+.stage{position:fixed;inset:0;z-index:40;overflow-y:auto;background:var(--ground);padding:0 var(--gutter) 40px}
+.stage[hidden]{display:none}
+.stage-bar{position:sticky;top:0;z-index:1;margin-inline:calc(-1 * var(--gutter));padding:12px var(--gutter) 10px;
+  background:var(--ground);border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.stage-bar h2{margin:0;font:400 24px/1.1 var(--display)}
+.stage-clock{font:500 22px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stage-clock small{font-size:14px;color:var(--muted)}
+.stage-clock.over{color:var(--wrong)}
+.stage-meter{position:relative;flex:1 1 160px;height:8px;border-radius:4px;background:var(--rule);overflow:hidden}
+.stage-meter i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--lantern)}
+.stage-meter.over i{background:var(--wrong)}
+.stage-meter b{position:absolute;top:0;bottom:0;width:2px;background:var(--ink)}
+.stage .run-go.rec{background:var(--wrong);color:#fff}
+.stage .link{border:0;background:none;padding:0;font:14px var(--mono);color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.stage-msg{margin:10px 0 0;font-size:14px;color:var(--muted)}
+.stage-msg .bad{color:var(--wrong)}
+.stage-msg .good{color:var(--lantern-ink);font-weight:700}
+.stage audio{display:block;width:100%;margin-top:10px}
+.stage audio[hidden]{display:none}
+.stage-script{max-width:1400px;margin:14px auto 0;columns:2 21em;column-gap:40px;font-size:clamp(16px,1.45vw,21px);line-height:1.4}
+.stage-script h3{margin:10px 0 2px;font:500 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);break-after:avoid}
+.stage-script h3:first-child{margin-top:0}
+.stage-script p{margin:0 0 5px;padding-left:2em;text-indent:-2em;break-inside:avoid}
+.stage-script .n{display:inline-block;width:2em;text-indent:0;font:500 12px var(--mono);color:var(--faint)}
+.stage-script .s{font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-color:var(--faint)}
+.stage-script .r{margin-left:6px;font:500 .8em var(--mono);color:var(--lantern-ink);white-space:nowrap}
+.stage-script .e{margin-left:4px;font:500 .8em var(--mono);color:var(--muted)}
 
 /* rubric */
 .rubric{margin-top:64px;padding-top:28px;border-top:2px solid var(--ink);display:grid;gap:30px}
@@ -248,6 +284,15 @@ footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-si
     <h2>Your speech</h2>
     <p id="run-line"></p>
     <p id="run-missing" class="run-note"></p>
+    <div class="onego">
+      <button class="run-alt" id="onego-open" type="button">Record it in one go</button>
+      <span id="onego-line">The whole script on one screen, read straight through, no guide playing.</span>
+    </div>
+    <fieldset class="use" id="use" hidden>
+      <legend>Send</legend>
+      <label><input type="radio" name="use" value="whole" id="use-whole"> my one-go recording</label>
+      <label><input type="radio" name="use" value="lines" id="use-lines"> the speech put together line by line</label>
+    </fieldset>
     <div class="run-buttons">
       <button class="run-go" id="run-send" type="button">Send it to my teacher</button>
       <button class="run-alt" id="run-listen" type="button">Listen to the whole speech</button>
@@ -292,13 +337,26 @@ footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-si
         <li>Work down the script until the two curves sit on top of each other. To drill one line on its own, press <strong>Record this line</strong> under it.</li>
         <li>A line with a low score: press <strong>Play the guide</strong>, listen, and record it again. Your speech keeps whichever take of that line comes closest.</li>
         <li>When all 29 lines are recorded, go to <strong>Your speech</strong> below the script. Press <strong>Listen to the whole speech</strong>, then <strong>Send it to my teacher</strong>.</li>
-        <li>Reading it in one go instead? Use a stopwatch. Finish between 1:50 and 1:58. The recording must stay under 2:00.</li>
+        <li>Ready to read it straight through? Press <strong>Record it in one go</strong>. The whole script fits on one screen, the clock counts up to 2:00, and no guide plays while you speak. Finish between 1:50 and 1:58. Then choose which recording to send.</li>
       </ol>
     </div>
   </section>
 
   <footer>Voice: Microsoft Sonia, British English neural text-to-speech. Script version of 13 September 2026. The same recording is saved as Witches_Guide_Recording_British.mp3.</footer>
 </main>
+
+<div class="stage" id="stage" hidden role="dialog" aria-modal="true" aria-labelledby="stage-title">
+  <div class="stage-bar">
+    <h2 id="stage-title">In one go</h2>
+    <div class="stage-clock" id="stage-clock"><span id="stage-now">0:00</span><small> / 2:00</small></div>
+    <div class="stage-meter" id="stage-meter"><i id="stage-fill"></i><b style="left:98.33%"></b></div>
+    <button class="run-go" id="stage-go" type="button">Start recording</button>
+    <button class="link" id="stage-close" type="button">Close</button>
+  </div>
+  <p class="stage-msg" id="stage-msg"></p>
+  <audio id="stage-audio" controls preload="none" hidden></audio>
+  <div class="stage-script" id="stage-script"></div>
+</div>
 
 <audio id="aud" preload="auto" src="guide.mp3"></audio>
 
@@ -481,8 +539,28 @@ let waitEnd = 0, waitLen = 0, afterWait = null;
 let live = -1, liveWord = null, liveDot = null;
 const canRecord = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
 let micAsked = false, micOK = false;
+let whole = null;          /* the speech recorded in one go, tidied: { blob, ext, url, seconds, at, whole } */
+let use = "whole";         /* which recording Send, Listen and Save act on: "whole" or "lines" */
 
 const GAP = 1.5;   /* the breath on top of the line's own length before the guide moves on */
+
+/* The guide is paused the instant a line ends and the microphone opens in the same moment, but
+   the sound is not gone yet: Bluetooth speakers are 0.1-0.3 s behind, and the room rings on after.
+   That tail landed at the head of every take, was counted as the student's voice, and came
+   through in the finished speech. So a take ignores its first SETTLE seconds after anything
+   was last heard from the speakers. Takes kept before this was measured lose OLD_SKIP. */
+const SETTLE = 0.45, OLD_SKIP = 0.35;
+let heardAt = 0;
+const settle = () => Math.max(0, SETTLE - (performance.now() - heardAt) / 1000);
+const skipOf = (t) => (t && typeof t.skip === "number" ? t.skip : OLD_SKIP);
+const cut = (x, sec, rate) => x.subarray(Math.min(x.length, Math.round(sec * rate)));
+function hush() {
+  const run = $("run-audio");
+  if (!aud.paused || (mineAudio && !mineAudio.paused) || (run && !run.paused)) heardAt = performance.now();
+  aud.pause();
+  if (mineAudio) { mineAudio.pause(); mineAudio = null; }
+  if (run) run.pause();
+}
 
 function setHint() {
   $("hint").textContent =
@@ -550,6 +628,7 @@ function setWord(i, t) {
 }
 function tick() {
   const t = aud.currentTime;
+  if (!aud.paused) heardAt = performance.now();
   $("head").style.left = (t / LIMIT * 100) + "%";
   $("now").textContent = fmt(t);
   $("track").setAttribute("aria-valuenow", t.toFixed(1));
@@ -608,6 +687,7 @@ function yourTurn(i, then) {
 }
 
 function playFrom(t) {
+  dropTake();
   endWait();
   stopAt = null; single = -1;
   gated = new Set([...gated].filter((k) => S[k].stop <= t + 0.01));
@@ -615,6 +695,7 @@ function playFrom(t) {
   aud.play();
 }
 function playLine(i) {
+  dropTake();
   if (mode === "listen") return playFrom(Math.max(0, S[i].start - 0.05));
   endWait();
   stopAt = S[i].stop + 0.05; single = i;
@@ -631,7 +712,7 @@ $("play").addEventListener("click", async () => {
   playFrom(t);
 });
 aud.addEventListener("play", () => { setIcon(true); requestAnimationFrame(tick); });
-aud.addEventListener("pause", () => { if (!waiting()) setIcon(false); tick(); });
+aud.addEventListener("pause", () => { heardAt = performance.now(); if (!waiting()) setIcon(false); tick(); });
 aud.addEventListener("ended", () => { if (!waiting()) setIcon(false); });
 aud.addEventListener("seeked", () => { if (aud.paused) tick(); });
 
@@ -948,9 +1029,9 @@ function levelled(x) {
   return out;
 }
 
-async function compare(i, blob) {
+async function compare(i, blob, skip) {
   const s = S[i];
-  const mineF0 = track(levelled(await pcm16k(await blob.arrayBuffer())));
+  const mineF0 = track(levelled(cut(await pcm16k(await blob.arrayBuffer()), skip, SR)));
   let lo = -1, hi = -1;
   for (let k = 0; k < mineF0.length; k++) if (mineF0[k] > 0) { if (lo < 0) lo = k; hi = k; }
   if (lo < 0 || hi - lo < 15) return { error: "I could not hear a voice in that. Move closer to the microphone and try again." };
@@ -1090,9 +1171,17 @@ function playMine(i, which) {
   if (mineAudio) { mineAudio.pause(); mineAudio = null; }
   const t = which === "best" ? bests[i] : takes[i];
   if (!t) return;
+  dropTake();
   aud.pause();
   mineAudio = new Audio(t.url);
+  mineAudio.addEventListener("pause", () => { heardAt = performance.now(); });
   mineAudio.play();
+}
+
+/* the speakers and the microphone never run together: a take still going when anything
+   starts to play is thrown away, or the guide would be in it */
+function dropTake() {
+  if (recording() && !waiting()) { rec._drop = true; stopRec(); }
 }
 
 function saveTake(i) {
@@ -1147,6 +1236,7 @@ function beginTake(i, btn) {
   try { mine = new MediaRecorder(stream, { audioBitsPerSecond: 128000 }); }
   catch (e) { mine = new MediaRecorder(stream); }
   const type = mine.mimeType || "audio/webm";
+  const skip = settle();
   rec = mine;
   recBtn = btn || null;
   mine._drop = false;
@@ -1162,7 +1252,7 @@ function beginTake(i, btn) {
     strip(i, "<span>Listening back&hellip;</span>");
     const blob = new Blob(chunks, { type: type });
     let res;
-    try { res = await compare(i, blob); }
+    try { res = await compare(i, blob, skip); }
     catch (e) { res = { error: "Something went wrong reading that take: " + ((e && e.message) || e) }; }
     if (res.error) {
       strip(i, '<span class="bad">' + esc(res.error) + "</span>");
@@ -1170,7 +1260,7 @@ function beginTake(i, btn) {
       return;
     }
     const before = takes[i], oldBest = bests[i];
-    takes[i] = Object.assign(res, { blob: blob, url: URL.createObjectURL(blob),
+    takes[i] = Object.assign(res, { blob: blob, url: URL.createObjectURL(blob), skip: skip,
       ext: extFor(type), n: before ? before.n + 1 : 1 });
     /* a retake only goes into the speech if it comes closer to the guide than the one already there */
     if (!oldBest || res.score >= oldBest.score) bests[i] = takes[i];
@@ -1196,8 +1286,7 @@ function beginTake(i, btn) {
 async function toggleRec(i, btn) {
   if (recording()) { stopRec(); return; }
   clearTimeout(idle);
-  aud.pause();
-  if (mineAudio) { mineAudio.pause(); mineAudio = null; }
+  hush();
   strip(i, "<span>Getting the microphone ready&hellip;</span>");
   if (!(await armMic("record button"))) {
     strip(i, '<span class="bad">The browser would not hand over the microphone. Allow it next to the address bar, then press Record again.</span>');
@@ -1227,7 +1316,7 @@ function vault() {
 /* what is kept of a take: the sound, and everything needed to redraw its curve */
 function packed(t) {
   return { blob: t.blob, ext: t.ext, n: t.n, score: t.score, off: t.off, mine: t.mine,
-    words: t.words, ok: t.ok, judged: t.judged, dur: t.dur, at: t.at || Date.now() };
+    words: t.words, ok: t.ok, judged: t.judged, dur: t.dur, skip: t.skip, at: t.at || Date.now() };
 }
 
 async function keepTake(i) {
@@ -1257,6 +1346,11 @@ async function loadTakes() {
       else if (best) bests[i] = Object.assign({}, best, { url: URL.createObjectURL(best.blob) });
       else if (last) bests[i] = takes[i];          /* kept before bests existed: the last take stands in */
     }));
+    const w = await shelfGet(db.transaction(SHELF, "readonly").objectStore(SHELF), wholeSlot());
+    if (w) {
+      whole = Object.assign({}, w, { url: URL.createObjectURL(w.blob), whole: true });
+      try { if (localStorage.getItem("witches-use") === "lines") use = "lines"; } catch (e) {}
+    }
   } catch (e) {}
   S.forEach((s, i) => { if (takes[i]) { drawOne(i); showScore(i); tally.lines.add(i); } });
   runBar();
@@ -1279,7 +1373,10 @@ async function clearTakes() {
     const db = await vault();
     const shelf = db.transaction(SHELF, "readwrite").objectStore(SHELF);
     S.forEach((s, i) => { shelf.delete(slot(i)); shelf.delete(slot(i) + "/best"); });
+    shelf.delete(wholeSlot());
   } catch (e) {}
+  if (whole && whole.url) URL.revokeObjectURL(whole.url);
+  whole = null;
   S.forEach((s, i) => {
     [takes[i], bests[i]].forEach((t) => { if (t && t.url) URL.revokeObjectURL(t.url); });
     const had = takes[i] || bests[i];
@@ -1298,6 +1395,18 @@ async function clearTakes() {
 function runBar() {
   const scores = [], missing = [];
   S.forEach((s, i) => { if (bests[i]) scores.push(bests[i].score); else missing.push(s.n); });
+  /* which recording the buttons below act on: the one-go recording when there is one and it was
+     chosen, else the lines; with only one of the two, that one */
+  if (!whole) use = "lines";
+  else if (!scores.length) use = "whole";
+  $("use").hidden = !(whole && scores.length);
+  $("use-" + use).checked = true;
+  $("onego-line").textContent = whole
+    ? "One-go recording: " + fmt(whole.seconds) + (whole.seconds > 120 ? " (over 2:00)" : "") +
+      ", made " + hhmm(whole.at) + ". Press again to replace it."
+    : canRecord ? "The whole script on one screen, read straight through, no guide playing."
+    : "Recording needs Chrome or Safari on the https link.";
+  $("onego-open").textContent = whole ? "Record it in one go again" : "Record it in one go";
   busy(working);
   if (!scores.length) {
     $("run-line").textContent = "No lines recorded yet.";
@@ -1456,8 +1565,9 @@ async function buildSpeech(tell) {
     if (!t || !t.blob) continue;
     tell("Listening to line " + S[i].n + "…");
     const raw = await t.blob.arrayBuffer();
-    const x = await pcmAt(raw.slice(0), OUT_SR);
-    const span = voiceSpan(x, OUT_SR, track(levelled(await pcmAt(raw.slice(0), SR))));
+    const skip = skipOf(t);
+    const x = cut(await pcmAt(raw.slice(0), OUT_SR), skip, OUT_SR);
+    const span = voiceSpan(x, OUT_SR, track(levelled(cut(await pcmAt(raw.slice(0), SR), skip, SR))));
     if (span) lines.push({ i: i, x: x, span: span, take: t });
   }
   if (!lines.length) return null;
@@ -1624,6 +1734,10 @@ function status(html) {
 }
 
 async function speech() {
+  if (use === "whole" && whole) {
+    return Object.assign({}, whole, { lines: S.length, squeeze: 1, missing: [], used: [],
+      name: "Witches_speech_onego_" + (who ? who.replace(/[^A-Za-z0-9]+/g, "-") + "_" : "") + today() + "." + whole.ext });
+  }
   if (run) return run;
   const made = await buildSpeech((m) => status("<span>" + esc(m) + "</span>"));
   if (!made) return null;
@@ -1637,7 +1751,8 @@ async function speech() {
 }
 
 function describe(r) {
-  const whole = Math.round(r.seconds), m = Math.floor(whole / 60), s = whole % 60;
+  const secs = Math.round(r.seconds), m = Math.floor(secs / 60), s = secs % 60;
+  if (r.whole) return m + ":" + String(s).padStart(2, "0") + "  ·  recorded in one go";
   return m + ":" + String(s).padStart(2, "0") + "  ·  " + r.lines + " lines  ·  " +
     (r.squeeze < 0.999 ? "rests shortened to " + Math.round(r.squeeze * 100) + "% to finish by 1:58"
       : "rests follow the guide");
@@ -1646,8 +1761,10 @@ function describe(r) {
 let working = false;
 function busy(on) {
   working = on;
-  const none = !bests.some(Boolean);
-  ["run-send", "run-listen", "run-save", "run-clear"].forEach((id) => { $(id).disabled = on || none; });
+  const none = use === "whole" ? !whole : !bests.some(Boolean);
+  ["run-send", "run-listen", "run-save"].forEach((id) => { $(id).disabled = on || none; });
+  $("run-clear").disabled = on || (!bests.some(Boolean) && !whole);
+  $("onego-open").disabled = on || !canRecord;
 }
 
 async function listenSpeech() {
@@ -1695,7 +1812,7 @@ async function sendSpeech() {
     status('<span class="bad">Sending is not set up on this copy of the page. Use Save a copy and send the file to your teacher.</span>');
     return;
   }
-  const missing = S.filter((s, i) => !bests[i]).map((s) => s.n);
+  const missing = use === "whole" && whole ? [] : S.filter((s, i) => !bests[i]).map((s) => s.n);
   if (missing.length && !sendAnyway) {
     status('<span class="bad">Line' + (missing.length > 1 ? "s " : " ") + listed(missing) + " still have no take.</span>" +
       '<button class="link" id="run-anyway" type="button">Send it anyway</button>');
@@ -1743,6 +1860,210 @@ async function sendSpeech() {
   } finally { busy(false); }
 }
 
+/* ======================================================================
+   In one go: the whole script on one screen and the microphone open from the
+   first word to the last. No guide plays, so nothing can leak into it. The take
+   is cut down to the voice at either end and brought to the same peak as the
+   line-by-line speech; nothing in between is touched.
+   ====================================================================== */
+const ONEGO_MAX = 130;     /* the microphone closes itself here, well past the limit */
+const wholeSlot = () => (who || "?").toLowerCase() + "#whole";
+const hhmm = (ms) => { const d = new Date(ms || Date.now()); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
+let stageRec = null, stageT0 = 0, stageTimer = 0, stageCount = 0;
+
+(function stageScript() {
+  let sec = null, html = "";
+  S.forEach((s) => {
+    if (s.section !== sec) { sec = s.section; html += "<h3>" + esc(sec) + "</h3>"; }
+    const stress = new Set(s.stress);
+    const toks = s.tokens.map((tk) => stress.has(norm(tk)) ? '<span class="s">' + esc(tk) + "</span>" : esc(tk)).join(" ");
+    /* one stroke for a rest, two for the long ones the rubric names */
+    const rest = s.pause > 0 ? '<span class="r" title="rest ' + s.pause.toFixed(1) + ' s">' + (s.pause >= 2 ? "//" : "/") + "</span>" : "";
+    html += '<p><span class="n">' + s.n + "</span>" + toks +
+      '<span class="e">' + (s.end === "rise" ? "↗" : "↘") + "</span>" + rest + "</p>";
+  });
+  $("stage-script").innerHTML = html;
+})();
+
+function stageMsg(html) { $("stage-msg").innerHTML = html; }
+function stageIdle() {
+  stageMsg(whole
+    ? "Your last one-go recording is " + fmt(whole.seconds) + ". Start again to replace it, or close this and send it."
+    : "Read the whole script straight through. The guide does not play, so headphones are not needed. " +
+      "Aim to finish between 1:50 and 1:58. <b>/</b> is a rest, <b>//</b> a long one.");
+  $("stage-audio").hidden = !whole;
+  if (whole) $("stage-audio").src = whole.url;
+}
+
+function openStage() {
+  endWait();
+  dropTake();
+  hush();
+  setIcon(false);
+  $("stage").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("stage-now").textContent = "0:00";
+  $("stage-fill").style.width = "0";
+  $("stage-clock").classList.remove("over");
+  $("stage-meter").classList.remove("over");
+  stageIdle();
+  $("stage-go").focus();
+}
+function closeStage() {
+  if (stageCount) { clearInterval(stageCount); stageCount = 0; resetGo(); }
+  if (stageRec && stageRec.state === "recording") stageRec.stop();    /* closing keeps what was said */
+  $("stage-audio").pause();
+  $("stage").hidden = true;
+  document.body.style.overflow = "";
+  $("onego-open").focus();
+}
+function resetGo() {
+  $("stage-go").classList.remove("rec");
+  $("stage-go").textContent = whole ? "Record again" : "Start recording";
+  $("stage-go").disabled = false;
+}
+
+function stageTick() {
+  const t = (performance.now() - stageT0) / 1000;
+  $("stage-now").textContent = fmt(t);
+  $("stage-fill").style.width = Math.min(100, t / 120 * 100) + "%";
+  const over = t > FIT;
+  $("stage-clock").classList.toggle("over", over);
+  $("stage-meter").classList.toggle("over", over);
+  if (t >= ONEGO_MAX && stageRec && stageRec.state === "recording") stageRec.stop();
+}
+
+async function stageGo() {
+  if (stageRec && stageRec.state === "recording") { stageRec.stop(); return; }
+  if (stageCount) { clearInterval(stageCount); stageCount = 0; resetGo(); stageIdle(); return; }
+  $("stage-audio").pause();
+  hush();
+  stageMsg("Getting the microphone ready&hellip;");
+  if (!(await armMic("one go"))) {
+    stageMsg('<span class="bad">The browser would not hand over the microphone. Allow it next to the address bar, then press Start again.</span>');
+    return;
+  }
+  setHint();
+  $("stage-audio").hidden = true;
+  /* three seconds to breathe and look at line 1; the microphone is not recording yet */
+  let n = 3;
+  $("stage-go").textContent = "Cancel";
+  stageMsg("Starting in <b>" + n + "</b>&hellip;");
+  stageCount = setInterval(() => {
+    if (--n > 0) { stageMsg("Starting in <b>" + n + "</b>&hellip;"); return; }
+    clearInterval(stageCount);
+    stageCount = 0;
+    stageStart();
+  }, 1000);
+}
+
+function stageStart() {
+  clearTimeout(idle);
+  const chunks = [];
+  let mine;
+  try { mine = new MediaRecorder(stream, { audioBitsPerSecond: 128000 }); }
+  catch (e) { mine = new MediaRecorder(stream); }
+  const type = mine.mimeType || "audio/webm";
+  const skip = settle();
+  stageRec = mine;
+  mine.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+  mine.onstop = async () => {
+    clearInterval(stageTimer);
+    stageRec = null;
+    letMicGo();
+    $("stage-go").classList.remove("rec");
+    $("stage-go").disabled = true;
+    stageMsg("Tidying the ends&hellip;");
+    try {
+      const made = await tidyWhole(new Blob(chunks, { type: type }), skip);
+      if (!made) { stageMsg('<span class="bad">I could not hear a voice in that. Check the microphone and try again.</span>'); return; }
+      if (whole && whole.url) URL.revokeObjectURL(whole.url);
+      whole = Object.assign(made, { url: URL.createObjectURL(made.blob), at: Date.now(), whole: true });
+      use = "whole";
+      try { localStorage.setItem("witches-use", use); } catch (e) {}
+      keepWhole();
+      runBar();
+      const s = whole.seconds;
+      stageMsg((s > 120 ? '<span class="bad">' + fmt(s) + ": over the 2:00 limit. Read a little faster or shorten the long rests.</span>"
+        : s > FIT ? '<span class="bad">' + fmt(s) + ": under 2:00, but past 1:58. Too close to the limit.</span>"
+        : s < 110 ? "<span>" + fmt(s) + ": inside the limit, but quicker than 1:50. Let the rests breathe.</span>"
+        : '<span class="good">' + fmt(s) + ": right in the window.</span>") +
+        " Listen back below. It is now the recording that gets sent; close this to send it.");
+      $("stage-audio").src = whole.url;
+      $("stage-audio").hidden = false;
+      log("one go", { seconds: +s.toFixed(1), detail: "recorded the whole speech in one go: " + fmt(s) });
+    } catch (e) {
+      stageMsg('<span class="bad">That could not be read: ' + esc(String((e && e.message) || e)) + "</span>");
+    } finally { resetGo(); }
+  };
+  mine.start(1000);
+  stageT0 = performance.now();
+  $("stage-go").classList.add("rec");
+  $("stage-go").textContent = "Stop";
+  stageMsg("Recording. Press <b>Stop</b> after your last word.");
+  stageTimer = setInterval(stageTick, 200);
+  stageTick();
+}
+
+/* the voice, from its first sound to its last, with the guide's own air either side */
+async function tidyWhole(blob, skip) {
+  const x = cut(await pcmAt(await blob.arrayBuffer(), OUT_SR), skip, OUT_SR);
+  const hop = Math.round(0.01 * OUT_SR), n = Math.floor(x.length / hop);
+  if (n < 100) return null;
+  const db = new Float64Array(n);
+  for (let k = 0; k < n; k++) {
+    let p = 0;
+    for (let j = k * hop, end = j + hop; j < end; j++) p += x[j] * x[j];
+    db[k] = 10 * Math.log10(p / hop + 1e-12);
+  }
+  const sorted = Array.from(db).sort((a, b) => a - b);
+  const floor = sorted[Math.floor(n * 0.2)], peak = sorted[Math.floor(n * 0.99)];
+  if (peak - floor < 12) return null;
+  const gate = Math.min(peak - 20, Math.max(floor + 10, peak - 38));
+  /* five loud frames in a row: a click or a knock on the desk is shorter than a syllable */
+  const loud = (k) => { for (let j = k; j < k + 5; j++) if (!(db[j] > gate)) return false; return true; };
+  let a = -1, b = -1;
+  for (let k = 0; k + 5 <= n; k++) if (loud(k)) { a = k; break; }
+  for (let k = n - 5; k >= 0; k--) if (loud(k)) { b = k + 4; break; }
+  if (a < 0 || b <= a) return null;
+  /* a final consonant can trail under the gate; give it 150 ms more before the air starts */
+  const from = Math.max(0, a * hop - Math.round(LEAD * OUT_SR));
+  const to = Math.min(x.length, (b + 1) * hop + Math.round((TAIL + 0.15) * OUT_SR));
+  const out = x.slice(from, to);
+  let top = 0;
+  for (let j = 0; j < out.length; j++) top = Math.max(top, Math.abs(out[j]));
+  const lift = top > 0 ? Math.min(4, 0.89 / top) : 1;
+  const edge = Math.round(0.01 * OUT_SR);
+  for (let j = 0; j < out.length; j++) {
+    let w = lift;
+    if (j < edge) w *= j / edge;
+    else if (j >= out.length - edge) w *= (out.length - 1 - j) / edge;
+    out[j] *= w;
+  }
+  const file = await encoded(out, (m) => stageMsg(esc(m)));
+  return { blob: file.blob, ext: file.ext, seconds: out.length / OUT_SR };
+}
+
+async function keepWhole() {
+  try {
+    const db = await vault();
+    db.transaction(SHELF, "readwrite").objectStore(SHELF).put(
+      { blob: whole.blob, ext: whole.ext, seconds: whole.seconds, at: whole.at }, wholeSlot());
+  } catch (e) {}
+}
+
+$("onego-open").addEventListener("click", openStage);
+$("stage-go").addEventListener("click", stageGo);
+$("stage-close").addEventListener("click", closeStage);
+$("stage").addEventListener("keydown", (e) => { if (e.key === "Escape") closeStage(); });
+document.querySelectorAll('input[name="use"]').forEach((r) => r.addEventListener("change", () => {
+  use = r.value;
+  try { localStorage.setItem("witches-use", use); } catch (e) {}
+  $("run-audio").pause();
+  $("run-audio").hidden = true;
+  status("");
+  runBar();
+}));
 $("run-send").addEventListener("click", sendSpeech);
 $("run-listen").addEventListener("click", listenSpeech);
 $("run-save").addEventListener("click", saveSpeech);
