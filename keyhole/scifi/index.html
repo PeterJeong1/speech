@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Sci-Fi · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-scifi.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{color:#d7ecf5;font-family:'Outfit',Arial,sans-serif;-webkit-user-select:none;user-select:none;background:#040a12;
+    background-image:radial-gradient(circle 720px at 108% 118%,#2f6fb5 0,#1d4a86 34%,#0d2a52 52%,rgba(13,42,82,0) 60%),
+      radial-gradient(circle 760px at 108% 118%,rgba(127,182,234,.35) 58%,rgba(127,182,234,0) 62%),
+      radial-gradient(ellipse 900px 420px at 30% -80px,rgba(57,230,255,.16),transparent 70%),
+      linear-gradient(rgba(57,230,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(57,230,255,.045) 1px,transparent 1px),
+      linear-gradient(#071523,#040a12);
+    background-size:auto,auto,auto,44px 44px,44px 44px,auto;background-attachment:fixed}
+  .stars{position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;opacity:.8;
+    background-image:radial-gradient(1.4px 1.4px at 12% 22%,#fff,transparent),radial-gradient(1px 1px at 28% 64%,#cfe6ff,transparent),radial-gradient(1.6px 1.6px at 44% 12%,#fff,transparent),
+      radial-gradient(1px 1px at 63% 38%,#fff,transparent),radial-gradient(1.4px 1.4px at 81% 16%,#cfe6ff,transparent),radial-gradient(1px 1px at 91% 52%,#fff,transparent),
+      radial-gradient(1.2px 1.2px at 7% 78%,#fff,transparent),radial-gradient(1px 1px at 37% 88%,#cfe6ff,transparent),radial-gradient(1.5px 1.5px at 55% 72%,#fff,transparent),
+      radial-gradient(1px 1px at 72% 84%,#fff,transparent),radial-gradient(1.2px 1.2px at 19% 44%,#fff,transparent),radial-gradient(1px 1px at 49% 50%,#cfe6ff,transparent)}
+  .back{position:fixed;left:14px;top:12px;z-index:3;height:36px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(57,230,255,.4);
+    background:rgba(4,14,22,.7);color:#d7ecf5;border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:14px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#39e6ff;color:#39e6ff}
+  header{position:relative;text-align:center;padding:66px 20px 30px}
+  h1{margin:0;font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(46px,7.4vw,92px);letter-spacing:.2em;line-height:1;color:#eaffff;
+    text-shadow:0 0 22px rgba(57,230,255,.75),0 0 2px #39e6ff}
+  header p{margin:16px 0 0;font-family:'Share Tech Mono',monospace;font-size:17px;color:#8fd9ef;letter-spacing:.04em}
+  header:after{content:'';display:block;width:min(560px,80vw);height:2px;margin:22px auto 0;background:linear-gradient(90deg,transparent,#39e6ff,transparent)}
+  main{position:relative;max-width:1180px;margin:0 auto;padding:6px 24px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:30px 26px}
+  .pod{position:relative;display:block;text-align:left;padding:0 0 46px;border:0;cursor:pointer;font:inherit;color:#d7ecf5;border-radius:12px;overflow:hidden;
+    background:linear-gradient(100deg,#27323d,#3d4b59 45%,#232d37);box-shadow:0 0 0 2px #121a22,0 16px 40px rgba(0,0,0,.6);transition:transform .18s,box-shadow .18s}
+  .pod:before{content:'';position:absolute;left:0;top:0;bottom:0;width:7px;background:#39e6ff;box-shadow:0 0 16px #39e6ff}
+  .pod:after{content:'';position:absolute;left:0;right:0;bottom:0;height:30px;background:repeating-linear-gradient(-45deg,#e2b01c 0 16px,#17140e 16px 32px);opacity:.92}
+  .pod:hover{transform:translateY(-6px);box-shadow:0 0 0 2px #39e6ff,0 24px 50px rgba(0,0,0,.65),0 0 34px rgba(57,230,255,.28)}
+  .pod-top{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 10px 24px;background:rgba(8,14,20,.55);
+    font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.16em;color:#8fd9ef}
+  .led{display:inline-flex;align-items:center;gap:8px;color:#39e6ff}
+  .led i{width:10px;height:10px;border-radius:50%;background:#39e6ff;box-shadow:0 0 10px #39e6ff}
+  .pod.going .led{color:#ffc14d}.pod.going .led i{background:#ffc14d;box-shadow:0 0 10px #ffc14d;animation:bl 1.2s steps(1,end) infinite}
+  .pod.solved .led{color:#7dffb2}.pod.solved .led i{background:#7dffb2;box-shadow:0 0 10px #7dffb2}
+  .pod.going:before{background:#ffc14d;box-shadow:0 0 16px #ffc14d}.pod.solved:before{background:#7dffb2;box-shadow:0 0 16px #7dffb2}
+  @keyframes bl{0%{opacity:1}50%{opacity:.2}}
+  .pod-in{padding:16px 22px 0 26px}
+  .pod h2{margin:0 0 8px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:23px;line-height:1.2;letter-spacing:.04em;color:#f1fbff}
+  .stars5{font-size:22px;letter-spacing:4px;color:#39e6ff;line-height:1;text-shadow:0 0 8px rgba(57,230,255,.6)}
+  .meta{margin:9px 0 11px;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#9fb9c6}
+  .pod p{margin:0;font-size:18px;line-height:1.42;color:#dbe8ee}
+  .port{position:absolute;right:16px;top:52px;width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 60% 120%,#2f6fb5 0 46%,#050a1c 48%);
+    box-shadow:0 0 0 5px #1b242d,0 0 0 7px #55636f;opacity:.9}
+  .pod h2{padding-right:66px}
+  .more{display:grid;place-items:center;min-height:210px;border:2px dashed rgba(57,230,255,.3);border-radius:12px;color:rgba(143,217,239,.6);
+    font-family:'Share Tech Mono',monospace;font-size:16px;text-align:center;padding:20px;letter-spacing:.06em}
+  footer{position:relative;max-width:1180px;margin:0 auto;padding:10px 24px 54px;font-family:'Share Tech Mono',monospace;font-size:14px;color:#7fa3b3;text-align:center;line-height:1.8}
+  footer b{color:#39e6ff;font-weight:normal;letter-spacing:2px}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<header>
+  <h1>SCI-FI</h1>
+  <p>Mission files. Something has gone wrong on board, and help is a long way off.</p>
+</header>
+<main id="pods"></main>
+<footer><b>&#9733;</b> a short one for a first try &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;</b> a full mission &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> long, and nothing is handed to you</footer>
+
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"air","title":"Seven Hours of Air","stars":3,"minutes":"25-40","hold":false,"level":"A2+ to B1","blurb":"A small station above an ice moon, an air alarm at ten past two in the morning, and nobody on board but you and a very polite computer.","rooms":5,"first":"cabin.html","firstId":"cabin","last":"docking"}]), box = document.getElementById('pods');
+  var LED = { 'new': 'READY', going: 'IN PROGRESS', solved: 'COMPLETE' };
+  Shelf.init();
+  STORIES.forEach(function (s, i) {
+    var st = Shelf.status('scifi', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'pod ' + st.state; b.setAttribute('data-story', s.id);
+    b.innerHTML = '<div class="pod-top"><span></span><span class="led"><i></i><em style="font-style:normal"></em></span></div><div class="port"></div>' +
+      '<div class="pod-in"><h2></h2><div class="stars5"></div><div class="meta"></div><p></p></div>';
+    b.querySelector('.pod-top span').textContent = 'MISSION ' + (i < 9 ? '0' : '') + (i + 1);
+    b.querySelector('.led em').textContent = LED[st.state] || 'READY';
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('.stars5').textContent = Shelf.stars(s.stars);
+    b.querySelector('.stars5').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.meta').textContent = s.minutes + ' min · ' + s.rooms + ' rooms' + (s.level ? ' · level ' + s.level : '');
+    b.querySelector('p').textContent = s.blurb;
+    b.addEventListener('click', function () { Shelf.open('scifi', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 5) {
+    var m = document.createElement('div'); m.className = 'more'; m.textContent = 'More missions are still being built.';
+    box.appendChild(m);
+  }
+})();
+</script>
+</body>
+</html>

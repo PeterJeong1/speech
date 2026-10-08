@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Spine · Seven Hours of Air</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-scifi.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#050b11;--accent:#39e6ff;--font-display:'Rajdhani',sans-serif;--font-ui:'Rajdhani',sans-serif;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(3,9,14,.94);--cap-bg:rgba(4,12,18,.94);--panel:#0a1a25;--face-bg:#0b161f;--q-ink:#8fd9ef;--fade:#02060a;--hud-bg:rgba(4,14,20,.72)}
+  .tc-room{font-weight:700;letter-spacing:.3em;text-transform:uppercase;font-size:clamp(40px,6.4vw,88px)}
+  .hbtn,.chip,.ov-x,.btn,.toast{font-weight:600;font-size:15px}
+  .kitT{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:21px;letter-spacing:2px;fill:#fff;text-anchor:middle}
+  .scrT{font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;fill:#8fe9ff}
+  .bcn{animation:bcn 2.8s steps(1,end) infinite}
+  @keyframes bcn{0%{opacity:1}14%{opacity:.12}}
+  #keelRing{animation:kr 2.2s ease-in-out infinite}
+  @keyframes kr{50%{opacity:.25}}
+  #planScr{animation:scr 3.2s steps(1,end) infinite}
+  @keyframes scr{0%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+  #jam{animation:jam 2.6s steps(1,end) infinite}
+  @keyframes jam{0%{opacity:1}50%{opacity:.72}}
+
+  /* the wall plan */
+  .pl{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;width:min(1290px,96vw);align-items:start}
+  .pl-main{background:#051521;border:1px solid #1d5a70;box-shadow:0 0 0 5px #08202c,0 26px 70px rgba(0,0,0,.7);border-radius:8px;padding:10px 12px 12px}
+  .pl-main svg{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
+  .pl-bar{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .pl-msg{flex:1;min-height:46px;font-family:'Outfit',sans-serif;font-size:17.5px;line-height:1.3;color:#d9f4ff}
+  .pl .btn{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;white-space:nowrap}
+  .pl-side{background:#0a1a25;border:1px solid #1d5a70;border-radius:8px;padding:14px 16px 10px;color:#d9f4ff;font-family:'Outfit',sans-serif;font-size:16px;line-height:1.34;
+    -webkit-user-select:text;user-select:text}
+  .pl-side h6{margin:0 0 10px;font-family:'Orbitron',sans-serif;font-weight:700;font-size:12px;letter-spacing:.24em;color:#39e6ff;text-transform:uppercase}
+  .pl-side p{margin:0 0 8px;padding-left:12px;border-left:2px solid #1d5a70}
+  .pl-side p.none{border:0;padding:0;color:#8fb7c6}
+  .pl-side .jn{margin-top:12px;padding:8px 12px 6px;background:#ffe98a;color:#1d2a4a;font-family:'Caveat',cursive;font-weight:700;font-size:22px;line-height:1.1;transform:rotate(-1.2deg);border:0}
+  .pl-side .w:hover{color:#39e6ff}.pl-side .jn .w:hover{color:#8c2f24}
+  .pT{font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:3px;fill:#6fc7df}
+  .pS{font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:1px;fill:#6fc7df}
+  .rm{fill:#0b2a3c;stroke:#49d6f5;stroke-width:2.5;cursor:pointer}
+  .rm:hover{fill:#11394f}
+  .rm.on{fill:#3b3413;stroke:#ffd36a}
+  .rm.sp{fill:#0e3347}
+  .np rect{fill:#04111a;stroke:#3d8ba3;stroke-width:1.5;stroke-dasharray:4 3}
+  .np text{font-family:'Caveat',cursive;font-weight:700;font-size:24px;fill:#ffe98a;text-anchor:middle;pointer-events:none}
+  .np{cursor:pointer}
+  .np:hover rect{stroke:#ffe98a}
+  .route{fill:none;stroke:#ffd36a;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+  .route.jump{stroke-dasharray:3 12;stroke-width:5;opacity:.9}
+  #you{animation:you 1.4s steps(1,end) infinite}
+  @keyframes you{0%{opacity:1}50%{opacity:.45}}
+  .pk{position:absolute;z-index:5;display:none;grid-template-columns:1fr 1fr;gap:4px;padding:8px;background:#04111a;border:1px solid #ffe98a;border-radius:6px;box-shadow:0 14px 40px rgba(0,0,0,.7)}
+  .pk.on{display:grid}
+  .pk button{padding:5px 12px 3px;font-family:'Caveat',cursive;font-weight:700;font-size:23px;color:#ffe98a;text-align:left;border-radius:3px;white-space:nowrap}
+  .pk button:hover{background:#ffe98a;color:#04111a}
+  .pk button.x{grid-column:1/3;font-family:'Rajdhani',sans-serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#8fb7c6;text-align:center}
+  @media (max-width:980px){.pl{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="doorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f5466"/><stop offset=".5" stop-color="#2b3d4c"/><stop offset="1" stop-color="#1c2a36"/></linearGradient>
+  <linearGradient id="scrG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b3447"/><stop offset="1" stop-color="#062231"/></linearGradient>
+  <radialGradient id="hazeG"><stop offset="0" stop-color="#7ff0ff" stop-opacity=".34"/><stop offset=".5" stop-color="#39e6ff" stop-opacity=".1"/><stop offset="1" stop-color="#39e6ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="49%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#000" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".86"/></radialGradient>
+  <pattern id="haz" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#e2b01c"/><rect width="7" height="14" fill="#17140e"/></pattern>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1700" fill="#050b11"/>
+<g id="tube"></g>
+<!-- the far end: the big round hatch at the bow -->
+<g id="bowHatch" class="hot">
+  <circle cx="800" cy="438" r="50" fill="#060c12"/><circle cx="800" cy="438" r="44" fill="#1b3243"/>
+  <circle cx="800" cy="438" r="44" fill="none" stroke="#e2b01c" stroke-width="5" stroke-dasharray="9 9"/>
+  <circle cx="800" cy="438" r="33" fill="#122230"/><circle cx="800" cy="438" r="14" fill="#06140f"/><circle cx="800" cy="438" r="14" fill="none" stroke="#3a556a" stroke-width="2"/>
+  <path d="M770 438h14M816 438h14" stroke="#3a556a" stroke-width="4"/><circle cx="800" cy="398" r="3" fill="#ff4a36"/>
+</g>
+<ellipse cx="800" cy="440" rx="420" ry="290" fill="url(#hazeG)" pointer-events="none"/>
+<g id="hatches"></g>
+<g id="beacons"></g>
+
+<!-- patch kit and fire extinguisher, on the starboard wall -->
+<g id="kit" class="hot">
+  <g id="kitBox"></g>
+  <g transform="translate(1389 404) skewY(-5)"><rect x="-58" y="-17" width="116" height="26" fill="#f4f1e6"/><text y="3" class="kitT" style="fill:#b3261c">PATCH KIT</text></g>
+  <g transform="translate(1389 452) skewY(1)" fill="none" stroke="#f4f1e6" stroke-width="5" stroke-linecap="round"><circle r="19"/><path d="M-11 0h22M0-11v22"/></g>
+</g>
+<g id="ext" class="hot">
+  <rect x="1262" y="486" width="36" height="92" rx="14" fill="#c2301f"/><rect x="1262" y="486" width="12" height="92" rx="6" fill="#e25a45" opacity=".5"/>
+  <rect x="1272" y="470" width="16" height="18" fill="#16191e"/><path d="M1288 476h16l6 10" stroke="#16191e" stroke-width="5" fill="none"/>
+  <rect x="1262" y="520" width="36" height="20" fill="#f4f1e6"/>
+</g>
+
+<!-- Keel, in the ceiling -->
+<g id="keel" class="hot">
+  <path d="M700 96h200l-30 40H730z" fill="#0a141c"/><path d="M730 136h140l-14 16H744z" fill="#1c2b38"/>
+  <ellipse cx="800" cy="150" rx="58" ry="26" fill="#16232e"/><ellipse cx="800" cy="152" rx="42" ry="18" fill="#070e15"/>
+  <ellipse cx="800" cy="152" rx="30" ry="12.500" fill="none" stroke="#39e6ff" stroke-width="5" opacity=".35"/>
+  <ellipse id="keelRing" cx="800" cy="152" rx="30" ry="12.500" fill="none" stroke="#bff6ff" stroke-width="3"/>
+  <ellipse cx="800" cy="152" rx="9" ry="4.500" fill="#39e6ff"/>
+</g>
+
+<!-- the plan, on its arm -->
+<g id="plan" class="hot" transform="rotate(-3 310 320)">
+  <path d="M120 150L210 214M100 420L196 380" stroke="#0a141c" stroke-width="16" stroke-linecap="round"/>
+  <rect x="150" y="196" width="340" height="232" rx="12" fill="#0a141c"/>
+  <g id="planScr">
+    <rect x="162" y="208" width="316" height="208" rx="5" fill="url(#scrG)"/>
+    <text x="176" y="232" class="scrT">DECK PLAN</text>
+    <g fill="none" stroke="#49d6f5" stroke-width="2.500">
+      <rect x="182" y="258" width="26" height="60"/><path d="M208 282h206v12H208z"/>
+      <rect x="208" y="252" width="68" height="30"/><rect x="276" y="252" width="68" height="30"/><rect x="344" y="252" width="68" height="30"/>
+      <rect x="208" y="294" width="68" height="30"/><rect x="276" y="294" width="68" height="30"/><rect x="344" y="294" width="68" height="30"/>
+      <path d="M412 252h22q24 0 24 36t-24 36h-22z"/>
+      <rect x="208" y="352" width="68" height="20"/><rect x="276" y="352" width="68" height="20"/><rect x="344" y="352" width="68" height="20"/>
+      <rect x="276" y="378" width="68" height="20"/><rect x="344" y="378" width="68" height="20"/>
+    </g>
+    <circle cx="198" cy="288" r="5" fill="#ffd36a"/>
+    <g stroke="#49d6f5" stroke-width="1" opacity=".25"><path d="M162 244h316M162 340h316"/></g>
+  </g>
+  <rect x="150" y="196" width="340" height="232" rx="12" fill="none" stroke="#2a4458" stroke-width="3"/>
+</g>
+
+<!-- things that have got loose -->
+<g id="glove" class="flo drag"><g class="bob">
+  <rect x="-40" y="-50" width="80" height="100" fill="transparent"/>
+  <path d="M-20 44v-40l-14-22q-4-10 6-10l16 16v-28q0-8 8-8t8 8v-4q0-8 8-8t8 8v8q0-7 7-7t7 7v60q0 20-14 20z" fill="#d9a22b"/>
+  <rect x="-22" y="30" width="46" height="16" rx="3" fill="#3a2a26"/>
+</g></g>
+<g id="cup" class="flo drag"><g class="bob">
+  <rect x="-34" y="-50" width="68" height="96" fill="transparent"/>
+  <path d="M-22-24h44l5 62h-54z" fill="#b9c2c8"/><path d="M-22-24h44l2 16h-48z" fill="#dfe5e9"/><rect x="-13" y="2" width="26" height="20" rx="3" fill="#6b3d1e"/>
+  <path d="M6-24v-20h10" stroke="#dfe5e9" stroke-width="5" fill="none" stroke-linecap="round"/>
+</g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1700" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, heard = false, noted = false, solved = false;
+  var route = ['m'], labels = {};
+
+  /* ---------- the corridor, drawn towards one point ---------- */
+  (function () {
+    var s = '', E = 6.4, N = 0.3, i, z, c;
+    var SEC = [[-700, -200], [-540, -360], [540, -360], [700, -200], [700, 210], [560, 330], [-560, 330], [-700, 210]];
+    var COL = ['#11232f', '#0a1721', '#11232f', '#16293a', '#0f1f2b', '#08121a', '#0f1f2b', '#16293a'];
+    function P(X, Y, z) { return (800 + X / z).toFixed(1) + ' ' + (440 + Y / z).toFixed(1); }
+    function Q(a, b, z1, z2, fill, extra) {
+      return '<path d="M' + P(a[0], a[1], z1) + 'L' + P(b[0], b[1], z1) + 'L' + P(b[0], b[1], z2) + 'L' + P(a[0], a[1], z2) + 'Z" fill="' + fill + '"' + (extra || '') + '/>';
+    }
+    function wq(side, z1, z2, Y1, Y2, fill, extra) { return Q([side * 700, Y1], [side * 700, Y2], z1, z2, fill, extra); }
+    function ring(z) { return 'M' + SEC.map(function (p) { return P(p[0], p[1], z); }).join('L') + 'Z'; }
+    for (i = 0; i < 8; i++) s += Q(SEC[i], SEC[(i + 1) % 8], N, E, COL[i]);
+    /* wall seams, hand rails, floor grating */
+    [-1, 1].forEach(function (d) {
+      s += wq(d, N, E, -64, -58, '#0c1a25') + wq(d, N, E, 128, 134, '#0c1a25') + wq(d, N, E, 62, 76, '#8098aa') + wq(d, N, E, 76, 82, '#3d5364');
+      s += Q([d * 650, -250], [d * 610, -290], N, E, '#39e6ff') + Q([d * 684, -216], [d * 576, -324], N, E, '#39e6ff', ' opacity=".14"');
+      s += Q([d * 660, 250], [d * 644, 266], N, E, '#39e6ff', ' opacity=".75"');
+    });
+    s += Q([-70, 330], [70, 330], N, E, '#0e1c27');
+    s += '<g stroke="#12222e" stroke-width="2">';
+    for (i = -420; i <= 420; i += 140) s += '<path d="M' + P(i, 330, N) + 'L' + P(i, 330, E) + '"/>';
+    [0.5, 0.62, 0.78, 1.0, 1.2, 1.42, 1.7, 2.0, 2.37, 2.8, 3.3, 3.9, 4.6, 5.4].forEach(function (z) { s += '<path d="M' + P(-560, 330, z) + 'L' + P(560, 330, z) + '"/>'; });
+    s += '</g>';
+    /* the end wall, then the ribs */
+    s += '<path d="' + ring(E) + '" fill="#0d1c27"/>';
+    [5.4, 3.9, 2.8, 2.0, 1.42, 1.0, 0.62].forEach(function (z) {
+      s += '<path d="' + ring(z) + '" fill="none" stroke="#070f17" stroke-width="' + (34 / z).toFixed(1) + '" stroke-linejoin="round"/>' +
+        '<path d="' + ring(z * 1.012) + '" fill="none" stroke="#243b4e" stroke-width="' + (5 / z).toFixed(1) + '" stroke-linejoin="round"/>';
+    });
+    $('#tube').innerHTML = s; s = '';
+
+    function hatch(side, z1, z2, id) {
+      var m = (z2 - z1) * 0.07, zc = (z1 + z2) / 2, g = '<g class="hot hatch" id="' + id + '">';
+      g += wq(side, z1, z2, -192, 218, '#060c12');
+      g += wq(side, z1 + m, z2 - m, -168, 206, 'url(#doorG)');
+      g += wq(side, z1 + m, z2 - m, -168, -150, '#e2b01c');
+      g += wq(side, z1 + m, z2 - m, 188, 206, 'url(#haz)');
+      g += wq(side, z1 + 3.4 * m, z2 - 3.4 * m, -112, -34, '#03080c', ' stroke="#4a677d" stroke-width="2"');
+      g += wq(side, z1 + m, z2 - m, 30, 36, '#1a2733') + wq(side, zc - m * 0.5, zc + m * 0.5, -150, 188, '#1a2733');
+      g += wq(side, z1 - 6 * m, z1 - 1.5 * m, -92, -42, '#04090d', ' stroke="#2c4a5e" stroke-width="1.5"');
+      c = P(side * 700, -130, zc).split(' ');
+      g += '<circle class="led" cx="' + c[0] + '" cy="' + c[1] + '" r="' + (8 / zc).toFixed(1) + '" fill="#ff4a36"/>';
+      if (id === 'hS3') g += '<g id="jam">' + wq(side, zc - 3.4 * m, zc + 3.4 * m, 52, 118, '#ffe98a') + wq(side, zc - 2.4 * m, zc + 2.4 * m, 66, 74, '#b3261c') +
+        wq(side, zc - 2.4 * m, zc + 2.4 * m, 86, 90, '#3a4a7a') + wq(side, zc - 2.4 * m, zc + 1 * m, 98, 102, '#3a4a7a') + '</g>';
+      return g + '</g>';
+    }
+    [[1.5, 1.95, '1'], [2.08, 2.72, '2'], [2.9, 3.8, '3']].forEach(function (b) { s += hatch(-1, b[0], b[1], 'hP' + b[2]) + hatch(1, b[0], b[1], 'hS' + b[2]); });
+    $('#hatches').innerHTML = s; s = '';
+    [5.4, 3.9, 2.8, 2.0, 1.42].forEach(function (z, k) {
+      [-1, 1].forEach(function (d) { c = P(d * 610, -328, z).split(' '); s += '<circle class="bcn" cx="' + c[0] + '" cy="' + c[1] + '" r="' + (9 / z).toFixed(1) + '" fill="#ffb347" style="animation-delay:' + (-k * 0.4).toFixed(1) + 's"/>'; });
+    });
+    $('#beacons').innerHTML = s;
+    $('#kitBox').innerHTML = wq(1, 1.05, 1.36, -128, 66, '#b3261c') + wq(1, 1.05, 1.36, -128, -116, '#7d1d10') + wq(1, 1.08, 1.33, -52, 46, '#7d1d10', ' stroke="#e25a45" stroke-width="2"');
+  })();
+
+  ER.init({
+    theme: 'scifi', story: 'air', storyTitle: 'Seven Hours of Air', id: 'spine', no: 'II', title: 'The Spine',
+    go: 'Float out',
+    intro: [
+      'A long sigh from the seal, and the door slides into the wall. You did the five things in the right order. Keel says that this is unusual.',
+      'Outside is the Spine: one corridor from the stern of the station to the bow, with a hatch every few metres.',
+      'In an air alarm every hatch is locked, and every sign beside every hatch switches itself off to save power. Nobody remembers whose idea that was.'
+    ],
+    exit: {"next":"airroom","w":{"e2e309ea":"9d801ae0"}}, tags: {"jam":["808b7019"],"is-galley":["e60f827e"],"is-medbay":["1d38e2f0"],"is-suits":["04e15576"],"is-airlock":["a099c6af"],"is-store":["8aafd8af"],"is-lab":["cb9ccd13"],"is-garden":["7d32188e"],"is-cold":["9863496e"],"is-batt":["d689cf23"],"is-spares":["3ffadfe9"],"is-water":["6b6e88b8"]},
+    hints: hints,
+    onBegin: begin
+  });
+  AIR.clock();
+
+  var SAYS = [
+    'You are at the stern, outside the cabins. The corridor in front of you is the Spine. It runs to the bow. Port is on your left as you look towards the bow. Starboard is on your right.',
+    'There are three rooms on the port side and three on the starboard side. The galley is next to the cabins, on the port side.',
+    'The airlock is opposite the galley.',
+    'The store is between the airlock and the lab.',
+    'The med bay is opposite the store. The suit room is between the med bay and the garden.',
+    'The garden is at the bow end of the Spine. It is the largest room on the station. Dr Adeyemi does not like people going in there.',
+    'There is also a lower deck, with five small rooms. You need only one of them. The Air Room is directly below the lab. The only way into it is a ladder in the lab floor.',
+    'Now the rule. In an air alarm I may unlock three doors, and they must be on one route. Draw your route on the plan: begin where you are, and end in the Air Room. I will unlock those doors and no others.'
+  ];
+  /* the same facts, shorter, to keep beside the plan */
+  var SIDE = [
+    'Port is on your left as you look towards the bow. Starboard is on your right.',
+    'The galley is next to the cabins, on the port side.',
+    'The airlock is opposite the galley.',
+    'The store is between the airlock and the lab.',
+    'The med bay is opposite the store. The suit room is between the med bay and the garden.',
+    'The garden is at the bow end of the Spine.',
+    'The Air Room is on the lower deck, directly below the lab. The only way into it is a ladder in the lab floor.',
+    'I may unlock three doors, and they must be on one route.'
+  ];
+  var JAM = '<h4>Jammed</h4><p>This door has not opened since Tuesday. Do not hit it. Hitting it is how it got like this.</p>' +
+    '<p>Use the other door, through the room next door.</p><p>J. Antal</p>';
+
+  function hints() {
+    if (solved) return null;
+    if (!heard) return ['keel', [
+      'Every sign is dark, so ask somebody who knows the station. Keel is in the ceiling.',
+      'Click on the round speaker with the ring of blue light, at the top of the picture, and listen to all of it. After that, look at the plan on its arm, and at the hatch with something yellow on it.'
+    ]];
+    return ['plan', [
+      'Open the plan. Start with the room you can be sure of: which room is next to the cabins, on the port side? Click a name plate on the plan to write a name on it.',
+      '&ldquo;Opposite&rdquo; means on the other side of the Spine, face to face. &ldquo;Between A and B&rdquo; means A is on one side and B is on the other. Work along the starboard side. Then read the yellow note on one of the hatches: which door is &ldquo;this door&rdquo;?',
+      'Find the lab. The Air Room is on the other deck, in the same place as the lab. The lab&rsquo;s own door to the Spine is jammed, so go in through the room beside it. Press on YOU and drag through three doors.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function begin() {
+    AIR.amb.vent(0.045, 520); ER.amb.hum(true);
+    ER.narrate([
+      'The Spine is cold and blue and very quiet. Three hatches on each side, and a big round one at the far end. They all look exactly the same.',
+      '&ldquo;I can describe the station to you,&rdquo; says Keel, from somewhere in the ceiling. &ldquo;I am good at describing.&rdquo;'
+    ]);
+  }
+
+  AIR.thing('#kit', 'patch', 'HULL PATCH KIT. Nine patches, a tube of glue and a card that says: FIND THE HOLE FIRST. You do not know that there is a hole.', isBusy);
+  AIR.thing('#ext', 'fire extinguisher', null, isBusy);
+  AIR.thing('#bowHatch', 'hatch', 'The big round hatch at the bow end. Its sign is as dark as all the others.', isBusy);
+  ER.$$('.hatch').forEach(function (h) {
+    h.addEventListener('click', function (e) {
+      if (busy) return;
+      if (h.id === 'hS3') {
+        ER.read({ html: JAM, cls: 'sticky', clue: { id: 'jam', title: 'Note on a hatch', kind: 'Note' }, done: function () { noted = true; } });
+        return;
+      }
+      ER.wordAt(e.clientX, e.clientY, 'hatch');
+      ER.say('A hatch. Locked. The little sign beside it is dark.');
+    });
+  });
+  $('#keel').addEventListener('click', function () {
+    if (busy) return;
+    AIR.keel(['You want the Air Room. I cannot show you the way, because I have no hands. I can tell you where things are.'].concat(SAYS, [
+      { q: 'The plan has no names on it.', a: 'The names were stickers. They have been falling off since 2071. Mr Antal ordered new ones in March.' }
+    ]), { id: 'keel2', title: 'Keel: where things are', kind: 'Station computer' }, function (seen) {
+      if (seen && !heard) { heard = true; ER.say('The plan is on the left, on its arm. One of the hatches on the right has something yellow stuck to it.'); }
+    });
+  });
+  AIR.float(svg, $('#glove'), { x: 1040, y: 650, a: 24, lock: isBusy, box: [220, 220, 1380, 740], tap: function () { ER.say('One of Josef&rsquo;s gloves. He has been looking for it since Monday.'); } });
+  AIR.float(svg, $('#cup'), { x: 610, y: 668, a: -18, lock: isBusy, box: [220, 220, 1380, 740], tap: function () { ER.say('An empty coffee pouch. It has floated here all the way from the galley.'); } });
+  $('#plan').addEventListener('click', function () { if (!busy) openPlan(); });
+
+  /* ---------- the plan: write names on it, then draw a route through three doors ---------- */
+  var C = { e: [305, 152], k: [535, 152], b: [765, 152], h: [305, 292], c: [535, 292], j: [765, 292], f: [965, 222],
+            d: [305, 480], n: [535, 480], q: [765, 480], g: [535, 566], a: [765, 566] };
+  /* every way from one room to the next: the points the line passes on its way */
+  var WAY = {
+    'm>e': [[305, 222], [305, 200]], 'm>k': [[535, 222], [535, 200]], 'm>b': [[765, 222], [765, 200]],
+    'm>h': [[305, 222], [305, 244]], 'm>c': [[535, 222], [535, 244]], 'm>j': [[765, 222], [765, 244]], 'm>f': [[880, 222]],
+    'k>b': [[650, 152]], 'c>j': [[650, 292]], 'd>n': [[420, 480]],
+    'e>d': [[222, 124], 0, [222, 452]], 'b>q': [[848, 124], 0, [848, 452]], 'c>g': [[452, 322], 0, [452, 594]], 'j>a': [[848, 322], 0, [848, 594]]
+  };
+  function way(u, v) {
+    if (WAY[u + '>' + v]) return WAY[u + '>' + v];
+    var w = WAY[v + '>' + u]; return w ? w.slice().reverse() : null;
+  }
+  var NAMES = ['GALLEY', 'AIRLOCK', 'STORE', 'LAB', 'MED BAY', 'SUIT ROOM', 'GARDEN', 'AIR ROOM'];
+  var ENDS = {
+    galley: '&ldquo;That route ends in the galley,&rdquo; says Keel. &ldquo;The galley has Mr Antal&rsquo;s coffee machine in it, and no air to spare.&rdquo;',
+    airlock: '&ldquo;That route ends in the airlock,&rdquo; says Keel. &ldquo;I would rather not open the airlock tonight.&rdquo;',
+    store: '&ldquo;That route ends in the store,&rdquo; says Keel. &ldquo;The store has four hundred pairs of socks in it, and nothing else you need.&rdquo;',
+    lab: '&ldquo;That route ends in the lab,&rdquo; says Keel. &ldquo;The Air Room is not on that deck.&rdquo;',
+    medbay: '&ldquo;That route ends in the med bay,&rdquo; says Keel. &ldquo;You are not ill yet.&rdquo;',
+    suits: '&ldquo;That route ends in the suit room,&rdquo; says Keel. &ldquo;A suit holds six hours of air. Six is less than seven.&rdquo;',
+    garden: '&ldquo;That route ends in the garden,&rdquo; says Keel. &ldquo;Dr Adeyemi has a list of people who may go into the garden. You are not on it.&rdquo;',
+    cold: '&ldquo;That route ends in the cold store,&rdquo; says Keel. &ldquo;It is full of frozen peas.&rdquo;',
+    water: '&ldquo;That route ends in the water tank,&rdquo; says Keel. &ldquo;It is a tank. It is full of water.&rdquo;',
+    batt: '&ldquo;That route ends in the battery room,&rdquo; says Keel. &ldquo;Please do not touch the batteries.&rdquo;',
+    spares: '&ldquo;That route ends in the spares room,&rdquo; says Keel. &ldquo;Mr Antal keeps things there that he may need one day. He has not needed any of them yet.&rdquo;'
+  };
+  function planSvg() {
+    var s = '', id, x;
+    function room(id, d, cls) { return '<path class="rm' + (cls || '') + '" data-id="' + id + '" d="' + d + '"/>'; }
+    function R(x, y, w, h) { return 'M' + x + ' ' + y + 'h' + w + 'v' + h + 'h' + (-w) + 'z'; }
+    function door(x, y, vert) { return vert ? '<rect x="' + (x - 5) + '" y="' + (y - 17) + '" width="10" height="34" fill="#051521"/><rect x="' + (x - 2.5) + '" y="' + (y - 13) + '" width="5" height="26" fill="#bff6ff"/>'
+      : '<rect x="' + (x - 17) + '" y="' + (y - 5) + '" width="34" height="10" fill="#051521"/><rect x="' + (x - 13) + '" y="' + (y - 2.5) + '" width="26" height="5" fill="#bff6ff"/>'; }
+    function ladder(x, y) { return '<g pointer-events="none"><rect x="' + (x - 13) + '" y="' + (y - 13) + '" width="26" height="26" fill="#04111a" stroke="#bff6ff" stroke-width="2"/><path d="M' + (x - 7) + ' ' + (y - 6) + 'h14M' + (x - 7) + ' ' + y + 'h14M' + (x - 7) + ' ' + (y + 6) + 'h14" stroke="#bff6ff" stroke-width="2"/></g>'; }
+    function plate(id, x, y) { return '<g class="np" data-np="' + id + '"><rect x="' + (x - 68) + '" y="' + (y - 17) + '" width="136" height="32" rx="3"/><text x="' + x + '" y="' + (y + 7) + '">' + (labels[id] || '?') + '</text></g>'; }
+    s += '<defs><pattern id="pgrid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#0b2a3a" stroke-width="1"/></pattern>' +
+      '<pattern id="phatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#071c28"/><rect width="3" height="10" fill="#12384b"/></pattern></defs>';
+    s += '<rect width="1120" height="626" fill="#051521"/><rect width="1120" height="626" fill="url(#pgrid)"/>';
+    s += '<text x="40" y="38" class="pT" font-size="17">KEELING STATION · DECK PLAN</text><text x="1080" y="38" class="pS" text-anchor="end">printed 2071 · names: see stickers</text>';
+    s += '<text x="40" y="76" class="pT" font-size="13">UPPER DECK</text><text x="535" y="76" class="pT" font-size="13" text-anchor="middle">PORT</text>' +
+      '<text x="535" y="378" class="pT" font-size="13" text-anchor="middle">STARBOARD</text>' +
+      '<text x="26" y="222" class="pT" font-size="13" text-anchor="middle" transform="rotate(-90 26 222)">STERN</text><text x="1094" y="222" class="pT" font-size="13" text-anchor="middle" transform="rotate(90 1094 222)">BOW</text>';
+    /* upper deck */
+    s += room('m', R(60, 202, 820, 40), ' sp');
+    s += '<g fill="#082231" stroke="#2f8ba3" stroke-width="2"><rect x="60" y="112" width="65" height="90"/><rect x="125" y="112" width="65" height="90"/><rect x="60" y="242" width="65" height="90"/><rect x="125" y="242" width="65" height="90" fill="#0e3347"/></g>' +
+      '<g class="pS" text-anchor="middle"><text x="92" y="162">1</text><text x="157" y="162">2</text><text x="92" y="292">3</text><text x="157" y="292" style="fill:#ffd36a">4</text><text x="125" y="104">CABINS</text></g>';
+    s += room('e', R(190, 92, 230, 110)) + room('k', R(420, 92, 230, 110)) + room('b', R(650, 92, 230, 110));
+    s += room('h', R(190, 242, 230, 110)) + room('c', R(420, 242, 230, 110)) + room('j', R(650, 242, 230, 110));
+    s += room('f', 'M880 92h96q84 0 84 130t-84 130h-96z');
+    s += '<text x="535" y="227" class="pS" text-anchor="middle" letter-spacing="9" style="fill:#3d8ba3" pointer-events="none">THE SPINE</text>';
+    [305, 535, 765].forEach(function (x) { s += door(x, 202) + door(x, 242); });
+    s += door(880, 222, true) + door(650, 152, true) + door(650, 292, true);
+    s += ladder(222, 124) + ladder(848, 124) + ladder(452, 322) + ladder(848, 322);
+    /* lower deck */
+    s += '<text x="40" y="420" class="pT" font-size="13">LOWER DECK</text><text x="190" y="420" class="pS">the same view, one deck down</text>';
+    s += room('d', R(190, 436, 230, 88)) + room('n', R(420, 436, 230, 88)) + room('q', R(650, 436, 230, 88));
+    s += '<rect x="190" y="524" width="690" height="14" fill="url(#phatch)" stroke="#2f8ba3" stroke-width="1.5"/><rect x="190" y="538" width="230" height="72" fill="url(#phatch)" stroke="#2f8ba3" stroke-width="2"/>' +
+      '<text x="305" y="580" class="pS" text-anchor="middle" style="fill:#3d8ba3">HULL · NO ROOM</text>';
+    s += room('g', R(420, 538, 230, 72)) + room('a', R(650, 538, 230, 72));
+    s += door(420, 480, true);
+    s += ladder(222, 452) + ladder(848, 452) + ladder(452, 594) + ladder(848, 594);
+    s += '<g stroke="#2f8ba3" stroke-width="1.5" stroke-dasharray="3 7" opacity=".7" pointer-events="none"><path d="M222 137V439M848 137V439M452 335V581M848 335V581"/></g>';
+    /* legend */
+    s += '<g transform="translate(906 452)"><rect x="-6" y="-16" width="194" height="150" fill="#04111a" stroke="#1d5a70"/>' +
+      '<rect x="6" y="2" width="26" height="5" fill="#bff6ff"/><text x="46" y="10" class="pS">door</text>' +
+      '<rect x="8" y="26" width="22" height="22" fill="#04111a" stroke="#bff6ff" stroke-width="2"/><path d="M13 32h12M13 37h12M13 42h12" stroke="#bff6ff" stroke-width="1.6"/><text x="46" y="35" class="pS">ladder to the</text><text x="46" y="51" class="pS">other deck</text>' +
+      '<circle cx="19" cy="76" r="8" fill="#ffd36a"/><text x="46" y="81" class="pS">you</text>' +
+      '<rect x="4" y="98" width="30" height="18" rx="2" fill="#04111a" stroke="#3d8ba3" stroke-dasharray="4 3"/><text x="46" y="105" class="pS">click to write</text><text x="46" y="121" class="pS">a name</text></g>';
+    /* name plates */
+    for (id in C) s += plate(id, C[id][0], id === 'f' ? 150 : C[id][1] - (id === 'g' || id === 'a' ? 8 : (C[id][1] > 400 ? 20 : 26)));
+    s += '<path class="route" id="rt" d=""/><path class="route jump" id="rj" d=""/>';
+    s += '<g pointer-events="none"><circle id="you" cx="157" cy="222" r="10" fill="#ffd36a"/><text x="157" y="198" class="pS" text-anchor="middle" style="fill:#ffd36a">YOU</text></g>';
+    return s;
+  }
+  function openPlan() {
+    var box = ER.el('div', 'pl'), ps, msgEl, pk;
+    box.innerHTML = '<div class="pl-main"><svg viewBox="0 0 1120 626">' + planSvg() + '</svg>' +
+      '<div class="pl-bar"><div class="pl-msg"></div><button type="button" class="btn" id="p-back">Back one door</button><button type="button" class="btn" id="p-clear">Rub it out</button>' +
+      '<button type="button" class="btn" id="p-send">Send it to Keel</button></div></div>' +
+      '<div class="pl-side"><h6>Keel said</h6></div><div class="pk"></div>';
+    ps = box.querySelector('svg'); msgEl = box.querySelector('.pl-msg'); pk = box.querySelector('.pk');
+    var side = box.querySelector('.pl-side');
+    if (heard) SIDE.forEach(function (t) { side.appendChild(ER.el('p', '', ER.gloss(t))); });
+    else side.appendChild(ER.el('p', 'none', 'Nothing yet. Keel knows where everything is. You have not asked.'));
+    if (noted) side.appendChild(ER.el('p', 'jn', ER.gloss('JAMMED. Use the other door, through the room next door. J.A.')));
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    msg('Press on YOU and drag through the doors. A route may pass three doors.');
+
+    function draw() {
+      var d = 'M157 222', dj = '', i, w, u, v, at = [157, 222];
+      for (i = 1; i < route.length; i++) {
+        u = route[i - 1]; v = route[i]; w = way(u, v);
+        w.forEach(function (pt, n) {
+          if (pt === 0) { dj += 'M' + at[0] + ' ' + at[1] + 'L' + w[n + 1][0] + ' ' + w[n + 1][1]; d += 'M' + w[n + 1][0] + ' ' + w[n + 1][1]; at = w[n + 1]; return; }
+          if (n && w[n - 1] === 0) return;
+          d += 'L' + pt[0] + ' ' + pt[1]; at = pt;
+        });
+        d += 'L' + C[v][0] + ' ' + C[v][1]; at = C[v];
+      }
+      ps.querySelector('#rt').setAttribute('d', route.length > 1 ? d : ''); ps.querySelector('#rj').setAttribute('d', dj);
+      ER.$$('.rm', ps).forEach(function (r) { r.classList.toggle('on', route.indexOf(r.getAttribute('data-id')) > 0); });
+      box.setAttribute('data-route', route.join('>'));
+    }
+    function roomAt(e) {
+      var t = document.elementFromPoint(e.clientX, e.clientY);
+      t = t && t.closest ? t.closest('[data-id]') : null;
+      return t && ps.contains(t) ? t.getAttribute('data-id') : null;
+    }
+    function reach(r) {
+      var last = route[route.length - 1];
+      if (!r || r === last || solved) return;
+      if (route.length > 1 && r === route[route.length - 2]) { route.pop(); AIR.sfx.blip(); draw(); return; }
+      if (route.indexOf(r) >= 0 || !way(last, r)) return;
+      route.push(r); ER.sfx.click(); draw();
+      msg(route.length - 1 === 1 ? 'One door.' : route.length - 1 === 2 ? 'Two doors.' : 'Three doors.');
+    }
+    ER.drag(ps, {
+      start: function (e) {
+        if (solved || (e.target.closest && e.target.closest('.np'))) return false;
+        pk.classList.remove('on');
+        var r = roomAt(e); if (!r) return false;
+        reach(r);
+      },
+      move: function (e) { reach(roomAt(e)); },
+      end: function (e, moved) { if (moved) reach(roomAt(e)); }
+    });
+    box.querySelector('#p-back').addEventListener('click', function () { if (!solved && route.length > 1) { route.pop(); draw(); msg(''); } });
+    box.querySelector('#p-clear').addEventListener('click', function () { if (!solved) { route = ['m']; draw(); msg('The plan is clean again.'); } });
+
+    /* writing names on the plan: only for your own use, nobody checks them */
+    ER.$$('.np', ps).forEach(function (n) {
+      n.addEventListener('click', function () {
+        var id = n.getAttribute('data-np'), r = n.getBoundingClientRect(), b = box.getBoundingClientRect(), s = '';
+        NAMES.forEach(function (nm) { s += '<button type="button">' + nm + '</button>'; });
+        pk.innerHTML = s + '<button type="button" class="x">rub it out</button>';
+        pk.classList.add('on');
+        pk.style.left = Math.max(0, Math.min(b.width - 300, r.left - b.left - 60)) + 'px';
+        pk.style.top = Math.max(0, Math.min(b.height - 220, r.bottom - b.top + 4)) + 'px';
+        ER.$$('button', pk).forEach(function (bt) {
+          bt.addEventListener('click', function () {
+            labels[id] = bt.classList.contains('x') ? '' : bt.textContent;
+            n.querySelector('text').textContent = labels[id] || '?';
+            pk.classList.remove('on'); ER.sfx.paper();
+          });
+        });
+      });
+    });
+
+    box.querySelector('#p-send').addEventListener('click', function () {
+      if (solved) return;
+      pk.classList.remove('on');
+      if (route.length < 2) { msg('There is no route on the plan yet. Press on YOU and drag through a door.'); ER.shake(ps); return; }
+      if (route.length > 4) { msg('&ldquo;That is more than three doors,&rdquo; says Keel. &ldquo;In an air alarm I may unlock three.&rdquo;'); return; }
+      var file = ER.exitOk([route.join('>')]), i, k, end = route[route.length - 1], said = '';
+      if (file) { win(file, msg); return; }
+      ER.sfx.no(); ER.shake(ps); AIR.lose(240);
+      for (i = 1; i < route.length && !said; i++) if (ER.check('jam', route[i - 1] + '>' + route[i])) said = '&ldquo;That route uses a door that has been jammed since Tuesday,&rdquo; says Keel. &ldquo;There is a note on it. Mr Antal wrote it in capital letters.&rdquo;';
+      for (k in ENDS) if (!said && ER.check('is-' + k, end)) said = ENDS[k];
+      msg((said || '&ldquo;That route does not end in the Air Room,&rdquo; says Keel.') + ' Checking it cost you four minutes of air.');
+    });
+    ER.open('ov-lock', box);
+    draw();
+  }
+  function win(file, msg) {
+    solved = true; busy = true; ER.sfx.ok();
+    var st = ER.state(); st.done = st.done || {}; st.done.spine = 1; ER.flag('seen-spine', 1);
+    msg('Keel is silent for a moment. &ldquo;That route ends in the Air Room,&rdquo; it says. &ldquo;Three doors. Unlocking.&rdquo;');
+    setTimeout(function () {
+      ER.closeAll();
+      var led = $('#hS2 .led'); led.setAttribute('fill', '#3dff8a'); led.setAttribute('r', +led.getAttribute('r') * 1.5);
+      AIR.sfx.lock(); setTimeout(AIR.sfx.lock, 700); setTimeout(AIR.sfx.lock, 1500);
+      ER.narrate([
+        'On the starboard wall, a lock opens with a clack. Then a second one, deeper in. Then, further off, something under the floor.',
+        '&ldquo;Through the store, through the lab, and down the ladder,&rdquo; says Keel. &ldquo;Please shut each door behind you.&rdquo;'
+      ], function () { ER.leave(file); });
+    }, 2000);
+  }
+})();
+</script>
+</body>
+</html>

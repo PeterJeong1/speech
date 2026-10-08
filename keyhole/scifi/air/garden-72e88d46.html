@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Garden · Seven Hours of Air</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-scifi.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#020a08;--accent:#ff8ad8;--font-display:'Caveat',cursive;--font-ui:'Outfit',sans-serif;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(2,10,8,.95);--cap-bg:rgba(3,14,11,.94);--panel:#0a1a16;--face-bg:#123a44;--q-ink:#ffb8e6;--fade:#010504;--hud-bg:rgba(3,14,11,.74)}
+  .tc-room{font-weight:700;font-size:clamp(50px,8vw,112px);letter-spacing:.01em}
+  .hbtn,.chip,.ov-x,.btn,.toast{font-weight:500;letter-spacing:.14em}
+  .tape{font-family:'Caveat',cursive;font-weight:700;font-size:27px;fill:#1d2a4a;text-anchor:middle}
+  .tape2{font-family:'Caveat',cursive;font-weight:700;font-size:19px;fill:#1d2a4a;text-anchor:middle;opacity:.8}
+  .tno{font-family:'Orbitron',sans-serif;font-weight:800;font-size:28px;fill:#7f9c95;text-anchor:middle}
+  .tk-name{text-transform:none;font-size:38px;letter-spacing:.01em}
+  .refl{fill:url(#reflOff)}
+  .lit .refl{fill:url(#reflOn)}
+  #redGlow{transition:opacity 1.2s}
+  .lit #redGlow{opacity:0}
+  .hoodT{font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;fill:#6f8a84;text-anchor:middle}
+  .scrT{font-family:'Orbitron',sans-serif;font-weight:700;letter-spacing:3px;text-anchor:middle}
+  .noT{font-family:'Caveat',cursive;font-weight:700;font-size:22px;fill:#b3261c;text-anchor:middle}
+  .boxT{font-family:'Orbitron',sans-serif;font-weight:800;font-size:17px;letter-spacing:3px;fill:#dfe7e4;text-anchor:middle}
+  .liq{fill:url(#liqOff)}
+  .lit .liq{fill:url(#liqOn)}
+  .bar{fill:#2c2230}
+  .lit .bar{fill:#ffb0e6}
+  .cone{fill:url(#coneG);opacity:0;pointer-events:none;transition:opacity 1.8s}
+  .bub{opacity:0;fill:#eaffd8}
+  .lit .bub{animation:rise 4s linear infinite}
+  @keyframes rise{0%{transform:translateY(0);opacity:0}12%{opacity:.85}88%{opacity:.7}100%{transform:translateY(-428px);opacity:0}}
+  #dark,#pink{transition:opacity 1.8s}
+  .lit #dark{opacity:0}
+  #pink{opacity:0}.lit #pink{opacity:1}
+  #strip{animation:strip 3s steps(1,end) infinite}
+  @keyframes strip{0%{opacity:.9}50%{opacity:.6}}
+  #callScr.ring{animation:ringf 1s steps(1,end) infinite}
+  @keyframes ringf{0%{opacity:1}50%{opacity:.25}}
+  #flag{animation:flag 1.4s steps(1,end) infinite}
+  .lit #flag{animation:none;opacity:0}
+  @keyframes flag{0%{opacity:1}50%{opacity:.35}}
+  #keelRing{animation:kr 2.2s ease-in-out infinite}
+  @keyframes kr{50%{opacity:.25}}
+
+  /* circuit C: four lamps, one socket, one breaker */
+  .lp{width:min(1010px,96vw);background:#2b302e linear-gradient(160deg,#343a37,#232725);border:3px solid #111413;border-radius:8px;padding:14px 20px 14px;
+    box-shadow:0 26px 70px rgba(0,0,0,.75),inset 0 0 0 2px #454d49;color:#e6ecea;display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:6px 26px}
+  .lp h5{grid-column:1/3;margin:0 0 4px;display:flex;align-items:baseline;gap:14px;font-family:'Orbitron',sans-serif;font-weight:800;font-size:19px;letter-spacing:.2em}
+  .lp h5 small{font-family:'Share Tech Mono',monospace;font-weight:normal;font-size:13px;letter-spacing:.08em;color:#9fb0aa}
+  .lp-s{display:flex;justify-content:space-between;gap:8px;background:#161a18;border-radius:6px;padding:12px 16px 10px;box-shadow:inset 0 0 0 2px #0b0e0d}
+  .sl{width:112px;text-align:center}
+  .sl-lamp{width:74px;height:34px;margin:0 auto 4px;border-radius:6px 6px 16px 16px;background:#2a2230;box-shadow:inset 0 -5px 0 #3b3042}
+  .sl-name{font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em;color:#dfe7e4}
+  .sl-sub{font-family:'Share Tech Mono',monospace;font-size:12px;color:#8ea39b;margin-bottom:8px}
+  .sl-track{position:relative;width:58px;height:260px;margin:0 auto;background:#0b0e0d;border-radius:8px;box-shadow:inset 0 0 0 2px #3a423f;cursor:pointer;touch-action:none}
+  .sl-track u{position:absolute;left:-18px;width:14px;text-align:right;font-family:'Share Tech Mono',monospace;font-size:12px;color:#8ea39b;text-decoration:none;line-height:12px}
+  .sl-track s{position:absolute;left:6px;right:6px;height:1px;background:#3a423f}
+  .sl-fill{position:absolute;left:22px;width:14px;bottom:18px;border-radius:7px;background:linear-gradient(#ffb0e6,#b84fa0);height:0}
+  .sl-knob{position:absolute;left:3px;width:52px;height:30px;border-radius:7px;background:linear-gradient(#f1f4f3,#9aa6a2);box-shadow:0 4px 8px rgba(0,0,0,.6),inset 0 -3px 0 rgba(0,0,0,.25);
+    cursor:grab;touch-action:none}
+  .sl-knob:after{content:'';position:absolute;left:10px;right:10px;top:13px;height:3px;background:#2b302e;border-radius:2px}
+  .sl-knob.on{cursor:grabbing;background:linear-gradient(#fff,#c9d2cf)}
+  .sl-val{margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:30px;color:#ffb0e6;line-height:1}
+  .lp-b{display:flex;flex-direction:column;gap:9px}
+  .ld{background:#161a18;border-radius:6px;padding:9px 14px 10px;box-shadow:inset 0 0 0 2px #0b0e0d}
+  .ld-top{display:flex;justify-content:space-between;align-items:baseline;font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;letter-spacing:.16em}
+  .ld-top b{font-family:'Share Tech Mono',monospace;font-weight:normal;font-size:25px;letter-spacing:0;color:#7dffb2}
+  .ld.over .ld-top b{color:#ff6a5a}
+  .ld-bar{position:relative;height:16px;margin-top:6px;background:#0b0e0d;border-radius:4px;overflow:hidden}
+  .ld-bar i{position:absolute;left:0;top:0;bottom:0;background:#7dffb2;width:0;transition:width .15s}
+  .ld.over .ld-bar i{background:#ff6a5a}
+  .ld-bar em{position:absolute;left:66.66%;top:0;bottom:0;width:3px;background:#fff}
+  .on-c{font-family:'Share Tech Mono',monospace;font-size:15.5px;line-height:1.5}
+  .on-c div{display:flex;align-items:center;gap:8px}
+  .on-c span{flex:1}
+  .on-c b{font-weight:normal;color:#ffc14d;min-width:22px;text-align:right}
+  .sw{width:74px;height:28px;border-radius:14px;background:#7dffb2;position:relative;font-family:'Orbitron',sans-serif;font-weight:800;font-size:11px;letter-spacing:.1em;color:#0b0e0d;
+    text-align:left;padding:0 0 0 10px;line-height:28px}
+  .sw:after{content:'';position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#0b0e0d}
+  .sw.off{background:#4a524f;color:#cfd6d3;text-align:right;padding:0 10px 0 0}
+  .sw.off:after{right:auto;left:3px}
+  .lg{font-family:'Share Tech Mono',monospace;font-size:13.5px;line-height:1.5;color:#9fe8c0;background:#07100c;border-radius:4px;padding:7px 10px;white-space:pre}
+  .brk{display:flex;align-items:center;gap:16px;background:#161a18;border-radius:6px;padding:10px 14px;box-shadow:inset 0 0 0 2px #0b0e0d}
+  .brk-slot{position:relative;width:70px;height:112px;background:#0b0e0d;border-radius:8px;box-shadow:inset 0 0 0 2px #3a423f;flex:none}
+  .brk-h{position:absolute;left:7px;top:60px;width:56px;height:44px;border-radius:8px;background:linear-gradient(#e2503c,#9a2a1a);box-shadow:0 4px 8px rgba(0,0,0,.6);cursor:grab;touch-action:none;transition:top .16s}
+  .brk-h.on{transition:none;cursor:grabbing}
+  .brk.up .brk-h{top:8px;background:linear-gradient(#58d98a,#2b8a52)}
+  .brk-t{font-family:'Orbitron',sans-serif;font-weight:800;font-size:15px;letter-spacing:.14em;line-height:1.5}
+  .brk-t small{display:block;font-family:'Share Tech Mono',monospace;font-weight:normal;font-size:13px;letter-spacing:.04em;color:#ff8a78}
+  .brk.up .brk-t small{color:#7dffb2}
+  .lp-msg{grid-column:1/3;min-height:68px;margin-top:4px;padding:10px 14px;background:rgba(5,10,8,.7);border-left:3px solid #ff8ad8;
+    font-family:'Outfit',sans-serif;font-size:17.5px;line-height:1.32;color:#f3ecf1}
+  @media (max-width:900px){.lp{grid-template-columns:1fr}.lp h5,.lp-msg{grid-column:1}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1f1c"/><stop offset=".6" stop-color="#123029"/><stop offset="1" stop-color="#091815"/></linearGradient>
+  <linearGradient id="liqOff" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0a2012"/><stop offset=".4" stop-color="#17432a"/><stop offset="1" stop-color="#06140c"/></linearGradient>
+  <linearGradient id="liqOn" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f9a3a"/><stop offset=".4" stop-color="#9bf05c"/><stop offset="1" stop-color="#268a35"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".14"/><stop offset=".18" stop-color="#fff" stop-opacity=".3"/><stop offset=".3" stop-color="#fff" stop-opacity=".02"/><stop offset=".85" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/></linearGradient>
+  <linearGradient id="coneG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7ad1" stop-opacity=".95"/><stop offset=".5" stop-color="#ff7ad1" stop-opacity=".4"/><stop offset="1" stop-color="#ff7ad1" stop-opacity=".08"/></linearGradient>
+  <radialGradient id="jupL"><stop offset="0" stop-color="#ffe2b0" stop-opacity=".26"/><stop offset="1" stop-color="#ffe2b0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="jupSh" cx="34%" cy="26%" r="80%"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".72"/></radialGradient>
+  <radialGradient id="redL"><stop offset="0" stop-color="#ff4a36" stop-opacity=".4"/><stop offset="1" stop-color="#ff4a36" stop-opacity="0"/></radialGradient>
+  <radialGradient id="cyanL"><stop offset="0" stop-color="#39e6ff" stop-opacity=".3"/><stop offset="1" stop-color="#39e6ff" stop-opacity="0"/></radialGradient>
+  <linearGradient id="vioL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6cff" stop-opacity="0"/><stop offset=".86" stop-color="#9a6cff" stop-opacity=".3"/><stop offset="1" stop-color="#9a6cff" stop-opacity=".05"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1c19"/><stop offset="1" stop-color="#030908"/></linearGradient>
+  <linearGradient id="reflOff" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a6a48" stop-opacity=".4"/><stop offset="1" stop-color="#2a6a48" stop-opacity="0"/></linearGradient>
+  <linearGradient id="reflOn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b6ff7a" stop-opacity=".55"/><stop offset=".5" stop-color="#ff8ad8" stop-opacity=".2"/><stop offset="1" stop-color="#ff8ad8" stop-opacity="0"/></linearGradient>
+  <radialGradient id="pinkG" cx="50%" cy="36%" r="70%"><stop offset="0" stop-color="#ff7ad1" stop-opacity=".3"/><stop offset=".6" stop-color="#ff7ad1" stop-opacity=".1"/><stop offset="1" stop-color="#ff7ad1" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="74%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".9"/></radialGradient>
+  <clipPath id="winClip"><path d="M250 440V180q0-80 80-80h940q80 0 80 80v260z"/></clipPath>
+  <clipPath id="jupClip"><circle cx="560" cy="476" r="300"/></clipPath>
+</defs>
+
+<!-- the bow wall and its window: Jupiter -->
+<rect x="-1000" width="3600" height="900" fill="url(#wallG)"/>
+<g id="ribs"></g>
+<g id="win" class="hot">
+  <path d="M234 456V180q0-96 96-96h940q96 0 96 96v276z" fill="#07110f"/>
+  <g clip-path="url(#winClip)">
+    <rect x="250" y="100" width="1100" height="340" fill="#02040c"/>
+    <g id="stars" fill="#e6efff"></g>
+    <circle cx="560" cy="476" r="322" fill="#ffe2b0" opacity=".1"/>
+    <g clip-path="url(#jupClip)">
+      <rect x="240" y="160" width="640" height="300" fill="#d9b48a"/>
+      <path d="M240 196Q560 150 880 196V226Q560 182 240 226Z" fill="#b89a80"/>
+      <path d="M240 226Q560 182 880 226V250Q560 210 240 250Z" fill="#ecd9b8"/>
+      <path d="M240 250Q560 210 880 250V286Q560 250 240 286Z" fill="#b9774e"/>
+      <path d="M240 286Q560 250 880 286V312Q560 280 240 312Z" fill="#f4e6cc"/>
+      <path d="M240 312Q560 280 880 312V334Q560 304 240 334Z" fill="#d39c6b"/>
+      <path d="M240 334Q560 304 880 334V378Q560 354 240 378Z" fill="#f1dfc0"/>
+      <path d="M240 378Q560 354 880 378V426Q560 408 240 426Z" fill="#a7653f"/>
+      <path d="M240 426Q560 408 880 426V470H240Z" fill="#e6cba2"/>
+      <g fill="none" stroke-linecap="round" opacity=".5"><path d="M240 286Q400 262 560 268T880 286" stroke="#7d4a2c" stroke-width="3"/><path d="M240 378Q400 360 560 366T880 378" stroke="#fff6e2" stroke-width="3"/></g>
+      <ellipse cx="640" cy="398" rx="50" ry="15" fill="#c2553a"/><ellipse cx="640" cy="398" rx="32" ry="8" fill="#d97a55" opacity=".8"/>
+      <circle cx="430" cy="322" r="9" fill="#1a1210" opacity=".8"/>
+      <circle cx="560" cy="476" r="300" fill="url(#jupSh)"/>
+    </g>
+    <circle cx="372" cy="250" r="9" fill="#f1e2a8"/><circle cx="376" cy="252" r="9" fill="#02040c" opacity=".4"/>
+    <circle cx="1120" cy="210" r="5" fill="#f4f8ff"/>
+  </g>
+  <g fill="#0c1a17"><rect x="466" y="100" width="12" height="340"/><rect x="686" y="100" width="12" height="340"/><rect x="906" y="100" width="12" height="340"/><rect x="1126" y="100" width="12" height="340"/></g>
+  <path d="M250 440V180q0-80 80-80h940q80 0 80 80v260" fill="none" stroke="#1d3a34" stroke-width="6"/>
+</g>
+<rect x="-1000" y="440" width="3600" height="20" fill="#07110f"/>
+
+<!-- Keel, in the ceiling -->
+<g id="keel" class="hot">
+  <rect x="970" y="20" width="140" height="80" fill="transparent"/>
+  <ellipse cx="1040" cy="58" rx="58" ry="24" fill="#16232e"/><ellipse cx="1040" cy="60" rx="42" ry="17" fill="#070e15"/>
+  <ellipse cx="1040" cy="60" rx="30" ry="12" fill="none" stroke="#39e6ff" stroke-width="5" opacity=".35"/>
+  <ellipse id="keelRing" cx="1040" cy="60" rx="30" ry="12" fill="none" stroke="#bff6ff" stroke-width="3"/><ellipse cx="1040" cy="60" rx="9" ry="4.500" fill="#39e6ff"/>
+</g>
+
+<!-- the lamp rail, the four tanks -->
+<rect x="300" y="150" width="1000" height="16" fill="#1a2a27"/><rect x="300" y="166" width="1000" height="8" fill="#0c1a17"/>
+<g stroke="#1a2a27" stroke-width="8"><path d="M330 96v60M1270 96v60M800 86v64"/></g>
+<g id="tanks"></g>
+
+<!-- tomatoes, and the garden log -->
+<g id="tomato" class="hot">
+  <rect x="20" y="150" width="240" height="640" fill="transparent"/>
+  <g fill="#1f302c"><rect x="24" y="150" width="14" height="640"/><rect x="236" y="150" width="14" height="640"/><rect x="24" y="356" width="226" height="12"/><rect x="24" y="570" width="226" height="12"/></g>
+  <g fill="#2a2420"><rect x="44" y="326" width="186" height="30" rx="4"/><rect x="44" y="540" width="186" height="30" rx="4"/><rect x="44" y="750" width="186" height="34" rx="4"/></g>
+  <g stroke="#3f7a45" stroke-width="5" fill="none" stroke-linecap="round"><path d="M80 326q-10-70 14-150M140 326q14-80-6-164M196 326q-8-60 10-136"/><path d="M84 540q6-60-8-130M150 540q-12-70 8-150M204 540q8-50-4-120"/></g>
+  <g fill="#4f9a55"><ellipse cx="72" cy="230" rx="22" ry="11" transform="rotate(-30 72 230)"/><ellipse cx="112" cy="204" rx="22" ry="11" transform="rotate(24 112 204)"/><ellipse cx="124" cy="262" rx="20" ry="10" transform="rotate(-20 124 262)"/>
+    <ellipse cx="160" cy="196" rx="22" ry="11" transform="rotate(30 160 196)"/><ellipse cx="182" cy="250" rx="20" ry="10" transform="rotate(-28 182 250)"/><ellipse cx="216" cy="214" rx="20" ry="10" transform="rotate(20 216 214)"/>
+    <ellipse cx="66" cy="444" rx="22" ry="11" transform="rotate(26 66 444)"/><ellipse cx="108" cy="470" rx="20" ry="10" transform="rotate(-24 108 470)"/><ellipse cx="166" cy="430" rx="22" ry="11" transform="rotate(-30 166 430)"/><ellipse cx="212" cy="466" rx="20" ry="10" transform="rotate(22 212 466)"/></g>
+  <g fill="#6f9a3a"><circle cx="92" cy="278" r="11"/><circle cx="150" cy="238" r="10"/><circle cx="204" cy="282" r="11"/><circle cx="70" cy="494" r="10"/><circle cx="128" cy="512" r="11"/><circle cx="200" cy="508" r="10"/><circle cx="170" cy="478" r="9"/></g>
+  <circle cx="118" cy="302" r="13" fill="#d8402f"/><path d="M118 289v-8" stroke="#3f7a45" stroke-width="3"/>
+  <g transform="rotate(8 150 318)"><rect x="132" y="300" width="50" height="30" fill="#f1eee2"/><text x="157" y="322" class="noT">NO.</text></g>
+  <g fill="#3f7a45"><ellipse cx="80" cy="748" rx="30" ry="14"/><ellipse cx="136" cy="742" rx="34" ry="16"/><ellipse cx="194" cy="748" rx="30" ry="14"/></g>
+</g>
+<g id="log" class="hot" transform="rotate(3 302 520)">
+  <path d="M302 448v22" stroke="#8d959c" stroke-width="3"/>
+  <rect x="264" y="466" width="78" height="108" rx="5" fill="#6b4a2a"/><rect x="271" y="480" width="64" height="88" fill="#f4f1e6"/><rect x="286" y="460" width="34" height="16" rx="4" fill="#9aa2a9"/>
+  <g stroke="#3a4a7a" stroke-width="2.500" stroke-linecap="round"><path d="M278 494h50M278 506h50M278 518h50M278 530h50M278 546h36M278 556h44"/></g>
+</g>
+
+<!-- the screen, and the grey box marked CIRCUIT C -->
+<g id="call" class="hot">
+  <rect x="1338" y="150" width="232" height="190" rx="10" fill="#0a1512"/><rect x="1350" y="162" width="208" height="166" rx="4" fill="#041014"/>
+  <g id="callIdle"><text x="1454" y="252" class="scrT" font-size="13" fill="#31525a">NO SIGNAL</text></g>
+  <g id="callScr" style="display:none"><rect x="1350" y="162" width="208" height="166" rx="4" fill="#0d4a5a"/>
+    <text x="1454" y="236" class="scrT" font-size="17" fill="#d9fbff">INCOMING CALL</text><text x="1454" y="266" class="scrT" font-size="14" fill="#8fe9ff">LANDER</text>
+    <circle cx="1454" cy="298" r="9" fill="#7dffb2"/></g>
+  <g id="callLive" style="display:none"><rect x="1350" y="162" width="208" height="166" rx="4" fill="#123a44"/><use href="#ch-wren" x="1390" y="166" width="126" height="164"/>
+    <rect x="1350" y="162" width="74" height="20" fill="#b3261c"/><text x="1387" y="177" class="scrT" font-size="11" fill="#fff">LIVE</text></g>
+</g>
+<g id="panel" class="hot">
+  <path d="M1420 392v-52M1480 392v-52" stroke="#1a2a27" stroke-width="10"/>
+  <rect x="1344" y="390" width="212" height="270" rx="8" fill="#59635f"/><rect x="1344" y="390" width="212" height="270" rx="8" fill="none" stroke="#111413" stroke-width="5"/>
+  <rect x="1358" y="404" width="184" height="36" rx="3" fill="#111413"/><text x="1450" y="429" class="boxT">CIRCUIT C</text>
+  <g fill="#111413"><rect x="1372" y="456" width="14" height="92" rx="7"/><rect x="1402" y="456" width="14" height="92" rx="7"/><rect x="1432" y="456" width="14" height="92" rx="7"/><rect x="1462" y="456" width="14" height="92" rx="7"/></g>
+  <g fill="#cfd6d3"><rect x="1367" y="524" width="24" height="16" rx="3"/><rect x="1397" y="524" width="24" height="16" rx="3"/><rect x="1427" y="524" width="24" height="16" rx="3"/><rect x="1457" y="524" width="24" height="16" rx="3"/></g>
+  <rect x="1500" y="456" width="28" height="92" rx="6" fill="#111413"/><rect id="lever" x="1496" y="508" width="36" height="34" rx="6" fill="#d8402f"/>
+  <g id="flag"><rect x="1364" y="570" width="172" height="34" rx="3" fill="#d8402f"/><text x="1450" y="592" class="boxT" style="font-size:12.5px;letter-spacing:2px">BREAKER OPEN</text></g>
+  <g stroke="#111413" stroke-width="3"><path d="M1364 622h172M1364 636h120"/></g>
+</g>
+
+<!-- floor, and what little light there is -->
+<rect x="-1000" y="790" width="3600" height="110" fill="url(#floorG)"/>
+<g stroke="#12302a" stroke-width="2"><path d="M-1000 818H2600M-1000 852H2600M-1000 892H2600M-400 900L420 792M100 900L610 792M560 900L740 792M800 900V792M1040 900L860 792M1500 900L990 792M2000 900L1180 792"/></g>
+<g id="refl"></g>
+<rect x="-1000" y="690" width="3600" height="102" fill="url(#vioL)" pointer-events="none"/>
+<rect id="strip" x="-1000" y="786" width="3600" height="6" fill="#b08cff"/>
+<ellipse cx="560" cy="470" rx="640" ry="310" fill="url(#jupL)" pointer-events="none"/>
+<circle id="redGlow" cx="1450" cy="587" r="200" fill="url(#redL)" pointer-events="none"/>
+<circle cx="1454" cy="245" r="240" fill="url(#cyanL)" pointer-events="none"/>
+
+<rect id="dark" x="-1000" width="3600" height="900" fill="#010604" opacity=".3" pointer-events="none"/>
+<rect id="pink" x="-1000" width="3600" height="900" fill="url(#pinkG)" pointer-events="none"/>
+<rect x="-1000" width="3600" height="900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, ringing = false, called = false, logRead = false, solved = false, ringT = 0, bubT = 0;
+  var vals = [0, 0, 0, 0], sock = true, LIMIT = 20, SOCK = 6;
+  var TANKS = [[420, 'CLEM', 2083], [660, 'AGNES', 2079], [900, 'PIP', 2086], [1140, 'BRUNO', 2081]];
+
+  /* wall ribs, stars, the four tanks with their lamps */
+  (function () {
+    var s = '', x, i, j, cx, t, bx;
+    for (x = -940; x < 2600; x += 190) s += '<rect x="' + x + '" y="0" width="16" height="790" fill="#0a1a17"/><rect x="' + (x + 16) + '" y="0" width="4" height="790" fill="#17352e"/>';
+    s += '<rect x="-1000" y="470" width="3600" height="6" fill="#17352e"/>';
+    $('#ribs').innerHTML = s; s = '';
+    for (i = 0; i < 46; i++) s += '<circle cx="' + (262 + (i * 397) % 1080) + '" cy="' + (108 + (i * 211) % 250) + '" r="' + (0.7 + (i % 4) * 0.4).toFixed(1) + '" opacity="' + (0.5 + (i % 3) * 0.2).toFixed(1) + '"/>';
+    $('#stars').innerHTML = s; s = '';
+    TANKS.forEach(function (T, i) {
+      cx = T[0]; x = cx - 75;
+      s += '<g class="tank hot" data-i="' + i + '">';
+      s += '<path class="cone" id="cone' + i + '" d="M' + (cx - 84) + ' 243h168l26 500h-220z"/>';
+      s += '<rect x="' + (x - 16) + '" y="744" width="182" height="46" rx="4" fill="#16221f"/><text x="' + cx + '" y="779" class="tno">' + (i + 1) + '</text>';
+      s += '<rect class="liq" x="' + x + '" y="262" width="150" height="482" rx="18"/>';
+      for (j = 0; j < 5; j++) { bx = x + 22 + ((i * 37 + j * 29) % 106); s += '<circle class="bub" cx="' + bx + '" cy="722" r="' + (3 + (j % 3) * 1.5) + '" style="animation-duration:' + (3.2 + ((i + j) % 4) * 0.7).toFixed(1) + 's;animation-delay:' + (-(j * 0.9 + i * 0.4)).toFixed(1) + 's"/>'; }
+      s += '<rect x="' + x + '" y="262" width="150" height="482" rx="18" fill="url(#glassG)"/><rect x="' + x + '" y="262" width="150" height="482" rx="18" fill="none" stroke="#5f7d77" stroke-width="3"/>';
+      s += '<rect x="' + (x - 9) + '" y="250" width="168" height="26" rx="6" fill="#2f3f3b"/><rect x="' + (x - 9) + '" y="728" width="168" height="22" rx="6" fill="#2f3f3b"/>';
+      s += '<path d="M' + (cx - 66) + ' 186h132l26 46h-184z" fill="#1c2b28"/><path d="M' + (cx - 66) + ' 186h132" stroke="#34504a" stroke-width="3"/><rect class="bar" x="' + (cx - 88) + '" y="232" width="176" height="10" rx="5"/>';
+      s += '<text x="' + cx + '" y="216" class="hoodT">LAMP ' + (i + 1) + '</text><path d="M' + cx + ' 166v20" stroke="#1a2a27" stroke-width="10"/>';
+      t = (i % 2 ? 3 : -3);
+      s += '<g transform="rotate(' + t + ' ' + cx + ' 610)"><rect x="' + (cx - 60) + '" y="578" width="120" height="62" fill="#f1eee2"/><path d="M' + (cx - 60) + ' 578h120v8h-120z" fill="#d9d4c4"/>' +
+        '<text x="' + cx + '" y="612" class="tape">' + T[1] + '</text><text x="' + cx + '" y="632" class="tape2">' + T[2] + '</text></g>';
+      s += '</g>';
+    });
+    $('#tanks').innerHTML = s; s = '';
+    TANKS.forEach(function (T) { s += '<rect class="refl" x="' + (T[0] - 72) + '" y="793" width="144" height="107"/>'; });
+    $('#refl').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'scifi', story: 'air', storyTitle: 'Seven Hours of Air', id: 'garden', no: 'IV', title: 'The Garden',
+    go: 'Open the big hatch',
+    intro: [
+      'The pressure never moved. There is no hole in Keeling Station, and there never was one. The hissing behind the tanks is the hot-water pipe for Josef&rsquo;s coffee machine.',
+      'Nothing is leaving the station. The oxygen is not being lost. It is not being made.',
+      'The reserve bottle is emptying into the Spine, and Keel has done the sum again: nine hours of air. The lander is still eleven hours away.',
+      'The station&rsquo;s oxygen is made at the bow, in four glass tanks of green algae, under four lamps. Commander Hale told you not to go into the garden. You go into the garden.'
+    ],
+    exit: {"next":"docking","w":{"afb4963c":"ab8148dc"}}, tags: {"lamps":["8e377ea3"]},
+    hints: hints,
+    onBegin: begin
+  });
+  AIR.clock();
+
+  var LOG = '<h4>Garden log &middot; W. Adeyemi</h4>' +
+    '<table><tr><td>Tank 1</td><td>CLEM</td><td>started 2083</td></tr><tr><td>Tank 2</td><td>AGNES</td><td>started 2079</td></tr>' +
+    '<tr><td>Tank 3</td><td>PIP</td><td>started 2086</td></tr><tr><td>Tank 4</td><td>BRUNO</td><td>started 2081</td></tr></table>' +
+    '<p>The timer takes the lamps up to day levels at 01:50 and down to night levels at 17:50.</p>' +
+    '<p>Nobody changes the levels but me. That means you, Josef.</p>';
+
+  function hints() {
+    if (solved) return null;
+    if (!called) return ['call', [
+      'A screen on the wall is flashing. Somebody is calling the station.',
+      'Click on the flashing screen, on the right, and listen to everything Dr Adeyemi says. She tells you what each tank needs.'
+    ]];
+    if (!ER.check('lamps', vals.join('-'))) return ['lamps', [
+      'Open the grey box marked CIRCUIT C. There are four lamps to set. Dr Adeyemi gave you one rule for each tank, and her words are in your Notebook.',
+      'She talks about &ldquo;the youngest&rdquo; and &ldquo;the oldest&rdquo; tank. Her log on the clipboard tells you which they are. Lamp 1 is over tank 1, and so on.',
+      'Begin with the youngest tank: she gives you its number. &ldquo;Twice as much&rdquo; gives you Clem. &ldquo;As much as those two together&rdquo; gives you the oldest. Bruno is more than one of them and less than the other, so only one number is left for him.'
+    ]];
+    return ['load', [
+      'The lamps are right, but the breaker will not stay up. Look at the load, and look at the limit.',
+      'The lamps are not the only thing on circuit C. Read the list on the box, and the four lines of the log. What was switched on at 22:41, and where?',
+      'Cabin 4 is your cabin. Something of yours has been on since bedtime. You need air more than you need that. Switch that socket off on the box, and then push the breaker up.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function pips() { ER.pips((called ? 1 : 0) + (logRead ? 1 : 0) + (solved ? 1 : 0), 3); }
+  function begin() {
+    AIR.amb.vent(0.035, 260); pips();
+    ER.narrate([
+      'It is dark in the garden, and it should never be dark in the garden. Four tall tanks of water stand in a row under four dead lamps.',
+      'Nothing bubbles. On the wall, a red light says BREAKER OPEN.'
+    ], function () { setTimeout(startRing, 1600); });
+  }
+  function startRing() {
+    if (called || ringing) return;
+    ringing = true;
+    $('#callIdle').style.display = 'none'; $('#callScr').style.display = ''; $('#callScr').classList.add('ring');
+    AIR.sfx.ring(); ringT = setInterval(function () { if (!ER.isOpen()) AIR.sfx.ring(); }, 2600);
+    ER.say('On the wall, a screen wakes up. INCOMING CALL: LANDER.');
+  }
+
+  AIR.thing('#win', null, 'Jupiter, filling half the window. It is very large, and it is not interested.', isBusy);
+  AIR.thing('#tomato', 'tomato plant', 'Tomato plants, tied to a frame. Seven green tomatoes and one red one. Somebody has hung a sign on the red one. The sign says: NO.', isBusy);
+  ER.$$('.tank').forEach(function (t) {
+    t.addEventListener('click', function (e) {
+      if (busy) return;
+      var i = +t.getAttribute('data-i'), T = TANKS[i];
+      ER.wordAt(e.clientX, e.clientY, 'algae');
+      ER.say('Tank ' + (i + 1) + '. The tape says ' + T[1] + ', ' + T[2] + '. ' + (solved ? 'The water is bright green and full of small bubbles.' : 'The water is dark green and perfectly still. The lamp above it is dead.'));
+    });
+  });
+  $('#log').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LOG, cls: 'clip', clue: { id: 'gardenlog', title: 'Garden log', kind: 'Clipboard' }, done: function () { if (!logRead) { logRead = true; pips(); } } });
+  });
+  $('#keel').addEventListener('click', function () {
+    if (busy) return;
+    AIR.keel([
+      'Breaker C opened at 01:52, and the garden lamps went out. Nobody asked me about breakers until now. A breaker opens when its circuit is carrying more than its limit. It is a safety switch, and it has done its job.',
+      { q: 'What is on circuit C?', a: 'Four garden lamps, and one wall socket in cabin 4. The station was rewired in 2079. Nobody wrote down why.' },
+      { q: 'What is plugged into the socket in cabin 4?', a: 'I cannot see into the cabins. That is a rule. You may know better than I do.' }
+    ], { id: 'keel4', title: 'Keel: circuit C', kind: 'Station computer' });
+  });
+  $('#call').addEventListener('click', function () {
+    if (busy) return;
+    if (!ringing && !called) { ER.say('A screen. NO SIGNAL, it says.'); return; }
+    var c = CAST.wren;
+    clearInterval(ringT); AIR.sfx.radio();
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('wren'),
+      lines: [
+        { note: 'The picture jumps, and settles. A woman in a white suit, very close to the camera.', a: 'Keeling, this is the lander. I have twenty minutes before the moon gets in the way again. Keel says my garden is dark. Tell me it isn&rsquo;t true.' },
+        { q: 'It is true. The lamps went out at eight minutes to two.', a: 'More than an hour. All right. They can live through an hour of dark. They cannot live through nine.' },
+        'Now listen. You can&rsquo;t just push every lamp to the top. The four tanks are not the same age, and they do not want the same light.',
+        'The youngest tank is the most delicate. Give it the least light of the four: set its lamp to 2. No lower. Below 2 it stops growing.',
+        'Clem is three years older than the youngest, and needs twice as much light.',
+        'The oldest tank is the hungriest. Give it as much light as Clem and the youngest together.',
+        'Bruno gets more than Clem, but less than the oldest.',
+        { q: 'Which tank is which?', a: 'Their names are on the tape, and their years are in my log, on the clipboard by the tomatoes. Lamp 1 is over tank 1, lamp 2 is over tank 2, and so on. That part is easy.' },
+        { q: 'Why did the lamps go out?', a: 'I have no idea. That circuit has carried my four lamps for eight years. Something new is on it. Find out what it is, or the breaker will open again.' },
+        { note: 'The picture breaks into squares, and comes back.', a: 'And do not touch the tomatoes.' }
+      ],
+      clue: { id: 'wren', title: 'Dr Adeyemi: the four lamps', kind: 'Call from the lander' },
+      done: function (seen) {
+        if (!seen) { if (!called) ringT = setInterval(function () { if (!ER.isOpen()) AIR.sfx.ring(); }, 2600); return; }
+        if (called) return;
+        called = true; pips();
+        $('#callScr').style.display = 'none'; $('#callLive').style.display = '';
+        ER.say('Dr Adeyemi stays on the screen, watching. The grey box marked CIRCUIT C is just below her.');
+      }
+    });
+  });
+  $('#panel').addEventListener('click', function () { if (!busy && !solved) openPanel(); });
+
+  /* ---------- circuit C ---------- */
+  function openPanel() {
+    var box = ER.el('div', 'lp'), STEP = 28, msgEl, brk, trying = false;
+    box.innerHTML = '<h5>CIRCUIT C <small>garden lamps &middot; set by hand after a fault</small></h5><div class="lp-s"></div>' +
+      '<div class="lp-b"><div class="ld"><div class="ld-top"><span>LOAD</span><b></b></div><div class="ld-bar"><i></i><em></em></div></div>' +
+      '<div class="ld on-c"><div><span>ON THIS CIRCUIT</span></div><div><span>Garden lamps 1 to 4</span><b id="c-l">0</b></div>' +
+      '<div><span>Wall socket, cabin 4</span><button type="button" class="sw" id="c-sw">ON</button><b id="c-s">6</b></div></div>' +
+      '<div class="lg">17:50  LAMPS TO NIGHT LEVELS    LOAD  6\n22:41  SOCKET, CABIN 4: ON      LOAD 12\n01:50  LAMPS TO DAY LEVELS      LOAD 23\n01:52  OVER LIMIT. BREAKER C OPEN. LAMPS TO 0.</div>' +
+      '<div class="brk"><div class="brk-slot"><div class="brk-h"></div></div><div class="brk-t">BREAKER C<small>OPEN</small></div></div></div>' +
+      '<div class="lp-msg"></div>';
+    msgEl = box.querySelector('.lp-msg'); brk = box.querySelector('.brk');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    msg('Slide each lamp up or down. When everything on the circuit is right, push the red breaker up.');
+    function load() { return vals[0] + vals[1] + vals[2] + vals[3] + (sock ? SOCK : 0); }
+    function meter() {
+      var L = load(), ld = box.querySelector('.ld');
+      ld.querySelector('b').textContent = L + ' / LIMIT ' + LIMIT; ld.classList.toggle('over', L > LIMIT);
+      ld.querySelector('i').style.width = Math.min(100, L / 30 * 100) + '%';
+      box.querySelector('#c-l').textContent = vals[0] + vals[1] + vals[2] + vals[3]; box.querySelector('#c-s').textContent = sock ? SOCK : 0;
+      box.setAttribute('data-vals', vals.join('-')); box.setAttribute('data-sock', sock ? 1 : 0);
+    }
+    var sl = box.querySelector('.lp-s');
+    vals.forEach(function (v, i) {
+      var col = ER.el('div', 'sl', '<div class="sl-lamp"></div><div class="sl-name">LAMP ' + (i + 1) + '</div><div class="sl-sub">over tank ' + (i + 1) + '</div>' +
+        '<div class="sl-track"><div class="sl-fill"></div><div class="sl-knob"></div></div><div class="sl-val">0</div>');
+      var track = col.querySelector('.sl-track'), knob = col.querySelector('.sl-knob'), y0 = 0, v0 = 0, n;
+      for (n = 0; n <= 8; n++) track.insertAdjacentHTML('afterbegin', '<u style="bottom:' + (12 + n * STEP) + 'px">' + n + '</u><s style="bottom:' + (18 + n * STEP) + 'px"></s>');
+      function set(nv, quiet) {
+        nv = Math.max(0, Math.min(8, nv));
+        if (nv !== vals[i] && !quiet) ER.sfx.tick(0.8);
+        vals[i] = nv; knob.style.bottom = (3 + nv * STEP) + 'px'; col.querySelector('.sl-fill').style.height = (nv * STEP) + 'px';
+        col.querySelector('.sl-val').textContent = nv; meter();
+      }
+      ER.drag(knob, {
+        start: function (e) { if (solved || trying) return false; y0 = e.clientY; v0 = vals[i]; msg(''); },
+        move: function (e) { set(v0 + Math.round((y0 - e.clientY) / STEP)); },
+        end: function (e, moved) { if (moved) set(v0 + Math.round((y0 - e.clientY) / STEP)); }
+      });
+      track.addEventListener('pointerdown', function (e) {
+        if (solved || trying || e.target === knob) return;
+        var r = track.getBoundingClientRect(); set(Math.round((r.bottom - 18 - e.clientY) / STEP)); msg('');
+      });
+      sl.appendChild(col); set(v, true);
+    });
+    var sw = box.querySelector('#c-sw');
+    function swDraw() { sw.classList.toggle('off', !sock); sw.textContent = sock ? 'ON' : 'OFF'; meter(); }
+    sw.addEventListener('click', function () {
+      if (solved || trying) return;
+      sock = !sock; ER.sfx.click(); swDraw();
+      msg(sock ? 'SOCKET, CABIN 4: ON. Far away at the stern, something small begins to glow again.' : 'SOCKET, CABIN 4: OFF. Far away at the stern, a small orange light goes out.');
+    });
+    swDraw();
+    var h = box.querySelector('.brk-h'), hy = 0;
+    ER.drag(h, {
+      start: function (e) { if (solved || trying) return false; hy = e.clientY; },
+      move: function (e) { h.style.top = Math.max(8, Math.min(60, 60 + e.clientY - hy)) + 'px'; },
+      end: function (e, moved) { var far = hy - e.clientY > 30; h.style.top = ''; if (far || !moved) push(); }
+    });
+    function glow(on) { ER.$$('.sl-lamp', box).forEach(function (l, i) { l.style.background = on && vals[i] ? 'rgba(255,138,216,' + (0.25 + vals[i] / 8 * 0.75).toFixed(2) + ')' : ''; l.style.boxShadow = on && vals[i] ? '0 0 ' + (6 + vals[i] * 3) + 'px #ff8ad8' : ''; }); }
+    function drop(text) { brk.classList.remove('up'); brk.querySelector('small').textContent = 'OPEN'; glow(false); trying = false; AIR.sfx.trip(); ER.shake(brk); msg(text); }
+    function push() {
+      var L = load(), file;
+      trying = true; brk.classList.add('up'); brk.querySelector('small').textContent = 'CLOSED'; AIR.sfx.lock(); msg('The lever goes up.');
+      if (vals[0] + vals[1] + vals[2] + vals[3] === 0) { setTimeout(function () { drop('The lever goes up. Nothing comes on, because every lamp is set to 0. You pull it down again.'); }, 900); return; }
+      if (L > LIMIT) { glow(true); setTimeout(function () { drop('For one second the lamps come on. Then: clack. The load was ' + L + '. The limit is ' + LIMIT + '.'); }, 1000); return; }
+      file = ER.exitOk([vals.join('-') + '|' + (sock ? 1 : 0)]);
+      glow(true);
+      if (file) { win(file, msg); return; }
+      setTimeout(function () {
+        drop(called ? 'The lamps come on. On the screen, Dr Adeyemi looks at her tanks and puts her hands over her face. &ldquo;No. Off! That is not what I said.&rdquo; You pull the lever down again.'
+                    : 'The lamps come on. But what does each tank need? You do not know. On the wall, somebody is still calling. You pull the lever down again.');
+      }, 2000);
+    }
+    ER.open('ov-lock', box);
+  }
+  function win(file, msg) {
+    solved = true; busy = true; clearInterval(ringT); ER.sfx.ok(); AIR.sfx.power();
+    var st = ER.state(); st.done = st.done || {}; st.done.garden = 1; AIR.fixed(); pips();
+    msg('The lever goes up, and this time it stays up.');
+    setTimeout(function () {
+      ER.closeAll();
+      vals.forEach(function (v, i) { $('#cone' + i).style.opacity = (0.25 + v / 8 * 0.6).toFixed(2); });
+      svg.classList.add('lit'); $('#lever').setAttribute('y', 458); $('#lever').setAttribute('fill', '#3dbf73');
+      bubT = setInterval(function () { if (!ER.isOpen()) AIR.sfx.bubble(); }, 420);
+      setTimeout(function () {
+        ER.narrate([
+          'Four lamps come on, as pink as the inside of a shell. In tank 2, one bubble lets go of the glass and climbs to the top. Then another.',
+          '&ldquo;There they are,&rdquo; says Dr Adeyemi. She is talking to the tanks, not to you.',
+          'Keel counts the air again. It takes a long time. &ldquo;I can no longer give you a number of hours,&rdquo; it says. &ldquo;This is good news.&rdquo;'
+        ], function () { clearInterval(bubT); ER.leave(file); });
+      }, 2600);
+    }, 1500);
+  }
+})();
+</script>
+</body>
+</html>
