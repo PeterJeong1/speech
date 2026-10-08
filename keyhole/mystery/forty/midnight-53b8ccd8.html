@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Hall, nearly midnight · Forty Minutes of Dark</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<style>
+  body{--bg:#07060d;--accent:#d9c7ff;--font-display:'Cinzel',serif;--font-ui:'Oswald',sans-serif;
+    --tc-bg:rgba(7,6,13,.95);--cap-bg:rgba(9,8,18,.94);--panel:#141222;--face-bg:#3a2a30;--q-ink:#b6a6dd;--fade:#030208}
+  .tc-room{font-weight:500;letter-spacing:.05em;font-size:clamp(30px,4.6vw,60px)}
+  .tc-text{font-size:clamp(17px,1.4vw,21px)}
+  .tagtxt{font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;letter-spacing:1px;fill:#3a2a08;text-anchor:middle;pointer-events:none}
+  .stencil{font-family:'Stardos Stencil',serif;font-weight:700;fill:#1c120a;text-anchor:middle}
+  .heardT{font-family:'EB Garamond',serif;font-style:italic;font-weight:600;font-size:30px;fill:#f3e9ff;text-anchor:middle;pointer-events:none;opacity:0}
+  .ring{fill:none;stroke:#f3e9ff;opacity:0;pointer-events:none;transform-box:fill-box;transform-origin:center}
+  #pend,#pend2{transform-origin:680px 290px;animation:swing 1s ease-in-out infinite alternate}
+  @keyframes swing{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+  .key{transition:transform .25s}.key.on{transition:none}
+  .key:hover .tagbg{filter:brightness(1.25)}
+
+  #glassHint{animation:gh 2.2s ease-in-out infinite}
+  @keyframes gh{50%{opacity:.15}}
+  #lanternGlow{animation:lg 3.6s steps(3) infinite}
+  @keyframes lg{50%{opacity:.78}}
+  #box{animation:bx .5s steps(2) infinite}
+  @keyframes bx{50%{transform:translateX(.8px)}}
+  .lbtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:1px solid #d9c7ff;
+    color:#d9c7ff;background:rgba(9,8,18,.9);font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.18em;text-transform:uppercase;border-radius:3px}
+  .lbtn.on{display:block}.lbtn:hover{background:#d9c7ff;color:#0a0814}
+
+  /* the letter, the lamp, and the last line of the notebook */
+  .lw{width:min(1020px,96vw)}
+  .lw-top{position:relative;height:min(470px,62vh);overflow:hidden;border:1px solid #2b2644;
+    background:radial-gradient(circle at 73% 44%,rgba(255,228,165,.95) 0,rgba(255,196,104,.42) 17%,rgba(255,170,70,.1) 34%,transparent 46%),#0c0a15}
+  .lw-lamp{position:absolute;left:73%;top:0;width:150px;margin-left:-75px;pointer-events:none}
+  .lw-hint{position:absolute;left:22px;bottom:16px;max-width:330px;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:19px;color:#b6a6dd;pointer-events:none}
+  .paper{position:absolute;left:4%;top:8%;width:350px;padding:22px 26px 20px;background:#d9c493;box-shadow:0 12px 30px rgba(0,0,0,.6);cursor:grab;touch-action:none;
+    font-family:'Homemade Apple',cursive;font-size:14.5px;line-height:1.95;color:rgba(70,44,12,.03);transform:rotate(-3deg);
+    background-image:radial-gradient(ellipse at 30% 20%,rgba(255,248,220,.4),rgba(120,82,30,.25))}
+  .paper.on{cursor:grabbing}
+  .paper p{margin:0 0 8px}
+  .lw-nb{margin-top:14px;background:#f3ecd6;border-left:26px solid #1c2742;padding:18px 24px 16px;color:#1c1c22;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+  .lw-say{font-family:'EB Garamond',Georgia,serif;font-size:19px;color:#3a362e;margin:0 0 8px}
+  .lw-line{font-family:'Caveat',cursive;font-weight:700;font-size:32px;color:#1d2a4a;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px}
+  .lw-line input{flex:1 1 220px;min-width:160px;font:inherit;color:#8c2f24;background:transparent;border:0;border-bottom:3px solid #1d2a4a;outline:0;padding:0 6px;
+    -webkit-user-select:text;user-select:text}
+  .lw-foot{display:flex;align-items:center;gap:14px;margin-top:10px}
+  .lw-msg{flex:1;min-height:26px;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:19px;color:#8c2f24}
+  .lw-nb .btn{--accent:#1c2742}.lw-nb .btn:hover:not([disabled]){color:#f3ecd6}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="paper" width="120" height="160" patternUnits="userSpaceOnUse">
+    <rect width="120" height="160" fill="#1d1630"/>
+    <g fill="#271e3f">
+      <path d="M60 12c14 18 26 26 26 44s-12 28-26 46c-14-18-26-28-26-46s12-26 26-44z"/>
+      <path d="M0 92c14 18 26 26 26 44s-12 28-26 46zM120 92c-14 18-26 26-26 44s12 28 26 46zM0-68c14 18 26 26 26 44S14 4 0 22zM120-68c-14 18-26 26-26 44s12 28 26 46z"/>
+    </g>
+    <path d="M60 34c7 10 12 15 12 24s-5 14-12 24c-7-10-12-15-12-24s5-14 12-24z" fill="#1d1630"/>
+  </pattern>
+  <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2c1a10"/><stop offset=".45" stop-color="#5a3620"/><stop offset="1" stop-color="#28170e"/></linearGradient>
+  <linearGradient id="woodL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#452814"/><stop offset=".5" stop-color="#6e4526"/><stop offset="1" stop-color="#3e2412"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="tagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0d98f"/><stop offset="1" stop-color="#b98f36"/></linearGradient>
+  <linearGradient id="crate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a6a40"/><stop offset="1" stop-color="#5f4628"/></linearGradient>
+  <linearGradient id="gdoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0c1f1a"/><stop offset=".5" stop-color="#143229"/><stop offset="1" stop-color="#0a1915"/></linearGradient>
+  <radialGradient id="dial"><stop offset="0" stop-color="#fbf3dc"/><stop offset="1" stop-color="#d8c9a0"/></radialGradient>
+  <radialGradient id="warm"><stop offset="0" stop-color="#ffd68a" stop-opacity=".62"/><stop offset=".4" stop-color="#ffb04a" stop-opacity=".16"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="46%" cy="50%" r="72%"><stop offset="0" stop-color="#03020a" stop-opacity="0"/><stop offset=".6" stop-color="#03020a" stop-opacity=".42"/><stop offset="1" stop-color="#03020a" stop-opacity=".93"/></radialGradient>
+  <linearGradient id="moon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe0ff" stop-opacity=".9"/><stop offset="1" stop-color="#8fb0ee" stop-opacity=".55"/></linearGradient>
+  <clipPath id="gl1"><rect x="662" y="302" width="36" height="250"/></clipPath>
+  <clipPath id="gl2"><rect x="632" y="280" width="96" height="282"/></clipPath>
+</defs>
+
+<rect x="-1000" width="3600" height="570" fill="url(#paper)"/>
+<rect x="-1000" width="3600" height="70" fill="#0c0916"/><rect x="-1000" y="70" width="3600" height="10" fill="#1f1830"/>
+<rect x="-1000" y="552" width="3600" height="18" fill="#1f1830"/><rect x="-1000" y="570" width="3600" height="226" fill="#100c1a"/>
+<g id="panels" fill="none" stroke="#1d1730" stroke-width="3"></g>
+<rect x="-1000" y="790" width="3600" height="16" fill="#0a0812"/>
+<rect x="-1000" y="806" width="3600" height="94" fill="#0c0a14"/>
+<g id="tiles" fill="#4c4a6e"></g>
+
+<!-- front door with the moon in the fanlight -->
+<g id="zdoor">
+  <rect x="44" y="150" width="212" height="656" fill="#150d09"/>
+  <path d="M60 244q0-80 90-80t90 80z" fill="url(#moon)"/><path d="M150 164v80M96 190l54 54M204 190l-54 54" stroke="#150d09" stroke-width="6"/>
+  <rect x="60" y="256" width="180" height="550" fill="url(#gdoor)"/>
+  <g fill="none" stroke="#081410" stroke-width="4"><rect x="76" y="276" width="66" height="150"/><rect x="158" y="276" width="66" height="150"/><rect x="76" y="446" width="66" height="130"/><rect x="158" y="446" width="66" height="130"/><rect x="76" y="596" width="66" height="190"/><rect x="158" y="596" width="66" height="190"/></g>
+  <rect x="168" y="506" width="90" height="20" rx="6" fill="#0c0c10"/><circle cx="198" cy="516" r="8" fill="#2a2a34"/>
+</g>
+<path d="M60 244h180l420 656H250z" fill="#a9c4ff" opacity=".07" pointer-events="none"/>
+
+<!-- crate nine, boxes, the constable's lantern -->
+<g id="zboxes"><rect x="286" y="606" width="112" height="76" fill="#8c6e48"/><rect x="334" y="606" width="16" height="76" fill="#b8a784" opacity=".8"/><rect x="410" y="632" width="96" height="50" fill="#7f6340"/><rect x="450" y="632" width="16" height="50" fill="#b8a784" opacity=".8"/></g>
+<g id="zcrate"><rect x="290" y="682" width="210" height="124" fill="url(#crate)"/><path d="M290 722h210M290 764h210" stroke="#3f2d18" stroke-width="2.500"/>
+  <rect x="290" y="682" width="18" height="124" fill="#4f3a20"/><rect x="482" y="682" width="18" height="124" fill="#4f3a20"/>
+  <text x="395" y="718" class="stencil" font-size="30">PM 09</text><text x="395" y="754" class="stencil" font-size="17">ANCHOR CHAIN</text><text x="395" y="792" class="stencil" font-size="15">HEAVY · TWO MEN</text></g>
+<circle id="lanternGlow" cx="560" cy="520" r="470" fill="url(#warm)" pointer-events="none"/>
+<g><rect x="520" y="752" width="44" height="10" rx="3" fill="#2a2a2f"/><rect x="526" y="700" width="32" height="52" rx="5" fill="#ffd98a" opacity=".9"/><path d="M526 700h32l-6-14h-20zM532 686q10-22 20 0" fill="none" stroke="#2a2a2f" stroke-width="5"/><rect x="524" y="696" width="36" height="6" fill="#2a2a2f"/><path d="M542 742q-7-10 0-22 7 12 0 22z" fill="#fff6d8"/></g>
+
+<!-- the tall clock -->
+<g id="clock">
+  <path d="M590 96q90-74 180 0v12H590z" fill="#24150d"/>
+  <rect x="596" y="106" width="168" height="150" fill="url(#wood)"/>
+  <rect x="604" y="114" width="12" height="134" fill="#1a0f08"/><rect x="744" y="114" width="12" height="134" fill="#1a0f08"/>
+  <circle cx="680" cy="180" r="64" fill="#c79b3b"/><circle cx="680" cy="180" r="58" fill="url(#dial)"/>
+  <g id="ticks" stroke="#2a2018" stroke-width="3.500" stroke-linecap="round"></g>
+  <path d="M680 180L673 150" stroke="#1b140f" stroke-width="6" stroke-linecap="round"/><path d="M680 180L656 222" stroke="#1b140f" stroke-width="4" stroke-linecap="round"/><circle cx="680" cy="180" r="5.500" fill="#1b140f"/>
+  <rect x="586" y="256" width="188" height="14" fill="#1a0f08"/>
+  <rect x="618" y="270" width="124" height="376" fill="url(#wood)"/>
+  <g id="doorOpen" opacity="0">
+    <rect x="632" y="280" width="96" height="352" fill="#060403"/>
+    <g stroke="#6f5a2a" stroke-width="2.500"><path d="M654 282V404M706 282V446"/></g>
+    <rect x="645" y="404" width="18" height="64" rx="4" fill="url(#brassG)"/><rect x="697" y="446" width="18" height="64" rx="4" fill="url(#brassG)"/>
+    <g clip-path="url(#gl2)"><g id="pend2"><path d="M680 290V520" stroke="#b8923a" stroke-width="3.500"/><circle cx="680" cy="530" r="17" fill="url(#brassG)"/></g></g>
+    <g id="box" class="hot">
+      <rect x="646" y="566" width="68" height="60" fill="#7a4a26"/><rect x="646" y="566" width="68" height="16" fill="#8e5a30"/><path d="M646 582h68" stroke="#3f2412" stroke-width="2"/>
+      <g fill="url(#brassG)"><path d="M646 566h16l-16 16zM714 566h-16l16 16zM646 626h16l-16-16zM714 626h-16l16-16z"/><rect x="674" y="578" width="12" height="9" rx="2"/></g>
+    </g>
+    <path d="M632 280l-36 20v344l36-12z" fill="url(#woodL)"/><path d="M596 300v344" stroke="#1a0f08" stroke-width="3"/>
+  </g>
+  <g id="doorClosed">
+    <rect x="632" y="280" width="96" height="352" fill="url(#woodL)"/>
+    <rect x="662" y="302" width="36" height="250" fill="#0b0806"/>
+    <g clip-path="url(#gl1)"><g id="pend"><path d="M680 290V520" stroke="#b8923a" stroke-width="3.500"/><circle cx="680" cy="530" r="16" fill="url(#brassG)"/></g></g>
+    <path d="M667 306v242" stroke="#fff" stroke-width="2" opacity=".12"/>
+    <ellipse cx="716" cy="462" rx="6" ry="10" fill="#c79b3b"/><ellipse cx="716" cy="462" rx="2.200" ry="4.800" fill="#0b0806"/>
+  </g>
+  <rect x="600" y="646" width="160" height="160" fill="url(#wood)"/><rect x="616" y="662" width="128" height="124" fill="none" stroke="#1a0f08" stroke-width="3"/>
+  <rect x="592" y="640" width="176" height="12" fill="#1a0f08"/><rect x="592" y="798" width="176" height="10" fill="#1a0f08"/>
+</g>
+
+<!-- the little table -->
+<g id="ztable"><ellipse cx="886" cy="652" rx="62" ry="12" fill="#4a2e1a"/><rect x="880" y="656" width="12" height="130" fill="#3a2414"/><path d="M846 806q40-34 80 0z" fill="#3a2414"/></g>
+
+<!-- Ruth -->
+<g id="zruth">
+  <ellipse cx="1042" cy="812" rx="84" ry="9" fill="#000" opacity=".4"/>
+  <rect x="1010" y="760" width="26" height="40" fill="#5a3a27"/><rect x="1048" y="760" width="26" height="40" fill="#5a3a27"/>
+  <rect x="1002" y="794" width="40" height="13" rx="5" fill="#15121c"/><rect x="1044" y="794" width="40" height="13" rx="5" fill="#15121c"/>
+  <path d="M976 660h132l14 108H962z" fill="#2a2838"/>
+  <path d="M966 544h152l-6 124H972z" fill="#1f6f6b"/>
+  <rect x="950" y="548" width="30" height="96" rx="14" fill="#1a5f5b"/><rect x="1104" y="548" width="30" height="96" rx="14" fill="#1a5f5b"/>
+  <rect x="972" y="612" width="140" height="28" rx="13" fill="#1a5f5b"/><circle cx="1104" cy="626" r="11" fill="#714a34"/>
+  <use href="#ch-ruth" x="960" y="336" width="164" height="213"/>
+</g>
+
+<!-- key board -->
+<g id="zboard"><rect x="1180" y="130" width="300" height="300" rx="5" fill="#3d2616"/><rect x="1180" y="130" width="300" height="300" rx="5" fill="none" stroke="#1c110a" stroke-width="5"/><path d="M1188 284h284" stroke="#2c1a0e" stroke-width="2"/></g>
+<g id="keys"></g>
+<rect x="1524" y="226" width="200" height="580" fill="#6f6857"/><rect x="1508" y="210" width="16" height="596" fill="#150d09"/><g fill="none" stroke="#565040" stroke-width="4"><rect x="1544" y="336" width="84" height="170"/><rect x="1544" y="526" width="84" height="250"/><rect x="1544" y="246" width="180" height="72"/></g>
+
+<!-- listening -->
+<circle id="glassHint" cx="886" cy="612" r="46" fill="none" stroke="#d9c7ff" stroke-width="2" opacity=".5" pointer-events="none"/>
+<circle id="ringA" class="ring" cx="0" cy="0" r="70" stroke-width="3"/><circle id="ringB" class="ring" cx="0" cy="0" r="34" stroke-width="2.500"/>
+<g id="glass" class="drag" style="transform:translate(886px,612px)">
+  <rect x="-40" y="-48" width="80" height="96" fill="transparent"/>
+  <path d="M-21-32h42l-5 62h-32z" fill="#cfeaf4" fill-opacity=".2" stroke="#d6eef6" stroke-width="2.500" stroke-linejoin="round"/>
+  <ellipse cx="0" cy="-32" rx="21" ry="5" fill="#d6eef6" fill-opacity=".25" stroke="#d6eef6" stroke-width="2"/>
+  <path d="M-13-22l-3 44" stroke="#fff" stroke-width="2.500" opacity=".6" stroke-linecap="round"/>
+</g>
+<text id="heardT" class="heardT" x="0" y="0">tock</text>
+
+<rect x="-1000" width="3600" height="900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="lbtn" id="lbtn">Mrs Sorley&rsquo;s letter</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), glass = $('#glass'), busy = false, listened = false, opened = false, confessed = false, done = false;
+  var gx = 886, gy = 612, zone = 'table', zoneSince = 0, phase = 0, beatT = 0, lastSay = 0, read = false;
+
+  (function () {
+    var s = '', x, r, k, a, b, y0, y1, vx = 800, vy = 520, rows = [806, 826, 852, 884, 900], W = 150, i, an;
+    for (x = -980; x < 2600; x += 180) s += '<rect x="' + (x + 14) + '" y="588" width="152" height="186"/>';
+    $('#panels').innerHTML = s; s = '';
+    function X(off, y) { return (vx + off * (y - vy) / (900 - vy)).toFixed(1); }
+    for (r = 0; r < rows.length - 1; r++) { y0 = rows[r]; y1 = rows[r + 1];
+      for (k = -18; k < 18; k++) { if ((k + r) & 1) continue; a = k * W; b = (k + 1) * W;
+        s += '<path d="M' + X(a, y0) + ' ' + y0 + 'L' + X(b, y0) + ' ' + y0 + 'L' + X(b, y1) + ' ' + y1 + 'L' + X(a, y1) + ' ' + y1 + 'Z" opacity="' + (0.22 + r * 0.08) + '"/>'; } }
+    $('#tiles').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { an = i * Math.PI / 6; s += '<path d="M' + (680 + Math.sin(an) * 46).toFixed(1) + ' ' + (180 - Math.cos(an) * 46).toFixed(1) + 'L' + (680 + Math.sin(an) * 53).toFixed(1) + ' ' + (180 - Math.cos(an) * 53).toFixed(1) + '"/>'; }
+    $('#ticks').innerHTML = s; s = '';
+    [['hum', 1222, 166], ['drip', 1292, 166], ['tock', 1362, 166], ['ding', 1432, 166], ['creak', 1257, 300], ['tick', 1327, 300], ['hiss', 1397, 300]].forEach(function (k) {
+      var x = k[1], y = k[2];
+      s += '<circle cx="' + x + '" cy="' + y + '" r="4.5" fill="#120a05"/><g class="key drag" data-k="' + k[0] + '">' +
+        '<circle cx="' + x + '" cy="' + (y + 12) + '" r="10" fill="none" stroke="#c79b3b" stroke-width="5"/>' +
+        '<path d="M' + x + ' ' + (y + 23) + 'V' + (y + 70) + 'M' + x + ' ' + (y + 55) + 'h12M' + x + ' ' + (y + 66) + 'h9" stroke="#b8923a" stroke-width="5" stroke-linecap="round" fill="none"/>' +
+        '<g transform="rotate(-5 ' + x + ' ' + (y + 92) + ')"><rect class="tagbg" x="' + (x - 29) + '" y="' + (y + 78) + '" width="58" height="28" rx="4" fill="url(#tagG)" stroke="#6f531a" stroke-width="1.5"/>' +
+        '<text x="' + x + '" y="' + (y + 98) + '" class="tagtxt">' + k[0].toUpperCase() + '</text></g>' +
+        '<rect x="' + (x - 32) + '" y="' + (y - 2) + '" width="64" height="112" fill="transparent"/></g>';
+    });
+    $('#keys').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'mystery', story: 'forty', storyTitle: 'Forty Minutes of Dark', id: 'midnight', no: 'VI', title: 'The Hall, nearly midnight',
+    go: 'Go down to the hall',
+    intro: [
+      'There is one key, and it never left her neck.',
+      'At twenty to eight she came downstairs and sent the only person in the hall to the cellar. For ten minutes there were two men on the cellar steps with an anchor chain, and an old lady upstairs with a cup of tea going cold. The curator had the ground floor to herself.',
+      'Then she heard the crate coming up. She pushed the glass door shut and did not stop to turn the key. She threw the sheet over the case and did not stop to tuck the corner. She remembered the biscuits and forgot the plate.',
+      'You put all of this to her. She listens with her hands folded. &ldquo;Then you had better search me,&rdquo; she says. &ldquo;My bag, my desk, my coat. I should like you to.&rdquo; The constables do. They find nothing.',
+      'She has not left the building tonight, and neither has anything else.'
+    ],
+    exit: {"next":"morning","w":{"902cc3be":"059eda8b","1dd0f833":"c7b7663c","44375c76":"2f94f340","b33c0e76":"0e63eb82","4ed5c360":"c7d184a8","806a059a":"d529d624"}}, tags: {"clockkey":["0a6d5714"],"spot":["a30427b5"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var HEAR = {
+    hood: ['tock', 'Tock&hellip; tock&hellip; tock. One a second. Big, slow and very old.'],
+    trunk: ['tock', 'Tock. And under the tock, something smaller and quicker.'],
+    base: ['tick-tick', 'Tick-tick-tick-tick. Twice a second. And it is coming from inside.'],
+    door: ['wind', 'Wind in the keyhole. A long way off, a gull.'],
+    crate: ['clink', 'Iron, settling. One small, tired clink.'],
+    boxes: ['nothing', 'Cardboard. Nothing at all.'],
+    board: ['chink', 'Keys, touching each other. Chink.'],
+    ruth: ['', 'Ruth Okafor looks at the glass, and then at you. She does not smile.'],
+    wall: ['nothing', 'Plaster. Nothing.'],
+    table: ['', '']
+  };
+  var ZONES = [['base', 592, 600, 768, 808], ['trunk', 618, 268, 742, 600], ['hood', 590, 60, 770, 268], ['door', 44, 150, 256, 806], ['crate', 290, 682, 500, 806],
+               ['boxes', 286, 606, 506, 682], ['board', 1180, 130, 1480, 430], ['ruth', 950, 336, 1134, 806], ['table', 820, 560, 952, 806]];
+  function zoneAt(x, y) {
+    for (var i = 0; i < ZONES.length; i++) if (x >= ZONES[i][1] && x <= ZONES[i][3] && y >= ZONES[i][2] && y <= ZONES[i][4]) return ZONES[i][0];
+    return y < 790 ? 'wall' : 'table';
+  }
+
+  function hints() {
+    if (done) return null;
+    if (!listened) return ['listen', [
+      'A chronometer never stops. So there is one thing it cannot hide. Pick up the glass from the little table and carry it to things.',
+      'Did anybody hear something strange tonight? Read Dennis&rsquo;s statement again. And where was Ruth standing at ten to eight?',
+      'Hold the glass against the tall clock: the top, the middle and the bottom. Keep it still for a moment each time.'
+    ]];
+    if (!opened) return ['key', [
+      'The long door of the tall clock is locked. The caretaker&rsquo;s keys are still on the board.',
+      'Every key is named for a sound. What sound does this big clock make? Drag that key onto the clock.'
+    ]];
+    if (!confessed) return ['box', ['Look inside the clock, right at the bottom. Click on what you find there.']];
+    return ['owner', [
+      'Open Mrs Sorley&rsquo;s letter with the button at the bottom. The ink is too faint to read in the dark. Is there any light?',
+      'Drag the letter under the lamp and read it. For how long did Thomas Harland lend the clock?',
+      'The letter says the clock comes home to his family on the day there is no museum in Pellam. Tomorrow there is no museum. Who in this hall belongs to his family? Write her name.'
+    ]];
+  }
+  function begin() {
+    beatT = setInterval(beat, 100);
+    ER.narrate([
+      'The storm has gone out to sea. The moon is in the fanlight, and for the first time tonight the hall is quiet.',
+      'Quiet enough to listen. Somebody has left a drinking glass on the little table.',
+      'Put a glass against a thing, and your ear against the glass, and you can hear inside it.'
+    ]);
+  }
+
+  /* what the glass hears */
+  function ring(sel, big) {
+    var r = $(sel); r.setAttribute('cx', gx); r.setAttribute('cy', gy);
+    try { r.animate([{ opacity: 0.8, transform: 'scale(.35)' }, { opacity: 0, transform: 'scale(' + (big ? 1.7 : 1.5) + ')' }], { duration: big ? 800 : 380 }); } catch (e) {}
+  }
+  function beat() {
+    phase = (phase + 1) % 10;
+    var z = busy || done ? null : zone, inClock = z === 'hood' || z === 'trunk' || z === 'base';
+    if (phase === 0) {
+      if (inClock) { ER.sfx.tock(z === 'base' ? 0.5 : 1); ring('#ringA', true); }
+      else if (!opened) ER.sfx.tock(0.22);
+    }
+    if (phase === 2 || phase === 7) {
+      if (z === 'base') { ER.sfx.tick(1); ring('#ringB', false); }
+      else if (z === 'trunk') { ER.sfx.tick(0.35); ring('#ringB', false); }
+      else if (opened && !done) ER.sfx.tick(0.7);
+    }
+    if (z === 'base' && !listened && Date.now() - zoneSince > 1700 && ER.check('spot', z)) found();
+  }
+  function setZone(z) {
+    if (z === zone) return;
+    zone = z; zoneSince = Date.now();
+    var h = HEAR[z], t = $('#heardT');
+    t.textContent = h[0]; t.setAttribute('x', gx); t.setAttribute('y', gy - 62); t.style.opacity = h[0] ? 0.9 : 0;
+    if (h[1] && Date.now() - lastSay > 500) { lastSay = Date.now(); ER.say(h[1], 3600); }
+    if (z === 'crate') ER.sfx.chain(); else if (z === 'board') ER.sfx.glass(); else if (z === 'door') ER.sfx.gull();
+  }
+  var ox = 0, oy = 0;
+  ER.drag(glass, {
+    start: function (e) { if (busy || listened) return false; var p = ER.pt(svg, e); ox = p.x - gx; oy = p.y - gy; $('#glassHint').style.display = 'none'; ER.audio(); },
+    move: function (e) {
+      var p = ER.pt(svg, e); gx = Math.max(30, Math.min(1570, p.x - ox)); gy = Math.max(60, Math.min(850, p.y - oy));
+      glass.style.transform = 'translate(' + gx + 'px,' + gy + 'px)';
+      var t = $('#heardT'); t.setAttribute('x', gx); t.setAttribute('y', gy - 62);
+      setZone(zoneAt(gx, gy));
+    },
+    end: function (e, moved) { if (!moved) ER.say('A drinking glass. Carry it to whatever you want to listen to.'); }
+  });
+  function found() {
+    listened = true; busy = true; ER.sfx.ok();
+    $('#heardT').style.opacity = 0;
+    ER.narrate([
+      'Two clocks. One of them has no business being in there.',
+      '&ldquo;Locked,&rdquo; says PC Marsh, trying the long door of the tall clock. &ldquo;The caretaker&rsquo;s keys are still on the board.&rdquo;'
+    ], function () { busy = false; ER.pips(1, 3); });
+  }
+
+  /* keys */
+  ER.$$('.key').forEach(function (k) {
+    var sx = 0, sy = 0, word = k.getAttribute('data-k');
+    ER.drag(k, {
+      start: function (e) { if (busy || opened) return false; var p = ER.pt(svg, e); sx = p.x; sy = p.y; k.parentNode.appendChild(k); },
+      move: function (e) { var p = ER.pt(svg, e); k.style.transform = 'translate(' + (p.x - sx) + 'px,' + (p.y - sy) + 'px)'; },
+      end: function (e, moved) {
+        var p = ER.pt(svg, e); k.style.transform = '';
+        if (!moved) { ER.wordAt(e.clientX, e.clientY, word); ER.sfx.chain(); return; }
+        if (p.x > 590 && p.x < 780 && p.y > 260 && p.y < 660) {
+          if (!listened) return ER.say('&ldquo;What makes you think it is in there?&rdquo; says PC Marsh. &ldquo;Show me first.&rdquo;');
+          ER.sfx.click();
+          if (!ER.check('clockkey', word)) { ER.sfx.no(); return ER.say('The key marked ' + word.toUpperCase() + ' goes in. It will not turn.'); }
+          openClock(word);
+        }
+      }
+    });
+  });
+  function openClock(word) {
+    opened = true; ER.sfx.clunk(); ER.pips(2, 3);
+    ER.say('The key marked ' + word.toUpperCase() + ' turns.', 2600);
+    setTimeout(function () {
+      $('#doorClosed').setAttribute('opacity', 0); $('#doorClosed').style.pointerEvents = 'none'; $('#doorOpen').setAttribute('opacity', 1); ER.sfx.creak();
+      ER.say('The long door swings open. A pendulum, two brass weights, a hundred years of dust. And on the floor of the case, a wooden box with brass corners.', 9000);
+    }, 900);
+  }
+  $('#box').addEventListener('click', function () {
+    if (!opened || busy || confessed) { if (confessed) openLetter(); return; }
+    var c = CAST.ruth;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('ruth'),
+      lines: [
+        { note: 'Ruth Okafor does not argue. She walks past you, lifts the box out of the clock, and holds it against her cardigan. It is still ticking.', a: 'It has run for a hundred and fifty-eight years. In the city it would have stopped in a week.' },
+        'I was not going to sell it. I was going to wind it.',
+        { q: 'You let me suspect three other people.', a: 'Yes. I did. I am not proud of that part.' }
+      ],
+      clue: { id: 'ruth-hall', title: 'Ruth Okafor, in the hall' },
+      done: function (seen) {
+        if (!seen || confessed) return;
+        confessed = true; busy = true; ER.pips(3, 3);
+        ER.narrate([
+          'Behind her, the tall clock goes back to tock, tock, tock.',
+          'PC Marsh opens his notebook. &ldquo;One chronometer, recovered 11.40 p.m.,&rdquo; he writes. &ldquo;Property of&hellip;&rdquo; He stops and looks up. &ldquo;Property of who? There is no museum after tomorrow.&rdquo;',
+          'Mrs Sorley is holding something out to you. It is a letter. The ink is sixty-five years old and the colour of weak tea.'
+        ], function () { busy = false; $('#lbtn').classList.add('on'); openLetter(); });
+      }
+    });
+  });
+  $('#lbtn').addEventListener('click', function () { if (!busy) openLetter(); });
+
+  /* the letter: the ink only shows in strong light */
+  var LAMP = '<svg viewBox="0 0 150 150"><path d="M75 0V40" stroke="#2a2440" stroke-width="5"/><path d="M38 40h74l22 46H16z" fill="#1f5a48"/><path d="M38 40h74" stroke="#3f8a70" stroke-width="3"/><ellipse cx="75" cy="88" rx="59" ry="9" fill="#ffe9b0"/></svg>';
+  var LETTER = '<p>Harland&rsquo;s Yard, Pellam<br>3 May 1961</p><p>To the Museum of Pellam.</p>' +
+    '<p>I lend you my father&rsquo;s chronometer, which he carried round Cape Horn eleven times, for as long as the museum shall stand in Pellam.</p>' +
+    '<p>On the day it does not, the clock comes home to my family.</p><p>Thomas Harland</p>';
+  var px = null, py = null;
+  function openLetter() {
+    var box = ER.el('div', 'lw');
+    box.innerHTML = '<div class="lw-top"><div class="lw-lamp">' + LAMP + '</div><div class="lw-hint">The ink has faded to the colour of the paper. There is a lamp.</div><div class="paper drag">' + LETTER + '</div></div>' +
+      '<div class="lw-nb"><p class="lw-say">PC Marsh holds out his notebook and his pencil. &ldquo;You write it,&rdquo; he says.</p>' +
+      '<div class="lw-line"><span>One chronometer, recovered 11.40 p.m. Property of</span><input type="text" autocomplete="off" spellcheck="false" maxlength="40"></div>' +
+      '<div class="lw-foot"><div class="lw-msg"></div><button type="button" class="btn">Write it down</button></div></div>';
+    ER.glossIn(box, '.lw-hint, .lw-say');
+    var top = box.querySelector('.lw-top'), paper = box.querySelector('.paper'), input = box.querySelector('input'), msg = box.querySelector('.lw-msg'), sx, sy;
+    function light() {
+      var t = top.getBoundingClientRect(), p = paper.getBoundingClientRect();
+      var d = Math.hypot((p.left + p.width / 2) - (t.left + t.width * 0.73), (p.top + p.height / 2) - (t.top + t.height * 0.5));
+      var a = Math.max(0.03, Math.min(1, 1.25 - d / (t.width * 0.3)));
+      paper.style.color = 'rgba(70,44,12,' + a.toFixed(2) + ')';
+      if (a > 0.9 && !read) { read = true; ER.addClue('harland', 'Thomas Harland’s letter, 1961', LETTER, 'letter', 'Letter'); box.querySelector('.lw-hint').style.display = 'none'; }
+    }
+    function place() { if (px != null) { paper.style.left = px + 'px'; paper.style.top = py + 'px'; } }
+    ER.drag(paper, {
+      start: function (e) { if (done) return false; var t = top.getBoundingClientRect(), p = paper.getBoundingClientRect(); sx = e.clientX - (p.left - t.left); sy = e.clientY - (p.top - t.top); },
+      move: function (e) {
+        var t = top.getBoundingClientRect();
+        px = Math.max(-60, Math.min(t.width - 200, e.clientX - sx)); py = Math.max(-40, Math.min(t.height - 120, e.clientY - sy));
+        place(); light();
+      }
+    });
+    function submit() {
+      if (done) return;
+      var ws = ER.words(input.value);
+      if (!ws.length) { msg.textContent = 'The line is still empty.'; return; }
+      if (ER.exit(ws, { delay: 4600 })) {
+        done = true; busy = true; clearInterval(beatT); input.disabled = true; $('#lbtn').classList.remove('on');
+        msg.style.color = '#2f6b45'; msg.textContent = 'PC Marsh reads it, nods, and underlines it twice.';
+        setTimeout(ER.closeAll, 2600);
+        return;
+      }
+      ER.sfx.no(); ER.shake(box.querySelector('.lw-nb'));
+      msg.textContent = read ? 'PC Marsh looks at the letter, and then at what you wrote. “That is not what it says.”'
+                             : '“Are you sure?” says PC Marsh. “We have not even read the letter.”';
+    }
+    box.querySelector('.btn').addEventListener('click', submit);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); e.stopPropagation(); });
+    ER.open('ov-lock', box);
+    place(); light();
+  }
+})();
+</script>
+</body>
+</html>

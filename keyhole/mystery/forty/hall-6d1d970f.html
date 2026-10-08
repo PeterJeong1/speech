@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Hall · Forty Minutes of Dark</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<style>
+  body{--bg:#120a08;--accent:#e2b65a;--font-display:'IM Fell English SC',serif;--font-ui:'Oswald',sans-serif;
+    --tc-bg:rgba(16,8,6,.88);--cap-bg:rgba(18,10,8,.92);--panel:#1d1210;--face-bg:#2b3550;--q-ink:#c9a878;--fade:#080403}
+  .tc-room{font-size:clamp(40px,6vw,82px)}
+  .doorname{font-family:'IM Fell English SC',serif;font-size:30px;letter-spacing:3px;fill:#8a6a22;text-anchor:middle}
+  .stencil{font-family:'Stardos Stencil',serif;font-weight:700;fill:#2a1c10;text-anchor:middle}
+  .chalk{font-family:'Caveat',cursive;font-weight:700;font-size:32px;fill:#e9e4d6;opacity:.72;text-anchor:middle}
+  .tagtxt{font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:1px;fill:#3a2a08;text-anchor:middle;pointer-events:none}
+  .cardtxt{font-family:'Caveat',cursive;font-weight:700;font-size:21px;fill:#1d2a4a}
+  .boxlab{font-family:'Special Elite',monospace;font-size:11px;fill:#3a2f22;text-anchor:middle}
+  .sfxt{font-family:'IM Fell English SC',serif;font-style:italic;fill:#f0dcae;opacity:0;pointer-events:none;text-anchor:middle}
+  #pend{transform-origin:684px 300px;animation:swing 1s ease-in-out infinite alternate}
+  @keyframes swing{from{transform:rotate(-3.1deg)}to{transform:rotate(3.1deg)}}
+  .key{transition:transform .25s}
+  .key.on{transition:none}
+  .key:hover .tagbg{filter:brightness(1.25)}
+  #card{animation:cardGlow 3s ease-in-out infinite}
+  @keyframes cardGlow{50%{filter:brightness(1.2)}}
+  #dark{transition:opacity 1.1s}
+  #flame{animation:flame 2.4s steps(2) infinite}
+  @keyframes flame{0%,100%{opacity:.56}40%{opacity:.5}60%{opacity:.6}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="paper" width="120" height="160" patternUnits="userSpaceOnUse">
+    <rect width="120" height="160" fill="#4b1c22"/>
+    <g fill="#5e272d">
+      <path d="M60 12c14 18 26 26 26 44s-12 28-26 46c-14-18-26-28-26-46s12-26 26-44z"/>
+      <path d="M0 92c14 18 26 26 26 44s-12 28-26 46zM120 92c-14 18-26 26-26 44s12 28 26 46zM0-68c14 18 26 26 26 44S14 4 0 22zM120-68c-14 18-26 26-26 44s12 28 26 46z"/>
+    </g>
+    <path d="M60 34c7 10 12 15 12 24s-5 14-12 24c-7-10-12-15-12-24s5-14 12-24z" fill="#4b1c22"/>
+    <circle cx="60" cy="58" r="4.500" fill="#6b3036"/><circle cx="0" cy="138" r="4.500" fill="#6b3036"/><circle cx="120" cy="138" r="4.500" fill="#6b3036"/>
+  </pattern>
+  <linearGradient id="gdoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#143229"/><stop offset=".5" stop-color="#1e4a3c"/><stop offset="1" stop-color="#12291f"/></linearGradient>
+  <linearGradient id="cdoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a69b80"/><stop offset=".5" stop-color="#c4b99c"/><stop offset="1" stop-color="#9a8f75"/></linearGradient>
+  <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2c1a10"/><stop offset=".45" stop-color="#4a2c1a"/><stop offset="1" stop-color="#28170e"/></linearGradient>
+  <linearGradient id="woodL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#402614"/><stop offset=".5" stop-color="#5c391f"/><stop offset="1" stop-color="#3a2212"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="tagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0d98f"/><stop offset="1" stop-color="#b98f36"/></linearGradient>
+  <linearGradient id="crate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a27c48"/><stop offset="1" stop-color="#7a5a32"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffe0a0" stop-opacity=".75"/><stop offset=".35" stop-color="#ffbf66" stop-opacity=".22"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".88"/></radialGradient>
+  <radialGradient id="dial"><stop offset="0" stop-color="#fbf3dc"/><stop offset="1" stop-color="#d8c9a0"/></radialGradient>
+  <clipPath id="glassClip"><rect x="666" y="330" width="36" height="270"/></clipPath>
+  <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+
+<!-- wall, panelling, floor -->
+<rect x="-1000" width="3600" height="520" fill="url(#paper)"/>
+<rect x="-1000" width="3600" height="80" fill="#190e0a"/><rect x="-1000" y="80" width="3600" height="10" fill="#3c2517"/>
+<rect x="-1000" y="500" width="3600" height="20" fill="#3c2517"/><rect x="-1000" y="500" width="3600" height="4" fill="#5a3a22"/>
+<rect x="-1000" y="520" width="3600" height="226" fill="#231510"/>
+<g id="panels" fill="none" stroke="#3d2718" stroke-width="3"></g>
+<rect x="-1000" y="742" width="3600" height="20" fill="#170d09"/>
+<rect x="-1000" y="762" width="3600" height="138" fill="#17110e"/>
+<g id="tiles" fill="#a59a80"></g>
+<rect x="-1000" y="762" width="3600" height="10" fill="#000" opacity=".45"/>
+
+<!-- pendant lamp -->
+<ellipse id="flame" cx="800" cy="330" rx="620" ry="420" fill="url(#lampG)" opacity=".56"/>
+<path d="M800 88V150" stroke="#1a100b" stroke-width="5"/>
+<path d="M766 150h68l18 42H748z" fill="#274d3f"/><path d="M766 150h68" stroke="#3f7a65" stroke-width="3"/>
+<ellipse cx="800" cy="194" rx="50" ry="9" fill="#ffe7ad"/>
+
+<!-- front door, seen from inside -->
+<g id="frontdoor" class="hot">
+  <rect x="54" y="210" width="252" height="552" fill="#2a180f"/>
+  <rect x="70" y="226" width="220" height="536" fill="url(#gdoor)"/>
+  <g fill="none" stroke="#0d241d" stroke-width="4"><rect x="88" y="246" width="84" height="150"/><rect x="188" y="246" width="84" height="150"/><rect x="88" y="416" width="84" height="120"/><rect x="188" y="416" width="84" height="120"/><rect x="88" y="556" width="84" height="184"/><rect x="188" y="556" width="84" height="184"/></g>
+  <rect x="204" y="468" width="104" height="22" rx="6" fill="#15151a"/><rect x="198" y="460" width="18" height="38" rx="3" fill="#2a2a31"/><rect x="262" y="460" width="18" height="38" rx="3" fill="#2a2a31"/>
+  <circle cx="240" cy="479" r="9" fill="#3a3a44"/><rect x="290" y="462" width="18" height="34" rx="3" fill="#2a2a31"/>
+  <path d="M250 206q24-42 62-18" stroke="#8b6d28" stroke-width="4" fill="none"/>
+  <path d="M300 186q12-10 24 0l4 22h-32z" fill="url(#brassG)"/><circle cx="312" cy="212" r="4" fill="#7d5f1d"/>
+</g>
+<g id="mat" class="hot"><path d="M64 786h236l26 44H42z" fill="#3d2c1c"/><path d="M78 796h208l14 24H66z" fill="none" stroke="#5a4229" stroke-width="2"/></g>
+
+<!-- coat hooks -->
+<g id="coat" class="hot">
+  <rect x="326" y="288" width="180" height="14" rx="3" fill="#2a180f"/>
+  <g fill="url(#brassG)"><circle cx="350" cy="295" r="6.500"/><circle cx="416" cy="295" r="6.500"/><circle cx="482" cy="295" r="6.500"/></g>
+  <path d="M416 298q-30 6-44 34l-10 226q54 12 108 0l-10-226q-14-28-44-34z" fill="#6c5036"/>
+  <path d="M416 298q-10 20-10 50v214M416 298q10 20 10 50" stroke="#4d3824" stroke-width="3" fill="none"/>
+  <path d="M398 304q18 14 36 0l-6 28q-12 8-24 0z" fill="#59412b"/>
+  <rect x="372" y="436" width="34" height="38" rx="4" fill="none" stroke="#4d3824" stroke-width="3"/>
+  <path d="M482 300v170q0 14-11 14" stroke="#101014" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M482 310l-13 150h26z" fill="#18181d"/>
+</g>
+
+<!-- boxes and crate nine -->
+<g id="boxes" class="hot">
+  <rect x="330" y="566" width="116" height="74" fill="#b28c5c"/><rect x="380" y="566" width="16" height="74" fill="#d9c7a3" opacity=".8"/>
+  <rect x="338" y="590" width="36" height="24" fill="#efe9d8"/><text x="356" y="606" class="boxlab">ROPES</text>
+  <rect x="454" y="590" width="100" height="50" fill="#a67f50"/><rect x="496" y="590" width="16" height="50" fill="#d9c7a3" opacity=".8"/>
+  <rect x="518" y="602" width="30" height="20" fill="#efe9d8"/>
+  <rect x="548" y="700" width="62" height="62" fill="#b28c5c"/><rect x="572" y="700" width="14" height="62" fill="#d9c7a3" opacity=".8"/>
+  <path d="M470 580h34v10h-34z" fill="#a23a2c"/><circle cx="478" cy="578" r="9" fill="#d9c7a3"/><circle cx="478" cy="578" r="3.500" fill="#a23a2c"/>
+</g>
+<g id="crate9" class="hot">
+  <rect x="340" y="640" width="200" height="122" fill="url(#crate)"/>
+  <path d="M340 680h200M340 722h200" stroke="#5b4124" stroke-width="2.500"/>
+  <rect x="340" y="640" width="18" height="122" fill="#6b4d2b"/><rect x="522" y="640" width="18" height="122" fill="#6b4d2b"/>
+  <text x="440" y="676" class="stencil" font-size="30">PM 09</text>
+  <text x="440" y="712" class="stencil" font-size="17">ANCHOR CHAIN</text>
+  <text x="440" y="750" class="stencil" font-size="15">HEAVY · TWO MEN</text>
+</g>
+
+<!-- the tall clock -->
+<g id="clock" class="hot">
+  <path d="M612 172q72-56 144 0v10H612z" fill="#2c1a10"/>
+  <rect x="618" y="180" width="132" height="124" fill="url(#wood)"/>
+  <rect x="624" y="186" width="10" height="112" fill="#1f120a"/><rect x="734" y="186" width="10" height="112" fill="#1f120a"/>
+  <circle cx="684" cy="240" r="50" fill="#c79b3b"/><circle cx="684" cy="240" r="45" fill="url(#dial)"/>
+  <g id="ticks" stroke="#2a2018" stroke-width="3" stroke-linecap="round"></g>
+  <path d="M684 240L655 233" stroke="#1b140f" stroke-width="5" stroke-linecap="round"/>
+  <path d="M684 240L721 224" stroke="#1b140f" stroke-width="3.500" stroke-linecap="round"/>
+  <circle cx="684" cy="240" r="4.500" fill="#1b140f"/>
+  <rect x="610" y="300" width="148" height="12" fill="#1f120a"/>
+  <rect x="638" y="312" width="92" height="330" fill="url(#wood)"/>
+  <rect x="650" y="322" width="68" height="290" fill="url(#woodL)"/>
+  <rect x="666" y="330" width="36" height="270" fill="#0d0907"/>
+  <g clip-path="url(#glassClip)"><g id="pend"><path d="M684 300V566" stroke="#b8923a" stroke-width="3"/><circle cx="684" cy="574" r="14" fill="url(#brassG)"/></g></g>
+  <path d="M670 334v262" stroke="#fff" stroke-width="2" opacity=".12"/>
+  <ellipse cx="710" cy="470" rx="4.500" ry="7.500" fill="#c79b3b"/><ellipse cx="710" cy="470" rx="1.600" ry="3.600" fill="#0d0907"/>
+  <rect x="624" y="642" width="120" height="120" fill="url(#wood)"/><rect x="638" y="656" width="92" height="88" fill="none" stroke="#1f120a" stroke-width="3"/>
+  <rect x="618" y="636" width="132" height="10" fill="#1f120a"/>
+</g>
+<text id="tockTxt" class="sfxt" x="600" y="232" font-size="30">tock</text>
+<text id="tickTxt" class="sfxt" x="770" y="716" font-size="17">tick</text>
+
+<!-- cellar door -->
+<g id="cellar" class="hot">
+  <rect x="770" y="368" width="140" height="394" fill="#2a180f"/>
+  <rect x="780" y="380" width="120" height="382" fill="#3c2a1d"/>
+  <path d="M810 380v382M840 380v382M870 380v382" stroke="#2a1c13" stroke-width="3"/>
+  <path d="M780 430h120v16H780zM780 690h120v16H780z" fill="#2f2016"/>
+  <rect x="842" y="556" width="62" height="16" rx="5" fill="#15151a"/><circle cx="858" cy="564" r="7" fill="#3a3a44"/>
+  <text x="840" y="512" class="chalk">cellar</text>
+  <rect x="780" y="752" width="120" height="10" fill="#050302"/>
+</g>
+
+<!-- Chart Room door -->
+<g id="chartdoor" class="hot">
+  <rect x="1074" y="210" width="252" height="552" fill="#2a180f"/>
+  <rect x="1090" y="226" width="220" height="536" fill="url(#cdoor)"/>
+  <g fill="none" stroke="#877c62" stroke-width="4"><rect x="1108" y="336" width="84" height="170"/><rect x="1208" y="336" width="84" height="170"/><rect x="1108" y="526" width="84" height="212"/><rect x="1208" y="526" width="84" height="212"/><rect x="1108" y="246" width="184" height="72"/></g>
+  <text x="1200" y="293" class="doorname">CHART ROOM</text>
+  <circle cx="1282" cy="472" r="13" fill="url(#brassG)"/>
+  <ellipse cx="1282" cy="514" rx="10" ry="18" fill="url(#brassG)"/><circle cx="1282" cy="509" r="3.800" fill="#120a08"/><path d="M1279.500 510h5l2 12h-9z" fill="#120a08"/>
+  <g id="chartOpen" opacity="0" pointer-events="none"><rect x="1090" y="226" width="220" height="536" fill="#020304"/><path d="M1090 226l46 20v496l-46 20z" fill="#8f856c"/></g>
+</g>
+
+<!-- PC Marsh -->
+<g id="marsh" class="hot">
+  <ellipse cx="992" cy="768" rx="96" ry="11" fill="#000" opacity=".45"/>
+  <rect x="930" y="700" width="52" height="60" fill="#141c33"/><rect x="1002" y="700" width="52" height="60" fill="#141c33"/>
+  <rect x="922" y="752" width="64" height="15" rx="4" fill="#0a0a0d"/><rect x="998" y="752" width="64" height="15" rx="4" fill="#0a0a0d"/>
+  <rect x="894" y="514" width="32" height="150" rx="15" fill="#18213a"/><rect x="1058" y="514" width="32" height="150" rx="15" fill="#18213a"/>
+  <circle cx="910" cy="670" r="12" fill="#e6b995"/>
+  <path d="M918 506h148l8 198H910z" fill="#1b2540"/>
+  <g fill="#cfd6e2"><circle cx="992" cy="534" r="4.500"/><circle cx="992" cy="564" r="4.500"/><circle cx="992" cy="636" r="4.500"/><circle cx="992" cy="668" r="4.500"/></g>
+  <rect x="912" y="594" width="160" height="15" fill="#0b0f1c"/><rect x="982" y="591" width="20" height="21" rx="2" fill="#cfd6e2"/>
+  <g transform="rotate(9 1078 668)"><rect x="1056" y="640" width="44" height="58" rx="2" fill="#efe6cf"/><rect x="1056" y="640" width="44" height="9" fill="#1c2742"/></g>
+  <circle cx="1074" cy="668" r="12" fill="#e6b995"/>
+  <use href="#ch-marsh" x="912" y="300" width="160" height="208"/>
+</g>
+
+<!-- the caretaker's key board -->
+<g id="board">
+  <rect x="1346" y="150" width="226" height="292" rx="5" fill="#4b2f1c"/><rect x="1346" y="150" width="226" height="292" rx="5" fill="none" stroke="#2a180f" stroke-width="5"/>
+  <path d="M1352 300h214" stroke="#3a2415" stroke-width="2"/>
+</g>
+<g id="keys"></g>
+<g id="card" class="hot" transform="rotate(-3 1460 470)">
+  <rect x="1384" y="446" width="156" height="50" fill="#f3ecd4"/><circle cx="1462" cy="452" r="3.500" fill="#a23a2c"/>
+  <text x="1398" y="482" class="cardtxt">my keys — read me</text>
+</g>
+
+<rect x="-1000" width="3600" height="900" fill="url(#vig)" pointer-events="none"/>
+<rect id="dark" x="-1000" width="3600" height="900" fill="#000" opacity="0" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, briefed = false, phase = 0, clockT = 0;
+
+  /* panelling, floor tiles, dial */
+  (function () {
+    var s = '', x, r, k, a, b, y0, y1, vx = 800, vy = 430, rows = [762, 786, 818, 856, 900], W = 150, i, an;
+    for (x = -980; x < 2600; x += 180) s += '<rect x="' + (x + 14) + '" y="538" width="152" height="186"/><rect x="' + (x + 28) + '" y="552" width="124" height="158" opacity=".5"/>';
+    $('#panels').innerHTML = s; s = '';
+    function X(off, y) { return (vx + off * (y - vy) / (900 - vy)).toFixed(1); }
+    for (r = 0; r < rows.length - 1; r++) {
+      y0 = rows[r]; y1 = rows[r + 1];
+      for (k = -18; k < 18; k++) {
+        if ((k + r) & 1) continue;
+        a = k * W; b = (k + 1) * W;
+        s += '<path d="M' + X(a, y0) + ' ' + y0 + 'L' + X(b, y0) + ' ' + y0 + 'L' + X(b, y1) + ' ' + y1 + 'L' + X(a, y1) + ' ' + y1 + 'Z" opacity="' + (0.34 + r * 0.1) + '"/>';
+      }
+    }
+    $('#tiles').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) {
+      an = i * Math.PI / 6;
+      s += '<path d="M' + (684 + Math.sin(an) * 36).toFixed(1) + ' ' + (240 - Math.cos(an) * 36).toFixed(1) + 'L' + (684 + Math.sin(an) * 42).toFixed(1) + ' ' + (240 - Math.cos(an) * 42).toFixed(1) + '"/>';
+    }
+    $('#ticks').innerHTML = s;
+  })();
+
+  /* keys on the board */
+  var KEYS = [['hum', 1378, 176], ['drip', 1432, 176], ['tock', 1486, 176], ['ding', 1540, 176],
+              ['creak', 1405, 304], ['tick', 1459, 304], ['hiss', 1513, 304]];
+  (function () {
+    var s = '';
+    KEYS.forEach(function (k) {
+      var x = k[1], y = k[2];
+      s += '<circle cx="' + x + '" cy="' + y + '" r="4" fill="#1a0f08"/>' +
+        '<g class="key drag" data-k="' + k[0] + '">' +
+        '<circle cx="' + x + '" cy="' + (y + 11) + '" r="8.5" fill="none" stroke="#c79b3b" stroke-width="4.5"/>' +
+        '<path d="M' + x + ' ' + (y + 20) + 'V' + (y + 60) + 'M' + x + ' ' + (y + 47) + 'h10M' + x + ' ' + (y + 56) + 'h8" stroke="#b8923a" stroke-width="4.5" stroke-linecap="round" fill="none"/>' +
+        '<g transform="rotate(-5 ' + x + ' ' + (y + 80) + ')">' +
+        '<rect class="tagbg" x="' + (x - 25) + '" y="' + (y + 68) + '" width="50" height="25" rx="4" fill="url(#tagG)" stroke="#6f531a" stroke-width="1.5"/>' +
+        '<text x="' + x + '" y="' + (y + 86) + '" class="tagtxt">' + k[0].toUpperCase() + '</text></g>' +
+        '<rect x="' + (x - 27) + '" y="' + (y - 2) + '" width="54" height="98" fill="transparent"/></g>';
+    });
+    $('#keys').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'mystery', story: 'forty', storyTitle: 'Forty Minutes of Dark', id: 'hall', no: 'II', title: 'The Hall',
+    go: 'Shake off the rain',
+    intro: [
+      'The bolt slides back. PC Marsh lets you in out of the rain and bolts the door again behind you.',
+      'The hall smells of dust, parcel tape and old wood. Against the wall a tall clock goes on counting, as it has since long before there was a museum here.'
+    ],
+    exit: {"next":"chart","w":{"eb3d2067":"411bd9cb"}}, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var NOTES = '<h4>PC Marsh. Notes, 9.10 p.m.</h4>' +
+    '<p><b>FRONT DOOR.</b> Bolted on the inside. The bell works.</p>' +
+    '<p><b>CHART ROOM WINDOW.</b> Painted shut. Not opened in years.</p>' +
+    '<p><b>GLASS CASE.</b> Door found open. Lock not broken. No scratches on the brass or inside the keyhole. In my opinion it was opened with its key.</p>' +
+    '<p><b>KEY TO THE CASE.</b> One exists. Mrs Okafor wears it on a green cord.</p>' +
+    '<p><b>DUST SHEET.</b> On the floor beside the case. Dry. Not torn.</p>' +
+    '<p><b>MRS SORLEY&rsquo;S BAG.</b> Knitting. Keys with a small torch. A letter dated 3 May 1961, signed T. Harland. Old brown ink, very faint. I could not read it by torchlight.</p>' +
+    '<p><b>MR PYM&rsquo;S COAT.</b> One brass harbour whistle, museum label no. 214. Value &pound;5. He says: &ldquo;Thirty-one years. I wanted one thing.&rdquo;</p>' +
+    '<p><b>MR REYES&rsquo;S RUCKSACK.</b> Sandwiches. Parcel tape. A phone. Yesterday he looked up the price of a marine chronometer.</p>' +
+    '<p><b>MRS OKAFOR&rsquo;S HANDBAG.</b> Purse. Reading glasses. Keys to the building.</p>' +
+    '<p><b>CELLAR.</b> 22 crates, sealed and listed. Not opened.</p>' +
+    '<p><b>CHRONOMETER.</b> Not found. There are two of us and twenty-two sealed crates. Before we break one seal, tell us where to look.</p>';
+  var CARD = '<h4>My keys</h4>' +
+    '<p>I never could remember numbers. So every key on this board is named for the sound of its room.</p>' +
+    '<p>Thirty-one years, and I have not once picked up the wrong one.</p>' +
+    '<p>D. Pym</p>';
+
+  function hints() {
+    if (!briefed) return ['marsh', [
+      'PC Marsh is waiting for you. Click on him, and listen to everything he says.',
+      'Keep clicking Next until he gives you his notebook. Read the notebook too.'
+    ]];
+    return ['key', [
+      'The Chart Room door is locked, and the keys are on the board beside it. Read the little card under the board.',
+      'Every key is named for the sound of its room. What did PC Marsh say you could hear from the Chart Room door? His words are in your Notebook.',
+      'The chronometer in the Chart Room ticks. The big clock in this hall goes &ldquo;tock&rdquo;. Drag the right key onto the keyhole of the Chart Room door.'
+    ]];
+  }
+  function begin() {
+    clockT = setInterval(beat, 100);
+    ER.narrate(['PC Marsh shuts his notebook, opens it again, and waits for you to speak first.']);
+  }
+  /* the tall clock: one slow tock a second. And, very quietly, something quicker. */
+  function beat() {
+    phase = (phase + 1) % 10;
+    if (phase === 0) { ER.sfx.tock(0.55); puff('#tockTxt', 0.5, 900); }
+    if (phase === 2 || phase === 7) { ER.sfx.tick(0.16); puff('#tickTxt', 0.2, 380); }
+  }
+  function puff(sel, op, ms) {
+    try { $(sel).animate([{ opacity: 0 }, { opacity: op, offset: 0.2 }, { opacity: 0 }], { duration: ms }); } catch (e) {}
+  }
+
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#frontdoor', 'bolt', 'Bolted again. Nobody goes in or out until you say so.');
+  thing('#mat', 'doormat', null);
+  thing('#coat', 'coat hook', 'A caretaker&rsquo;s coat on its hook. PC Marsh has already been through the pockets. It is in his notes.');
+  thing('#boxes', 'parcel tape', 'Boxes, taped and labelled for the van. Somebody was working beside this door all evening.');
+  thing('#crate9', 'crate', 'PM 09. Anchor chain. Somebody got it as far as the front door and stopped for breath.');
+  thing('#clock', 'pendulum', 'Tock. Tock. Tock. It belongs to the building, and it is the one thing here that is not going to the city.');
+  thing('#cellar', null, 'The cellar. Cold air comes under the door, and somewhere below there is a drip.');
+  $('#chartdoor').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'keyhole');
+    ER.say('Locked. PC Marsh turned the key himself and hung it on the caretaker&rsquo;s board.');
+  });
+  $('#card').addEventListener('click', function () {
+    ER.read({ html: CARD, cls: 'hand', clue: { id: 'keycard', title: 'Card on the key board', kind: 'Note' } });
+  });
+  $('#marsh').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.marsh;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('marsh'), last: 'Take the notebook',
+      lines: [
+        'Evening. PC Marsh. I&rsquo;ve kept all four of them in the building, as you asked. Nobody is pleased about it.',
+        'This is the hall. Through that door is the Chart Room, where the chronometer lived. They tell me you could hear it ticking from where we&rsquo;re standing. Twice a second.',
+        'Behind the Chart Room there&rsquo;s a kitchen the size of a cupboard, with a kettle that never stops hissing. The stairs go up to the office. Mind them, they creak. And down there is the cellar: crates, the fuse box, and a drip that has already gone down my neck.',
+        'At ten past eight every light in the harbour went out. At ten to nine they came back on, and the glass case was open and empty. Forty minutes of dark. Plenty of time for anybody.',
+        'I locked the Chart Room so nobody could tidy up. The key is on the caretaker&rsquo;s board over there, with all the others. He labels them his own way. You&rsquo;ll see.',
+        'My notes are in this book. Take it. If I were you, I&rsquo;d start with the room.'
+      ],
+      clue: { id: 'marsh', title: 'PC Marsh: the building', kind: 'Briefing' },
+      done: function (seen) {
+        if (!seen) return;
+        if (!briefed) { briefed = true; ER.read({ html: NOTES, cls: 'book', clue: { id: 'notes', title: 'PC Marsh’s notes', kind: 'Police notebook' },
+          done: function () { ER.say('The Chart Room is locked. The keys are on the board beside it.'); } }); }
+      }
+    });
+  });
+
+  /* dragging a key to a lock */
+  ER.$$('.key').forEach(function (k) {
+    var sx = 0, sy = 0, word = k.getAttribute('data-k');
+    ER.drag(k, {
+      start: function (e) { if (busy) return false; var p = ER.pt(svg, e); sx = p.x; sy = p.y; k.parentNode.appendChild(k); },
+      move: function (e) { var p = ER.pt(svg, e); k.style.transform = 'translate(' + (p.x - sx) + 'px,' + (p.y - sy) + 'px)'; },
+      end: function (e, moved) {
+        var p = ER.pt(svg, e);
+        k.style.transform = '';
+        if (!moved) { ER.wordAt(e.clientX, e.clientY, word); ER.sfx.chain(); return; }
+        if (Math.abs(p.x - 1282) < 70 && Math.abs(p.y - 510) < 80) return tryDoor(word);
+        if (Math.abs(p.x - 700) < 80 && p.y > 300 && p.y < 640) return ER.say('PC Marsh coughs. &ldquo;The Chart Room, if you don&rsquo;t mind. We can admire the furniture later.&rdquo;');
+        if (Math.abs(p.x - 840) < 80 && p.y > 380) return ER.say('&ldquo;Not down there yet,&rdquo; says PC Marsh. &ldquo;The Chart Room first.&rdquo;');
+      }
+    });
+  });
+  function tryDoor(word) {
+    ER.sfx.click();
+    if (!ER.exit([word], { quiet: true, delay: 3600 })) {
+      ER.sfx.no();
+      ER.say('The key marked ' + word.toUpperCase() + ' goes in. It will not turn.');
+      return;
+    }
+    busy = true; clearInterval(clockT);
+    ER.sfx.clunk();
+    ER.say('The key marked ' + word.toUpperCase() + ' turns.', 5000);
+    setTimeout(function () { $('#chartOpen').setAttribute('opacity', 1); ER.sfx.creak(); }, 700);
+    setTimeout(function () { ER.sfx.thunder(); $('#dark').setAttribute('opacity', 0.93); }, 1900);
+  }
+})();
+</script>
+</body>
+</html>

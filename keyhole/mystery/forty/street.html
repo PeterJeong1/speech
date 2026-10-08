@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Harbour Road · Forty Minutes of Dark</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<style>
+  body{--bg:#04080e;--accent:#f2b453;--font-display:'Cinzel',serif;--font-ui:'Oswald',sans-serif;
+    --tc-bg:rgba(3,7,12,.84);--cap-bg:rgba(4,9,15,.9)}
+  .tc-room{letter-spacing:.06em;font-weight:600}
+  .rain{position:fixed;left:-30%;top:-60%;width:180%;height:220%;pointer-events:none;z-index:5;will-change:transform;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='240'%3E%3Cg stroke='%23bcd6e6' stroke-width='1.3' stroke-linecap='round' opacity='.5'%3E%3Cpath d='M100 10l-14 28M40 70l-16 32M110 130l-12 24M60 190l-16 32M20 150l-10 20M75 20l-8 16'/%3E%3C/g%3E%3C/svg%3E");
+    animation:rain1 .44s linear infinite}
+  .rain.r2{background-size:190px 380px;opacity:.45;animation:rain2 .66s linear infinite}
+  @keyframes rain1{to{transform:translate3d(-120px,240px,0)}}
+  @keyframes rain2{to{transform:translate3d(-190px,380px,0)}}
+  .vig{position:fixed;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:6;
+    background:radial-gradient(ellipse at 50% 58%,transparent 42%,rgba(0,0,0,.6) 100%)}
+  .sign{font-family:'Cinzel',serif;font-weight:600;font-size:28px;letter-spacing:5px;fill:#e2c06a}
+  .pulltxt{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:1.5px;fill:#5a4312;text-anchor:middle;pointer-events:none}
+  .faint{font-family:'Cinzel',serif;font-size:19px;letter-spacing:4px;fill:#3d566b;opacity:.5}
+  .bill{font-family:'Oswald',sans-serif;font-weight:600;fill:#2b3640}
+  .ding{font-family:'Cinzel',serif;font-style:italic;font-weight:600;font-size:34px;fill:#ffd98a;text-anchor:middle;pointer-events:none;opacity:0}
+  #pull{transition:transform .28s cubic-bezier(.3,1.7,.5,1)}
+  #pull.on{transition:none}
+  #notice{animation:noticeGlow 2.6s ease-in-out infinite}
+  @keyframes noticeGlow{50%{filter:brightness(1.35)}}
+  .boat{animation:bob 4.2s ease-in-out infinite alternate}
+  .boat.b2{animation-duration:3.3s;animation-delay:-1.2s}
+  @keyframes bob{from{transform:rotate(-1.6deg) translateY(0)}to{transform:rotate(1.4deg) translateY(4px)}}
+  .ripple{animation:ripple 2.4s linear infinite;transform-box:fill-box;transform-origin:center}
+  .ripple.d2{animation-delay:-1.1s}.ripple.d3{animation-delay:-1.8s}
+  @keyframes ripple{from{transform:scale(.2);opacity:.75}to{transform:scale(1.6);opacity:0}}
+  #lhBeam{animation:beam 5s linear infinite;transform-origin:92px 503px}
+  @keyframes beam{0%,100%{opacity:0;transform:rotate(-8deg)}45%{opacity:.16}50%{opacity:.2;transform:rotate(3deg)}55%{opacity:.16}90%{opacity:0}}
+  #lhLight{animation:lh 5s linear infinite}
+  @keyframes lh{0%,35%,65%,100%{opacity:.25}50%{opacity:1}}
+  .seaLine{stroke-dasharray:26 60;animation:sea 5s linear infinite}
+  @keyframes sea{to{stroke-dashoffset:-172}}
+  #opened{transition:opacity .9s}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04080e"/><stop offset=".6" stop-color="#0b1a29"/><stop offset="1" stop-color="#173446"/></linearGradient>
+  <linearGradient id="flashG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef4ff"/><stop offset="1" stop-color="#7f9cc4"/></linearGradient>
+  <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#143646"/><stop offset="1" stop-color="#07131c"/></linearGradient>
+  <radialGradient id="glow"><stop offset="0" stop-color="#ffd98a" stop-opacity=".95"/><stop offset=".22" stop-color="#ffb347" stop-opacity=".4"/><stop offset="1" stop-color="#ff9d3c" stop-opacity="0"/></radialGradient>
+  <linearGradient id="winLit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe29a"/><stop offset="1" stop-color="#f09a3c"/></linearGradient>
+  <linearGradient id="winDark" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#101d2a"/><stop offset=".5" stop-color="#16293a"/><stop offset="1" stop-color="#0a131c"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#12302a"/><stop offset=".5" stop-color="#1f4d3f"/><stop offset="1" stop-color="#0f2822"/></linearGradient>
+  <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="wallShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#03070c" stop-opacity=".62"/><stop offset=".45" stop-color="#03070c" stop-opacity=".2"/><stop offset="1" stop-color="#03070c" stop-opacity=".5"/></linearGradient>
+  <linearGradient id="refl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffbe5c" stop-opacity=".7"/><stop offset="1" stop-color="#ffbe5c" stop-opacity="0"/></linearGradient>
+  <pattern id="brick" width="56" height="28" patternUnits="userSpaceOnUse">
+    <rect width="56" height="28" fill="#2b1b1b"/>
+    <rect x="1" y="1" width="26" height="12" fill="#4a2b28"/><rect x="29" y="1" width="26" height="12" fill="#402524"/>
+    <rect x="-13" y="15" width="26" height="12" fill="#452826"/><rect x="15" y="15" width="26" height="12" fill="#502e2a"/><rect x="43" y="15" width="26" height="12" fill="#3d2322"/>
+  </pattern>
+  <pattern id="cob" width="64" height="36" patternUnits="userSpaceOnUse">
+    <rect width="64" height="36" fill="#080d13"/>
+    <ellipse cx="16" cy="9" rx="14" ry="7" fill="#141e29"/><ellipse cx="48" cy="9" rx="14" ry="7" fill="#101924"/>
+    <ellipse cx="0" cy="27" rx="14" ry="7" fill="#131c27"/><ellipse cx="32" cy="27" rx="14" ry="7" fill="#17232f"/><ellipse cx="64" cy="27" rx="14" ry="7" fill="#131c27"/>
+    <path d="M6 6q10-5 20 0M38 6q10-5 20 0M22 24q10-5 20 0" stroke="#33495c" stroke-width="1.3" fill="none" opacity=".75"/>
+  </pattern>
+  <filter id="b3" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="b8" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8"/></filter>
+  <filter id="b22" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="22"/></filter>
+  <symbol id="sash" viewBox="0 0 96 150">
+    <rect x="1.5" y="1.5" width="93" height="147" fill="none" stroke="#cfc9bb" stroke-width="5"/>
+    <path d="M0 75h96M48 0v150M0 38h96M0 112h96" stroke="#cfc9bb" stroke-width="3"/>
+  </symbol>
+  <symbol id="gull" viewBox="0 0 44 30">
+    <path d="M3 22Q10 8 25 11L31 5Q38 4 39 10L44 11L39 14Q37 22 24 24L9 24Z"/>
+    <path d="M17 24v6M24 24v6" stroke-width="1.6" fill="none"/>
+  </symbol>
+</defs>
+
+<!-- sky -->
+<rect x="-1000" width="3600" height="900" fill="url(#sky)"/>
+<rect id="flash" x="-1000" width="3600" height="760" fill="url(#flashG)" opacity="0"/>
+<g filter="url(#b22)">
+  <ellipse cx="240" cy="110" rx="380" ry="92" fill="#060c14"/>
+  <ellipse cx="900" cy="2" rx="560" ry="62" fill="#050a11"/>
+  <ellipse cx="1430" cy="170" rx="340" ry="84" fill="#070f18"/>
+  <ellipse cx="610" cy="280" rx="300" ry="46" fill="#0d1a27" opacity=".75"/>
+  <ellipse cx="1290" cy="350" rx="360" ry="44" fill="#10202e" opacity=".65"/>
+  <ellipse cx="120" cy="330" rx="260" ry="40" fill="#0e1c2a" opacity=".7"/>
+  <ellipse cx="-420" cy="150" rx="420" ry="90" fill="#060c14"/><ellipse cx="2040" cy="110" rx="460" ry="90" fill="#060c14"/>
+</g>
+<path id="bolt1" d="M1330 0l-26 98 36 14-60 132 32 12-66 152" stroke="#fff" stroke-width="4" fill="none" stroke-linejoin="round" opacity="0" filter="url(#b3)"/>
+<path id="bolt2" d="M214 0l22 84-32 16 48 112-28 14 42 124" stroke="#fff" stroke-width="4" fill="none" stroke-linejoin="round" opacity="0" filter="url(#b3)"/>
+
+<!-- harbour -->
+<path d="M-1000 600V578H0v6q70-26 160-12t180 2 180 10v16z" fill="#091520"/>
+<g>
+  <path d="M78 590l6-80h16l6 80z" fill="#16222d"/>
+  <rect x="81" y="496" width="22" height="15" fill="#1f2e3b"/><path d="M79 496h26l-13-13z" fill="#16222d"/>
+  <path id="lhBeam" d="M92 503L470 416V476Z" fill="#fff3c4" opacity="0"/>
+  <circle id="lhLight" cx="92" cy="503" r="5.5" fill="#fff3c4"/>
+</g>
+<rect x="-1000" y="598" width="1520" height="130" fill="url(#sea)"/>
+<g stroke="#3d7389" stroke-width="2" stroke-linecap="round" opacity=".55">
+  <path class="seaLine" d="M0 622h520"/><path class="seaLine" d="M0 650h520" style="animation-duration:6.4s"/><path class="seaLine" d="M0 684h520" style="animation-duration:4.2s"/>
+</g>
+<g fill="#ffcf7a"><circle cx="232" cy="595" r="2.6"/><circle cx="306" cy="594" r="2"/><circle cx="384" cy="596" r="2.6"/><circle cx="462" cy="595" r="2"/></g>
+<g stroke="#ffcf7a" stroke-width="2.4" opacity=".28" stroke-linecap="round"><path d="M232 604v34M306 604v22M384 604v38M462 604v24"/></g>
+<g class="boat" style="transform-origin:236px 700px">
+  <path d="M236 644V462" stroke="#1b2c39" stroke-width="6"/><path d="M196 520h80M236 474l66 168M236 474l-62 168" stroke="#1b2c39" stroke-width="2.2" fill="none"/>
+  <path d="M240 486q34 60 4 118z" fill="#22323f"/>
+  <rect x="208" y="640" width="52" height="30" fill="#14242f"/><rect x="218" y="648" width="12" height="10" fill="#0b1720"/>
+  <path d="M146 668h186l-24 38H170z" fill="#0f1d27"/><path d="M146 668h186" stroke="#b5432f" stroke-width="4"/>
+</g>
+<g class="boat b2" style="transform-origin:410px 706px">
+  <path d="M408 664V528" stroke="#1b2c39" stroke-width="5"/><path d="M382 566h52M408 536l44 124" stroke="#1b2c39" stroke-width="2" fill="none"/>
+  <path d="M352 680h118l-16 28H366z" fill="#0f1d27"/><path d="M352 680h118" stroke="#d1b45a" stroke-width="3"/>
+</g>
+<rect x="-1000" y="724" width="1520" height="50" fill="#18222c"/><path d="M-1000 724H520" stroke="#2f4152" stroke-width="3"/>
+<path d="M90 724v50M210 724v50M330 724v50M450 724v50M0 748h520" stroke="#0e161e" stroke-width="2"/>
+<g fill="#0b131b"><path d="M168 724v-26q0-11 13-11t13 11v26z"/><path d="M398 724v-26q0-11 13-11t13 11v26z"/></g>
+<path d="M194 704Q296 744 398 704" stroke="#0b131b" stroke-width="4" fill="none"/>
+
+<!-- right-hand neighbour -->
+<path d="M1112 300L1180 218H2600V772H1112Z" fill="#0b141d"/>
+<path d="M1180 218H2600" stroke="#14212d" stroke-width="3"/>
+<g fill="#0f1b27" stroke="#172634" stroke-width="3">
+  <rect x="1190" y="330" width="84" height="130"/><rect x="1340" y="330" width="84" height="130"/><rect x="1490" y="330" width="84" height="130"/>
+</g>
+<g id="shutters" stroke="#1c2d3c" stroke-width="2"><path d="M1190 350h84M1190 372h84M1190 394h84M1190 416h84M1190 438h84M1340 350h84M1340 372h84M1340 394h84M1340 416h84M1340 438h84M1490 350h84M1490 372h84M1490 394h84M1490 416h84M1490 438h84"/></g>
+<rect x="1160" y="520" width="440" height="40" fill="#101c28"/>
+<text x="1380" y="548" text-anchor="middle" class="faint">J. TREGEAR · SHIP CHANDLER</text>
+<rect x="1180" y="580" width="250" height="160" fill="#0d1822" stroke="#172634" stroke-width="3"/>
+<path d="M1180 606h250M1242 580v160M1305 580v160M1368 580v160" stroke="#172634" stroke-width="2"/>
+<rect x="1470" y="584" width="96" height="188" fill="#0e1a25" stroke="#172634" stroke-width="3"/>
+
+<!-- lamp post -->
+<ellipse cx="440" cy="424" rx="190" ry="190" fill="url(#glow)" opacity=".8"/>
+<path d="M436 446h8v326h-8z" fill="#0b131b"/><path d="M426 772h28v-12h-28zM430 446h20l-4-8h-12z" fill="#0b131b"/>
+<path d="M426 438h28l-5-34h-18z" fill="#ffdc8f"/><path d="M422 404h36l-8-12h-20zM426 438h28" fill="#0b131b" stroke="#0b131b" stroke-width="3"/>
+
+<!-- the museum -->
+<g>
+  <path d="M484 240L548 150H1052L1116 240Z" fill="#0a121b"/><path d="M548 150H1052" stroke="#152130" stroke-width="3"/>
+  <rect x="590" y="92" width="46" height="70" fill="#0b141e"/><rect x="584" y="86" width="58" height="10" fill="#0d1722"/>
+  <rect x="598" y="70" width="11" height="18" fill="#0b141e"/><rect x="617" y="70" width="11" height="18" fill="#0b141e"/>
+  <rect x="972" y="124" width="46" height="38" fill="#0b141e"/><rect x="966" y="118" width="58" height="10" fill="#0d1722"/>
+  <path d="M800 150V90M780 104h40l-9-7M820 104l-9 7M800 90l-6-7M800 90l6-7" stroke="#0d1722" stroke-width="3" fill="none"/>
+  <g id="gulls" fill="#060c14" stroke="#060c14">
+    <use href="#gull" class="hot gull" x="646" y="122" width="44" height="30"/>
+    <use href="#gull" class="hot gull" x="704" y="122" width="44" height="30" transform="translate(1452 0) scale(-1 1)"/>
+    <use href="#gull" class="hot gull" x="884" y="122" width="44" height="30"/>
+    <use href="#gull" class="hot gull" x="974" y="90" width="44" height="30" transform="translate(1992 0) scale(-1 1)"/>
+  </g>
+  <rect x="484" y="238" width="632" height="18" fill="#3c3a37"/><rect x="492" y="256" width="616" height="8" fill="#292826"/>
+  <rect x="500" y="264" width="600" height="506" fill="url(#brick)"/>
+  <rect x="500" y="264" width="600" height="506" fill="url(#wallShade)"/>
+  <g id="quoins" fill="#4c4944"></g>
+  <!-- upper windows: two lit, one dark -->
+  <g>
+    <rect x="558" y="284" width="112" height="166" fill="#4c4944"/><rect x="566" y="292" width="96" height="150" fill="url(#winLit)"/>
+    <path d="M566 292h22q10 70-22 150zM662 292h-22q-10 70 22 150z" fill="#b9681f" opacity=".7"/>
+    <use href="#sash" x="566" y="292" width="96" height="150"/>
+    <rect x="744" y="284" width="112" height="166" fill="#4c4944"/><rect x="752" y="292" width="96" height="150" fill="url(#winLit)"/>
+    <path d="M752 292h20q8 60-20 150zM848 292h-20q-8 60 20 150z" fill="#b9681f" opacity=".7"/>
+    <path d="M776 442v-34q0-16 14-20-5-6-5-14 0-15 15-15t15 15q0 8-5 14 14 4 14 20v34z" fill="#7a4a1c" opacity=".55"/>
+    <use href="#sash" x="752" y="292" width="96" height="150"/>
+    <rect x="930" y="284" width="112" height="166" fill="#4c4944"/><rect x="938" y="292" width="96" height="150" fill="url(#winDark)"/>
+    <path d="M944 300l40 30M950 340l60 50" stroke="#2c4458" stroke-width="2" opacity=".6"/>
+    <use href="#sash" x="938" y="292" width="96" height="150" opacity=".45"/>
+  </g>
+  <ellipse cx="614" cy="367" rx="110" ry="130" fill="url(#glow)" opacity=".5"/>
+  <ellipse cx="800" cy="367" rx="110" ry="130" fill="url(#glow)" opacity=".5"/>
+  <!-- sign -->
+  <rect x="500" y="498" width="600" height="56" fill="#102c24"/>
+  <rect x="508" y="505" width="584" height="42" fill="none" stroke="#b9953f" stroke-width="1.5"/>
+  <text x="800" y="537" text-anchor="middle" class="sign">PELLAM MARITIME MUSEUM</text>
+  <!-- ground floor: lit hall window, door, dark window with a bill -->
+  <rect x="552" y="572" width="132" height="156" fill="#4c4944"/><rect x="560" y="580" width="116" height="140" fill="url(#winLit)"/>
+  <path d="M628 720V620q0-8 6-10v-8q0-12 12-12t12 12v8q6 2 6 10v100z" fill="#8a5420" opacity=".5"/>
+  <path d="M560 650h116M618 580v140" stroke="#cfc9bb" stroke-width="3"/><rect x="561.500" y="581.500" width="113" height="137" fill="none" stroke="#cfc9bb" stroke-width="5"/>
+  <ellipse cx="618" cy="650" rx="120" ry="120" fill="url(#glow)" opacity=".45"/>
+  <rect x="916" y="572" width="132" height="156" fill="#4c4944"/><rect x="924" y="580" width="116" height="140" fill="url(#winDark)"/>
+  <rect x="946" y="606" width="72" height="88" fill="#cfd3cf" opacity=".5" transform="rotate(-3 982 650)"/>
+  <g transform="rotate(-3 982 650)" opacity=".8"><text x="982" y="634" text-anchor="middle" class="bill" font-size="15">LAST</text><text x="982" y="656" text-anchor="middle" class="bill" font-size="15">DAY</text><text x="982" y="678" text-anchor="middle" class="bill" font-size="8" letter-spacing="1">CLOSING FOR GOOD</text></g>
+  <path d="M924 650h116M982 580v140" stroke="#cfc9bb" stroke-width="3" opacity=".4"/><rect x="925.500" y="581.500" width="113" height="137" fill="none" stroke="#cfc9bb" stroke-width="5" opacity=".45"/>
+  <!-- door -->
+  <rect x="716" y="552" width="168" height="18" fill="#5a5751"/>
+  <rect x="726" y="570" width="16" height="176" fill="#403e3a"/><rect x="858" y="570" width="16" height="176" fill="#403e3a"/>
+  <rect x="742" y="570" width="116" height="176" fill="url(#doorG)"/>
+  <g fill="none" stroke="#0b1f1a" stroke-width="3"><rect x="752" y="582" width="44" height="42"/><rect x="804" y="582" width="44" height="42"/><rect x="752" y="634" width="44" height="54"/><rect x="804" y="634" width="44" height="54"/><rect x="752" y="698" width="44" height="40"/><rect x="804" y="698" width="44" height="40"/></g>
+  <circle cx="848" cy="664" r="6.5" fill="url(#brass)"/>
+  <g id="opened" opacity="0" pointer-events="none">
+    <rect x="742" y="570" width="116" height="176" fill="#f8c96e"/>
+    <path d="M772 746V676q0-16 14-22-6-8-6-20 0-24 20-24t20 24q0 12-6 20 14 6 14 22v70z" fill="#1a130c"/>
+    <path d="M776 634h48l4 8h-56z" fill="#1a130c"/>
+    <path d="M742 746H858L1010 900H590Z" fill="#f8c96e" opacity=".22"/>
+  </g>
+  <g id="notice" class="hot" transform="rotate(3 800 640)">
+    <rect x="770" y="600" width="60" height="78" fill="#e9ecea"/><rect x="770" y="600" width="60" height="10" fill="#16233b"/>
+    <path d="M777 622h46M777 632h46M777 642h38M777 652h46M777 662h30" stroke="#5a6470" stroke-width="2"/>
+    <circle cx="800" cy="605" r="2.8" fill="#c0392b"/>
+  </g>
+  <rect x="708" y="746" width="184" height="14" fill="#5a5751"/><rect x="698" y="760" width="204" height="12" fill="#4a4743"/>
+  <rect x="500" y="734" width="198" height="38" fill="#33312e"/><rect x="902" y="734" width="198" height="38" fill="#33312e"/>
+  <!-- bell-pull -->
+  <g id="pull" class="drag">
+    <path d="M896 556V664" stroke="#8b6d28" stroke-width="4"/>
+    <path d="M883 664h26l-5 24h-16z" fill="url(#brass)"/>
+    <circle cx="896" cy="696" r="7.500" fill="none" stroke="#c79b3b" stroke-width="4.5"/>
+    <rect x="868" y="626" width="56" height="92" fill="transparent"/>
+  </g>
+  <rect x="879" y="596" width="34" height="28" rx="4" fill="url(#brass)"/><text x="896" y="614" class="pulltxt">PULL</text>
+  <text id="ding" class="ding" x="800" y="520">ding</text>
+</g>
+
+<!-- road -->
+<rect x="-1000" y="772" width="3600" height="128" fill="url(#cob)"/>
+<rect x="-1000" y="772" width="3600" height="8" fill="#1d2935"/>
+<g filter="url(#b8)" opacity=".5">
+  <rect x="566" y="780" width="96" height="120" fill="url(#refl)"/><rect x="752" y="780" width="96" height="120" fill="url(#refl)"/>
+  <rect x="408" y="780" width="64" height="120" fill="url(#refl)"/><rect x="560" y="780" width="116" height="60" fill="url(#refl)" opacity=".6"/>
+</g>
+<ellipse cx="1010" cy="846" rx="150" ry="20" fill="#1b2f40" opacity=".85"/>
+<g fill="none" stroke="#6f94ad" stroke-width="2">
+  <ellipse class="ripple" cx="960" cy="846" rx="26" ry="6"/><ellipse class="ripple d2" cx="1040" cy="850" rx="30" ry="7"/><ellipse class="ripple d3" cx="1090" cy="842" rx="22" ry="5"/>
+</g>
+<rect id="lit" x="-1000" width="3600" height="900" fill="#bcd3ff" opacity="0" pointer-events="none" style="mix-blend-mode:screen"/>
+
+<!-- things you can name -->
+<g fill="transparent">
+  <rect class="hot word" data-w="lighthouse" data-d="a tower by the sea with a strong light that guides ships" x="56" y="476" width="72" height="118"/>
+  <rect class="hot word" data-w="mast" data-d="the tall pole on a boat that holds up the sails" x="196" y="462" width="80" height="180"/>
+  <rect class="hot word" data-w="quay" data-d="a stone platform beside the water where boats tie up (say it like 'key')" x="0" y="724" width="150" height="48"/>
+  <rect class="hot word" data-w="bollard" data-d="a short, thick post on a quay; boats are tied to it" x="160" y="684" width="42" height="42"/>
+  <rect class="hot word" data-w="lamp post" data-d="a tall post in the street with a light on top" x="416" y="390" width="48" height="382"/>
+  <rect class="hot word" data-w="chimney" data-d="the pipe on a roof that lets the smoke out" x="584" y="70" width="58" height="52"/>
+  <rect class="hot word" data-w="shutters" data-d="wooden covers that close over a window" x="1190" y="330" width="384" height="130"/>
+  <rect class="hot word" data-w="cobbles" data-d="rounded stones that an old road is made of" x="1180" y="790" width="420" height="110"/>
+  <rect class="hot word" data-w="puddle" data-d="a small pool of rain water on the ground" x="860" y="824" width="300" height="46"/>
+  <rect class="hot word" data-w="doorstep" data-d="the step in front of the door of a house" x="698" y="748" width="204" height="24"/>
+</g>
+</svg>
+</div>
+<div class="rain"></div><div class="rain r2"></div><div class="vig"></div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), pull = $('#pull'), busy = false, cur = 0, y0 = 0, rings = [], evalT = 0, fails = 0, flashT = 0;
+
+  // stone corner blocks
+  (function () {
+    var q = $('#quoins'), y, i = 0, s = '';
+    for (y = 264; y < 734; y += 26, i++) {
+      if (y > 492 && y < 556) continue;
+      s += '<rect x="500" y="' + y + '" width="' + (i % 2 ? 22 : 36) + '" height="24"/>' +
+           '<rect x="' + (i % 2 ? 1078 : 1064) + '" y="' + y + '" width="' + (i % 2 ? 22 : 36) + '" height="24"/>';
+    }
+    q.innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'mystery', story: 'forty', storyTitle: 'Forty Minutes of Dark', id: 'street', no: 'I', title: 'Harbour Road',
+    go: 'Walk up to the door',
+    intro: [
+      'Pellam is a small harbour town, and since 1961 it has had a small museum in the old customs house. Tomorrow it closes for good. Everything is going to a big museum in the city.',
+      'Tonight, in the middle of a storm, every light in the harbour went out for forty minutes. When they came back on, the museum&rsquo;s ship&rsquo;s clock was gone.',
+      'The front door was bolted. Four people were inside. They are still inside.',
+      'You are the detective. It is a quarter past nine, and the rain is coming in sideways off the sea.'
+    ],
+    exit: {"next":"hall","w":{"fdeeddf1":"f8923738"}}, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var CALL = '<h4>Pellam Harbour Police &middot; Call sheet &middot; Case 0412</h4>' +
+    '<p>8.52 p.m. Telephone call from Pellam Maritime Museum, Harbour Road.</p>' +
+    '<p>MISSING. One ship&rsquo;s chronometer, made 1868, in a wooden box with brass corners. Value about &pound;40,000.</p>' +
+    '<p>LAST SEEN. In its glass case in the Chart Room.</p>' +
+    '<p>POWER CUT. 8.10 p.m. to 8.50 p.m. The whole harbour was dark.</p>' +
+    '<p>FRONT DOOR. Bolted on the inside since 7.30 p.m.</p>' +
+    '<p>INSIDE. Four persons. Nobody has left.</p>' +
+    '<p>OFFICER AT THE SCENE. PC A. Marsh.</p>';
+  var NOTICE = '<h4>Police</h4>' +
+    '<p>The door is bolted on the inside. Do not knock. Nobody will hear you over this storm.</p>' +
+    '<p>Pull the bell once for every museum window with a light in it.</p>' +
+    '<p>Stop. Count to three.</p>' +
+    '<p>Then pull it once for every gull on the museum roof.</p>' +
+    '<p>Then I shall know it is you and not the newspapers.</p>' +
+    '<p>PC A. Marsh</p>';
+
+  function hints() {
+    return ['bell', [
+      'Read the notice on the door. It tells you exactly how to ring, and you have to count two things.',
+      'First count the museum windows with a light in them. The gulls are harder. You can only see the roof against the sky when the lightning comes, so watch and wait.',
+      'The bell-pull is the brass handle to the right of the door. Drag it down once for each window with a light. Stop for about three seconds. Then drag it down once for each gull.'
+    ]];
+  }
+  function begin() {
+    ER.amb.rain(0.055);
+    ER.addClue('callsheet', 'Call sheet', CALL, 'typed', 'Police paper', true);
+    flashT = setTimeout(flash, 2600);
+    ER.narrate([
+      'Harbour Road, a quarter past nine. The museum is the narrow building with the green door.',
+      'Something white is pinned to the door. The paper is already going soft in the rain.'
+    ]);
+  }
+
+  /* lightning: the only moment the roof can be seen against the sky */
+  function flash() {
+    var b = Math.random() < 0.5 ? $('#bolt1') : $('#bolt2');
+    var k = [{ opacity: 0 }, { opacity: 0.95, offset: 0.07 }, { opacity: 0.15, offset: 0.14 }, { opacity: 0.9, offset: 0.2 },
+             { opacity: 0.8, offset: 0.62 }, { opacity: 0 }];
+    try {
+      $('#flash').animate(k, { duration: 1500 });
+      $('#lit').animate(k.map(function (f) { return { opacity: f.opacity * 0.14, offset: f.offset }; }), { duration: 1500 });
+      b.animate([{ opacity: 0 }, { opacity: 1, offset: 0.07 }, { opacity: 0, offset: 0.14 }, { opacity: 0.9, offset: 0.2 }, { opacity: 0, offset: 0.34 }, { opacity: 0 }], { duration: 1500 });
+    } catch (e) {}
+    setTimeout(ER.sfx.thunder, 380 + Math.random() * 500);
+    if (Math.random() < 0.4) setTimeout(ER.sfx.gull, 1500);
+    flashT = setTimeout(flash, 5200 + Math.random() * 3200);
+  }
+
+  $('#notice').addEventListener('click', function () {
+    ER.read({ html: NOTICE, cls: 'notice', clue: { id: 'notice', title: 'Notice on the door', kind: 'Police paper' } });
+  });
+  ER.$$('.word').forEach(function (n) {
+    n.addEventListener('click', function (e) { ER.wordAt(e.clientX, e.clientY, n.getAttribute('data-w'), n.getAttribute('data-d')); });
+  });
+  ER.$$('.gull').forEach(function (n) {
+    n.addEventListener('click', function (e) { ER.wordAt(e.clientX, e.clientY, 'gull', 'a large grey and white sea bird with a loud cry'); });
+  });
+
+  /* the bell-pull */
+  function setPull(v) { cur = v; pull.style.transform = 'translateY(' + v + 'px)'; }
+  ER.drag(pull, {
+    start: function (e) { if (busy) return false; y0 = ER.pt(svg, e).y - cur; },
+    move: function (e) { setPull(Math.max(0, Math.min(62, ER.pt(svg, e).y - y0))); },
+    end: function (e, moved) {
+      var far = cur > 38;
+      setPull(0);
+      if (far) ring();
+      else if (!moved) ER.say('A brass bell-pull. It is meant to be pulled down, not pushed.');
+    }
+  });
+  function ring() {
+    rings.push(Date.now());
+    ER.sfx.chain(); setTimeout(ER.sfx.bell, 90);
+    var d = $('#ding');
+    d.setAttribute('x', 760 + Math.random() * 80);
+    try { d.animate([{ opacity: 0, transform: 'translateY(0)' }, { opacity: 1, transform: 'translateY(-14px)', offset: 0.2 }, { opacity: 0, transform: 'translateY(-46px)' }], { duration: 1100 }); } catch (e) {}
+    clearTimeout(evalT);
+    evalT = setTimeout(judge, groups().length >= 2 ? 2700 : 6500);
+  }
+  function groups() {
+    var g = [], i;
+    for (i = 0; i < rings.length; i++) { if (!i || rings[i] - rings[i - 1] > 1900) g.push(1); else g[g.length - 1]++; }
+    return g;
+  }
+  function judge() {
+    var g = groups(); rings = [];
+    if (g.length === 2 && ER.exit([g[0] + '-' + g[1]], { quiet: true, delay: 4300 })) {
+      busy = true; clearTimeout(flashT);
+      setTimeout(ER.sfx.clunk, 500);
+      setTimeout(function () { $('#opened').setAttribute('opacity', 1); $('#notice').style.display = 'none'; ER.sfx.creak(); }, 1300);
+      ER.say('Inside, a bolt slides back.', 4000);
+      return;
+    }
+    fails++;
+    ER.sfx.no();
+    ER.say(['The bell dies away. Nobody comes.',
+            'Somewhere inside, a chair scrapes. Then nothing.',
+            'Nobody comes. That was not the signal.'][(fails - 1) % 3]);
+  }
+})();
+</script>
+</body>
+</html>

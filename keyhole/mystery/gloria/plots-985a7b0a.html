@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Allotments · Where Is Gloria?</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="gloria.css">
+<style>
+  body{--bg:#86bb45;--accent:#f4c430;--font-display:'Amatic SC',cursive;--font-ui:'Oswald',sans-serif;--font-body:'Outfit',Arial,sans-serif;
+    --tc-bg:linear-gradient(#a9dbf3 0,#dff2e2 52%,#a8d468 100%);--tc-ink:#27331c;
+    --cap-bg:rgba(251,253,242,.97);--cap-ink:#27331c;--panel:#fbfdf2;--panel-ink:#27331c;--q-ink:#4a7a2a;
+    --hud-bg:rgba(46,62,28,.88);--hud-ink:#fbfdf2;--hud-line:rgba(251,253,242,.38);--ov-bg:rgba(30,46,20,.72);--fade:#dff2e2}
+  .tc-theme{color:#3d7a2c}
+  .tc-room{font-weight:700;font-size:clamp(58px,9vw,124px);letter-spacing:.04em;line-height:.95;margin-bottom:20px;color:#3d7a2c}
+  .tc .btn,.tk .btn{--accent:#3d7a2c}
+  .tc .btn:hover:not([disabled]),.tk .btn:hover:not([disabled]){color:#fbfdf2}
+  .cap{border-top-color:#3d7a2c;box-shadow:0 14px 44px rgba(30,50,20,.35)}
+  .cap em{color:#3d7a2c}
+  .tk{border-color:#bcd29a}
+  .tk-name{font-weight:700;font-size:40px;letter-spacing:.04em;line-height:1;color:#3d7a2c}
+  .tk-role{color:#b0731a}
+  .hbtn.hnt{color:#f4c430;border-color:#f4c430}
+
+  .postT{font-family:'Amatic SC',cursive;font-weight:700;font-size:21px;letter-spacing:1px;fill:#3a2a14;text-anchor:middle}
+  .nameT{font-family:'Amatic SC',cursive;font-weight:700;fill:#fbfdf2;text-anchor:middle}
+  .cardT{font-family:'Oswald',sans-serif;font-weight:600;font-size:6.500px;fill:#2b2a20;text-anchor:middle}
+  .cl{animation:drift 90s linear infinite}
+  .cl.c2{animation-duration:130s;animation-delay:-50s}.cl.c3{animation-duration:110s;animation-delay:-80s}
+  @keyframes drift{from{transform:translateX(-360px)}to{transform:translateX(420px)}}
+  .steam{animation:steam 3.6s ease-in-out infinite}
+  .steam.s2{animation-delay:-1.4s}.steam.s3{animation-delay:-2.5s}
+  @keyframes steam{0%{opacity:0;transform:translateY(8px)}35%{opacity:.85}100%{opacity:0;transform:translateY(-26px)}}
+  .flow{stroke-dasharray:16 46;animation:flow 6s linear infinite}
+  @keyframes flow{to{stroke-dashoffset:-124}}
+  .bob{animation:bob 3.4s ease-in-out infinite alternate}
+  .bob.b2{animation-duration:2.7s;animation-delay:-1s}
+  @keyframes bob{from{transform:translate(0,0)}to{transform:translate(7px,2px)}}
+  .sleeve{animation:sleeve 2.6s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:0 0}
+  @keyframes sleeve{from{transform:rotate(-4deg)}to{transform:rotate(7deg)}}
+  .nod{animation:nod 4.2s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}
+  .nod.n2{animation-duration:3.3s;animation-delay:-1.3s}
+  @keyframes nod{from{transform:rotate(-2.5deg)}to{transform:rotate(3deg)}}
+  .fly{animation:fly1 19s linear infinite}
+  .fly.f2{animation:fly2 24s linear infinite;animation-delay:-9s}
+  .fly.f3{animation:fly1 28s linear infinite;animation-delay:-15s}
+  @keyframes fly1{0%{transform:translate(0,0)}20%{transform:translate(120px,-70px)}40%{transform:translate(260px,-10px)}60%{transform:translate(180px,90px)}80%{transform:translate(40px,60px)}100%{transform:translate(0,0)}}
+  @keyframes fly2{0%{transform:translate(0,0)}25%{transform:translate(-140px,50px)}50%{transform:translate(-240px,-40px)}75%{transform:translate(-90px,-90px)}100%{transform:translate(0,0)}}
+  .wing{animation:wing .28s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 50%}
+  @keyframes wing{from{transform:scaleX(1)}to{transform:scaleX(.25)}}
+  .peck{animation:peck 2.2s steps(2) infinite;transform-box:fill-box;transform-origin:50% 100%}
+  .peck.p2{animation-delay:-.8s}.peck.p3{animation-delay:-1.5s;animation-duration:3s}
+  @keyframes peck{50%{transform:rotate(14deg)}}
+  .stone .ringp{opacity:0;transform-box:fill-box;transform-origin:center}
+  .stone.next .ringp{animation:ringp 1.5s ease-out infinite}
+  @keyframes ringp{from{opacity:.95;transform:scale(.55)}to{opacity:0;transform:scale(1.25)}}
+  .stone.next .st{fill:#fff6cf}
+  .trail{opacity:0;transition:opacity .3s}
+  .trail.on{opacity:1}
+  #tanHot{animation:tanGlow 3s steps(3) infinite}
+  #tanHot.done{animation:none}
+  @keyframes tanGlow{50%{filter:brightness(1.1)}}
+  #caught{opacity:0;transition:opacity .8s}
+  #caught.on{opacity:1}
+  .gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:2px solid #3d7a2c;
+    color:#fbfdf2;background:#3d7a2c;font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.16em;text-transform:uppercase;border-radius:4px;
+    box-shadow:0 8px 22px rgba(20,40,20,.4)}
+  .gobtn.on{display:block}
+  .gobtn:hover{background:#f4c430;border-color:#f4c430;color:#27331c}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7cc6ee"/><stop offset="1" stop-color="#e2f4fb"/></linearGradient>
+  <linearGradient id="groundG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9d463"/><stop offset=".55" stop-color="#93c552"/><stop offset="1" stop-color="#7fb543"/></linearGradient>
+  <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86d0ea"/><stop offset="1" stop-color="#55abcf"/></linearGradient>
+  <linearGradient id="deckG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2a468"/><stop offset="1" stop-color="#a87840"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9f8fb" stop-opacity=".9"/><stop offset=".5" stop-color="#bfe6ef" stop-opacity=".65"/><stop offset="1" stop-color="#e9f8fb" stop-opacity=".85"/></linearGradient>
+  <pattern id="chairS" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="20" height="20" fill="#fbf6e6"/><rect width="10" height="20" fill="#e98a6e"/></pattern>
+  <pattern id="tentS" width="28" height="28" patternUnits="userSpaceOnUse"><rect width="28" height="28" fill="#fbf6e6"/><rect width="14" height="28" fill="#d2452f"/></pattern>
+  <radialGradient id="vig" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#1c2a0c" stop-opacity="0"/><stop offset=".75" stop-color="#1c2a0c" stop-opacity=".05"/><stop offset="1" stop-color="#1c2a0c" stop-opacity=".34"/></radialGradient>
+  <symbol id="bfly" viewBox="-12 -10 24 20"><path class="wing" d="M0 0C-5 -11 -13 -9 -11 -2C-12 5 -5 8 0 0C5 8 12 5 11 -2C13 -9 5 -11 0 0Z"/><path d="M0 -6V7" stroke="#3a2a14" stroke-width="1.600"/></symbol>
+</defs>
+
+<!-- sky and the village behind the hedge -->
+<rect x="-1000" y="-700" width="3600" height="890" fill="url(#skyG)"/>
+<g fill="#fff" opacity=".95">
+  <g class="cl"><ellipse cx="260" cy="72" rx="74" ry="17"/><ellipse cx="304" cy="58" rx="44" ry="17"/><ellipse cx="216" cy="62" rx="36" ry="13"/></g>
+  <g class="cl c2"><ellipse cx="1010" cy="50" rx="84" ry="17"/><ellipse cx="1064" cy="38" rx="46" ry="16"/></g>
+  <g class="cl c3"><ellipse cx="620" cy="96" rx="58" ry="13"/><ellipse cx="654" cy="86" rx="32" ry="12"/></g>
+</g>
+<path d="M-1000 190V128Q-500 66 0 126T800 116T1500 104T2600 128V190Z" fill="#b5dfae"/>
+<path d="M-1000 190V152Q-300 112 300 152T1200 140T2600 158V190Z" fill="#93c984"/>
+<g id="skyline" class="hot">
+  <g fill="#4f9a45"><circle cx="46" cy="150" r="30"/><circle cx="104" cy="140" r="34"/><circle cx="430" cy="146" r="30"/><circle cx="486" cy="136" r="36"/><circle cx="560" cy="152" r="26"/><circle cx="900" cy="146" r="32"/><circle cx="962" cy="136" r="30"/><circle cx="1030" cy="152" r="26"/><circle cx="1504" cy="142" r="34"/><circle cx="1566" cy="150" r="28"/></g>
+  <g fill="#6fb85a"><circle cx="94" cy="130" r="18"/><circle cx="476" cy="124" r="20"/><circle cx="952" cy="126" r="16"/><circle cx="1494" cy="130" r="18"/></g>
+  <rect x="150" y="130" width="72" height="50" fill="#f3ead2"/><path d="M142 132L186 104L230 132Z" fill="#c2553c"/><rect x="200" y="102" width="12" height="20" fill="#a5533f"/><rect x="164" y="146" width="16" height="16" fill="#8fc7de"/><rect x="194" y="150" width="14" height="30" fill="#5a7d4e"/>
+  <rect x="236" y="138" width="60" height="42" fill="#e9dcbc"/><path d="M228 140L266 116L304 140Z" fill="#8f6a4a"/><rect x="250" y="152" width="14" height="14" fill="#8fc7de"/>
+  <!-- church -->
+  <rect x="746" y="118" width="100" height="62" fill="#ddd2b8"/><path d="M740 120L796 90L852 120Z" fill="#8a7a72"/>
+  <rect x="704" y="62" width="44" height="118" fill="#e6dcc4"/><path d="M700 62h10v-10h8v10h8v-10h8v10h8v-10h10v14h-52z" fill="#e6dcc4"/>
+  <circle cx="726" cy="96" r="11" fill="#fbf7ea" stroke="#6b5f48" stroke-width="2"/><path d="M726 96V88M726 96l-6 3" stroke="#2b2a20" stroke-width="2" stroke-linecap="round"/>
+  <path d="M720 150q6-12 12 0v30h-12z" fill="#6b5f48"/><g fill="#8fb7c7"><path d="M768 150q6-12 12 0v22h-12z"/><path d="M800 150q6-12 12 0v22h-12z"/></g>
+  <path d="M726 52V30" stroke="#6b5f48" stroke-width="2"/><path d="M726 30l14 5-14 5z" fill="#d2452f"/>
+  <!-- village hall, and the striped top of a tent beside it -->
+  <rect x="1146" y="116" width="116" height="64" fill="#c0694b"/><path d="M1136 118L1204 84L1272 118Z" fill="#6f7d86"/>
+  <rect x="1194" y="142" width="22" height="38" fill="#fbf6e6"/><g fill="#8fc7de"><rect x="1160" y="136" width="20" height="20"/><rect x="1230" y="136" width="20" height="20"/></g>
+  <g id="teatop">
+    <path d="M1324 152L1392 94L1460 152Z" fill="url(#tentS)"/><path d="M1324 152L1392 94L1460 152" stroke="#b3372b" stroke-width="2.500" fill="none" stroke-linejoin="round"/>
+    <path d="M1324 152q8.500 12 17 0t17 0 17 0 17 0 17 0 17 0 17 0 17 0v-2h-136z" fill="#fbf6e6" stroke="#b3372b" stroke-width="2"/>
+    <rect x="1330" y="160" width="124" height="24" fill="#fbf6e6"/>
+    <path d="M1392 94V70" stroke="#6b5f48" stroke-width="2"/><path d="M1392 70l20 6-20 6z" fill="#f4c430"/>
+    <g stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"><path class="steam" d="M1436 120q-8-12 0-22t0-22"/><path class="steam s2" d="M1450 126q8-12 0-22t0-22"/><path class="steam s3" d="M1424 128q-6-10 0-18t0-18"/></g>
+  </g>
+</g>
+
+<!-- the ground -->
+<rect x="-1000" y="184" width="3600" height="1400" fill="url(#groundG)"/>
+<g id="blots"></g>
+<g id="plots"></g>
+
+<!-- pond and stream -->
+<g id="pond" class="hot">
+  <ellipse cx="690" cy="392" rx="98" ry="50" fill="#5d9a3a"/>
+  <ellipse cx="690" cy="388" rx="92" ry="46" fill="url(#waterG)"/><ellipse cx="672" cy="378" rx="46" ry="16" fill="#b9e6f4" opacity=".55"/>
+  <g fill="#3f9a4a"><circle cx="734" cy="402" r="9"/><circle cx="750" cy="390" r="7"/><circle cx="640" cy="410" r="8"/></g>
+  <circle cx="734" cy="402" r="3" fill="#f6a6c0"/>
+  <g stroke="#3f7a2c" stroke-width="3" stroke-linecap="round"><path d="M604 396v-34M612 400v-26M620 404v-36M772 372v-30M780 378v-22"/></g>
+  <g fill="#7a5530"><rect x="601" y="356" width="6" height="14" rx="3"/><rect x="617" y="362" width="6" height="14" rx="3"/><rect x="769" y="338" width="6" height="14" rx="3"/></g>
+  <g class="bob"><ellipse cx="676" cy="392" rx="13" ry="8" fill="#fff"/><circle cx="687" cy="384" r="6" fill="#fff"/><path d="M692 384l8 2-8 3z" fill="#f29a2b"/><circle cx="688" cy="383" r="1.200" fill="#2b2a20"/></g>
+  <g class="bob b2"><ellipse cx="712" cy="372" rx="10" ry="6" fill="#f6e29a"/><circle cx="704" cy="366" r="4.500" fill="#f6e29a"/><path d="M700 366l-6 1 6 3z" fill="#f29a2b"/></g>
+</g>
+<g id="stream" class="hot">
+  <path d="M776 392Q826 380 860 398Q930 424 1000 410Q1040 402 1068 418Q1150 462 1260 478Q1400 494 1500 470Q1560 456 1700 500" stroke="#5d9a3a" stroke-width="34" fill="none" stroke-linecap="round"/>
+  <ellipse cx="1068" cy="420" rx="86" ry="46" fill="#5d9a3a" transform="rotate(-12 1068 420)"/>
+  <path d="M776 392Q826 380 860 398Q930 424 1000 410Q1040 402 1068 418Q1150 462 1260 478Q1400 494 1500 470Q1560 456 1700 500" stroke="#6cc2e0" stroke-width="24" fill="none" stroke-linecap="round"/>
+  <ellipse cx="1068" cy="420" rx="80" ry="40" fill="url(#waterG)" transform="rotate(-12 1068 420)"/>
+  <path class="flow" d="M776 392Q826 380 860 398Q930 424 1000 410Q1040 402 1068 418Q1150 462 1260 478Q1400 494 1500 470Q1560 456 1700 500" stroke="#d6f1f8" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>
+  <g stroke="#3f7a2c" stroke-width="3" stroke-linecap="round"><path d="M1126 398v-28M1134 404v-22M1008 446v-26M1000 440v-18"/></g>
+  <g fill="#7a5530"><rect x="1123" y="364" width="6" height="13" rx="3"/><rect x="1005" y="414" width="6" height="13" rx="3"/></g>
+</g>
+
+<!-- paths, bridges, stepping stones -->
+<g id="paths"></g>
+<g id="bridgeS" class="hot" transform="translate(857 399) rotate(80)">
+  <rect x="-33" y="-17" width="66" height="34" rx="3" fill="url(#deckG)"/><path d="M-22 -17v34M-11 -17v34M0 -17v34M11 -17v34M22 -17v34" stroke="#8f6030" stroke-width="2"/>
+  <path d="M-33 -17H33M-33 17H33" stroke="#6f4a22" stroke-width="5" stroke-linecap="round"/>
+</g>
+<g id="bridgeL" class="hot" transform="translate(1071 420) rotate(-47)">
+  <rect x="-84" y="-17" width="168" height="34" rx="3" fill="url(#deckG)"/>
+  <path d="M-72 -17v34M-60 -17v34M-48 -17v34M-36 -17v34M-24 -17v34M-12 -17v34M0 -17v34M12 -17v34M24 -17v34M36 -17v34M48 -17v34M60 -17v34M72 -17v34" stroke="#8f6030" stroke-width="2"/>
+  <path d="M-84 -17H84M-84 17H84" stroke="#6f4a22" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#6f4a22"><rect x="-86" y="-22" width="6" height="10"/><rect x="80" y="-22" width="6" height="10"/><rect x="-86" y="12" width="6" height="10"/><rect x="80" y="12" width="6" height="10"/><rect x="-3" y="-22" width="6" height="10"/><rect x="-3" y="12" width="6" height="10"/></g>
+</g>
+<g id="trail"></g>
+<g id="stones"></g>
+
+<!-- hedges and gates round the field -->
+<g id="hedges"></g>
+<g id="posts"></g>
+
+<!-- everything that stands up, from the back of the field to the front -->
+<g id="back"></g>
+<g id="shedOld" class="hot" transform="rotate(-4 1178 274)">
+  <ellipse cx="1178" cy="276" rx="52" ry="6" fill="#000" opacity=".18"/>
+  <rect x="1140" y="220" width="76" height="54" fill="#8d8674"/><path d="M1152 220v54M1164 220v54M1176 220v54M1188 220v54M1200 220v54" stroke="#756e5e" stroke-width="1.500"/>
+  <rect x="1150" y="234" width="24" height="40" fill="#2b2a20"/><path d="M1150 234l16 5v35h-16z" fill="#6f695b"/>
+  <rect x="1186" y="234" width="20" height="18" fill="#3a4a4a"/><path d="M1186 234l20 18M1196 234v18" stroke="#8d8674" stroke-width="1.500"/>
+  <rect x="1198" y="256" width="20" height="18" fill="#9aa5a8" transform="rotate(6 1208 265)"/>
+  <path d="M1130 224L1176 194L1226 222Z" fill="#5f5a50"/><path d="M1130 224Q1178 204 1226 222" stroke="#4a463e" stroke-width="3" fill="none"/>
+  <g fill="#6aa544"><ellipse cx="1160" cy="210" rx="14" ry="5"/><ellipse cx="1196" cy="212" rx="12" ry="4.500"/><ellipse cx="1178" cy="202" rx="8" ry="3.500"/></g>
+  <path d="M1140 274q-6-30 4-50M1146 274q-2-14 2-26" stroke="#4f9a45" stroke-width="3" fill="none" stroke-linecap="round"/>
+</g>
+<g id="glassH" class="hot">
+  <ellipse cx="1444" cy="318" rx="76" ry="6" fill="#000" opacity=".15"/>
+  <rect x="1384" y="262" width="56" height="54" fill="url(#glassG)" stroke="#fbfdf2" stroke-width="3"/><path d="M1380 264L1412 240L1444 264Z" fill="url(#glassG)" stroke="#fbfdf2" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M1402 262v54M1422 262v54M1384 288h56" stroke="#fbfdf2" stroke-width="2"/>
+  <g fill="#4f9a45"><circle cx="1396" cy="302" r="8"/><circle cx="1414" cy="298" r="9"/><circle cx="1430" cy="304" r="7"/></g><g fill="#d2452f"><circle cx="1398" cy="298" r="2.500"/><circle cx="1416" cy="304" r="2.500"/><circle cx="1428" cy="298" r="2.500"/></g>
+  <rect x="1452" y="270" width="50" height="46" fill="url(#glassG)" stroke="#fbfdf2" stroke-width="3"/><path d="M1448 272L1477 250L1506 272Z" fill="url(#glassG)" stroke="#fbfdf2" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M1468 270v46M1486 270v46M1452 292h50" stroke="#fbfdf2" stroke-width="2"/>
+  <g fill="#4f9a45"><circle cx="1464" cy="304" r="7"/><circle cx="1480" cy="300" r="8"/><circle cx="1494" cy="306" r="6"/></g>
+</g>
+<g id="mid1"></g>
+<g id="shedNew" class="hot">
+  <ellipse cx="1300" cy="428" rx="52" ry="6" fill="#000" opacity=".18"/>
+  <rect x="1262" y="374" width="76" height="52" fill="#e9593c"/><path d="M1274 374v52M1286 374v52M1298 374v52M1310 374v52M1322 374v52" stroke="#cf4a30" stroke-width="1.500"/>
+  <rect x="1272" y="388" width="24" height="38" fill="#fbf6e6"/><circle cx="1291" cy="408" r="2.500" fill="#f4c430"/>
+  <rect x="1306" y="388" width="22" height="18" fill="#bfe6ef" stroke="#fbf6e6" stroke-width="2.500"/><path d="M1317 388v18" stroke="#fbf6e6" stroke-width="2"/>
+  <rect x="1304" y="408" width="26" height="6" fill="#7a5530"/><g fill="#f4c430"><circle cx="1309" cy="405" r="3"/><circle cx="1317" cy="404" r="3"/><circle cx="1325" cy="405" r="3"/></g>
+  <path d="M1252 376L1300 350L1348 376Z" fill="#3a4a56"/><path d="M1252 376L1300 350L1348 376" stroke="#fbf6e6" stroke-width="3" fill="none" stroke-linejoin="round"/>
+</g>
+<g id="mid2"></g>
+<!-- the corner that belongs to Mr Nash -->
+<g id="nashShed" class="hot">
+  <ellipse cx="296" cy="592" rx="46" ry="6" fill="#000" opacity=".18"/>
+  <rect x="262" y="540" width="68" height="50" fill="#3c8a4a"/><path d="M274 540v50M286 540v50M298 540v50M310 540v50M322 540v50" stroke="#2f7340" stroke-width="1.500"/>
+  <rect x="270" y="552" width="22" height="38" fill="#2f7340"/><rect x="300" y="552" width="20" height="16" fill="#bfe6ef" stroke="#fbfdf2" stroke-width="2"/>
+  <path d="M254 542L296 518L338 542Z" fill="#2b3a30"/><path d="M254 542L296 518L338 542" stroke="#fbfdf2" stroke-width="2.500" fill="none" stroke-linejoin="round"/>
+  <rect x="272" y="528" width="48" height="13" rx="2" fill="#fbfdf2"/><text x="296" y="539" class="cardT" font-size="10">T. NASH</text>
+</g>
+<g id="nashBarrow" class="hot" transform="translate(-22 2)">
+  <ellipse cx="372" cy="606" rx="40" ry="5" fill="#000" opacity=".18"/>
+  <path d="M340 566h66l-8 30h-50z" fill="#3c8a4a"/><path d="M340 566h66" stroke="#2f7340" stroke-width="4"/>
+  <path d="M406 572l26-8" stroke="#6f4a22" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="354" cy="598" r="9" fill="#2b2a20"/><circle cx="354" cy="598" r="3.500" fill="#9aa2a5"/><circle cx="392" cy="598" r="9" fill="#2b2a20"/><circle cx="392" cy="598" r="3.500" fill="#9aa2a5"/>
+  <text x="373" y="586" class="cardT" font-size="9" fill="#fbfdf2">NASH</text>
+</g>
+<g id="mid3"></g>
+<!-- where Gloria grew -->
+<g id="patch" class="hot">
+  <rect x="716" y="632" width="170" height="92" rx="9" fill="#8b6741" stroke="#6f5031" stroke-width="3"/>
+  <ellipse cx="810" cy="682" rx="52" ry="24" fill="#e3c257"/><ellipse cx="810" cy="684" rx="38" ry="15" fill="#b99a3c"/><ellipse cx="810" cy="686" rx="26" ry="9" fill="#8b6741"/>
+  <path d="M768 668l-10-6M852 668l10-6M776 700l-8 6M846 702l8 5" stroke="#e3c257" stroke-width="3" stroke-linecap="round"/>
+  <path d="M734 706q20-30 44-16M742 650q26 4 34 22M866 654q-22 6-26 20" stroke="#3f8a3a" stroke-width="3.500" fill="none" stroke-linecap="round"/>
+  <g fill="#4f9a45"><ellipse cx="738" cy="702" rx="15" ry="10"/><ellipse cx="744" cy="652" rx="14" ry="9"/><ellipse cx="866" cy="656" rx="13" ry="9"/><ellipse cx="868" cy="706" rx="12" ry="8"/></g>
+  <ellipse cx="748" cy="686" rx="9" ry="7" fill="#9bc23e"/>
+  <path d="M872 628V672" stroke="#6f4a22" stroke-width="4"/><rect x="836" y="606" width="72" height="24" rx="3" fill="#fbfdf2" stroke="#6f4a22" stroke-width="2.500"/><text x="872" y="625" class="postT" font-size="20" fill="#d2552e">GLORIA</text>
+  <path d="M894 714V690h22M894 702h22v14M900 690l-4-22" stroke="#6f4a22" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="924" y="696" width="24" height="18" rx="3" fill="#3a4a56"/><path d="M944 696l8-14" stroke="#3a4a56" stroke-width="2"/><circle cx="932" cy="705" r="4" fill="#9aa2a5"/>
+  <rect x="954" y="696" width="9" height="18" rx="2" fill="#fbfdf2"/><rect x="955" y="691" width="7" height="6" fill="#3f86ad"/>
+</g>
+<g id="front"></g>
+
+<!-- Miss Tan, plot 7 -->
+<g id="tanShed" class="hot">
+  <ellipse cx="1478" cy="764" rx="84" ry="8" fill="#000" opacity=".18"/>
+  <rect x="1412" y="640" width="132" height="122" fill="#3f86ad"/><path d="M1430 640v122M1448 640v122M1466 640v122M1484 640v122M1502 640v122M1520 640v122" stroke="#34749a" stroke-width="2"/>
+  <rect x="1428" y="676" width="42" height="86" fill="#fbfdf2"/><rect x="1433" y="682" width="32" height="74" fill="#e9f0e2"/><circle cx="1462" cy="722" r="3.500" fill="#f4c430"/>
+  <rect x="1486" y="676" width="42" height="36" fill="#bfe6ef" stroke="#fbfdf2" stroke-width="4"/><path d="M1507 676v36M1486 694h42" stroke="#fbfdf2" stroke-width="3"/>
+  <path d="M1488 678q8 12 0 32M1526 678q-8 12 0 32" stroke="#f6a6c0" stroke-width="5" fill="none"/>
+  <rect x="1482" y="716" width="50" height="9" fill="#7a5530"/><g fill="#d2452f"><circle cx="1490" cy="712" r="5"/><circle cx="1502" cy="710" r="5"/><circle cx="1514" cy="712" r="5"/><circle cx="1525" cy="711" r="5"/></g>
+  <path d="M1398 644L1478 596L1558 644Z" fill="#2b3a48"/><path d="M1398 644L1478 596L1558 644" stroke="#fbfdf2" stroke-width="4" fill="none" stroke-linejoin="round"/>
+  <circle cx="1478" cy="626" r="11" fill="#fbfdf2"/><text x="1478" y="631.500" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="700" font-size="14" fill="#2b3a48">7</text>
+</g>
+<g id="beans" class="hot"></g>
+<g id="tanHot" class="hot">
+  <ellipse cx="1326" cy="874" rx="112" ry="10" fill="#000" opacity=".18"/>
+  <path d="M1246 712V874M1406 712V874" stroke="#8f6030" stroke-width="8" stroke-linecap="round"/>
+  <rect x="1250" y="716" width="152" height="104" fill="url(#chairS)"/><rect x="1242" y="708" width="168" height="11" rx="4" fill="#a87840"/>
+  <rect x="1238" y="818" width="176" height="12" rx="4" fill="#a87840"/>
+  <path d="M1266 796h120l12 48h-144z" fill="#4f6b3a"/>
+  <rect x="1278" y="838" width="32" height="28" fill="#56703e"/><rect x="1342" y="838" width="32" height="28" fill="#56703e"/>
+  <path d="M1266 878q0-15 18-15h30v15zM1330 878q0-15 18-15h30v15z" fill="#27457c"/>
+  <rect x="1362" y="702" width="28" height="80" rx="13" fill="#6a3661" transform="rotate(16 1376 706)"/>
+  <rect x="1262" y="702" width="28" height="80" rx="13" fill="#7b4170" transform="rotate(-18 1276 706)"/>
+  <rect x="1290" y="764" width="22" height="20" rx="3" fill="#d2452f"/><ellipse cx="1301" cy="764" rx="11" ry="3.500" fill="#f3d9a2"/><circle cx="1306" cy="782" r="11" fill="#ecc9a4"/><circle cx="1350" cy="782" r="11" fill="#ecc9a4"/>
+  <use href="#ch-olive" x="1252" y="594" width="148" height="192"/>
+</g>
+<g id="rhubarb" class="hot" transform="translate(-64 6)">
+  <g stroke="#c2456a" stroke-width="5" stroke-linecap="round"><path d="M1196 868l-18-34M1206 868l-4-40M1216 868l14-36M1224 868l26-26"/></g>
+  <g fill="#3f8a3a"><ellipse cx="1172" cy="826" rx="24" ry="15" transform="rotate(-24 1172 826)"/><ellipse cx="1202" cy="820" rx="24" ry="16"/><ellipse cx="1234" cy="824" rx="22" ry="14" transform="rotate(20 1234 824)"/><ellipse cx="1256" cy="838" rx="18" ry="12" transform="rotate(36 1256 838)"/></g>
+  <g stroke="#5fae4a" stroke-width="2" fill="none"><path d="M1160 832l22-12M1190 822h24M1224 828l20-8"/></g>
+</g>
+<g id="foot"></g>
+<rect x="-1000" y="-700" width="3600" height="2300" fill="url(#vig)" pointer-events="none"/>
+
+<g id="caught"><path d="M0 0l16-10 12 6-4 16-18 4z" fill="#efe6cf" stroke="#b3a078" stroke-width="1.500"/><path d="M6 2q6-4 10 0M8 8q5-3 9 0" stroke="#23335e" stroke-width="1.600" fill="none"/></g>
+<g class="fly" style="pointer-events:none"><use href="#bfly" x="500" y="470" width="24" height="20" fill="#f6a6c0"/></g>
+<g class="fly f2" style="pointer-events:none"><use href="#bfly" x="1180" y="560" width="22" height="18" fill="#fff"/></g>
+<g class="fly f3" style="pointer-events:none"><use href="#bfly" x="220" y="300" width="20" height="17" fill="#f4c430"/></g>
+
+<!-- you -->
+<g id="me" class="drag">
+  <ellipse cx="0" cy="3" rx="17" ry="6.500" fill="#000" opacity=".28"/>
+  <path d="M0 0Q-23 -27 -23 -46A23 23 0 1 1 23 -46Q23 -27 0 0Z" fill="#c2361f" stroke="#7a1f10" stroke-width="2.500"/>
+  <circle cx="0" cy="-46" r="15" fill="#fff8e6"/>
+  <circle cx="-2.500" cy="-48.500" r="6.500" fill="none" stroke="#27331c" stroke-width="3"/><path d="M2.500 -43.500l6.500 6.500" stroke="#27331c" stroke-width="3.600" stroke-linecap="round"/>
+  <rect x="-28" y="-74" width="56" height="80" fill="transparent"/>
+</g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go through the gate</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), me = $('#me'), busy = false, heard = false, done = false, walking = false, nextFile = null;
+  var at = 'gate', route = ['gate'], seenBarrow = false;
+
+  function E(n, a, inner) {
+    var s = '<' + n, k;
+    for (k in a) s += ' ' + k + '="' + a[k] + '"';
+    return s + (inner == null ? '/>' : '>' + inner + '</' + n + '>');
+  }
+  function G(a, inner) { return E('g', a, inner); }
+
+  /* the field as a map: stones, and the paths between them */
+  var NODES = { gate: [120, 836], fork: [310, 744], heap: [170, 600], river: [52, 470], crows: [560, 640], hives: [400, 410], road: [330, 204],
+    hens: [800, 790], water: [930, 520], trees: [850, 300], church: [800, 204], sheds: [1150, 320], glass: [1400, 340], cars: [1548, 300], top: [1300, 204] };
+  var EDGES = [
+    ['gate', 'fork', 'M120 836Q200 806 310 744', 40], ['fork', 'crows', 'M310 744Q430 704 560 640', 40],
+    ['fork', 'heap', 'M310 744Q230 690 170 600', 15], ['heap', 'river', 'M170 600Q120 520 52 470', 15],
+    ['crows', 'hives', 'M560 640Q470 560 400 410', 26], ['hives', 'road', 'M400 410Q360 320 330 204', 26],
+    ['crows', 'water', 'M560 640Q740 612 930 520', 26], ['crows', 'hens', 'M560 640Q680 740 800 790', 26],
+    ['water', 'trees', 'M930 520Q880 460 856 400Q840 350 850 300', 26], ['trees', 'church', 'M850 300Q830 250 800 204', 26],
+    ['water', 'sheds', 'M930 520Q1010 480 1070 420Q1110 372 1150 320', 26], ['sheds', 'top', 'M1150 320Q1230 280 1300 204', 26],
+    ['sheds', 'glass', 'M1150 320Q1280 350 1400 340', 26], ['glass', 'cars', 'M1400 340Q1480 332 1548 300', 26]
+  ];
+  var ENDS = {
+    river: 'This is the gate to the river. There are no wheel marks here, only ducks. The ducks have seen nothing.',
+    road: 'This is the gate to the road. A bus goes by. Nobody on it is holding a pumpkin.',
+    hens: 'The path stops at the hen house. Five hens look at you. They have seen nothing, and they would not tell you anyway.',
+    church: 'This is the gate to the church. The grass here is long, and nothing has rolled over it.',
+    cars: 'This is the gate to the car park. Forty cars. No wheelbarrow, no squeak, and nothing orange.',
+    top: 'This is the gate to the village hall. But you did not come the way Miss Tan told you, and there are no wheel marks here.'
+  };
+  function edge(a, b) {
+    for (var i = 0; i < EDGES.length; i++) if ((EDGES[i][0] === a && EDGES[i][1] === b) || (EDGES[i][0] === b && EDGES[i][1] === a)) return EDGES[i];
+    return null;
+  }
+
+  /* ---------- drawing ---------- */
+  function crop(kind, x, y) {
+    if (kind === 'cab') return E('circle', { cx: x, cy: y, r: 9.5, fill: '#4f9a4a' }) + E('circle', { cx: x, cy: y, r: 5.5, fill: '#7cc46a' }) + E('circle', { cx: x - 1, cy: y - 1, r: 2.2, fill: '#b5e39a' });
+    if (kind === 'let') return E('circle', { cx: x, cy: y, r: 7, fill: '#9bd45a' }) + E('circle', { cx: x, cy: y, r: 3.4, fill: '#cbee8f' });
+    if (kind === 'car') return E('path', { d: 'M' + x + ' ' + (y + 5) + 'l-5-12M' + x + ' ' + (y + 5) + 'v-14M' + x + ' ' + (y + 5) + 'l5-12', stroke: '#3f9a3a', 'stroke-width': 2.4, 'stroke-linecap': 'round', fill: 'none' }) + E('circle', { cx: x, cy: y + 5, r: 2.4, fill: '#ef7e2a' });
+    if (kind === 'oni') return E('path', { d: 'M' + x + ' ' + (y + 4) + 'l-3-13M' + x + ' ' + (y + 4) + 'l3-13', stroke: '#5fae4a', 'stroke-width': 2.2, 'stroke-linecap': 'round', fill: 'none' }) + E('ellipse', { cx: x, cy: y + 5, rx: 4, ry: 3.4, fill: '#e3b04a' });
+    if (kind === 'red') return E('circle', { cx: x, cy: y, r: 7, fill: '#3f8a3f' }) + E('circle', { cx: x + 2, cy: y + 1, r: 2.6, fill: '#d2452f' });
+    return E('ellipse', { cx: x, cy: y, rx: 9, ry: 7, fill: '#3f8a3f' }) + E('circle', { cx: x + 2, cy: y - 3, r: 1.8, fill: '#fbfdf2' });
+  }
+  function plot(x, y, w, h, kind, rot) {
+    var s = E('rect', { x: x, y: y, width: w, height: h, rx: 8, fill: '#8b6741', stroke: '#6f5031', 'stroke-width': 3 }), r, c, n, py, rows = Math.max(1, Math.round((h - 20) / 24)), step = kind === 'cab' ? 24 : 18;
+    for (r = 0; r < rows; r++) {
+      py = y + 16 + r * (h - 32) / Math.max(1, rows - 1);
+      s += E('path', { d: 'M' + (x + 8) + ' ' + (py + 8) + 'h' + (w - 16), stroke: '#765534', 'stroke-width': 2 });
+      n = Math.max(2, Math.floor((w - 20) / step));
+      for (c = 0; c < n; c++) s += crop(kind, x + 14 + c * (w - 28) / (n - 1), py);
+    }
+    return rot ? G({ transform: 'rotate(' + rot + ' ' + (x + w / 2) + ' ' + (y + h / 2) + ')' }, s) : s;
+  }
+  function tree(x, y, r, fruit) {
+    var s = E('ellipse', { cx: x, cy: y + 2, rx: r * 0.8, ry: 6, fill: '#000', opacity: 0.16 }) + E('rect', { x: x - 5, y: y - r * 0.9, width: 10, height: r * 0.9, fill: '#7a5530' }) +
+      E('circle', { cx: x, cy: y - r * 1.5, r: r, fill: '#4f9a45' }) + E('circle', { cx: x - r * 0.3, cy: y - r * 1.75, r: r * 0.55, fill: '#6fb85a' });
+    if (fruit) [[-0.5, -1.2], [0.4, -1.7], [0.1, -1.1], [0.55, -1.25], [-0.2, -1.9]].forEach(function (p) { s += E('circle', { cx: x + p[0] * r, cy: y + p[1] * r, r: 3.4, fill: '#d2452f' }); });
+    return s;
+  }
+  function scarecrow(id, x, y, h, o) {
+    var k = h / 128, s = E('ellipse', { cx: 0, cy: 2, rx: 26, ry: 6, fill: '#000', opacity: 0.2 }) +
+      E('rect', { x: -3, y: -104, width: 6, height: 104, fill: '#7a5530' }) + E('path', { d: 'M-38 -80H38', stroke: '#7a5530', 'stroke-width': 5, 'stroke-linecap': 'round' }) +
+      E('path', { d: 'M-8 0l-9-5M8 0l9-5M0 0l-2-9M0 0l4-8', stroke: '#e3c257', 'stroke-width': 2.4, 'stroke-linecap': 'round' }) +
+      E('path', { 'class': 'sleeve', d: 'M-38 -88h18v24h-18z', fill: o.coat }) + E('path', { d: 'M20 -88h18v24h-18z', fill: o.coat }) +
+      E('path', { d: 'M-20 -90h40l5 62h-50z', fill: o.coat }) + E('path', { d: 'M0 -90v62', stroke: o.dark, 'stroke-width': 2 }) +
+      E('path', { d: 'M-44 -80l-8-6M-44 -78l-9 2M44 -80l8-6M44 -78l9 2', stroke: '#e3c257', 'stroke-width': 2.6, 'stroke-linecap': 'round' }) +
+      E('rect', { x: -9, y: -58, width: 18, height: 10, fill: '#fbfdf2', stroke: '#6f5031', 'stroke-width': 0.8 }) + E('text', { x: 0, y: -50.5, 'class': 'cardT' }, o.name);
+    if (o.hat === 'bucket') {
+      s += E('path', { d: 'M-14 -92h28l-4-28h-20z', fill: '#9aa5a8' }) + E('path', { d: 'M-14 -92h28', stroke: '#6f7a7d', 'stroke-width': 3 }) +
+        E('circle', { cx: -5, cy: -108, r: 2, fill: '#27331c' }) + E('circle', { cx: 5, cy: -108, r: 2, fill: '#27331c' }) + E('path', { d: 'M-7 -100q7 6 14 0', stroke: '#d2452f', 'stroke-width': 2.4, fill: 'none', 'stroke-linecap': 'round' }) +
+        E('path', { d: 'M-24 -82q24 12 48 0', stroke: '#d2452f', 'stroke-width': 5, fill: 'none', 'stroke-linecap': 'round' });
+    } else {
+      s += E('circle', { cx: 0, cy: -104, r: 15, fill: '#e9d6a6' }) + E('path', { d: 'M-7 -107l4 4M-3 -107l-4 4M3 -107l4 4M7 -107l-4 4', stroke: '#3a2a14', 'stroke-width': 1.8 }) +
+        E('path', { d: 'M-6 -97h12M-4 -99v4M0 -99v4M4 -99v4', stroke: '#3a2a14', 'stroke-width': 1.6 });
+      if (o.hat === 'top') s += E('rect', { x: -12, y: -140, width: 24, height: 24, fill: '#22201c' }) + E('rect', { x: -19, y: -118, width: 38, height: 5, rx: 2, fill: '#22201c' }) + E('rect', { x: -12, y: -124, width: 24, height: 4, fill: '#b3372b' });
+      else s += E('ellipse', { cx: 0, cy: -116, rx: 21, ry: 4.5, fill: '#e3c257' }) + E('path', { d: 'M-12 -116q0-13 12-13t12 13z', fill: '#efd58d' }) + E('circle', { cx: 9, cy: -84, r: 4, fill: '#f6a6c0' });
+    }
+    return G({ id: id, 'class': 'hot', transform: 'translate(' + [x, y].join(' ') + ')' }, G({ transform: 'scale(' + k.toFixed(3) + ')' }, s));
+  }
+  function hive(x, y) {
+    return E('ellipse', { cx: x, cy: y + 2, rx: 16, ry: 4, fill: '#000', opacity: 0.16 }) + E('path', { d: 'M' + (x - 11) + ' ' + y + 'v-6M' + (x + 11) + ' ' + y + 'v-6', stroke: '#7a5530', 'stroke-width': 3 }) +
+      E('rect', { x: x - 13, y: y - 30, width: 26, height: 24, fill: '#fbfdf2', stroke: '#b9c2a8', 'stroke-width': 1.5 }) + E('path', { d: 'M' + (x - 13) + ' ' + (y - 18) + 'h26', stroke: '#b9c2a8', 'stroke-width': 1.5 }) +
+      E('rect', { x: x - 5, y: y - 12, width: 10, height: 3, fill: '#3a2a14' }) + E('path', { d: 'M' + (x - 16) + ' ' + (y - 30) + 'l16-9 16 9z', fill: '#9aa5a8' });
+  }
+  function hen(x, y, cls, col) {
+    return G({ 'class': ['peck', cls].join(' ') }, E('ellipse', { cx: x, cy: y - 9, rx: 11, ry: 8, fill: col }) + E('circle', { cx: x + 9, cy: y - 17, r: 5, fill: col }) +
+      E('path', { d: 'M' + (x + 13) + ' ' + (y - 17) + 'l6 2-6 2z', fill: '#f29a2b' }) + E('path', { d: 'M' + (x + 7) + ' ' + (y - 22) + 'q3-4 5 0z', fill: '#d2452f' }) +
+      E('path', { d: 'M' + (x - 10) + ' ' + (y - 12) + 'l-7-6 3 9z', fill: col }) + E('path', { d: 'M' + (x - 2) + ' ' + (y - 2) + 'v4M' + (x + 3) + ' ' + (y - 2) + 'v4', stroke: '#f29a2b', 'stroke-width': 1.6 }));
+  }
+  function wigwam(x, y) {
+    var s = E('path', { d: 'M' + (x - 20) + ' ' + y + 'L' + x + ' ' + (y - 116) + 'L' + (x + 20) + ' ' + y + 'M' + x + ' ' + (y + 4) + 'V' + (y - 116), stroke: '#b98a4e', 'stroke-width': 3, fill: 'none' }), i, t, px, py;
+    for (i = 0; i < 16; i++) {
+      t = (i * 0.618) % 1; py = y - 8 - t * 96; px = x + (((i * 7) % 5) - 2) * 4 * (1 - t * 0.8);
+      s += E('ellipse', { cx: px, cy: py, rx: 10 - t * 3, ry: 8 - t * 2, fill: i % 3 ? '#3f8a3a' : '#56a34a' });
+      if (i % 4 === 0) s += E('circle', { cx: px + 5, cy: py - 2, r: 2.6, fill: '#e0452f' });
+    }
+    return s;
+  }
+  function sunflower(x, y, h, cls) {
+    var s = E('path', { d: 'M' + x + ' ' + y + 'V' + (y - h), stroke: '#3f8a3a', 'stroke-width': 4 }) + E('ellipse', { cx: x - 9, cy: y - h * 0.45, rx: 10, ry: 5, fill: '#4f9a45', transform: 'rotate(-28 ' + (x - 9) + ' ' + (y - h * 0.45) + ')' }) +
+      E('ellipse', { cx: x + 9, cy: y - h * 0.62, rx: 10, ry: 5, fill: '#4f9a45', transform: 'rotate(28 ' + (x + 9) + ' ' + (y - h * 0.62) + ')' }), i, an;
+    for (i = 0; i < 10; i++) { an = i * Math.PI / 5; s += E('ellipse', { cx: x + Math.cos(an) * 12, cy: y - h + Math.sin(an) * 12, rx: 6, ry: 4, fill: '#f4c430', transform: 'rotate(' + (i * 36) + ' ' + (x + Math.cos(an) * 12).toFixed(1) + ' ' + (y - h + Math.sin(an) * 12).toFixed(1) + ')' }); }
+    return G({ 'class': ['nod', cls].join(' ') }, s + E('circle', { cx: x, cy: y - h, r: 8.5, fill: '#6f4a22' }));
+  }
+  function hedge(x0, x1, y) {
+    var d = 'M' + x0 + ' ' + (y + 30) + 'V' + (y + 6), x, d2 = '';
+    for (x = x0; x < x1; x += 30) { d += 'q15-22 30 0'; d2 += 'M' + (x + 6) + ' ' + (y + 8) + 'q9-12 18 0'; }
+    return E('path', { d: d + 'V' + (y + 30) + 'Z', fill: '#3f8a3a' }) + E('path', { d: d2, stroke: '#5fae4a', 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' });
+  }
+  function sideHedge(x, y0, y1, dir) {
+    var d = 'M' + x + ' ' + y0, y, d2 = '';
+    for (y = y0; y < y1; y += 30) { d += 'q' + (dir * 22) + ' 15 0 30'; d2 += 'M' + (x + dir * 6) + ' ' + (y + 6) + 'q' + (dir * 12) + ' 9 0 18'; }
+    return E('path', { d: d + 'H' + (x - dir * 1200) + 'V' + y0 + 'Z', fill: '#3f8a3a' }) + E('path', { d: d2, stroke: '#5fae4a', 'stroke-width': 3, fill: 'none', 'stroke-linecap': 'round' });
+  }
+  function post(x, y, label, w, flip) {
+    return E('path', { d: 'M' + x + ' ' + y + 'V' + (y - 46), stroke: '#6f4a22', 'stroke-width': 5, 'stroke-linecap': 'round' }) +
+      E('path', { d: flip ? 'M' + (x + 6) + ' ' + (y - 46) + 'h-' + w + 'l-10 11 10 11h' + w + 'z' : 'M' + (x - 6) + ' ' + (y - 46) + 'h' + w + 'l10 11-10 11h-' + w + 'z', fill: '#fbfdf2', stroke: '#6f4a22', 'stroke-width': 2.5, 'stroke-linejoin': 'round' }) +
+      E('text', { x: flip ? x + 6 - w / 2 : x - 6 + w / 2, y: y - 28, 'class': 'postT' }, label);
+  }
+  function gate(x, y) {
+    return E('rect', { x: x - 34, y: y - 26, width: 8, height: 34, fill: '#6f4a22' }) + E('rect', { x: x + 26, y: y - 26, width: 8, height: 34, fill: '#6f4a22' }) +
+      E('path', { d: 'M' + (x + 30) + ' ' + (y - 20) + 'l34-12M' + (x + 30) + ' ' + (y - 10) + 'l34-12M' + (x + 30) + ' ' + y + 'l34-12M' + (x + 64) + ' ' + (y - 34) + 'v24', stroke: '#b98a4e', 'stroke-width': 4, 'stroke-linecap': 'round', fill: 'none' });
+  }
+
+  (function () {
+    var s = '', i, x, y;
+    for (i = 0; i < 46; i++) {
+      x = (i * 397) % 1700 - 50; y = 220 + (i * 211) % 680;
+      s += E('ellipse', { cx: x, cy: y, rx: 50 + (i * 13) % 60, ry: 12 + (i * 7) % 12, fill: i % 2 ? '#b8de72' : '#7fb543', opacity: 0.4 });
+    }
+    for (i = 0; i < 70; i++) {
+      x = (i * 523) % 1640 - 20; y = 216 + (i * 337) % 660;
+      s += E('path', { d: 'M' + x + ' ' + y + 'l-4-9M' + x + ' ' + y + 'l1-11M' + x + ' ' + y + 'l5-8', stroke: '#5f9d38', 'stroke-width': 2.2, 'stroke-linecap': 'round', fill: 'none' });
+      if (i % 5 === 0) s += E('circle', { cx: x + 12, cy: y - 3, r: 3, fill: i % 2 ? '#fff' : '#f4c430' });
+    }
+    $('#blots').innerHTML = s;
+    $('#plots').innerHTML = plot(74, 366, 160, 74, 'car', -3) + plot(446, 236, 140, 84, 'let', 2) + plot(456, 346, 124, 96, 'pot', -2) + plot(992, 214, 132, 80, 'oni', 3) +
+      plot(1012, 524, 190, 78, 'cab', -2) + plot(1244, 522, 150, 74, 'car', 2) + plot(442, 734, 150, 92, 'cab', 3) + plot(628, 812, 150, 62, 'let', -2) +
+      plot(336, 800, 96, 66, 'red', 2) + plot(46, 652, 92, 104, 'pot', -3) + plot(286, 606, 138, 70, 'oni', 0) + plot(596, 484, 96, 66, 'red', -4) + plot(1420, 500, 130, 66, 'let', 3);
+    /* paths */
+    s = '';
+    EDGES.forEach(function (e) { s += E('path', { d: e[2], stroke: '#b9a56c', 'stroke-width': e[3] + 7, fill: 'none', 'stroke-linecap': 'round' }); });
+    EDGES.forEach(function (e) {
+      s += E('path', { id: 'e-' + e[0] + '-' + e[1], d: e[2], stroke: '#ecdcae', 'stroke-width': e[3], fill: 'none', 'stroke-linecap': 'round' }) +
+        E('path', { d: e[2], stroke: '#d2c08a', 'stroke-width': Math.max(3, e[3] / 6), fill: 'none', 'stroke-dasharray': '2 15', 'stroke-linecap': 'round' });
+    });
+    $('#paths').innerHTML = s + E('ellipse', { cx: 104, cy: 858, rx: 78, ry: 26, fill: '#8a6843' }) + E('path', { d: 'M40 884Q90 862 128 838', stroke: '#4a3520', 'stroke-width': 7, fill: 'none', 'stroke-linecap': 'round' });
+    s = '';
+    EDGES.forEach(function (e) { s += E('path', { 'class': 'trail', id: 't-' + e[0] + '-' + e[1], d: e[2], stroke: '#c2361f', 'stroke-width': 5, fill: 'none', 'stroke-dasharray': '12 9', 'stroke-linecap': 'round' }); });
+    $('#trail').innerHTML = s; s = '';
+    Object.keys(NODES).forEach(function (k) {
+      var n = NODES[k];
+      s += G({ 'class': ['stone', 'hot'].join(' '), 'data-n': k, transform: 'translate(' + n.join(' ') + ')' },
+        E('circle', { r: 36, fill: 'transparent' }) + E('ellipse', { cy: 3, rx: 21, ry: 13, fill: '#000', opacity: 0.2 }) + E('ellipse', { 'class': 'st', rx: 21, ry: 13, fill: '#dcd7c8', stroke: '#8d8877', 'stroke-width': 2 }) +
+        E('ellipse', { cx: -6, cy: -4, rx: 8, ry: 3.5, fill: '#fff', opacity: 0.55 }) + E('ellipse', { 'class': 'ringp', rx: 33, ry: 21, fill: 'none', stroke: '#c2361f', 'stroke-width': 4 }));
+    });
+    $('#stones').innerHTML = s;
+    /* hedges, gates and signposts */
+    $('#hedges').innerHTML = hedge(-1000, 296, 176) + hedge(364, 766, 176) + hedge(834, 1266, 176) + hedge(1334, 2600, 176) +
+      sideHedge(30, 206, 436, 1) + sideHedge(30, 504, 884, 1) + sideHedge(1570, 206, 266, -1) + sideHedge(1570, 334, 1300, -1) +
+      E('path', { d: 'M-1000 1500V884H60V1500ZM180 1500V884H2600V1500Z', fill: '#3f8a3a' }) + hedge(180, 2600, 866) + hedge(-1000, 60, 866);
+    $('#posts').innerHTML = gate(330, 206) + gate(800, 206) + gate(1300, 206) +
+      E('rect', { x: 26, y: 430, width: 10, height: 12, fill: '#6f4a22' }) + E('rect', { x: 26, y: 498, width: 10, height: 12, fill: '#6f4a22' }) +
+      E('rect', { x: 1564, y: 260, width: 10, height: 12, fill: '#6f4a22' }) + E('rect', { x: 1564, y: 328, width: 10, height: 12, fill: '#6f4a22' }) +
+      E('rect', { x: 54, y: 866, width: 9, height: 36, fill: '#6f4a22' }) + E('rect', { x: 177, y: 866, width: 9, height: 36, fill: '#6f4a22' }) +
+      post(282, 214, 'ROAD', 54, true) + post(752, 214, 'CHURCH', 70, true) + post(1252, 214, 'VILLAGE HALL', 112, true) +
+      post(64, 432, 'RIVER', 56) + post(1536, 262, 'CAR PARK', 86, true) + post(206, 878, 'SHOW FIELD', 100);
+    /* the back of the field */
+    $('#back').innerHTML = G({ id: 'orchard', 'class': 'hot' }, tree(906, 250, 26, 1) + tree(958, 284, 28, 1) + tree(912, 316, 30, 1)) +
+      G({ id: 'suns', 'class': 'hot' }, plot(70, 250, 176, 96, 'x', 0).replace(/<circle[^>]*>|<ellipse[^>]*>/g, '') + [0, 1, 2, 3, 4, 5].map(function (i) { return sunflower(92 + i * 27, 338 - (i % 2) * 22, 62 + (i * 13) % 26, i % 2 ? 'n2' : ''); }).join(''));
+    $('#mid1').innerHTML = G({ id: 'hivesG', 'class': 'hot' }, hive(312, 428) + hive(346, 440) + hive(292, 452) +
+      [[300, 396], [330, 404], [356, 414], [318, 418]].map(function (p, i) { return E('circle', { 'class': 'bob' + (i % 2 ? ' b2' : ''), cx: p[0], cy: p[1], r: 2.2, fill: '#3a2a14' }); }).join(''));
+    $('#mid2').innerHTML = scarecrow('crowA', 440, 572, 132, { coat: '#3a3a40', dark: '#22201c', hat: 'top', name: 'T. NASH' }) +
+      scarecrow('crowB', 660, 586, 102, { coat: '#8d8a84', dark: '#6f6c66', hat: 'straw', name: 'W. PEGG' });
+    $('#mid3').innerHTML = G({ id: 'compost', 'class': 'hot' },
+      E('ellipse', { cx: 108, cy: 626, rx: 56, ry: 6, fill: '#000', opacity: 0.16 }) + E('path', { d: 'M70 598q38-34 76 0z', fill: '#6b4a2b' }) + E('path', { d: 'M92 590q8-8 14-2M112 584q8-4 12 4', stroke: '#8a6843', 'stroke-width': 2.5, fill: 'none' }) +
+      E('path', { d: 'M62 574v50M82 590v34M134 590v34M154 574v50M62 600h92M62 614h92', stroke: '#b98a4e', 'stroke-width': 5, 'stroke-linecap': 'round', fill: 'none' }) +
+      E('path', { d: 'M50 626V562M42 562h16M42 562v-14M50 562v-14M58 562v-14', stroke: '#6f7a7d', 'stroke-width': 3, 'stroke-linecap': 'round', fill: 'none' }));
+    $('#front').innerHTML = scarecrow('crowC', 606, 744, 76, { coat: '#3f86ad', dark: '#34749a', hat: 'bucket', name: 'SCHOOL' }) +
+      G({ id: 'henH', 'class': 'hot' }, E('ellipse', { cx: 890, cy: 816, rx: 70, ry: 7, fill: '#000', opacity: 0.16 }) +
+        E('rect', { x: 846, y: 768, width: 70, height: 44, fill: '#c08d52' }) + E('path', { d: 'M858 768v44M870 768v44M882 768v44M894 768v44M906 768v44', stroke: '#a87840', 'stroke-width': 1.5 }) +
+        E('rect', { x: 870, y: 786, width: 20, height: 26, rx: 9, fill: '#3a2a14' }) + E('path', { d: 'M838 770L881 744L924 770Z', fill: '#b3372b' }) + E('path', { d: 'M890 812l26 12', stroke: '#8f6030', 'stroke-width': 5, 'stroke-linecap': 'round' }) +
+        E('path', { d: 'M924 776v40M944 780v38M964 784v36M924 790l40 8M924 804l40 8', stroke: '#9aa5a8', 'stroke-width': 2, fill: 'none' }) +
+        hen(830, 840, '', '#b5673a') + hen(946, 836, 'p2', '#fbfdf2') + hen(990, 818, 'p3', '#b5673a') + hen(852, 842, 'p3', '#e9d6a6') + hen(1006, 846, 'p2', '#3a3a40'));
+    $('#beans').innerHTML = E('ellipse', { cx: 1126, cy: 772, rx: 110, ry: 9, fill: '#000', opacity: 0.16 }) + E('rect', { x: 1034, y: 730, width: 190, height: 44, rx: 8, fill: '#8b6741', stroke: '#6f5031', 'stroke-width': 3 }) +
+      wigwam(1064, 762) + wigwam(1106, 766) + wigwam(1148, 762) + wigwam(1190, 766) + E('path', { d: 'M1044 650H1210', stroke: '#b98a4e', 'stroke-width': 3 });
+    $('#foot').innerHTML = G({ transform: 'translate(42 0)' }, E('rect', { x: 1404, y: 834, width: 44, height: 5, rx: 2, fill: '#b98a4e' }) + E('path', { d: 'M1412 839v32M1440 839v32', stroke: '#8f6030', 'stroke-width': 4 }) +
+      E('rect', { x: 1412, y: 804, width: 14, height: 30, rx: 4, fill: '#b3372b' }) + E('rect', { x: 1414, y: 798, width: 10, height: 8, rx: 2, fill: '#fbfdf2' }) + E('path', { d: 'M1412 814h14M1412 824h14', stroke: '#f4c430', 'stroke-width': 2 }) +
+      E('rect', { x: 1430, y: 822, width: 12, height: 12, rx: 2, fill: '#fbfdf2' }));
+    place(NODES.gate);
+  })();
+
+  ER.init({
+    theme: 'mystery', story: 'gloria', storyTitle: 'Where Is Gloria?', id: 'plots', no: 'II', title: 'The Allotments',
+    go: 'Follow the wheel',
+    intro: [
+      'Nobody carried Gloria. Somebody untied the back door, took the plank from behind the table and made a slope with it, and rolled her down into something with one wheel. A straw bale kept the door open. The wheel went over the prize card on its way out.',
+      'One wheel means a wheelbarrow. Small boots mean somebody small.',
+      'The wheel mark goes across the grass and through a gate, into the allotments. Then the mud stops, the gravel begins, and the mark is gone.',
+      'A woman in a very large hat is sitting outside a blue shed. She looks as if she has been sitting there all morning.'
+    ],
+    exit: {"next":"teas","w":{"7223707d":"2c369f2e"}}, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var SCRAP = '<p>under the ta&hellip;</p><p>NOT the bi&hellip;</p>';
+  var JOT = '<h4>Mr Nash&rsquo;s wheelbarrow</h4><p>It is beside his green shed. It has two wheels, and it is clean and dry.</p><p>The mark in the mud had one wheel.</p>';
+
+  function hints() {
+    if (done) return ['go', ['This gate is open. Use the button at the bottom to go through it.']];
+    if (!heard) return ['tan', [
+      'The wheel mark stops where the gravel begins. But somebody has been sitting here all morning. Click on the woman in the big hat.',
+      'Listen to Miss Tan right to the end. She tells you which way the wheelbarrow went, one step at a time.'
+    ]];
+    return ['route', [
+      'You are the red marker at the first gate. Click the next stone on the path to walk there. Miss Tan&rsquo;s words are in your Notebook: follow them one step at a time.',
+      'At every fork she compares two or three things. Which path is wider? Which bridge is longer? Which shed is older? Look at them, then choose.',
+      'The scarecrows are the hard part. Not the tallest, and not the shortest: so which one is left? If you take a wrong turn, click the stone you came from to walk back.'
+    ]];
+  }
+  function begin() {
+    ER.pips(0, 2); mark();
+    ER.narrate([
+      'It is quiet here, after the tent. Bees, hens, and somewhere a radio.',
+      'You are the red marker at the gate. The paths go off in every direction, and the gravel tells you nothing.'
+    ]);
+  }
+
+  /* ---------- walking ---------- */
+  function place(p) { me.setAttribute('transform', 'translate(' + p[0] + ' ' + p[1] + ')'); }
+  function mark() {
+    ER.$$('.stone').forEach(function (n) {
+      var k = n.getAttribute('data-n');
+      n.classList.toggle('next', heard && !done && !walking && !!edge(at, k));
+    });
+    EDGES.forEach(function (e) {
+      var on = false, i;
+      for (i = 1; i < route.length; i++) if (edge(route[i - 1], route[i]) === e) on = true;
+      $('#t-' + e[0] + '-' + e[1]).classList.toggle('on', on);
+    });
+  }
+  function go(to) {
+    var e = edge(at, to), el, L, rev, t0 = 0, dur;
+    if (!e || walking || busy || done) return;
+    el = $('#e-' + e[0] + '-' + e[1]); L = el.getTotalLength(); rev = e[0] !== at; dur = Math.max(450, L * 2.7);
+    walking = true; mark(); ER.sfx.paper();
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var u = Math.min(1, (ts - t0) / dur), k = u < 0.5 ? 2 * u * u : 1 - Math.pow(2 - 2 * u, 2) / 2, p = el.getPointAtLength((rev ? 1 - k : k) * L);
+      place([p.x.toFixed(1), p.y.toFixed(1)]);
+      if (u < 1) { requestAnimationFrame(step); return; }
+      if (route.length > 1 && route[route.length - 2] === to) route.pop(); else route.push(to);
+      at = to; walking = false; place(NODES[at]); mark(); ER.sfx.click();
+      if (ENDS[at]) arrive();
+    }
+    requestAnimationFrame(step);
+  }
+  function arrive() {
+    var file = ER.exitOk([route.join('>')]);
+    if (!file) {
+      busy = true; ER.sfx.no();
+      ER.narrate([ENDS[at], 'You walk back to the first gate.'], function () {
+        at = 'gate'; route = ['gate']; place(NODES.gate); busy = false; mark();
+      });
+      return;
+    }
+    done = true; busy = true; nextFile = file; mark(); ER.pips(2, 2);
+    var st = ER.state(); st.done = st.done || {}; st.done.plots = 1; ER.flag('plots', 1);
+    ER.sfx.ok();
+    $('#caught').setAttribute('transform', 'translate(' + [NODES[at][0] + 22, NODES[at][1] - 8].join(' ') + ')'); $('#caught').classList.add('on');
+    ER.narrate([
+      'This gate is open. On the other side the grass is flat in one thin line.',
+      'A scrap of paper is caught on the gate post. Blue ink, and mud. You have seen this handwriting before.',
+      'Behind the hedge, very near, something squeaks. And something smells wonderful.'
+    ], function () {
+      ER.addClue('scrap2', 'A scrap of paper from the gate', SCRAP, 'scrap', 'Torn paper');
+      busy = false; $('#go').classList.add('on');
+    });
+  }
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#stones').addEventListener('click', function (e) {
+    var n = e.target.closest ? e.target.closest('.stone') : null, k;
+    if (!n || busy || walking) return;
+    k = n.getAttribute('data-n');
+    if (done) { if (k === at && nextFile) ER.leave(nextFile); return; }
+    if (!heard) return ER.say('Which way? The gravel shows no wheel marks. Somebody here may have seen the wheelbarrow.');
+    if (k === at) return ER.say('You are standing on this stone. Click the next one along a path.');
+    if (!edge(at, k)) return ER.say('That stone is too far away. Walk one stone at a time.');
+    go(k);
+  });
+  (function () {
+    var ox = 0, oy = 0;
+    ER.drag(me, {
+      start: function (e) { if (busy || walking || done) return false; var p = ER.pt(svg, e); ox = p.x - NODES[at][0]; oy = p.y - NODES[at][1]; },
+      move: function (e, moved) { if (!moved) return; var p = ER.pt(svg, e); place([(p.x - ox).toFixed(1), (p.y - oy).toFixed(1)]); },
+      end: function (e, moved) {
+        var p = ER.pt(svg, e), best = null, bd = 90, k, d;
+        place(NODES[at]);
+        if (!moved) return ER.say('That is you. Click the next stone along a path, or drag yourself there.');
+        if (!heard) return ER.say('Which way? The gravel shows no wheel marks. Somebody here may have seen the wheelbarrow.');
+        for (k in NODES) { d = Math.hypot(p.x - ox - NODES[k][0], p.y - oy - NODES[k][1]); if (k !== at && edge(at, k) && d < bd) { bd = d; best = k; } }
+        if (best) go(best);
+      }
+    });
+  })();
+
+  /* ---------- things to look at ---------- */
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) { if (busy) return; if (word) ER.wordAt(e.clientX, e.clientY, word); if (line) ER.say(line); });
+  }
+  thing('#crowA', 'scarecrow', 'A scarecrow in a black hat and a long coat. A card on the coat says T. NASH.');
+  thing('#crowB', 'scarecrow', 'A scarecrow in a grey jacket and a straw hat, with a flower. A card says W. PEGG.');
+  thing('#crowC', 'scarecrow', 'A scarecrow with a bucket for a head and a painted smile. The children at Wickerby School made it.');
+  thing('#shedOld', 'shed', 'A grey shed. The door does not shut, and the roof is green with moss.');
+  thing('#shedNew', 'shed', 'A red shed with a white door. You can still smell the paint.');
+  thing('#nashShed', 'shed', 'A green shed. T. NASH. Everything round it is in straight lines.');
+  thing('#tanShed', 'shed', 'A blue shed with a number 7 and curtains in the window.');
+  thing('#glassH', 'greenhouse', 'Two greenhouses, full of tomatoes.');
+  thing('#bridgeS', 'bridge', 'A little bridge. Three steps and you are over.');
+  thing('#bridgeL', 'bridge', 'A bridge of old planks over the wide part of the water. It moves a bit when you stand on it.');
+  thing('#pond', 'pond', 'A pond, two ducks, and no pumpkin.');
+  thing('#stream', 'stream', 'A stream. It comes out of the pond and goes off towards the river.');
+  thing('#hivesG', 'beehives', 'Three beehives. The bees are busy. They did not see anything.');
+  thing('#compost', 'compost heap', 'A compost heap. It is warm, and it smells of old cabbage.');
+  thing('#henH', 'hen house', 'The hen house, and five hens.');
+  thing('#orchard', 'apple trees', null);
+  thing('#suns', 'sunflowers', 'Sunflowers. Every one of them is looking at the sun.');
+  thing('#beans', 'beans', 'Miss Tan&rsquo;s beans. One metre sixty. You cannot see over them.');
+  thing('#rhubarb', 'rhubarb', 'Rhubarb. Do not sit on it.');
+  thing('#patch', 'hollow', 'This is where Gloria grew. There is a hollow in the straw as big as a bath. Beside it are a chair, a radio and a bottle of milk.');
+  thing('#skyline', null, 'The roofs of Wickerby. The church clock says ten to twelve. Next to the village hall there is a striped tent, and a little steam.');
+  $('#nashBarrow').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'wheelbarrow');
+    ER.say('A wheelbarrow with NASH on the side. It has two wheels, and it is clean and dry. The mark in the mud had one wheel.', 7000);
+    if (!seenBarrow) { seenBarrow = true; ER.addClue('nashbarrow', 'Mr Nash’s wheelbarrow', JOT, 'jot', 'What you saw'); }
+  });
+  $('#tanHot').addEventListener('click', function () {
+    if (busy || walking) return;
+    var c = CAST.olive;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('olive'),
+      lines: [
+        'Sit down, dear. Not there. That&rsquo;s the rhubarb.',
+        'Olive Tan, plot 7. I have been in this chair since eight o&rsquo;clock, and I see everything from here. Nobody ever asks me.',
+        { q: 'Did a wheelbarrow come through here this morning?', a: 'Two. Ted Nash came first, at five to ten. His barrow was empty. He put it away beside his shed and went off again. You can&rsquo;t miss Ted. He is taller than my beans.' },
+        'Then the church clock struck ten, and a second barrow came through that gate. This one squeaked. And there was something big and orange in it. Bigger than my best cabbage. Much bigger than my pumpkin, but don&rsquo;t tell anybody.',
+        { q: 'Who was pushing it?', a: 'I couldn&rsquo;t see. My beans are one metre sixty this year. So it was somebody shorter than my beans. Not Ted, then. I only saw the orange thing going along above the cabbages, like a small sun.' },
+        { q: 'Which way did it go?', a: 'I watched it all the way. From the gate it took the wider path, as far as the three scarecrows.' },
+        'There it turned. It did not go past the tallest scarecrow. That one is Ted&rsquo;s, of course. And it did not go past the shortest one, the one the school children made.',
+        'Then it came to the water. There are two bridges. It went over the longer one. I thought, that will never get across. It got across.',
+        'After the bridge there are two sheds. It went past the older one. That shed is older than I am, and I am eighty-four.',
+        'Then it went out through the gate behind the shed, and I lost it. But I could still hear the squeak.'
+      ],
+      clue: { id: 'tan', title: 'Miss Tan, at the allotments' },
+      done: function (seen) {
+        if (!seen || heard) return;
+        heard = true; ER.pips(1, 2); $('#tanHot').classList.add('done'); mark();
+        ER.say('The stones on the paths are stepping stones. Click the next one to walk to it.', 6000);
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

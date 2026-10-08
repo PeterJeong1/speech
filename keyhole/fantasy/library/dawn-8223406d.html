@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Dawn, at Eight in the Evening · The Library That Locks at Dusk</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#060a1f;--accent:#ffd27a;--font-display:'Uncial Antiqua',serif;--font-ui:'Almendra',serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(6,10,31,.93);--tc-ink:#f1e9d2;--cap-bg:rgba(7,11,30,.93);--panel:#12173a;--fade:#03051a;--hud-bg:rgba(6,10,31,.7)}
+  .hud,.btn,.ov-x{font-weight:700}
+  .tc-room{font-size:clamp(32px,4.8vw,62px);color:#ffe2a0}
+  .openT{font-family:'Uncial Antiqua',serif;font-size:25px;letter-spacing:3px;fill:#f6e7bd;text-anchor:middle}
+  .tw{animation:tw 3.3s steps(3) infinite}.tw.t2{animation-duration:4.6s;animation-delay:-1.4s}.tw.t3{animation-duration:5.4s;animation-delay:-2.7s}
+  @keyframes tw{50%{opacity:.3}}
+  .rune{animation:rune 3.4s steps(3) infinite}.rune:nth-child(2n){animation-delay:-1.2s}.rune:nth-child(3n){animation-delay:-2.3s}
+  @keyframes rune{50%{opacity:.3}}
+  .halo{animation:halo 4s steps(4) infinite}.halo.h2{animation-delay:-1.6s}.halo.h3{animation-delay:-2.7s}
+  @keyframes halo{50%{opacity:.75}}
+  .walker{animation:walk 70s linear forwards}
+  .walker.w2{animation-duration:84s}.walker.w3{animation-duration:96s}.walker.w4{animation-duration:110s}
+  @keyframes walk{to{transform:translate(64px,-34px)}}
+  .lant{animation:lant 2.2s ease-in-out infinite alternate}
+  @keyframes lant{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+  #sign{transform-origin:1004px 512px;animation:sway 3.6s ease-in-out infinite alternate}
+  @keyframes sway{from{transform:rotate(-2.2deg)}to{transform:rotate(2.2deg)}}
+  .orbit{transform-origin:800px 370px;animation:orbit 5s linear infinite}
+  .orbit.o2{animation-duration:3.6s;animation-direction:reverse}.orbit.o3{animation-duration:7s}
+  @keyframes orbit{to{transform:rotate(360deg)}}
+  .smoke{animation:smoke 7s linear infinite}.smoke.s2{animation-delay:-3.4s}
+  @keyframes smoke{0%{transform:translate(0,0) scale(.6);opacity:0}15%{opacity:.5}100%{transform:translate(26px,-70px) scale(1.5);opacity:0}}
+  .fly{animation:fly 6s ease-in-out infinite alternate}.fly.f2{animation-duration:8s;animation-delay:-3s}.fly.f3{animation-duration:5s;animation-delay:-1s}
+  @keyframes fly{0%{transform:translate(0,0);opacity:.2}50%{opacity:1}100%{transform:translate(26px,-18px);opacity:.3}}
+
+  /* the date slip */
+  .slip{position:fixed;right:3vw;top:64px;z-index:34;width:min(430px,92vw);padding:22px 28px 20px;color:#2b2218;display:none;transform:rotate(1deg);
+    background:#f3e9cc repeating-linear-gradient(transparent 0 37px,rgba(120,96,60,.3) 37px 38px);box-shadow:0 20px 60px rgba(0,0,0,.6);border-top:10px solid #5a2a22}
+  .slip.on{display:block}
+  .slip h3{margin:0 0 2px;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:21px;color:#5a2a22}
+  .slip .sub{font-family:'Almendra',serif;font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#7a5a3a;margin-bottom:10px}
+  .stamp{display:inline-block;border:4px solid #a5301f;color:#a5301f;font-family:'Cinzel',serif;font-weight:900;font-size:28px;letter-spacing:.16em;padding:3px 14px 1px;
+    transform:rotate(-6deg);margin:2px 0 12px 4px;opacity:.86;border-radius:4px}
+  .stamp small{display:block;font-size:11px;letter-spacing:.24em;text-align:center;margin-top:-3px;padding-bottom:3px}
+  .slip p{margin:0;font-family:'EB Garamond',Georgia,serif;font-size:20px;line-height:38px;font-variant-numeric:lining-nums;-webkit-font-feature-settings:'lnum';font-feature-settings:'lnum'}
+  .slip .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .slip .btn{--accent:#3a2412;font-size:12.5px;padding:8px 13px;background:#f3e9cc}.slip .btn:hover{color:#f3e9cc}
+  .slip small.again{display:block;margin-top:12px;font-family:'Almendra',serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.65}
+  .slip small.again button{text-decoration:underline;letter-spacing:.12em;text-transform:uppercase}
+
+  /* the note for the day librarian */
+  .rp{width:min(780px,94vw);max-height:88vh;overflow:auto;background:#f3e9cc;color:#2b2218;padding:22px 38px 18px;box-shadow:0 26px 70px rgba(0,0,0,.6);border-top:10px solid #5a2a22;
+    -webkit-user-select:text;user-select:text}
+  .rp h4{margin:0 0 2px;font-family:'Almendra',serif;font-weight:700;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#7a5a3a}
+  .rp h3{margin:0 0 8px;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:25px;color:#5a2a22}
+  .rp .lead{margin:0 0 4px;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:18.5px;line-height:1.3;border-bottom:2px solid #5a2a22;padding-bottom:9px}
+  .rp label{display:block;font-family:'EB Garamond',Georgia,serif;font-size:19.5px;font-weight:600;margin:9px 0 5px}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'EB Garamond',Georgia,serif;font-size:19px;line-height:1.45;color:#27304f;background:#fffdf4;border:1px solid #b9a67c;
+    padding:8px 12px;border-radius:2px;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:62px;height:62px}
+  .rp .sig{display:flex;align-items:center;gap:14px;margin-top:9px}
+  .rp .sig label{margin:0;flex:0 0 auto}
+  .rp .yn{display:flex;gap:22px;font-family:'EB Garamond',Georgia,serif;font-size:19px;margin:2px 0 8px}
+  .rp .yn label{display:inline-flex;align-items:center;gap:8px;margin:0;font:inherit;font-weight:normal;cursor:pointer}
+  .rp .count{font-family:'Almendra',serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right;margin-top:4px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:4px}
+  .rp .foot span{flex:1;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:17px;opacity:.7}
+  .rp .btn{--accent:#3a2412}.rp .btn:hover{color:#f3e9cc}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible;border-top:0}
+    .rp textarea,.rp input[type=text]{border:0;border-bottom:1px solid #999;background:#fff}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050818"/><stop offset=".5" stop-color="#101a48"/><stop offset=".8" stop-color="#27397a"/><stop offset="1" stop-color="#3a4f92"/></linearGradient>
+  <linearGradient id="hillG" gradientUnits="userSpaceOnUse" x1="0" y1="594" x2="0" y2="900"><stop offset="0" stop-color="#1b3a33"/><stop offset="1" stop-color="#0a1614"/></linearGradient>
+  <linearGradient id="stoneN" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3e4560"/><stop offset=".7" stop-color="#596181"/><stop offset="1" stop-color="#6b7496"/></linearGradient>
+  <linearGradient id="winG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#ffd27a"/><stop offset="1" stop-color="#f09a3c"/></linearGradient>
+  <linearGradient id="oakN" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a2f18"/><stop offset=".5" stop-color="#6e4727"/><stop offset="1" stop-color="#3f2713"/></linearGradient>
+  <linearGradient id="spill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd98a" stop-opacity=".75"/><stop offset=".5" stop-color="#ffb85a" stop-opacity=".2"/><stop offset="1" stop-color="#ffb85a" stop-opacity="0"/></linearGradient>
+  <linearGradient id="copper" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a5650"/><stop offset=".6" stop-color="#4f8a7c"/><stop offset="1" stop-color="#7ab3a2"/></linearGradient>
+  <radialGradient id="glowG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".8"/><stop offset=".35" stop-color="#ffb85a" stop-opacity=".22"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="moonH"><stop offset="0" stop-color="#eef3ff" stop-opacity=".5"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="doorIn" cx="50%" cy="60%" r="70%"><stop offset="0" stop-color="#fffbe0"/><stop offset=".6" stop-color="#ffd98a"/><stop offset="1" stop-color="#e89a3a"/></radialGradient>
+  <radialGradient id="vig" gradientUnits="userSpaceOnUse" cx="800" cy="450" r="684" gradientTransform="translate(800 450) scale(4 1) translate(-800 -450)"><stop offset="0" stop-color="#02030c" stop-opacity="0"/><stop offset=".65" stop-color="#02030c" stop-opacity=".25"/><stop offset="1" stop-color="#02030c" stop-opacity=".8"/></radialGradient>
+  <symbol id="gwin" viewBox="0 0 60 164" overflow="visible">
+    <path d="M2 162V52Q2 10 30 2Q58 10 58 52V162Z" fill="url(#winG)" stroke="#7a82a2" stroke-width="5"/>
+    <path d="M30 4V162M2 100H58M2 52Q16 40 30 52Q44 40 58 52" stroke="#7a5a22" stroke-width="3" fill="none"/>
+  </symbol>
+  <symbol id="folk" viewBox="-30 -80 60 86" overflow="visible">
+    <ellipse cx="0" cy="4" rx="20" ry="3.500" fill="#000" opacity=".35"/>
+    <path d="M-6 0V-16M6 0V-16" stroke="#2a2f3f" stroke-width="5" stroke-linecap="round"/>
+    <path d="M-12-16L-9-52Q0-58 9-52L12-16Z"/>
+    <circle cx="0" cy="-60" r="8" fill="#d9b59a"/>
+    <path d="M-8-63Q0-76 8-63Z" fill="#b3261c"/><path d="M6-66q9-2 11 8" stroke="#b3261c" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="17" cy="-57" r="3" fill="#f4efe2"/>
+    <path d="M9-46L20-34" stroke="#d9b59a" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+</defs>
+
+<!-- the real night -->
+<rect x="-1000" y="-500" width="3600" height="502" fill="#050818"/><rect x="-1000" width="3600" height="900" fill="url(#skyN)"/>
+<g id="stars"></g>
+<circle cx="330" cy="140" r="150" fill="url(#moonH)"/><circle cx="330" cy="140" r="52" fill="#f1f5ff"/>
+<g fill="#d3dcf0"><circle cx="310" cy="122" r="10"/><circle cx="348" cy="158" r="7"/><circle cx="344" cy="116" r="5"/><circle cx="316" cy="164" r="4"/></g>
+<g fill="#1b2a63" opacity=".8"><ellipse cx="1180" cy="190" rx="190" ry="13"/><ellipse cx="470" cy="196" rx="170" ry="11"/><ellipse cx="1000" cy="110" rx="120" ry="8"/></g>
+<path d="M-1000 640Q-360 520 160 606T900 560T1700 604T2600 548V1400H-1000Z" fill="#0c1536"/>
+<path d="M-1000 1400V770Q200 606 800 594Q1400 606 2600 790V1400Z" fill="url(#hillG)"/>
+
+<!-- Marrowby, down the hill -->
+<g id="town">
+  <g fill="#0a1020"><path d="M1180 770l34-30 34 30v60h-68zM1256 762l28-26 28 26v70h-56zM1322 776l40-34 40 34v60h-80zM1410 756l30-28 30 28v84h-60zM1478 782l36-30 36 30v60h-72zM1552 770l30-26 30 26v70h-60z"/>
+    <path d="M1380 742V690l12-34 12 34v52z"/><rect x="1216" y="726" width="9" height="20"/><rect x="1500" y="740" width="9" height="20"/></g>
+  <g fill="#ffd27a"><rect x="1200" y="784" width="9" height="11"/><rect x="1226" y="784" width="9" height="11"/><rect x="1276" y="780" width="9" height="11"/><rect x="1344" y="792" width="9" height="11"/><rect x="1372" y="792" width="9" height="11"/><rect x="1430" y="776" width="9" height="11"/><rect x="1432" y="802" width="9" height="11"/><rect x="1498" y="798" width="9" height="11"/><rect x="1524" y="798" width="9" height="11"/><rect x="1574" y="788" width="9" height="11"/></g>
+  <g fill="#aab6d8"><ellipse class="smoke" cx="1220" cy="720" rx="9" ry="6"/><ellipse class="smoke s2" cx="1504" cy="734" rx="9" ry="6"/></g>
+</g>
+
+<!-- the library, and everything in front of it, a little left of centre so the slip does not hide it -->
+<g transform="translate(-100 0)">
+<g id="library">
+  <ellipse cx="800" cy="612" rx="360" ry="24" fill="#1a3832"/>
+  <!-- the dome -->
+  <circle class="halo" cx="800" cy="258" r="140" fill="url(#glowG)" opacity=".6"/>
+  <path d="M800 92V124" stroke="#1a2038" stroke-width="5"/><circle cx="800" cy="124" r="7" fill="#c9a044"/>
+  <g fill="#c9a044"><path d="M776 88h48v5h-48zM824 90.500l12-6v12z"/><g transform="translate(798 76) scale(.8)"><ellipse cx="-2" cy="2" rx="15" ry="11"/><circle cx="12" cy="-7" r="7.500"/><path d="M19-8l9 2-9 3zM-14-2l-12-16 2 20z"/></g></g>
+  <path d="M690 250Q690 138 800 128Q910 138 910 250Z" fill="url(#copper)"/>
+  <g stroke="#234a44" stroke-width="2.500" fill="none"><path d="M800 128V250M745 140Q724 190 722 250M855 140Q876 190 878 250"/></g>
+  <rect x="682" y="246" width="236" height="56" fill="url(#stoneN)"/><rect x="674" y="240" width="252" height="12" fill="#7f88a8"/>
+  <g fill="url(#winG)" stroke="#7a82a2" stroke-width="3"><path d="M716 296v-22q0-12 12-12t12 12v22zM788 296v-22q0-12 12-12t12 12v22zM860 296v-22q0-12 12-12t12 12v22z"/></g>
+  <!-- the front -->
+  <path d="M520 344L560 300H1040L1080 344Z" fill="#232a44"/>
+  <rect x="520" y="344" width="560" height="262" fill="url(#stoneN)"/>
+  <g stroke="#2f3550" stroke-width="2" opacity=".55"><path d="M520 378H1080M520 412H1080M520 446H1080M520 480H1080M520 514H1080M520 548H1080M520 582H1080"/></g>
+  <rect x="506" y="336" width="34" height="270" fill="#4a516e"/><rect x="1060" y="336" width="34" height="270" fill="#7a83a6"/><rect x="498" y="336" width="604" height="14" fill="#7f88a8"/>
+  <g>
+    <circle class="halo h2" cx="602" cy="470" r="100" fill="url(#glowG)" opacity=".55"/><circle class="halo h3" cx="1000" cy="470" r="100" fill="url(#glowG)" opacity=".55"/>
+    <use href="#gwin" x="560" y="384" width="60" height="164"/><use href="#gwin" x="640" y="384" width="60" height="164"/><use href="#gwin" x="900" y="384" width="60" height="164"/><use href="#gwin" x="980" y="384" width="60" height="164"/>
+  </g>
+  <!-- ivy up one side -->
+  <g>
+    <path d="M534 606q-12-60 8-110t-6-92 18-60" stroke="#1d4a2a" stroke-width="5" fill="none"/><path d="M556 606q14-40 2-80t20-66" stroke="#1d4a2a" stroke-width="4" fill="none"/>
+    <g fill="#2f6f3c"><ellipse cx="528" cy="568" rx="13" ry="7" transform="rotate(-30 528 568)"/><ellipse cx="550" cy="528" rx="13" ry="7" transform="rotate(30 550 528)"/><ellipse cx="534" cy="486" rx="12" ry="7" transform="rotate(-40 534 486)"/><ellipse cx="548" cy="446" rx="12" ry="7" transform="rotate(26 548 446)"/><ellipse cx="530" cy="410" rx="11" ry="6" transform="rotate(-30 530 410)"/><ellipse cx="552" cy="372" rx="11" ry="6" transform="rotate(30 552 372)"/><ellipse cx="572" cy="560" rx="11" ry="6" transform="rotate(34 572 560)"/><ellipse cx="562" cy="500" rx="10" ry="6" transform="rotate(-24 562 500)"/><ellipse cx="582" cy="466" rx="10" ry="6" transform="rotate(40 582 466)"/></g>
+    <g fill="#4f9a58"><ellipse cx="540" cy="548" rx="8" ry="5" transform="rotate(20 540 548)"/><ellipse cx="542" cy="466" rx="8" ry="5" transform="rotate(-20 542 466)"/><ellipse cx="568" cy="530" rx="7" ry="4" transform="rotate(-30 568 530)"/><ellipse cx="540" cy="390" rx="7" ry="4" transform="rotate(24 540 390)"/></g>
+  </g>
+  <!-- the door, wide open -->
+  <path d="M800 600L520 900H1080Z" fill="url(#spill)" opacity=".8"/>
+  <path d="M718 606V470Q718 388 800 380Q882 388 882 470V606Z" fill="#7f88a8"/>
+  <g stroke="#4a516e" stroke-width="2.500" fill="none"><path d="M718 560h22M718 500h22M860 560h22M860 500h22M726 428l18 12M762 392l10 20M800 380v24M838 392l-10 20M874 428l-18 12"/></g>
+  <path d="M740 606V472Q740 410 800 404Q860 410 860 472V606Z" fill="url(#doorIn)"/>
+  <g stroke="#c9862e" stroke-width="5" opacity=".55"><path d="M758 470V600M776 446V600M824 446V600M842 470V600"/><path d="M748 520H852M748 560H852" stroke-width="3"/></g>
+  <path d="M740 606V472Q740 446 734 430L702 452V620Z" fill="url(#oakN)"/><path d="M860 606V472Q860 446 866 430L898 452V620Z" fill="url(#oakN)"/>
+  <g stroke="#14131a" stroke-width="5" stroke-linecap="round"><path d="M738 486L708 496M738 578L708 590M862 486L892 496M862 578L892 590"/></g>
+  <circle class="halo" cx="800" cy="370" r="70" fill="url(#glowG)" opacity=".8"/>
+  <path d="M800 348v10" stroke="#14131a" stroke-width="3"/><path d="M790 358h20l4 26h-28z" fill="#ffe9a8"/><path d="M788 358h24M784 384h32" stroke="#14131a" stroke-width="3.500"/>
+  <g fill="#f4efe2"><g class="orbit"><ellipse cx="800" cy="332" rx="4" ry="2.500"/></g><g class="orbit o2"><ellipse cx="826" cy="370" rx="3.500" ry="2"/></g><g class="orbit o3"><ellipse cx="800" cy="422" rx="3" ry="2"/></g></g>
+  <g id="runes" stroke-linecap="round" fill="none">
+    <g class="rune"><path d="M725 572v-22l9 11-9 11" stroke="#b79cff" stroke-width="8" opacity=".35"/><path d="M725 572v-22l9 11-9 11" stroke="#efe6ff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M723 500h12M729 490v22" stroke="#b79cff" stroke-width="8" opacity=".35"/><path d="M723 500h12M729 490v22" stroke="#efe6ff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M738 420l9 10-9 10M748 420l-10 20" stroke="#b79cff" stroke-width="8" opacity=".35"/><path d="M738 420l9 10-9 10M748 420l-10 20" stroke="#efe6ff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M772 388l6 14 6-14" stroke="#b79cff" stroke-width="8" opacity=".35"/><path d="M772 388l6 14 6-14" stroke="#efe6ff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M824 386v16M818 391l12 6" stroke="#b79cff" stroke-width="8" opacity=".35"/><path d="M824 386v16M818 391l12 6" stroke="#efe6ff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M852 420l8 18M860 420l-8 18" stroke="#b79cff" stroke-width="8" opacity=".35"/><path d="M852 420l8 18M860 420l-8 18" stroke="#efe6ff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M866 492l8 8-8 8v-16" stroke="#b79cff" stroke-width="8" opacity=".35"/><path d="M866 492l8 8-8 8v-16" stroke="#efe6ff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M865 552h10l-10 16h10" stroke="#b79cff" stroke-width="8" opacity=".35"/><path d="M865 552h10l-10 16h10" stroke="#efe6ff" stroke-width="2.400"/></g>
+  </g>
+  <!-- steps -->
+  <path d="M722 606H878L890 620H710Z" fill="#9aa2c0"/><path d="M710 620H890L904 636H696Z" fill="#838bac"/><path d="M696 636H904L920 654H680Z" fill="#6e7698"/>
+</g>
+
+<!-- the way up, and the people on it -->
+<path d="M684 654Q610 716 470 762Q330 808 250 900L-60 1300H260L470 900Q530 838 660 796Q830 736 916 654Z" fill="#434a63" opacity=".85"/>
+<path d="M800 654L560 900H1000Z" fill="url(#spill)" opacity=".45"/>
+<g id="folks">
+  <g class="walker w4"><use href="#folk" x="640" y="632" width="36" height="52" fill="#e9e3d2"/><circle cx="668" cy="664" r="26" fill="url(#glowG)"/><g class="lant" style="transform-origin:668px 652px"><rect x="664" y="658" width="8" height="10" fill="#ffe9a8"/></g></g>
+  <g class="walker w3"><use href="#folk" x="548" y="668" width="46" height="66" fill="#d9e0ee"/><circle cx="584" cy="709" r="32" fill="url(#glowG)"/><g class="lant" style="transform-origin:584px 694px"><rect x="579" y="702" width="10" height="13" fill="#ffe9a8"/></g></g>
+  <g class="walker w2"><use href="#folk" x="424" y="712" width="58" height="83" fill="#efe6cf"/><circle cx="470" cy="763" r="40" fill="url(#glowG)"/><g class="lant" style="transform-origin:470px 744px"><rect x="464" y="755" width="12" height="16" fill="#ffe9a8"/></g></g>
+  <g class="walker"><use href="#folk" x="294" y="760" width="72" height="103" fill="#dfe6f2"/><circle cx="351" cy="824" r="50" fill="url(#glowG)"/><g class="lant" style="transform-origin:351px 800px"><rect x="343" y="814" width="15" height="20" fill="#ffe9a8"/></g></g>
+</g>
+
+<!-- the sign -->
+<path d="M1068 660V500" stroke="#2b1c12" stroke-width="10" stroke-linecap="round"/><path d="M1068 508H990" stroke="#2b1c12" stroke-width="8" stroke-linecap="round"/><path d="M1068 540L1030 508" stroke="#2b1c12" stroke-width="5"/>
+<g id="sign"><path d="M986 512v14M1022 512v14" stroke="#8a744a" stroke-width="2.500"/><rect x="954" y="526" width="100" height="44" rx="3" fill="#1f4a3c" stroke="#c9a044" stroke-width="2.500"/><text x="1004" y="557" class="openT">OPEN</text></g>
+<g id="octavo" class="hot"><use href="#ch-octavo" x="1038" y="418" width="64" height="83"/></g>
+</g>
+
+<!-- the near dark -->
+<g fill="#050912"><path d="M-1000 1400V-500H-300Q-200 220 60 300Q150 330 120 400Q210 420 170 500Q230 560 150 600L170 900L196 1400Z"/><path d="M96 900Q110 700 60 560L130 560Q160 720 190 900Z"/></g>
+<g fill="#07100f"><ellipse cx="1500" cy="884" rx="240" ry="48"/><ellipse cx="1330" cy="902" rx="150" ry="34"/><ellipse cx="620" cy="914" rx="210" ry="30"/></g>
+<g fill="#e9ff9a"><circle class="fly" cx="246" cy="704" r="2.600"/><circle class="fly f2" cx="1200" cy="850" r="2.400"/><circle class="fly f3" cx="1420" cy="826" r="2.600"/><circle class="fly f2" cx="210" cy="640" r="2.200"/><circle class="fly" cx="700" cy="872" r="2.400"/></g>
+
+<rect x="-1000" y="-500" width="3600" height="1900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<div class="slip" id="slip">
+  <h3>Marrowby Free Library</h3>
+  <div class="sub">open from dawn &middot; whenever that is</div>
+  <div class="stamp">RETURNED<small>eleven years late</small></div>
+  <p id="cl-time"></p><p id="cl-words"></p><p id="cl-hints"></p><p id="cl-fine">Your aunt owes the library 572 pennies.</p>
+  <div class="row"><button type="button" class="btn" id="b-note">Leave a note</button><button type="button" class="btn" id="b-book">Open the notebook</button><button type="button" class="btn" id="b-lobby">Back to the shelf</button></div>
+  <small class="again">The Library That Locks at Dusk &middot; <button type="button" id="b-reset">read it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, cricketT = 0;
+  (function () {
+    var r = LIB.rng(97), s = ['', '', ''], i, x, y;
+    for (i = 0; i < 170; i++) {
+      x = -200 + r() * 2000; y = r() * 560;
+      s[i % 3] += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="' + (0.6 + r() * 1.5).toFixed(1) + '"/>';
+    }
+    $('#stars').innerHTML = '<g class="tw" fill="#dfe6ff">' + s[0] + '</g><g class="tw t2" fill="#fff3c9">' + s[1] + '</g><g class="tw t3" fill="#cfd8ff">' + s[2] + '</g>';
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'library', storyTitle: 'The Library That Locks at Dusk', id: 'dawn', no: 'IV', title: 'Dawn, at Eight in the Evening',
+    go: 'Go out by the front door',
+    intro: [
+      'Lamps out, from right to left. Shutters open. The sun up in the east, and the bell last of all. It was the Evening Order backwards, and the Dome believed every word of it.',
+      'Every lock in the library opened at once. You went down the stairs a good deal faster than you came up.'
+    ],
+    exit: null, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+
+  /* nothing is locked out here; the hints are for the note */
+  function hints() {
+    if (!$('#slip').classList.contains('on')) return null;
+    return ['note', [
+      'Click &ldquo;Leave a note&rdquo;. The note is for somebody who was not here, so tell her things in the order they happened, and use the past: I sat down, I read, the doors locked.',
+      'Begin each part with a word that shows the order: First&hellip; Then&hellip; After that&hellip; In the end&hellip; You did three jobs tonight: one with books, one with a door, and one with the Dome.',
+      'You can begin like this: &ldquo;First I fell asleep in the good chair, and the library locked itself. Then I&hellip;&rdquo; In question 2, use &ldquo;harder than&rdquo; or &ldquo;the hardest&rdquo;. In question 3, give a reason with &ldquo;because&rdquo;.'
+    ]];
+  }
+
+  function begin() {
+    var st = ER.state();
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    cricketT = setInterval(function () { if (!ER.isOpen() && Math.random() < 0.7) LIB.snd.cricket(); }, 1300);
+    setTimeout(LIB.snd.owl, 2600);
+    ER.narrate([
+      'Eight o&rsquo;clock at night. Inside the Dome it is a fine morning, so the front door stands wide open, and every lamp in the library has lit itself.',
+      'From Marrowby it looks as if the hill is on fire. People come up the path in their nightshirts to see.',
+      'The baker borrows a book about bread. The cook from the inn asks if the soup book is back yet. They all whisper, although nobody has told them to.',
+      'Octavo stamps <em>How to Be Early</em> with both front feet. RETURNED. &ldquo;Eleven years late,&rdquo; he says. &ldquo;The fine is one penny a week. I will write to your aunt.&rdquo;',
+      'At real dawn, nothing happens at all. The Dome did its morning hours ago.'
+    ], function () {
+      var mins = Math.max(1, Math.round((ER.flag('tEnd') - (st.t0 || ER.flag('tEnd'))) / 60000)), hn = ER.hintsUsed();
+      $('#cl-time').textContent = 'You were out in ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+      $('#cl-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' new words.';
+      $('#cl-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+      $('#slip').classList.add('on'); ER.sfx.ok();
+    });
+  }
+  $('#octavo').addEventListener('click', function (e) {
+    LIB.snd.flutter();
+    ER.say('&ldquo;Come back tomorrow,&rdquo; says Octavo. &ldquo;In the evening. I am told the chair is very good.&rdquo;');
+  });
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { clearInterval(cricketT); ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* a note for the day librarian: the one thing nobody can do for you */
+  $('#b-note').addEventListener('click', function () {
+    var saved = ER.flag('note') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Marrowby Free Library</h4><h3>A note for Miss Lark, the day librarian</h3>' +
+      '<p class="lead">Miss Lark comes in at eight in the morning. She will find the front door open, every lamp burning, and a moth asleep on her desk. Tell her what happened.</p>' +
+      '<label for="r1">1. What happened tonight? Write it in order: First&hellip; Then&hellip; After that&hellip; In the end&hellip;</label><textarea id="r1"></textarea>' +
+      '<label for="r2">2. Which was the hardest: the scale, the rings or the Dome? Why?</label><textarea id="r2"></textarea>' +
+      '<label>3. Should the library stay open at night?</label><div class="yn"><label><input type="radio" name="yn" value="yes"> Yes</label><label><input type="radio" name="yn" value="no"> No</label></div>' +
+      '<textarea id="r3" placeholder="Because&hellip;"></textarea>' +
+      '<div class="sig"><label for="r4">Signed</label><input type="text" id="r4" maxlength="60"></div>' +
+      '<div class="count"></div><div class="foot"><span>Saved in this browser as you type.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.lead, .rp > label');
+    ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { box.querySelector('#' + k).value = saved[k] || ''; });
+    if (saved.yn) { var r = box.querySelector('input[value=' + saved.yn + ']'); if (r) r.checked = true; }
+    function keep() {
+      var o = {}, n = 0, c = box.querySelector('input[name=yn]:checked');
+      ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { o[k] = box.querySelector('#' + k).value; });
+      o.yn = c ? c.value : '';
+      ['r1', 'r2', 'r3'].forEach(function (k) { n += (o[k].match(/[A-Za-z’']+/g) || []).length; });
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('note', o);
+    }
+    box.addEventListener('input', keep); box.addEventListener('change', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-lock ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

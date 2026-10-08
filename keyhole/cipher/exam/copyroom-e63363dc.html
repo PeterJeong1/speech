@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Copy Room · Answer All Questions</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0d1210;--accent:#f4e04d;--font-display:'VT323',monospace;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(9,14,11,.96);--tc-ink:#e6f2e8;--cap-bg:rgba(10,15,12,.94);--panel:#141b17;--q-ink:#e6d58a;--fade:#050806;--hud-bg:rgba(10,15,12,.8)}
+  .tc-room{letter-spacing:.06em;text-transform:uppercase;font-size:clamp(44px,6.6vw,88px)}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .lcdT{font-family:'VT323',monospace;font-size:17px;fill:#8dfc9d}
+  .mk{font-family:'Permanent Marker',cursive;text-anchor:middle}
+  #flick{animation:fl 6.1s steps(1,end) infinite}
+  @keyframes fl{0%{opacity:0}43%{opacity:.16}45%{opacity:0}47%{opacity:.1}48%{opacity:0}81%{opacity:.2}82%{opacity:0}}
+  #tubeOn{animation:tb 6.1s steps(1,end) infinite}
+  @keyframes tb{0%{opacity:1}43%{opacity:.5}45%{opacity:1}47%{opacity:.6}48%{opacity:1}81%{opacity:.4}82%{opacity:1}}
+  #scanbar{animation:scan 2.2s linear infinite}
+  @keyframes scan{0%{transform:translateX(0);opacity:.95}45%{transform:translateX(250px);opacity:.95}50%{opacity:0}100%{transform:translateX(0);opacity:0}}
+  .outp{animation:outp 2.2s linear infinite;opacity:0}
+  @keyframes outp{0%{transform:translate(58px,-10px);opacity:0}55%{transform:translate(58px,-10px);opacity:0}60%{opacity:1}100%{transform:translate(0,0);opacity:1}}
+  #redlamp{animation:rl 1.1s steps(1,end) infinite}
+  @keyframes rl{50%{opacity:.25}}
+  #hang{animation:hang 3.4s ease-in-out infinite alternate;transform-origin:1262px 470px}
+  @keyframes hang{from{transform:rotate(-1.2deg)}to{transform:rotate(1.2deg)}}
+
+  /* the page in the shredder, and the bin under it */
+  .sh{display:grid;grid-template-columns:minmax(0,730px) 318px;gap:22px;width:min(1080px,96vw);align-items:start}
+  .sh-left{position:relative;padding-top:34px}
+  .sh-mouth{position:absolute;left:-14px;right:-14px;top:0;height:46px;z-index:2;background:#22272b linear-gradient(#3a4147,#15181b);border-radius:8px 8px 3px 3px;box-shadow:0 8px 14px rgba(0,0,0,.6);
+    display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.26em;color:#aab2b8;text-transform:uppercase}
+  .sh-mouth:after{content:'';position:absolute;left:10px;right:10px;bottom:5px;height:6px;border-radius:3px;background:#000}
+  .sh-mouth b{font-weight:500;color:#ff5a4a}
+  .sh-mouth b:before{content:'';display:inline-block;width:11px;height:11px;margin-right:8px;border-radius:50%;background:#ff4a3a;box-shadow:0 0 9px #ff4a3a;animation:rl 1.1s steps(1,end) infinite}
+  .sh-page{position:relative;background:#f3eedf;color:#1c1b18;padding:20px 30px 22px;font-family:'Courier Prime',monospace;font-size:16.5px;line-height:1.5;box-shadow:0 22px 50px rgba(0,0,0,.6);
+    background-image:repeating-linear-gradient(90deg,rgba(0,0,0,0) 0 44px,rgba(60,50,30,.2) 44px 45px,rgba(255,255,255,.6) 45px 46px),linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,0) 60px),linear-gradient(#f3eedf,#f3eedf)}
+  .sh-page h5{margin:0 0 4px;display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;letter-spacing:.1em}
+  .sh-page .ins{margin:0 0 8px;font-size:14.5px;line-height:1.35}
+  .sh-page .hole{margin:0 0 10px;height:30px;border:2px dashed #8d8776;background:#1b1e21;color:#aab2b8;font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;
+    clip-path:polygon(0 12%,6% 0,15% 18%,27% 4%,39% 16%,52% 0,64% 14%,77% 3%,89% 17%,100% 5%,100% 88%,92% 100%,80% 84%,69% 100%,55% 86%,43% 100%,30% 83%,18% 100%,8% 86%,0 100%)}
+  .sh-page h6{margin:0 0 6px;font-family:'Playfair Display',serif;font-weight:900;font-size:21px;letter-spacing:.02em}
+  .sh-page p{margin:0 0 7px}
+  .sh-page sup{font-size:11px;font-weight:700;color:#6b6453;margin-right:1px}
+  .sh .wk-blank{min-width:124px;min-height:1.42em;margin:0 3px;padding:0;border-bottom:0;background:#1b1e21;vertical-align:-4px;border-radius:2px;
+    clip-path:polygon(0 10%,8% 0,20% 14%,35% 2%,50% 12%,66% 0,82% 13%,100% 3%,100% 92%,90% 100%,74% 88%,58% 100%,42% 87%,26% 100%,10% 90%,0 100%)}
+  .sh .wk-blank.ok{background:transparent;clip-path:none;min-width:0;vertical-align:baseline;margin:0}
+  .sh .wk-blank .wk-chip{display:block;margin:0;padding:0 6px;transform:none}
+  .sh .wk-blank .wk-set{padding:0 3px;font-weight:700;background:rgba(244,224,77,.5);border-radius:0;line-height:1.3}
+  .sh-bin{background:rgba(190,205,215,.13);border:2px solid rgba(215,228,236,.45);border-top:0;border-radius:0 0 16px 16px;padding:8px 10px 12px;box-shadow:inset 0 -30px 50px rgba(0,0,0,.35)}
+  .sh-bin h6{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#aab2b8;text-align:center}
+  .sh .wk-bank{margin:0;padding:2px;border:0;min-height:236px;align-content:flex-start}
+  .sh .wk-chip{margin:5px 4px;padding:3px 10px 2px;border:0;border-radius:0;background:#f3eedf;color:#1c1b18;font-family:'Courier Prime',monospace;font-size:16.5px;line-height:1.3;box-shadow:0 3px 6px rgba(0,0,0,.5);
+    clip-path:polygon(0 8%,12% 0,30% 9%,55% 0,78% 10%,100% 0,100% 90%,85% 100%,60% 91%,38% 100%,15% 90%,0 100%)}
+  .sh .wk-bank .wk-chip:nth-child(3n){transform:rotate(-4deg)}.sh .wk-bank .wk-chip:nth-child(3n+1){transform:rotate(3deg)}.sh .wk-bank .wk-chip:nth-child(4n+2){transform:rotate(-1.5deg)}
+  .sh .wk-chip.wht{background:#fff;font-family:'Outfit',Arial,sans-serif;font-weight:500;font-size:16px;letter-spacing:.01em}
+  .sh .wk-chip.held{outline:3px solid #f4e04d;outline-offset:2px}
+  .sh .pmsg{margin-top:12px;min-height:120px;font-size:16px}
+  @media (max-width:900px){.sh{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d3dbd5"/><stop offset=".7" stop-color="#b3beb7"/><stop offset="1" stop-color="#96a39b"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d8882"/><stop offset="1" stop-color="#4a534e"/></linearGradient>
+  <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef1ee"/><stop offset="1" stop-color="#c3cbc6"/></linearGradient>
+  <linearGradient id="shG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a5156"/><stop offset="1" stop-color="#24282b"/></linearGradient>
+  <linearGradient id="binG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#dfe9ee" stop-opacity=".55"/><stop offset=".5" stop-color="#dfe9ee" stop-opacity=".22"/><stop offset="1" stop-color="#dfe9ee" stop-opacity=".5"/></linearGradient>
+  <linearGradient id="boxG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b08a5a"/><stop offset="1" stop-color="#8c6c42"/></linearGradient>
+  <radialGradient id="tubeG" cx="50%" cy="0%" r="90%"><stop offset="0" stop-color="#f6fff4" stop-opacity=".75"/><stop offset=".5" stop-color="#eaffe6" stop-opacity=".16"/><stop offset="1" stop-color="#eaffe6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="38%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".65" stop-color="#001006" stop-opacity=".22"/><stop offset="1" stop-color="#000802" stop-opacity=".78"/></radialGradient>
+  <pattern id="tile" width="130" height="130" patternUnits="userSpaceOnUse" patternTransform="skewX(-22)"><rect width="130" height="130" fill="none"/><path d="M0 0V130M0 0H130" stroke="#3d4641" stroke-width="2.5"/></pattern>
+  <clipPath id="binC"><path d="M1166 560h196l-12 150h-172z"/></clipPath>
+</defs>
+
+<!-- walls, ceiling light, floor -->
+<rect x="-1000" y="-400" width="3600" height="1110" fill="url(#wallG)"/>
+<g stroke="#a4b0a8" stroke-width="2" opacity=".6"><path d="M-1000 250H2600M-1000 470H2600"/></g>
+<rect x="-1000" y="686" width="3600" height="18" fill="#6c7872"/>
+<rect x="-1000" y="704" width="3600" height="620" fill="url(#floorG)"/><rect x="-1000" y="704" width="3600" height="620" fill="url(#tile)"/>
+<g id="tube" class="hot"><rect x="470" y="34" width="640" height="34" rx="6" fill="#8f9b94"/><rect id="tubeOn" x="486" y="42" width="608" height="18" rx="9" fill="#fbfff9"/><rect x="486" y="42" width="608" height="18" rx="9" fill="none" stroke="#c9d3cc" stroke-width="2"/></g>
+<ellipse cx="790" cy="60" rx="1100" ry="760" fill="url(#tubeG)" pointer-events="none"/>
+
+<!-- shelves of paper -->
+<g id="shelves" class="hot">
+  <rect x="50" y="130" width="330" height="574" fill="#7d6a4f"/><rect x="62" y="142" width="306" height="562" fill="#5e4f3a"/>
+  <g id="reams"></g>
+  <g fill="#8f7b5d"><rect x="50" y="268" width="330" height="12"/><rect x="50" y="410" width="330" height="12"/><rect x="50" y="552" width="330" height="12"/></g>
+</g>
+
+<!-- the copier -->
+<g id="copier" class="hot">
+  <ellipse cx="640" cy="708" rx="250" ry="16" fill="#000" opacity=".25"/>
+  <rect x="452" y="402" width="372" height="300" rx="10" fill="url(#bodyG)"/><rect x="452" y="402" width="372" height="300" rx="10" fill="none" stroke="#8f9b94" stroke-width="3"/>
+  <g stroke="#9aa69f" stroke-width="3"><path d="M452 520h372M452 600h372"/></g>
+  <g fill="#8f9b94"><rect x="610" y="548" width="60" height="9" rx="4"/><rect x="610" y="628" width="60" height="9" rx="4"/></g>
+  <rect x="470" y="366" width="258" height="40" rx="5" fill="#141a17"/><rect id="scanbar" x="474" y="370" width="10" height="32" fill="#c8ffd2"/>
+  <path d="M446 350h300l10 22H436z" fill="#cfd6d1"/><path d="M446 350h300" stroke="#eef1ee" stroke-width="4"/><rect x="560" y="338" width="80" height="14" rx="4" fill="#aab5ae"/>
+  <path d="M452 440h-78l-22 34h100z" fill="#b9c2bc"/><path d="M352 474h100v10H352z" fill="#8f9b94"/>
+  <g id="tray2" class="hot"><rect x="342" y="424" width="116" height="64" fill="transparent"/><g fill="#fbfaf4" stroke="#b9c2bc" stroke-width="1"><path d="M366 458h82l-4 7h-82z"/><path d="M364 452h82l-4 7h-82z"/><path d="M366 446h82l-4 7h-82z"/></g>
+    <path class="outp" d="M364 440h82l-4 7h-82z" fill="#fff" stroke="#b9c2bc" stroke-width="1"/></g>
+  <path d="M824 430h54l10 18h-64z" fill="#cfd6d1"/>
+  <g id="lcd" class="hot"><path d="M740 352h92l-8 46h-92z" fill="#aab5ae"/><rect x="744" y="356" width="76" height="34" rx="3" fill="#0c1a10" transform="skewX(-9)" style="transform-origin:744px 390px"/>
+    <g stroke="#8dfc9d" stroke-width="2.6"><path d="M756 364h52M754 372h38M752 380h46"/></g><circle cx="812" cy="394" r="3" fill="#7be04a"/></g>
+</g>
+
+<!-- the trolley, and the box that Paper A came in -->
+<g id="trolley" class="hot">
+  <ellipse cx="985" cy="712" rx="130" ry="10" fill="#000" opacity=".25"/>
+  <path d="M880 596h210M880 676h210" stroke="#59645f" stroke-width="10"/><path d="M884 560v130M1086 560v130" stroke="#59645f" stroke-width="7"/><circle cx="894" cy="700" r="11" fill="#24282b"/><circle cx="1076" cy="700" r="11" fill="#24282b"/>
+  <path d="M900 492h168l14 104H886z" fill="url(#boxG)"/><path d="M900 492l-26-30h60l14 30zM1068 492l28-30h-64l-12 30z" fill="#a17c4e"/><path d="M900 492h168" stroke="#5a4326" stroke-width="3"/>
+  <rect x="924" y="520" width="120" height="52" fill="#fdfdf6"/><text x="984" y="538" class="sT" font-size="11" fill="#16171c" letter-spacing="1">YEAR 9 ENGLISH</text><text x="984" y="554" class="sT" font-size="13" fill="#c8281d" letter-spacing="2">PAPER A</text><text x="984" y="567" class="sT" font-size="10" fill="#16171c">120 COPIES</text>
+</g>
+
+<!-- wall: clock, poster -->
+<g id="clock" class="hot"><circle cx="985" cy="170" r="46" fill="#59645f"/><circle cx="985" cy="170" r="39" fill="#fbfaf4"/><g stroke="#16171c" stroke-width="3"><path d="M985 136v8M985 196v8M951 170h8M1011 170h8"/></g>
+  <path id="hh" d="M985 170V148" stroke="#16171c" stroke-width="6" stroke-linecap="round"/><path id="mh" d="M985 170V138" stroke="#16171c" stroke-width="3.5" stroke-linecap="round"/><circle cx="985" cy="170" r="4" fill="#c8281d"/></g>
+<g id="poster" class="hot"><rect x="1150" y="140" width="230" height="150" fill="#fdfdf6" transform="rotate(1.2 1265 215)"/><g transform="rotate(1.2 1265 215)"><rect x="1150" y="140" width="230" height="40" fill="#2f6a4a"/><text x="1265" y="167" class="sT" font-size="19" fill="#fff" letter-spacing="3">THINK</text>
+  <text x="1265" y="214" class="sT" font-size="19" fill="#16171c" letter-spacing="2">BEFORE YOU PRINT</text><path d="M1215 262q20-36 50-14t50-10" stroke="#2f6a4a" stroke-width="6" fill="none"/><circle cx="1215" cy="262" r="7" fill="#2f6a4a"/></g></g>
+
+<!-- the shredder, with a page in its teeth -->
+<g id="shred" class="hot">
+  <ellipse cx="1264" cy="716" rx="130" ry="12" fill="#000" opacity=".28"/>
+  <g clip-path="url(#binC)"><rect x="1160" y="556" width="210" height="160" fill="#55605a"/><g id="strips"></g></g>
+  <path d="M1166 560h196l-12 150h-172z" fill="url(#binG)" stroke="#e9f1f4" stroke-width="3"/>
+  <g id="hang"><rect x="1206" y="372" width="112" height="106" fill="#f3eedf"/><g stroke="#3b382f" stroke-width="2.2"><path d="M1216 388h70M1216 402h92M1216 414h86M1216 426h92M1216 438h80M1216 450h92M1216 462h60"/></g>
+    <g fill="#1b1e21"><rect x="1250" y="408" width="26" height="8"/><rect x="1226" y="432" width="26" height="8"/><rect x="1272" y="456" width="26" height="8"/></g></g>
+  <rect x="1150" y="466" width="228" height="98" rx="10" fill="url(#shG)"/><rect x="1150" y="466" width="228" height="98" rx="10" fill="none" stroke="#15181b" stroke-width="3"/>
+  <rect x="1180" y="474" width="168" height="9" rx="4" fill="#000"/><circle id="redlamp" cx="1352" cy="524" r="8" fill="#ff4a3a"/><circle cx="1352" cy="524" r="12" fill="none" stroke="#15181b" stroke-width="3"/>
+  <text x="1236" y="532" class="sT" font-size="15" fill="#aab2b8" letter-spacing="4">SHREDDER</text>
+  <g stroke="#f3eedf" stroke-width="5" stroke-linecap="round"><path d="M1120 716l34-6M1392 720l28 8M1404 706l10-22"/></g>
+</g>
+
+<!-- the guillotine -->
+<g id="guil" class="hot"><rect x="1436" y="604" width="150" height="14" fill="#59645f"/><path d="M1446 618v90M1576 618v90" stroke="#59645f" stroke-width="9"/>
+  <rect x="1444" y="578" width="134" height="26" fill="#3d7a52"/><g stroke="#2a5a3b" stroke-width="2"><path d="M1466 578v26M1488 578v26M1510 578v26M1532 578v26M1554 578v26"/></g>
+  <path d="M1448 578L1580 520" stroke="#c9ced3" stroke-width="7" stroke-linecap="round"/><circle cx="1584" cy="518" r="9" fill="#16171c"/>
+  <rect x="1462" y="630" width="100" height="34" fill="#fdfdf6" transform="rotate(-2 1512 647)"/><g stroke="#16171c" stroke-width="3.5" stroke-linecap="round" transform="rotate(-2 1512 647)"><path d="M1470 642h84M1470 654h60"/></g></g>
+
+<rect id="flick" x="-1000" y="-400" width="3600" height="1720" fill="#04140a" pointer-events="none"/>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go down to the library</button>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, seenLcd = false, shBox = null, inPuzzle = false, told = {};
+
+  /* paper on the shelves, strips in the bin */
+  (function () {
+    var s = '', COL = ['#f4b6c2', '#fff0a8', '#bcd9f2', '#c6e8c0', '#fbfaf4', '#f7cfa0'], BOT = [268, 410, 552, 700], r, c, x, y, n, i;
+    for (r = 0; r < 4; r++) for (c = 0; c < 4; c++) {
+      x = 74 + c * 74; n = 2 + ((r * 5 + c * 3) % 4);
+      for (i = 0; i < n; i++) s += '<rect x="' + x + '" y="' + (BOT[r] - 21 - i * 21) + '" width="66" height="20" fill="' + COL[(r * 2 + c + (i > 1 ? 1 : 0)) % 6] + '" stroke="#5e4f3a" stroke-width="1"/>';
+    }
+    $('#reams').innerHTML = s; s = '';
+    for (i = 0; i < 80; i++) {
+      x = 1172 + (i * 37) % 186; y = 596 + (i * 53) % 104;
+      s += '<path d="M' + x + ' ' + y + 'q' + (8 + i % 9) + ' ' + (10 + i % 7) + ' ' + ((i % 2 ? 1 : -1) * 6) + ' ' + (30 + i % 20) + '" stroke="' + (i % 5 ? '#f3eedf' : '#fff') + '" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    }
+    $('#strips').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'exam', storyTitle: 'Answer All Questions', id: 'copyroom', no: 'III', title: 'The Copy Room',
+    go: 'Go in',
+    intro: [
+      'The door asked five questions, and every answer was a word that had to change its shape before it would fit. A verb became a noun. One word had to turn into its own opposite. And nothing was allowed to lose its U, because the door is British. Five bolts slid back.',
+      'On the way you passed a locker that would not stop buzzing. Tomorrow&rsquo;s paper is already on half the phones in Year 9.',
+      'The copy room is white and warm, and it smells of hot paper. The big copier is working hard. There is nobody here to tell it to.'
+    ],
+    exit: {"next":"library","w":{"586ed4a7":"738c9514"}}, tags: {"c1":["9687f73e"],"c1@":["7c3373af","5c16598d","14830404","7805185c"],"c1?":["a1b8745b","4a127068","aa74be8d","a6a8e9b9"],"c1#":["bfc944c1"],"c2":["302355c2"],"c2@":["97d60a11","e2bc26ad","7e7c8476","6939f22a","9b618206","e75d966b","cdfc6104","b5ac879c","7b79af5e"],"c2?":["8ab058dd","0590e570","33f99680","852fbe05","9a538486","7031d773","3116561a","deb81354","db1e4fa0"],"c2#":["749ddc7d"],"c3":["6941d823"],"c3@":["3be3f33a","f076e1ef","08d0bb80","b5ac801f","c4d3e9f6","e0bd0519","bda827ed","088deb3d","8bd83a89","9df790ca"],"c3?":["ee77203c","5c3beff0","062e3fa7","eb515853","2395bf99","0a1e1d47","e1bbf7ef","3abd101a","4856bfec","035e7e93"],"c3#":["c42c6e8d"],"c4":["28862e0f"],"c4@":["f4841ccb","cd23d5a4","bfa8c6b5","43db7f06","f42e0f35","7f081cde","c339f20a","43431acb","1ad64b10"],"c4?":["b459a043","61f2023b","70e2b34e","bedf8688","f2138273","e9140200","5dfc445b","ce3be502","525d04a5"],"c4#":["d964e65b"],"c5":["414e9655"],"c5@":["19bc6ee2","410829ef","362c29ef","89bdc591","ee18f08d","5006d73d","69150835","3a962629","9c21f293"],"c5?":["9fb9b884","c7da1737","66184d10","08dff7c9","fef3baf9","71cc186a","a8e1e756","572388a5","786182bd"],"c5#":["969b0147"],"c6":["3c7408bc"],"c6@":["f2fdd7ff","fffc135a","02ad1044","14710232","94c7f1a9","4967eda7"],"c6?":["171f215e","d64b7deb","51dee6c3","9fd49497","065b6ff5","e9f21666"],"c6#":["c84be6aa"],"c7":["3c870426"],"c7@":["98d00a84","80aa4a33","f46c7839","c591ca21","9dbc6474","cf529ef7","b135deb0","1f998bed"],"c7?":["4580308c","c19cdb31","52f1a120","84c7f920","f8f93dcb","b61d7bb8","813c60ac","6b6d3a78"],"c7#":["250d0a37"],"c8":["568ea521"],"c8@":["fc538fd8","83571009","ead41123","62e211aa","37cdf5b9","55707b80","961336e0","35c1ece5","ef4364dc"],"c8?":["423a081d","10c626b9","affa40af","c424331b","3ce0db54","d525ea13","480c46a9","0b839b3e","1d8916bd"],"c8#":["b3cc8b1e"]},
+    sound: ['corridor', { root: 50, bpm: 64, drop: ['ost'] }],      /* the copier is the beat in here */
+    hints: hints, onBegin: begin
+  });
+  EXAM.clock(); EXAM.wall('#hh', '#mh', 985, 170);
+  nextFile = ER.flag('c-file') || null; seenLcd = !!ER.flag('c-lcd'); told = ER.flag('c-told') || {};
+
+  var LCD = '<h4>COPIER 2 &middot; STAFF</h4><p>JOB 0412: PAPER B</p><p>8 pages x 120 copies</p><p>printing: copy 104 of 120</p><p>sent from: LIBRARY, PC 2</p><p>sent at: 20:52</p>';
+  var PAGE = '<h5><span>KESTREL HILL SCHOOL &middot; YEAR 9 ENGLISH &middot; PAPER A</span><span>1</span></h5>' +
+    '<p class="ins"><b>Section A.</b> Read the text. Choose one word from the box for each gap. There are more words than gaps.</p>' +
+    '<div class="hole"><!--nogloss-->the box of words has been through the shredder<!--/nogloss--></div>' +
+    '<h6>Three Days in a Cell</h6>' +
+    '<p>For about thirteen hundred years, the way to a government job in China was to <sup>1</sup><span class="wk-blank" data-key="c1"></span> an examination. It was not easy. Each <sup>2</sup><span class="wk-blank" data-key="c2"></span> was locked into a tiny brick cell for three days and two nights, with his food, a blanket and a pot. About one man in a hundred was <sup>3</sup><span class="wk-blank" data-key="c3"></span>.</p>' +
+    '<p>So some people cheated. A <sup>4</sup><span class="wk-blank" data-key="c4"></span> trick was to hide a book the size of a matchbox in a shoe. One shirt, which you can still see in a museum, is covered in tiny handwriting from collar to hem.</p>' +
+    '<p>The examiners fought back. Guards searched everybody at the gate. And because a marker might <sup>5</sup><span class="wk-blank" data-key="c5"></span> a friend&rsquo;s handwriting, clerks copied out every single answer again in red ink before it was marked. The rule was <sup>6</sup><span class="wk-blank" data-key="c6"></span>: anyone who was caught could be banned for life. It was a great honour to pass, and a great <sup>7</sup><span class="wk-blank" data-key="c7"></span> to be caught.</p>' +
+    '<p>In the end it was not the cheats who finished the system. It was <sup>8</sup><span class="wk-blank" data-key="c8"></span> in 1905, when China wanted engineers more than poets.</p>';
+  var CHIPS = ['realise', 'color', 'candidate', 'win', 'abolished', 'favourite', 'traveled', 'strict', 'prisoner', 'pass', 'center', 'disgrace', 'favorite', 'successful', 'disappeared', 'recognise'];
+  var WHT = { color: 1, center: 1, traveled: 1, favorite: 1 };            /* the scraps on whiter paper */
+  var WHY = {
+    'c1:win': 'You <b>WIN</b> a race or a prize. An examination is not won. What do you do to one, if all goes well?',
+    'c2:prisoner': 'Locked in a cell, yes. But nobody had been arrested, so <b>PRISONER</b> is the wrong word. What do you call a person who is sitting an exam?',
+    'c5:realise': 'You <b>REALISE</b> that something is true. A face, a voice or a friend&rsquo;s handwriting takes a different verb.',
+    'c8:disappeared': 'Things disappear by themselves, and nothing can &ldquo;be <b>DISAPPEARED</b>&rdquo;. Somebody ended these exams on purpose, by law.',
+    'c4:successful': 'A <b>SUCCESSFUL</b> trick? Perhaps. But then another gap is left with nothing that fits it. Which scrap can go in gap 4 and nowhere else?',
+    'c3:favourite': 'One man in a hundred was <b>FAVOURITE</b>? That word needs a noun after it. Look for a gap that has one.',
+    'c6:successful': 'The words after the gap say what the rule was like: anyone who was caught was banned for life. Is <b>SUCCESSFUL</b> the word for a rule like that?',
+    'c4:favorite': '<b>FAVORITE</b> fits the sentence. It does not fit the page. Look how this page spells HONOUR, a few lines further down. Mrs Calloway typed it, and she has never dropped a U in her life.'
+  };
+
+  function hints() {
+    if (nextFile && !seenLcd) return ['copier', ['Whoever is doing all this is not in this room. The copier may know where its orders come from: look at the small green screen on it.']];
+    if (nextFile) return ['go', ['The copier takes its orders from a computer in the library. Use the button at the bottom of the screen to go down there.']];
+    if (inPuzzle) return ['cloze', [
+      'Begin with the gaps you are sure of. Read to the end of the sentence before you choose: the words after a gap decide as much as the words before it.',
+      'Look at the grammar round each gap. &ldquo;To ___ an examination&rdquo; wants a verb. &ldquo;Each ___ was locked&rdquo; wants a person. &ldquo;A great ___&rdquo; wants a noun. And look at the scraps themselves: they are not all from the same sheet of paper.',
+      'Gap 7 is the opposite of honour. Gap 8 means &ldquo;ended by law&rdquo;. And gap 4 will not take a word that has lost its U: look how the page spells HONOUR.'
+    ]];
+    return ['look', [
+      'Two machines are busy in this room. Look at the small green screen on the big one, and at what is stuck in the small one.',
+      'The shredder, on the right, has a page caught in its teeth. Click on it.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function after() {
+    ER.pips((nextFile ? 1 : 0) + (seenLcd ? 1 : 0), 2);
+    if (nextFile && seenLcd) $('#go').classList.add('on');
+  }
+  function begin() {
+    after();
+    setInterval(function () { if (!ER.isOpen() && !busy) EXAM.sfx.copier(); }, 2200);
+    if (told.in) { ER.say('The copy room. The copier is still counting.'); return; }
+    busy = true; tell('in');
+    ER.narrate([
+      'The copier is counting to itself. Warm sheets come out of it face down, one every second or two.',
+      'In the corner, the shredder has a red light on, and a page stuck in its teeth.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things in the room ---------- */
+  function lcd() {
+    if (busy) return;
+    ER.read({ html: LCD, cls: 'lcd', clue: { id: 'lcd', title: 'The copier’s screen', kind: 'Copier' }, done: function () {
+      seenLcd = true; ER.flag('c-lcd', 1); after();
+      if (!tell('lcd')) return;
+      busy = true;
+      ER.narrate([
+        'PAPER B. A hundred and twenty copies of something that is not Paper A.',
+        'And the order did not come from this room. It came from a computer in the library, at eight minutes to nine. You were not even in the building.'
+      ], function () { busy = false; if (nextFile) ER.say('The library is downstairs, by the side door.'); });
+    } });
+  }
+  $('#lcd').addEventListener('click', function (e) { e.stopPropagation(); lcd(); });
+  $('#tray2').addEventListener('click', function (e) {
+    e.stopPropagation(); if (busy) return;
+    ER.say('The new pages land face down. You could turn the top one over. Tomorrow at nine you will be sitting in front of it. You think of the word that opened the key box, and you leave the page where it is.', 10000);
+  });
+  $('#copier').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'photocopier');
+    ER.say('The copier. Its light goes from side to side, and another page drops into the tray. It has a small green screen, at the top on the right.');
+  });
+  $('#trolley').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'trolley');
+    ER.say('An open box on the trolley, with nothing in it. The label says YEAR 9 ENGLISH, PAPER A, 120 COPIES. So this is where Paper A came to. But one page in a shredder is not a hundred and twenty papers. Where are the rest?', 10000);
+    EXAM.mine('box', 'The empty box', '<p>On the trolley in the copy room: the box that Paper A was kept in. <b>YEAR 9 ENGLISH &middot; PAPER A &middot; 120 COPIES.</b> Empty.</p><p>One page is in the shredder. The rest are somewhere else.</p>');
+  });
+  EXAM.thing('#shelves', 'ream', 'Paper in six colours. Pink is for letters home. Nobody is ever pleased to see pink.', isBusy);
+  EXAM.thing('#guil', 'guillotine', 'A guillotine, for cutting paper. Mr Drummond&rsquo;s label says: MIND YOUR FINGERS. THEIR NOT SPARE ONES. And under that, in red ink: They&rsquo;re. V.C.', isBusy);
+  EXAM.thing('#poster', null, 'THINK BEFORE YOU PRINT. Somebody has thought about it, and then printed nine hundred and sixty pages.', isBusy);
+  EXAM.thing('#tube', null, 'The light flickers. It has flickered since September. It is on Mr Drummond&rsquo;s list.', isBusy);
+  EXAM.thing('#clock', null, function () { return 'The copy room clock says ' + EXAM.time() + '. The side door is locked at half past nine.'; }, isBusy);
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; EXAM.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+  $('#shred').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The page from the shredder is whole again: page one of Paper A. Four scraps were left over that never belonged to it: COLOR, CENTER, TRAVELED and FAVORITE.'); return; }
+    openShred();
+  });
+
+  /* ---------- the page in the shredder ---------- */
+  function build() {
+    var box = ER.el('div', 'sh'), attempt = {}, fresh = [], slots, msgEl;
+    box.innerHTML = '<div class="sh-left"><div class="sh-mouth"><span>Shredder</span><b>Paper jam</b></div><div class="sh-page">' + ER.gloss(PAGE) + '</div></div>' +
+      '<div class="sh-right"><div class="sh-bin"><h6>The bin under the shredder</h6><div class="wk-bank">' +
+      CHIPS.map(function (c) { return '<span class="wk-chip' + (WHT[c] ? ' wht' : '') + '">' + c + '</span>'; }).join('') + '</div></div><p class="pmsg"></p></div>';
+    slots = ER.$$('.wk-blank', box); msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function news() { var s = fresh.length ? ' In your notebook: <b>' + fresh.join(', ') + '</b>.' : ''; fresh = []; return s; }
+    /* what was in the gaps when they were last judged: the kit only says how many were wrong */
+    new MutationObserver(function () {
+      var open = slots.filter(function (s) { return !s.classList.contains('ok'); });
+      if (open.length && open.every(function (s) { return s.querySelector('.wk-chip'); })) {
+        attempt = {}; open.forEach(function (s) { attempt[s.getAttribute('data-key')] = s.textContent.trim().toLowerCase(); });
+      }
+    }).observe(box.querySelector('.sh-page'), { childList: true, subtree: true });
+    WK.cloze(box, {
+      sound: false,
+      onRight: function (key, node) { var w = node.textContent.trim().toLowerCase(); if (WK.learn(w, true)) fresh.push(w); },
+      onMiss: function (n) {
+        var keys = Object.keys(attempt).filter(function (k) { var s = box.querySelector('.wk-blank[data-key=' + k + ']'); return s && !s.classList.contains('ok'); }), t = '', i, w;
+        EXAM.slip(1); EXAM.sfx.shred();
+        for (i = 0; i < keys.length && !t; i++) if (keys[i] === 'c4' && attempt.c4 === 'favorite') t = WHY['c4:favorite'];
+        for (i = 0; i < keys.length && !t; i++) { w = attempt[keys[i]]; if (WHT[w]) t = '<b>' + w.toUpperCase() + '</b> will not lie flat in any of these gaps. Look at the scrap itself: whiter paper, and a different type. It did not come from this page at all.'; }
+        for (i = 0; i < keys.length && !t; i++) t = WHY[keys[i] + ':' + attempt[keys[i]]] || '';
+        if (!t) t = n === 1 ? 'One scrap will not lie flat. It reads well enough until the end of the sentence, and then it does not.' : n + ' of the scraps will not lie flat. Each of them reads well enough until the end of its sentence, and then it does not.';
+        else if (n > 1) t += ' (And ' + (n - 1 === 1 ? 'one other scrap' : (n - 1) + ' other scraps') + ' would not stay in.)';
+        box.setAttribute('data-miss', (+box.getAttribute('data-miss') || 0) + 1);
+        msg(t + ' Back into the bin they go. The ones that fit are stuck down.' + news());
+      },
+      onDone: function () {
+        var cand = slots.map(function (s) { return s.textContent.trim().toLowerCase(); }).join('-'), file = ER.exitOk([cand]), copy, st;
+        if (!file) { msg('The page is whole, and nothing happens. Something is wrong: tell your teacher.'); return; }
+        nextFile = file; ER.flag('c-file', file); st = ER.state(); st.done = st.done || {}; st.done.copyroom = 1; ER.flag('c-out', 1);
+        copy = box.querySelector('.sh-page').cloneNode(true);
+        ER.$$('.wk-blank', copy).forEach(function (s) { var b = document.createElement('b'); b.textContent = s.textContent.trim(); s.parentNode.replaceChild(b, s); });
+        ER.$$('.hole, sup', copy).forEach(function (n) { n.parentNode.removeChild(n); });
+        ER.$$('.w', copy).forEach(function (n) { n.parentNode.replaceChild(document.createTextNode(n.textContent), n); });
+        ER.addClue('paperA', 'Page one of Paper A', copy.innerHTML, 'typed', 'From the shredder', true);
+        ER.sfx.ok(); msg('Eight scraps, eight gaps. The page lies flat, and you can read it from top to bottom.' + news());
+        setTimeout(function () {
+          ER.closeAll(); busy = true;
+          ER.narrate([
+            'You know what this is. It is page one of tomorrow&rsquo;s exam: Paper A, Section A.',
+            'So somebody took a hundred and twenty exam papers out of a locked cupboard, and fed the first one to a shredder. Nobody steals an exam in order to destroy it. Unless the exam is no good any more.',
+            'Eight scraps are left in the bin. Four of them are only wrong answers. The box had more words than gaps, as these boxes always do.',
+            'The other four are on whiter paper, in a different type: COLOR, CENTER, TRAVELED, FAVORITE. They never belonged to Paper A. Something else has been through this shredder tonight.'
+          ], function () {
+            busy = false;
+            EXAM.mine('scraps', 'Four scraps that fitted nowhere', '<p>Left in the bin when the page was whole: four scraps on whiter paper, in a different type.</p><p><b>color &middot; center &middot; traveled &middot; favorite</b></p>' +
+              '<p>They never belonged to Paper A. Mrs Calloway typed Paper A, and her page says &ldquo;honour&rdquo; and &ldquo;favourite&rdquo;.</p>');
+            after();
+            if (!seenLcd) ER.say('Whoever fed the shredder is not in this room. The copier may know where its orders come from.');
+          });
+        }, 3000);
+      }
+    });
+    msg('The page hangs out of the shredder in ribbons, with eight holes where the teeth caught it. The bin underneath is full of scraps. Drag a scrap into a hole, or click the scrap and then the hole. Nothing is stuck down until every hole is full.');
+    return box;
+  }
+  function openShred() {
+    if (!shBox) shBox = build();
+    inPuzzle = true;
+    ER.open('ov-lock', shBox, function () { inPuzzle = false; });
+  }
+})();
+</script>
+</body>
+</html>

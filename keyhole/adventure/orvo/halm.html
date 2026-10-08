@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Halm Junction · The Night Train to Orvo</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="story.css">
+<style>
+  body{--bg:#040816;--accent:#7fe3ac;--font-display:'Josefin Sans',sans-serif;--font-ui:'Josefin Sans',sans-serif;
+    --tc-bg:rgba(4,8,22,.88);--cap-bg:rgba(5,10,26,.93);--panel:#0f172b;--face-bg:#27304a;--q-ink:#9fc3e6;--fade:#02040b;
+    --hud-bg:rgba(5,10,26,.72)}
+  .tc-room{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(32px,4.9vw,64px);padding-left:.14em}
+  .tk-name{font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:23px}
+  .snow{position:fixed;left:-30%;top:-60%;width:160%;height:220%;pointer-events:none;z-index:5;will-change:transform;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='24' cy='30' r='2.4'/%3E%3Ccircle cx='110' cy='70' r='1.6'/%3E%3Ccircle cx='190' cy='18' r='2'/%3E%3Ccircle cx='262' cy='96' r='2.6'/%3E%3Ccircle cx='60' cy='150' r='2'/%3E%3Ccircle cx='150' cy='176' r='2.8'/%3E%3Ccircle cx='230' cy='210' r='1.6'/%3E%3Ccircle cx='96' cy='250' r='2.4'/%3E%3Ccircle cx='280' cy='280' r='2'/%3E%3Ccircle cx='16' cy='230' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+    opacity:.8;animation:sn1 11s linear infinite}
+  .snow.s2{background-size:470px 470px;opacity:.5;animation:sn2 19s linear infinite}
+  @keyframes sn1{from{transform:skewX(-9deg) translate3d(0,0,0)}to{transform:skewX(-9deg) translate3d(0,300px,0)}}
+  @keyframes sn2{from{transform:skewX(7deg) translate3d(0,0,0)}to{transform:skewX(7deg) translate3d(0,470px,0)}}
+  .stn{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:25px;letter-spacing:5px;fill:#f6f2e6;text-anchor:middle}
+  .dep1{font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:11px;letter-spacing:4px;fill:#ffb347;text-anchor:middle}
+  .dep2{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:21px;letter-spacing:4px;fill:#ffcf7a;text-anchor:middle}
+  .buf{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:18px;letter-spacing:6px;fill:#5a2a0c;text-anchor:middle}
+  .chalk{font-family:'Caveat',cursive;font-weight:700;font-size:13px;fill:#e9e6de;text-anchor:middle}
+  .chalk.c2{font-size:19px}
+  .sbx{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:10px;letter-spacing:3px;fill:#cfd8ea;text-anchor:middle;opacity:.7}
+  .stc{font-family:'Stardos Stencil',serif;font-weight:700;font-size:15px;fill:#3a2f1c;text-anchor:middle;opacity:.8}
+  .plateT{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:1.5px;fill:#5a1722;text-anchor:middle;pointer-events:none}
+  .plateT.p2{font-size:13px;letter-spacing:4px;fill:#1f6b45}
+  .tw{animation:tw 3.4s steps(2) infinite}
+  .tw:nth-child(12n){animation-delay:-1.7s}
+  @keyframes tw{50%{opacity:.12}}
+  .car{transition:transform .22s ease-out}
+  .car.on{transition:none}
+  #lever{transform-origin:1467px 808px}
+  #sigArm{transform-origin:1552px 186px;transition:transform .7s cubic-bezier(.3,1.5,.5,1)}
+  body.go #sigArm{transform:rotate(-42deg)}
+  body.go .rl-z{display:none}
+  #tail{transform-origin:470px 748px;animation:tail 3.2s ease-in-out infinite alternate}
+  @keyframes tail{from{transform:rotate(-9deg)}to{transform:rotate(12deg)}}
+  #vane{animation:vg 3.4s steps(3) infinite}
+  #vane.done{animation:none}
+  @keyframes vg{50%{filter:brightness(1.22)}}
+  #leverGlow{transition:opacity .5s}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#040816"/><stop offset=".2" stop-color="#081430"/><stop offset=".42" stop-color="#1b3763"/><stop offset="1" stop-color="#1b3763"/></linearGradient>
+  <linearGradient id="mtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b5a8c"/><stop offset="1" stop-color="#172b50"/></linearGradient>
+  <linearGradient id="roofS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef4fc"/><stop offset="1" stop-color="#8ea5c8"/></linearGradient>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#465172"/><stop offset="1" stop-color="#2d3757"/></linearGradient>
+  <linearGradient id="platG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2e3a59"/><stop offset=".45" stop-color="#1b2338"/><stop offset="1" stop-color="#0b101d"/></linearGradient>
+  <linearGradient id="winLit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9ad"/><stop offset="1" stop-color="#f0a245"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".8"/><stop offset=".3" stop-color="#ffc86a" stop-opacity=".28"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+  <radialGradient id="moonG"><stop offset="0" stop-color="#cfe0ff" stop-opacity=".42"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="redG"><stop offset="0" stop-color="#ff5a48" stop-opacity=".8"/><stop offset=".35" stop-color="#ff3b2a" stop-opacity=".25"/><stop offset="1" stop-color="#ff3b2a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="greenG"><stop offset="0" stop-color="#6dffb0" stop-opacity=".85"/><stop offset=".35" stop-color="#2fe08a" stop-opacity=".28"/><stop offset="1" stop-color="#2fe08a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".72"/></radialGradient>
+  <pattern id="val" width="22" height="16" patternUnits="userSpaceOnUse"><path d="M0 0h22L11 16z" fill="#2c3657"/></pattern>
+  <pattern id="ties" width="36" height="14" patternUnits="userSpaceOnUse"><rect width="13" height="14" fill="#2a2420"/></pattern>
+  <pattern id="fence" width="26" height="40" patternUnits="userSpaceOnUse"><path d="M4 40V8l5-7 5 7v32z" fill="#1a2440"/><path d="M0 16h26M0 30h26" stroke="#1a2440" stroke-width="3"/><path d="M4 8l5-7 5 7z" fill="#c9d8ee" opacity=".7"/></pattern>
+  <pattern id="brickN" width="40" height="20" patternUnits="userSpaceOnUse"><rect width="40" height="20" fill="#1c2238"/><rect x="1" y="1" width="18" height="8" fill="#2a3150"/><rect x="21" y="1" width="18" height="8" fill="#262d49"/><rect x="-9" y="11" width="18" height="8" fill="#283050"/><rect x="11" y="11" width="18" height="8" fill="#2c3454"/><rect x="31" y="11" width="18" height="8" fill="#252c47"/></pattern>
+  <mask id="cres"><rect x="1040" y="30" width="200" height="170" fill="#fff"/><circle cx="1147" cy="100" r="29" fill="#000"/></mask>
+</defs>
+<defs id="railDefs"></defs>
+
+<!-- night, mountains -->
+<rect x="-1000" y="-200" width="3600" height="1300" fill="url(#sky)"/>
+<g id="stars" fill="#eaf2ff"></g>
+<circle cx="1130" cy="112" r="130" fill="url(#moonG)"/>
+<circle cx="1130" cy="112" r="32" fill="#f1f5ff" mask="url(#cres)"/>
+<path d="M-1000 340L-760 200L-640 252L-470 150L-330 240L-180 176L-60 240L70 138L170 208L300 110L420 216L520 150L640 78L760 184L860 120L980 206L1100 96L1230 202L1340 134L1470 230L1580 126L1700 220L1880 140L2040 240L2240 170L2600 340Z" fill="url(#mtn)"/>
+<g fill="#dbe6f7" opacity=".92">
+  <path d="M70 138l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/><path d="M300 110l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/>
+  <path d="M640 78l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/><path d="M860 120l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/>
+  <path d="M1100 96l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/><path d="M1340 134l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/>
+  <path d="M1580 126l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/><path d="M-470 150l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/>
+  <path d="M1880 140l28 26-10-3-8 11-9-9-9 12-9-11-11 5z"/>
+</g>
+<g id="pines" fill="#0b1630"></g>
+<rect x="-1000" y="330" width="3600" height="230" fill="#111c3a"/>
+<path d="M-1000 484V452q130-16 270-4t250-8 240 10 250-12h1320q130-14 260 0t250-6 260 8V484z" fill="#2a3a62" opacity=".7"/>
+<rect x="-1000" y="446" width="3600" height="40" fill="url(#fence)"/>
+<g><circle cx="-190" cy="372" r="64" fill="url(#lampG)" opacity=".7"/><path d="M-190 484V378" stroke="#1a2238" stroke-width="5"/><circle cx="-190" cy="372" r="7" fill="#ffe2a0"/>
+  <circle cx="1810" cy="372" r="64" fill="url(#lampG)" opacity=".7"/><path d="M1810 484V378" stroke="#1a2238" stroke-width="5"/><circle cx="1810" cy="372" r="7" fill="#ffe2a0"/></g>
+<path d="M-1000 96Q-480 132 22 104Q640 152 1246 110Q1440 140 1640 112Q2100 150 2600 100" stroke="#5b6f96" stroke-width="1.5" fill="none" opacity=".55"/>
+<path d="M22 100v232M12 112h20M1246 106v226M1236 118h20" stroke="#1a2238" stroke-width="5" fill="none"/>
+
+<!-- the water tower -->
+<g id="tower" class="hot">
+  <path d="M132 486V250h60v236z" fill="url(#brickN)"/><path d="M130 252h64" stroke="#141a2e" stroke-width="5"/>
+  <rect x="104" y="176" width="116" height="78" rx="8" fill="#34406a"/>
+  <path d="M104 200h116M104 230h116" stroke="#232c49" stroke-width="4"/>
+  <path d="M96 182Q162 130 228 182Z" fill="url(#roofS)"/>
+  <path d="M220 222h34v14" stroke="#34406a" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M252 238l2 14 2-14z" fill="#dbe9fb"/>
+</g>
+
+<!-- the station house, on the far platform -->
+<g id="station">
+  <rect x="404" y="112" width="30" height="50" fill="#3a3340"/><rect x="398" y="106" width="42" height="9" rx="3" fill="#eef4fb"/>
+  <rect x="1040" y="112" width="30" height="50" fill="#3a3340"/><rect x="1034" y="106" width="42" height="9" rx="3" fill="#eef4fb"/>
+  <circle class="rl-puff s1" cx="419" cy="94" r="11" fill="url(#rl-puff)"/><circle class="rl-puff s2" cx="419" cy="94" r="11" fill="url(#rl-puff)"/>
+  <circle class="rl-puff s2" cx="1055" cy="94" r="11" fill="url(#rl-puff)"/><circle class="rl-puff s1" cx="1055" cy="94" r="11" fill="url(#rl-puff)"/>
+  <path d="M282 218L330 150H1150L1198 218Z" fill="url(#roofS)"/>
+  <path d="M330 150H1150" stroke="#f8fbff" stroke-width="5" stroke-linecap="round"/>
+  <rect x="296" y="222" width="888" height="82" fill="url(#wallG)"/>
+  <rect x="282" y="214" width="916" height="9" fill="#141a2e"/>
+  <g id="icicles" fill="#e3eefc" opacity=".9"></g>
+  <path d="M300 222v82M520 222v82M700 222v82M780 222v82M960 222v82M1180 222v82" stroke="#181d30" stroke-width="7"/>
+  <g id="wins"></g>
+</g>
+<g id="clock" class="hot">
+  <circle cx="740" cy="150" r="78" fill="url(#lampG)" opacity=".4"/>
+  <rect x="700" y="92" width="80" height="212" fill="#3a4468" stroke="#181d30" stroke-width="4"/>
+  <path d="M686 98L740 34L794 98Z" fill="url(#roofS)"/><path d="M740 34V14" stroke="#8ea5c8" stroke-width="3"/><circle cx="740" cy="12" r="4.500" fill="#d9ae48"/>
+  <circle cx="740" cy="150" r="33" fill="#d9ae48"/><circle cx="740" cy="150" r="28" fill="#fbf3dc"/>
+  <g id="cticks" stroke="#2a2018" stroke-width="2.500" stroke-linecap="round"></g>
+  <path id="hh" d="M740 150V135" stroke="#1b140f" stroke-width="4.500" stroke-linecap="round"/>
+  <path id="mh" d="M740 150V127" stroke="#1b140f" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="740" cy="150" r="3" fill="#1b140f"/>
+  <path d="M722 302V250q0-18 18-18t18 18v52z" fill="url(#winLit)"/><path d="M740 232v70M722 266h36" stroke="#3a4468" stroke-width="3"/>
+</g>
+<g>
+  <path d="M400 212v-8M650 212v-8" stroke="#141a2e" stroke-width="5"/>
+  <rect x="372" y="166" width="304" height="40" rx="4" fill="#16305a"/><rect x="376" y="170" width="296" height="32" rx="2" fill="none" stroke="#f3efe2" stroke-width="2"/>
+  <text x="526" y="195" class="stn">HALM JUNCTION</text>
+</g>
+<g id="depb" class="hot">
+  <path d="M836 214v-8M1074 214v-8" stroke="#141a2e" stroke-width="5"/>
+  <rect x="806" y="160" width="296" height="48" rx="4" fill="#0a0d16" stroke="#3a4266" stroke-width="2"/>
+  <text x="954" y="177" class="dep1">NIGHT TRAIN TO</text><text x="954" y="200" class="dep2">ORVO · 23.50</text>
+</g>
+<g id="buffet" class="hot">
+  <rect x="984" y="230" width="176" height="26" rx="3" fill="#ffcf7a" stroke="#7a4a12" stroke-width="2"/>
+  <text x="1075" y="250" class="buf">BUFFET</text>
+  <rect x="992" y="262" width="76" height="40" rx="2" fill="#16201c" stroke="#6b4a2a" stroke-width="3"/>
+  <text x="1030" y="277" class="chalk">TODAY</text><text x="1030" y="295" class="chalk c2">FISH</text>
+  <rect x="1086" y="262" width="62" height="40" fill="url(#winLit)"/><path d="M1086 282h62M1117 262v40" stroke="#cfc9bb" stroke-width="3"/>
+  <ellipse cx="1072" cy="250" rx="120" ry="52" fill="url(#lampG)" opacity=".35"/>
+</g>
+<!-- ground floor and canopy: mostly hidden by the train -->
+<rect x="296" y="330" width="888" height="156" fill="#2a3352"/>
+<g fill="url(#winLit)"><rect x="336" y="356" width="74" height="96"/><rect x="452" y="356" width="74" height="96"/><rect x="590" y="346" width="90" height="140"/><rect x="800" y="346" width="90" height="140"/><rect x="930" y="356" width="74" height="96"/><rect x="1046" y="356" width="74" height="96"/></g>
+<g fill="url(#lampG)"><circle cx="350" cy="338" r="74"/><circle cx="620" cy="338" r="74"/><circle cx="890" cy="338" r="74"/><circle cx="1130" cy="338" r="74"/></g>
+<rect x="236" y="298" width="1008" height="10" rx="4" fill="#eef4fb"/>
+<rect x="236" y="307" width="1008" height="9" fill="#141a2e"/>
+<rect x="236" y="316" width="1008" height="16" fill="url(#val)"/>
+
+<!-- the signal box -->
+<g id="sbox" class="hot">
+  <rect x="1282" y="282" width="108" height="204" fill="url(#brickN)"/>
+  <rect x="1264" y="214" width="144" height="70" fill="#3a3340"/>
+  <rect x="1274" y="224" width="124" height="38" fill="url(#winLit)"/>
+  <path d="M1290 262v-14M1300 262v-19M1310 262v-12M1352 262v-17M1362 262v-12" stroke="#3a2412" stroke-width="3.500" stroke-linecap="round"/>
+  <path d="M1305 224v38M1336 224v38M1367 224v38" stroke="#3a3340" stroke-width="4"/>
+  <text x="1336" y="278" class="sbx">HALM BOX</text>
+  <path d="M1248 218L1278 182H1394L1424 218Z" fill="url(#roofS)"/><rect x="1248" y="214" width="176" height="7" fill="#141a2e"/>
+  <ellipse cx="1336" cy="244" rx="110" ry="60" fill="url(#lampG)" opacity=".4"/>
+</g>
+
+<!-- far platform edge, and the starting signal -->
+<rect x="-1000" y="484" width="3600" height="7" fill="#dfe9f7"/>
+<rect x="-1000" y="491" width="3600" height="70" fill="url(#brickN)"/>
+<g id="signal" class="hot">
+  <rect x="1548" y="150" width="8" height="412" fill="#2c3352"/>
+  <path d="M1544 300h16M1544 340h16M1544 380h16M1544 420h16M1544 460h16M1544 500h16" stroke="#2c3352" stroke-width="3"/>
+  <path d="M1552 150l-7-16h14z" fill="#b3261c"/>
+  <g id="sigArm"><rect x="1462" y="176" width="92" height="20" rx="3" fill="#d6382c"/><rect x="1480" y="176" width="13" height="20" fill="#f3efe2"/></g>
+  <rect x="1556" y="174" width="22" height="26" rx="4" fill="#161b2e"/>
+  <circle id="sigGlow" cx="1567" cy="187" r="52" fill="url(#redG)"/>
+  <circle id="sigLamp" cx="1567" cy="187" r="8" fill="#ff5a48"/>
+  <rect x="1500" y="140" width="96" height="430" fill="transparent"/>
+</g>
+
+<!-- the engine and its train -->
+<g id="engine" class="hot" transform="translate(1190 330)"></g>
+<g id="train"></g>
+<rect x="-1000" y="556" width="3600" height="5" fill="#9aa8c4"/><rect x="-1000" y="561" width="3600" height="2.500" fill="#39425c"/>
+<rect x="-1000" y="563" width="3600" height="40" fill="#b9c8e0"/>
+<rect x="-1000" y="566" width="3600" height="14" fill="url(#ties)" opacity=".8"/>
+<path d="M-1000 603V584q160-9 330 0t340-3 330 4 340-4 330 3 340-3 330 4 340-3 330 2 250 0V603z" fill="#d3deef"/>
+
+<!-- the near platform, where you stand -->
+<rect x="-1000" y="600" width="3600" height="300" fill="url(#platG)"/>
+<path d="M-1000 616V600q200-9 420 0t380-4 420 5 380-5 400 4 400-5 400 5 400-2 400 2V616z" fill="#e6eefa"/>
+<rect x="-1000" y="614" width="3600" height="6" fill="#0a0e1a" opacity=".45"/>
+<g stroke="#0a0e1a" stroke-width="2" opacity=".5">
+  <path d="M-1000 668H2600M-1000 742H2600M-1000 832H2600"/>
+  <path d="M800 620v280M560 620L440 900M320 620L80 900M80 620L-280 900M-160 620L-640 900M1040 620l120 280M1280 620l240 280M1520 620l360 280M1760 620l480 280"/>
+</g>
+<ellipse cx="350" cy="852" rx="340" ry="92" fill="url(#lampG)" opacity=".5"/>
+<ellipse cx="1460" cy="858" rx="300" ry="86" fill="url(#lampG)" opacity=".36"/>
+
+<!-- mail bags, and somebody sitting on them -->
+<g id="bags" class="hot">
+  <path d="M446 858q-16-58 14-92h64q30 34 14 92z" fill="#8f7d5c"/><path d="M462 768q30-14 60 0l-8-18q-22-6-44 0z" fill="#74654a"/>
+  <path d="M520 858q-14-50 12-82h58q28 32 14 82z" fill="#a08c68"/><path d="M534 778q27-12 54 0l-8-16q-19-5-38 0z" fill="#85744f"/>
+  <path d="M588 858q-10-38 10-62h46q22 24 12 62z" fill="#8a7856"/><path d="M600 798q21-10 42 0l-6-13q-15-4-30 0z" fill="#6f6146"/>
+  <text x="491" y="826" class="stc">ORVO</text><text x="560" y="832" class="stc">MAIL</text>
+</g>
+<g id="cat" class="hot">
+  <path id="tail" d="M470 748q-30 4-34-22" stroke="#23252e" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M468 752q-4-50 26-60 28 10 28 60z" fill="#23252e"/>
+  <circle cx="496" cy="682" r="19" fill="#23252e"/>
+  <path d="M481 672l-3-21 15 11zM511 672l4-21-15 11z" fill="#23252e"/>
+  <path d="M487 712q9 16 18 0l-2 34h-14z" fill="#e9e6de"/>
+  <circle cx="489" cy="681" r="3" fill="#b9e87a"/><circle cx="503" cy="681" r="3" fill="#b9e87a"/>
+  <path d="M494 688l2 3 2-3z" fill="#e9a6a0"/>
+</g>
+
+<!-- luggage for the morning -->
+<g id="trolley" class="hot">
+  <rect x="770" y="822" width="290" height="12" rx="3" fill="#5a3a22"/>
+  <circle cx="820" cy="852" r="20" fill="#14161d" stroke="#4a4f5e" stroke-width="4"/><circle cx="1010" cy="852" r="20" fill="#14161d" stroke="#4a4f5e" stroke-width="4"/>
+  <path d="M1060 826l34-70M1084 754h26" stroke="#5a3a22" stroke-width="7" stroke-linecap="round"/>
+  <path d="M1032 822L1054 642" stroke="#d9b160" stroke-width="7" stroke-linecap="round"/><path d="M1046 822L1068 642" stroke="#b9862e" stroke-width="7" stroke-linecap="round"/>
+  <rect x="786" y="742" width="150" height="80" rx="6" fill="#6b3f24"/><path d="M786 770h150" stroke="#4a2a16" stroke-width="3"/>
+  <rect x="816" y="742" width="12" height="80" fill="#c79b3b" opacity=".85"/><rect x="894" y="742" width="12" height="80" fill="#c79b3b" opacity=".85"/>
+  <rect x="852" y="762" width="18" height="16" rx="2" fill="#e6c268"/>
+  <rect x="806" y="700" width="100" height="42" rx="5" fill="#2f6b4f"/><path d="M806 716h100" stroke="#1c4a35" stroke-width="2"/>
+  <rect x="846" y="691" width="22" height="10" rx="4" fill="none" stroke="#1c4a35" stroke-width="3.500"/>
+  <ellipse cx="986" cy="822" rx="42" ry="7" fill="#5a1722"/><rect x="944" y="772" width="84" height="50" fill="#8a2a38"/><ellipse cx="986" cy="772" rx="42" ry="9" fill="#a03344"/>
+  <path d="M944 792h84" stroke="#d9ae48" stroke-width="3"/>
+  <path d="M790 742q8-7 16 0M910 700q-6-5-12 0" stroke="#eef4fb" stroke-width="4" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- the lantern, the guard, the lever -->
+<g id="lantern" class="hot">
+  <circle cx="352" cy="826" r="80" fill="url(#lampG)"/>
+  <rect x="336" y="806" width="32" height="42" rx="4" fill="#ffe2a0"/>
+  <path d="M344 806v42M360 806v42" stroke="#2a2d38" stroke-width="2.500"/><path d="M334 806h36M334 848h36" stroke="#2a2d38" stroke-width="6" stroke-linecap="round"/>
+  <path d="M340 803q12-22 24 0" stroke="#2a2d38" stroke-width="3.500" fill="none"/>
+</g>
+<g id="vane" class="hot">
+  <use href="#ch-vane" x="34" y="560" width="270" height="351"/>
+  <g class="lid l4" fill="#e6c6aa"><ellipse cx="147.400" cy="720.650" rx="8.200" ry="5.600"/><ellipse cx="190.600" cy="720.650" rx="8.200" ry="5.600"/><path d="M139.500 721.500q8 3.400 16 0M182.700 721.500q8 3.400 16 0" stroke="#6b6e75" stroke-width="2.200" fill="none" stroke-linecap="round"/></g>
+  <path d="M176 862q46 30 84-18" stroke="#d9ae48" stroke-width="2.500" fill="none"/>
+  <path d="M236 868q-8-26 12-32h34q14 8 8 32z" fill="#eee8d8"/>
+  <circle cx="266" cy="816" r="25" fill="url(#rl-brass)"/><circle cx="266" cy="816" r="19" fill="#fbf3dc"/>
+  <path d="M266 816v-13M266 816l-9 6" stroke="#1b140f" stroke-width="2.500" stroke-linecap="round"/>
+  <rect x="261" y="785" width="10" height="9" rx="3" fill="#c79b3b"/>
+</g>
+<g id="frame">
+  <circle id="leverGlow" cx="1467" cy="690" r="150" fill="url(#greenG)" opacity="0" pointer-events="none"/>
+  <path d="M1422 810q45-38 90 0z" fill="#2c3657" stroke="#39425c" stroke-width="2"/>
+  <rect x="1382" y="808" width="170" height="100" rx="6" fill="#1a2036" stroke="#39425c" stroke-width="2"/>
+  <rect x="1396" y="822" width="142" height="50" rx="3" fill="#f3efe2"/>
+  <circle cx="1404" cy="830" r="2.500" fill="#8a7a4a"/><circle cx="1530" cy="830" r="2.500" fill="#8a7a4a"/><circle cx="1404" cy="864" r="2.500" fill="#8a7a4a"/><circle cx="1530" cy="864" r="2.500" fill="#8a7a4a"/>
+  <text x="1467" y="842" class="plateT">STARTING SIGNAL</text><text x="1477" y="863" class="plateT p2">PULL</text>
+  <path d="M1426 858.500l13-7v14z" fill="#1f6b45"/><path d="M1439 858.500h8" stroke="#1f6b45" stroke-width="3"/>
+</g>
+<g id="lever" class="drag">
+  <rect x="1460" y="630" width="14" height="182" rx="6" fill="#2f9b63"/><rect x="1460" y="630" width="5" height="182" rx="2" fill="#5fd198" opacity=".6"/>
+  <rect x="1455" y="600" width="24" height="50" rx="11" fill="url(#rl-brass)"/>
+  <circle cx="1467" cy="808" r="9" fill="#39425c"/>
+  <rect x="1436" y="588" width="62" height="232" fill="transparent"/>
+</g>
+
+<rect x="-1000" y="-200" width="3600" height="1300" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="snow"></div><div class="snow s2"></div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="rail.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), tr = $('#train'), lever = $('#lever'), Y0 = 330, PITCH = 222, X0 = 978;
+  /* how the carriages stand when you arrive. Place 0 is the one next to the engine. */
+  var ord = ['sleeping', 'guard', 'kitchen', 'mail', 'dining'];
+  var cars = {}, busy = false, briefed = false, solved = false, ang = 14, hissT = 0, wind = null;
+
+  function rnd(i) { var x = Math.sin(i * 127.1 + 3.7) * 43758.5453; return x - Math.floor(x); }
+  function slotX(i) { return X0 - i * PITCH; }
+
+  /* scenery that is easier to count than to draw */
+  (function () {
+    var s = '', i, x, h, a;
+    $('#railDefs').innerHTML = RAIL.defs;
+    for (i = 0; i < 80; i++) {
+      s += '<circle' + (i % 5 === 0 ? ' class="tw"' : '') + ' cx="' + (-300 + rnd(i) * 2200).toFixed(0) + '" cy="' + (12 + rnd(i + 100) * 250).toFixed(0) +
+        '" r="' + (0.7 + rnd(i + 200) * 1.4).toFixed(1) + '" opacity="' + (0.35 + rnd(i + 300) * 0.6).toFixed(2) + '"/>';
+    }
+    $('#stars').innerHTML = s; s = '';
+    for (x = -1000; x < 2600; x += 22) { h = 28 + rnd(x + 7) * 40; s += '<path d="M' + x + ' 334l13-' + h.toFixed(0) + ' 13 ' + h.toFixed(0) + 'z"/>'; }
+    $('#pines').innerHTML = s; s = '';
+    for (x = 286; x < 1196; x += 9) { h = 5 + rnd(x) * 17; s += '<path d="M' + x + ' 222h6l-3 ' + h.toFixed(0) + 'z"/>'; }
+    $('#icicles').innerHTML = s; s = '';
+    [[340, 1], [430, 0], [560, 2], [630, 1], [806, 0], [884, 1]].forEach(function (w) {
+      var wx = w[0];
+      s += '<rect x="' + (wx - 16) + '" y="232" width="13" height="64" fill="#24503f"/><rect x="' + (wx + 55) + '" y="232" width="13" height="64" fill="#24503f"/>' +
+        '<rect x="' + (wx - 3) + '" y="231" width="58" height="66" fill="#cfc9bb"/>' +
+        '<rect x="' + wx + '" y="234" width="52" height="60" fill="' + (w[1] ? 'url(#winLit)' : '#131a31') + '"/>' +
+        (w[1] === 2 ? '<path d="M' + (wx + 13) + ' 294v-20q0-10 9-12-4-4-4-9 0-10 9-10t9 10q0 5-4 9 9 2 9 12v20z" fill="#8a5420" opacity=".55"/>' : '') +
+        '<path d="M' + wx + ' 264h52M' + (wx + 26) + ' 234v60" stroke="#cfc9bb" stroke-width="3"/>' +
+        (w[1] ? '<ellipse cx="' + (wx + 26) + '" cy="264" rx="60" ry="56" fill="url(#lampG)" opacity=".34"/>' : '');
+    });
+    $('#wins').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) {
+      a = i * Math.PI / 6;
+      s += '<path d="M' + (740 + Math.sin(a) * 21).toFixed(1) + ' ' + (150 - Math.cos(a) * 21).toFixed(1) + 'L' + (740 + Math.sin(a) * 25).toFixed(1) + ' ' + (150 - Math.cos(a) * 25).toFixed(1) + '"/>';
+    }
+    $('#cticks').innerHTML = s;
+    $('#engine').innerHTML = RAIL.engine() + RAIL.steam(265, 4) + '<rect x="0" y="20" width="300" height="210" fill="transparent"/>';
+    s = '';
+    ord.forEach(function (id) { s += '<g class="car drag" data-id="' + id + '">' + RAIL.car(id) + '<rect x="0" y="0" width="212" height="230" fill="transparent"/></g>'; });
+    tr.innerHTML = s;
+    ER.$$('.car', tr).forEach(function (g) { cars[g.getAttribute('data-id')] = g; });
+  })();
+
+  function layout(skip) {
+    ord.forEach(function (id, i) { if (id !== skip) cars[id].style.transform = 'translate(' + slotX(i) + 'px,' + Y0 + 'px)'; });
+    tr.setAttribute('data-order', ord.join('>'));
+  }
+  function setClock(h, m) {
+    $('#hh').setAttribute('transform', 'rotate(' + ((h % 12) * 30 + m / 2) + ' 740 150)');
+    $('#mh').setAttribute('transform', 'rotate(' + (m * 6) + ' 740 150)');
+  }
+  function setLever(a, spring) {
+    ang = a;
+    lever.style.transition = spring ? 'transform .3s cubic-bezier(.3,1.6,.5,1)' : 'none';
+    lever.style.transform = 'rotate(' + a + 'deg)';
+  }
+  layout(); setClock(11, 40); setLever(14);
+
+  ER.init({
+    theme: 'adventure', story: 'orvo', storyTitle: 'The Night Train to Orvo', id: 'halm', no: 'I', title: 'Halm Junction',
+    go: 'Walk down the platform',
+    intro: [
+      'Halm Junction, twenty to midnight. It is snowing. You have a ticket for the night train to Orvo, and nothing to do until morning.',
+      'The guard of the night train is Mr Vane. He started forty-one years ago. The train left on time that night, and every night after it.',
+      'Tonight his assistant ate the fish at the station buffet. Mr Vane looks at you for a long time. &ldquo;You have two hands,&rdquo; he says. &ldquo;Come with me.&rdquo;'
+    ],
+    exit: {"next":"dining","w":{"6d9c105d":"30684d5e"}}, tags: {"dining":["69002647"],"guard":["840a2f86"],"kitchen":["4ad032d3"],"mail":["a9126b8c"],"sleeping":["42056ce1"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var CARD = '<h4>Orvo Line &middot; Train card</h4>' +
+    '<p class="sub">Night train &middot; Halm Junction to Orvo &middot; leaves 23.50</p>' +
+    '<p>Count from the engine. The first carriage is the one behind the engine.</p>' +
+    '<ol><li>The mail van is first.</li>' +
+    '<li>The guard&rsquo;s van is last.</li>' +
+    '<li>The dining car is third.</li>' +
+    '<li>The sleeping car is behind the dining car.</li>' +
+    '<li>One carriage is left. One place is left.</li></ol>' +
+    '<p>When the train is right, pull the green lever.</p>' +
+    '<p class="sign">L. Vane, guard</p>';
+
+  /* one line of the card for each carriage it names, in the order the card gives them */
+  var LINES = [
+    ['mail', 'Mr Vane does not look up from his watch. &ldquo;Line one,&rdquo; he says. &ldquo;Read it again.&rdquo;'],
+    ['guard', '&ldquo;Line two,&rdquo; says Mr Vane. &ldquo;I ride in the guard&rsquo;s van. I like to know where it is.&rdquo;'],
+    ['dining', '&ldquo;Line three,&rdquo; says Mr Vane. &ldquo;Count again. Start at the engine.&rdquo;'],
+    ['sleeping', '&ldquo;Line four,&rdquo; says Mr Vane. &ldquo;Find the dining car first. Then read the line again.&rdquo;']
+  ];
+  var ABOUT = {
+    dining: 'White tablecloths and little red lamps. Supper is at midnight.',
+    guard: 'Mr Vane rides in here, at the very back of the train, with the red lamp.',
+    kitchen: 'The cook is making soup in here. Move this one slowly.',
+    mail: 'Letters and parcels for the mountains. The mail van has one small window, with bars. The letters cannot get out.',
+    sleeping: 'The blinds are down. Somebody inside is snoring already.'
+  };
+
+  function hints() {
+    if (solved) return null;
+    if (!briefed) return ['vane', [
+      'Mr Vane is standing at the bottom left, with his watch. Click on him and listen to the end.',
+      'Keep clicking Next until he gives you the train card. Then read the card. It tells you where every carriage goes.'
+    ]];
+    return ['order', [
+      'Read the train card again. It is in your Notebook. Every line tells you where one carriage goes.',
+      'Count from the engine. The first carriage is the one right behind the engine. &ldquo;Last&rdquo; means the one at the other end, far away from the engine.',
+      'Start with the three lines that say first, third and last, and drag those carriages to their places. &ldquo;Behind&rdquo; means one place further away from the engine. After that, only one carriage and one place are left. Then drag the green lever to the left.'
+    ]];
+  }
+  function begin() {
+    wind = RAIL.snd.loop({ type: 'bandpass', f: 380, q: 0.5, vol: 0.05 });
+    hissT = setInterval(function () { if (!solved) RAIL.snd.hiss(); }, 8200);
+    ER.narrate([
+      'You are standing on platform 2. Across the track is the night train to Orvo. It has five carriages, and they are all in the wrong place.',
+      'Mr Vane stands beside you with his watch in his hand. Ask him what to do.'
+    ]);
+  }
+
+  /* looking at things */
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#engine', 'engine', 'The engine is ready. It was ready an hour ago, and it wants everybody to know.');
+  thing('#signal', 'signal', 'The starting signal. It is red. No train can pass a red signal. Not even this one.');
+  thing('#clock', null, 'The station clock. Mr Vane does not look at it. He has his own watch, and his watch is right.');
+  thing('#depb', null, 'Night train to Orvo, 23.50. That is ten to twelve.');
+  thing('#buffet', 'buffet', 'The station buffet. TODAY: FISH. Mr Vane&rsquo;s assistant is lying down in the waiting room.');
+  thing('#tower', 'water tower', null);
+  thing('#sbox', 'signal box', null);
+  thing('#bags', 'mail bag', 'Mail bags for Orvo. They go in the mail van, at the front of the train.');
+  thing('#cat', null, 'The station cat. It is sitting on the mail for Orvo. Nobody asked it to.');
+  thing('#trolley', 'trolley', 'Luggage for the morning train. It can wait. The night train cannot.');
+  thing('#lantern', 'lantern', null);
+
+  $('#vane').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.vane;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('vane'), last: briefed ? 'Close' : 'Take the card',
+      lines: [
+        'I am the guard. On the Orvo Line the guard looks at his watch. The assistant does everything else. That is rule one.',
+        'Tonight you are the assistant. The train leaves at ten to twelve. Look at it! The carriages are in the wrong order.',
+        'The right order is on this card. Read every line. Then move each carriage to its place.',
+        'When the train is right, pull the green lever. Then the signal turns green and we go. Not before.'
+      ],
+      clue: { id: 'vane1', title: 'Mr Vane: the job', kind: 'Orders' },
+      done: function (seen) {
+        if (!seen || briefed) return;
+        briefed = true; $('#vane').classList.add('done');
+        ER.read({ html: CARD, cls: 'traincard', clue: { id: 'traincard', title: 'Train card', kind: 'Railway paper' },
+          done: function () { ER.say('Five carriages. You can drag each one along the track to a new place.', 5200); } });
+      }
+    });
+  });
+
+  /* moving the carriages: pick one up, and the others make room */
+  ER.$$('.car', tr).forEach(function (g) {
+    var id = g.getAttribute('data-id'), off = 0, x = 0;
+    ER.drag(g, {
+      start: function (e) {
+        if (busy || solved) return false;
+        x = slotX(ord.indexOf(id)); off = ER.pt(svg, e).x - x; tr.appendChild(g);
+      },
+      move: function (e, moved) {
+        if (!moved) return;
+        x = Math.max(slotX(4) - 50, Math.min(slotX(0) + 50, ER.pt(svg, e).x - off));
+        g.style.transform = 'translate(' + x + 'px,' + (Y0 - 13) + 'px)';
+        var to = Math.max(0, Math.min(4, Math.round((X0 - x) / PITCH))), from = ord.indexOf(id);
+        if (to !== from) { ord.splice(from, 1); ord.splice(to, 0, id); layout(id); ER.sfx.tick(0.8); }
+      },
+      end: function (e, moved) {
+        layout();
+        if (!moved) { ER.wordAt(e.clientX, e.clientY, RAIL.word[id]); ER.say(ABOUT[id]); return; }
+        RAIL.snd.couple();
+      }
+    });
+  });
+
+  /* the lever */
+  ER.drag(lever, {
+    start: function () { if (busy || solved) return false; },
+    move: function (e, moved) {
+      if (!moved) return;
+      var p = ER.pt(svg, e);
+      setLever(Math.max(-24, Math.min(14, Math.atan2(p.x - 1467, 808 - p.y) * 180 / Math.PI)));
+    },
+    end: function (e, moved) {
+      if (!moved) {
+        setLever(14, true); ER.wordAt(e.clientX, e.clientY, 'lever');
+        ER.say('A green lever with a brass handle. Take hold of it and pull it over to the left.');
+        return;
+      }
+      if (ang < -8) pull(); else setLever(14, true);
+    }
+  });
+  function back() { setTimeout(function () { setLever(14, true); ER.sfx.no(); }, 380); }
+  function pull() {
+    var i;
+    setLever(-24); ER.sfx.clunk();
+    if (!briefed) { back(); ER.say('Mr Vane puts one hand on the lever. &ldquo;Not yet,&rdquo; he says. &ldquo;First you listen. Then you read. Then you pull.&rdquo;'); return; }
+    if (ER.exit([ord.join('>')], { quiet: true, delay: 9600 })) { depart(); return; }
+    back();
+    for (i = 0; i < LINES.length; i++) {
+      if (!ER.check(LINES[i][0], String(ord.indexOf(LINES[i][0])))) { ER.say('The lever jumps back. ' + LINES[i][1], 6200); return; }
+    }
+    ER.say('The lever jumps back. &ldquo;Read the card again,&rdquo; says Mr Vane.');
+  }
+  function depart() {
+    solved = busy = true; clearInterval(hissT);
+    document.body.classList.add('go');
+    $('#sigLamp').setAttribute('fill', '#5dffa0'); $('#sigGlow').setAttribute('fill', 'url(#greenG)');
+    $('#leverGlow').setAttribute('opacity', 0.5);
+    setClock(11, 50);
+    ER.say('The signal arm drops. Green.', 2800);
+    setTimeout(function () { RAIL.snd.whistle(); RAIL.snd.chuff(1.2); }, 1300);
+    setTimeout(function () { ER.say('The engine whistles. In the sleeping car, somebody stops snoring.', 3300); RAIL.snd.chuff(1); }, 3000);
+    setTimeout(function () { ER.sfx.click(); ER.say('&ldquo;Ten to twelve,&rdquo; says Mr Vane. He shuts his watch with a click. &ldquo;Get in.&rdquo;', 4200); }, 6500);
+    setTimeout(function () { if (wind) wind.stop(); }, 9400);
+  }
+})();
+</script>
+</body>
+</html>

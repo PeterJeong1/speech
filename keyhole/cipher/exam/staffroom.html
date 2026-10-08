@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Staffroom · Answer All Questions</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#120e0b;--accent:#f4e04d;--font-display:'Playfair Display',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(13,10,8,.96);--tc-ink:#f1ecdf;--cap-bg:rgba(15,12,9,.94);--panel:#1b1612;--face-bg:#2a211b;--q-ink:#e6d58a;--fade:#080605;--hud-bg:rgba(15,12,9,.76)}
+  .tc-room{font-weight:900;font-style:italic}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .mk{font-family:'Permanent Marker',cursive;text-anchor:middle}
+  #torch{animation:torch 17s ease-in-out infinite alternate}
+  @keyframes torch{from{transform:translate(0,0)}to{transform:translate(170px,-8px)}}
+  #lampGlow{animation:lg 5.3s steps(1,end) infinite}
+  @keyframes lg{0%{opacity:1}61%{opacity:.93}66%{opacity:1}}
+  #shadow{transform:translateX(-150px);opacity:0}
+  #shadow.pass{animation:pass 2.6s linear forwards}
+  @keyframes pass{0%{transform:translateX(-150px);opacity:.75}100%{transform:translateX(190px);opacity:.75}}
+  #kdoor{transition:transform .7s;transform-origin:1206px 440px}
+  #kbox.open #kdoor{transform:scaleX(-.34)}
+  #kbox.glow #klamp{fill:#7be04a}
+
+  /* the bulletin and the key box */
+  .kb{display:grid;grid-template-columns:minmax(0,700px) 330px;gap:26px;width:min(1090px,96vw);align-items:start}
+  .kb-paper{position:relative;background:#f3eedf linear-gradient(176deg,rgba(255,255,255,.5),rgba(120,100,60,.14));color:#1c1b18;padding:30px 36px 20px 30px;
+    font-family:'Courier Prime',monospace;font-size:18.5px;line-height:1.3;box-shadow:0 24px 60px rgba(0,0,0,.65);transform:rotate(-.5deg)}
+  .kb-paper:before{content:'';position:absolute;left:50%;top:-10px;width:20px;height:20px;margin-left:-10px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#ff8d80,#b3261c 60%,#6e120c);box-shadow:0 3px 5px rgba(0,0,0,.5)}
+  .kb-paper h5{margin:0;font-size:19px;font-weight:700;letter-spacing:.12em}
+  .kb-from{margin:2px 0 12px;padding-bottom:9px;border-bottom:1px solid #6b6453;font-size:15.5px;color:#4a463b}
+  .kb-lines{margin:0;padding:0;list-style:none;counter-reset:ln}
+  .kb-lines li{position:relative;counter-increment:ln;margin:0;padding:17px 0 4px 38px;-webkit-user-select:none;user-select:none}
+  .kb-lines li:before{content:counter(ln) '.';position:absolute;left:0;top:17px;font-weight:700;color:#6b6453}
+  .kb-lines .wk-w{position:relative;padding:1px 2px;cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><path d='M3 29l3-9L22 4l6 6L12 26z' fill='%23c8281d' stroke='%23400' stroke-width='1.5'/><path d='M3 29l3-9 6 6z' fill='%23f1ecdf' stroke='%23400' stroke-width='1.2'/><path d='M3 29l1.6-4 2.4 2.4z' fill='%23c8281d'/></svg>") 3 29,pointer}
+  .kb-lines .wk-w:hover{background:rgba(200,40,29,.14)}
+  .kb-lines .wk-w.ok{background:none;color:inherit;cursor:default}
+  .kb-lines .wk-w.ok:after,.kb-lines .wk-w.blot:after{content:'';position:absolute;left:-7px;right:-7px;top:-3px;bottom:-4px;border:2.5px solid #c8281d;border-radius:50%;transform:rotate(-3deg)}
+  .kb-lines .wk-w.blot:after{border-style:dashed;opacity:.55}
+  .kb-lines .wk-w.blot:before{content:'?';position:absolute;right:-13px;top:-15px;font-family:'Caveat',cursive;font-weight:700;font-size:22px;color:#c8281d;opacity:.7}
+  .kb-lines .fix{position:absolute;left:50%;top:-20px;transform:translateX(-50%) rotate(-3deg);white-space:nowrap;font-size:24px;line-height:1;pointer-events:none}
+  .kb-lines li.kb-ok .wk-w{cursor:default}
+  .kb-lines li.kb-ok .wk-w:hover{background:none}
+  .kb-lines li.kb-done{color:#8d8776}
+  .kb-lines li.kb-done:after{content:'\2713';position:absolute;left:-2px;top:36px;font-family:'Caveat',cursive;font-weight:700;font-size:26px;color:#c8281d}
+  .kb-foot{margin:14px 0 0;padding-top:10px;border-top:1px solid #6b6453;font-size:15.5px;line-height:1.32;color:#3b382f}
+  .kb-side svg{display:block;width:100%;height:auto}
+  .kb-rings{margin:12px 0 10px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#cfc8b6;display:flex;align-items:center;gap:7px}
+  .kb-rings i{width:17px;height:13px;border:2px solid #6b6453;border-radius:50%;transform:rotate(-8deg)}
+  .kb-rings i.on{border-color:#ff5a4a}
+  .whT{font-family:'Bebas Neue',sans-serif;font-size:44px;fill:#16171c;text-anchor:middle}
+  .wh.on rect{fill:#f4e04d}
+  /* inside the key box */
+  .hk{width:min(820px,94vw);background:#23272c;border:8px solid #5d656e;border-radius:6px;padding:16px 20px 16px;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .hk svg{display:block;width:100%;height:auto}
+  .hk .pmsg{margin-top:10px;min-height:66px}
+  .hkT{font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;fill:#1c1b18;text-anchor:middle}
+  .hkN{font-family:'Bebas Neue',sans-serif;font-size:34px;fill:#f4e04d;text-anchor:middle}
+  .hook{cursor:pointer}
+  @media (max-width:900px){.kb{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3c3027"/><stop offset=".55" stop-color="#5a493a"/><stop offset="1" stop-color="#4a3c30"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5c646d"/><stop offset=".5" stop-color="#8b949d"/><stop offset="1" stop-color="#59616a"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5f38"/><stop offset="1" stop-color="#5a3c22"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b4526"/><stop offset=".5" stop-color="#7c532f"/><stop offset="1" stop-color="#5a3a20"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#27364a"/><stop offset=".5" stop-color="#1a2535"/><stop offset="1" stop-color="#101824"/></linearGradient>
+  <linearGradient id="chairG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d3b34"/><stop offset="1" stop-color="#4c211d"/></linearGradient>
+  <linearGradient id="chair2G" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f5a55"/><stop offset="1" stop-color="#22332f"/></linearGradient>
+  <linearGradient id="shadeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3d38c"/><stop offset="1" stop-color="#ffefc0"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffd78a" stop-opacity=".62"/><stop offset=".35" stop-color="#ffb95a" stop-opacity=".2"/><stop offset="1" stop-color="#ffb95a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="torchG"><stop offset="0" stop-color="#fff6c8"/><stop offset=".3" stop-color="#ffe48a" stop-opacity=".6"/><stop offset="1" stop-color="#ffe48a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="42%" r="75%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".38"/><stop offset="1" stop-color="#000" stop-opacity=".93"/></radialGradient>
+  <pattern id="carpet" width="120" height="120" patternUnits="userSpaceOnUse"><rect width="120" height="120" fill="#2f3440"/><rect width="60" height="60" fill="#343a47"/><rect x="60" y="60" width="60" height="60" fill="#343a47"/><path d="M0 0H120M0 60H120M0 0V120M60 0V120" stroke="#262a34" stroke-width="2"/></pattern>
+  <pattern id="stripe" width="46" height="10" patternUnits="userSpaceOnUse"><rect width="46" height="10" fill="none"/><rect width="3" height="10" fill="#000" opacity=".1"/><rect x="23" width="1.5" height="10" fill="#fff" opacity=".05"/></pattern>
+  <pattern id="cork" width="22" height="22" patternUnits="userSpaceOnUse"><rect width="22" height="22" fill="#b98a55"/><circle cx="4" cy="5" r="1.6" fill="#8e6638"/><circle cx="14" cy="12" r="2" fill="#a47744"/><circle cx="8" cy="18" r="1.3" fill="#8e6638"/><circle cx="19" cy="3" r="1.2" fill="#caa06a"/></pattern>
+  <clipPath id="winC"><rect x="408" y="118" width="204" height="214"/></clipPath>
+  <clipPath id="glassC"><rect x="1388" y="192" width="114" height="216" rx="4"/></clipPath>
+</defs>
+
+<!-- wall, panelling, carpet -->
+<rect x="-1000" y="-400" width="3600" height="1110" fill="url(#wallG)"/>
+<rect x="-1000" y="-400" width="3600" height="960" fill="url(#stripe)"/>
+<rect x="-1000" y="556" width="3600" height="152" fill="#3a2e25"/>
+<g id="panels"></g>
+<rect x="-1000" y="548" width="3600" height="11" fill="#241c16"/>
+<rect x="-1000" y="694" width="3600" height="14" fill="#1d1612"/>
+<rect x="-1000" y="706" width="3600" height="620" fill="url(#carpet)"/>
+
+<!-- the grey cupboard, standing open -->
+<g id="cup" class="hot">
+  <path d="M70 150L26 172V722L70 706Z" fill="#4d555e"/><path d="M26 172V722" stroke="#7b848d" stroke-width="3"/>
+  <path d="M330 150L372 174V724L330 706Z" fill="#434a53"/><path d="M372 174V724" stroke="#6d757e" stroke-width="3"/>
+  <circle cx="356" cy="440" r="7" fill="#22262b"/><path d="M356 436v9" stroke="#8b949d" stroke-width="2.5"/>
+  <rect x="70" y="150" width="260" height="556" fill="#121418"/>
+  <g fill="#6d757e"><rect x="70" y="262" width="260" height="9"/><rect x="70" y="384" width="260" height="9"/><rect x="70" y="506" width="260" height="9"/><rect x="70" y="612" width="260" height="9"/></g>
+  <g><rect x="92" y="186" width="26" height="76" fill="#27457a"/><rect x="120" y="180" width="26" height="82" fill="#7a2b27"/><rect x="148" y="190" width="26" height="72" fill="#2f5a3b"/><rect x="176" y="184" width="24" height="78" fill="#27457a"/>
+     <rect x="228" y="214" width="84" height="48" fill="#a8895a"/><rect x="228" y="214" width="84" height="12" fill="#8c6f44"/></g>
+  <rect x="112" y="300" width="176" height="84" fill="none" stroke="#3b424a" stroke-width="2" stroke-dasharray="5 6"/>
+  <rect x="138" y="386" width="124" height="26" fill="#f1eee2"/><text x="200" y="404" class="sT" font-size="12.5" fill="#16171c" letter-spacing="1">YEAR 9 ENGLISH</text>
+  <g><rect x="92" y="446" width="92" height="60" fill="#e9dcc0"/><rect x="92" y="446" width="92" height="16" fill="#1d2a52"/><text x="138" y="459" class="sT" font-size="10.5" fill="#fff" letter-spacing="1">SPARE PENS</text>
+     <rect x="206" y="470" width="104" height="8" fill="#f1eee2"/><rect x="204" y="480" width="108" height="8" fill="#e2dccb"/><rect x="208" y="490" width="100" height="8" fill="#f1eee2"/><rect x="206" y="498" width="104" height="8" fill="#d9d2bf"/></g>
+  <g><rect x="92" y="536" width="30" height="76" fill="#3a3f47"/><rect x="124" y="530" width="30" height="82" fill="#565d66"/><rect x="156" y="540" width="30" height="72" fill="#3a3f47"/><rect x="230" y="560" width="80" height="52" fill="#7a2b27"/></g>
+  <g><rect x="96" y="640" width="208" height="62" fill="#2a2e34"/><path d="M96 660h208M96 680h208" stroke="#16181c" stroke-width="2"/></g>
+  <rect x="70" y="150" width="260" height="556" fill="none" stroke="#7b848d" stroke-width="6"/>
+</g>
+
+<!-- window, with the blind half down -->
+<g id="win" class="hot">
+  <rect x="398" y="108" width="224" height="234" fill="#241c16"/>
+  <rect x="408" y="118" width="204" height="214" fill="#0b1322"/>
+  <g clip-path="url(#winC)"><rect x="408" y="286" width="204" height="46" fill="#080d16"/><path d="M408 292h204" stroke="#18233a" stroke-width="2"/>
+    <g stroke="#18233a" stroke-width="2"><path d="M430 292v40M470 292v40M510 292v40M550 292v40M590 292v40"/></g>
+    <circle cx="560" cy="150" r="13" fill="#e9ecf2" opacity=".85"/><circle cx="555" cy="146" r="12" fill="#0b1322"/>
+    <circle id="torch" cx="424" cy="306" r="24" fill="url(#torchG)"/></g>
+  <g stroke="#cfc6b2" stroke-width="5" opacity=".9"><path d="M408 124h204M408 138h204M408 152h204M408 166h204M408 180h204M408 194h204M408 208h204"/></g>
+  <path d="M510 118v214M408 226h204" stroke="#241c16" stroke-width="6"/>
+  <rect x="392" y="340" width="236" height="12" fill="#2f251d"/>
+</g>
+
+<!-- fridge, with a note on it -->
+<g id="fridge" class="hot">
+  <rect x="410" y="384" width="130" height="322" rx="8" fill="#e6e2d6"/><rect x="410" y="384" width="130" height="322" rx="8" fill="none" stroke="#a9a493" stroke-width="3"/>
+  <path d="M410 500h130" stroke="#a9a493" stroke-width="3"/><rect x="520" y="410" width="8" height="64" rx="4" fill="#8d897b"/><rect x="520" y="520" width="8" height="90" rx="4" fill="#8d897b"/>
+  <g transform="rotate(-5 462 446)"><rect x="428" y="412" width="70" height="66" fill="#ffe36b"/><path d="M436 428h52M436 440h46M436 452h54M436 464h30" stroke="#3a4a7a" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M450 434h24M446 458h22" stroke="#c8281d" stroke-width="2.4" stroke-linecap="round"/></g>
+  <circle cx="462" cy="410" r="6" fill="#c8281d"/><circle cx="440" cy="540" r="7" fill="#27457a"/><rect x="470" y="560" width="34" height="24" fill="#f4e04d"/><circle cx="487" cy="558" r="5" fill="#2f5a3b"/>
+</g>
+
+<!-- counter: kettle, telephone, mugs on hooks -->
+<rect x="540" y="560" width="226" height="146" fill="url(#woodG)"/><rect x="532" y="550" width="242" height="14" fill="#2f251d"/>
+<g stroke="#3d2916" stroke-width="3" fill="none"><rect x="552" y="578" width="96" height="116"/><rect x="658" y="578" width="96" height="116"/></g><circle cx="640" cy="636" r="4" fill="#d9c58a"/><circle cx="666" cy="636" r="4" fill="#d9c58a"/>
+<g id="kettle" class="hot"><path d="M570 550q-4-52 30-56h14q34 4 30 56z" fill="#c9ced3"/><path d="M576 548q-2-40 22-48" stroke="#fff" stroke-width="4" fill="none" opacity=".6"/><path d="M644 518q26-14 20 16" stroke="#22262b" stroke-width="7" fill="none"/><path d="M572 520l-16-12" stroke="#c9ced3" stroke-width="9" stroke-linecap="round"/><rect x="596" y="486" width="22" height="9" rx="3" fill="#22262b"/></g>
+<g id="phone" class="hot"><rect x="678" y="524" width="76" height="27" rx="5" fill="#1d1f24"/><rect x="672" y="510" width="88" height="14" rx="7" fill="#2b2e35"/><g fill="#8d9199"><rect x="702" y="531" width="6" height="5"/><rect x="712" y="531" width="6" height="5"/><rect x="722" y="531" width="6" height="5"/><rect x="702" y="540" width="6" height="5"/><rect x="712" y="540" width="6" height="5"/><rect x="722" y="540" width="6" height="5"/></g><path d="M678 518q-18 22 6 30" stroke="#1d1f24" stroke-width="3" fill="none"/></g>
+<g id="mugs" class="hot">
+  <rect x="548" y="424" width="216" height="8" rx="3" fill="#2f251d"/>
+  <g stroke="#c9b27a" stroke-width="3" fill="none"><path d="M570 432v8q0 6 6 6M616 432v8q0 6 6 6M662 432v8q0 6 6 6M708 432v8q0 6 6 6M750 432v8q0 6 6 6"/></g>
+  <g><rect x="558" y="446" width="30" height="34" rx="4" fill="#b23a30"/><path d="M588 454q12 2 0 18" stroke="#b23a30" stroke-width="5" fill="none"/></g>
+  <g><rect x="604" y="446" width="30" height="34" rx="4" fill="#2c4f8a"/><path d="M634 454q12 2 0 18" stroke="#2c4f8a" stroke-width="5" fill="none"/><path d="M606 458h26" stroke="#fff" stroke-width="4" opacity=".7"/></g>
+  <g><rect x="650" y="446" width="30" height="34" rx="4" fill="#efe6cf"/><path d="M680 454q12 2 0 18" stroke="#efe6cf" stroke-width="5" fill="none"/><circle cx="665" cy="463" r="7" fill="#d9a22b"/></g>
+  <g><rect x="696" y="446" width="30" height="34" rx="4" fill="#2f6a4a"/><path d="M726 454q12 2 0 18" stroke="#2f6a4a" stroke-width="5" fill="none"/></g>
+</g>
+
+<!-- standard lamp -->
+<circle id="lampGlow" cx="812" cy="350" r="640" fill="url(#lampG)" pointer-events="none"/>
+<g id="lamp" class="hot"><path d="M812 372V742" stroke="#2a211b" stroke-width="8"/><ellipse cx="812" cy="746" rx="44" ry="10" fill="#2a211b"/><path d="M776 300h72l22 74h-116z" fill="url(#shadeG)"/><path d="M776 300h72" stroke="#a8843e" stroke-width="4"/><path d="M754 374h116" stroke="#a8843e" stroke-width="4"/></g>
+
+<!-- notice board -->
+<g id="nboard">
+  <rect x="868" y="142" width="316" height="346" fill="#4a3220"/><rect x="880" y="154" width="292" height="322" fill="url(#cork)"/>
+  <g id="bull" class="hot"><g transform="rotate(-1.5 954 262)"><rect x="894" y="170" width="124" height="186" fill="#f3eedf"/><path d="M904 188h80" stroke="#1c1b18" stroke-width="4"/><path d="M904 200h56" stroke="#6b6453" stroke-width="2"/>
+    <g stroke="#3b382f" stroke-width="2.2"><path d="M904 218h104M904 236h98M904 254h104M904 272h90M904 290h102M904 308h96"/></g><path d="M904 326h104M904 334h104M904 342h70" stroke="#8d8776" stroke-width="1.6"/></g><circle cx="956" cy="172" r="6" fill="#c8281d"/></g>
+  <g id="dnote" class="hot"><g transform="rotate(2 1096 232)"><rect x="1034" y="168" width="124" height="128" fill="#fdfdf6"/><path d="M1034 168v128" stroke="#c8281d" stroke-width="4"/>
+    <text x="1097" y="194" class="mk" font-size="15" fill="#16171c">LOCKING UP</text><g stroke="#16171c" stroke-width="4" stroke-linecap="round"><path d="M1046 212h100M1046 230h84M1046 248h100M1046 266h60"/></g>
+    <g stroke="#c8281d" stroke-width="2.5" fill="none"><path d="M1044 230h30M1090 248h34"/><ellipse cx="1128" cy="276" rx="18" ry="11"/></g></g><circle cx="1096" cy="170" r="6" fill="#27457a"/></g>
+  <g id="memo" class="hot"><g transform="rotate(-1 1098 388)"><rect x="1036" y="316" width="126" height="146" fill="#fbfbf8"/><rect x="1036" y="316" width="126" height="13" fill="#1d2a52"/>
+    <path d="M1046 344h70" stroke="#1d2a52" stroke-width="4"/><g stroke="#6a7084" stroke-width="2"><path d="M1046 362h106M1046 374h100M1046 386h106M1046 398h88M1046 410h106M1046 422h60"/></g><path d="M1100 446q10-10 18 0t16-2" stroke="#1d2a52" stroke-width="2" fill="none"/></g><circle cx="1098" cy="318" r="6" fill="#2f5a3b"/></g>
+  <g id="drill" class="hot"><g transform="rotate(1.5 954 416)"><rect x="896" y="376" width="118" height="84" fill="#ffe36b"/><path d="M906 392h64" stroke="#1c1b18" stroke-width="4"/><g stroke="#3b382f" stroke-width="2"><path d="M906 410h98M906 422h92M906 434h98M906 446h50"/></g></g><circle cx="956" cy="378" r="6" fill="#16171c"/></g>
+</g>
+
+<!-- who is who, the key box, the door, the clock -->
+<g id="who" class="hot">
+  <rect x="1206" y="146" width="122" height="188" fill="#4a3220"/><rect x="1213" y="153" width="108" height="174" fill="#2c4a3a"/>
+  <text x="1267" y="172" class="sT" font-size="11" fill="#f4e04d" letter-spacing="1.5">WHO IS WHO</text>
+  <g id="mugshots"></g>
+</g>
+<g id="kbox" class="hot">
+  <rect x="1206" y="384" width="118" height="112" rx="5" fill="#1b1e22"/>
+  <g id="kin"><g stroke="#8b949d" stroke-width="3" fill="none"><path d="M1226 404v10q0 5 5 5M1252 404v10q0 5 5 5M1278 404v10q0 5 5 5M1304 404v10q0 5 5 5"/></g>
+    <g id="keyIn"><circle cx="1231" cy="430" r="8" fill="none" stroke="#d9c58a" stroke-width="3.5"/><path d="M1231 438v30M1231 458h8M1231 466h6" stroke="#d9c58a" stroke-width="3.5"/></g>
+    <g><circle cx="1283" cy="430" r="8" fill="none" stroke="#c9ced3" stroke-width="3.5"/><path d="M1283 438v26M1283 456h7" stroke="#c9ced3" stroke-width="3.5"/></g></g>
+  <g id="kdoor"><rect x="1206" y="384" width="118" height="112" rx="5" fill="url(#steelG)"/><rect x="1206" y="384" width="118" height="112" rx="5" fill="none" stroke="#30353b" stroke-width="3"/>
+    <text x="1265" y="408" class="sT" font-size="12" fill="#16171c" letter-spacing="2">SPARE KEYS</text>
+    <g id="kwh"></g><circle id="klamp" cx="1310" cy="402" r="4" fill="#c8281d"/></g>
+  <rect x="1212" y="504" width="106" height="30" fill="#fdfdf6" transform="rotate(-1.5 1265 519)"/><g stroke="#16171c" stroke-width="3" stroke-linecap="round" transform="rotate(-1.5 1265 519)"><path d="M1220 514h90M1220 525h64"/></g>
+</g>
+<g id="door" class="hot">
+  <rect x="1346" y="140" width="204" height="568" fill="#2f2118"/><rect x="1358" y="152" width="180" height="554" fill="url(#doorG)"/>
+  <rect x="1380" y="184" width="130" height="232" rx="6" fill="#3d2916"/><rect x="1388" y="192" width="114" height="216" rx="4" fill="url(#glassG)"/>
+  <g clip-path="url(#glassC)"><path d="M1380 380L1470 192h26L1406 408z" fill="#fff" opacity=".05"/><ellipse id="shadow" cx="1420" cy="330" rx="40" ry="104" fill="#000"/><circle id="shadowH" cx="1420" cy="230" r="0"/></g>
+  <g stroke="#4a3220" stroke-width="3" fill="none"><rect x="1380" y="446" width="130" height="226"/></g>
+  <rect x="1372" y="430" width="16" height="50" rx="3" fill="#c9b27a"/><path d="M1380 444h34" stroke="#d9c58a" stroke-width="9" stroke-linecap="round"/><circle cx="1380" cy="470" r="3.5" fill="#1d1612"/>
+</g>
+<g id="clock" class="hot"><circle cx="1448" cy="92" r="40" fill="#1d1612"/><circle cx="1448" cy="92" r="34" fill="#f3eedf"/>
+  <g stroke="#1c1b18" stroke-width="3"><path d="M1448 62v7M1448 115v7M1418 92h7M1471 92h7"/></g>
+  <path id="hh" d="M1448 92V72" stroke="#1c1b18" stroke-width="5" stroke-linecap="round"/><path id="mh" d="M1448 92V64" stroke="#1c1b18" stroke-width="3" stroke-linecap="round"/><circle cx="1448" cy="92" r="3.5" fill="#c8281d"/></g>
+
+<!-- armchairs, and the low table with the tray -->
+<g id="chairL" class="hot"><path d="M150 700q-6-96 60-104h150q66 8 60 104v170H150z" fill="url(#chairG)"/><path d="M190 640q10-34 44-36h102q34 2 44 36v84H190z" fill="#8a4640"/>
+  <path d="M132 720q0-34 34-34t34 34v160h-68zM372 720q0-34 34-34t34 34v160h-68z" fill="#5d2a25"/><rect x="198" y="724" width="176" height="60" rx="14" fill="#93514a"/></g>
+<g id="chairR" class="hot"><path d="M1150 706q-6-92 58-100h140q64 8 58 100v170h-256z" fill="url(#chair2G)"/><path d="M1188 650q10-32 42-34h96q32 2 42 34v80h-180z" fill="#476660"/>
+  <path d="M1132 726q0-32 32-32t32 32v156h-64zM1360 726q0-32 32-32t32 32v156h-64z" fill="#2a3f3a"/><rect x="1196" y="730" width="164" height="58" rx="14" fill="#4f6f69"/>
+  <path d="M1230 668l50-6 8 44-52 8z" fill="#f3eedf" opacity=".9"/></g>
+<g id="table"><path d="M736 770h408l34 54H702z" fill="#6b4526"/><path d="M702 824h476v14H702z" fill="#3d2916"/><path d="M724 838v52M1156 838v52" stroke="#3d2916" stroke-width="12"/><path d="M736 770h408" stroke="#9a6a3c" stroke-width="3"/></g>
+<g id="tray" class="hot"><path d="M764 776h150l14 38H750z" fill="#2a2e34"/><path d="M750 814h178v10H750z" fill="#16181c"/><rect x="774" y="816" width="130" height="0" fill="none"/>
+  <text x="839" y="822" class="sT" font-size="9" fill="#f4e04d" letter-spacing="2" style="pointer-events:none">CONFISCATED</text>
+  <g id="cards"><g transform="rotate(-8 812 792)"><rect x="786" y="780" width="56" height="24" fill="#f1eee2"/><rect x="786" y="776" width="56" height="24" fill="#fbfaf4"/><path d="M792 784h40M792 790h30" stroke="#27457a" stroke-width="2"/><path d="M812 772v32" stroke="#c8281d" stroke-width="3"/></g></g>
+  <g transform="rotate(10 880 794)"><rect x="866" y="784" width="30" height="18" rx="3" fill="#b23a30"/><circle cx="881" cy="793" r="5" fill="#f4e04d"/></g></g>
+<g id="tin" class="hot"><ellipse cx="1060" cy="806" rx="52" ry="14" fill="#27457a"/><rect x="1008" y="772" width="104" height="34" fill="#2c4f8a"/><ellipse cx="1060" cy="772" rx="52" ry="14" fill="#3d63a6"/><ellipse cx="1060" cy="772" rx="40" ry="9" fill="none" stroke="#d9c58a" stroke-width="2"/>
+  <rect x="1030" y="784" width="60" height="14" fill="#fdfdf6"/><text x="1060" y="795" class="sT" font-size="8.5" fill="#16171c" letter-spacing="1">STAFF ONLY</text></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, got = false, solved = false, hasKey = false, opened = false, seen = {};
+  var ver = 'a', copyNo = 3, rings = 0, swaps = 0, found = ['', '', '', '', '', ''], lockBox = null, cur = 0;
+
+  /* panelling, the staff photographs, the wheels on the key box */
+  (function () {
+    var s = '', x, i;
+    for (x = -980; x < 2600; x += 130) s += '<rect x="' + x + '" y="574" width="110" height="106" fill="none" stroke="#2a211b" stroke-width="3"/>';
+    $('#panels').innerHTML = s; s = '';
+    [[1219, 182, '#c9a27e', '#3a3f47'], [1253, 182, '#e3c3a2', '#7a2b27'], [1287, 182, '#d9b08c', '#27457a'], [1236, 252, '#7a4d33', '#2f6a4a'], [1270, 252, '#d2aa86', '#5a4a3a']].forEach(function (p) {
+      s += '<rect x="' + p[0] + '" y="' + p[1] + '" width="30" height="38" fill="#f3eedf"/><circle cx="' + (p[0] + 15) + '" cy="' + (p[1] + 14) + '" r="8" fill="' + p[2] + '"/>' +
+        '<path d="M' + (p[0] + 3) + ' ' + (p[1] + 34) + 'q12-16 24 0z" fill="' + p[3] + '"/><path d="M' + (p[0] + 2) + ' ' + (p[1] + 46) + 'h26" stroke="#f3eedf" stroke-width="2.5"/>';
+    });
+    s += '<rect x="1214" y="198" width="40" height="11" fill="#fdfdf6" transform="rotate(-9 1234 203)"/><rect x="1249" y="200" width="38" height="11" fill="#fdfdf6" transform="rotate(7 1268 205)"/>';
+    $('#mugshots').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) s += '<rect x="' + (1214 + i * 17.4).toFixed(1) + '" y="428" width="14.5" height="26" rx="2" fill="#e9e3d2"/><text id="sw' + i + '" x="' + (1221.2 + i * 17.4).toFixed(1) + '" y="448" class="sT" font-size="16" fill="#16171c"></text>';
+    $('#kwh').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'exam', storyTitle: 'Answer All Questions', id: 'staffroom', no: 'I', title: 'The Staffroom',
+    go: 'Open the staffroom door',
+    intro: [
+      'Thursday, nine o&rsquo;clock at night. The Year 9 English exam is at nine tomorrow morning, and everything you know about English is written on forty small cards.',
+      'The cards are in the staffroom. Mr Tibbs took them away at a quarter past two, because you were reading them in Maths.',
+      'Mr Drummond, the caretaker, has let you in at the side door. He wrote your name in the visitors&rsquo; book and looked at his watch. &ldquo;Staffroom. First floor, end of the corridor. You have five minutes. I lock up at half past nine, and I do not come back for anybody.&rdquo;'
+    ],
+    exit: {"next":"corridor","w":{"75d37188":"e9f04690"}}, tags: {"a1":["77a05a02"],"a2":["4940e4cd"],"a3":["a3212f2f"],"a4":["72607c84"],"a5":["8853bb58"],"a6":["72cb6571"],"b1":["5a300d9b"],"b2":["3bde52f7"],"b3":["41b1fa8d"],"b4":["b8ad4ee1"],"b5":["c20ea1fc"],"b6":["84f4aa63"]},
+    sound: ['corridor', { drop: ['mel'] }],          /* Mr Drummond whistles in this room: the music has no tune of its own */
+    hints: hints, onBegin: begin
+  });
+  EXAM.clock(); EXAM.wall('#hh', '#mh', 1448, 92);
+
+  got = !!ER.flag('a-cards'); nextFile = ER.flag('a-file') || null; solved = !!nextFile; hasKey = !!ER.flag('a-key');
+  seen = ER.flag('a-seen') || {}; ver = ER.flag('a-ver') || 'a'; copyNo = ER.flag('a-copy') || 3;
+  found = (ER.flag('a-found') || '______').split('').map(function (c) { return c === '_' ? '' : c; });
+
+  var SLIP = '<h4>Confiscated</h4><p>Item: <u>40 revision cards (English)</u></p><p>Taken in: <u>Mathematics, period 5, 14:15</u></p>' +
+    '<p>Reason: <u>1. Reading English in a Mathematics lesson.</u></p><p><u>2. Not reading it very well. &ldquo;Passive&rdquo; has two Ss.</u></p>' +
+    '<p>May be collected at: <u>15:30</u></p><p>Collected: <u>no</u></p><p>Signed: <u>D. Tibbs</u></p>';
+  var DNOTE = '<h4>Locking up</h4><p>The building is locked at half past nine every night.</p>' +
+    '<p><s>Their</s> <span class="red">There</span> are no exceptions.</p>' +
+    '<p>If <s>your</s> <span class="red">you are</span> still inside, you will stay inside <s>untill</s> <span class="red">until</span> morning.</p>' +
+    '<p>F. Drummond, site manager</p><p class="red" style="text-align:right">7 out of 10. V.C.</p>';
+  var MEMO = '<h4>Kestrel Hill School</h4><h5>From the Head Teacher &middot; Examination security</h5>' +
+    '<p>1. All examination papers are kept locked in the grey cupboard in the staffroom. The Head of English and the Examinations Officer each have a key. A spare key, number 14, hangs in the key box.</p>' +
+    '<p>2. If any pupil sees a paper before the examination, that examination is cancelled. The whole year sits a new paper in the first week of the summer holidays.</p>' +
+    '<p>3. The pupil who saw it is excluded from the school.</p>' +
+    '<p>4. There are no exceptions to rules 2 and 3.</p><p class="sig">R. Kettle</p>';
+  var DRILL = '<h4>Fire drill &middot; report</h4><p>Wednesday, period 3 (11:15).</p>' +
+    '<p>1. The building was empty in 3 minutes 40 seconds.</p>' +
+    '<p>2. Doors and cupboards were left open, as the rule says: leave everything and walk.</p>' +
+    '<p>3. One pupil was seen going back inside. Name not known. This is not allowed.</p>' +
+    '<p>4. I shall be asking questions.</p><p>D. Tibbs, Examinations Officer</p>';
+  var WHO = '<h4>Kestrel Hill &middot; who is who</h4>' +
+    '<p><b>Mr R. Kettle</b>, Head Teacher.<em>In Leeds at a conference until Monday.</em></p>' +
+    '<p><b>Mrs V. Calloway</b>, Head of English. Twenty-six years at Kestrel Hill. Retires in July.<em>Off sick since Wednesday afternoon. Back on Friday for the exam.</em></p>' +
+    '<p><b>Mr D. Tibbs</b>, Mathematics. Examinations Officer.</p>' +
+    '<p><b>Miss A. Nwosu</b>, English. Joined us in September from a school in Boston, USA.</p>' +
+    '<p><b>Mr F. Drummond</b>, Site Manager. Keys, heating, and everything that nobody else wants to do.</p>';
+  var FRIDGE = '<p>To whoever borrowed the <s>gray</s> <span class="red">grey</span> mug with the bear on it:</p>' +
+    '<p>it&rsquo;s my <s>favorite</s> <span class="red">favourite</span>. No hard feelings! Just bring it back.</p><p>A.N.</p>' +
+    '<p class="red">Grey. Favourite. We are not in Boston now. V.C.</p>';
+
+  /* the bulletin: Mrs Calloway types a different copy for everybody, so two sets of mistakes with the same six first letters */
+  var LINES = {
+    a: ['The hole year sits the English examination on Friday at nine o&rsquo;clock.',
+      'Mobile telephones must be switched of and left in lockers.',
+      'By now every pupil should no the rules. Remind them anyway.',
+      'We cannot except anybody who arrives after ten past nine.',
+      'Please seat <span class="wk-skip">9B</span> and <span class="wk-skip">9C</span> in seperate rows, well apart.',
+      'Spare pens live in the grey cupboard, but their are never enough.'],
+    b: ['On Friday the examination will be held hear in the hall, not in the gym.',
+      'It lasts one our and a half, and nobody leaves early.',
+      'Last year nobody new the answer to the final question.',
+      'Noise in the corridor will effect everybody in the hall.',
+      'The Mathematics department has sum doubts about these bulletins.',
+      'Tell your classes that tommorow is always a day too late to begin revising.']
+  };
+  var DECOY = {
+    a0: { sits: '<b>SITS</b> is right. In Britain you sit an examination. Nobody stands up for one.' },
+    a1: { telephones: '<b>TELEPHONES</b> is only the long word for phones, and it is spelt correctly.' },
+    a5: { grey: '<b>GREY</b> is right, in this country. America writes GRAY. Mrs Calloway does not.', live: 'Pens do not really <b>LIVE</b> anywhere. That is a joke, not a mistake.' },
+    b0: { held: '<b>HELD</b> is right: an examination is held in a place.' },
+    b4: { mathematics: '<b>MATHEMATICS</b> is spelt correctly. Mrs Calloway would not give them the pleasure.', doubts: '<b>DOUBTS</b> has a silent B, and it is in the right place.' }
+  };
+  var LAST = {
+    a: ['Line 1: one word there means an empty space, the kind you dig. Mrs Calloway meant &ldquo;all of it&rdquo;.',
+      'Line 2: one very short word has lost its last letter. What do you do with a phone before an exam?',
+      'Line 3: one small word is the opposite of &ldquo;yes&rdquo;. A verb should be standing there.',
+      'Line 4: one word means &ldquo;but not&rdquo;. The word she wanted means &ldquo;say yes to&rdquo;.',
+      'Line 5: no word here has the wrong meaning. One long word has the wrong letter in the middle.',
+      'Line 6: one word means &ldquo;belonging to them&rdquo;. Mr Drummond makes the same mistake on his own notice.'],
+    b: ['Line 1: one word is what you do with your ears. She meant &ldquo;in this place&rdquo;.',
+      'Line 2: one word means &ldquo;belonging to us&rdquo;. She meant sixty minutes.',
+      'Line 3: one word is the opposite of &ldquo;old&rdquo;. The past tense of a verb should be standing there.',
+      'Line 4: one word is a noun that means &ldquo;result&rdquo;. The verb she wanted begins with a different letter.',
+      'Line 5: one word belongs in a Maths lesson. It sounds just like the word she meant.',
+      'Line 6: no word here has the wrong meaning. One word has an M too many and an R too few.']
+  };
+
+  function hints() {
+    if (!got) return ['cards', [
+      'You came for forty revision cards. Mr Tibbs put them in the staffroom.',
+      'There is a tray on the low table, in the middle of the room. Click on it.'
+    ]];
+    if (!solved && lockBox) return ['pick', [
+      'Read the last lines of the bulletin first. They say how the key box works. Then read line 1 aloud.',
+      'The wrong words are real English words, or nearly. Most of them sound exactly like the word that ought to be there. Ask of each word: is this how it is spelt when it means this?',
+      LAST[ver][cur]
+    ]];
+    if (!solved) return ['look', [
+      'You are locked in, and there is a steel box of spare keys by the door. Its six wheels want a word. Read the card under it.',
+      'The word changes every Monday, and Mrs Calloway hides it in her bulletin: the typed sheet at the top left of the notice board. Click on it.'
+    ]];
+    if (!hasKey) return ['key', [
+      'The key box is open. Click on it and look at what is hanging inside.',
+      'Take the key that fits the room you are standing in. Look at the other hooks before you shut the box: two of them are empty.'
+    ]];
+    if (missing().length) return ['who', [
+      'You can leave. But you will need to know who works in this school, and how each of them writes. Look at ' + missing().join(', ') + '.'
+    ]];
+    return ['door', ['You have the spare key. Use it on the staffroom door.']];
+  }
+  var NEED = [['cup', 'the grey cupboard'], ['who', 'the small green board that says WHO IS WHO'], ['fridge', 'the yellow note on the fridge'], ['memo', 'the head teacher&rsquo;s notice on the notice board']];
+  function missing() { return NEED.filter(function (n) { return !seen[n[0]]; }).map(function (n) { return n[1]; }); }
+  function mark(k) { if (!seen[k]) { seen[k] = 1; ER.flag('a-seen', seen); } }
+  function pips() { ER.pips((got ? 1 : 0) + (solved ? 1 : 0) + (hasKey ? 1 : 0), 3); }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#cards').style.display = got ? 'none' : '';
+    $('#kbox').classList.toggle('open', solved); $('#kbox').classList.toggle('glow', solved);
+    $('#keyIn').style.display = hasKey ? 'none' : 'block';
+    found.forEach(function (c, i) { $('#sw' + i).textContent = c.toUpperCase(); });
+  }
+
+  function begin() {
+    ER.amb.hum(true); pips(); paint();
+    setInterval(function () { if (!ER.isOpen() && !busy && Math.random() < 0.6) EXAM.sfx.whistle(); }, 23000);
+    if (got) { ER.say(hasKey ? 'The staffroom. The spare key is in your hand.' : 'The staffroom. The door is still locked, from the outside.'); return; }
+    busy = true;
+    ER.narrate([
+      'The staffroom. One lamp is on. It smells of coffee and old carpet, and there is nobody here.',
+      'On the low table there is a tray marked CONFISCATED. You can see your cards from the door.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the tray: what you came for, and what happens next ---------- */
+  $('#tray').addEventListener('click', function () {
+    if (busy) return;
+    if (got) { ER.say('The tray is empty now, apart from somebody&rsquo;s yo-yo.'); return; }
+    ER.read({ html: SLIP, cls: 'slip', clue: { id: 'slip', title: 'Mr Tibbs’s slip', kind: 'Confiscation slip' }, done: function () {
+      if (got) return;
+      got = true; ER.flag('a-cards', 1); paint(); pips(); busy = true;
+      ER.narrate([
+        'Forty cards and a rubber band, with a slip from Mr Tibbs. That is what you came for. You turn to go.',
+        'Then you see the grey cupboard in the corner. Its doors are standing wide open. On the middle shelf there is a label, and a great deal of nothing.'
+      ], function () {
+        EXAM.sfx.key(); $('#shadow').classList.add('pass'); EXAM.mood('tense');
+        setTimeout(function () { EXAM.sfx.steps(6); }, 900);
+        ER.narrate([
+          'Behind you, a key turns in the staffroom door. From the outside.',
+          'Steps go away down the corridor. They are not Mr Drummond&rsquo;s. You can hear Mr Drummond whistling, down below, out in the yard.',
+          'You try the handle. Locked. You are alone in the staffroom, the night before the exam, with an empty exam cupboard. And yours is the only name in the visitors&rsquo; book.'
+        ], function () { busy = false; EXAM.mood('calm'); });
+      });
+    } });
+  });
+
+  /* ---------- things to look at ---------- */
+  $('#cup').addEventListener('click', function (e) {
+    if (busy) return;
+    if (!got) { ER.say('A tall grey cupboard. You did not come for a cupboard. You came for forty cards, and they are in the tray on the low table.'); return; }
+    ER.wordAt(e.clientX, e.clientY, 'cupboard'); mark('cup');
+    ER.say('The label on the empty shelf says: YEAR 9 ENGLISH &middot; PAPER A &middot; 120 COPIES &middot; FRIDAY 9.00. The dust shows where the pile stood. The lock is not broken. Somebody used a key.', 9000);
+    EXAM.mine('cup', 'The grey cupboard', '<p>Open, and not broken: whoever opened it had a key.</p><p>The empty shelf is labelled <b>YEAR 9 ENGLISH &middot; PAPER A &middot; 120 COPIES &middot; FRIDAY 9.00</b>.</p><p>On the shelf below: a box of spare pens.</p>');
+  });
+  function doc(sel, html, cls, id, title, kind, key) {
+    $(sel).addEventListener('click', function () {
+      if (busy) return;
+      ER.read({ html: html, cls: cls, clue: { id: id, title: title, kind: kind }, done: function () { if (key) mark(key); } });
+    });
+  }
+  doc('#dnote', DNOTE, 'caps', 'dnote', 'Mr Drummond’s notice', 'Notice, corrected in red');
+  doc('#memo', MEMO, 'memo', 'memo', 'The head teacher’s rules', 'Notice', 'memo');
+  doc('#drill', DRILL, 'slip', 'drill', 'The fire drill', 'Report by Mr Tibbs');
+  doc('#who', WHO, 'who', 'who', 'Who is who', 'Staff board', 'who');
+  doc('#fridge', FRIDGE, 'sticky', 'fridge', 'The note on the fridge', 'Note, corrected in red', 'fridge');
+  EXAM.thing('#win', 'blind', function () { return got ? 'Down in the yard a torch is going slowly along the fence. That is Mr Drummond, checking the gates and whistling. So it was not Mr Drummond at the door.' : 'Down in the yard a torch is going slowly along the fence. Mr Drummond is checking the gates, and whistling.'; }, isBusy);
+  EXAM.thing('#phone', null, function () { return got ? 'The staffroom telephone. You ring the caretaker&rsquo;s office. It rings eleven times. Mr Drummond is out in the yard.' : 'The staffroom telephone. You have nobody to ring.'; }, isBusy);
+  EXAM.thing('#mugs', 'mug', 'Five hooks and four mugs. The hook on the end is empty.', isBusy);
+  EXAM.thing('#kettle', 'kettle', 'The kettle is still warm. Somebody made tea in here tonight, and not very long ago.', isBusy);
+  EXAM.thing('#lamp', null, 'One lamp, left on. Teachers go home at five. Lamps do not switch themselves on.', isBusy);
+  EXAM.thing('#tin', 'biscuit tin', 'STAFF ONLY, says the tin. Mr Drummond said five minutes. He did not say anything about biscuits. You lift the lid. Crumbs.', isBusy);
+  EXAM.thing('#chairL', 'armchair', 'An armchair that the same person has sat in for twenty-six years. Nobody else would dare.', isBusy);
+  EXAM.thing('#chairR', null, 'A pile of exercise books, half marked, with a red pen on top. Mrs Calloway went home ill in the middle of 9B.', isBusy);
+  EXAM.thing('#clock', null, function () { return 'The staffroom clock says ' + EXAM.time() + '. Mr Drummond locks up at half past nine.'; }, isBusy);
+
+  $('#door').addEventListener('click', function () {
+    if (busy) return;
+    if (!got) { ER.say('That is the door you came in by. Your cards first.'); return; }
+    if (!hasKey) { ER.say('Locked, from the outside. Through the glass the corridor is dark. On the wall beside you there is a steel box marked SPARE KEYS.'); return; }
+    var m = missing();
+    if (m.length) { ER.say('The spare key fits. But tomorrow somebody is going to ask who was in this building tonight, and yours is the only name in the book. Before you go, look at ' + m.join(', ') + '.', 9000); return; }
+    busy = true; EXAM.sfx.key(); ER.hush();
+    var st = ER.state(); st.done = st.done || {}; st.done.staffroom = 1; ER.flag('a-out', 1);
+    setTimeout(function () { EXAM.solved(); }, 450);
+    setTimeout(function () { ER.leave(nextFile); }, 1500);
+  });
+  $('#kbox').addEventListener('click', function () {
+    if (busy) return;
+    if (!got) { ER.say('A steel box on the wall, marked SPARE KEYS. It is no business of yours.'); return; }
+    if (solved) { openHooks(); return; }
+    if (opened) { openLock(); return; }
+    ER.say('A steel box with six small wheels, and a letter on each. Under it, a card in Mr Drummond&rsquo;s capitals: THE WORD CHANGES EVERY MONDAY. ASK MRS CALLOWAY. I HAVE STOPPED ASKING.', 9000);
+  });
+  $('#bull').addEventListener('click', function () {
+    if (busy) return;
+    if (!got) { ER.say('The English department&rsquo;s bulletin for the week. It is addressed to teachers, and you came for your cards.'); return; }
+    if (solved) { ER.say('The bulletin has six red rings on it now. Mrs Calloway will think one of her teachers has been busy.'); return; }
+    openLock();
+  });
+
+  /* ---------- the lock: six wrong words, six first letters ---------- */
+  function boxSvg() {
+    var s = '<rect x="6" y="6" width="318" height="238" rx="12" fill="#4d555e"/><rect x="6" y="6" width="318" height="238" rx="12" fill="none" stroke="#22262b" stroke-width="5"/>' +
+      '<rect x="20" y="20" width="290" height="210" rx="6" fill="none" stroke="#6d757e" stroke-width="2"/>' +
+      '<text x="165" y="60" class="sT" font-size="24" fill="#16171c" letter-spacing="6">SPARE KEYS</text><circle id="kb-lamp" cx="292" cy="50" r="8" fill="#c8281d"/>' +
+      '<rect x="24" y="84" width="282" height="88" rx="6" fill="#16181c"/>', i;
+    for (i = 0; i < 6; i++) s += '<g class="wh" id="wh' + i + '"><rect x="' + (33 + i * 45) + '" y="94" width="39" height="68" rx="4" fill="#e9e3d2"/><text x="' + (52.5 + i * 45) + '" y="145" class="whT"></text>' +
+      '<text x="' + (52.5 + i * 45) + '" y="194" class="sT" font-size="13" fill="#16171c">' + (i + 1) + '</text></g>';
+    return s + '<rect x="130" y="206" width="70" height="16" rx="8" fill="#22262b"/><g fill="#22262b"><circle cx="22" cy="22" r="4"/><circle cx="308" cy="22" r="4"/><circle cx="22" cy="228" r="4"/><circle cx="308" cy="228" r="4"/></g>';
+  }
+  function openLock() {
+    opened = true;
+    var box = ER.el('div', 'kb'), wait = false;
+    box.innerHTML = '<div class="kb-paper"><h5>ENGLISH DEPARTMENT &middot; WEEK 38</h5><div class="kb-from">From V. Calloway &middot; Monday &middot; copy <b id="kb-no"></b> of 12</div>' +
+      '<ol class="kb-lines"></ol><p class="kb-foot"></p></div>' +
+      '<div class="kb-side"><svg viewBox="0 0 330 250">' + boxSvg() + '</svg><div class="kb-rings">Red rings wasted on this copy <i></i><i></i><i></i></div><p class="pmsg"></p></div>';
+    box.querySelector('.kb-foot').innerHTML = ER.gloss('As every week: <b>one word in each line is wrong.</b> Take the first letter of each wrong word, from the top. Those six letters are this week&rsquo;s word for the key box. I type more than one version of this bulletin, with different mistakes, so there is no point in copying from Mr Tibbs. V.C.');
+    var ol = box.querySelector('.kb-lines'), msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function wheels() { found.forEach(function (c, i) { var g = box.querySelector('#wh' + i); g.querySelector('.whT').textContent = c.toUpperCase(); g.classList.toggle('on', !!c); }); }
+    function ringsPaint() { ER.$$('.kb-rings i', box).forEach(function (n, i) { n.classList.toggle('on', i < rings); }); box.setAttribute('data-rings', rings); }
+    function first() { for (var i = 0; i < 6; i++) if (!found[i]) return i; return 0; }
+    function build() {
+      ol.innerHTML = ''; box.querySelector('#kb-no').textContent = copyNo; box.setAttribute('data-ver', ver);
+      LINES[ver].forEach(function (t, i) {
+        var li = ER.el('li', '', t); ol.appendChild(li);
+        if (found[i]) { li.classList.add('kb-done', 'kb-ok'); return; }
+        var pk = WK.pick(li, { key: ver + (i + 1), sound: false,
+          onRight: function (w, node) { right(i, w, node, pk, li); },
+          onWrong: function (w, node) { wrong(i, w, node); } });
+      });
+      ringsPaint(); wheels(); cur = first();
+    }
+    function spin(i, letter) {
+      var t = box.querySelector('#wh' + i + ' .whT'), n = 0, id = setInterval(function () {
+        t.textContent = n < 7 ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.charAt((n * 7 + i * 3) % 26) : letter;
+        if (n++ >= 7) { clearInterval(id); wheels(); }
+      }, 55);
+    }
+    function right(i, w, node, pk, li) {
+      if (wait) return;
+      var e = EXAM.entry(w), letter = w.charAt(0).toUpperCase(), f;
+      found[i] = letter.toLowerCase(); ER.flag('a-found', found.map(function (c) { return c || '_'; }).join(''));
+      pk.destroy(); li.classList.add('kb-ok');
+      if (e) { f = ER.el('i', 'fix red'); f.textContent = e.other; node.appendChild(f); WK.learn(e.head); }
+      EXAM.sfx.pen(); setTimeout(EXAM.sfx.wheel, 260); spin(i, letter); paint(); cur = first();
+      msg('<b>' + w.toUpperCase() + '</b> gets a red ring. ' + (e ? '(' + e.en + '.) ' : '') + 'Wheel ' + (i + 1) + ' on the key box turns to <b>' + letter + '</b>.');
+      if (found.every(Boolean)) win();
+    }
+    function wrong(i, w, node) {
+      if (wait) return;
+      rings++; EXAM.slip(1); EXAM.sfx.deny(); node.classList.add('blot'); ringsPaint(); cur = i;
+      if (rings >= 3) {
+        wait = true; ol.style.pointerEvents = 'none';
+        msg('Three red rings in the wrong places, and the page looks like somebody&rsquo;s homework. You unpin it and take the next copy from the pile.');
+        setTimeout(function () {
+          rings = 0; copyNo = copyNo >= 12 ? 1 : copyNo + 1; ver = ver === 'a' ? 'b' : 'a'; ER.flag('a-ver', ver); ER.flag('a-copy', copyNo);
+          ER.sfx.paper(); wait = false; ol.style.pointerEvents = ''; build();
+          swaps++;
+          msg('Copy ' + copyNo + ' of 12. ' + (swaps > 1 ? 'You have seen this one before: Mrs Calloway, it seems, had the patience to type only two versions.' : 'It says different things and has different mistakes.') + ' The letters already on the wheels stay where they are.');
+        }, 2800);
+        return;
+      }
+      msg((DECOY[ver + i] || {})[w] || ('<b>' + w.toUpperCase() + '</b> is spelt properly, and it means what it should. That is one red ring wasted. Read the whole line aloud: one word in it sounds right and is wrong.'));
+    }
+    function win() {
+      var word = found.join(''), file = ER.exitOk([word]);
+      if (!file) { msg('The wheels will not move. Something is wrong with this box: tell your teacher.'); return; }
+      wait = true; solved = true; nextFile = file; ER.flag('a-file', file); WK.learn(word, true); pips();
+      setTimeout(function () { ER.sfx.ok(); box.querySelector('#kb-lamp').setAttribute('fill', '#7be04a'); msg('Six wrong words, six first letters: <b>' + word.toUpperCase().split('').join(' ') + '</b>. Inside the box, something goes clunk.'); }, 700);
+      setTimeout(function () {
+        ER.closeAll(); paint(); EXAM.sfx.bolt(); busy = true;
+        ER.narrate([
+          'The steel door of the key box swings open. ' + word.toUpperCase() + ': it is just the word Mrs Calloway would choose for exam week.',
+          'Five hooks. Not all of them have keys on.'
+        ], function () { busy = false; });
+      }, 3600);
+    }
+    build();
+    msg('Mrs Calloway&rsquo;s red pen is lying on the green armchair. You borrow it. Click on the word that is wrong in each line.');
+    lockBox = box;
+    ER.open('ov-lock', box, function () { lockBox = null; });
+  }
+
+  /* ---------- inside the key box ---------- */
+  function openHooks() {
+    var box = ER.el('div', 'hk'), H = [[3, 'STAFFROOM', 'spare'], [9, 'COPY ROOM', ''], [14, 'EXAM', 'CUPBOARD'], [17, 'MINIBUS', ''], [21, 'LIBRARY', '']], s = '';
+    s += '<rect width="780" height="290" fill="#16181c"/><rect x="0" y="52" width="780" height="10" fill="#5d656e"/>';
+    H.forEach(function (h, i) {
+      var x = 86 + i * 152, key = (h[0] === 3 && !hasKey) || h[0] === 17;
+      s += '<g class="hook" data-h="' + h[0] + '"><rect x="' + (x - 70) + '" y="6" width="140" height="278" fill="transparent"/><text x="' + x + '" y="42" class="hkN">' + h[0] + '</text>' +
+        '<path d="M' + x + ' 62v22q0 12 12 12" stroke="#c9ced3" stroke-width="6" fill="none" stroke-linecap="round"/>';
+      if (key) s += '<g class="kk"><circle cx="' + (x + 6) + '" cy="118" r="20" fill="none" stroke="' + (h[0] === 3 ? '#d9c58a' : '#c9ced3') + '" stroke-width="8"/><path d="M' + (x + 6) + ' 138v76M' + (x + 6) + ' 190h18M' + (x + 6) + ' 208h13" stroke="' + (h[0] === 3 ? '#d9c58a' : '#c9ced3') + '" stroke-width="8" fill="none"/></g>';
+      if (h[0] === 9) s += '<g transform="rotate(-4 ' + x + ' 150)"><rect x="' + (x - 62) + '" y="104" width="124" height="96" fill="#fdfdf6"/><g stroke="#16171c" stroke-width="4" stroke-linecap="round"><path d="M' + (x - 50) + ' 124h100M' + (x - 50) + ' 142h84M' + (x - 50) + ' 160h100M' + (x - 50) + ' 178h46"/></g></g>';
+      s += '<g transform="rotate(' + (i % 2 ? 3 : -3) + ' ' + x + ' 250)"><rect x="' + (x - 60) + '" y="228" width="120" height="' + (h[2] ? 48 : 30) + '" fill="#f1eee2"/><text x="' + x + '" y="249" class="hkT">' + h[1] + '</text>' +
+        (h[2] ? '<text x="' + x + '" y="268" class="hkT">' + (h[0] === 3 ? '(SPARE)' : h[2]) + '</text>' : '') + '</g></g>';
+    });
+    box.innerHTML = '<svg viewBox="0 0 780 290">' + s + '</svg><p class="pmsg"></p>';
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    msg(hasKey ? 'The key box. Hook 3 is empty now, because its key is in your hand.' : 'Five hooks, with a number over each one. Click on a hook to look at it.');
+    var SAY = {
+      9: 'No key on hook 9. Only a card, in Mr Drummond&rsquo;s capitals: COPY ROOM HAS A NEW LOCK. NO KEY. IT ASKS QUESTIONS. NOT MY IDEA. F.D.',
+      14: 'Hook 14: EXAM CUPBOARD. The hook is empty. So whoever opened the grey cupboard tonight took the spare key from this box. And to open this box they had to find six wrong words, just as you did.',
+      17: 'Number 17: MINIBUS. You are thirteen years old. You leave it where it is.',
+      21: 'Hook 21: LIBRARY. Empty as well. Somebody has the library key in a pocket tonight.'
+    };
+    ER.$$('.hook', box).forEach(function (g) {
+      g.addEventListener('click', function () {
+        var n = +g.getAttribute('data-h'), k;
+        if (n !== 3) { ER.sfx.click(); msg(SAY[n]); return; }
+        if (hasKey) { msg('Hook 3 is empty now. Its key is in your hand.'); return; }
+        hasKey = true; ER.flag('a-key', 1); k = g.querySelector('.kk'); if (k) k.style.display = 'none';
+        ER.sfx.chain(); paint(); pips();
+        msg('Number 3: STAFFROOM (SPARE). It is the only key in this box that you have any right to. You take it. Look at the other hooks before you go.');
+      });
+    });
+    ER.open('ov-read', box, function () {
+      EXAM.mine('keybox', 'Inside the key box', '<p>Hook 3, STAFFROOM (SPARE): the key I took.</p><p>Hook 9, COPY ROOM: no key. Mr Drummond&rsquo;s card says the copy room has a new lock that &ldquo;asks questions&rdquo;.</p>' +
+        '<p>Hook 14, EXAM CUPBOARD: <b>empty</b>.</p><p>Hook 17, MINIBUS: a key.</p><p>Hook 21, LIBRARY: <b>empty</b>.</p>' +
+        '<p>Whoever took 14 and 21 opened the box the way I did, by finding six wrong words. Mr Drummond would not need to: he has keys of his own.</p>');
+    });
+  }
+})();
+</script>
+</body>
+</html>

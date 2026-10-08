@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>KEYHOLE · Sound room</title>
+<link rel="stylesheet" href="assets/fonts-base.css">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#0b1418;color:#e9e4d8;font-family:'Outfit',Arial,sans-serif;font-weight:300;font-size:17px;line-height:1.5}
+  main{max-width:1020px;margin:0 auto;padding:40px 22px 120px}
+  h1{margin:0 0 4px;font-family:'Cinzel',serif;font-weight:600;font-size:36px;letter-spacing:.06em;color:#ffd6ea}
+  .sub{margin:0 0 22px;color:#9fc1cc}
+  h2{margin:38px 0 6px;font-family:'Oswald',sans-serif;font-weight:500;font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:#f0c53a}
+  h3{margin:20px 0 6px;font-weight:500;font-size:19px;color:#e9e4d8}
+  h3 small{font-weight:300;color:#9fc1cc;font-size:15px;margin-left:8px}
+  .row{display:flex;align-items:center;flex-wrap:wrap;padding:6px 0;border-bottom:1px solid #1e343d}
+  .row.on{background:#13262e}
+  .row b{flex:0 0 150px;font-weight:500}
+  .row i{flex:1 1 220px;font-style:normal;font-family:'Special Elite',monospace;font-size:13.5px;color:#8fb0bb;padding:0 10px}
+  button{font:inherit;font-size:14px;font-weight:500;padding:6px 13px;margin:2px 6px 2px 0;border:1px solid #3a5a66;background:transparent;color:#e9e4d8;cursor:pointer;border-radius:3px}
+  button:hover{border-color:#f0c53a;color:#f0c53a}
+  button.go{border-color:#f0c53a;color:#f0c53a}
+  #bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;padding:12px 22px;background:#081014;border-top:2px solid #ff4fa3}
+  #now{flex:1;font-family:'Special Elite',monospace;font-size:15px;color:#ffd6ea}
+  #warn{display:none;margin:0 0 18px;padding:12px 16px;border-left:5px solid #ff6a5a;background:#2a1714}
+  .fx button{min-width:92px}
+  a{color:#ffd6ea}
+</style>
+</head>
+<body>
+<main>
+<h1>Sound room</h1>
+<p class="sub">Every room&rsquo;s music and every sound effect, to listen to without playing the stories. Nothing here gives a story away.<br>
+All of it is made by the browser as it plays. There are no recordings.</p>
+<div id="warn">Sound is switched off in the game on this computer. <button type="button" id="soundon">Switch it on</button></div>
+
+<h2>Rooms</h2>
+<p class="sub">&#9654; plays the room as the game plays it. <b>calm</b> and <b>tense</b> are its two moods. <b>solved</b> is the phrase you hear when the door opens.</p>
+<div id="rooms"></div>
+
+<h2>All the soundscapes</h2>
+<p class="sub">Some of these are not used by any room yet.</p>
+<div id="scapes"></div>
+
+<h2>Sound effects</h2>
+<div class="fx" id="fx"></div>
+<p class="sub">Stories also have sounds of their own (a train, a studio bell, a pump). Those can only be heard inside the story.</p>
+
+<p><a href="index.html">Go to the corridor &rarr;</a></p>
+</main>
+<div id="bar"><span id="now">Nothing is playing.</span><button type="button" id="stop">Stop</button></div>
+
+<script src="assets/engine.js"></script>
+<script src="assets/soundtrack.js"></script>
+<script>
+(function () {
+  var LIST = [{"theme":"mystery","themeName":"Mystery","story":"gloria","title":"Where Is Gloria?","stars":2,"rooms":["tent","plots","teas","prize"]},{"theme":"mystery","themeName":"Mystery","story":"forty","title":"Forty Minutes of Dark","stars":4,"rooms":["street","hall","chart","cellar","office","midnight","morning"]},{"theme":"scifi","themeName":"Sci-Fi","story":"air","title":"Seven Hours of Air","stars":3,"rooms":["cabin","spine","airroom","garden","docking"]},{"theme":"fantasy","themeName":"Fantasy","story":"library","title":"The Library That Locks at Dusk","stars":2,"rooms":["reading","landing","dome","dawn"]},{"theme":"ghost","themeName":"Ghost Story","story":"room13","title":"Room 13 Is Not on the Plan","stars":2,"rooms":["lobby","second","thirteen","morning"]},{"theme":"adventure","themeName":"Adventure","story":"orvo","title":"The Night Train to Orvo","stars":1,"rooms":["halm","dining","arrival"]},{"theme":"cipher","themeName":"Cipher","story":"wrong","title":"Wrong Number","stars":1,"rooms":["phonebox","shop","midnight"]},{"theme":"cipher","themeName":"Cipher","story":"lexicon","title":"The Final Word","stars":2,"rooms":["corridor","gallery","studio","onair"]},{"theme":"cipher","themeName":"Cipher","story":"exam","title":"Answer All Questions","stars":3,"rooms":["staffroom","corridor","copyroom","library","hall"]}], T = ER.track, now = document.getElementById('now'), lit = null;
+  ER.cfg = { theme: '', story: '', id: '', sound: null };
+  function el(tag, text, cls) { var e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; }
+  function describe(s) {
+    if (!s) return 'no music';
+    if (typeof s === 'string') return s;
+    var o = s[1] || {}, bits = [s[0]];
+    if (o.mood) bits.push(o.mood);
+    if (o.root) bits.push('key ' + ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'][o.root % 12]);
+    if (o.bpm) bits.push(o.bpm + ' bpm');
+    if (o.drop) bits.push('without ' + o.drop.join(', '));
+    if (o.beds) bits.push('with ' + o.beds.map(function (b) { return b[0]; }).join(', '));
+    if (o.level) bits.push('level ' + o.level);
+    if (o.then) bits.push('then ' + describe(o.then));
+    return bits.join(' · ');
+  }
+  function warn() { document.getElementById('warn').style.display = ER.music() ? 'none' : 'block'; }
+  function play(sound, mood, label, row) {
+    if (!ER.audio()) { now.textContent = 'This browser cannot play sound.'; return; }
+    ER.wantMood = mood || null;
+    T.play(sound);
+    var i = T.info();
+    now.textContent = i.on ? 'Playing: ' + label + '  (' + i.scape + ', ' + i.mood + ')' : 'Nothing to play for ' + label + '.';
+    if (lit) lit.classList.remove('on'); lit = row; if (row) row.classList.add('on');
+    warn();
+  }
+  function row(box, name, sound, label) {
+    var r = el('div', null, 'row'), b;
+    r.appendChild(el('b', name)); r.appendChild(el('i', describe(sound)));
+    b = el('button', '▶', 'go'); b.type = 'button'; b.title = 'Play it as the game does'; b.addEventListener('click', function () { play(sound, null, label, r); }); r.appendChild(b);
+    ['calm', 'tense'].forEach(function (m) { b = el('button', m); b.type = 'button'; b.addEventListener('click', function () { play(sound, m, label, r); }); r.appendChild(b); });
+    b = el('button', 'solved'); b.type = 'button';
+    b.addEventListener('click', function () { if (lit !== r || !T.info().on) play(sound, null, label, r); setTimeout(function () { T.sting('solved'); now.textContent = 'The door opens: ' + label; }, 900); });
+    r.appendChild(b);
+    box.appendChild(r);
+  }
+  var rooms = document.getElementById('rooms');
+  LIST.forEach(function (s) {
+    var h = el('h3', s.title); h.appendChild(el('small', s.themeName + ' · ' + '★★★★★'.slice(0, s.stars)));
+    rooms.appendChild(h);
+    s.rooms.forEach(function (id) { row(rooms, id, T.pick(s.theme, s.story, id), s.title + ' / ' + id); });
+  });
+  var scapes = document.getElementById('scapes');
+  Object.keys(T.scapes).forEach(function (n) { row(scapes, n, n, n); });
+  var fx = document.getElementById('fx');
+  Object.keys(ER.sfx).forEach(function (n) {
+    var b = el('button', n); b.type = 'button'; b.addEventListener('click', function () { ER.audio(); ER.sfx[n](); warn(); }); fx.appendChild(b);
+  });
+  document.getElementById('stop').addEventListener('click', function () { T.stop(0.6); now.textContent = 'Nothing is playing.'; if (lit) lit.classList.remove('on'); lit = null; });
+  document.getElementById('soundon').addEventListener('click', function () { ER.audio(); ER.sound(true); ER.music(true); warn(); });
+  warn();
+})();
+</script>
+</body>
+</html>

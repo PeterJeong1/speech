@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Orvo · The Night Train to Orvo</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="story.css">
+<style>
+  body{--bg:#a9d3ee;--accent:#8a2433;--font-display:'Homemade Apple',cursive;--font-ui:'Josefin Sans',sans-serif;
+    --tc-bg:rgba(252,246,236,.93);--tc-ink:#2a1c1e;--cap-bg:rgba(253,248,238,.96);--cap-ink:#2a1c1e;--fade:#fff8ee;
+    --hud-bg:rgba(255,251,243,.84);--hud-ink:#2a1c1e;--hud-line:rgba(42,28,30,.3)}
+  .tc-room{font-size:clamp(46px,6.4vw,88px);line-height:1.35;margin:4px 0 14px;color:#5a1722}
+  .tc-theme{font-weight:700}
+  .cap{border-top-color:#8a2433}
+  .cap small{opacity:.6}
+  .orvoT{font-family:'Limelight',serif;font-size:44px;letter-spacing:9px;fill:#5a1722;text-anchor:middle}
+  .altT{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:3px;fill:#5a1722;text-anchor:middle}
+  .postA{font-family:'Limelight',serif;font-size:24px;letter-spacing:3px;fill:#3a2412;text-anchor:middle}
+  .postB{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:15px;letter-spacing:2px;fill:#3a2412;text-anchor:middle}
+  .crateT{font-family:'Stardos Stencil',serif;font-weight:700;font-size:17px;fill:#3a2412;text-anchor:middle;opacity:.8}
+  .stc{font-family:'Stardos Stencil',serif;font-weight:700;font-size:11px;fill:#3a2f1c;text-anchor:middle;opacity:.8}
+  .drip{animation:drip 2.6s cubic-bezier(.6,0,1,.6) infinite}
+  .drip.d2{animation-delay:-1s;animation-duration:3.3s}.drip.d3{animation-delay:-1.9s;animation-duration:2.9s}
+  @keyframes drip{0%{transform:translateY(0);opacity:0}10%{opacity:.9}80%{transform:translateY(250px);opacity:.9}82%,100%{transform:translateY(250px);opacity:0}}
+  .spark{animation:spark 2.8s steps(2) infinite}
+  .spark:nth-child(3n){animation-delay:-.9s}.spark:nth-child(3n+1){animation-delay:-1.8s}
+  @keyframes spark{50%{opacity:.1}}
+  #walker{animation:walk 70s linear forwards}
+  @keyframes walk{to{transform:translateX(-110px)}}
+  #ctail{transform-origin:531px 716px;animation:ctail 1.9s ease-in-out infinite alternate}
+  @keyframes ctail{from{transform:rotate(-7deg)}to{transform:rotate(9deg)}}
+  .leg{transform-box:fill-box;transform-origin:50% 0;animation:leg .9s ease-in-out infinite alternate}
+  .leg.b{animation-direction:alternate-reverse}
+  @keyframes leg{from{transform:rotate(-12deg)}to{transform:rotate(12deg)}}
+  .fly{animation:fly 38s linear infinite}.fly.f2{animation-duration:52s;animation-delay:-20s}
+  @keyframes fly{from{transform:translate(-200px,30px)}50%{transform:translate(800px,-40px)}to{transform:translate(1900px,20px)}}
+  .wing{animation:wing .8s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+  @keyframes wing{from{transform:scaleY(1)}to{transform:scaleY(.3)}}
+
+  /* the label at the end of the line */
+  .endc{position:fixed;right:3vw;top:68px;z-index:34;width:min(420px,92vw);display:none;padding:54px 28px 20px;color:#2a1c1e;
+    background:#f6ecd2 linear-gradient(168deg,rgba(255,255,255,.5),rgba(150,110,50,.12));box-shadow:0 20px 60px rgba(40,30,20,.45);transform:rotate(1.2deg);
+    border-radius:8px 8px 4px 4px;border-top:10px solid #8a2433}
+  .endc.on{display:block}
+  .endc:before{content:'';position:absolute;left:50%;top:10px;width:22px;height:22px;margin-left:-11px;border-radius:50%;background:#8fb9d9;
+    box-shadow:inset 0 3px 5px rgba(0,0,0,.4),0 0 0 4px #d9c59a}
+  .stampE{position:absolute;right:18px;top:26px;width:128px;height:128px;border:4px double #8a2433;border-radius:50%;color:#8a2433;display:grid;place-items:center;
+    text-align:center;transform:rotate(-13deg);opacity:.86;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:.2em;line-height:1.5}
+  .stampE b{display:block;font-family:'Limelight',serif;font-weight:normal;font-size:27px;letter-spacing:.08em;line-height:1.05}
+  .endc h3{margin:0 138px 12px 0;font-family:'Limelight',serif;font-weight:normal;font-size:30px;line-height:1.1;color:#5a1722}
+  .endc p{margin:0 0 7px;font-family:'EB Garamond',Georgia,serif;font-size:20px;line-height:1.35}
+  .endc p:first-of-type{margin-right:138px}
+  .endc .rowE{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .endc .btn{--accent:#5a1722;font-size:13px;font-weight:600;padding:10px 14px 7px}.endc .btn:hover{color:#f6ecd2}
+  .endc small{display:block;margin-top:16px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:11.5px;line-height:1.9;letter-spacing:.13em;text-transform:uppercase;opacity:.7}
+  .endc small button{text-decoration:underline;font-weight:600;letter-spacing:.13em;text-transform:uppercase}
+
+  /* the postcard */
+  .pc{position:relative;display:grid;grid-template-columns:1.3fr 1fr;width:min(940px,95vw);padding:26px 30px 16px;color:#2a221a;
+    background:#fbf6ea linear-gradient(160deg,rgba(255,255,255,.6),rgba(160,130,70,.1));box-shadow:0 26px 70px rgba(0,0,0,.5);-webkit-user-select:text;user-select:text}
+  .pc-l{padding-right:28px;border-right:2px solid #c9b98f}
+  .pc-r{padding-left:28px;display:flex;flex-direction:column}
+  .pc h4{margin:0 0 6px;font-family:'Limelight',serif;font-weight:normal;font-size:28px;letter-spacing:.03em;color:#5a1722}
+  .pc .ask{margin:0 0 4px;font-family:'EB Garamond',Georgia,serif;font-size:19.5px;line-height:1.35}
+  .pc ol{margin:0 0 12px;padding-left:24px;font-family:'EB Garamond',Georgia,serif;font-size:19px;line-height:1.4;color:#5a4a3a}
+  .pc label{display:flex;align-items:baseline;gap:10px;font-family:'Caveat',cursive;font-weight:700;font-size:28px;color:#1d2a4a}
+  .pc input{flex:1;min-width:0;border:0;border-bottom:1.5px solid #9c8b68;border-radius:0;background:transparent;font-family:'Caveat',cursive;font-size:28px;color:#1d2a4a;
+    padding:0 4px;-webkit-user-select:text;user-select:text}
+  .pc textarea{display:block;width:100%;height:152px;margin:8px 0 6px;border:0;border-radius:0;resize:none;font-family:'Caveat',cursive;font-size:28px;line-height:38px;color:#1d2a4a;
+    background:repeating-linear-gradient(transparent 0 36.500px,#b3a583 36.500px 38px);background-attachment:local;padding:0 4px;-webkit-user-select:text;user-select:text}
+  .pc input:focus,.pc textarea:focus{outline:2px solid rgba(138,36,51,.35);outline-offset:2px}
+  .pc-stamp{align-self:flex-end;width:112px;height:136px;padding:6px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);
+    background-image:radial-gradient(circle at 4px 4px,#fbf6ea 3.500px,transparent 4px);background-size:8px 8px;background-position:-4px -4px}
+  .pc-stamp svg{width:100%;height:100%;display:block}
+  .pc-mark{align-self:flex-end;margin:-46px 84px 0 0;width:104px;height:104px;border:3px solid rgba(42,34,26,.55);border-radius:50%;display:grid;place-items:center;text-align:center;
+    transform:rotate(-16deg);font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11px;letter-spacing:.16em;line-height:1.5;color:rgba(42,34,26,.6)}
+  .pc-mark b{display:block;font-size:20px;letter-spacing:.1em}
+  .pc-to{margin-top:auto}
+  .pc-to i{display:block;height:38px;border-bottom:1.5px solid #9c8b68}
+  .pc-foot{grid-column:1/3;display:flex;gap:12px;align-items:center;margin-top:16px;padding-top:12px;border-top:1px solid #d9cfb4}
+  .pc-foot span{font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:17px;opacity:.7}
+  .pc-foot .count{flex:1;font-family:'Josefin Sans',sans-serif;font-style:normal;font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
+  .pc .btn{--accent:#5a1722}.pc .btn:hover{color:#fbf6ea}
+  @media (max-width:720px){.pc{grid-template-columns:1fr}.pc-l{border-right:0;padding-right:0}.pc-r{padding-left:0;margin-top:14px}.pc-foot{grid-column:1}}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.pc-foot{display:none!important}
+    .pc{box-shadow:none;width:auto;border:1px solid #999}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f9ad6"/><stop offset=".3" stop-color="#9fcdea"/><stop offset=".5" stop-color="#ffe9d0"/><stop offset="1" stop-color="#ffd6ae"/></linearGradient>
+  <radialGradient id="sun"><stop offset="0" stop-color="#fffbe6"/><stop offset=".16" stop-color="#fff2b8" stop-opacity=".9"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff5e8" stop-opacity="0"/><stop offset="1" stop-color="#fff5e8" stop-opacity=".9"/></linearGradient>
+  <linearGradient id="snowG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#eaf2fb"/><stop offset="1" stop-color="#c9daef"/></linearGradient>
+  <linearGradient id="roofW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfdff2"/></linearGradient>
+  <linearGradient id="logG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a5a30"/><stop offset=".6" stop-color="#b97a44"/><stop offset="1" stop-color="#9a6638"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a1722"/><stop offset=".5" stop-color="#7c2532"/><stop offset="1" stop-color="#52141e"/></linearGradient>
+  <linearGradient id="warmG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9ad"/><stop offset="1" stop-color="#f0a245"/></linearGradient>
+  <pattern id="logs" width="40" height="22" patternUnits="userSpaceOnUse"><path d="M0 21.500h40" stroke="#6b4322" stroke-width="2.500"/><path d="M0 4h40" stroke="#d09a5e" stroke-width="1.500" opacity=".5"/></pattern>
+  <pattern id="stones" width="64" height="26" patternUnits="userSpaceOnUse"><rect width="64" height="26" fill="#8f8a80"/><rect x="1" y="1" width="30" height="11" rx="3" fill="#b9b3a6"/><rect x="33" y="1" width="30" height="11" rx="3" fill="#aaa497"/><rect x="-15" y="14" width="30" height="11" rx="3" fill="#b0aa9d"/><rect x="17" y="14" width="30" height="11" rx="3" fill="#c0baad"/><rect x="49" y="14" width="30" height="11" rx="3" fill="#b0aa9d"/></pattern>
+  <filter id="b14" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="14"/></filter>
+  <symbol id="bird" viewBox="0 0 60 24"><path class="wing" d="M2 12Q16 0 30 12Q44 0 58 12Q44 6 30 14Q16 6 2 12Z" fill="#2a2d38"/></symbol>
+  <symbol id="star4" viewBox="-10 -10 20 20"><path d="M0 -9L2 -2L9 0L2 2L0 9L-2 2L-9 0L-2 -2Z" fill="#fff"/></symbol>
+</defs>
+<defs id="railDefs"></defs>
+
+<!-- sky, sun, peaks -->
+<rect x="-1000" y="-200" width="3600" height="1300" fill="url(#sky)"/>
+<circle cx="1330" cy="262" r="340" fill="url(#sun)"/><circle cx="1330" cy="262" r="42" fill="#fffbe6"/>
+<g filter="url(#b14)" opacity=".85"><ellipse cx="560" cy="92" rx="260" ry="20" fill="#fff"/><ellipse cx="1010" cy="60" rx="200" ry="16" fill="#fff3e2"/><ellipse cx="-260" cy="170" rx="280" ry="22" fill="#fff"/><ellipse cx="1960" cy="110" rx="300" ry="22" fill="#ffeeda"/></g>
+<g id="peaks" class="hot"></g>
+<rect x="-1000" y="372" width="3600" height="118" fill="url(#haze)"/>
+<g class="fly"><use href="#bird" x="0" y="150" width="44" height="18"/></g>
+<g class="fly f2"><use href="#bird" x="0" y="230" width="34" height="14"/></g>
+
+<!-- forest, village, snow -->
+<g id="forest"></g>
+<rect x="-1000" y="486" width="3600" height="420" fill="url(#snowG)"/>
+<path d="M-1000 508q300-26 620-2t640-8 620 10 640-12 620 8 460-4v30H-1000z" fill="#fff"/>
+<g id="village">
+  <path d="M1396 486v-70h20v70z" fill="#efe6d2"/><path d="M1390 418l16-50 16 50z" fill="#7c2532"/><rect x="1402" y="430" width="8" height="12" fill="#5a4a3a"/>
+  <rect x="1366" y="446" width="80" height="42" fill="#e6dcc6"/><path d="M1356 450l50-28 50 28z" fill="url(#roofW)"/>
+  <rect x="1196" y="452" width="78" height="38" fill="#a8703f"/><path d="M1184 456l51-30 51 30z" fill="url(#roofW)"/><rect x="1210" y="464" width="12" height="12" fill="#ffcf7a"/><rect x="1246" y="464" width="12" height="12" fill="#ffcf7a"/>
+  <rect x="1284" y="458" width="64" height="32" fill="#b98250"/><path d="M1274 462l42-26 42 26z" fill="url(#roofW)"/><rect x="1308" y="468" width="11" height="11" fill="#ffcf7a"/>
+  <rect x="1466" y="454" width="82" height="36" fill="#9a6638"/><path d="M1454 458l53-30 53 30z" fill="url(#roofW)"/><rect x="1482" y="466" width="12" height="12" fill="#ffcf7a"/><rect x="1518" y="466" width="12" height="12" fill="#ffcf7a"/>
+  <rect x="1254" y="424" width="9" height="16" fill="#6b4322"/><rect x="1524" y="426" width="9" height="16" fill="#6b4322"/>
+  <circle class="rl-puff s1" cx="1258" cy="416" r="8" fill="url(#rl-puff)"/><circle class="rl-puff s2" cx="1528" cy="418" r="8" fill="url(#rl-puff)"/>
+</g>
+<path d="M-1000 690q380-34 880 0t900-18 900 18 920-10v230H-1000z" fill="#c2d4ec" opacity=".55"/>
+<g id="trees"></g>
+
+<!-- the end of the line -->
+<rect x="-1000" y="586" width="2166" height="5" fill="#8f9bb5"/><rect x="-1000" y="591" width="2166" height="3" fill="#56617c"/>
+<g id="buffer" class="hot">
+  <path d="M1164 592v-44M1194 592v-44" stroke="#3a2f2a" stroke-width="9"/><path d="M1150 592l14-30M1208 592l-14-30" stroke="#3a2f2a" stroke-width="6"/>
+  <rect x="1148" y="534" width="62" height="18" rx="3" fill="#c9382c"/><rect x="1168" y="534" width="20" height="18" fill="#f3efe2"/>
+  <path d="M1146 534q33-12 66 0z" fill="#fff"/>
+  <path d="M1130 600q40-22 96 0z" fill="#fff"/>
+</g>
+<g id="rolling"></g>
+<path d="M-1000 600q200-12 420-4t400-4 400 6 460-6 420 4v22H-1000z" fill="#fff"/>
+
+<!-- Orvo station -->
+<g id="chalet" class="hot">
+  <rect x="52" y="214" width="34" height="66" fill="#8f8a80"/><rect x="46" y="208" width="46" height="10" rx="3" fill="#fff"/>
+  <circle class="rl-puff s1" cx="69" cy="196" r="12" fill="url(#rl-puff)"/><circle class="rl-puff s2" cx="69" cy="196" r="12" fill="url(#rl-puff)"/>
+  <rect x="-1000" y="372" width="1310" height="250" fill="url(#logG)"/><rect x="-1000" y="372" width="1310" height="250" fill="url(#logs)"/>
+  <rect x="-1000" y="614" width="1310" height="52" fill="url(#stones)"/>
+  <rect x="296" y="372" width="14" height="250" fill="#6b4322"/>
+  <path d="M-1000 384V258H292L372 384Z" fill="url(#roofW)"/>
+  <path d="M-1000 384v-40q360-22 700-6t560-10l112 56z" fill="#b5cbe8" opacity=".5"/>
+  <path d="M-1000 300q300-14 600-2t560-8" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".9"/>
+  <path d="M-1000 258H292" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  <path d="M-1000 384H372v14H-1000z" fill="#5a371f"/>
+  <path d="M-1000 391H366" stroke="#d6a064" stroke-width="5" stroke-dasharray="1 13" stroke-linecap="round"/>
+  <g id="eaves" fill="#e8f3fc" stroke="#b9d3ec" stroke-width="1"></g>
+</g>
+<g id="win2">
+  <rect x="10" y="476" width="22" height="118" fill="#2f6b4f"/><rect x="148" y="476" width="22" height="118" fill="#2f6b4f"/>
+  <path d="M10 500h22M10 530h22M10 560h22M148 500h22M148 530h22M148 560h22" stroke="#1f4a3a" stroke-width="3"/>
+  <rect x="32" y="474" width="116" height="122" fill="#f6efe0"/><rect x="40" y="482" width="100" height="106" fill="url(#warmG)"/>
+  <path d="M40 535h100M90 482v106" stroke="#f6efe0" stroke-width="6"/>
+  <path d="M40 588V560q20-12 30 0t26-6 24 4 20-6v36z" fill="#8a5420" opacity=".35"/>
+  <rect x="26" y="596" width="128" height="16" rx="3" fill="#6b4322"/><path d="M24 598q64-22 132 0z" fill="#fff"/>
+</g>
+<g id="sign" class="hot">
+  <path d="M40 398v12M196 398v12" stroke="#3a2412" stroke-width="4"/>
+  <rect x="14" y="408" width="210" height="58" rx="6" fill="#f3efe2" stroke="#b8923a" stroke-width="3"/><rect x="21" y="415" width="196" height="44" rx="3" fill="none" stroke="#5a1722" stroke-width="1.500"/>
+  <text x="123" y="453" class="orvoT">ORVO</text>
+</g>
+<g id="door">
+  <rect x="184" y="470" width="104" height="152" rx="5" fill="#3a2412"/>
+  <rect x="192" y="478" width="88" height="144" rx="3" fill="url(#doorG)"/><rect x="198" y="484" width="76" height="132" rx="2" fill="none" stroke="#d9ae48" stroke-width="1.500"/>
+  <path d="M212 556V516q0-24 24-24t24 24v40z" fill="#d9ae48"/><path d="M216 552V517q0-20 20-20t20 20v35z" fill="url(#warmG)"/>
+  <rect x="268" y="560" width="5" height="26" rx="2" fill="url(#rl-brass)"/>
+  <path d="M178 622h116v10H178z" fill="#8f8a80"/><path d="M170 632h132v12H170z" fill="#aaa497"/>
+  <path d="M168 634q66-14 136 0z" fill="#fff"/>
+</g>
+<g id="oclock" class="hot">
+  <path d="M310 430h44" stroke="#3a2412" stroke-width="7"/><path d="M310 452l30-18" stroke="#3a2412" stroke-width="4"/>
+  <circle cx="374" cy="436" r="34" fill="#3a2412"/><circle cx="374" cy="436" r="28" fill="#fbf3dc"/>
+  <g id="oticks" stroke="#2a2018" stroke-width="2.500" stroke-linecap="round"></g>
+  <path d="M374 436V456" stroke="#1b140f" stroke-width="4.500" stroke-linecap="round" transform="rotate(30 374 436)"/><path d="M374 436V413" stroke="#1b140f" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="374" cy="436" r="3" fill="#1b140f"/><path d="M344 410q30-22 60 0z" fill="#fff"/>
+</g>
+<g fill="#9fc3e6"><path class="drip" d="M118 404q-3 5 0 7t0-7z"/><path class="drip d2" d="M262 404q-3 5 0 7t0-7z"/><path class="drip d3" d="M338 404q-3 5 0 7t0-7z"/></g>
+
+<!-- on the snow: mail, the sledge, a signpost -->
+<g id="mailbags" class="hot">
+  <path d="M660 652q-9-36 9-56h36q18 20 9 56z" fill="#8f7d5c"/><path d="M670 598q17-9 34 0l-5-11q-12-3-24 0z" fill="#74654a"/>
+  <path d="M708 656q-8-30 7-48h34q16 18 8 48z" fill="#a08c68"/><path d="M717 610q15-8 30 0l-4-10q-11-3-22 0z" fill="#85744f"/>
+  <text x="687" y="634" class="stc">ORVO</text><text x="732" y="640" class="stc">MAIL</text>
+  <path d="M652 656q52-14 112 0z" fill="#fff"/>
+</g>
+<g id="prints" class="hot" fill="#9db3d3"></g>
+<g id="sledge" class="hot">
+  <ellipse cx="1310" cy="806" rx="170" ry="12" fill="#9db3d3" opacity=".5"/>
+  <path d="M1170 792h280q26 0 30-26" stroke="#6b4322" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <path d="M1200 792v-34M1290 792v-34M1380 792v-34" stroke="#6b4322" stroke-width="7"/><rect x="1180" y="748" width="230" height="12" rx="4" fill="#8a5a30"/>
+  <rect x="1206" y="676" width="120" height="72" fill="#b98250"/><path d="M1206 700h120M1206 724h120" stroke="#8a5a30" stroke-width="2.500"/><rect x="1206" y="676" width="12" height="72" fill="#8a5a30"/><rect x="1314" y="676" width="12" height="72" fill="#8a5a30"/>
+  <text x="1266" y="720" class="crateT">ORVO MAIL</text>
+  <path d="M1336 748q-8-34 8-52h34q16 18 8 52z" fill="#8f7d5c"/><path d="M1345 698q16-9 32 0l-5-11q-11-3-22 0z" fill="#74654a"/>
+  <path d="M1204 676q60-16 124 0z" fill="#fff"/>
+  <path d="M1480 766q30 4 70-20" stroke="#8a7a5a" stroke-width="3" fill="none"/>
+</g>
+<g id="post" class="hot">
+  <rect x="1494" y="596" width="12" height="190" fill="#6b4322"/><path d="M1486 790q14-10 28 0z" fill="#fff"/>
+  <path d="M1420 606h150l22 26-22 26h-150z" fill="#d9b160" stroke="#6b4322" stroke-width="3"/><text x="1500" y="640" class="postA">ORVO</text>
+  <rect x="1440" y="672" width="120" height="34" fill="#d9b160" stroke="#6b4322" stroke-width="3"/><text x="1500" y="695" class="postB">1,822 m</text>
+  <path d="M1418 606q76-16 154 0z" fill="#fff"/>
+</g>
+
+<!-- the guard, and a passenger who never paid -->
+<g id="vane" class="hot"></g>
+<g id="walker">
+  <g id="cat" class="hot">
+    <ellipse cx="492" cy="756" rx="46" ry="6" fill="#9db3d3" opacity=".6"/>
+    <path id="ctail" d="M531 716q22-4 20-34" stroke="#23252e" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <rect class="leg" x="462" y="724" width="8" height="30" rx="4" fill="#23252e"/><rect class="leg b" x="474" y="724" width="8" height="30" rx="4" fill="#191a21"/>
+    <rect class="leg b" x="510" y="724" width="8" height="30" rx="4" fill="#23252e"/><rect class="leg" x="522" y="724" width="8" height="30" rx="4" fill="#191a21"/>
+    <ellipse cx="496" cy="718" rx="40" ry="17" fill="#23252e"/>
+    <circle cx="456" cy="704" r="17" fill="#23252e"/><path d="M443 694l-4-19 14 10zM463 690l6-18 8 17z" fill="#23252e"/>
+    <path d="M462 722q10 10 22 6l-4 12q-12 2-20-6z" fill="#e9e6de"/>
+    <circle cx="449" cy="703" r="2.800" fill="#b9e87a"/><path d="M438 708l3 2-3 2z" fill="#e9a6a0"/>
+    <rect x="430" y="670" width="126" height="90" fill="transparent"/>
+  </g>
+</g>
+<g id="sparks"></g>
+</svg>
+</div>
+<div class="endc" id="endc">
+  <div class="stampE"><span>Orvo<b>07.00</b>on time</span></div>
+  <h3>End of the line</h3>
+  <p id="e-time"></p><p id="e-words"></p><p id="e-hints"></p>
+  <div class="rowE"><button type="button" class="btn" id="b-card">Write a postcard</button><button type="button" class="btn" id="b-book">Open the notebook</button><button type="button" class="btn" id="b-list">Back to the trains</button></div>
+  <small>The Night Train to Orvo &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="rail.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, shown = false;
+  function rnd(i) { var x = Math.sin(i * 57.3 + 9.1) * 43758.5453; return x - Math.floor(x); }
+
+  (function () {
+    var s = '', i, x, y, h, a;
+    $('#railDefs').innerHTML = RAIL.defs;
+    /* peaks: [top x, top y, half width, far away?]. The sun is on the right, so the right-hand faces are bright. */
+    [[800, 176, 300, 1], [1420, 196, 320, 1], [-380, 190, 320, 1], [2150, 186, 330, 1], [60, 150, 330, 0], [1090, 116, 310, 0], [430, 84, 390, 0], [1760, 150, 330, 0]].forEach(function (p) {
+      var ax = p[0], ay = p[1], hw = p[2], H = 486 - ay, far = p[3];
+      function P(u, v) { return (ax + u * hw).toFixed(0) + ' ' + (ay + v * H).toFixed(0); }
+      var ridge = 'L' + P(0.05, 0.2) + 'L' + P(-0.03, 0.37) + 'L' + P(0.09, 0.56) + 'L' + P(0.02, 0.76) + 'L' + P(0.1, 1);
+      /* the dark side, the bright side, and a few flat faces on each to break them up */
+      s += '<path d="M' + P(0, 0) + 'L' + P(-0.12, 0.1) + 'L' + P(-0.3, 0.37) + 'L' + P(-0.42, 0.4) + 'L' + P(-0.56, 0.63) + 'L' + P(-1, 1) + 'H' + (ax + 0.1 * hw).toFixed(0) +
+        'L' + P(0.02, 0.76) + 'L' + P(0.09, 0.56) + 'L' + P(-0.03, 0.37) + 'L' + P(0.05, 0.2) + 'Z" fill="' + (far ? '#c3d2ee' : '#a6bbe2') + '"/>' +
+        '<path d="M' + P(0, 0) + ridge + 'H' + (ax + hw) + 'L' + P(0.5, 0.5) + 'L' + P(0.36, 0.45) + 'L' + P(0.2, 0.2) + 'L' + P(0.1, 0.13) + 'Z" fill="' + (far ? '#fff0e0' : '#fff8ee') + '"/>' +
+        '<path d="M' + P(-0.12, 0.1) + 'L' + P(-0.03, 0.37) + 'L' + P(-0.24, 0.62) + 'L' + P(-0.3, 0.37) + 'Z" fill="' + (far ? '#b3c5e8' : '#91a9d8') + '"/>' +
+        '<path d="M' + P(-0.42, 0.4) + 'L' + P(-0.24, 0.62) + 'L' + P(-0.38, 1) + 'L' + P(-0.72, 1) + 'L' + P(-0.56, 0.63) + 'Z" fill="' + (far ? '#b9caea' : '#9bb2dd') + '"/>' +
+        '<path d="M' + P(0.2, 0.2) + 'L' + P(0.36, 0.45) + 'L' + P(0.3, 0.72) + 'L' + P(0.09, 0.56) + 'L' + P(0.05, 0.2) + 'Z" fill="' + (far ? '#ffe5cf' : '#ffe9d6') + '"/>' +
+        '<path d="M' + P(0.5, 0.5) + 'L' + P(0.74, 1) + 'L' + P(0.44, 1) + 'L' + P(0.3, 0.72) + 'L' + P(0.36, 0.45) + 'Z" fill="' + (far ? '#ffdcc4' : '#fbd9c2') + '"/>' +
+        '<path d="M' + P(0, 0) + ridge + '" stroke="#fff" stroke-width="2.5" fill="none" stroke-linejoin="round" opacity=".7"/>';
+    });
+    $('#peaks').innerHTML = s;
+    s = '<path d="M-1000 500V462q200-22 420-6t400-10 420 12 400-14 420 10 400-8 420 10 320-4V500z" fill="#1f4a3a"/>';
+    for (x = -1000; x < 2600; x += 19) {
+      h = 22 + rnd(x) * 32; y = 462 + Math.sin(x / 170) * 8;
+      s += '<path d="M' + x + ' ' + (y + 8).toFixed(0) + 'l10-' + h.toFixed(0) + ' 10 ' + h.toFixed(0) + 'z" fill="#1f4a3a"/>' +
+        '<path d="M' + (x + 5) + ' ' + (y + 8 - h * 0.5).toFixed(0) + 'l5-' + (h * 0.5).toFixed(0) + ' 5 ' + (h * 0.5).toFixed(0) + 'z" fill="#f2f8f5" opacity=".8"/>';
+    }
+    $('#forest').innerHTML = s; s = '';
+    /* three big pines to frame the right-hand side */
+    [[1596, 640, 300, 60], [1266, 582, 150, 34], [1700, 610, 240, 50]].forEach(function (t) {
+      var tx = t[0], ty = t[1], th = t[2], tw = t[3];
+      s += '<rect x="' + (tx - 5) + '" y="' + (ty - 20) + '" width="10" height="22" fill="#4a2f1c"/>';
+      for (i = 0; i < 4; i++) {
+        a = 1 - i * 0.2; y = ty - 16 - i * th * 0.22;
+        s += '<path d="M' + (tx - tw * a).toFixed(0) + ' ' + y.toFixed(0) + 'L' + tx + ' ' + (y - th * 0.36).toFixed(0) + 'L' + (tx + tw * a).toFixed(0) + ' ' + y.toFixed(0) + 'Z" fill="#1b4435"/>' +
+          '<path d="M' + (tx + tw * a * 0.1).toFixed(0) + ' ' + (y - th * 0.3).toFixed(0) + 'L' + tx + ' ' + (y - th * 0.36).toFixed(0) + 'L' + (tx + tw * a).toFixed(0) + ' ' + y.toFixed(0) + 'Q' + (tx + tw * a * 0.5).toFixed(0) + ' ' + (y - th * 0.1).toFixed(0) + ' ' + (tx + tw * a * 0.1).toFixed(0) + ' ' + (y - th * 0.3).toFixed(0) + 'Z" fill="#fff" opacity=".9"/>';
+      }
+    });
+    $('#trees').innerHTML = s; s = '';
+    s = '<g transform="translate(134 360)">' + RAIL.car('dining', true) + '</g><g transform="translate(356 360)">' + RAIL.car('kitchen', true) + '</g>' +
+      '<g transform="translate(578 360)">' + RAIL.car('mail', true) + '<rect x="64" y="62" width="60" height="104" fill="#1a0c10"/></g>' +
+      '<g id="eng" class="hot" transform="translate(800 360)">' + RAIL.engine(true) + RAIL.steam(265, 4) + '<rect x="0" y="20" width="300" height="210" fill="transparent"/></g>';
+    $('#rolling').innerHTML = s; s = '';
+    for (x = -1000; x < 372; x += 13) { h = 8 + rnd(x + 3) * 30; s += '<path d="M' + x + ' 397h8l-4 ' + h.toFixed(0) + 'z"/>'; }
+    $('#eaves').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { a = i * Math.PI / 6; s += '<path d="M' + (374 + Math.sin(a) * 21).toFixed(1) + ' ' + (436 - Math.cos(a) * 21).toFixed(1) + 'L' + (374 + Math.sin(a) * 25).toFixed(1) + ' ' + (436 - Math.cos(a) * 25).toFixed(1) + '"/>'; }
+    $('#oticks').innerHTML = s; s = '';
+    /* paw prints: from the mail van door to where the cat is now */
+    for (i = 0; i < 10; i++) {
+      x = 668 - i * 14; y = 672 + i * 8;
+      s += '<ellipse cx="' + (x + (i % 2 ? 5 : -5)).toFixed(0) + '" cy="' + y.toFixed(0) + '" rx="5" ry="3.4"/>';
+    }
+    s += '<rect x="530" y="662" width="150" height="90" fill="transparent"/>';
+    $('#prints').innerHTML = s; s = '';
+    for (i = 0; i < 26; i++) {
+      x = -100 + rnd(i) * 1800; y = 520 + rnd(i + 40) * 360; h = 8 + rnd(i + 80) * 12;
+      s += '<use class="spark" href="#star4" x="' + (x - h / 2).toFixed(0) + '" y="' + (y - h / 2).toFixed(0) + '" width="' + h.toFixed(0) + '" height="' + h.toFixed(0) + '"/>';
+    }
+    $('#sparks').innerHTML = s;
+    $('#vane').innerHTML = '<g transform="translate(856 884) scale(.8)">' + RAIL.vane(0, 0) + '</g><rect x="782" y="446" width="150" height="440" fill="transparent"/>';
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'orvo', storyTitle: 'The Night Train to Orvo', id: 'arrival', no: 'III', title: 'Orvo',
+    go: 'Step down onto the snow',
+    intro: [
+      'Mr Vane held each ticket up to the lamp. Three tickets, six holes. He put them in his pocket and said nothing. That meant they were right.',
+      'At half past two the train stopped at Dorn. Mr Finch ran down the platform in his slippers and came back with six sausages. At a quarter to four you knocked for Mrs Brandt and her cake. At a quarter past five you knocked for Doctor Osei.',
+      'After that there was nothing to do. You slept in the mail van, on a pile of mail bags. Something warm slept on your feet.'
+    ],
+    exit: null, tags: {},
+    onBegin: begin
+  });
+
+  function begin() {
+    var st = ER.state();
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    RAIL.snd.hiss(); setTimeout(ER.sfx.bell, 700);
+    ER.narrate([
+      'Orvo, seven o&rsquo;clock in the morning. This is the end of the line. After Orvo there are only mountains.',
+      'Mr Vane looks at his watch, and then at the station clock. Seven o&rsquo;clock exactly. Forty-one years, and the night train is still never late.',
+      'The door of the mail van slides open. The station cat from Halm jumps down and walks away across the snow. It has no ticket. It never has a ticket.',
+      'Mr Vane takes your ticket and punches one hole in it. &ldquo;The train goes back at ten to twelve tonight,&rdquo; he says. &ldquo;Do not eat the fish.&rdquo;'
+    ], function () {
+      var mins = Math.max(1, Math.round((ER.flag('tEnd') - (st.t0 || ER.flag('tEnd'))) / 60000)), hn = ER.hintsUsed(), wn = Object.keys(st.words).length;
+      $('#e-time').textContent = 'You reached Orvo in ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+      $('#e-words').textContent = 'In your notebook: ' + st.clues.length + (st.clues.length === 1 ? ' note and ' : ' notes and ') + wn + (wn === 1 ? ' new word.' : ' new words.');
+      $('#e-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+      $('#endc').classList.add('on'); shown = true; RAIL.snd.punch(); setTimeout(ER.sfx.ok, 250);
+    });
+  }
+
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#peaks', 'peak', null);
+  thing('#chalet', 'chalet', 'Orvo station. One room, one stove, and icicles as long as your arm.');
+  thing('#sign', null, 'ORVO. You are 1,822 metres up. The air is cold and very clean.');
+  thing('#oclock', null, 'Seven o&rsquo;clock. The station clock and Mr Vane&rsquo;s watch say the same thing.');
+  thing('#buffer', 'buffer stop', 'The end of the line. After this there are only mountains.');
+  thing('#eng', null, 'The engine is quiet now. It sleeps all day, like the cat.');
+  thing('#mailbags', 'mail bag', 'The mail for Orvo. You know these bags. You slept on them.');
+  thing('#prints', 'paw prints', 'Paw prints in the new snow. They go straight to the station kitchen.');
+  thing('#sledge', 'sledge', 'After Orvo there is no road. The mail goes on by sledge.');
+  thing('#post', null, 'ORVO, 1,822 m. That is the height. The &ldquo;m&rdquo; is for metres.');
+  thing('#vane', null, 'Mr Vane is looking at his watch. He looks pleased with it.');
+  thing('#cat', 'stowaway', 'The cat comes to Orvo every night and goes home every morning. Nobody knows why.');
+
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-list').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* the postcard: two or three sentences of your own */
+  var STAMP = '<svg viewBox="0 0 100 124"><rect width="100" height="124" fill="#8a2433"/><rect x="5" y="5" width="90" height="114" fill="#9fcdea"/>' +
+    '<circle cx="70" cy="34" r="13" fill="#fff2b8"/><path d="M5 92L34 40l14 20 16-30 31 62z" fill="#fff8ee"/><path d="M34 40l14 20 16-30-9 34-8-12-9 14z" fill="#a9bfe4"/>' +
+    '<rect x="5" y="88" width="90" height="31" fill="#8a2433"/><text x="50" y="108" text-anchor="middle" font-family="Limelight,serif" font-size="15" letter-spacing="2" fill="#f6ecd2">ORVO</text>' +
+    '<text x="86" y="22" text-anchor="end" font-family="Josefin Sans,sans-serif" font-weight="700" font-size="12" fill="#5a1722">20</text></svg>';
+  $('#b-card').addEventListener('click', function () {
+    var saved = ER.flag('postcard') || {}, box = ER.el('div', 'pc');
+    box.innerHTML = '<div class="pc-l"><h4>Greetings from Orvo</h4>' +
+      '<p class="ask">Write a postcard to somebody at home. Three sentences are enough.</p>' +
+      '<ol><li>Where are you?</li><li>What did you do on the train last night?</li><li>What can you see this morning?</li></ol>' +
+      '<label>Dear <input type="text" id="p1" maxlength="30" autocomplete="off"></label>' +
+      '<textarea id="p2" spellcheck="false" placeholder="I am in Orvo. Last night I&hellip;"></textarea>' +
+      '<label>From <input type="text" id="p3" maxlength="30" autocomplete="off"></label></div>' +
+      '<div class="pc-r"><div class="pc-stamp">' + STAMP + '</div><div class="pc-mark"><span>Orvo<b>07.00</b>on time</span></div>' +
+      '<div class="pc-to"><i></i><i></i><i></i></div></div>' +
+      '<div class="pc-foot"><span class="count"></span><span>Saved in this browser as you type.</span><button type="button" class="btn" id="p-print">Print</button><button type="button" class="btn" id="p-done">Done</button></div>';
+    ER.glossIn(box, '.ask, li');
+    ['p1', 'p2', 'p3'].forEach(function (k) { box.querySelector('#' + k).value = saved[k] || ''; });
+    function keep() {
+      var o = {}, n;
+      ['p1', 'p2', 'p3'].forEach(function (k) { o[k] = box.querySelector('#' + k).value; });
+      n = (o.p2.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('postcard', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#p-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#p-done').addEventListener('click', ER.close);
+    ER.open('ov-card', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Breakfast · Room 13 Is Not on the Plan</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="story.css">
+<style>
+  body{--bg:#4f2818;--accent:#c4501f;--font-display:'Caveat',cursive;--font-ui:'Outfit',sans-serif;
+    --tc-bg:rgba(251,243,226,.95);--tc-ink:#2a221a;--cap-bg:rgba(252,246,233,.96);--cap-ink:#2a221a;--fade:#fff3dc;
+    --hud-bg:rgba(255,250,240,.84);--hud-ink:#2a221a;--hud-line:rgba(42,34,26,.3)}
+  .tc-room{font-weight:700;font-size:clamp(52px,7.6vw,104px);letter-spacing:0;line-height:1}
+  .hbtn,.chip{font-weight:500;letter-spacing:.1em}
+  .cap:not(.seq){pointer-events:none}
+  .cap:not(.seq) .w{pointer-events:auto}
+  .tc .btn,.cap em{color:#c4501f}
+  .cap{border-top-color:#c4501f}.cap small{opacity:.6}
+  .big3{font-family:'Cinzel',serif;font-weight:700;font-size:170px;fill:url(#brassG);stroke:#3a2a08;stroke-width:2.5;text-anchor:middle}
+  .slipT{font-family:'Special Elite',monospace;font-size:24px;fill:#27231d;text-anchor:middle}
+  .inkT{font-family:'Caveat',cursive;font-weight:700;fill:#1d2a6b;text-anchor:middle;opacity:0;transition:opacity .7s}
+  #inkW{stroke-dasharray:640;stroke-dashoffset:640;transition:stroke-dashoffset 1.9s ease-in-out}
+  #inkD{opacity:0;transition:opacity .5s 1.7s}
+  .inked #inkW{stroke-dashoffset:0}
+  .inked #inkD{opacity:1}
+  .inked .inkT{opacity:1}
+  .inked .inkT.t1{transition-delay:2.1s}.inked .inkT.t2{transition-delay:2.6s}.inked .inkT.t3{transition-delay:3.1s}.inked .inkT.t4{transition-delay:3.6s}
+  #lab13{transition:transform .3s}
+  #lab13.on{transition:none}
+  #lab13:not(.gone){animation:lb 2.6s ease-in-out infinite}
+  @keyframes lb{50%{filter:brightness(1.12)}}
+  .steam{animation:st 4.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .steam.s2{animation-duration:5.4s;animation-delay:-2s}
+  @keyframes st{0%,100%{opacity:.1;transform:scale(.9) rotate(-6deg)}50%{opacity:.34;transform:scale(1.15) rotate(8deg)}}
+  #sun{animation:sun 9s ease-in-out infinite alternate}
+  @keyframes sun{from{opacity:.75}to{opacity:1}}
+  .dust{animation:dust 13s linear infinite;opacity:0}
+  .dust.d2{animation-duration:17s;animation-delay:-6s}.dust.d3{animation-duration:11s;animation-delay:-3s}.dust.d4{animation-duration:19s;animation-delay:-11s}
+  @keyframes dust{0%{transform:translate(0,0);opacity:0}12%{opacity:.8}88%{opacity:.6}100%{transform:translate(-120px,90px);opacity:0}}
+
+  /* the bill */
+  .bill{position:fixed;left:2.4vw;top:64px;z-index:34;width:min(440px,92vw);padding:26px 30px 22px;background:#fbf6e9;color:#2a221a;
+    box-shadow:0 22px 60px rgba(40,20,5,.5);display:none;transform:rotate(-1.2deg);border-top:10px solid #17473a}
+  .bill.on{display:block}
+  .bill h3{margin:0;font-family:'Abril Fatface',serif;font-weight:normal;font-size:30px;letter-spacing:.06em;text-transform:uppercase;color:#17473a}
+  .b-sub{margin:2px 0 12px;font-family:'Outfit',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:#7a6338}
+  .bill table{width:100%;border-collapse:collapse;font-family:'Special Elite',monospace;font-size:17.5px}
+  .bill td{padding:7px 0 4px;border-bottom:1px dotted #9c8b68;vertical-align:top}
+  .bill td:last-child{text-align:right;white-space:nowrap;padding-left:12px}
+  .bill .stamp{position:absolute;right:26px;bottom:74px;border:3px solid #c4501f;color:#c4501f;font-family:'Oswald',sans-serif;font-weight:700;font-size:19px;letter-spacing:.2em;
+    padding:4px 12px 3px;transform:rotate(-9deg);opacity:.88}
+  .bill .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .bill .btn{--accent:#2a221a;font-size:13px;padding:8px 13px}.bill .btn:hover{color:#fbf6e9}
+  .bill small{display:block;margin-top:14px;font-family:'Outfit',sans-serif;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.6}
+  .bill small button{text-decoration:underline;letter-spacing:.12em;text-transform:uppercase}
+
+  /* the new page of the guide: the one part nobody can do for you */
+  .rp{width:min(820px,94vw);max-height:86vh;overflow:auto;background:#efe3c4 linear-gradient(168deg,rgba(255,255,255,.45),rgba(150,105,40,.14));color:#2a2114;padding:22px 36px 18px;
+    box-shadow:0 26px 70px rgba(0,0,0,.5);-webkit-user-select:text;user-select:text;border:1px solid #cdb98a}
+  .rp h3{margin:0;font-family:'Abril Fatface',serif;font-weight:normal;font-size:26px;letter-spacing:.07em;text-transform:uppercase;text-align:center;color:#3b2912}
+  .rp h4{margin:1px 0 8px;padding-bottom:8px;border-bottom:1px solid #9a8455;font-family:'Oswald',sans-serif;font-weight:400;font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;text-align:center;color:#7a6338}
+  .rp label{display:block;font-family:'EB Garamond',Georgia,serif;font-size:19px;line-height:1.3;font-weight:600;margin:9px 0 5px}
+  .rp label i{display:block;font-weight:400;font-size:16.5px;color:#6b5937}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Special Elite',monospace;font-size:16.5px;line-height:1.45;color:#1d2a4a;background:#fffdf4;border:1px solid #b9a877;
+    padding:7px 11px;border-radius:2px;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{display:block;min-height:62px;height:62px}
+  .rp .yn{display:flex;gap:22px;font-family:'Special Elite',monospace;font-size:17px;margin:2px 0 6px}
+  .rp .yn label{display:inline-flex;align-items:center;gap:8px;margin:0;font:inherit;font-weight:normal;cursor:pointer}
+  .rp .by{display:flex;align-items:center;gap:12px;margin-top:9px}
+  .rp .by label{margin:0;white-space:nowrap}
+  .rp .count{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right;margin-top:4px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:8px}
+  .rp .foot span{flex:1;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:17px;opacity:.75}
+  .rp .btn{--accent:#3b2912}.rp .btn:hover{color:#efe3c4}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible;background:#fff;border:0}
+    .rp textarea,.rp input[type=text]{border:0;border-bottom:1px solid #999;background:#fff}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0b5"/><stop offset=".5" stop-color="#d9ae48"/><stop offset="1" stop-color="#8f6f22"/></linearGradient>
+  <radialGradient id="bellG" cx="38%" cy="34%"><stop offset="0" stop-color="#fff3c0"/><stop offset=".55" stop-color="#cfa243"/><stop offset="1" stop-color="#7d5f1d"/></radialGradient>
+  <radialGradient id="warmG" gradientUnits="userSpaceOnUse" cx="1250" cy="120" r="1300"><stop offset="0" stop-color="#fff3c8" stop-opacity=".3"/><stop offset=".5" stop-color="#fff3c8" stop-opacity=".05"/><stop offset="1" stop-color="#1c0c04" stop-opacity=".5"/></radialGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5f311e"/><stop offset=".5" stop-color="#743d25"/><stop offset="1" stop-color="#572c1a"/></linearGradient>
+  <pattern id="leather" width="46" height="46" patternUnits="userSpaceOnUse"><rect width="46" height="46" fill="#1e4a3b"/><circle cx="8" cy="10" r="1.2" fill="#245545"/><circle cx="30" cy="26" r="1.4" fill="#1a4234"/><circle cx="18" cy="38" r="1" fill="#245545"/><circle cx="40" cy="6" r="1" fill="#1a4234"/></pattern>
+  <pattern id="xw" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" fill="#fbf8ee" stroke="#27231d" stroke-width="1.2"/></pattern>
+</defs>
+
+<!-- Aunt Viv's desk, from above -->
+<rect x="-1000" y="-600" width="3600" height="2100" fill="url(#woodG)"/>
+<g stroke="#4c2616" stroke-width="2" opacity=".6"><path d="M-1000 20H2600M-1000 34H2600M-1000 868H2600M-1000 884H2600M-1000-80H2600M-1000 960H2600"/></g>
+<rect x="56" y="50" width="1488" height="800" rx="6" fill="url(#leather)"/>
+<rect x="74" y="68" width="1452" height="764" rx="3" fill="none" stroke="#b08d3c" stroke-width="2.200" opacity=".75"/>
+<rect x="83" y="77" width="1434" height="746" fill="none" stroke="#b08d3c" stroke-width="1" opacity=".5"/>
+
+<!-- Wilf's newspaper -->
+<g id="paper" class="hot" transform="rotate(-7 250 760)">
+  <rect x="86" y="640" width="360" height="300" fill="#e7e1cf"/><rect x="86" y="640" width="360" height="300" fill="none" stroke="#c9c2ad" stroke-width="1.5"/>
+  <rect x="112" y="668" width="182" height="182" fill="url(#xw)"/>
+  <g fill="#27231d"><rect x="138" y="668" width="26" height="26"/><rect x="242" y="694" width="26" height="26"/><rect x="112" y="746" width="26" height="26"/><rect x="190" y="720" width="26" height="26"/><rect x="268" y="772" width="26" height="26"/><rect x="164" y="798" width="26" height="26"/><rect x="216" y="824" width="26" height="26"/></g>
+  <g font-family="Caveat,cursive" font-weight="700" font-size="22" fill="#1d2a6b" text-anchor="middle"><text x="125" y="714">M</text><text x="151" y="714">O</text><text x="177" y="714">S</text><text x="203" y="714">S</text></g>
+  <g stroke="#9a947f" stroke-width="2.200"><path d="M312 676h116M312 690h110M312 704h116M312 718h96M312 740h116M312 754h104M312 768h116M312 782h90M312 804h116M312 818h110M312 832h80"/></g>
+  <g transform="rotate(24 300 850)"><rect x="210" y="842" width="170" height="13" rx="3" fill="#e0b23a"/><path d="M380 842l22 6.500-22 6.500z" fill="#e7c9a0"/><path d="M394 846l8 2.500-8 2.500z" fill="#27231d"/><rect x="204" y="842" width="12" height="13" fill="#c9705e"/></g>
+</g>
+
+<!-- the builder's plan, and on top of it the plan that was drawn in 1978 -->
+<g id="bpG" class="hot" transform="translate(704 34) rotate(6) scale(.83)"></g>
+<g id="npG" transform="translate(290 198) rotate(-2) scale(1.1)"></g>
+
+<!-- the brass 3, its one screw, a screwdriver -->
+<g id="three" class="hot">
+  <text x="208" y="352" class="big3" transform="rotate(-18 208 290)" fill="#000" style="fill:#000;stroke:none;opacity:.3" dx="5" dy="7">3</text>
+  <text x="208" y="352" class="big3" transform="rotate(-18 208 290)">3</text>
+  <circle cx="192" cy="208" r="5" fill="#1e4a3b"/>
+  <circle cx="322" cy="196" r="10" fill="url(#bellG)"/><path d="M315 196h14" stroke="#5a431a" stroke-width="2.500"/>
+</g>
+<g id="driver" class="hot" transform="rotate(13 180 432)">
+  <rect x="86" y="421" width="88" height="24" rx="11" fill="#000" opacity=".25" transform="translate(4 6)"/>
+  <rect x="86" y="421" width="88" height="24" rx="11" fill="#a3281f"/><path d="M104 421v24M120 421v24M136 421v24M152 421v24" stroke="#7b1c15" stroke-width="2"/>
+  <rect x="174" y="427" width="13" height="12" fill="#8f979c"/><rect x="187" y="429" width="80" height="8" fill="#c3cacd"/><path d="M267 429l11 4-11 4z" fill="#8f979c"/>
+</g>
+<g id="bell" class="hot"><circle cx="176" cy="556" r="50" fill="#000" opacity=".25"/><circle cx="170" cy="548" r="48" fill="url(#bellG)"/><circle cx="170" cy="548" r="34" fill="none" stroke="#fff3c0" stroke-width="1.500" opacity=".6"/><circle cx="170" cy="548" r="10" fill="#8f6f22"/><circle cx="168" cy="546" r="4" fill="#fff3c0" opacity=".8"/></g>
+<g id="specs" class="hot" transform="rotate(-9 560 118)">
+  <g fill="rgba(255,255,255,.18)" stroke="#5a3a22" stroke-width="6"><rect x="500" y="96" width="52" height="38" rx="14"/><rect x="570" y="96" width="52" height="38" rx="14"/></g>
+  <path d="M552 112q9-6 18 0M500 108l-26-14M622 108l26-14" stroke="#5a3a22" stroke-width="6" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- breakfast -->
+<g id="coffee" class="hot">
+  <circle cx="1456" cy="250" r="82" fill="#000" opacity=".25"/>
+  <circle cx="1450" cy="242" r="80" fill="#f4f1e6"/><circle cx="1450" cy="242" r="62" fill="none" stroke="#dcd6c2" stroke-width="2"/>
+  <path d="M1496 232q32-4 32 10t-32 10" stroke="#fbf9f1" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <circle cx="1450" cy="242" r="50" fill="#fbf9f1"/><circle cx="1450" cy="242" r="50" fill="none" stroke="#d6cfba" stroke-width="2.500"/>
+  <circle cx="1450" cy="242" r="42" fill="#3a2416"/><path d="M1420 226q16-16 40-12" stroke="#7a5536" stroke-width="5" fill="none" stroke-linecap="round" opacity=".7"/>
+  <path d="M1388 296l-34 30" stroke="#c9d0d3" stroke-width="7" stroke-linecap="round"/><ellipse cx="1392" cy="292" rx="13" ry="8" fill="#c9d0d3" transform="rotate(-40 1392 292)"/>
+  <g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><path class="steam" d="M1434 226q14-12 4-26t8-26"/><path class="steam s2" d="M1462 250q-14-12-2-28t-6-24"/></g>
+</g>
+<g id="toast" class="hot">
+  <circle cx="1416" cy="706" r="104" fill="#000" opacity=".25"/>
+  <circle cx="1410" cy="698" r="102" fill="#f4f1e6"/><circle cx="1410" cy="698" r="80" fill="none" stroke="#dcd6c2" stroke-width="2"/>
+  <g transform="rotate(14 1400 690)">
+    <path d="M1346 646q0-12 12-12h84q12 0 12 12v76q0 12-12 12h-56q-4-18-22-20t-18-16z" fill="#d9a45b" stroke="#a8733a" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M1362 652q30-8 54 6t24 40-34 22q-14-16-28-18t-18-20z" fill="#e8872b"/>
+    <g stroke="#f5c06a" stroke-width="3.500" stroke-linecap="round"><path d="M1376 664l14 6M1406 660l10 12M1396 690l16-4M1420 692l6 12"/></g>
+  </g>
+  <g transform="rotate(-52 1470 760)"><rect x="1400" y="754" width="96" height="12" rx="5" fill="#d6dde0"/><rect x="1496" y="752" width="62" height="16" rx="7" fill="#3a2416"/></g>
+</g>
+<g id="jar" class="hot">
+  <circle cx="1226" cy="776" r="52" fill="#000" opacity=".25"/>
+  <circle cx="1220" cy="768" r="50" fill="#cfd8d6"/><circle cx="1220" cy="768" r="42" fill="#e8872b"/><circle cx="1220" cy="768" r="42" fill="none" stroke="#b9661c" stroke-width="2.500"/>
+  <g stroke="#f5c06a" stroke-width="3.500" stroke-linecap="round"><path d="M1198 756l14 4M1226 746l8 12M1214 782l14-6M1238 776l4 12"/></g>
+  <path d="M1190 746q14-18 36-16" stroke="#fff" stroke-width="5" fill="none" opacity=".5" stroke-linecap="round"/>
+</g>
+<g id="pen" class="hot" transform="rotate(-34 1270 640)">
+  <rect x="1180" y="632" width="150" height="17" rx="8" fill="#17302a"/><rect x="1262" y="632" width="9" height="17" fill="#d9ae48"/>
+  <path d="M1330 634l34 6.500-34 6.500z" fill="#d9ae48"/><path d="M1344 640.500h18" stroke="#5a431a" stroke-width="1.500"/><rect x="1196" y="630" width="50" height="4" rx="2" fill="#d9ae48"/>
+</g>
+
+<!-- the label for Room 13 -->
+<g id="lab13" class="drag">
+  <rect x="-58" y="-34" width="116" height="68" fill="transparent"/>
+  <rect x="-44" y="-17" width="92" height="40" fill="#000" opacity=".25"/><rect x="-48" y="-21" width="96" height="42" fill="#f6efd9"/>
+  <text x="0" y="9" class="slipT">13</text>
+</g>
+
+<!-- morning light through the blinds -->
+<g id="sun" fill="#fff3c8" pointer-events="none">
+  <path d="M1500-200H1640L560 1100H420Z" opacity=".09"/><path d="M1760-200H1900L820 1100H680Z" opacity=".11"/><path d="M2020-200H2160L1080 1100H940Z" opacity=".09"/>
+  <path d="M1240-200H1380L300 1100H160Z" opacity=".07"/><path d="M980-200H1120L40 1100H-100Z" opacity=".05"/>
+</g>
+<g fill="#fffbe6" pointer-events="none"><circle class="dust" cx="1180" cy="210" r="2.200"/><circle class="dust d2" cx="930" cy="430" r="1.800"/><circle class="dust d3" cx="1330" cy="520" r="2"/><circle class="dust d4" cx="760" cy="620" r="2.400"/></g>
+<rect x="-1000" y="-600" width="3600" height="2100" fill="url(#warmG)" pointer-events="none"/>
+</svg>
+</div>
+<div class="bill" id="bill">
+  <div class="stamp">ANSWERED</div>
+  <h3>The Swan Hotel</h3>
+  <div class="b-sub">Account &middot; Room 13 &middot; Miss W. Moss</div>
+  <table>
+    <tr><td>1 cocoa, no sugar</td><td>no charge</td></tr>
+    <tr><td>Time taken</td><td id="b-time"></td></tr>
+    <tr><td>Hints asked for</td><td id="b-hints"></td></tr>
+    <tr><td>In your notebook</td><td id="b-book"></td></tr>
+  </table>
+  <div class="row"><button type="button" class="btn" id="b-report">Write the new page</button><button type="button" class="btn" id="b-nb">Open the notebook</button><button type="button" class="btn" id="b-lobby">Back to the stories</button></div>
+  <small>Room 13 Is Not on the Plan &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = true, placed = false, lab = $('#lab13'), L0 = [1236, 536], lx = L0[0], ly = L0[1], ox = 0, oy = 0, birdT = 0;
+  var SHADOW = '<rect x="7" y="9" width="760" height="430" fill="#000" opacity=".3"/>';
+
+  /* the two plans. By now every number is known, so both can be shown complete. */
+  $('#bpG').innerHTML = SHADOW + R13.plan({ old: true, labels: ['11', '12', 'bath', '14', 'linen', '15', '16', '13'], attrs: ' width="760" height="430"' });
+  $('#npG').innerHTML = SHADOW + R13.plan({ print: ['11', '12', 'BATH', '14', 'LINEN', '15', '16', null], attrs: ' width="760" height="430"' }) +
+    '<g fill="none" stroke="#1d2a6b" stroke-width="2.800" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path id="inkW" d="M606 40H734V390H606"/>' +
+    '<g id="inkD"><path d="M604 199V231" stroke="#fbfaf4" stroke-width="8" stroke-linecap="butt"/><path d="M604 232h34M604 198a34 34 0 0 1 34 34M730 86v60M738 86v60M730 284v60M738 284v60" stroke-width="2"/></g></g>' +
+    '<g id="labIn" opacity="0"><rect x="630" y="109" width="80" height="34" fill="#f6efd9" stroke="#b9ad8c"/><text x="670" y="133" class="slipT" style="font-size:20px">13</text></g>' +
+    '<text class="inkT t1" x="670" y="186" font-size="20">Miss W. Moss</text><text class="inkT t2" x="670" y="262" font-size="19">permanent</text>' +
+    '<text class="inkT t3" x="670" y="300" font-size="19">cocoa at 9.10</text><text class="inkT t4" x="670" y="338" font-size="19">no sugar</text>';
+
+  ER.init({
+    theme: 'ghost', story: 'room13', storyTitle: 'Room 13 Is Not on the Plan', id: 'morning', no: 'IV', title: 'Breakfast',
+    go: 'Tell her everything',
+    intro: [
+      'No sugar, and the little table by the window: the way she has it now. In the mirror Miss Moss drank her cocoa. Then she wrote THANK YOU on the glass, in very large letters.',
+      'Under it she wrote one more line: NOW PUT ME BACK ON THE PLAN.',
+      'At eight in the morning Aunt Viv comes downstairs. Her headache has gone. On her desk she finds two plans, a brass 3, and you, asleep in Wilf&rsquo;s chair.'
+    ],
+    exit: null, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+
+  function hints() {
+    if (placed) return null;
+    return ['label', [
+      'Aunt Viv has given you one small paper label. It is lying on the desk, to the right of the plans. Where does it belong?',
+      'Look at the blue plan, the builder&rsquo;s one. Where is Room 13 on it? Now find the same place on the new white plan.',
+      'On the new plan the corridor stops at a wall. On the builder&rsquo;s plan it goes on. Drag the label onto the new plan, to the empty paper where her room ought to be.'
+    ]];
+  }
+
+  function drawLab() { lab.style.transform = 'translate(' + lx.toFixed(1) + 'px,' + ly.toFixed(1) + 'px) rotate(6deg)'; }
+  drawLab();
+  function birds() { if (!ER.isOpen()) R13.chirp(1); birdT = setTimeout(birds, 2600 + Math.random() * 5200); }
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    birdT = setTimeout(birds, 900);
+    ER.narrate([
+      'Aunt Viv listens to all of it. She does not say &ldquo;nonsense&rdquo; once.',
+      'Then she puts the builder&rsquo;s plan beside the new one, and counts the rooms on her fingers.',
+      '&ldquo;Sixteen,&rdquo; she says. &ldquo;I paid for fifteen rooms, and all this time there were sixteen.&rdquo; She sounds pleased.',
+      'She pushes one small paper label across the desk to you. &ldquo;Go on, then,&rdquo; she says. &ldquo;Put her back.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* where a point of the desk falls on the 1978 plan */
+  function onPlan(x, y) {
+    var a = 2 * Math.PI / 180, dx = x - 290, dy = y - 198;
+    return [(dx * Math.cos(a) - dy * Math.sin(a)) / 1.1, (dx * Math.sin(a) + dy * Math.cos(a)) / 1.1];
+  }
+  ER.drag(lab, {
+    start: function (e) { if (busy || placed) return false; var p = ER.pt(svg, e); ox = p.x - lx; oy = p.y - ly; },
+    move: function (e) { var p = ER.pt(svg, e); lx = p.x - ox; ly = p.y - oy; drawLab(); },
+    end: function (e, moved) {
+      var q = onPlan(lx, ly);
+      if (!moved) { ER.say('A paper label with 13 on it. Drag it onto the new plan, to the place where Room 13 belongs.'); return; }
+      if (q[0] > 606 && q[0] < 764 && q[1] > 26 && q[1] < 404) { put(); return; }
+      ER.sfx.no();
+      if (q[0] > 20 && q[0] <= 606 && q[1] > 36 && q[1] < 394) ER.say('Not there. Every room on that part of the plan has a number already. Look at the builder&rsquo;s plan: where did Room 13 use to be?', 7000);
+      else ER.say('Put the label on the new plan, in the place where Room 13 used to be.');
+      lx = L0[0]; ly = L0[1]; drawLab();
+    }
+  });
+  function scratch(n) { var i; for (i = 0; i < n; i++) R13.noise({ type: 'highpass', f: 2600 + Math.random() * 1500, dur: 0.09, peak: 0.05, when: i * 0.16 + Math.random() * 0.05 }); }
+  function put() {
+    placed = true; busy = true; ER.hush(); ER.sfx.click();
+    lab.classList.add('gone'); lab.style.display = 'none';
+    $('#labIn').setAttribute('opacity', 1); $('#npG').classList.add('inked'); scratch(11);
+    setTimeout(function () { scratch(14); }, 2100);
+    setTimeout(function () {
+      ER.narrate([
+        'Aunt Viv takes out her fountain pen and draws the walls back in, and the door, and two windows.',
+        'Under the number she writes: Miss W. Moss. Permanent. Cocoa at ten past nine. No sugar.',
+        'Wilf finds a new screw for the brass 3. It still hangs crooked. He says it always did.',
+        'That night the bell rings at ten past nine. It rings once. Wilf is already on the stairs with the tray.',
+        'In the morning the blue cup comes down again. It is empty, and somebody has washed it.'
+      ], bill);
+    }, 4600);
+  }
+  function bill() {
+    var st = ER.state(), mins = Math.max(1, Math.round((ER.flag('tEnd') - (st.t0 || ER.flag('tEnd'))) / 60000)), hn = ER.hintsUsed(), wn = Object.keys(st.words).length;
+    $('#b-time').textContent = mins + (mins === 1 ? ' minute' : ' minutes');
+    $('#b-hints').textContent = hn ? String(hn) : 'none';
+    $('#b-book').textContent = st.clues.length + ' papers, ' + wn + (wn === 1 ? ' word' : ' words');
+    $('#bill').classList.add('on'); ER.sfx.ok(); busy = false;
+  }
+
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#three', null, 'The brass 3 from her door, and the one screw that held it up for nearly fifty years.');
+  thing('#driver', 'screwdriver', null);
+  thing('#bell', 'desk bell', 'Aunt Viv&rsquo;s desk bell. Nobody has dared to ring it this morning.');
+  thing('#specs', 'spectacles', null);
+  thing('#paper', 'crossword', 'Wilf&rsquo;s crossword. He has filled in one word since last night.');
+  thing('#coffee', null, 'Aunt Viv&rsquo;s coffee. Black, and no sugar. It seems to be a rule in this hotel.');
+  thing('#toast', 'marmalade', null);
+  thing('#jar', 'marmalade', null);
+  thing('#pen', 'fountain pen', null);
+  thing('#bpG', null, 'The builder&rsquo;s plan from 1936, with its labels back on. Sixteen rooms.');
+
+  $('#b-nb').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { clearTimeout(birdT); ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* a short piece of writing: the page the 1936 guide never had */
+  $('#b-report').addEventListener('click', function () {
+    var saved = ER.flag('report') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h3>The Swan Hotel</h3><h4>A Guide for Guests &middot; the new page</h4>' +
+      '<label for="r1">1. Finding Room 13. Tell a new guest the way from the lift. <i>Try to use: on your left, opposite, next to, at the end of.</i></label><textarea id="r1"></textarea>' +
+      '<label for="r2">2. Miss Moss, then and now. What did she use to do? What does she do now? <i>Write three sentences with &ldquo;used to&rdquo;.</i></label><textarea id="r2"></textarea>' +
+      '<label>3. Aunt Viv wants to know: should the hotel let other guests sleep in Room 13?</label><div class="yn"><label><input type="radio" name="yn" value="yes"> Yes</label><label><input type="radio" name="yn" value="no"> No</label></div>' +
+      '<textarea id="r3" placeholder="Because&hellip;"></textarea>' +
+      '<div class="by"><label for="r4">Written by</label><input type="text" id="r4" maxlength="60"></div>' +
+      '<div class="count"></div><div class="foot"><span>Saved in this browser as you type.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, 'label[for=r1], label[for=r2]');
+    ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { box.querySelector('#' + k).value = saved[k] || ''; });
+    if (saved.yn) { var r = box.querySelector('input[value=' + saved.yn + ']'); if (r) r.checked = true; }
+    function keep() {
+      var o = {}, n = 0, c = box.querySelector('input[name=yn]:checked');
+      ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { o[k] = box.querySelector('#' + k).value; });
+      o.yn = c ? c.value : '';
+      ['r1', 'r2', 'r3'].forEach(function (k) { n += (o[k].match(/[A-Za-z’']+/g) || []).length; });
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('report', o);
+    }
+    box.addEventListener('input', keep); box.addEventListener('change', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

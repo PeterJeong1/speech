@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Fantasy · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-fantasy.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{color:#e9dfc8;font-family:'IM Fell English',Georgia,serif;-webkit-user-select:none;user-select:none;background:#14101d;
+    background-image:radial-gradient(ellipse 760px 430px at 50% 40px,rgba(201,166,255,.26),rgba(160,120,255,.07) 55%,transparent 76%),
+      repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 2px,transparent 2px 86px),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.022) 0 2px,transparent 2px 190px),linear-gradient(#211a30,#14101d 60%,#0e0b15)}
+  .back{position:fixed;left:14px;top:12px;z-index:3;height:36px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(233,217,255,.3);
+    background:rgba(12,9,20,.7);color:#efe9dc;border-radius:3px;font-family:'Almendra',serif;font-weight:700;font-size:14px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#d6b8ff;color:#d6b8ff}
+  .arch{display:block;width:min(1180px,100%);height:auto;margin:0 auto -150px;pointer-events:none}
+  .rune{animation:rune 3.4s steps(3) infinite}.rune:nth-child(2n){animation-delay:-1.2s}.rune:nth-child(3n){animation-delay:-2.3s}
+  @keyframes rune{50%{opacity:.3}}
+  header{position:relative;text-align:center;padding:0 20px 30px}
+  h1{margin:0;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:clamp(48px,7vw,86px);color:#d6b8ff;line-height:1;
+    text-shadow:0 0 26px rgba(170,120,255,.55)}
+  header p{margin:14px 0 0;font-style:italic;font-size:20px;color:#cdbfa6}
+  main{max-width:1180px;margin:0 auto;padding:22px 30px 26px;display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:36px 34px;align-items:start;
+    border-bottom:16px solid #4a5060;box-shadow:0 5px 0 #2b2f3a,0 22px 30px -8px rgba(0,0,0,.6)}
+  .tome{position:relative;display:block;text-align:left;padding:36px 34px 30px 46px;border:0;cursor:pointer;font:inherit;color:#efe3c6;min-height:330px;
+    background:linear-gradient(100deg,rgba(0,0,0,.42) 0 14px,rgba(255,255,255,.07) 14px 17px,rgba(0,0,0,.2) 17px 24px,transparent 24px),linear-gradient(160deg,var(--c1),var(--c2));
+    border-radius:4px 10px 10px 4px;box-shadow:0 18px 40px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.07),6px 6px 0 -1px #d9cba4,7px 7px 0 0 #8f8262;
+    transition:transform .2s,box-shadow .2s}
+  .tome:nth-child(3n+1){--c1:#2f5446;--c2:#17302a}.tome:nth-child(3n+2){--c1:#5c2130;--c2:#32101a}.tome:nth-child(3n){--c1:#283a66;--c2:#141d38}
+  .tome:hover{transform:translateY(-7px) rotate(-.6deg);box-shadow:0 28px 50px rgba(0,0,0,.66),inset 0 0 0 1px rgba(255,255,255,.1),6px 6px 0 -1px #e6d9b4,7px 7px 0 0 #8f8262}
+  .tome .edge{position:absolute;left:38px;right:16px;top:16px;bottom:16px;border:1.5px solid rgba(226,192,106,.75);border-radius:3px;pointer-events:none}
+  .tome .edge:before{content:'';position:absolute;left:5px;right:5px;top:5px;bottom:5px;border:1px solid rgba(226,192,106,.35)}
+  .tome .no{font-family:'Almendra',serif;font-weight:700;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#d8b860;opacity:.85}
+  .tome h2{margin:10px 0 12px;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:27px;line-height:1.16;color:#f0d488}
+  .stars{font-size:23px;letter-spacing:4px;color:#f0d488;line-height:1}
+  .meta{margin:12px 0 14px;font-family:'Almendra',serif;font-weight:700;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;color:#cdbb8a}
+  .tome p{margin:0;font-size:19.5px;line-height:1.36;color:#efe3c6}
+  .mark{position:absolute;right:38px;top:-10px;width:34px;padding:16px 0 20px;display:none;background:#a5301f;color:#ffe9d2;text-align:center;
+    font-family:'Almendra',serif;font-weight:700;font-size:11px;letter-spacing:.14em;line-height:1.15;box-shadow:0 5px 10px rgba(0,0,0,.45)}
+  .mark:after{content:'';position:absolute;left:0;bottom:-12px;border-left:17px solid #a5301f;border-right:17px solid #a5301f;border-bottom:12px solid transparent}
+  .mark i{display:block;font-style:normal}
+  .tome.going .mark{display:block}
+  .tome.going h2,.tome.going .no{padding-right:46px}
+  .seal{position:absolute;right:26px;bottom:22px;width:76px;height:76px;border-radius:50%;display:none;place-items:center;transform:rotate(-12deg);
+    background:radial-gradient(circle at 36% 30%,#d9c7ff,#8a63d6 58%,#4c2f8a);color:#f6efff;font-family:'Uncial Antiqua',serif;font-size:13px;line-height:1.05;text-align:center;
+    box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 4px rgba(255,255,255,.14)}
+  .tome.solved .seal{display:grid}
+  .tome.solved p{padding-right:66px}
+  .more{display:grid;place-items:center;min-height:330px;border:2px dashed rgba(214,184,255,.3);border-radius:4px 10px 10px 4px;color:rgba(214,184,255,.6);
+    font-style:italic;font-size:19px;text-align:center;padding:24px}
+  footer{max-width:1180px;margin:0 auto;padding:16px 30px 54px;font-size:16.5px;font-style:italic;color:#a99c84;text-align:center;line-height:1.7}
+  footer b{color:#f0d488;font-weight:normal;font-style:normal;letter-spacing:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<svg class="arch" viewBox="0 0 1180 250" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="stn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f6675"/><stop offset="1" stop-color="#3a3f4c"/></linearGradient>
+  </defs>
+  <path d="M40 250Q40 24 590 24T1140 250H1080Q1080 82 590 82T100 250Z" fill="url(#stn)"/>
+  <g stroke="#2b2f3a" stroke-width="3" fill="none"><path d="M70 172l58 12M124 108l50 30M214 64l34 46M330 40l20 52M462 28l8 56M590 24v58M718 28l-8 56M850 40l-20 52M966 64l-34 46M1056 108l-50 30M1110 172l-58 12"/></g>
+  <g stroke="#b79cff" stroke-width="9" fill="none" stroke-linecap="round" opacity=".38">
+    <path class="rune" d="M152 152v-26l12 13-12 13"/><path class="rune" d="M258 88h16M266 76v28"/><path class="rune" d="M386 52l12 14-12 14M400 52l-14 28"/><path class="rune" d="M518 44l9 22 9-22"/>
+    <path class="rune" d="M650 42v26M640 50l20 10"/><path class="rune" d="M778 54l12 26M790 54l-12 26"/><path class="rune" d="M900 80l12 12-12 12v-24"/><path class="rune" d="M1010 130h16l-16 22h16"/>
+  </g>
+  <g stroke="#efe2ff" stroke-width="2" fill="none" stroke-linecap="round">
+    <path d="M152 152v-26l12 13-12 13M258 88h16M266 76v28M386 52l12 14-12 14M400 52l-14 28M518 44l9 22 9-22M650 42v26M640 50l20 10M778 54l12 26M790 54l-12 26M900 80l12 12-12 12v-24M1010 130h16l-16 22h16"/>
+  </g>
+  <path d="M34 250q-6-60 14-104t-4-86" stroke="#2f5a34" stroke-width="5" fill="none"/>
+  <path d="M64 250q14-40 2-78t22-64" stroke="#2f5a34" stroke-width="4" fill="none"/>
+  <g fill="#3f7a45"><ellipse cx="30" cy="212" rx="14" ry="8" transform="rotate(-30 30 212)"/><ellipse cx="52" cy="170" rx="14" ry="8" transform="rotate(30 52 170)"/><ellipse cx="38" cy="128" rx="13" ry="7" transform="rotate(-40 38 128)"/>
+    <ellipse cx="56" cy="88" rx="12" ry="7" transform="rotate(24 56 88)"/><ellipse cx="78" cy="206" rx="12" ry="7" transform="rotate(34 78 206)"/><ellipse cx="62" cy="150" rx="11" ry="6" transform="rotate(-24 62 150)"/><ellipse cx="96" cy="124" rx="11" ry="6" transform="rotate(40 96 124)"/></g>
+  <g fill="#57985a"><ellipse cx="44" cy="190" rx="9" ry="5" transform="rotate(20 44 190)"/><ellipse cx="46" cy="106" rx="9" ry="5" transform="rotate(-20 46 106)"/><ellipse cx="80" cy="170" rx="8" ry="5" transform="rotate(-30 80 170)"/></g>
+</svg>
+<header>
+  <h1>Fantasy</h1>
+  <p>Old books on a stone shelf. Every one is a locked room, and the way out is in the reading.</p>
+</header>
+<main id="shelf"></main>
+<footer><b>&#9733;</b> a short one for a first try &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;</b> a full story &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> long, and nothing is handed to you</footer>
+
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"library","title":"The Library That Locks at Dusk","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"You sat down to read one page. Now it is dusk, every door has locked itself, and the night librarian is a moth.","rooms":4,"first":"reading.html","firstId":"reading","last":"dawn"}]), box = document.getElementById('shelf'), NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+  Shelf.init();
+  STORIES.forEach(function (s, i) {
+    var st = Shelf.status('fantasy', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'tome ' + st.state; b.setAttribute('data-story', s.id);
+    b.innerHTML = '<span class="edge"></span><span class="mark"><i>R</i><i>E</i><i>A</i><i>D</i><i>I</i><i>N</i><i>G</i></span>' +
+      '<div class="no"></div><h2></h2><div class="stars"></div><div class="meta"></div><p></p><span class="seal">read<br>to the<br>end</span>';
+    b.querySelector('.no').textContent = 'Book ' + (NUM[i] || i + 1);
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('.stars').textContent = Shelf.stars(s.stars);
+    b.querySelector('.stars').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.meta').textContent = s.minutes + ' min · ' + s.rooms + ' rooms' + (s.level ? ' · level ' + s.level : '');
+    b.querySelector('p').textContent = s.blurb;
+    b.addEventListener('click', function () { Shelf.open('fantasy', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 5) {
+    var m = document.createElement('div'); m.className = 'more'; m.textContent = 'There is room on this shelf. More books are still being written.';
+    box.appendChild(m);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Dining Car · The Night Train to Orvo</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="story.css">
+<style>
+  body{--bg:#1a0b0d;--accent:#f0c96a;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;
+    --tc-bg:rgba(28,9,13,.9);--cap-bg:rgba(34,11,15,.94);--panel:#2a1216;--face-bg:#3a2a30;--q-ink:#e6b98a;--fade:#0d0405;
+    --hud-bg:rgba(34,11,15,.74)}
+  .tc-room{letter-spacing:.03em;font-size:clamp(38px,5.6vw,76px)}
+  .tk-name{font-size:28px;letter-spacing:.03em}
+  #wfar{animation:scrA 90s linear infinite}
+  #wmid{animation:scrB 36s linear infinite}
+  #wnear{animation:scrC 7.5s linear infinite}
+  #wlite{animation:scrD 17s linear infinite}
+  #wflk{animation:scrE 1.25s linear infinite}
+  @keyframes scrA{to{transform:translateX(-800px)}}
+  @keyframes scrB{to{transform:translateX(-700px)}}
+  @keyframes scrC{to{transform:translateX(-600px)}}
+  @keyframes scrD{to{transform:translateX(-1300px)}}
+  @keyframes scrE{to{transform:translate(-320px,100px)}}
+  .tlamp{animation:sway 2.3s ease-in-out infinite alternate}
+  .tlamp.l2{animation-delay:-.8s}.tlamp.l3{animation-delay:-1.5s}
+  @keyframes sway{from{transform:rotate(-1.1deg)}to{transform:rotate(1.1deg)}}
+  .steam{animation:steam 3.2s ease-in-out infinite}
+  .steam.s2{animation-delay:-1.6s}
+  @keyframes steam{0%,100%{opacity:.15;transform:translateY(0)}50%{opacity:.5;transform:translateY(-8px)}}
+  #catB{transform-box:fill-box;transform-origin:50% 100%;animation:breathe 3.4s ease-in-out infinite alternate}
+  @keyframes breathe{from{transform:scaleY(1)}to{transform:scaleY(1.09)}}
+  #desk.ready{animation:dg 2.8s steps(3) infinite}
+  @keyframes dg{50%{filter:brightness(1.3)}}
+  #dim{transition:opacity 2.4s}
+  .dtk{display:none}.dtk.on{display:inline}
+  .postT{font-family:'Limelight',serif;font-size:31px;letter-spacing:5px;fill:#5a1722;text-anchor:middle}
+  .postS{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:8.5px;letter-spacing:2.2px;fill:#5a1722;text-anchor:middle}
+  .boxT{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:9px;letter-spacing:1.5px;fill:#a04a44;text-anchor:middle}
+  .ttT{font-family:'Limelight',serif;font-size:15px;letter-spacing:1px;fill:#5a1722;text-anchor:middle}
+  .ttS{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:7px;letter-spacing:2px;fill:#7c2532;text-anchor:middle}
+  .ttP{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:9px;letter-spacing:2.5px;fill:#3a2a08;text-anchor:middle}
+  .numT{font-family:'Limelight',serif;font-size:15px;fill:#3a2a08;text-anchor:middle}
+
+  /* Mr Vane's desk: three tickets and a punch */
+  .dk{position:relative;width:min(1060px,96vw);padding:18px 26px 16px;border:3px solid #24130a;border-radius:6px;color:#f3e6c8;
+    background:#5a371f linear-gradient(176deg,#6f4628,#40250f);box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 2px #8a5a34}
+  .dk h5{margin:0 0 2px;font-family:'Limelight',serif;font-weight:normal;font-size:27px;letter-spacing:.05em;color:#f0c96a}
+  .dk .say{margin:0 0 14px;font-family:'EB Garamond',Georgia,serif;font-size:19.5px;line-height:1.35;color:#f1e3c2}
+  .tks{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .tkt{position:relative;min-height:286px;padding:13px 18px 10px;color:#2a1a1e;border-radius:4px;background:#efd9a7;box-shadow:0 7px 16px rgba(0,0,0,.55)}
+  .tkt.t2{background:#ecbfae}.tkt.t3{background:#c2d8b6}
+  .tkt:before,.tkt:after{content:'';position:absolute;top:50%;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:#553218}
+  .tkt:before{left:-9px}.tkt:after{right:-9px}
+  .tkt.none{display:grid;place-items:center;background:transparent;border:2px dashed rgba(243,230,200,.4);box-shadow:none;color:rgba(243,230,200,.7);
+    font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:19px;text-align:center}
+  .tkt.none:before,.tkt.none:after{display:none}
+  .tkt .line{display:flex;justify-content:space-between;align-items:baseline;font-family:'Limelight',serif;font-size:21px;letter-spacing:.05em;color:#5a1722}
+  .tkt .line small{font-family:'Special Elite',monospace;font-size:13px;letter-spacing:0;color:#2a1a1e}
+  .tkt .route{margin:5px 0 3px;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:12.5px;line-height:1.45;letter-spacing:.12em;text-transform:uppercase}
+  .tkt .route .w{border-bottom-width:1px}
+  .tkt .who{font-family:'Caveat',cursive;font-weight:700;font-size:28px;line-height:1.05;color:#1d2a4a;border-bottom:1px dashed rgba(42,26,30,.5);padding-bottom:5px}
+  .tkt h6{margin:9px 0 5px;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:#5a1722}
+  .row{display:flex;gap:5px}
+  .row.m{width:66%}
+  .bx{position:relative;flex:1;height:38px;display:grid;place-items:center;border:1.5px solid #5a1722;border-radius:3px;cursor:pointer;
+    font-family:'Special Elite',monospace;font-size:19px;line-height:1;padding-top:3px;background:rgba(255,255,255,.3)}
+  .bx:hover{background:rgba(255,255,255,.62)}
+  .bx.hole{color:transparent;cursor:default}
+  .bx.hole:after{content:'';position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:#2a170c;
+    box-shadow:inset 0 3px 5px rgba(0,0,0,.75)}
+  .chad{position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:#f6ead0;pointer-events:none;z-index:2;
+    animation:chad .55s ease-in forwards}
+  @keyframes chad{to{transform:translate(14px,70px) rotate(200deg);opacity:0}}
+  .clean{display:block;margin:9px 0 0 auto;padding:3px 0 0;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:#5a1722;border-bottom:1px solid #5a1722;opacity:.75}
+  .clean:hover{opacity:1}
+  .tkt.fresh{animation:fresh .5s}
+  @keyframes fresh{0%{transform:translateY(-16px) rotate(-2deg);opacity:.2}100%{transform:none;opacity:1}}
+  .dk-foot{display:flex;align-items:center;gap:18px;margin-top:14px}
+  .dk-msg{flex:1;min-height:54px;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:19.5px;line-height:1.32;color:#f8e7b8}
+  .bell{display:flex;align-items:center;gap:12px;padding:6px 20px 6px 10px;border:1px solid #f0c96a;border-radius:4px;color:#ffe6a0;
+    font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:15px;letter-spacing:.16em;text-transform:uppercase;background:rgba(0,0,0,.3)}
+  .bell svg{width:66px;height:52px;display:block}
+  .bell span{padding-top:3px}
+  .bell:hover{background:#f0c96a;color:#2a170c}
+  .bell:active svg{transform:translateY(2px)}
+  .punch{position:fixed;z-index:57;width:130px;height:90px;margin:-51px 0 0 -20px;pointer-events:none;display:none}
+  .punch.on{display:block}
+  .punch svg{width:100%;height:100%;display:block;overflow:visible}
+  .punch .h1,.punch .h2{transform-origin:48px 51px;transition:transform .07s}
+  .punch.bite .h1{transform:rotate(7deg)}.punch.bite .h2{transform:rotate(-7deg)}
+  .dk.tool .tkt:not(.none){cursor:none}.dk.tool .bx{cursor:none}
+  @media (max-width:900px){.tks{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="ceilG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cdbb93"/><stop offset="1" stop-color="#efe3c6"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b4226"/><stop offset=".45" stop-color="#80512f"/><stop offset="1" stop-color="#482b17"/></linearGradient>
+  <linearGradient id="woodD" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3d2414"/><stop offset=".5" stop-color="#5a371f"/><stop offset="1" stop-color="#361f11"/></linearGradient>
+  <linearGradient id="velG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f2c3b"/><stop offset="1" stop-color="#561621"/></linearGradient>
+  <linearGradient id="curG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#561621"/><stop offset=".5" stop-color="#93303f"/><stop offset="1" stop-color="#5c1823"/></linearGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#060b20"/><stop offset=".7" stop-color="#14244c"/><stop offset="1" stop-color="#22386a"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="clothG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbf7ee"/><stop offset="1" stop-color="#d3cab7"/></linearGradient>
+  <linearGradient id="shadeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a70"/><stop offset="1" stop-color="#c9382c"/></linearGradient>
+  <linearGradient id="floorS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></linearGradient>
+  <linearGradient id="glassS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#ffcf8a" stop-opacity=".1"/></linearGradient>
+  <radialGradient id="glowG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".72"/><stop offset=".35" stop-color="#ffb86a" stop-opacity=".22"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+  <radialGradient id="moonG"><stop offset="0" stop-color="#dfeaff" stop-opacity=".5"/><stop offset="1" stop-color="#dfeaff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="76%"><stop offset="0" stop-color="#1a0500" stop-opacity="0"/><stop offset=".62" stop-color="#1a0500" stop-opacity=".2"/><stop offset="1" stop-color="#0a0200" stop-opacity=".8"/></radialGradient>
+  <pattern id="carpet" width="80" height="60" patternUnits="userSpaceOnUse">
+    <rect width="80" height="60" fill="#103436"/>
+    <path d="M-40 30a40 40 0 0 1 80 0zM40 30a40 40 0 0 1 80 0z" fill="#164446"/>
+    <path d="M0 60a40 40 0 0 1 80 0z" fill="#1a4f50"/>
+    <path d="M12 60a28 28 0 0 1 56 0M26 60a14 14 0 0 1 28 0M-28 30a28 28 0 0 1 56 0M52 30a28 28 0 0 1 56 0M-14 30a14 14 0 0 1 28 0M66 30a14 14 0 0 1 28 0" stroke="#c79b3b" stroke-width="1.6" fill="none" opacity=".75"/>
+  </pattern>
+  <pattern id="tuft" width="56" height="48" patternUnits="userSpaceOnUse">
+    <path d="M0 0l28 24L0 48M56 0L28 24l28 24" stroke="#4a121c" stroke-width="2" fill="none" opacity=".55"/>
+    <circle cx="28" cy="24" r="4" fill="#4a121c"/><circle cx="0" cy="0" r="4" fill="#4a121c"/><circle cx="56" cy="0" r="4" fill="#4a121c"/><circle cx="0" cy="48" r="4" fill="#4a121c"/><circle cx="56" cy="48" r="4" fill="#4a121c"/>
+  </pattern>
+  <clipPath id="winClip"><rect x="300" y="162" width="280" height="306" rx="22"/><rect x="670" y="162" width="280" height="306" rx="22"/><rect x="1040" y="162" width="280" height="306" rx="22"/></clipPath>
+</defs>
+<defs id="railDefs"></defs>
+
+<!-- wall and ceiling -->
+<rect x="-1000" y="100" width="3600" height="630" fill="url(#woodG)"/>
+<g id="seams" stroke="#3d2414" stroke-width="2" opacity=".55"></g>
+<rect x="-1000" y="-200" width="3600" height="306" fill="url(#ceilG)"/>
+<path d="M-1000 62H2600M-1000 72H2600" stroke="#c79b3b" stroke-width="2" opacity=".7"/>
+<g id="fans"></g>
+<rect x="-1000" y="104" width="3600" height="20" fill="#3d2414"/><rect x="-1000" y="112" width="3600" height="3" fill="#d9ae48"/>
+
+<!-- the doors at each end: only a wide screen shows them -->
+<g id="ends"></g>
+
+<!-- the night outside -->
+<g id="frames"></g>
+<g clip-path="url(#winClip)">
+  <rect x="290" y="150" width="1040" height="330" fill="url(#nightG)"/>
+  <g id="wstars" fill="#eaf2ff"></g>
+  <circle cx="792" cy="212" r="74" fill="url(#moonG)"/><circle cx="792" cy="212" r="19" fill="#f3f0dc"/><circle cx="786" cy="207" r="4" fill="#dcd8c0"/><circle cx="798" cy="218" r="3" fill="#dcd8c0"/>
+  <g id="wfar"></g><g id="wmid"></g><g id="wlite"></g><g id="wnear"></g><g id="wflk" stroke="#fff" stroke-width="1.700" stroke-linecap="round" opacity=".6"></g>
+  <rect x="290" y="150" width="1040" height="330" fill="url(#glassS)"/>
+</g>
+<g id="windows" class="hot" fill="transparent"><rect x="300" y="162" width="280" height="150"/><rect x="670" y="162" width="280" height="150"/><rect x="1040" y="162" width="280" height="150"/></g>
+<g id="drapes" class="hot"></g>
+
+<!-- lamps on the wall, and a poster -->
+<g>
+  <circle cx="625" cy="236" r="120" fill="url(#glowG)"/><circle cx="995" cy="236" r="120" fill="url(#glowG)"/>
+  <path d="M597 256l28-66 28 66z" fill="#fff0c4"/><path d="M611 256l14-66 14 66" stroke="#e2b85c" stroke-width="2" fill="none"/><rect x="593" y="254" width="64" height="9" rx="4" fill="url(#brassG)"/><path d="M625 263v22" stroke="url(#brassG)" stroke-width="6"/>
+  <path d="M967 256l28-66 28 66z" fill="#fff0c4"/><path d="M981 256l14-66 14 66" stroke="#e2b85c" stroke-width="2" fill="none"/><rect x="963" y="254" width="64" height="9" rx="4" fill="url(#brassG)"/><path d="M995 263v22" stroke="url(#brassG)" stroke-width="6"/>
+  <path d="M625 330l22 34-22 34-22-34zM995 330l22 34-22 34-22-34z" fill="#4a2c18" stroke="#d9ae48" stroke-width="2"/>
+</g>
+<g id="poster" class="hot">
+  <rect x="66" y="134" width="170" height="178" fill="#2a170c"/><rect x="72" y="140" width="158" height="166" fill="#f3efe2"/>
+  <rect x="80" y="148" width="142" height="104" fill="#f6c56b"/>
+  <g stroke="#fbe3a6" stroke-width="5"><path d="M151 252L80 190M151 252L96 148M151 252L151 148M151 252L206 148M151 252L222 190"/></g>
+  <path d="M80 252l34-52 20 22 26-48 30 44 14-16 18 50z" fill="#3b5a8c"/><path d="M160 174l12 18-9-3-6 8-7-8z" fill="#f3efe2"/>
+  <rect x="80" y="148" width="142" height="104" fill="none" stroke="#5a1722" stroke-width="2"/>
+  <text x="153" y="284" class="postT">ORVO</text><text x="152" y="298" class="postS">BY THE NIGHT TRAIN</text>
+</g>
+
+<!-- the long seat under the windows -->
+<rect x="262" y="640" width="1096" height="82" fill="url(#woodD)"/>
+<rect x="270" y="478" width="1080" height="136" rx="10" fill="url(#velG)"/>
+<rect x="270" y="478" width="1080" height="136" rx="10" fill="url(#tuft)"/>
+<rect x="262" y="468" width="1096" height="13" rx="6" fill="#4a2c18"/><rect x="262" y="472" width="1096" height="3" fill="#d9ae48"/>
+<rect x="262" y="604" width="1096" height="40" rx="9" fill="#5c1823"/><rect x="262" y="604" width="1096" height="8" rx="4" fill="#7c2532"/>
+
+<!-- floor -->
+<rect x="-1000" y="716" width="3600" height="14" fill="#24130a"/>
+<rect x="-1000" y="730" width="3600" height="170" fill="url(#carpet)"/>
+<rect x="-1000" y="730" width="3600" height="170" fill="url(#floorS)"/>
+<rect x="-1000" y="742" width="3600" height="5" fill="#c79b3b" opacity=".55"/>
+
+<!-- three passengers -->
+<g id="p-brandt" class="hot"><use href="#ch-brandt" x="315" y="262" width="250" height="325"/>
+  <g class="lid" fill="#f2d0b8"><ellipse cx="420" cy="408.250" rx="8" ry="5.600"/><ellipse cx="460" cy="408.250" rx="8" ry="5.600"/><path d="M412 409q8 3.500 16 0M452 409q8 3.500 16 0" stroke="#7d3a1f" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+  <rect x="330" y="290" width="220" height="282" fill="transparent"/></g>
+<g id="p-finch" class="hot"><use href="#ch-finch" x="685" y="262" width="250" height="325"/>
+  <g class="lid l2" fill="#dba57c"><ellipse cx="790" cy="404.500" rx="7.400" ry="5.400"/><ellipse cx="830" cy="404.500" rx="7.400" ry="5.400"/><path d="M783 405.500q7 3 14 0M823 405.500q7 3 14 0" stroke="#2a2320" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+  <rect x="700" y="290" width="220" height="282" fill="transparent"/></g>
+<g id="p-osei" class="hot"><use href="#ch-osei" x="1055" y="262" width="250" height="325"/>
+  <g class="lid l3" fill="#7d5038"><ellipse cx="1160" cy="407" rx="8" ry="5.600"/><ellipse cx="1200" cy="407" rx="8" ry="5.600"/><path d="M1152 408q8 3.500 16 0M1192 408q8 3.500 16 0" stroke="#1d1614" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+  <rect x="1070" y="290" width="220" height="282" fill="transparent"/></g>
+
+<!-- a passenger without a ticket -->
+<g id="cat" class="hot">
+  <path d="M1030 598q12-20-8-24" stroke="#23252e" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <ellipse id="catB" cx="998" cy="597" rx="36" ry="15" fill="#23252e"/>
+  <circle cx="972" cy="592" r="13" fill="#23252e"/><path d="M961 585l-1-14 10 8zM978 581l5-12 5 12z" fill="#23252e"/>
+  <path d="M966 594q4 3 8 0" stroke="#6b7083" stroke-width="1.600" fill="none" stroke-linecap="round"/>
+  <ellipse cx="985" cy="606" rx="9" ry="4" fill="#e9e6de"/>
+  <rect x="954" y="566" width="84" height="48" fill="transparent"/>
+</g>
+
+<!-- tables, and what is on them -->
+<g id="tables"></g>
+<g id="cake" class="hot">
+  <rect x="304" y="486" width="132" height="86" rx="3" fill="#fbf7ee"/><rect x="304" y="486" width="132" height="15" fill="#e9e0cc"/>
+  <path d="M364 486v86M304 530h132" stroke="#e98f84" stroke-width="8"/>
+  <path d="M364 486q-24-28-36-10t36 10q24-28 36-10t-36 10z" fill="#e98f84"/><circle cx="364" cy="484" r="6" fill="#d3766c"/>
+  <text x="402" y="556" class="boxT">THIS WAY UP</text><path d="M402 546v-12M397 539l5-6 5 6" stroke="#a04a44" stroke-width="2" fill="none"/>
+</g>
+<g>
+  <ellipse cx="478" cy="571" rx="21" ry="4" fill="#e3dccb"/><path d="M466 569q-3-12 0-17h24q3 5 0 17z" fill="#fff"/><path d="M490 555q9 2 5 10" stroke="#fff" stroke-width="3" fill="none"/>
+  <path class="steam" d="M474 548q-6-9 0-17M484 546q5-8 0-14" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".3"/>
+</g>
+<g id="plates" class="hot">
+  <ellipse cx="744" cy="570" rx="42" ry="8" fill="#fff"/><ellipse cx="744" cy="564" rx="42" ry="8" fill="#f1ece0"/><ellipse cx="744" cy="562" rx="29" ry="5" fill="#e0d8c6"/>
+  <path d="M770 556l34-12" stroke="url(#brassG)" stroke-width="4" stroke-linecap="round"/><ellipse cx="768" cy="557" rx="8" ry="5" fill="url(#brassG)"/>
+  <path d="M812 572q-5-19 0-22h50q5 3 0 22z" fill="#b5803a"/><path d="M812 558h50M818 550v22M830 550v22M842 550v22M854 550v22" stroke="#8a5a22" stroke-width="2"/>
+  <circle cx="826" cy="546" r="11" fill="#e3b46a"/><circle cx="846" cy="544" r="12" fill="#d9a558"/>
+  <path d="M872 572v-30h20v30z" fill="#fff" opacity=".3"/><path d="M872 556h20v16h-20z" fill="#7c2532" opacity=".7"/>
+</g>
+<g id="things" class="hot">
+  <path d="M1056 572v-36q0-11 11-11h48q11 0 11 11v36z" fill="#4a2a18"/><path d="M1076 525q15-17 30 0" stroke="#4a2a18" stroke-width="5" fill="none"/>
+  <rect x="1084" y="540" width="14" height="11" rx="2" fill="url(#brassG)"/>
+  <ellipse cx="1152" cy="571" rx="21" ry="4" fill="#e3dccb"/><path d="M1140 569q-3-12 0-17h24q3 5 0 17z" fill="#fff"/><ellipse cx="1152" cy="553" rx="11" ry="2.500" fill="#2a170c"/><path d="M1164 555q9 2 5 10" stroke="#fff" stroke-width="3" fill="none"/>
+  <path class="steam s2" d="M1148 546q-6-9 0-17M1158 544q5-8 0-14" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".3"/>
+  <path d="M1186 572l4-14q22-8 34 2 12-10 34-2l4 14q-24-6-38 2-14-8-38-2z" fill="#f6f1e6"/><path d="M1224 560v13" stroke="#b9ad8c" stroke-width="2"/>
+  <path d="M1196 564q10-3 20 0M1232 564q10-3 20 0" stroke="#9a9484" stroke-width="1.500" fill="none"/>
+</g>
+<g id="lamps"></g>
+<g id="lampHot" class="hot" fill="transparent"><rect x="500" y="478" width="72" height="96"/><rect x="870" y="478" width="72" height="96"/><rect x="1240" y="478" width="72" height="96"/></g>
+
+<!-- the guard -->
+<g id="vane" class="hot"></g>
+
+<!-- his desk, and the timetable above it -->
+<g id="tt" class="hot">
+  <rect x="1424" y="186" width="150" height="214" rx="4" fill="#5a1722"/><rect x="1430" y="192" width="138" height="202" rx="2" fill="none" stroke="#d9ae48" stroke-width="2"/>
+  <rect x="1438" y="200" width="122" height="186" fill="#f3efe2"/>
+  <text x="1499" y="224" class="ttT">ORVO LINE</text><text x="1500" y="238" class="ttS">NIGHT TRAIN</text>
+  <path d="M1446 248h106" stroke="#7c2532" stroke-width="1.500"/>
+  <g stroke="#3a2a2e" stroke-width="3.200"><path d="M1448 270h58M1448 296h34M1448 322h50M1448 348h28M1448 374h36"/></g>
+  <g stroke="#7c2532" stroke-width="4"><path d="M1526 270h26M1526 296h26M1526 322h26M1526 348h26M1526 374h26"/></g>
+  <rect x="1456" y="408" width="86" height="19" rx="3" fill="url(#brassG)"/><text x="1500" y="421.500" class="ttP">TIMETABLE</text>
+</g>
+<g id="desk" class="hot">
+  <rect x="1404" y="590" width="196" height="136" fill="url(#woodD)"/>
+  <rect x="1416" y="604" width="78" height="108" rx="3" fill="none" stroke="#d9ae48" stroke-width="1.600"/><rect x="1506" y="604" width="78" height="108" rx="3" fill="none" stroke="#d9ae48" stroke-width="1.600"/>
+  <circle cx="1486" cy="658" r="4.500" fill="url(#brassG)"/><circle cx="1514" cy="658" r="4.500" fill="url(#brassG)"/>
+  <path d="M1404 574v-24M1596 574v-24M1404 550h192" stroke="url(#brassG)" stroke-width="4" fill="none"/>
+  <rect x="1394" y="574" width="212" height="18" rx="4" fill="#7d4f2e"/><rect x="1394" y="574" width="212" height="5" rx="2" fill="#a06e44"/>
+  <g class="dtk" id="dt-brandt" transform="rotate(-9 1436 560)"><rect x="1410" y="546" width="54" height="27" rx="2" fill="#efd9a7" stroke="#8a7a4a"/></g>
+  <g class="dtk" id="dt-finch" transform="rotate(5 1450 560)"><rect x="1424" y="545" width="54" height="27" rx="2" fill="#ecbfae" stroke="#8a6a5a"/></g>
+  <g class="dtk" id="dt-osei"><rect x="1440" y="548" width="54" height="26" rx="2" fill="#c2d8b6" stroke="#6a8a5a"/></g>
+  <path d="M1500 573l32-22 7 6-27 21zM1503 575l36-9 2 8-34 6z" fill="#aab2c2"/><circle cx="1505" cy="571" r="6" fill="#6b7183"/>
+  <path d="M1548 573q0-24 20-24t20 24z" fill="url(#brassG)"/><rect x="1543" y="571" width="50" height="6" rx="3" fill="#7d5f1d"/><rect x="1565" y="540" width="6" height="10" fill="#c79b3b"/><circle cx="1568" cy="538" r="4.500" fill="#e6c268"/>
+</g>
+
+<rect x="-1000" y="-200" width="3600" height="1300" fill="url(#vig)" pointer-events="none"/>
+<rect id="dim" x="-1000" y="-200" width="3600" height="1300" fill="#050208" opacity="0" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="rail.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, WIN = [440, 810, 1180];
+  var heard = { brandt: 0, finch: 0, osei: 0 }, holes = { brandt: { h: [], m: [] }, finch: { h: [], m: [] }, osei: { h: [], m: [] } };
+  var briefed = false, done = false, busy = false, clackT = 0, rumble = null;
+  var TK = [
+    { id: 'brandt', who: 'Mrs Brandt', berth: 1, to: 'Lake Sarn', no: '0417', cls: 't1' },
+    { id: 'finch', who: 'Mr Finch', berth: 2, to: 'Orvo', no: '0418', cls: 't2' },
+    { id: 'osei', who: 'Doctor Osei', berth: 3, to: 'Pell', no: '0419', cls: 't3' }
+  ];
+  var HOURS = ['12', '1', '2', '3', '4', '5', '6'], MINS = ['00', '15', '30', '45'];
+
+  function rnd(i) { var x = Math.sin(i * 91.7 + 1.3) * 43758.5453; return x - Math.floor(x); }
+
+  /* the carriage is built here: window frames, curtains, what goes past outside, tables, lamps */
+  (function () {
+    var s = '', i, k, x, y, h, a, c, far = [[0, 392], [70, 350], [150, 402], [240, 322], [330, 408], [430, 356], [510, 398], [600, 310], [690, 404], [760, 366], [800, 392]];
+    $('#railDefs').innerHTML = RAIL.defs;
+    for (x = -980; x < 2600; x += 185) s += '<path d="M' + x + ' 124V716"/>';
+    $('#seams').innerHTML = s; s = '';
+    WIN.forEach(function (c) {
+      s += '<path d="M' + (c - 74) + ' 104a74 74 0 0 1 148 0z" fill="#e3d2a8"/>';
+      for (a = 20; a < 180; a += 20) s += '<path d="M' + c + ' 104L' + (c + Math.cos(a * Math.PI / 180) * 74).toFixed(1) + ' ' + (104 - Math.sin(a * Math.PI / 180) * 74).toFixed(1) + '" stroke="#c79b3b" stroke-width="1.6"/>';
+      s += '<path d="M' + (c - 74) + ' 104a74 74 0 0 1 148 0" fill="none" stroke="#c79b3b" stroke-width="2.5"/><circle cx="' + c + '" cy="104" r="14" fill="#c79b3b"/>';
+    });
+    $('#fans').innerHTML = s; s = '';
+    [-250, 1730].forEach(function (dx) {
+      s += '<rect x="' + (dx - 16) + '" y="150" width="212" height="570" fill="#3d2414"/><rect x="' + dx + '" y="166" width="180" height="554" rx="6" fill="url(#velG)"/>' +
+        '<rect x="' + (dx + 10) + '" y="176" width="160" height="534" rx="4" fill="none" stroke="#d9ae48" stroke-width="2"/>' +
+        '<rect x="' + (dx + 30) + '" y="198" width="120" height="170" rx="60" fill="url(#brassG)"/><rect x="' + (dx + 36) + '" y="204" width="108" height="158" rx="54" fill="url(#nightG)"/>' +
+        '<rect x="' + (dx + 30) + '" y="398" width="120" height="38" rx="4" fill="#f3efe2"/><text x="' + (dx + 92) + '" y="425" class="postT" style="font-size:23px">ORVO</text>' +
+        '<rect x="' + (dx + 158) + '" y="390" width="8" height="110" rx="4" fill="url(#brassG)"/>';
+    });
+    $('#ends').innerHTML = s; s = '';
+    WIN.forEach(function (c) { s += '<rect x="' + (c - 152) + '" y="150" width="304" height="332" rx="30" fill="url(#brassG)"/><rect x="' + (c - 145) + '" y="157" width="290" height="318" rx="26" fill="#24130a"/>'; });
+    $('#frames').innerHTML = s; s = '';
+    for (i = 0; i < 46; i++) s += '<circle cx="' + (300 + rnd(i) * 1020).toFixed(0) + '" cy="' + (166 + rnd(i + 50) * 150).toFixed(0) + '" r="' + (0.7 + rnd(i + 90) * 1.2).toFixed(1) + '" opacity="' + (0.4 + rnd(i + 130) * 0.5).toFixed(2) + '"/>';
+    $('#wstars').innerHTML = s; s = '';
+    /* far mountains: the same 800 over and over, so the loop cannot be seen */
+    for (k = 0; k < 3; k++) {
+      s += '<path d="M' + (290 + k * 800) + ' 490';
+      far.forEach(function (p) { s += 'L' + (290 + k * 800 + p[0]) + ' ' + p[1]; });
+      s += 'V490Z" fill="#1c2f5e"/>';
+      s += '<path d="M' + (290 + k * 800 + 240) + ' 322l20 22-8-2-6 9-7-8-8 9-6-8-9 4z" fill="#b9c9e8" opacity=".8"/>' +
+        '<path d="M' + (290 + k * 800 + 600) + ' 310l20 22-8-2-6 9-7-8-8 9-6-8-9 4z" fill="#b9c9e8" opacity=".8"/>';
+    }
+    $('#wfar').innerHTML = s; s = '';
+    for (k = 0; k < 3; k++) {
+      x = 290 + k * 700;
+      s += '<path d="M' + x + ' 430Q' + (x + 90) + ' 386 ' + (x + 180) + ' 420Q' + (x + 270) + ' 452 ' + (x + 360) + ' 414Q' + (x + 450) + ' 380 ' + (x + 540) + ' 418Q' + (x + 620) + ' 450 ' + (x + 700) + ' 430V490H' + x + 'Z" fill="#4a66a0"/>';
+    }
+    $('#wmid').innerHTML = s; s = '';
+    for (k = 0; k < 2; k++) {
+      x = 290 + k * 1300;
+      s += '<path d="M' + (x + 380) + ' 446v-24l17-13 17 13v24z" fill="#0a1226"/><rect x="' + (x + 392) + '" y="427" width="10" height="10" fill="#ffd98a"/>' +
+        '<circle cx="' + (x + 397) + '" cy="432" r="16" fill="#ffd98a" opacity=".18"/>' +
+        '<circle cx="' + (x + 1010) + '" cy="436" r="14" fill="#ffd98a" opacity=".2"/><circle cx="' + (x + 1010) + '" cy="436" r="3.2" fill="#ffe9ad"/>';
+    }
+    $('#wlite').innerHTML = s; s = '';
+    for (k = 0; k < 4; k++) {
+      for (i = 0; i < 9; i++) {
+        x = 290 + k * 600 + i * 66 + rnd(i + 7) * 30; h = 80 + rnd(i + 20) * 96; a = 15 + rnd(i + 40) * 9;
+        s += '<path d="M' + (x - a * 1.5).toFixed(0) + ' 478l' + (a * 0.9).toFixed(1) + ' -' + (h * 0.5).toFixed(0) + 'h-' + (a * 0.5).toFixed(1) + 'l' + (a * 1.1).toFixed(1) + ' -' + (h * 0.5).toFixed(0) +
+          'l' + (a * 1.1).toFixed(1) + ' ' + (h * 0.5).toFixed(0) + 'h-' + (a * 0.5).toFixed(1) + 'l' + (a * 0.9).toFixed(1) + ' ' + (h * 0.5).toFixed(0) + 'z" fill="#050a1a"/>';
+      }
+    }
+    s += '<rect x="290" y="458" width="2400" height="24" fill="#9db1d8"/>';
+    $('#wnear').innerHTML = s; s = '';
+    for (k = 0; k < 6; k++) for (y = 0; y < 6; y++) for (i = 0; i < 5; i++) {
+      x = 290 + k * 320 + rnd(i + 3) * 320; h = y * 100 + rnd(i + 11) * 100;
+      s += '<path d="M' + x.toFixed(0) + ' ' + h.toFixed(0) + 'l-17 5"/>';
+    }
+    $('#wflk').innerHTML = s; s = '';
+    WIN.forEach(function (c) {
+      [0, 1].forEach(function (f) {
+        s += '<g' + (f ? ' transform="translate(' + (2 * c) + ' 0) scale(-1 1)"' : '') + '>' +
+          '<path d="M' + (c - 146) + ' 158h76q-4 96-48 158l-28 8z" fill="url(#curG)"/>' +
+          '<path d="M' + (c - 146) + ' 318l26-6q22 34 16 84t-12 78h-30z" fill="url(#curG)"/>' +
+          '<path d="M' + (c - 128) + ' 164q-2 80-14 146M' + (c - 106) + ' 164q-4 86-32 146M' + (c - 86) + ' 164q-6 90-46 148M' + (c - 134) + ' 330q8 70 2 140M' + (c - 120) + ' 326q14 70 4 144" stroke="#3d0f17" stroke-width="2" fill="none" opacity=".7"/>' +
+          '<rect x="' + (c - 151) + '" y="309" width="36" height="12" rx="6" fill="url(#brassG)"/></g>';
+      });
+      s += '<path d="M' + (c - 159) + ' 136h318v32';
+      for (i = 0; i < 6; i++) s += 'q-26.5 17-53 0';
+      s += 'z" fill="url(#curG)"/><path d="M' + (c - 159) + ' 143h318" stroke="#d9ae48" stroke-width="2"/>';
+      for (i = 1; i < 6; i++) s += '<circle cx="' + (c - 159 + i * 53) + '" cy="171" r="4" fill="#d9ae48"/>';
+      s += '<rect x="' + (c - 150) + '" y="470" width="300" height="9" rx="4" fill="url(#brassG)"/>';
+    });
+    $('#drapes').innerHTML = s; s = '';
+    WIN.forEach(function (c) {
+      s += '<ellipse cx="' + c + '" cy="752" rx="150" ry="13" fill="#000" opacity=".3"/>' +
+        '<rect x="' + (c - 9) + '" y="690" width="18" height="54" fill="#24130a"/><ellipse cx="' + c + '" cy="746" rx="46" ry="9" fill="#24130a"/>' +
+        '<path d="M' + (c - 140) + ' 584H' + (c + 140) + 'L' + (c + 147) + ' 690';
+      for (i = 0; i < 7; i++) s += 'q-21 14-42 0';
+      s += 'Z" fill="url(#clothG)"/><path d="M' + (c - 84) + ' 592l-5 94M' + (c - 14) + ' 592v100M' + (c + 66) + ' 592l5 94" stroke="#b5aa93" stroke-width="2" opacity=".6"/>' +
+        '<rect x="' + (c - 144) + '" y="572" width="288" height="14" rx="5" fill="#fffdf6"/>';
+    });
+    $('#tables').innerHTML = s; s = '';
+    WIN.forEach(function (c, n) {
+      var lx = c + 96;
+      s += '<circle cx="' + lx + '" cy="506" r="104" fill="url(#glowG)" pointer-events="none"/>' +
+        '<g class="tlamp l' + (n + 1) + '" style="transform-origin:' + lx + 'px 572px">' +
+        '<ellipse cx="' + lx + '" cy="571" rx="18" ry="4.5" fill="url(#brassG)"/><rect x="' + (lx - 3) + '" y="520" width="6" height="52" fill="url(#brassG)"/>' +
+        '<path d="M' + (lx - 31) + ' 524l10-40h42l10 40z" fill="url(#shadeG)"/>' +
+        '<path d="M' + (lx - 31) + ' 524h62M' + (lx - 21) + ' 484h42" stroke="#d9ae48" stroke-width="2.5"/>' +
+        '<path d="M' + (lx - 26) + ' 527v6M' + (lx - 13) + ' 527v6M' + lx + ' 527v6M' + (lx + 13) + ' 527v6M' + (lx + 26) + ' 527v6" stroke="#d9ae48" stroke-width="2" stroke-linecap="round"/></g>';
+    });
+    $('#lamps').innerHTML = s;
+    $('#vane').innerHTML = RAIL.vane(150, 852) +
+      '<g class="lid l4" fill="#e6c6aa"><ellipse cx="135.9" cy="400.7" rx="5.6" ry="3.9"/><ellipse cx="164.1" cy="400.7" rx="5.6" ry="3.9"/>' +
+      '<path d="M130.5 401.3q5.4 2.4 10.8 0M158.7 401.3q5.4 2.4 10.8 0" stroke="#6b6e75" stroke-width="1.6" fill="none" stroke-linecap="round"/></g>' +
+      '<rect x="56" y="300" width="190" height="556" fill="transparent"/>';
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'orvo', storyTitle: 'The Night Train to Orvo', id: 'dining', no: 'II', title: 'The Dining Car',
+    go: 'Go through to the dining car',
+    intro: [
+      'Mail van, kitchen car, dining car, sleeping car, guard&rsquo;s van. The signal turned green, and the night train left Halm at ten to twelve. On time.',
+      'Now the train is climbing into the mountains. In the dining car three passengers are eating a late supper. Outside the windows there is only snow and the dark.',
+      '&ldquo;All three want a night call,&rdquo; says Mr Vane. &ldquo;That is your next job.&rdquo;'
+    ],
+    exit: {"next":"arrival","w":{"abf1d3a4":"30fa3938"}}, tags: {"brandt":["87898c12"],"finch":["544ec190"],"osei":["644645ab"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var TABLE = '<h4>Orvo Line</h4><p class="sub">Night train</p><table>' +
+    '<tr><td>Halm Junction</td><td>leaves</td><td>23.50</td></tr>' +
+    '<tr><td>Dorn</td><td>stops</td><td>02.30</td></tr>' +
+    '<tr><td>Lake Sarn</td><td>stops</td><td>03.55</td></tr>' +
+    '<tr><td>Pell</td><td>stops</td><td>05.25</td></tr>' +
+    '<tr><td>Orvo</td><td>arrives</td><td>07.00</td></tr></table>' +
+    '<p>The train stops for five minutes at each station. It does not wait for anybody.</p>';
+
+  function left() { return TK.filter(function (t) { return !heard[t.id]; }).map(function (t) { return t.who; }); }
+  function list(a) { return a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1] : a[0]; }
+  function hints() {
+    if (done) return null;
+    if (!briefed) return ['vane', [
+      'Mr Vane is standing on the left, by the poster. Click on him and listen to the end.',
+      'He tells you the whole job: three passengers, three tickets, and two holes in each ticket.'
+    ]];
+    if (left().length) return ['ask', [
+      'Three passengers are sitting at the tables. Click on each one and keep clicking Next. At the end, take the ticket.',
+      'You still need a ticket from ' + list(left()) + '.'
+    ]];
+    return ['punch', [
+      'Click on Mr Vane&rsquo;s desk, at the right-hand end of the car. Every ticket needs two holes: one for the hour and one for the minutes. Everything the passengers said is in your Notebook.',
+      '&ldquo;Past&rdquo; and &ldquo;to&rdquo; are not the same. &ldquo;A quarter past&rdquo; is fifteen minutes after the hour. &ldquo;A quarter to&rdquo; is fifteen minutes before the next hour. One passenger did not give a time at all, only the name of a station. Look at the timetable above the desk.',
+      'Think of a clock. At &ldquo;a quarter to nine&rdquo; it is not nine yet: the hour is still 8, and the minutes are 45. Do the same with the times the passengers gave you. When all three tickets have two holes, ring the bell.'
+    ]];
+  }
+  function pips() { ER.pips(3 - left().length + (done ? 1 : 0), 4); }
+  function begin() {
+    rumble = RAIL.snd.loop({ type: 'lowpass', f: 130, q: 0.7, vol: 0.09 });
+    clackT = setInterval(function () { RAIL.snd.clack(0.5); }, 1180);
+    pips();
+    ER.narrate([
+      'The dining car smells of soup and coal smoke. The little lamps shake when the train goes over a bridge.',
+      'Mr Vane is standing under the poster with his watch. His desk is at the other end of the car.'
+    ]);
+  }
+
+  /* looking at things */
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#windows', null, 'Snow, black trees, and now and then one small light. Somebody up there is still awake.');
+  thing('#drapes', 'curtain', null);
+  thing('#lampHot', 'lampshade', 'A little lamp with a red shade. There is one on every table. They all shake together.');
+  thing('#poster', null, 'ORVO, BY THE NIGHT TRAIN. In the picture it is not snowing.');
+  thing('#cake', null, 'A white box with a pink ribbon. THIS WAY UP, it says. Mrs Brandt is watching your hands.');
+  thing('#plates', null, 'Two empty soup plates. Mr Finch is thinking about a third.');
+  thing('#things', null, 'A doctor&rsquo;s bag, a book and black coffee. Doctor Osei is not going to sleep much tonight.');
+  thing('#cat', 'stowaway', 'The station cat from Halm. It has no ticket. On a train, that is called a stowaway.');
+  $('#tt').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: TABLE, cls: 'timetable', clue: { id: 'timetable', title: 'Timetable', kind: 'Railway paper' } });
+  });
+  $('#desk').addEventListener('click', function () { if (!busy) openDesk(); });
+
+  $('#vane').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.vane;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('vane'),
+      lines: [
+        'A night call is a knock on your door in the night. The passenger tells us the time. We knock at that time. Not a minute before, and not a minute after.',
+        'Go to each table. Ask when they want their call, and take their ticket.',
+        'Then go to my desk, at the other end of the car. The punch is there. Make two holes in each ticket: one for the hour and one for the minutes.',
+        'On the Orvo Line the time goes into the ticket. Then nobody can argue about it at four in the morning.',
+        'Ring the bell on the desk when you are ready. I look at every hole.'
+      ],
+      clue: { id: 'vane2', title: 'Mr Vane: night calls', kind: 'Orders' },
+      done: function (seen) { if (seen) briefed = true; }
+    });
+  });
+
+  function passenger(k, title, lines) {
+    $('#p-' + k).addEventListener('click', function () {
+      if (busy) return;
+      var c = CAST[k];
+      ER.talk({
+        who: c.who, role: c.role, face: FACE(k), last: heard[k] ? 'Close' : 'Take the ticket', lines: lines, clue: { id: k, title: title },
+        done: function (seen) {
+          if (!seen || heard[k]) return;
+          heard[k] = 1; pips(); ER.sfx.paper();
+          $('#dt-' + k).classList.add('on');
+          if (left().length) ER.say(c.who + ' gives you a ticket. You put it on Mr Vane&rsquo;s desk.');
+          else { $('#desk').classList.add('ready'); ER.say('That is all three tickets. They are on Mr Vane&rsquo;s desk, next to the punch.', 5000); }
+        }
+      });
+    });
+  }
+  passenger('brandt', 'Mrs Brandt, table 1', [
+    'Good evening. Please do not touch the box. It is a wedding cake. It has three tiers, and I carried it onto this train myself.',
+    'My sister gets married at Lake Sarn tomorrow. The wedding can start without me. It cannot start without the cake.',
+    'So wake me at a quarter to four, please. Here is my ticket.'
+  ]);
+  passenger('finch', 'Mr Finch, table 2', [
+    'Sit down, sit down! Do you want some soup? I had it twice. It is very good soup.',
+    'I am going all the way to Orvo. But the best sausages in these mountains are at Dorn. A man sells them on the platform. He comes out for the night train, even in the snow.',
+    'So wake me when the train stops at Dorn. I do not know the time. Look at the timetable. It is on the wall, above the desk. Here is my ticket.'
+  ]);
+  passenger('osei', 'Doctor Osei, table 3', [
+    'I am Doctor Osei. I get off at Pell. A baby is coming there tonight. Or tomorrow. Or next week.',
+    'Babies do not read timetables. But I must be on time. Wake me at a quarter past five, please.',
+    { note: 'She looks at the cat on the seat next to her.', a: 'That is not my cat. It was here when I sat down. Here is my ticket.' }
+  ]);
+
+  /* ---------- the desk: punch the tickets, ring the bell ---------- */
+  var PUNCH = '<svg viewBox="0 0 130 90"><path class="h1" d="M44 40L110 9q16-3 14 13L58 58z" fill="#8a2a38" stroke="#4f1420" stroke-width="2"/>' +
+    '<path class="h2" d="M44 60L108 84q16 3 14-13L58 44z" fill="#6a1c28" stroke="#4f1420" stroke-width="2"/>' +
+    '<path fill-rule="evenodd" d="M-2 36q0-12 13-12h38q11 0 11 11v32q0 11-11 11H11Q-2 78-2 66zM20 37a14 14 0 1 0 .01 0z" fill="#c9cfdb" stroke="#4a5163" stroke-width="2.5"/>' +
+    '<path d="M8 30h36" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>' +
+    '<circle cx="20" cy="51" r="14" fill="none" stroke="#2a2f3d" stroke-width="3"/>' +
+    '<circle cx="48" cy="51" r="6.5" fill="#4a5163"/><circle cx="48" cy="51" r="2.5" fill="#c9cfdb"/></svg>';
+  var BELL = '<svg viewBox="0 0 90 70"><defs><linearGradient id="bellG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient></defs>' +
+    '<rect x="41" y="6" width="8" height="14" fill="#c79b3b"/><circle cx="45" cy="7" r="6" fill="#e6c268"/><path d="M12 58q0-42 33-42t33 42z" fill="url(#bellG)"/>' +
+    '<path d="M24 50q0-24 16-28" stroke="#fff6cf" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/><rect x="5" y="55" width="80" height="9" rx="4" fill="#7d5f1d"/></svg>';
+
+  function cell(v) { return '<span class="bx" data-v="' + v + '">' + v + '</span>'; }
+  function ticket(t) {
+    return '<div class="line"><b>Orvo Line</b><small>No. ' + t.no + '</small></div>' +
+      '<div class="route">Night train &middot; berth ' + t.berth + '<br>Halm Junction to ' + t.to + '</div><div class="who">' + t.who + '</div>' +
+      '<h6>Night call &middot; hour</h6><div class="row h" data-r="h">' + HOURS.map(cell).join('') + '</div>' +
+      '<h6>Minutes</h6><div class="row m" data-r="m">' + MINS.map(cell).join('') + '</div>' +
+      '<button type="button" class="clean">take a clean ticket</button>';
+  }
+  function openDesk() {
+    var box = ER.el('div', 'dk'), tool = ER.el('div', 'punch', PUNCH), s, msg;
+    s = '<h5>Mr Vane&rsquo;s desk</h5><p class="say">Make two holes in each ticket: one for the hour and one for the minutes. Then ring the bell.</p><div class="tks">';
+    TK.forEach(function (t) {
+      s += heard[t.id] ? '<div class="tkt ' + t.cls + '" data-id="' + t.id + '">' + ticket(t) + '</div>'
+                       : '<div class="tkt none"><span>' + t.who + ' still has this ticket.</span></div>';
+    });
+    s += '</div><div class="dk-foot"><div class="dk-msg"></div><button type="button" class="bell">' + BELL + '<span>Ring the bell</span></button></div>';
+    box.innerHTML = s; msg = box.querySelector('.dk-msg');
+    ER.glossIn(box, '.say, .route');
+    function say(t) { msg.innerHTML = ER.gloss(t); }
+    function paint(card) {
+      var id = card.getAttribute('data-id');
+      ER.$$('.bx', card).forEach(function (b) {
+        b.classList.toggle('hole', holes[id][b.parentNode.getAttribute('data-r')].indexOf(b.getAttribute('data-v')) >= 0);
+      });
+    }
+    function clean(id) {
+      var card = box.querySelector('.tkt[data-id=' + id + ']');
+      holes[id] = { h: [], m: [] }; paint(card);
+      card.classList.remove('fresh'); void card.offsetWidth; card.classList.add('fresh'); ER.sfx.paper();
+    }
+    ER.$$('.tkt[data-id]', box).forEach(paint);
+
+    function follow(e) {
+      var over = !done && e.target.closest && e.target.closest('.tkt[data-id]') && !e.target.closest('.clean');
+      tool.style.left = e.clientX + 'px'; tool.style.top = e.clientY + 'px';
+      tool.classList.toggle('on', !!over); box.classList.toggle('tool', !!over);
+    }
+    box.addEventListener('pointermove', follow);
+    box.addEventListener('pointerdown', follow);
+    box.addEventListener('pointerleave', function () { tool.classList.remove('on'); box.classList.remove('tool'); });
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.bx') : null, c = e.target.closest ? e.target.closest('.clean') : null, id, ch;
+      if (done) return;
+      if (c) { clean(c.parentNode.getAttribute('data-id')); say(''); return; }
+      if (!b || b.classList.contains('hole')) return;
+      id = b.parentNode.parentNode.getAttribute('data-id');
+      holes[id][b.parentNode.getAttribute('data-r')].push(b.getAttribute('data-v'));
+      b.classList.add('hole'); RAIL.snd.punch(); say('');
+      ch = ER.el('i', 'chad'); b.appendChild(ch);
+      setTimeout(function () { if (ch.parentNode) ch.parentNode.removeChild(ch); }, 600);
+      tool.classList.add('bite'); setTimeout(function () { tool.classList.remove('bite'); }, 150);
+    });
+    box.querySelector('.bell').addEventListener('click', function () {
+      var bad, cand;
+      RAIL.snd.ding();
+      if (done) return;
+      if (left().length) { say('&ldquo;I count three passengers,&rdquo; says Mr Vane. &ldquo;I do not count three tickets.&rdquo;'); return; }
+      bad = TK.filter(function (t) { return !holes[t.id].h.length || !holes[t.id].m.length; });
+      if (bad.length) { ER.shake(box.querySelector('.tks')); say('&ldquo;Two holes in every ticket,&rdquo; says Mr Vane. &ldquo;One for the hour. One for the minutes.&rdquo;'); return; }
+      bad = TK.filter(function (t) { return holes[t.id].h.length > 1 || holes[t.id].m.length > 1; });
+      if (bad.length) { say('&ldquo;Too many holes,&rdquo; says Mr Vane. &ldquo;' + bad[0].who + ' cannot wake up twice. Take a clean ticket.&rdquo;'); return; }
+      cand = TK.map(function (t) { return holes[t.id].h[0] + '.' + holes[t.id].m[0]; });
+      if (ER.exit([cand.join('|')], { quiet: true, delay: 9000 })) {
+        done = busy = true; pips(); tool.classList.remove('on'); box.classList.remove('tool'); $('#desk').classList.remove('ready');
+        setTimeout(ER.sfx.ok, 500);
+        say('Mr Vane holds each ticket up to the lamp. Three tickets, six holes. He puts them in his pocket and says nothing.');
+        setTimeout(function () { ER.closeAll(); night(); }, 3400);
+        return;
+      }
+      bad = TK.filter(function (t, i) { return !ER.check(t.id, cand[i]); });
+      ER.sfx.no();
+      say('Mr Vane holds each ticket up to the lamp. He tears up ' + (bad.length === 3 ? 'all three' : list(bad.map(function (t) { return t.who + '&rsquo;s'; }))) +
+        ' and gives you ' + (bad.length > 1 ? 'clean ones' : 'a clean one') + '. &ldquo;That is not the right time. Ask again, and listen to every word.&rdquo;');
+      bad.forEach(function (t) { clean(t.id); });
+    });
+    document.body.appendChild(tool);
+    ER.open('ov-lock', box, function () { if (tool.parentNode) tool.parentNode.removeChild(tool); });
+  }
+  function night() {
+    $('#dim').setAttribute('opacity', 0.6);
+    ER.say('The lamps go down. The train climbs on through the snow. You have three doors to knock on before morning.', 5200);
+    setTimeout(function () { clearInterval(clackT); if (rumble) rumble.stop(); }, 4600);
+  }
+})();
+</script>
+</body>
+</html>

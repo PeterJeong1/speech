@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ghost Story · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-ghost.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{position:relative;color:#dfe8df;font-family:'EB Garamond',Georgia,serif;-webkit-user-select:none;user-select:none;overflow-x:hidden;
+    background:#161b18;
+    background-image:radial-gradient(ellipse 760px 470px at 50% -30px,rgba(244,255,233,.3),rgba(244,255,233,.07) 55%,transparent 76%),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 2px,transparent 2px 62px,rgba(0,0,0,.09) 62px 64px,transparent 64px 124px),
+      linear-gradient(#3d4a41,#232b26 46%,#141815)}
+  /* the bare bulb */
+  .bulb{position:absolute;left:50%;top:0;width:2px;height:54px;margin-left:-1px;background:#0a0f0c;pointer-events:none}
+  .bulb i{position:absolute;left:-11px;top:54px;width:24px;height:31px;border-radius:50% 50% 46% 46%/42% 42% 58% 58%;background:#f4ffe9;
+    box-shadow:0 0 34px 12px rgba(244,255,233,.5),0 0 120px 50px rgba(244,255,233,.16);animation:bulb 6s steps(1,end) infinite}
+  .bulb b{position:absolute;left:-6px;top:46px;width:14px;height:11px;background:#2a2f2b;border-radius:2px}
+  @keyframes bulb{0%,38%,42%,44%,71%,73%,100%{opacity:1}40%,43%,72%{opacity:.28}}
+  /* a line of cold light along the floor */
+  .under{position:fixed;left:0;right:0;bottom:0;height:5px;background:#e6fbff;box-shadow:0 0 46px 22px rgba(223,246,255,.2);pointer-events:none;
+    animation:under 6s steps(1,end) infinite}
+  @keyframes under{0%,38%,42%,44%,71%,73%,100%{opacity:.85}40%,43%,72%{opacity:.4}}
+  .back{position:fixed;left:14px;top:12px;height:36px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(255,255,255,.24);z-index:3;
+    background:rgba(8,12,10,.62);color:#e9efe6;border-radius:3px;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#cfeee0;color:#cfeee0}
+  header{text-align:center;padding:104px 20px 16px}
+  h1{margin:0;font-family:'Rock Salt',cursive;font-weight:normal;font-size:clamp(34px,5vw,56px);letter-spacing:.02em;color:#eef5ea;line-height:1.3;
+    text-shadow:0 0 26px rgba(223,246,255,.28)}
+  header p{margin:16px 0 0;font-family:'Special Elite',monospace;font-size:17px;color:#b9c5b8}
+  main{max-width:1160px;margin:0 auto;padding:22px 24px 24px;display:flex;flex-wrap:wrap;justify-content:center;gap:44px 40px}
+  /* each story hangs on a door knob, like a DO NOT DISTURB card */
+  .card{position:relative;display:block;width:300px;padding:112px 26px 26px;border:0;text-align:left;color:#2b2a26;cursor:pointer;font:inherit;
+    background:#e9e6da linear-gradient(172deg,#f3f1e6,#d6d2c2);border-radius:150px 150px 8px 8px/104px 104px 8px 8px;
+    box-shadow:0 18px 36px rgba(0,0,0,.55);transform-origin:50% 44px;transition:transform .25s}
+  .card:nth-child(3n+1){transform:rotate(-2.2deg)}.card:nth-child(3n+2){transform:rotate(1.6deg)}.card:nth-child(3n){transform:rotate(-.8deg)}
+  .card:hover{transform:rotate(0)}
+  .knob{position:absolute;left:50%;top:14px;width:62px;height:62px;margin-left:-31px;border-radius:50%;
+    background:radial-gradient(circle at 36% 32%,#d8c98a,#8a7436 58%,#4a3d18);box-shadow:inset 0 0 0 5px rgba(20,24,20,.55),0 0 0 7px #1c221e}
+  .knob:after{content:'';position:absolute;left:50%;top:60px;width:5px;height:24px;margin-left:-2.5px;background:#1c221e;border-radius:0 0 3px 3px}
+  .dnd{display:block;margin:0 0 10px;font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.3em;text-align:center;color:#8c2f24;
+    border-top:1.5px solid #8c2f24;border-bottom:1.5px solid #8c2f24;padding:5px 0 4px}
+  .card h2{margin:0 0 9px;font-family:'Special Elite',monospace;font-weight:normal;font-size:24px;line-height:1.22}
+  .stars{font-size:24px;letter-spacing:3px;color:#5d6a8c;line-height:1}
+  .meta{margin:10px 0 11px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#6d6a5c}
+  .card p{margin:0;font-size:19px;line-height:1.38}
+  .stamp{position:absolute;right:14px;bottom:14px;padding:3px 10px 2px;border:3px solid;font-family:'Oswald',sans-serif;font-weight:700;font-size:14px;
+    letter-spacing:.18em;transform:rotate(-8deg);opacity:.86;display:none;background:rgba(233,230,218,.8)}
+  .card.going .stamp{display:block;color:#8c2f24}
+  .card.solved .stamp{display:block;color:#3d5a8c}
+  .card.going,.card.solved{padding-bottom:58px}
+  .more{width:300px;min-height:300px;display:grid;place-items:center;padding:112px 26px 26px;border:2px dashed rgba(207,238,224,.3);color:rgba(207,238,224,.58);
+    border-radius:150px 150px 8px 8px/104px 104px 8px 8px;font-family:'Special Elite',monospace;font-size:17px;line-height:1.5;text-align:center}
+  footer{max-width:1160px;margin:0 auto;padding:14px 24px 60px;font-family:'Special Elite',monospace;font-size:15px;color:#9aa69a;text-align:center;line-height:1.7}
+  footer b{color:#cfeee0;font-weight:normal;letter-spacing:2px}
+  @media (prefers-reduced-motion:reduce){.bulb i,.under{animation:none}}
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<div class="bulb"><b></b><i></i></div>
+<header>
+  <h1>Ghost Story</h1>
+  <p>Nobody in here will hurt you. Somebody in here is still waiting.</p>
+</header>
+<main id="cards"></main>
+<footer><b>&#9733;</b> a short one for a first try &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;</b> a full night &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> long, and nobody holds your hand</footer>
+<div class="under"></div>
+
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"room13","title":"Room 13 Is Not on the Plan","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"Every night at ten past nine, a bell rings for Room 13. The Swan Hotel has no Room 13. It says so on the plan.","rooms":4,"first":"lobby.html","firstId":"lobby","last":"morning"}]), box = document.getElementById('cards');
+  Shelf.init();
+  STORIES.forEach(function (s) {
+    var st = Shelf.status('ghost', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'card ' + st.state; b.setAttribute('data-story', s.id);
+    b.innerHTML = '<span class="knob"></span><span class="dnd">Please knock</span><h2></h2><div class="stars"></div><div class="meta"></div><p></p><span class="stamp"></span>';
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('.stars').textContent = Shelf.stars(s.stars);
+    b.querySelector('.stars').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.meta').textContent = s.minutes + ' min · ' + s.rooms + ' rooms' + (s.level ? ' · level ' + s.level : '');
+    b.querySelector('p').textContent = s.blurb;
+    b.querySelector('.dnd').textContent = st.state === 'solved' ? 'Do not disturb' : 'Please knock';
+    b.querySelector('.stamp').textContent = st.state === 'solved' ? 'AT PEACE' : 'UNFINISHED';
+    b.addEventListener('click', function () { Shelf.open('ghost', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 4) {
+    var m = document.createElement('div'); m.className = 'more'; m.textContent = 'This room is still being aired. Another story will move in soon.';
+    box.appendChild(m);
+  }
+})();
+</script>
+</body>
+</html>

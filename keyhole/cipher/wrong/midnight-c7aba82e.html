@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Midnight · Wrong Number</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#06080b;--accent:#f4e04d;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime','Special Elite',monospace;
+    --tc-bg:rgba(5,6,9,.94);--tc-ink:#f1eee2;--cap-bg:rgba(6,8,11,.93);--cap-ink:#f1eee2;--panel:#15161a;--face-bg:#2a3038;--q-ink:#f4e04d;--fade:#000;--hud-bg:rgba(6,8,11,.74)}
+  .tc-room{letter-spacing:.26em;font-size:clamp(40px,6.4vw,86px)}
+  .mk{font-family:'Playfair Display',serif;font-weight:900;font-size:27px;letter-spacing:9px;fill:#3a2a08;text-anchor:middle}
+  #vdoor{transform-origin:420px 465px;transition:transform 2.6s cubic-bezier(.45,.05,.2,1)}
+  .open #vdoor{transform:scaleX(.07) skewY(-7deg)}
+  .open #vhandle{pointer-events:none}
+  #vlev{transform-origin:1010px 600px;transition:transform .5s}
+  .pulled #vlev{transform:rotate(58deg)}
+  #vlamps circle{fill:#1b1f25;transition:fill .35s}
+  .green #vlamps circle{fill:#5dff9a}
+  #blue{opacity:0}
+  .police #blue{animation:blue 1.16s steps(1,end) infinite}
+  @keyframes blue{0%{opacity:.17}28%{opacity:0}50%{opacity:.11}64%{opacity:0}}
+  #bulbG{animation:bulb 5.4s steps(1,end) infinite}
+  @keyframes bulb{0%{opacity:1}71%{opacity:.88}74%{opacity:1}}
+  .gem{animation:gem 2.6s steps(1,end) infinite}
+  .gem.g2{animation-delay:-.9s}.gem.g3{animation-delay:-1.7s}
+  @keyframes gem{0%{opacity:1}50%{opacity:.35}}
+
+  /* the last word from the telephone exchange */
+  .done{position:fixed;left:3vw;top:68px;z-index:34;width:min(440px,92vw);padding:16px 22px 15px;display:none;background:#12130d;border:3px solid #0a0a08;border-radius:6px;
+    box-shadow:0 0 0 6px #4b5057,0 20px 60px rgba(0,0,0,.7);color:#f4d94a;font-family:'VT323',monospace;font-size:24px;line-height:1.08;text-shadow:0 0 6px rgba(244,217,74,.4)}
+  .done.on{display:block}
+  .done p{margin:0 0 9px}
+  .done .stamp{position:absolute;right:-20px;top:-24px;padding:5px 14px 2px;border:4px solid #c8372d;color:#c8372d;background:#f1ede1;font-family:'Stardos Stencil',serif;font-weight:700;font-size:23px;
+    letter-spacing:.12em;transform:rotate(6deg);text-shadow:none;box-shadow:0 6px 14px rgba(0,0,0,.5)}
+  .done .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+  .done .btn{font-size:13px;padding:8px 13px;text-shadow:none}
+  .done small{display:block;margin-top:12px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.75;text-shadow:none;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit;letter-spacing:inherit;text-transform:inherit}
+
+  /* a message of your own */
+  .own{width:min(820px,94vw);max-height:84vh;overflow:auto;background:#f1ede1;color:#1c1b18;padding:24px 34px 20px;border-top:8px solid #141518;box-shadow:0 26px 70px rgba(0,0,0,.6);
+    font-family:'Courier Prime',monospace;-webkit-user-select:text;user-select:text}
+  .own h4{margin:0 0 2px;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:#6d685c}
+  .own h3{margin:0 0 10px;font-family:'Bebas Neue',sans-serif;font-weight:normal;font-size:36px;letter-spacing:.04em;line-height:1}
+  .own p{margin:0 0 9px;font-size:16.5px;line-height:1.42}
+  .own label{display:block;margin:10px 0 4px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:#4d4a42}
+  .own textarea{display:block;width:100%;min-height:76px;font-family:'Courier Prime',monospace;font-size:18px;line-height:1.4;padding:8px 12px;border:1px solid #6d685c;border-radius:0;background:#fff;color:#1c1b18;
+    resize:vertical;-webkit-user-select:text;user-select:text}
+  .own-out{min-height:78px;padding:10px 14px 9px;background:#12130d;color:#f4d94a;font-family:'VT323',monospace;font-size:28px;line-height:1.12;word-break:break-word;-webkit-user-select:none;user-select:none}
+  .own-out i{font-style:normal;cursor:pointer}
+  .own-out i:hover{background:rgba(244,217,74,.4)}
+  .own-out i.gone{color:transparent;background:rgba(244,217,74,.22);box-shadow:inset 0 0 0 1px rgba(244,217,74,.6)}
+  .own-out em{font-style:normal;opacity:.4}
+  .own-say{margin:10px 0 0;min-height:40px;font-size:17px}
+  .own-say b{font-family:'Caveat',cursive;font-weight:700;font-size:36px;line-height:.7;letter-spacing:.08em;color:#c8372d;vertical-align:-3px}
+  .own .foot{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .own .foot span{flex:1;font-size:14px;color:#6d685c}
+  .own .btn{--accent:#141518}.own .btn:hover:not([disabled]){color:#f1ede1}
+  .own .w:hover{color:#c8372d}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.own .foot,.own textarea,.own label,.own-say{display:none!important}
+    .own{box-shadow:none;max-height:none;width:auto;overflow:visible;background:#fff}
+    .own-out{background:#fff;color:#000;border:1px solid #000}
+    .own-out i.gone{background:#fff;box-shadow:none;border-bottom:2px solid #000}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a130f"/><stop offset="1" stop-color="#183024"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8d98a6"/><stop offset=".35" stop-color="#5b646f"/><stop offset="1" stop-color="#2b3138"/></linearGradient>
+  <linearGradient id="backG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a525c"/><stop offset="1" stop-color="#2a3038"/></linearGradient>
+  <linearGradient id="brassL" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a26"/><stop offset=".3" stop-color="#e6c873"/><stop offset=".55" stop-color="#b08a35"/><stop offset=".78" stop-color="#f0d98f"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <radialGradient id="glowG"><stop offset="0" stop-color="#fff0c0" stop-opacity=".75"/><stop offset=".3" stop-color="#ffd98a" stop-opacity=".22"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".9"/></radialGradient>
+  <pattern id="wpaper" width="70" height="90" patternUnits="userSpaceOnUse"><path d="M35 8q13 18 0 34q-13-16 0-34zM0 53q13 18 0 34M70 53q-13 18 0 34" fill="none" stroke="#2a5743" stroke-width="2.200" opacity=".5"/></pattern>
+  <clipPath id="inC"><rect x="420" y="70" width="760" height="790"/></clipPath>
+</defs>
+
+<!-- the back wall of the shop -->
+<rect x="-1000" y="-500" width="3600" height="1300" fill="url(#wallG)"/><rect x="-1000" y="-500" width="3600" height="1300" fill="url(#wpaper)"/>
+<rect x="-1000" y="700" width="3600" height="170" fill="#22150c"/><rect x="-1000" y="696" width="3600" height="12" fill="#3a2416"/>
+<rect x="-1000" y="866" width="3600" height="600" fill="#120b06"/>
+<rect x="196" y="236" width="118" height="232" fill="#2a1a10"/><rect x="207" y="247" width="96" height="210" fill="#efe8d2"/><path d="M226 268h58" stroke="#1c1b18" stroke-width="5"/>
+<g stroke="#6d685c" stroke-width="2"><path d="M216 290h22M246 290h48M216 303h20M246 303h48M216 316h20M246 316h48M216 329h16M246 329h48M216 342h20M246 342h48M216 355h20M246 355h48M216 368h24M246 368h48M216 381h20M246 381h48M216 394h20M246 394h48M216 407h20M246 407h48M216 420h20M246 420h48M216 433h22M246 433h48"/></g>
+
+<!-- inside the strongroom -->
+<g clip-path="url(#inC)">
+  <rect x="420" y="70" width="760" height="790" fill="#1a1e24"/>
+  <path d="M420 70L520 132V744L420 860Z" fill="#30373f"/><path d="M1180 70L1080 132V744L1180 860Z" fill="#262c33"/>
+  <rect x="520" y="132" width="560" height="612" fill="url(#backG)"/><path d="M420 70H1180L1080 132H520Z" fill="#23282e"/><path d="M420 860L520 744H1080L1180 860Z" fill="#14171b"/>
+  <g stroke="#1a1e24" stroke-width="3" opacity=".7"><path d="M520 132V744M1080 132V744M520 744H1080M660 132V744M940 132V744"/></g>
+  <!-- shelves, trays, tin boxes -->
+  <g fill="#14171b"><rect x="530" y="268" width="170" height="9"/><rect x="530" y="392" width="170" height="9"/><rect x="530" y="516" width="170" height="9"/><rect x="912" y="268" width="160" height="9"/><rect x="912" y="392" width="160" height="9"/></g>
+  <g id="trays"></g>
+  <g><rect x="924" y="222" width="64" height="46" fill="#1f4a3a"/><rect x="944" y="238" width="24" height="12" fill="url(#brassL)"/><rect x="996" y="232" width="62" height="36" fill="#3a2416"/><rect x="1014" y="244" width="24" height="10" fill="url(#brassL)"/>
+     <rect x="924" y="350" width="130" height="42" fill="#2b3138"/><rect x="972" y="364" width="30" height="12" fill="url(#brassL)"/><path d="M1018 392v-58q0-10 10-10h4q10 0 10 10v58z" fill="#cfd6dc"/><path d="M1022 340h20" stroke="#8d98a6" stroke-width="3"/></g>
+  <!-- the bulb -->
+  <circle id="bulbG" cx="800" cy="196" r="400" fill="url(#glowG)" pointer-events="none"/>
+  <path d="M800 70V176" stroke="#0a0c10" stroke-width="4"/><rect x="792" y="170" width="16" height="14" fill="#3a2416"/><circle cx="800" cy="198" r="15" fill="#fff6d8"/>
+  <!-- Mr Garnet -->
+  <g id="gar" class="hot">
+    <path d="M622 660h186l-12 150h-68l-13-104-13 104h-68z" fill="#1c1f24"/><ellipse cx="672" cy="812" rx="38" ry="11" fill="#0a0c10"/><ellipse cx="760" cy="812" rx="38" ry="11" fill="#0a0c10"/>
+    <use href="#ch-garnet" x="570" y="290" width="290" height="377"/>
+  </g>
+  <!-- his machine, and the little screen that shows the street -->
+  <g id="mon" class="hot"><rect x="440" y="596" width="104" height="92" rx="6" fill="#8d8674"/><rect x="450" y="606" width="84" height="64" rx="4" fill="#16243a"/>
+    <rect x="450" y="648" width="84" height="22" fill="#0b111b"/><rect x="484" y="620" width="15" height="34" fill="#c62f23"/><rect x="487" y="625" width="9" height="22" fill="#f1cc6c"/>
+    <g stroke="#a9c3e2" stroke-width="1" opacity=".5"><path d="M460 610l-3 14M474 632l-3 14M512 612l-3 14M524 640l-3 14M504 646l-3 12"/></g><circle cx="528" cy="680" r="3" fill="#5dff9a"/></g>
+  <g id="mach" class="hot"><path d="M556 648h110l12 40H544z" fill="#d6cfb6"/><path d="M556 648h110l3 9H553z" fill="#f4efdd"/><rect x="566" y="662" width="38" height="14" rx="2" fill="#12130d"/><rect x="569" y="665" width="32" height="8" fill="#3f7a4a"/>
+    <g fill="#8d8674"><rect x="612" y="662" width="8" height="5"/><rect x="624" y="662" width="8" height="5"/><rect x="636" y="662" width="8" height="5"/><rect x="648" y="662" width="8" height="5"/><rect x="612" y="672" width="8" height="5"/><rect x="624" y="672" width="8" height="5"/><rect x="636" y="672" width="8" height="5"/><rect x="648" y="672" width="8" height="5"/></g></g>
+  <rect x="430" y="688" width="262" height="14" fill="#5a3a22"/><path d="M444 702v150M676 702v150" stroke="#3a2416" stroke-width="12"/>
+  <!-- Vickers, on a tin box -->
+  <g id="vic" class="hot">
+    <rect x="866" y="736" width="220" height="100" fill="#39424c"/><rect x="866" y="736" width="220" height="8" fill="#55606c"/><rect x="954" y="776" width="44" height="18" fill="url(#brassL)"/>
+    <use href="#ch-vickers" x="852" y="382" width="246" height="320"/>
+    <path d="M884 696h186v46H884z" fill="#1c2636"/><path d="M896 742h60v84h-60zM996 742h60v84h-60z" fill="#1c2636"/><path d="M886 826h76v20h-84zM990 826h76l8 20h-84z" fill="#0a0c10"/>
+    <path d="M920 640q-4-36 22-36t22 36" fill="none" stroke="#e9e6dc" stroke-width="5"/><path d="M900 640h84l10 92h-104z" fill="#f1eee2"/><path d="M906 664h72M904 686h76" stroke="#c8372d" stroke-width="7"/>
+  </g>
+</g>
+
+<!-- the frame, and the door -->
+<rect x="398" y="48" width="804" height="834" fill="none" stroke="#0c0f13" stroke-width="44"/><rect x="420" y="70" width="760" height="790" fill="none" stroke="#3a4149" stroke-width="4"/>
+<g id="vdoor">
+  <rect x="420" y="70" width="760" height="790" fill="url(#steelG)"/><rect x="420" y="70" width="760" height="790" fill="none" stroke="#0a0c10" stroke-width="7"/>
+  <path d="M444 94h712" stroke="#c9d2dc" stroke-width="4" opacity=".4"/>
+  <g id="vriv" fill="#2b3138"></g>
+  <rect x="404" y="170" width="40" height="104" rx="8" fill="#2b3138"/><rect x="404" y="650" width="40" height="104" rx="8" fill="#2b3138"/><path d="M414 176v92M414 656v92" stroke="#8d98a6" stroke-width="4" opacity=".6"/>
+  <rect x="680" y="118" width="240" height="46" rx="4" fill="url(#brassL)"/><text x="800" y="151" class="mk">GARNET</text>
+  <rect x="590" y="214" width="420" height="250" rx="10" fill="#14181d"/><rect x="590" y="214" width="420" height="250" rx="10" fill="none" stroke="#b08a35" stroke-width="4"/>
+  <g id="vlamps"><circle cx="660" cy="276" r="26"/><circle cx="730" cy="276" r="26"/><circle cx="800" cy="276" r="26"/><circle cx="870" cy="276" r="26"/><circle cx="940" cy="276" r="26"/></g>
+  <g fill="none" stroke="#8d98a6" stroke-width="4"><circle cx="660" cy="276" r="26"/><circle cx="730" cy="276" r="26"/><circle cx="800" cy="276" r="26"/><circle cx="870" cy="276" r="26"/><circle cx="940" cy="276" r="26"/></g>
+  <g id="vkeys" fill="#2b3138" stroke="#b08a35" stroke-width="2.500"></g>
+  <g id="vhandle" class="hot">
+    <circle cx="1010" cy="600" r="62" fill="#2b3138"/><circle cx="1010" cy="600" r="62" fill="none" stroke="#0a0c10" stroke-width="6"/>
+    <g id="vlev"><path d="M1010 600V430" stroke="#0a0c10" stroke-width="40" stroke-linecap="round"/><path d="M1010 600V430" stroke="#a9b3bf" stroke-width="27" stroke-linecap="round"/>
+      <path d="M1002 590V440" stroke="#e3e8ee" stroke-width="5" stroke-linecap="round" opacity=".55"/><circle cx="1010" cy="424" r="34" fill="#14181d"/><circle cx="1000" cy="414" r="9" fill="#8d98a6" opacity=".7"/></g>
+    <circle cx="1010" cy="600" r="22" fill="#8d98a6"/>
+  </g>
+</g>
+
+<!-- Sergeant Stott -->
+<g id="sto" class="hot"><use href="#ch-stott" x="30" y="478" width="340" height="442"/></g>
+<rect id="blue" x="-1000" y="-500" width="3600" height="1900" fill="#2b62ff" pointer-events="none"/>
+<rect x="-1000" y="-500" width="3600" height="1900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="stamp">RIGHT NUMBER</div>
+  <p>TELEPHONE EXCHANGE. THIS IS AN AUTOMATIC MESSAGE.</p>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <p>YOU WERE NOT A WRONG NUMBER. THANK YOU.</p>
+  <div class="row"><button type="button" class="btn" id="b-own">Send a message of your own</button><button type="button" class="btn" id="b-book">Open the notebook</button><button type="button" class="btn" id="b-lobby">Back to the files</button></div>
+  <small>Wrong Number &middot; Mercer Row &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, ready = false;
+  var word = String(ER.readStore()['cipher/wrong'] && ER.readStore()['cipher/wrong'].flags && ER.readStore()['cipher/wrong'].flags.word || '').toUpperCase();
+  var nTries = (ER.readStore()['cipher/wrong'] && ER.readStore()['cipher/wrong'].flags || {}).tries || 0;
+
+  /* rivets, the keys on the door, trays of things that shine */
+  (function () {
+    var s = '', x, y, i, n = 0, COL = ['#f4fbff', '#ffd98a', '#ff6b6b', '#7dffb2', '#8fd0ff', '#f4fbff'];
+    for (y = 110; y < 850; y += 74) s += '<circle cx="452" cy="' + y + '" r="8"/><circle cx="1148" cy="' + y + '" r="8"/>';
+    for (x = 526; x < 1100; x += 74) s += '<circle cx="' + x + '" cy="828" r="8"/>';
+    $('#vriv').innerHTML = s; s = '';
+    for (y = 0; y < 3; y++) for (x = 0; x < 9 - y; x++) s += '<circle cx="' + (628 + y * 21 + x * 43) + '" cy="' + (344 + y * 42) + '" r="15"/>';
+    $('#vkeys').innerHTML = s; s = '';
+    [[536, 232], [620, 232], [536, 356], [620, 356], [536, 480], [620, 480]].forEach(function (t) {
+      s += '<rect x="' + t[0] + '" y="' + t[1] + '" width="76" height="36" fill="#2a1436"/><rect x="' + t[0] + '" y="' + t[1] + '" width="76" height="6" fill="#4a2a5c"/>';
+      for (i = 0; i < 8; i++) { n++; s += '<circle class="gem' + (n % 3 === 1 ? ' g2' : n % 3 === 2 ? ' g3' : '') + '" cx="' + (t[0] + 12 + (i % 4) * 17) + '" cy="' + (t[1] + 14 + Math.floor(i / 4) * 13) + '" r="3.200" fill="' + COL[n % COL.length] + '"/>'; }
+    });
+    $('#trays').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'wrong', storyTitle: 'Wrong Number', id: 'midnight', no: 'III', title: 'Midnight', go: 'Wait', backLabel: 'Files',
+    sound: WN.SOUND.midnight,
+    intro: [
+      'The lamps gave you Miss Imrie&rsquo;s word' + (word ? ', ' + word + ',' : '') + (nTries ? ' in ' + ['one try', 'two tries', 'three tries', 'four tries'][Math.min(nTries, 4) - 1] : '') + '. You did not use it.',
+      'The letters that were missing from Mr Garnet&rsquo;s six messages were never lost. He left them out, one at a time, and you put every one of them back with your own hand: THIEF IN HERE. DO NOT OPEN. TYPE ALARM.',
+      'So you typed ALARM. Five red lamps came on, and went out, and nothing else happened at all.'
+    ],
+    exit: null, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+  WN.clock('23:58');
+  if ((ER.flag('time') || '') < '23:58' && ER.flag('time') !== '00:00') WN.time('23:58');
+
+  var M7 = '<p>WHAT IS GOING ON OUT THERE. PULL THE HANDLE. PULL IT NOW.</p>';
+  function isBusy() { return busy; }
+  function step() { return ER.flag('e') || 0; }
+  /* the strongroom is open, and nobody is in danger any more: the music moves into a major key */
+  function turn() { ER.cfg.sound = WN.SOUND.open; if (ER.track) ER.track.play(WN.SOUND.open); }
+
+  function hints() {
+    var e = step();
+    if (e === 0) return ready ? ['handle', [
+      'Sergeant Stott has typed the word, and the five lamps are green. This time, the handle is yours.',
+      'Click on the handle of the strongroom door.'
+    ]] : null;
+    if (e === 1) return ['garnet', [
+      'Mr Garnet has something to tell you.',
+      'Click on the old man in the middle of the strongroom, and hear him out.'
+    ]];
+    return ['end', ['That is the end of the story. Try the first button on the card: now you can hide a message of your own.']];
+  }
+
+  function begin() {
+    var e = step();
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    ER.pips(Math.min(e, 2), 2);
+    if (e >= 1) { svg.classList.add('open', 'green', 'police', 'pulled'); ready = true; turn(); if (e >= 2) card(); return; }
+    busy = true;
+    setTimeout(function () { WN.sfx.clatter(12); }, 500);
+    ER.narrate([
+      'For a whole minute, nothing happens. The clocks go on ticking. Then the machine on the counter clatters once more, and this is what it prints:',
+      '<span class="wn-k">WHAT IS GOING ON OUT THERE. PULL THE HANDLE. PULL IT NOW.</span>',
+      'Every letter is in its place, and there is not one &ldquo;please&rdquo;. Mr Garnet did not type that.'
+    ], function () {
+      ER.addClue('m7', 'Message 7 \u00b7 23:58', '<h4>Message 7 &middot; 23:58</h4>' + M7, 'wn-msg', 'Message');
+      svg.classList.add('police'); WN.time('23:59');
+      ER.narrate([
+        'Then a blue light comes down Mercer Row, without a sound. The police station is at the far end of the street. ALARM rings a bell there, and nowhere else.',
+        '&ldquo;Sergeant Stott,&rdquo; says the sergeant, and shakes the rain off her hat. She reads the six messages once, and your handwriting twice. Then she looks at the steel door. &ldquo;I don&rsquo;t suppose you know the word?&rdquo;'
+      ], function () {
+        svg.classList.add('green'); WN.sfx.bolt();
+        ER.narrate([
+          'You do. She types it herself, with one finger' + (word ? ': ' + word.split('').join(', ') : '') + '. Five green lamps.',
+          '&ldquo;After you,&rdquo; says Sergeant Stott, and she nods at the handle. &ldquo;You have earned it.&rdquo;'
+        ], function () { busy = false; ready = true; });
+      });
+    });
+  }
+
+  $('#vhandle').addEventListener('click', function () {
+    if (busy || !ready || step() >= 1) return;
+    busy = true; svg.classList.add('pulled'); ER.sfx.clunk();
+    setTimeout(function () { svg.classList.add('open'); WN.sfx.bolt(); ER.sfx.creak(); turn(); }, 650);
+    ER.flag('e', 1); ER.pips(1, 2);
+    setTimeout(function () {
+      ER.narrate([
+        'The door swings open as slowly as a ship. Behind it there is a room no bigger than a lift, with one bare bulb in it.',
+        'On a tin box in the corner sits a large young man in a leather jacket, with a carrier bag on his knee. He has the face of somebody who has been losing an argument for six hours.',
+        'In the middle of the room stands a small, neat old man in a waistcoat. He looks at the sergeant, and then at you, and then at his watch.',
+        '&ldquo;One minute to midnight,&rdquo; says Mr Garnet, a little too loudly, as people do when they cannot hear themselves. &ldquo;You took your time.&rdquo;'
+      ], function () { busy = false; });
+    }, 3600);
+  });
+
+  $('#gar').addEventListener('click', function () {
+    if (busy || step() < 1) return;
+    var c = window.CAST.garnet;
+    ER.talk({ who: c.who, role: c.role, face: window.FACE('garnet'),
+      lines: [
+        '&ldquo;Twenty-nine letters,&rdquo; says Mr Garnet. &ldquo;I counted them twice. You put every one of them back with your own hand, and for a quarter of an hour you did not read one of them.&rdquo;' +
+          '</p><p class="note">He watches your mouth when you speak. That is how he listens.',
+        { q: 'Was it the rain?', a: '&ldquo;Rain! That wire has been dry since the day it was put in. No. It was my machine. It is forty years old, and if you press a key gently, it sends a gap in place of the letter. I pressed twenty-nine keys gently. It is harder than it sounds, with a young man breathing down your neck.&rdquo;' },
+        { q: 'Did he not see the holes?', a: '&ldquo;He read every line before I was allowed to send it. Of course he saw the holes. I told him that the keys stick. He believed me, because the machine is old, and so am I. He read every word that I sent. He never thought of reading the letters that I did not.&rdquo;' },
+        { q: 'How did he come to be locked in with you?', a: '&ldquo;He came in at ten to six, to look at engagement rings. At five to six he was looking at all of them, in my strongroom, with a bag. Now, that door shuts itself at six. I know that. He did not. So for five minutes I was a very slow old man, and a very deaf one.&rdquo;' },
+        { q: 'Why did you not just send me the two words for your shop door?', a: '&ldquo;Because I still had letters to send you, and I needed sentences to put them in. A long way of saying a thing has room in it for five letters. SELDOM and VALUABLE have room for none. I am sorry about the notice. I rather hoped that you would enjoy it.&rdquo;' },
+        { q: 'And ALARM?', a: '&ldquo;It rings a bell in the police station, and the door does nothing at all, so the person in here cannot tell. It was Miss Imrie&rsquo;s idea. Most of the good ideas in this shop are Miss Imrie&rsquo;s.&rdquo;' },
+        '&ldquo;Eleven people walked past that telephone tonight before you did,&rdquo; says Mr Garnet. &ldquo;All eleven let it ring. They were the wrong numbers.&rdquo;</p><p>He holds out his hand. &ldquo;You were the right one.&rdquo;'
+      ],
+      clue: { id: 'garnet', title: 'What Mr Garnet said', kind: 'In his own voice' }, last: 'Shake his hand',
+      done: function (seen) { if (seen && step() < 2) midnight(); } });
+  });
+  function midnight() {
+    busy = true; ER.flag('e', 2); ER.pips(2, 2); WN.time('00:00'); WN.sfx.chime(9);
+    ER.narrate([
+      'Then every clock in the shop begins to strike twelve. No two of them agree, and it takes them nearly a minute to finish.',
+      'Mr Garnet does not hear one of them. He looks at his own watch, and nods, and puts it away.',
+      '&ldquo;Vickers,&rdquo; says Sergeant Stott to the young man on the tin box, &ldquo;we have been wanting a word with you.&rdquo;',
+      '&ldquo;He said it was the keys,&rdquo; says Vickers.'
+    ], function () { busy = false; card(); });
+  }
+  function card() {
+    var st = ER.state(), mins = Math.max(1, Math.round(((ER.flag('tEnd') || Date.now()) - (st.t0 || Date.now())) / 60000)), hn = ER.hintsUsed(), wn = Object.keys(st.words).length;
+    $('#d-time').textContent = 'YOUR CALL LASTED ' + mins + (mins === 1 ? ' MINUTE.' : ' MINUTES.');
+    $('#d-hints').textContent = hn ? 'YOU ASKED FOR ' + hn + (hn === 1 ? ' HINT.' : ' HINTS.') : 'YOU ASKED FOR NO HINTS AT ALL.';
+    $('#d-words').textContent = 'YOUR NOTEBOOK HOLDS ' + st.clues.length + ' CLUES AND ' + wn + ' WORDS.';
+    $('#done').classList.add('on'); ER.sfx.ok();
+  }
+
+  WN.thing('#vic', null, 'The young man is called Vickers, and the motorbike outside is his. &ldquo;Can I have my helmet back?&rdquo; he asks. &ldquo;Not tonight,&rdquo; says Sergeant Stott.', isBusy);
+  WN.thing('#mach', 'textphone', 'Mr Garnet&rsquo;s machine: a keyboard, a small screen, and forty years of dust. You press one key, very gently. Nothing comes up on the screen but a gap.', isBusy);
+  WN.thing('#mon', null, 'A small grey screen that shows the street. The phone box is in the middle of it, with its light on and its door open, just as you left it.', isBusy);
+  $('#sto').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(step() < 1 ? '&ldquo;After you,&rdquo; says Sergeant Stott again. She is looking at the handle.'
+      : 'Sergeant Stott is writing in a notebook much smaller than yours. &ldquo;ALARM,&rdquo; she says, without looking up. &ldquo;Good word.&rdquo;');
+  });
+
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* ---------- a message of your own: leave letters out, so that the missing ones say something ---------- */
+  $('#b-own').addEventListener('click', function () {
+    var saved = ER.flag('own') || { t: '', o: [] }, box = ER.el('div', 'own'), ta, out, say, gone = {};
+    box.innerHTML = '<h4>Mr Garnet says that anybody can do it</h4><h3>A message of your own</h3>' +
+      '<p class="own-how">Write two or three sentences that look harmless. Then click on letters to leave them out. Read in order, the missing letters must spell a secret word: HELP, perhaps, or FIRE, or the name of a friend.</p>' +
+      '<label for="own-t">Your message</label><textarea id="own-t" maxlength="260" spellcheck="false"></textarea>' +
+      '<label>What goes down the line (click on a letter to leave it out)</label><div class="own-out"></div>' +
+      '<p class="own-say"></p>' +
+      '<div class="foot"><span>Saved in this browser as you type. Then show it to somebody: can they mend it, and can they find your word?</span><button type="button" class="btn" id="own-print">Print</button><button type="button" class="btn" id="own-done">Done</button></div>';
+    ER.glossIn(box, '.own-how');
+    ta = box.querySelector('textarea'); out = box.querySelector('.own-out'); say = box.querySelector('.own-say');
+    ta.value = saved.t || ''; (saved.o || []).forEach(function (i) { gone[i] = 1; });
+    function draw() {
+      var t = ta.value.toUpperCase(), s = '', hid = '', i, ch;
+      for (i = 0; i < t.length; i++) {
+        ch = t.charAt(i);
+        if (/[A-Z]/.test(ch)) { s += '<i data-i="' + i + '"' + (gone[i] ? ' class="gone"' : '') + '>' + ch + '</i>'; if (gone[i]) hid += ch; }
+        else s += ch === '<' ? '&lt;' : ch === '&' ? '&amp;' : ch === '\n' ? '<br>' : ch;
+      }
+      out.innerHTML = s || '<em>YOUR MESSAGE WILL COME UP HERE.</em>';
+      say.innerHTML = hid ? 'The missing letters say: <b>' + hid + '</b>' : (t ? 'No letters are missing yet.' : '');
+      ER.flag('own', { t: ta.value, o: Object.keys(gone).map(Number) });
+    }
+    ta.addEventListener('input', function () { gone = {}; draw(); });
+    out.addEventListener('click', function (e) {
+      var n = e.target.closest ? e.target.closest('i') : null, i;
+      if (!n) return;
+      i = +n.getAttribute('data-i'); if (gone[i]) delete gone[i]; else gone[i] = 1;
+      ER.sfx.click(); draw();
+    });
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#own-print').addEventListener('click', function () { window.print(); });
+    box.querySelector('#own-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); draw();
+  });
+})();
+</script>
+</body>
+</html>

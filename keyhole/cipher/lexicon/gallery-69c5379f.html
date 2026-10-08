@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Gallery · The Final Word</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="lex.css">
+<style>
+  body{--bg:#05080d;--accent:#7fd4ff;--font-display:'VT323',monospace;--font-ui:'Oswald',sans-serif;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(4,7,12,.95);--tc-ink:#e3eef5;--cap-bg:rgba(5,9,15,.93);--panel:#0e1621;--face-bg:#10202b;--q-ink:#7fd4ff;--fade:#020305;--hud-bg:rgba(5,9,15,.76)}
+  .tc-room{letter-spacing:.06em;text-transform:uppercase;font-size:clamp(44px,6.6vw,88px)}
+  .tc-text,.cap,.tk-text{font-weight:300}
+  .tk-name{font-family:'Bebas Neue',sans-serif;font-size:30px}
+  .sg{font-family:'Bebas Neue',sans-serif;text-anchor:middle}
+  .led{font-family:'VT323',monospace;text-anchor:middle}
+  .stn{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .mk{font-family:'Permanent Marker',cursive}
+  #gleaf{transform-box:fill-box;transform-origin:100% 50%;transition:transform 1.4s cubic-bezier(.6,0,.3,1)}
+  #gleaf.open{transform:scaleX(.08)}
+  #mute{transition:opacity 1.6s}
+  #mute.off{opacity:0}
+  .mon{animation:mon 3.1s steps(1,end) infinite}
+  .mon.b{animation-duration:4.3s;animation-delay:-1.2s}.mon.c{animation-duration:5.7s;animation-delay:-2.6s}
+  @keyframes mon{0%{opacity:1}92%{opacity:.82}96%{opacity:1}}
+  #teag.shout{animation:shout .5s steps(1,end) infinite}
+  @keyframes shout{0%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  #teag.shout .sh{animation:shl .5s steps(1,end) infinite}
+  #teag .sh{opacity:0}
+  @keyframes shl{0%{opacity:1}50%{opacity:.2}}
+  #glamp{fill:#d8271a;animation:glamp 1.4s steps(1,end) infinite}
+  #glamp.ok{fill:#3ddc6a;animation:none}
+  @keyframes glamp{50%{fill:#5a120c}}
+  #strip{animation:strip 6.1s steps(1,end) infinite}
+  @keyframes strip{0%{opacity:1}88%{opacity:.5}90%{opacity:1}93%{opacity:.6}95%{opacity:1}}
+  .scr text{fill:#f4e04d}.scr .dim{opacity:.5}.scr.won text{fill:#3ddc6a}
+  .scr.live .rnd{animation:rnd 1.1s steps(1,end) infinite}
+  @keyframes rnd{50%{opacity:.35}}
+  .in{pointer-events:none}
+  .in.on{pointer-events:auto;cursor:pointer}
+
+  /* round 3: the conundrum */
+  .cn{width:min(860px,94vw);--wk-size:62px}
+  .cn-head{display:flex;align-items:center;margin-top:12px}
+  .cn-clue{flex:1;margin-right:26px;padding:13px 20px 12px;background:#f1eee2;color:#141518;font-family:'Courier Prime',monospace;font-size:20px;line-height:1.34;border-radius:3px;
+    transform:rotate(-.6deg);box-shadow:0 8px 18px rgba(0,0,0,.5)}
+  .cn-clue small{display:block;margin-bottom:3px;font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.6}
+  .cn-clk{flex:none;width:104px;height:104px}
+  .cn-clk text{font-family:'VT323',monospace;font-size:44px;fill:#fff;text-anchor:middle}
+  #cnArc{transition:stroke-dashoffset .25s linear}
+  .cn-rack{margin:18px 0 4px;padding:16px 8px 14px;border-radius:8px;background:#12245c linear-gradient(#24439c,#12245c);box-shadow:inset 0 3px 0 rgba(255,255,255,.16),0 6px 0 #0a1436}
+  .cn .wk-tiles .wk-tile{min-width:62px;height:78px;margin:4px 5px;padding:6px 0 0;border:0;border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:54px;font-weight:normal;color:#141518;
+    background:#f4e04d linear-gradient(#fffbe0,#f4e04d 60%,#d9c12a);box-shadow:0 5px 0 #8f8320,0 9px 12px rgba(0,0,0,.4)}
+  .cn .wk-tiles .wk-tile.held{outline:3px solid #fff;outline-offset:3px}
+  .cn .wk-tiles.done .wk-tile{background:#3ddc6a linear-gradient(#e0ffe6,#3ddc6a 60%,#1f9d4a);box-shadow:0 5px 0 #0f5a28,0 9px 12px rgba(0,0,0,.4)}
+  .cn-help{font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:#f4e04d;opacity:.6;text-align:center}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="gw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b111a"/><stop offset=".5" stop-color="#151f2c"/><stop offset="1" stop-color="#0a0f17"/></linearGradient>
+  <linearGradient id="gin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1420"/><stop offset="1" stop-color="#16263a"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3a50"/><stop offset=".2" stop-color="#18222f"/><stop offset="1" stop-color="#090d13"/></linearGradient>
+  <linearGradient id="gdoor" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#25313e"/><stop offset=".5" stop-color="#3d4e61"/><stop offset="1" stop-color="#222d39"/></linearGradient>
+  <linearGradient id="fl2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141b25"/><stop offset="1" stop-color="#05070a"/></linearGradient>
+  <radialGradient id="monGl"><stop offset="0" stop-color="#6fc6ff" stop-opacity=".34"/><stop offset="1" stop-color="#6fc6ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="scrGl"><stop offset="0" stop-color="#f4e04d" stop-opacity=".3"/><stop offset="1" stop-color="#f4e04d" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="46%" cy="48%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#000" stop-opacity=".24"/><stop offset="1" stop-color="#000" stop-opacity=".88"/></radialGradient>
+  <pattern id="brick" width="128" height="56" patternUnits="userSpaceOnUse"><path d="M0 1H128M0 29H128M1 0V28M65 28V56" stroke="#000" stroke-opacity=".3" stroke-width="2" fill="none"/></pattern>
+  <pattern id="mesh" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 1H26M1 0V26" stroke="#2c3a4b" stroke-width="2" fill="none"/></pattern>
+  <pattern id="haz" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="40" height="40" fill="#e2c21c"/><rect width="20" height="40" fill="#17140e"/></pattern>
+  <clipPath id="winC"><rect x="76" y="166" width="1088" height="520" rx="8"/></clipPath>
+  <clipPath id="gdC"><rect x="1228" y="182" width="176" height="578"/></clipPath>
+</defs>
+
+<!-- the landing -->
+<rect x="-1000" y="-400" width="3600" height="1700" fill="url(#gw)"/><rect x="-1000" y="-400" width="3600" height="1162" fill="url(#brick)"/>
+<rect x="-1000" y="762" width="3600" height="600" fill="url(#fl2)"/><rect x="-1000" y="762" width="3600" height="600" fill="url(#mesh)"/>
+<rect x="-1000" y="762" width="3600" height="12" fill="url(#haz)" opacity=".8"/>
+<rect x="-1000" y="-400" width="3600" height="444" fill="#04060a"/>
+<g id="strip"><rect x="250" y="62" width="640" height="14" rx="7" fill="#0c1118"/><rect x="258" y="65" width="624" height="8" rx="4" fill="#cfe9ff"/></g>
+<ellipse cx="570" cy="90" rx="620" ry="170" fill="url(#monGl)" opacity=".5" pointer-events="none"/>
+<text x="210" y="128" class="stn" font-size="34" fill="#3d4e61" letter-spacing="8">GALLERY</text>
+<text x="1010" y="126" class="sg" font-size="24" fill="#3d4e61" letter-spacing="6">SOUNDPROOF GLASS · PLEASE DO NOT KNOCK</text>
+
+<!-- the room behind the glass -->
+<rect x="60" y="150" width="1120" height="552" rx="16" fill="#06090e"/>
+<g clip-path="url(#winC)">
+  <rect x="76" y="166" width="1088" height="520" fill="url(#gin)"/>
+  <ellipse cx="780" cy="350" rx="560" ry="300" fill="url(#monGl)" pointer-events="none"/>
+  <rect x="676" y="178" width="212" height="46" rx="5" fill="#04060a"/>
+  <text id="clk" x="782" y="215" class="led" font-size="44" fill="#ff4a36">7.41</text>
+
+  <!-- eight monitors -->
+  <g id="mons">
+    <g id="m1" class="in"><rect x="424" y="240" width="170" height="108" rx="6" fill="#04060a"/><g class="mon"><rect x="430" y="246" width="158" height="96" fill="#28332f"/>
+      <rect x="430" y="318" width="158" height="24" fill="#191614"/><rect x="430" y="296" width="158" height="4" fill="#c9b21f"/>
+      <rect x="450" y="268" width="26" height="52" fill="#8f242a"/><rect x="536" y="268" width="26" height="52" fill="#317049"/>
+      <circle cx="486" cy="290" r="6" fill="#ecc9ab"/><rect x="480" y="296" width="12" height="24" fill="#6a5a3c"/></g>
+      <text x="438" y="258" font-family="VT323,monospace" font-size="13" fill="#fff">CAM 1</text></g>
+    <g id="m2" class="in"><rect x="608" y="240" width="170" height="108" rx="6" fill="#04060a"/><g class="mon b"><rect x="614" y="246" width="158" height="96" fill="#3a1d5c"/>
+      <rect x="666" y="262" width="54" height="50" fill="#1a0d2c"/><g id="m2dots" fill="#f4e04d"></g>
+      <rect x="630" y="270" width="22" height="50" fill="none" stroke="#9fd0ff" stroke-width="2"/><rect x="734" y="270" width="22" height="50" fill="none" stroke="#9fd0ff" stroke-width="2"/>
+      <rect x="614" y="322" width="158" height="20" fill="#120a1d"/></g>
+      <text x="622" y="258" font-family="VT323,monospace" font-size="13" fill="#fff">CAM 2</text></g>
+    <g id="m3" class="in"><rect x="792" y="240" width="170" height="108" rx="6" fill="#04060a"/><g class="mon c"><rect x="798" y="246" width="158" height="96" fill="#1c1030"/>
+      <path d="M840 246l-26 96h126l-26-96z" fill="#fff" opacity=".1"/>
+      <rect x="850" y="268" width="54" height="42" fill="none" stroke="#bfe2ff" stroke-width="2"/><rect x="862" y="282" width="30" height="20" fill="#f1ead8"/><circle cx="877" cy="292" r="4" fill="#b3261c"/>
+      <rect x="864" y="310" width="26" height="32" fill="#2a1a44"/></g>
+      <text x="806" y="258" font-family="VT323,monospace" font-size="13" fill="#fff">CAM 3</text></g>
+    <g id="m4" class="in"><rect x="976" y="240" width="170" height="108" rx="6" fill="#04060a"/><g class="mon"><rect x="982" y="246" width="158" height="96" fill="#2b1646"/>
+      <rect x="1026" y="254" width="70" height="88" fill="#9fd0ff" opacity=".16"/><rect x="1026" y="254" width="70" height="88" fill="none" stroke="#bfe2ff" stroke-width="2.500"/>
+      <circle cx="1061" cy="282" r="9" fill="#efd3bd"/><circle cx="1061" cy="270" r="5" fill="#c9c9cf"/><path d="M1044 342v-34q0-14 17-14t17 14v34z" fill="#4f6b45"/><rect x="1052" y="312" width="18" height="12" fill="#f1eee2"/></g>
+      <text x="990" y="258" font-family="VT323,monospace" font-size="13" fill="#fff">CAM 4</text></g>
+    <g id="m5" class="in"><rect x="424" y="362" width="170" height="108" rx="6" fill="#04060a"/><g class="mon c">
+      <rect x="430" y="368" width="23" height="96" fill="#e9e9e9"/><rect x="453" y="368" width="22" height="96" fill="#e2d21c"/><rect x="475" y="368" width="23" height="96" fill="#1cd2d2"/><rect x="498" y="368" width="22" height="96" fill="#1cc232"/>
+      <rect x="520" y="368" width="23" height="96" fill="#d21cc2"/><rect x="543" y="368" width="22" height="96" fill="#d2281c"/><rect x="565" y="368" width="23" height="96" fill="#1c32d2"/></g></g>
+    <g id="m6" class="in"><rect x="608" y="362" width="170" height="108" rx="6" fill="#04060a"/><g class="mon"><rect x="614" y="368" width="158" height="96" fill="#5a4a3a"/>
+      <rect x="614" y="368" width="158" height="30" fill="#7a6a52"/><rect x="676" y="372" width="34" height="50" fill="#2a2018"/>
+      <g id="m6heads"></g></g>
+      <text x="622" y="380" font-family="VT323,monospace" font-size="13" fill="#fff">FOYER</text></g>
+    <g id="m7" class="in"><rect x="792" y="362" width="170" height="108" rx="6" fill="#04060a"/><g class="mon b"><rect x="798" y="368" width="158" height="96" fill="#090a06"/>
+      <text x="806" y="384" font-family="VT323,monospace" font-size="15" fill="#f4e04d">LEX · LOG</text>
+      <g stroke="#f4e04d" stroke-width="2.200" opacity=".85"><path d="M806 394h120M806 404h140M806 414h96M806 424h134M806 434h110M806 444h140M806 454h70"/></g></g></g>
+    <g id="m8" class="in"><rect x="976" y="362" width="170" height="108" rx="6" fill="#04060a"/><g class="mon c"><rect x="982" y="368" width="158" height="96" fill="#141518"/>
+      <text x="1061" y="414" class="sg" font-size="34" fill="#f4e04d" letter-spacing="3">LEXICON</text><text x="1061" y="442" class="led" font-size="20" fill="#fff">THE FINAL · 8.00</text></g></g>
+  </g>
+
+  <!-- the pinboard, and Miss Teague -->
+  <g id="memos" class="in">
+    <rect x="96" y="226" width="150" height="206" rx="4" fill="#3a2a1a"/><rect x="104" y="234" width="134" height="190" fill="#a57c48"/>
+    <g transform="rotate(-3 150 280)"><rect x="112" y="244" width="78" height="56" fill="#faf8f0"/><g stroke="#555" stroke-width="1.600"><path d="M118 256h64M118 264h64M118 272h44"/></g><text x="124" y="294" class="mk" font-size="13" fill="#c8372d">NO!!</text></g>
+    <g transform="rotate(3 190 330)"><rect x="150" y="300" width="80" height="56" fill="#faf8f0"/><g stroke="#555" stroke-width="1.600"><path d="M156 312h66M156 320h66M156 328h50"/></g><text x="160" y="350" class="mk" font-size="13" fill="#c8372d">LEAVE IT</text></g>
+    <g transform="rotate(-2 150 390)"><rect x="112" y="362" width="78" height="54" fill="#faf8f0"/><g stroke="#555" stroke-width="1.600"><path d="M118 374h64M118 382h40"/></g><text x="120" y="408" class="mk" font-size="13" fill="#c8372d">NO TIME</text></g>
+  </g>
+  <g id="teag" class="in shout">
+    <path d="M262 508h148l-10 190H272z" fill="#1c1c20"/>
+    <use href="#ch-teague" x="256" y="300" width="160" height="208"/>
+    <g class="sh" stroke="#fff" stroke-width="4" stroke-linecap="round"><path d="M352 404l22-10M356 416h26M352 428l22 10"/></g>
+  </g>
+
+  <!-- the desk -->
+  <path d="M76 540H1164V700H76Z" fill="url(#deskG)"/><path d="M76 540H1164" stroke="#4a6382" stroke-width="3"/>
+  <g id="btns"></g>
+  <path d="M470 560q-8-60 30-84" stroke="#0a0d12" stroke-width="6" fill="none" stroke-linecap="round"/><rect x="494" y="462" width="26" height="16" rx="6" fill="#0a0d12" transform="rotate(-30 507 470)"/>
+  <rect x="1088" y="506" width="34" height="40" rx="5" fill="#f1eee2"/><path d="M1122 516q14 0 14 12t-14 10" stroke="#f1eee2" stroke-width="5" fill="none"/><rect x="1094" y="514" width="22" height="10" fill="#1f5fd0"/>
+  <g id="sticky" class="in" transform="rotate(5 660 560)"><rect x="628" y="530" width="64" height="58" fill="#ffb7c8"/><g stroke="#7a3fb0" stroke-width="2" stroke-linecap="round"><path d="M636 544h46M636 554h40M636 564h46M636 574h24"/></g></g>
+
+  <!-- the glass -->
+  <rect x="76" y="166" width="1088" height="520" fill="#9fd0ff" opacity=".05" pointer-events="none"/>
+  <path d="M150 166l-74 190v-190zM420 166L180 686h90L520 166zM940 166L700 686h40L990 166z" fill="#fff" opacity=".045" pointer-events="none"/>
+  <rect id="mute" x="76" y="166" width="1088" height="520" fill="#03060b" opacity=".42" pointer-events="none"/>
+</g>
+<rect id="glass" class="hot" x="76" y="166" width="1088" height="520" fill="transparent"/>
+<rect x="60" y="150" width="1120" height="552" rx="16" fill="none" stroke="#1d2835" stroke-width="6"/>
+<rect x="68" y="158" width="1104" height="536" rx="11" fill="none" stroke="#000" stroke-width="5" opacity=".6"/>
+
+<!-- the door, and its screen -->
+<g id="gdoor" class="hot">
+  <rect x="1214" y="168" width="204" height="596" rx="6" fill="#06090e"/>
+  <rect x="1228" y="182" width="176" height="578" fill="#132235"/>
+  <g clip-path="url(#gdC)"><ellipse cx="1316" cy="460" rx="200" ry="330" fill="url(#monGl)"/></g>
+  <g id="gleaf">
+    <rect x="1228" y="182" width="176" height="578" fill="url(#gdoor)"/>
+    <rect x="1228" y="700" width="176" height="60" fill="url(#haz)" opacity=".75"/>
+    <circle cx="1316" cy="316" r="54" fill="#141d28"/><circle cx="1316" cy="316" r="42" fill="#274a6b"/><circle cx="1316" cy="316" r="42" fill="url(#monGl)"/>
+    <path d="M1290 296l22-18" stroke="#fff" stroke-width="5" opacity=".3" stroke-linecap="round"/>
+    <rect x="1250" y="406" width="132" height="64" rx="3" fill="#0b0c0e"/><text x="1316" y="436" class="sg" font-size="27" fill="#f4e04d" letter-spacing="3">GALLERY</text>
+    <text x="1316" y="460" class="sg" font-size="17" fill="#fff" letter-spacing="5">SILENCE</text>
+    <rect x="1244" y="540" width="16" height="110" rx="8" fill="#b9c4cf"/>
+  </g>
+</g>
+<rect x="1304" y="136" width="24" height="22" rx="4" fill="#06090e"/><circle id="glamp" cx="1316" cy="147" r="7"/>
+<ellipse cx="1514" cy="440" rx="190" ry="190" fill="url(#scrGl)" pointer-events="none"/>
+<g id="scr3" class="scr hot live">
+  <rect x="1434" y="326" width="162" height="220" rx="10" fill="#17181b"/><rect x="1442" y="334" width="146" height="204" rx="5" fill="#070708" stroke="#f4e04d" stroke-width="2.500"/>
+  <text x="1515" y="364" class="led rnd" font-size="27">ROUND 3</text>
+  <text x="1515" y="402" class="sg" font-size="27">THE</text><text x="1515" y="430" class="sg" font-size="27">CONUNDRUM</text>
+  <g fill="#f4e04d" opacity=".8"><rect x="1452" y="446" width="12" height="15"/><rect x="1466" y="446" width="12" height="15"/><rect x="1480" y="446" width="12" height="15"/><rect x="1494" y="446" width="12" height="15"/><rect x="1508" y="446" width="12" height="15"/><rect x="1522" y="446" width="12" height="15"/><rect x="1536" y="446" width="12" height="15"/><rect x="1550" y="446" width="12" height="15"/><rect x="1564" y="446" width="12" height="15"/></g>
+  <text x="1515" y="490" class="led dim" font-size="11.500">KINDLY STAY WHERE YOU ARE.</text><text x="1515" y="504" class="led dim" font-size="11.500">THIS WILL NOT TAKE LONG.</text>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1760" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="lex.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, open, heard, read, outKey, gone = false, inCn = false, deal = 0, nOut = 0;
+  var NOTE = 'Kindly stay where you are. This will not take long.';
+
+  /* buttons on the desk, the board on monitor 2, the crowd in the foyer */
+  (function () {
+    var s = '', i, j, cols = ['#d8271a', '#f0c416', '#1f9d4a', '#1f5fd0', '#e9e9e9', '#3a4656'], skin = ['#ecc9ab', '#8a5634', '#dba06f', '#f0cfb4', '#6b3f26'];
+    for (j = 0; j < 4; j++) for (i = 0; i < 46; i++) {
+      if ((i * 7 + j * 3) % 11 === 0) continue;
+      s += '<rect x="' + (96 + i * 23) + '" y="' + (590 + j * 24) + '" width="15" height="13" rx="2" fill="' + cols[(i * 5 + j * 7 + (i * j) % 3) % 6] +
+        '" opacity="' + (0.4 + ((i + j * 2) % 4) * 0.17).toFixed(2) + '"/>';
+    }
+    $('#btns').innerHTML = s; s = '';
+    for (j = 0; j < 4; j++) for (i = 0; i < 4; i++) s += '<rect x="' + (670 + i * 12) + '" y="' + (266 + j * 11) + '" width="9" height="8"/>';
+    $('#m2dots').innerHTML = s; s = '';
+    for (i = 0; i < 16; i++) {
+      s += '<circle cx="' + (624 + i * 9.4 + (i % 3) * 2).toFixed(1) + '" cy="' + (428 + (i * 7) % 16) + '" r="7" fill="' + skin[i % 5] + '"/>' +
+        '<rect x="' + (616 + i * 9.4 + (i % 3) * 2).toFixed(1) + '" y="' + (436 + (i * 7) % 16) + '" width="16" height="30" rx="4" fill="' + cols[(i * 3) % 5] + '" opacity=".8"/>';
+    }
+    $('#m6heads').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'lexicon', storyTitle: 'The Final Word', id: 'gallery', no: 'II', title: 'The Gallery',
+    go: 'Climb the stairs',
+    intro: [
+      'You put the vowels back into six things on television (LIVE AUDIENCE, INTERVIEW, SUBTITLES, TALENT SHOW, EPISODE, NEWSREADER) and Dressing Room 1 let Dexter Valentine out.',
+      'Then five odd ones out, each with its reason, opened the green room: CAREFUL, THE, WALLS, HAVE, EARS.',
+      'Mr Valentine has gone back to his mirror, and Miss Okafor to her singing. Mr Bloom calls up the stairs after you: &ldquo;I should leave Maxine where she is. She only shouts.&rdquo;',
+      'The gallery is the room where the programme is put together: a wall of screens, a desk of buttons, and the producer. Its door is at the top of the stairs.'
+    ],
+    exit: {"next":"studio","w":{"f7daa7f2":"a540042d"}}, tags: {"c1":["267757e4"],"c1@":["520e2521","33722b3f","cf1f0be2","fe9b9b34","36cab099","a0ce82de","7d705885","45398b26","46599bdc"],"c1?":["633e97e0","d4d321f2","74072c26","12c8a0cd","164e215b","bb0275df","ef71093c","1803bcfa","58406714"],"c1#":["433b6b78"]},
+    sound: ['studio', { root: 45, bpm: 92, drop: ['arp', 'hit', 'ost'], beds: [['hum', 0.6]] }],     /* a quiet room, much to read, and a clock to listen for: nothing with a beat */
+    hints: hints,
+    onBegin: begin
+  });
+  LEX.clock({ start: 41 * 60, range: 470, lin: 300 });
+  LEX.onTick(function () { $('#clk').textContent = LEX.hhmm(); });
+  open = !!ER.flag('g1'); heard = !!ER.flag('gt'); read = ER.flag('gr') || {}; outKey = ER.flag('gout') || null;
+
+  function isBusy() { return busy; }
+  function paint() {
+    $('#gleaf').classList.toggle('open', open); $('#glamp').setAttribute('class', open ? 'ok' : ''); $('#mute').setAttribute('class', open ? 'off' : '');
+    $('#scr3').classList.toggle('won', open); $('#scr3').classList.toggle('live', !open);
+    $('#teag').classList.toggle('shout', !open);
+    ER.$$('.in').forEach(function (n) { n.classList.toggle('on', open); });
+    $('#glass').style.display = open ? 'none' : '';
+    ER.pips((open ? 1 : 0) + (heard ? 1 : 0) + (read.log ? 1 : 0) + (read.memos ? 1 : 0), 4);
+    if (open && heard && read.log && read.memos && outKey) LEX.go('Down to Studio Two', function () { if (!gone) gone = ER.exit([outKey]); });
+  }
+  function begin() {
+    paint();
+    if (ER.flag('gseen')) return;
+    ER.flag('gseen', 1);
+    ER.narrate([
+      'The gallery has a wall of thick glass, so that no sound can get in or out. Behind it a woman in a headset is shouting. You cannot hear a word.',
+      'The yellow screen beside the door says ROUND 3: THE CONUNDRUM.'
+    ]);
+  }
+
+  /* ---------- outside the glass ---------- */
+  $('#glass').addEventListener('click', function () {
+    if (busy) return;
+    ER.say('Behind the glass Miss Teague is shouting, and you cannot hear a word of it. The glass was made for that. But the last word is easy to read on her lips. It is &ldquo;NOW&rdquo;.');
+  });
+  $('#gdoor').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(open ? 'The gallery door stands open. For the first time tonight you can hear Miss Teague. So can everybody else in the building.' :
+      'A heavy door with a round window. GALLERY, it says, and under that: SILENCE. Tonight it has plenty.');
+  });
+  $('#scr3').addEventListener('click', function () {
+    if (busy) return;
+    if (open) { ER.say('ROUND 3: WON, says the screen. The same two small lines are still under it: &ldquo;' + NOTE + '&rdquo;'); return; }
+    openCn();
+  });
+
+  /* ---------- round 3: the conundrum ---------- */
+  var DEALS = ['verahorde', 'heardover', 'roverhead'], TIME = 45;
+  var OUT = [
+    'Time. LEX turns the nine letters face down and deals them again. Behind the glass Miss Teague says one short word. You cannot hear it. You can read it.',
+    'Time. The letters are dealt again, a little more kindly. Miss Teague has put both hands flat on the glass.',
+    'Time. LEX deals again. Miss Teague is writing on the glass with a lipstick, backwards, so that you can read it. It says HURRY.'
+  ];
+  function openCn() {
+    var box = ER.el('div', 'lx-screen cn'), C = 2 * Math.PI * 42, rack, msgEl, arc, num, left = TIME, timer = 0, done = false, cur = null;
+    box.innerHTML = '<div class="lx-top"><b>ROUND 3</b><span>THE CONUNDRUM</span><i>NINE LETTERS, ONE WORD</i></div>' +
+      '<div class="lx-note">' + NOTE + '</div>' +
+      '<div class="cn-head"><div class="cn-clue"><small>The clue</small>&ldquo;Heard by accident, or by listening where you should not.&rdquo;</div>' +
+      '<svg class="cn-clk" viewBox="0 0 104 104"><circle cx="52" cy="52" r="50" fill="#17181b"/><circle cx="52" cy="52" r="42" fill="none" stroke="#3a3b40" stroke-width="8"/>' +
+      '<circle id="cnArc" cx="52" cy="52" r="42" fill="none" stroke="#f4e04d" stroke-width="8" transform="rotate(-90 52 52)" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="0"/>' +
+      '<text id="cnNum" x="52" y="66"></text></svg></div>' +
+      '<div class="cn-rack"></div><div class="cn-help">drag a letter to a new place &middot; or click two letters to change them over</div><div class="lx-msg"></div>';
+    rack = box.querySelector('.cn-rack'); msgEl = box.querySelector('.lx-msg'); arc = box.querySelector('#cnArc'); num = box.querySelector('#cnNum');
+    ER.glossIn(box, '.cn-clue');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function show() {
+      num.textContent = Math.ceil(left); box.setAttribute('data-left', Math.ceil(left));
+      arc.setAttribute('stroke-dashoffset', (C * (1 - left / TIME)).toFixed(1));
+      arc.setAttribute('stroke', left <= 10 ? '#ff5a4a' : '#f4e04d');
+    }
+    function dealOut() {
+      var mine = {}, d = deal < 3 ? deal : 1 + (deal - 1) % 2;
+      cur = mine; rack.innerHTML = ''; left = TIME; show(); box.setAttribute('data-deal', deal);
+      WK.tiles(rack, { key: 'c1', items: DEALS[d], onMove: function () { LEX.sfx.flip(); }, onDone: function (t) { if (cur === mine && !done) solved(t); } });
+    }
+    function tick() {
+      if (done || document.querySelector('.hintbox, .ov-top.on')) return;      /* reading a hint or the notebook: the clock is kind enough to wait */
+      left -= 0.25;
+      if (left <= 0) {
+        LEX.sfx.timeup(); LEX.lose(15); ER.shake(rack); deal++;
+        msg(OUT[nOut++ % OUT.length]); dealOut(); return;
+      }
+      if (left <= 10 && left % 1 === 0) LEX.sfx.tick();
+      show();
+    }
+    function solved(text) {
+      done = true; clearInterval(timer); busy = true;
+      open = true; ER.flag('g1', 1); outKey = ER.exitOk([text]) ? text : null; ER.flag('gout', outKey);
+      WK.learn(text); LEX.sfx.ding();
+      msg(LEX.yes() + ' ' + text.toUpperCase() + ': nine letters, with ' + Math.ceil(left) + ' seconds left on the clock.');
+      setTimeout(function () {
+        ER.closeAll(); LEX.sfx.door(); ER.sfx.ok(); paint(); busy = false;
+        ER.say(text.toUpperCase() + '. You say it under your breath: oh-vuh-HURD. You have heard that word once already tonight, through a red door. Then the gallery door opens, and you can hear Miss Teague.', 9000);
+      }, 2300);
+    }
+    msg('&ldquo;Fingers on buzzers!&rdquo; There are no buzzers. There are nine letters, a clue, and a clock that has already started.');
+    dealOut();
+    ER.open('ov-lock', box, function () { inCn = false; clearInterval(timer); if (!done) deal++; cur = null; });
+    inCn = true; timer = setInterval(tick, 250);
+  }
+
+  /* ---------- inside ---------- */
+  var LOG = '<h4>LEX &middot; LOG &middot; FRIDAY</h4>' +
+    '<p>12.00 &nbsp; FINAL WORD typed in by the WRITER. Envelope sealed.</p>' +
+    '<p>16.30 &nbsp; Technical rehearsal. PRACTICE SET 14, for the 9th Friday running. Nobody has asked for a new one.</p>' +
+    '<p>18.00 &nbsp; Set up by MARLOW. From 19.00 LEX runs itself.</p>' +
+    '<p>19.30 &nbsp; LOCKED IN made ready at the board desk. Questions: PRACTICE SET 14. Start in 60 seconds.</p>' +
+    '<p>19.30 &nbsp; Note typed for every screen: <b>&ldquo;' + NOTE + '&rdquo;</b></p>' +
+    '<p>19.31 &nbsp; LOCKED IN started. Doors locked: 6. Players in the corridor: 1.</p>' +
+    '<p>NOW &nbsp;&nbsp; Rounds 1, 2 and 3 won by PLAYER 1. Round 4, THE WALL: not yet played.</p>';
+  var MEMOS = '<h4>Pinned to Miss Teague&rsquo;s board</h4>' +
+    '<div class="m"><small>Memo &middot; week 3</small><p>Maxine, Mr Bloom solved the final conundrum in one second again. Kindly look into it. N.P.</p><p class="scrawl">HE&rsquo;S GOOD TELEVISION!! M.</p></div>' +
+    '<div class="m"><small>Memo &middot; week 6</small><p>Maxine, tonight he answered before the last two letters had turned over. Nobody can read a letter from the back. Kindly look into it. N.P.</p><p class="scrawl">VIEWERS UP 40%. LEAVE HIM ALONE. M.</p></div>' +
+    '<div class="m"><small>Memo &middot; week 9</small><p>Maxine, I think I know how he does it. Kindly give me ten minutes before Friday. N.P.</p><p class="scrawl">NO TIME. M.</p></div>';
+  var STICKY = '<p>Maxine darling!</p><p>Tonite can I have the GOOD chair. And water with NO bubbels in it. Definately no bubbels.</p><p>Dex x</p>';
+  function mark(k) { if (!read[k]) { read[k] = 1; ER.flag('gr', read); paint(); } }
+  $('#m7').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LOG, cls: 'lexlog', clue: { id: 'log', title: 'LEX: the log for Friday', kind: 'Gallery screen' }, done: function () { mark('log'); } });
+  });
+  $('#memos').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: MEMOS, cls: 'memo', clue: { id: 'memos', title: 'Three memos, and three answers', kind: 'Pinboard' }, done: function () { mark('memos'); } });
+  });
+  $('#sticky').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: STICKY, cls: 'sticky', clue: { id: 'dexnote', title: 'A pink note from Dexter', kind: 'On the desk' } });
+  });
+  LEX.thing('#m1', null, 'Monitor 1: the corridor you have just left. Mr Bloom is standing very close to the open door of Dressing Room 1, looking at nothing at all.', isBusy);
+  LEX.thing('#m2', null, 'Monitor 2: the set. Sixteen words are waiting on the big board, four by four. That must be round four.', isBusy);
+  LEX.thing('#m3', null, 'Monitor 3: a glass case on the set, with one cream envelope inside it. From here it looks as if nobody has touched it.', isBusy);
+  LEX.thing('#m4', null, 'Monitor 4: one of the two glass booths on the set. Somebody in a green cardigan is sitting inside it, doing a crossword. She does not look worried.', isBusy);
+  LEX.thing('#m5', null, 'Colour bars. Somewhere a camera is switched off.', isBusy);
+  LEX.thing('#m6', null, 'The foyer. Two hundred people in their best clothes are eating crisps in front of two locked doors.', isBusy);
+  LEX.thing('#m8', null, 'LEXICON: THE FINAL. 8.00. This screen has been saying so all week.', isBusy);
+  $('#teag').addEventListener('click', function () {
+    if (busy) return;
+    LEX.talk('teague', [
+      'RUNNER! Good. Less than twenty minutes. Where is my host? Where are my finalists? No, do not tell me: I can see them. I can see everything from in here. I just cannot DO anything.',
+      { q: 'What happened at 7.31?', a: 'LEX started LOCKED IN. And do not tell me it started by itself. Somebody set it going at the board desk, down on the set, and typed a little note for every screen in the building. It is all in the log: that screen there, with the yellow writing.' },
+      { q: 'Why would anybody do that?', a: 'Nine weeks, one champion, and tonight is the final. The final word is in a sealed envelope, in a glass case on the set. Somebody wanted ten minutes alone with that envelope. I would bet my job on it.' },
+      { q: 'Mr Bloom can hear Mr Valentine through the green-room wall.', a: 'And? I can hear Dexter from the car park. I am not stopping a live final because a man has ears. He is good television.' },
+      'Now. The set is shut by round four, but the audience doors are not on LEX: the audience does not play. Here is my key. Read that log, read what is on my pinboard, then get into the studio before the audience does and clear that wall.'
+    ], { id: 'teague', title: 'Maxine Teague, in the gallery', kind: 'What she said' }, function (seen) {
+      if (!seen || heard) return;
+      heard = true; ER.flag('gt', 1); paint();
+      if (!(read.log && read.memos)) ER.say('A key on a yellow ribbon, still warm from her hand. She has already turned back to her wall of screens.');
+    });
+  });
+
+  /* ---------- hints ---------- */
+  function hints() {
+    if (!open) {
+      if (inCn) return ['c1', [
+        'Read the clue first. The answer is about hearing, and it is two short words joined into one.',
+        'One of the two short words is the past of &ldquo;hear&rdquo;. Find those five letters and put them at the end.',
+        'Four letters are left for the beginning, and the first of them is O. The whole word means: heard something that was not said to you.'
+      ]];
+      return ['r3', [
+        'Miss Teague cannot open her own door, and she cannot hear you. The yellow screen to the right of the door can help. Click on it.',
+        'It is a conundrum: nine letters that make one word. There is a clue, and there is a clock. If the clock runs out, nothing terrible happens: LEX deals the letters again.'
+      ]];
+    }
+    if (!heard) return ['teague', [
+      'The door is open. Click on Miss Teague, behind the desk, before she breaks something.',
+      'Hear her to the end. She gives you two things to read, and one thing to take away.'
+    ]];
+    if (!read.log || !read.memos) return ['read', [
+      'Miss Teague told you to read two things: the log (the screen with the yellow writing, in the bottom row) and the papers on her pinboard, on the left.',
+      'In the log, look hard at the note that was typed at 19.30. On the pinboard, look at how each of the two people writes.'
+    ]];
+    return ['go', [
+      'You have a key, and less than twenty minutes. The yellow button at the bottom of the screen takes you down to the studio.',
+      'The other screens in the gallery are worth a look first. One of them shows the corridor.'
+    ]];
+  }
+})();
+</script>
+</body>
+</html>

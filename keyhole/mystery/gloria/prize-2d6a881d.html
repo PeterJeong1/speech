@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Three o’clock · Where Is Gloria?</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="gloria.css">
+<style>
+  body{--bg:#77ad3d;--accent:#d2452f;--font-display:'Alfa Slab One',serif;--font-ui:'Oswald',sans-serif;--font-body:'Outfit',Arial,sans-serif;
+    --tc-bg:linear-gradient(#fdf3d6 0,#fbe3b4 100%);--tc-ink:#33291c;
+    --cap-bg:rgba(255,250,236,.97);--cap-ink:#33291c;--panel:#fffaf0;--panel-ink:#33291c;
+    --hud-bg:rgba(255,250,236,.86);--hud-ink:#33291c;--hud-line:rgba(51,41,28,.3);--ov-bg:rgba(46,36,20,.72);--fade:#fdf3d6}
+  .tc-theme{color:#b3372b}
+  .tc-room{font-size:clamp(36px,5.6vw,74px);color:#b3372b}
+  .tc .btn{--accent:#b3372b}
+  .tc .btn:hover:not([disabled]){color:#fffaf0}
+  .cap{box-shadow:0 14px 44px rgba(60,40,10,.35)}
+  .cap em{color:#b3372b}
+  .crdT{font-family:'Patrick Hand',cursive;font-size:13px;fill:#1f2f63;text-anchor:middle}
+  .crdB{font-family:'Oswald',sans-serif;font-weight:700;font-size:9px;letter-spacing:1px;fill:#fff;text-anchor:middle}
+  .rosT{font-family:'Alfa Slab One',serif;font-size:13px;fill:#b3372b;text-anchor:middle}
+  .banT{font-family:'Alfa Slab One',serif;font-size:25px;letter-spacing:2px;fill:#2c6a3f;text-anchor:middle}
+  .cl{animation:drift 100s linear infinite}.cl.c2{animation-duration:140s;animation-delay:-60s}
+  @keyframes drift{from{transform:translateX(-300px)}to{transform:translateX(500px)}}
+  .flag{animation:flag 3s ease-in-out infinite alternate}
+  @keyframes flag{from{transform:rotate(-5deg)}to{transform:rotate(6deg)}}
+  .steam{animation:steam 3.4s ease-in-out infinite}.steam.s2{animation-delay:-1.2s}.steam.s3{animation-delay:-2.3s}
+  @keyframes steam{0%{opacity:0;transform:translateY(12px)}30%{opacity:.8}100%{opacity:0;transform:translateY(-34px)}}
+  .note{animation:note 5s linear infinite;opacity:0}
+  .note.n2{animation-delay:-1.7s}.note.n3{animation-delay:-3.3s}
+  @keyframes note{0%{opacity:0;transform:translate(0,0)}15%{opacity:.9}100%{opacity:0;transform:translate(46px,-110px) rotate(16deg)}}
+  .glint{animation:glint 3.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  @keyframes glint{0%,70%,100%{opacity:0;transform:scale(.3)}80%{opacity:1;transform:scale(1)}}
+  .bub{animation:bub 4s ease-in infinite;opacity:0}
+  .bub.b2{animation-delay:-1.3s}.bub.b3{animation-delay:-2.6s}
+  @keyframes bub{0%{opacity:0;transform:translateY(0)}20%{opacity:.9}100%{opacity:0;transform:translateY(-70px)}}
+  .pen{animation:pen 2.8s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:0 50%}
+  @keyframes pen{from{transform:skewY(-5deg)}to{transform:skewY(6deg)}}
+
+  /* the evening paper */
+  .gaz{position:fixed;right:3vw;top:64px;z-index:34;width:min(436px,92vw);padding:18px 26px 18px;background:#fbf6e8;color:#2b241a;display:none;transform:rotate(1deg);
+    box-shadow:0 20px 60px rgba(40,30,10,.5);border-top:6px double #2b241a;border-bottom:6px double #2b241a}
+  .gaz.on{display:block}
+  .gaz-mast{font-family:'IM Fell English SC',serif;font-size:31px;line-height:1;text-align:center;letter-spacing:.02em}
+  .gaz-date{margin:6px 0 10px;padding:3px 0;border-top:1px solid #2b241a;border-bottom:1px solid #2b241a;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;
+    text-transform:uppercase;text-align:center}
+  .gaz h1{margin:0 0 6px;font-family:'Alfa Slab One',serif;font-weight:normal;font-size:33px;line-height:1.05;text-align:center;color:#b3372b}
+  .gaz-sub{margin:0 0 10px;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:19px;line-height:1.25;text-align:center}
+  .gaz p.ln{margin:0 0 5px;font-family:'EB Garamond',Georgia,serif;font-size:19px;line-height:1.3}
+  .gaz .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .gaz .btn{--accent:#2b241a;font-size:13px;padding:8px 13px}.gaz .btn:hover{color:#fbf6e8}
+  .gaz small{display:block;margin-top:11px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.6}
+  .gaz small button{text-decoration:underline;letter-spacing:.14em;text-transform:uppercase}
+  .gaz .w:hover{color:#b3372b}
+
+  /* the kitchen pad */
+  .pad{width:min(720px,94vw);max-height:84vh;overflow:auto;background:#fffbe9;color:#2b241a;padding:0 36px 24px;box-shadow:0 26px 70px rgba(0,0,0,.5);
+    border-radius:3px;-webkit-user-select:text;user-select:text}
+  .pad h4{margin:0 -36px 16px;padding:14px 36px 12px;background:#1f7a76;color:#fffbe9;font-family:'Pacifico',cursive;font-weight:normal;font-size:24px}
+  .pad label{display:block;margin:14px 0 6px;font-size:19px;font-weight:500;line-height:1.35}
+  .pad textarea,.pad input[type=text]{width:100%;font-family:'Patrick Hand','Caveat',cursive;font-size:23px;line-height:1.35;color:#23335e;background:#fff;border:1px solid #cdbf9d;
+    padding:8px 12px;border-radius:2px;resize:vertical;-webkit-user-select:text;user-select:text}
+  .pad textarea{min-height:104px}
+  .pad .count{margin-top:4px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.55;text-align:right}
+  .pad .foot{display:flex;gap:10px;align-items:center;margin-top:14px}
+  .pad .foot span{flex:1;font-size:16px;font-style:italic;opacity:.7}
+  .pad .btn{--accent:#1f7a76}.pad .btn:hover{color:#fffbe9}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.pad .foot{display:none!important}
+    .pad{box-shadow:none;max-height:none;width:auto;overflow:visible}
+    .pad textarea,.pad input[type=text]{border:0;border-bottom:1px solid #999}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fc6ee"/><stop offset=".55" stop-color="#cfeaf6"/><stop offset="1" stop-color="#fdeccc"/></linearGradient>
+  <radialGradient id="sunG"><stop offset="0" stop-color="#fffbe0" stop-opacity=".95"/><stop offset=".3" stop-color="#fff0b0" stop-opacity=".5"/><stop offset="1" stop-color="#ffe9a0" stop-opacity="0"/></radialGradient>
+  <linearGradient id="greenG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a6d560"/><stop offset=".5" stop-color="#8cc24a"/><stop offset="1" stop-color="#6fa63a"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a9aa0"/><stop offset=".3" stop-color="#e6eced"/><stop offset=".6" stop-color="#b3c0c4"/><stop offset="1" stop-color="#77878d"/></linearGradient>
+  <linearGradient id="silverG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9aa6ad"/><stop offset=".35" stop-color="#f4f8fa"/><stop offset=".65" stop-color="#c2ccd2"/><stop offset="1" stop-color="#8794a0"/></linearGradient>
+  <linearGradient id="clothG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e6e2d6"/></linearGradient>
+  <pattern id="tweed" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#6b7f52"/><path d="M0 6h12M6 0v12" stroke="#586a44" stroke-width="1.500"/></pattern>
+  <pattern id="chairS" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#fbf6e6"/><rect width="7" height="14" fill="#3f86ad"/></pattern>
+  <radialGradient id="vig" cx="42%" cy="52%" r="76%"><stop offset="0" stop-color="#3a2a0c" stop-opacity="0"/><stop offset=".75" stop-color="#3a2a0c" stop-opacity=".06"/><stop offset="1" stop-color="#2a1c08" stop-opacity=".36"/></radialGradient>
+  <symbol id="cup" viewBox="0 0 40 36"><path d="M4 6h26l-3 26H7z" fill="#fffdf6"/><path d="M4 6h26" stroke="#d6d1c2" stroke-width="2"/><path d="M30 12q9 1 7 9t-9 6" stroke="#fffdf6" stroke-width="4" fill="none"/></symbol>
+  <symbol id="qn" viewBox="0 0 20 30"><ellipse cx="7" cy="24" rx="6" ry="4.500" transform="rotate(-20 7 24)"/><path d="M12 23V3l7 4" stroke-width="2.400" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs>
+
+<!-- sky, hills, the village -->
+<rect x="-1000" y="-700" width="3600" height="1240" fill="url(#skyG)"/>
+<circle cx="230" cy="140" r="300" fill="url(#sunG)"/><circle cx="230" cy="140" r="44" fill="#fffbe6"/>
+<g fill="#fff" opacity=".95"><g class="cl"><ellipse cx="620" cy="120" rx="80" ry="18"/><ellipse cx="672" cy="106" rx="46" ry="17"/></g>
+  <g class="cl c2"><ellipse cx="1180" cy="200" rx="70" ry="15"/><ellipse cx="1140" cy="190" rx="36" ry="13"/></g></g>
+<path d="M-1000 540V420Q-400 340 100 410T900 400T1700 380T2600 420V540Z" fill="#b5dfae"/>
+<path d="M-1000 540V470Q-300 420 300 470T1200 450T2600 476V540Z" fill="#93c984"/>
+<g fill="#4f9a45"><circle cx="560" cy="476" r="40"/><circle cx="620" cy="486" r="32"/><circle cx="1090" cy="470" r="44"/><circle cx="1150" cy="486" r="34"/><circle cx="-20" cy="470" r="44"/></g>
+<g fill="#6fb85a"><circle cx="548" cy="458" r="20"/><circle cx="1078" cy="450" r="22"/></g>
+<!-- the big oak -->
+<rect x="1356" y="420" width="44" height="130" fill="#7a5530"/><g fill="#3f8a3a"><circle cx="1380" cy="350" r="110"/><circle cx="1290" cy="400" r="74"/><circle cx="1470" cy="394" r="80"/></g><g fill="#56a34a"><circle cx="1350" cy="310" r="62"/><circle cx="1440" cy="352" r="44"/></g>
+<!-- cottages -->
+<rect x="700" y="452" width="96" height="78" fill="#f3ead2"/><path d="M690 456L748 414L806 456Z" fill="#c2553c"/><rect x="772" y="414" width="13" height="26" fill="#a5533f"/><rect x="716" y="474" width="20" height="20" fill="#8fc7de"/><rect x="756" y="480" width="18" height="50" fill="#5a7d4e"/>
+<rect x="822" y="462" width="80" height="68" fill="#e9dcbc"/><path d="M812 466L862 430L912 466Z" fill="#8f6a4a"/><rect x="842" y="482" width="18" height="18" fill="#8fc7de"/><rect x="874" y="482" width="18" height="18" fill="#8fc7de"/>
+<!-- the church, and its clock at three -->
+<rect x="398" y="404" width="118" height="126" fill="#ddd2b8"/><path d="M390 408L457 366L524 408Z" fill="#8a7a72"/>
+<rect x="330" y="290" width="68" height="240" fill="#e6dcc4"/><path d="M324 290h14v-14h12v14h12v-14h12v14h12v-14h14v20h-76z" fill="#e6dcc4"/>
+<circle cx="364" cy="346" r="20" fill="#fbf7ea" stroke="#6b5f48" stroke-width="3"/><path d="M364 346V330M364 346h12" stroke="#2b2a20" stroke-width="3" stroke-linecap="round"/>
+<path d="M352 448q12-22 24 0v82h-24z" fill="#6b5f48"/><g fill="#8fb7c7"><path d="M424 448q9-18 18 0v40h-18z"/><path d="M468 448q9-18 18 0v40h-18z"/></g>
+<path d="M364 276V236" stroke="#6b5f48" stroke-width="3"/><path class="pen" d="M364 238l30 8-30 8z" fill="#d2452f"/>
+<!-- the show tent -->
+<path d="M-90 420L96 316L262 420Z" fill="#fdfaf0"/><path d="M96 316L20 420M96 316L96 420M96 316L172 420" stroke="#e3d8ba" stroke-width="3"/>
+<rect x="-70" y="420" width="316" height="116" fill="#f3ead4"/><path d="M-70 420q13 16 26 0t26 0 26 0 26 0 26 0 26 0 26 0 26 0 26 0 26 0 26 0 30 0" fill="none" stroke="#2c6a3f" stroke-width="3"/>
+<path d="M70 536V456q26-20 52 0v80z" fill="#cbbf9f"/><path d="M96 316V282" stroke="#6b5f48" stroke-width="3"/><path class="pen" d="M96 284l28 7-28 7z" fill="#f4c430"/>
+<!-- a very small band -->
+<g id="band">
+  <rect x="150" y="512" width="110" height="20" fill="#b98a4e"/>
+  <g fill="#27457c"><rect x="162" y="482" width="18" height="32" rx="5"/><rect x="196" y="482" width="18" height="32" rx="5"/><rect x="230" y="482" width="18" height="32" rx="5"/></g>
+  <g fill="#f0c6a2"><circle cx="171" cy="474" r="8"/><circle cx="205" cy="474" r="8"/><circle cx="239" cy="474" r="8"/></g>
+  <g fill="#b3372b"><rect x="163" y="462" width="16" height="6" rx="2"/><rect x="197" y="462" width="16" height="6" rx="2"/><rect x="231" y="462" width="16" height="6" rx="2"/></g>
+  <g fill="#f4c430"><path d="M176 490h18l6-6v12l-6-6z"/><circle cx="252" cy="492" r="12"/><path d="M212 488q10-12 18 0" stroke="#f4c430" stroke-width="5" fill="none"/></g>
+  <circle cx="252" cy="492" r="6" fill="#d9a81c"/>
+  <g fill="#2b241a" stroke="#2b241a"><use class="note" href="#qn" x="190" y="430" width="16" height="24"/><use class="note n2" href="#qn" x="232" y="440" width="14" height="21"/><use class="note n3" href="#qn" x="160" y="444" width="14" height="21"/></g>
+</g>
+<!-- hedge and green -->
+<path id="hedge" fill="#3f8a3a"/>
+<rect x="-1000" y="532" width="3600" height="900" fill="url(#greenG)"/>
+<g id="stripes" fill="#b4de6c" opacity=".3"></g>
+<g id="tufts"></g>
+<g id="bunt"></g>
+
+<!-- behind the prize table: Mr Pegg and Dot -->
+<g id="pegg" transform="translate(26 0)">
+  <path d="M478 560h120v50h-120z" fill="#5a7d4e"/>
+  <rect x="586" y="512" width="26" height="70" rx="12" fill="#54764a" transform="rotate(-150 599 520)"/>
+  <circle cx="622" cy="466" r="11" fill="#ecb89a"/><path d="M622 462L640 420" stroke="#c1c9c8" stroke-width="4" stroke-linecap="round"/><ellipse cx="643" cy="412" rx="8" ry="11" fill="#c1c9c8" transform="rotate(24 643 412)"/>
+  <use href="#ch-pegg" x="470" y="404" width="136" height="177"/>
+</g>
+<g id="nash">
+  <path d="M802 552h120v62h-120z" fill="#4a5a3c"/>
+  <use href="#ch-nash" x="792" y="376" width="140" height="182"/>
+</g>
+
+<!-- the prize table -->
+<g id="ptable">
+  <path d="M430 616H940L926 592H444Z" fill="#fdfdf8"/>
+  <rect x="430" y="616" width="510" height="160" fill="url(#clothG)"/>
+  <path d="M520 620q-8 80 4 154M690 620q8 80-2 154M840 620q-6 70 4 154" stroke="#d6d1c2" stroke-width="2.500" fill="none"/>
+  <path d="M430 776h510" stroke="#000" stroke-width="5" opacity=".14"/>
+  <use href="#cup" x="752" y="562" width="36" height="32"/><ellipse cx="767" cy="569" rx="10.500" ry="3" fill="#e9782a"/>
+  <rect x="540" y="664" width="270" height="52" rx="5" fill="#fff8e2" stroke="#2c6a3f" stroke-width="4"/><text x="675" y="700" class="banT">CLASS 12</text>
+  <!-- the silver cup -->
+  <g id="trophy">
+    <rect x="474" y="586" width="56" height="12" rx="2" fill="#2b241a"/><rect x="494" y="566" width="16" height="22" fill="url(#silverG)"/>
+    <path d="M472 508h60q0 60-30 60t-30-60z" fill="url(#silverG)"/><path d="M472 516q-18 2-16 20t22 18M532 516q18 2 16 20t-22 18" stroke="#aeb9c0" stroke-width="5" fill="none"/>
+    <ellipse cx="502" cy="508" rx="30" ry="6" fill="#dfe6ea"/>
+    <path class="glint" d="M486 522l3 9 9 3-9 3-3 9-3-9-9-3 9-3z" fill="#fff"/>
+  </g>
+  <!-- first prize -->
+  <g id="winner">
+    <g stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"><path class="steam" d="M640 454q-14-20 0-38t0-38"/><path class="steam s2" d="M676 444q14-20 0-38t0-38"/><path class="steam s3" d="M710 456q-12-18 0-34t0-34"/></g>
+    <path d="M596 510q-18 2-18 20t20 18M754 510q18 2 18 20t-20 18" stroke="#8a9aa0" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <rect x="602" y="482" width="146" height="116" fill="url(#steelG)"/><path d="M602 506h146M602 576h146" stroke="#fff" stroke-width="2" opacity=".35"/>
+    <ellipse cx="675" cy="482" rx="75" ry="15" fill="#cfd8da"/><ellipse cx="675" cy="483" rx="68" ry="11" fill="#e9782a"/>
+    <path d="M634 482q20-7 42 0t40 0" stroke="#f6a03a" stroke-width="3.500" fill="none" stroke-linecap="round"/>
+    <g transform="translate(675 540)"><path d="M-12 14l-9 42 16-11 5 13 5-13 16 11-9-42z" fill="#b3372b"/><g id="pleat" fill="#d2452f"></g><circle r="21" fill="#d2452f"/>
+      <circle r="21" fill="none" stroke="#b3372b" stroke-width="2.500" stroke-dasharray="4 3.200"/><circle r="14" fill="#fff6e0"/><text y="5" class="rosT">1st</text></g>
+  </g>
+  <!-- second prize -->
+  <g id="bruce"></g>
+</g>
+
+<!-- Mrs Bell reads the rules -->
+<g id="bell">
+  <ellipse cx="330" cy="842" rx="86" ry="9" fill="#000" opacity=".18"/>
+  <rect x="300" y="784" width="20" height="46" fill="#e7c3a2"/><rect x="342" y="784" width="20" height="46" fill="#e7c3a2"/>
+  <path d="M292 842q0-13 16-13h14v13zM334 842q0-13 16-13h14v13z" fill="#2f4a36"/>
+  <path d="M276 676h110l10 112H266z" fill="url(#tweed)"/>
+  <rect x="250" y="566" width="26" height="124" rx="12" fill="#274372" transform="rotate(4 263 568)"/><circle cx="256" cy="694" r="11" fill="#f3cdac"/>
+  <path d="M268 560h126l5 124H263z" fill="#2c4a7c"/><g fill="#d8b150"><circle cx="338" cy="600" r="4"/><circle cx="338" cy="632" r="4"/><circle cx="338" cy="664" r="4"/></g>
+  <rect x="380" y="566" width="26" height="80" rx="12" fill="#274372" transform="rotate(-128 393 572)"/>
+  <g transform="rotate(-8 444 520)"><rect x="420" y="476" width="54" height="72" fill="#fffef7" stroke="#cdbf9d" stroke-width="1.500"/><path d="M428 490h38M428 500h38M428 510h30M428 520h38M428 530h24" stroke="#3d5a9a" stroke-width="2"/><rect x="420" y="476" width="54" height="9" fill="#2c6a3f"/></g>
+  <circle cx="440" cy="534" r="11" fill="#f3cdac"/>
+  <use href="#ch-iris" x="262" y="390" width="136" height="177"/>
+</g>
+
+<!-- Dot, with the ladle -->
+<g id="dot">
+  <ellipse cx="1010" cy="842" rx="84" ry="9" fill="#000" opacity=".18"/>
+  <rect x="980" y="790" width="20" height="40" fill="#f6ceae"/><rect x="1022" y="790" width="20" height="40" fill="#f6ceae"/>
+  <path d="M972 842q0-13 16-13h14v13zM1014 842q0-13 16-13h14v13z" fill="#7a4a2a"/>
+  <path d="M946 676h130l8 122H938z" fill="#257a76"/>
+  <path d="M950 572h122l4 112H946z" fill="#2f8f8a"/>
+  <rect x="1060" y="578" width="26" height="110" rx="12" fill="#2a827d" transform="rotate(-5 1073 580)"/><circle cx="1082" cy="692" r="11" fill="#f6ceae"/>
+  <path d="M972 600h78v166h-78z" fill="#fbf7ee"/><rect x="972" y="596" width="78" height="9" rx="3" fill="#d2452f"/><path d="M992 690h38v34h-38z" fill="none" stroke="#e6e2d6" stroke-width="2.500"/>
+  <circle cx="1030" cy="650" r="6" fill="#e8892b" opacity=".85"/><circle cx="1012" cy="668" r="3" fill="#e8892b" opacity=".85"/>
+  <rect x="934" y="574" width="26" height="66" rx="12" fill="#2a827d" transform="rotate(160 947 580)"/>
+  <path d="M924 522L914 412" stroke="#8a9aa0" stroke-width="5" stroke-linecap="round"/><ellipse cx="912" cy="400" rx="15" ry="11" fill="#8a9aa0" transform="rotate(10 912 400)"/><ellipse cx="912" cy="398" rx="10" ry="6" fill="#e9782a" transform="rotate(10 912 398)"/>
+  <circle cx="924" cy="520" r="11" fill="#f6ceae"/>
+  <use href="#ch-dot" x="942" y="404" width="136" height="177"/>
+</g>
+
+<!-- Alfie, washing up -->
+<g id="alfie">
+  <ellipse cx="170" cy="862" rx="150" ry="10" fill="#000" opacity=".18"/>
+  <path d="M4 800h44M10 800l-6 62M42 800l6 62" stroke="#8f6030" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <use href="#cup" x="8" y="770" width="34" height="31"/><use href="#cup" x="8" y="758" width="34" height="31"/><use href="#cup" x="8" y="746" width="34" height="31"/><use href="#cup" x="8" y="734" width="34" height="31"/><use href="#cup" x="8" y="722" width="34" height="31"/><use href="#cup" x="8" y="710" width="34" height="31"/>
+  <path d="M110 718h100l-4 76h-92z" fill="#f4f1e8"/><path d="M111 738h98M112 756h96M113 774h94" stroke="#27457c" stroke-width="7"/>
+  <rect x="84" y="722" width="26" height="70" rx="12" fill="#f8d2b3" transform="rotate(-10 97 726)"/><rect x="210" y="722" width="26" height="70" rx="12" fill="#f8d2b3" transform="rotate(10 223 726)"/>
+  <rect x="84" y="720" width="28" height="24" rx="11" fill="#f4f1e8" transform="rotate(-10 97 726)"/><rect x="208" y="720" width="28" height="24" rx="11" fill="#f4f1e8" transform="rotate(10 223 726)"/>
+  <use href="#ch-alfie" x="98" y="562" width="124" height="161"/>
+  <path d="M54 786h214l-16 74H70z" fill="url(#steelG)"/><ellipse cx="161" cy="786" rx="107" ry="15" fill="#8a9aa0"/><ellipse cx="161" cy="786" rx="98" ry="11" fill="#d6eef6"/>
+  <g fill="#fff"><circle cx="110" cy="782" r="13"/><circle cx="134" cy="776" r="16"/><circle cx="160" cy="782" r="13"/><circle cx="186" cy="776" r="15"/><circle cx="210" cy="783" r="12"/><circle cx="92" cy="788" r="9"/><circle cx="228" cy="788" r="9"/></g>
+  <g fill="#fff" stroke="#bfe6ef" stroke-width="1.500"><circle class="bub" cx="126" cy="760" r="6"/><circle class="bub b2" cx="176" cy="756" r="8"/><circle class="bub b3" cx="206" cy="764" r="5"/></g>
+  <path d="M74 812h180M80 836h168" stroke="#77878d" stroke-width="2"/>
+</g>
+
+<!-- Miss Tan has brought her own chair -->
+<g id="tan">
+  <ellipse cx="1220" cy="866" rx="92" ry="9" fill="#000" opacity=".18"/>
+  <path d="M1178 868L1294 692" stroke="#8f6030" stroke-width="8" stroke-linecap="round"/><path d="M1294 868L1210 738" stroke="#8f6030" stroke-width="8" stroke-linecap="round"/>
+  <path d="M1194 814L1280 692L1302 706L1220 832Z" fill="url(#chairS)"/>
+  <path d="M1158 828h50v36h-46z" fill="#56703e"/><path d="M1196 790h88l-9 40h-116l7-24z" fill="#4f6b3a"/>
+  <path d="M1148 872q0-13 16-13h32v13z" fill="#27457c"/><rect x="1160" y="846" width="40" height="16" fill="#27457c"/>
+  <rect x="1262" y="720" width="24" height="62" rx="11" fill="#6a3661" transform="rotate(24 1274 724)"/><rect x="1180" y="720" width="24" height="62" rx="11" fill="#7b4170" transform="rotate(-24 1192 724)"/>
+  <circle cx="1220" cy="778" r="10" fill="#ecc9a4"/><circle cx="1246" cy="778" r="10" fill="#ecc9a4"/>
+  <use href="#ch-olive" x="1170" y="622" width="126" height="164"/>
+</g>
+<rect x="-1000" y="-700" width="3600" height="2300" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="gaz" id="gaz">
+  <div class="gaz-mast">The Wickerby Gazette</div>
+  <div class="gaz-date">Show day &middot; late news &middot; one penny</div>
+  <h1>Prize pumpkin in the soup</h1>
+  <p class="gaz-sub" id="g-sub">And so is Alfie Pringle, aged eleven. He is washing up until five o&rsquo;clock.</p>
+  <p class="ln" id="g-time"></p><p class="ln" id="g-hints"></p><p class="ln" id="g-words"></p>
+  <div class="row"><button type="button" class="btn" id="b-write">Write Gran&rsquo;s note again</button><button type="button" class="btn" id="b-book">Open the notebook</button><button type="button" class="btn" id="b-lobby">Back to the case files</button></div>
+  <small>Where Is Gloria? &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$;
+  function E(n, a, inner) {
+    var s = '<' + n, k;
+    for (k in a) s += ' ' + k + '="' + a[k] + '"';
+    return s + (inner == null ? '/>' : '>' + inner + '</' + n + '>');
+  }
+  (function () {
+    var s = 'M-1000 560V524', x, i, a, b, t, an, pts, cols = ['#d2452f', '#f2c230', '#3a7fb8', '#6ea83c', '#fff8e2', '#e9832b'], seg;
+    for (x = -1000; x < 2600; x += 36) s += 'q18-22 36 0';
+    $('#hedge').setAttribute('d', s + 'V560Z'); s = '';
+    for (i = -9; i < 9; i++) {
+      if (i & 1) continue;
+      a = i * 200; b = (i + 1) * 200;
+      s += E('path', { d: 'M' + (700 + a * 0.6).toFixed(0) + ' 536L' + (700 + b * 0.6).toFixed(0) + ' 536L' + (700 + b * 1.7).toFixed(0) + ' 1500L' + (700 + a * 1.7).toFixed(0) + ' 1500Z' });
+    }
+    $('#stripes').innerHTML = s; s = '';
+    for (i = 0; i < 90; i++) {
+      x = (i * 577) % 1700 - 60; t = 560 + (i * 331) % 330;
+      s += 'M' + x + ' ' + t + 'l-4-9M' + x + ' ' + t + 'l1-11M' + x + ' ' + t + 'l5-8';
+    }
+    $('#tufts').innerHTML = E('path', { d: s, stroke: '#5f9d38', 'stroke-width': 2.4, 'stroke-linecap': 'round', fill: 'none' }); s = '';
+    /* flags from the tent to the church to the oak */
+    [[[96, 290], [364, 244], 34], [[364, 244], [1010, 250], 78], [[1010, 250], [1330, 300], 40]].forEach(function (g) {
+      var n = Math.round((g[1][0] - g[0][0]) / 38), p = [], j;
+      for (j = 0; j <= n; j++) { t = j / n; p.push([g[0][0] + (g[1][0] - g[0][0]) * t, g[0][1] + (g[1][1] - g[0][1]) * t + g[2] * Math.sin(Math.PI * t)]); }
+      s += E('path', { d: 'M' + p.map(function (q) { return q[0].toFixed(0) + ' ' + q[1].toFixed(1); }).join('L'), stroke: '#8a6a3a', 'stroke-width': 2.5, fill: 'none' });
+      for (j = 0; j < n; j++) {
+        a = p[j]; b = p[j + 1]; an = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+        s += '<g transform="translate(' + ((a[0] + b[0]) / 2).toFixed(1) + ' ' + ((a[1] + b[1]) / 2).toFixed(1) + ') rotate(' + an.toFixed(1) + ')">' +
+          E('path', { 'class': 'flag', d: 'M-15 0H15L0 36Z', fill: cols[j % 6], style: 'animation-delay:' + (-(j * 0.41) % 3).toFixed(2) + 's' }) + '</g>';
+      }
+    });
+    $('#bunt').innerHTML = E('path', { d: 'M1010 250V540', stroke: '#fbf6e8', 'stroke-width': 7 }) + E('circle', { cx: 1010, cy: 246, r: 7, fill: '#f4c430' }) + s; s = '';
+    for (i = 0; i < 14; i++) { an = i * Math.PI / 7; s += E('circle', { cx: (Math.cos(an) * 21).toFixed(1), cy: (Math.sin(an) * 21).toFixed(1), r: 6 }); }
+    $('#pleat').innerHTML = s;
+    /* Bruce, with his blue rosette */
+    s = E('ellipse', { cx: 862, cy: 594, rx: 60, ry: 7, fill: '#000', opacity: 0.16 }) + E('ellipse', { cx: 862, cy: 546, rx: 62, ry: 47, fill: '#c9571a' });
+    [-2, 2, -1, 1, 0].forEach(function (k) {
+      var q = Math.abs(k);
+      s += E('ellipse', { cx: 862 + k * 20, cy: 546, rx: 62 * (0.47 - q * 0.075), ry: 47 * (1 - q * 0.04), fill: q === 2 ? '#c9571a' : (q ? '#e2701f' : '#ec8530'), stroke: '#c9571a', 'stroke-width': 1.4 });
+    });
+    s += E('path', { d: 'M856 502q-4-14 8-20l7 5q-7 5-4 15z', fill: '#6f7a34' }) +
+      '<g transform="translate(904 568)">' + E('path', { d: 'M-8 10l-6 28 10-8 4 9 4-9 10 8-6-28z', fill: '#24558f' }) + E('circle', { r: 15, fill: '#2f6fb5' }) + E('circle', { r: 9, fill: '#f4f1e8' }) + '</g>';
+    $('#bruce').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'mystery', story: 'gloria', storyTitle: 'Where Is Gloria?', id: 'prize', no: 'IV', title: 'Three o’clock',
+    go: 'Go out onto the green',
+    intro: [
+      'You pin the red rosette on the big pot.',
+      'Gran wanted the little pumpkin in the green box under the table. Alfie read half a note, and took the big one on the table. Dot cut it up with a borrowed saw and made the best soup of her life.',
+      'Nobody stole Gloria. Wickerby ate her, at one pound a cup, and came back for more.'
+    ],
+    exit: null, tags: {},
+    onBegin: begin
+  });
+
+  function begin() {
+    var st = ER.state();
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    setTimeout(ER.sfx.bell, 700);
+    ER.narrate([
+      'Three o&rsquo;clock on the village green. The band plays something slow.',
+      'Mrs Bell reads the rules of Class 12 twice. They say &ldquo;heaviest pumpkin&rdquo;. They do not say it has to be in one piece. Gloria weighed forty-one kilos at nine o&rsquo;clock this morning. First prize.',
+      'Mr Nash is second, for the sixth year. He says he does not mind. He has eaten five cups of the winner.',
+      'Mr Pegg tastes the soup at last. He says it needs salt.',
+      'Then he takes an envelope out of his pocket, goes back to the wheelbarrow, and picks up the seeds. Every one of them.'
+    ], function () {
+      var mins = Math.max(1, Math.round((ER.flag('tEnd') - (st.t0 || ER.flag('tEnd'))) / 60000)), hn = ER.hintsUsed();
+      $('#g-time').textContent = 'Day-off detective finds Gloria in ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+      $('#g-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'The detective did not ask for a single hint.';
+      $('#g-words').textContent = 'In the notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' new words.';
+      $('#gaz').classList.add('on'); ER.sfx.ok();
+    });
+  }
+  ER.glossIn($('#gaz'), 'h1, .gaz-sub');
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* writing: the note, done properly */
+  $('#b-write').addEventListener('click', function () {
+    var saved = ER.flag('pad') || {}, box = ER.el('div', 'pad');
+    box.innerHTML = '<h4>Tea tent &middot; kitchen pad</h4>' +
+      '<label for="w1">1. Gran&rsquo;s note went wrong when half of it was lost. Write it again for her. Say which pumpkin, and where it is, in the first sentence.</label><textarea id="w1" placeholder="Alfie! &hellip;"></textarea>' +
+      '<label for="w2">2. Alfie has to say sorry to Mr Pegg. Write his note for him: what he did, why he did it, and what he will do now.</label><textarea id="w2" placeholder="Dear Mr Pegg, &hellip;"></textarea>' +
+      '<label for="w3">Signed</label><input type="text" id="w3" maxlength="60">' +
+      '<div class="count"></div><div class="foot"><span>Saved in this browser as you type.</span><button type="button" class="btn" id="w-print">Print</button><button type="button" class="btn" id="w-done">Done</button></div>';
+    ER.glossIn(box, 'label');
+    ['w1', 'w2', 'w3'].forEach(function (k) { box.querySelector('#' + k).value = saved[k] || ''; });
+    function keep() {
+      var o = {}, n = 0;
+      ['w1', 'w2', 'w3'].forEach(function (k) { o[k] = box.querySelector('#' + k).value; });
+      ['w1', 'w2'].forEach(function (k) { n += o[k].split(/\s+/).filter(function (w) { return /[A-Za-z]/.test(w); }).length; });
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('pad', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#w-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#w-done').addEventListener('click', ER.close);
+    ER.open('ov-pad', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

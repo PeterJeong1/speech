@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Adventure · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-adventure.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{--night:#0a1026;color:#efe3c6;font-family:'EB Garamond',Georgia,serif;-webkit-user-select:none;user-select:none;background:var(--night);
+    background-image:radial-gradient(ellipse 1000px 460px at 50% -150px,rgba(240,201,90,.26),rgba(240,201,90,.05) 55%,transparent 76%),
+      linear-gradient(#141d42,#0a1026 62%)}
+  .back{position:fixed;left:14px;top:12px;z-index:3;height:36px;display:inline-flex;align-items:center;padding:3px 14px 0;border:1px solid rgba(255,255,255,.24);
+    background:rgba(8,10,24,.66);color:#efe9dc;border-radius:3px;font-family:'Josefin Sans',sans-serif;font-size:14px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#f0c96a;color:#f0c96a}
+  header{text-align:center;padding:50px 20px 0}
+  h1{margin:0;font-family:'Limelight',serif;font-weight:normal;font-size:clamp(46px,6.6vw,82px);letter-spacing:.1em;color:#f0c96a;line-height:1;padding-left:.1em;
+    text-shadow:0 3px 0 #5a1722}
+  .dep{display:inline-flex;align-items:center;gap:16px;margin:13px 0 0;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:16px;letter-spacing:.42em;
+    text-transform:uppercase;color:#f3e3bd;padding-left:.42em}
+  .dep:before,.dep:after{content:'';width:70px;height:1px;background:#c79b3b}
+  header p{margin:8px 0 0;font-size:20px;font-style:italic;color:#d6c9a9}
+
+  /* a long carriage window, and what goes past it */
+  .pano{max-width:1124px;margin:26px auto 0;border:3px solid #d9ae48;border-radius:40px;overflow:hidden;background:#0c1432;
+    box-shadow:0 0 0 11px #5a1722,0 0 0 13px #c79b3b,0 22px 44px rgba(0,0,0,.55)}
+  .pano svg{display:block;width:100%;height:auto}
+  .run{animation:run 44s linear infinite;animation-delay:-13s}
+  @keyframes run{from{transform:translateX(-340px)}to{transform:translateX(1240px)}}
+  .pf{transform-box:fill-box;transform-origin:center;animation:pf 2.6s ease-out infinite;opacity:0}
+  .pf.b{animation-delay:-1.3s}
+  @keyframes pf{0%{transform:translate(0,0) scale(.5);opacity:0}15%{opacity:.8}100%{transform:translate(-26px,-22px) scale(2);opacity:0}}
+  .st{animation:st 3.2s steps(2) infinite}.st:nth-child(3n){animation-delay:-1.4s}
+  @keyframes st{50%{opacity:.15}}
+
+  main{max-width:1180px;margin:0 auto;padding:44px 24px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(460px,1fr));gap:30px 30px}
+  .tk{position:relative;display:block;width:100%;padding:0;border:0;text-align:left;cursor:pointer;font:inherit;color:#2a1a1e;
+    background:transparent;filter:drop-shadow(0 14px 22px rgba(0,0,0,.55));transition:transform .18s}
+  .in{position:relative;display:grid;grid-template-columns:136px 1fr;min-height:216px}
+  .tk:nth-child(2n+1){transform:rotate(-.5deg)}.tk:nth-child(2n){transform:rotate(.4deg)}
+  .tk:hover{transform:translateY(-6px) rotate(0)}
+  .stub{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 8px 16px;color:#f0c96a;
+    background:#6f1f2c linear-gradient(160deg,#8f2c3b,#561621);border-radius:8px 0 0 8px;border-right:2px dashed rgba(240,201,106,.7)}
+  .stub:before,.stub:after{content:'';position:absolute;right:-11px;width:20px;height:20px;border-radius:50%;background:var(--night);z-index:1}
+  .stub:before{top:-10px}.stub:after{bottom:-10px}
+  .stub b{font-family:'Limelight',serif;font-weight:normal;font-size:14px;letter-spacing:.18em;padding-left:.18em}
+  .stars{font-size:20px;letter-spacing:1px;line-height:1;white-space:nowrap}
+  .stub span{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#f8ecd0;white-space:nowrap}
+  .stub span.stars{color:#f0c96a;font-size:20px;letter-spacing:1px}
+  .stars i{font-style:normal;opacity:.38}
+  .body{position:relative;display:block;padding:27px 28px 18px 32px;background:#f3ead2 linear-gradient(170deg,rgba(255,255,255,.5),rgba(150,110,50,.14));border-radius:0 8px 8px 0}
+  .body:after{content:'';position:absolute;left:14px;right:14px;top:12px;bottom:12px;border:1px solid rgba(90,23,34,.28);border-radius:3px;pointer-events:none}
+  .no{display:block;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#8a2433}
+  .tk h2{margin:8px 0 8px;font-family:'Limelight',serif;font-weight:normal;font-size:29px;line-height:1.1;color:#5a1722}
+  .tk p{margin:0 0 34px;font-size:19px;line-height:1.38}
+  .state{position:absolute;right:28px;bottom:20px;padding:6px 12px 2px;border:2px solid #2f6b4f;color:#2f6b4f;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:12.5px;
+    letter-spacing:.2em;text-transform:uppercase;border-radius:3px}
+  .tk.going .state{border-color:#1f3a8a;color:#1f3a8a;transform:rotate(-4deg)}
+  .tk.solved .state{border:3px double #8a2433;color:#8a2433;transform:rotate(-5deg);font-size:14px}
+  .tk.solved .in:after{content:'';position:absolute;left:58px;top:20px;width:20px;height:20px;border-radius:50%;background:var(--night);box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}
+  .more{display:grid;place-items:center;min-height:216px;border:2px dashed rgba(240,201,106,.32);border-radius:8px;color:rgba(240,201,106,.66);
+    font-size:20px;font-style:italic;text-align:center;padding:20px}
+  footer{max-width:1180px;margin:0 auto;padding:6px 24px 50px;font-family:'Josefin Sans',sans-serif;font-size:14px;letter-spacing:.07em;color:#bdb199;text-align:center;line-height:1.9}
+  footer b{color:#f0c96a;font-weight:normal;letter-spacing:2px}
+  @media (max-width:540px){main{grid-template-columns:1fr}.in{grid-template-columns:104px 1fr}}
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<header>
+  <h1>Adventure</h1>
+  <div class="dep">Departures</div>
+  <p>Pick a train, mind the step, and read every sign.</p>
+</header>
+<div class="pano">
+  <svg viewBox="0 0 1200 176" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="pSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070d24"/><stop offset=".7" stop-color="#16264f"/><stop offset="1" stop-color="#22386a"/></linearGradient>
+      <radialGradient id="pfG"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+      <radialGradient id="pMoon"><stop offset="0" stop-color="#dfeaff" stop-opacity=".45"/><stop offset="1" stop-color="#dfeaff" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1200" height="176" fill="url(#pSky)"/>
+    <g fill="#eaf2ff"><circle class="st" cx="90" cy="26" r="1.500"/><circle class="st" cx="210" cy="50" r="1.200"/><circle class="st" cx="330" cy="18" r="1.600"/><circle class="st" cx="470" cy="38" r="1.200"/><circle class="st" cx="560" cy="14" r="1.500"/>
+      <circle class="st" cx="720" cy="30" r="1.300"/><circle class="st" cx="820" cy="16" r="1.600"/><circle class="st" cx="900" cy="48" r="1.200"/><circle class="st" cx="1090" cy="18" r="1.500"/><circle class="st" cx="1150" cy="44" r="1.300"/>
+      <circle cx="150" cy="14" r="1"/><circle cx="400" cy="56" r="1"/><circle cx="660" cy="20" r="1"/><circle cx="780" cy="54" r="1"/><circle cx="1010" cy="12" r="1"/></g>
+    <circle cx="986" cy="42" r="60" fill="url(#pMoon)"/><circle cx="986" cy="42" r="15" fill="#f3f0dc"/><circle cx="993" cy="37" r="13" fill="#0e1738"/>
+    <path d="M0 128L80 82L150 108L250 50L340 104L430 72L520 112L640 44L740 104L830 76L930 110L1040 60L1120 102L1200 78V128Z" fill="#1b2d5e"/>
+    <path d="M250 50l17 16-7-1-5 7-6-6-6 7-6-7-7 3zM640 44l17 16-7-1-5 7-6-6-6 7-6-7-7 3zM1040 60l17 16-7-1-5 7-6-6-6 7-6-7-7 3z" fill="#b9c9e8" opacity=".85"/>
+    <path d="M0 128V112q60-14 130-4t150-8 140 10 150-12 140 10 150-10 140 8 120-6 80 4V128z" fill="#0b1430"/>
+    <g fill="#060b1c"><path d="M60 120l8-26 8 26zM84 122l7-20 7 20zM372 118l8-28 8 28zM398 120l7-20 7 20zM760 118l8-26 8 26zM1064 120l8-28 8 28zM1090 122l7-20 7 20z"/></g>
+    <g class="run">
+      <g transform="translate(0 94)">
+        <rect x="0" y="6" width="44" height="19" rx="2" fill="#8a2a38"/><rect x="48" y="6" width="44" height="19" rx="2" fill="#8a2a38"/><rect x="96" y="6" width="44" height="19" rx="2" fill="#8a2a38"/>
+        <rect x="144" y="6" width="44" height="19" rx="2" fill="#8a2a38"/><rect x="192" y="6" width="44" height="19" rx="2" fill="#8a2a38"/>
+        <path d="M0 9h236M0 22h236" stroke="#d9ae48" stroke-width="1"/>
+        <g fill="#ffd98a"><rect x="54" y="12" width="7" height="6"/><rect x="66" y="12" width="7" height="6"/><rect x="78" y="12" width="7" height="6"/><rect x="102" y="12" width="7" height="6"/><rect x="114" y="12" width="7" height="6"/><rect x="126" y="12" width="7" height="6"/>
+          <rect x="150" y="12" width="7" height="6"/><rect x="174" y="12" width="7" height="6"/><rect x="200" y="12" width="7" height="6"/><rect x="8" y="12" width="7" height="6"/></g>
+        <circle cx="0" cy="19" r="3" fill="#ff5a48"/>
+        <path d="M240 25V10h20V2h14v8h22v15z" fill="#10131f"/><rect x="284" y="-5" width="7" height="15" fill="#10131f"/><circle cx="297" cy="14" r="2.500" fill="#fff0b8"/>
+        <path d="M298 14l56-8v16z" fill="#fff0b8" opacity=".25"/>
+        <circle class="pf" cx="287" cy="-11" r="9" fill="url(#pfG)"/><circle class="pf b" cx="287" cy="-11" r="9" fill="url(#pfG)"/>
+        <g fill="#06080f"><circle cx="10" cy="26" r="3"/><circle cx="34" cy="26" r="3"/><circle cx="58" cy="26" r="3"/><circle cx="82" cy="26" r="3"/><circle cx="106" cy="26" r="3"/><circle cx="130" cy="26" r="3"/><circle cx="154" cy="26" r="3"/>
+          <circle cx="178" cy="26" r="3"/><circle cx="202" cy="26" r="3"/><circle cx="226" cy="26" r="3"/><circle cx="252" cy="26" r="3.500"/><circle cx="268" cy="26" r="3.500"/><circle cx="284" cy="26" r="3.500"/></g>
+      </g>
+    </g>
+    <rect x="0" y="123" width="1200" height="5" fill="#c79b3b"/>
+    <path d="M0 176V128H1200V176H1150Q1150 140 1100 140T1050 176H950Q950 140 900 140T850 176H750Q750 140 700 140T650 176H550Q550 140 500 140T450 176H350Q350 140 300 140T250 176H150Q150 140 100 140T50 176Z" fill="#24376e" stroke="#c79b3b" stroke-width="1.500"/>
+  </svg>
+</div>
+<main id="trains"></main>
+<footer><b>&#9733;</b> a short ride for a first try &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;</b> a full journey &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> a long way, and nobody carries your bags</footer>
+
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"orvo","title":"The Night Train to Orvo","stars":1,"minutes":"10-15","hold":false,"level":"A2","blurb":"A snowy station at midnight. A guard with a watch. A train that is never late. Tonight you are the assistant.","rooms":3,"first":"halm.html","firstId":"halm","last":"arrival"}]), box = document.getElementById('trains');
+  var STATE = { 'new': 'Now boarding', going: 'On the way', solved: 'Arrived' };
+  Shelf.init();
+  STORIES.forEach(function (s, i) {
+    var st = Shelf.status('adventure', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'tk ' + st.state; b.setAttribute('data-story', s.id);
+    b.innerHTML = '<span class="in"><span class="stub"><b>ADMIT ONE</b><span class="stars"></span><span class="mins"></span><span class="rooms"></span><span class="lvl"></span></span>' +
+      '<span class="body"><span class="no"></span><h2></h2><p></p><span class="state"></span></span></span>';
+    b.querySelector('.stars').innerHTML = Shelf.stars(s.stars).replace(/☆+/, '<i>$&</i>');      /* the empty stars are dimmed */
+    b.querySelector('.stars').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.mins').textContent = s.minutes + ' min';
+    b.querySelector('.rooms').textContent = s.rooms + ' rooms';
+    b.querySelector('.lvl').textContent = s.level ? 'level ' + s.level : '';
+    b.querySelector('.no').textContent = 'Train ' + (i + 1) + ' · platform 5';
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('p').textContent = s.blurb;
+    b.querySelector('.state').textContent = STATE[st.state] || '';
+    b.addEventListener('click', function () { Shelf.open('adventure', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 4) {
+    var m = document.createElement('div'); m.className = 'more'; m.textContent = 'More trains are on their way.';
+    box.appendChild(m);
+  }
+})();
+</script>
+</body>
+</html>

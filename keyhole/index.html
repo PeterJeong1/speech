@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>KEYHOLE</title>
+<link rel="stylesheet" href="assets/fonts-base.css">
+<link rel="stylesheet" href="assets/fonts-lobby.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{background:#0b1418;overflow:hidden;font-family:'Outfit',Arial,sans-serif;color:#e9e4d8;-webkit-user-select:none;user-select:none}
+  svg{position:fixed;top:0;right:0;bottom:0;left:0;width:100%;height:100%;display:block}
+  .door{cursor:pointer;transition:filter .25s}
+  .door:hover{filter:brightness(1.22)}
+  .door.shut:hover{filter:brightness(1.08)}
+  .shake{animation:shake .45s}
+  @keyframes shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+  .neon{font-family:'Tilt Neon',sans-serif;font-size:104px;letter-spacing:10px;text-anchor:middle;fill:#ffd6ea;stroke:#ff4fa3;stroke-width:2.5}
+  .neonB{font-family:'Tilt Neon',sans-serif;font-size:104px;letter-spacing:10px;text-anchor:middle;fill:none;stroke:#ff2f93;stroke-width:9;opacity:.75}
+  #neonOn{animation:nf 7s steps(1,end) infinite}
+  @keyframes nf{0%,91%,94%,97%,100%{opacity:1}92%,95.5%{opacity:.35}}
+  .sub{font-family:'Outfit',sans-serif;font-weight:300;font-size:21px;letter-spacing:7px;text-anchor:middle;fill:#9fc1cc}
+  .t-my{font-family:'IM Fell English SC',serif;text-anchor:middle}
+  .t-sf{font-family:'Orbitron',sans-serif;font-weight:700;text-anchor:middle}
+  .t-sf2{font-family:'Share Tech Mono',monospace;text-anchor:middle}
+  .t-fa{font-family:'Uncial Antiqua',serif;text-anchor:middle}
+  .t-gh{font-family:'Rock Salt',cursive;text-anchor:middle}
+  .t-gh2{font-family:'Special Elite',monospace;text-anchor:middle}
+  .t-ad{font-family:'Limelight',serif;text-anchor:middle}
+  .t-ci{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .xw{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .door.shut .xw-let{opacity:0}
+  .rune{animation:rune 3.2s steps(3) infinite}.rune:nth-child(2n){animation-delay:-1.1s}.rune:nth-child(3n){animation-delay:-2.2s}
+  @keyframes rune{50%{opacity:.35}}
+  #bulb{animation:bulb 5s steps(1,end) infinite}
+  @keyframes bulb{0%,40%,44%,70%,72%,100%{opacity:.95}42%,71%{opacity:.25}}
+  #underdoor{animation:ud 5s steps(1,end) infinite}
+  @keyframes ud{0%,40%,44%,70%,72%,100%{opacity:.9}42%,71%{opacity:.4}}
+  .led{animation:led 2.4s steps(3) infinite}
+  @keyframes led{50%{opacity:.55}}
+  .blink{animation:blink 1.2s steps(2) infinite}
+  @keyframes blink{50%{opacity:.2}}
+  .pass{animation:pass 3.2s linear infinite}.pass.p2{animation-duration:4.6s;animation-delay:-2s}.pass.p3{animation-duration:2.4s;animation-delay:-1s}
+  @keyframes pass{from{transform:translateX(140px)}to{transform:translateX(-140px)}}
+  .cap{position:fixed;left:50%;bottom:5vh;transform:translate(-50%,10px);width:min(760px,92vw);padding:14px 24px 15px;background:rgba(6,10,13,.92);
+    border-top:2px solid #ff4fa3;font-size:clamp(17px,1.45vw,21px);line-height:1.45;text-align:center;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
+  .cap.on{opacity:1;transform:translate(-50%,0)}
+  .pick{position:fixed;top:0;right:0;bottom:0;left:0;display:none;place-items:center;background:rgba(4,7,9,.72);z-index:5}
+  .pick.on{display:grid}
+  .pick div{background:#f3ecd9;color:#27231d;padding:28px 34px 26px;width:min(430px,92vw);text-align:center;box-shadow:0 26px 70px rgba(0,0,0,.6)}
+  .pick h2{margin:0 0 4px;font-family:'IM Fell English SC',serif;font-weight:normal;font-size:30px}
+  .pick p{margin:0 0 18px;font-family:'EB Garamond',Georgia,serif;font-size:19px}
+  .pick button{display:block;width:100%;margin-top:8px;padding:11px 14px;border:1px solid #27231d;background:transparent;font-family:'Oswald',sans-serif;font-size:14px;
+    letter-spacing:.16em;text-transform:uppercase;color:#27231d;cursor:pointer}
+  .pick button:hover{background:#27231d;color:#f3ecd9}
+  .pick button.q{border-color:transparent;opacity:.6;font-size:12px}
+  .fade{position:fixed;top:0;right:0;bottom:0;left:0;background:#000;opacity:1;pointer-events:none;transition:opacity .9s;z-index:9}
+  .fade.off{opacity:0}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<svg id="hall" viewBox="0 0 1800 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1d24"/><stop offset=".6" stop-color="#1a323c"/><stop offset="1" stop-color="#142830"/></linearGradient>
+  <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1210"/><stop offset="1" stop-color="#2b1d18"/></linearGradient>
+  <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#16382e"/><stop offset=".5" stop-color="#24574a"/><stop offset="1" stop-color="#132f27"/></linearGradient>
+  <linearGradient id="amber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe7a8"/><stop offset="1" stop-color="#f29a3a"/></linearGradient>
+  <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b4753"/><stop offset=".5" stop-color="#5d6c7a"/><stop offset="1" stop-color="#35404b"/></linearGradient>
+  <linearGradient id="oak" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a3a1e"/><stop offset=".5" stop-color="#7d5430"/><stop offset="1" stop-color="#523418"/></linearGradient>
+  <linearGradient id="pale" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b7beb3"/><stop offset=".6" stop-color="#9ea69b"/><stop offset="1" stop-color="#858d83"/></linearGradient>
+  <linearGradient id="wine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a1722"/><stop offset=".5" stop-color="#7c2532"/><stop offset="1" stop-color="#52141e"/></linearGradient>
+  <linearGradient id="nightwin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1230"/><stop offset="1" stop-color="#1d2f5e"/></linearGradient>
+  <pattern id="hazard" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="40" height="40" fill="#e9c12b"/><rect width="20" height="40" fill="#15171a"/></pattern>
+  <pattern id="runner" width="80" height="60" patternUnits="userSpaceOnUse"><rect width="80" height="60" fill="#5a1622"/><path d="M40 8l28 22-28 22-28-22z" fill="#70202e"/><circle cx="40" cy="30" r="5" fill="#c79b3b"/></pattern>
+  <radialGradient id="pool"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>
+  <filter id="glow2" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="16"/></filter>
+  <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="28"/></filter>
+  <linearGradient id="ink" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#17181c"/><stop offset=".5" stop-color="#2a2c33"/><stop offset="1" stop-color="#131417"/></linearGradient>
+  <clipPath id="trainwin"><rect x="40" y="52" width="120" height="150" rx="60"/></clipPath>
+</defs>
+
+<!-- corridor -->
+<rect x="-1000" width="3600" height="770" fill="url(#wall)"/>
+<g stroke="#213d48" stroke-width="2" opacity=".7"><path d="M50 0v770M330 0v770M610 0v770M890 0v770M1170 0v770M1450 0v770M1730 0v770"/></g>
+<rect x="-1000" y="-700" width="3600" height="752" fill="#081014"/><rect x="-1000" y="52" width="3600" height="6" fill="#c79b3b" opacity=".55"/>
+<rect x="-1000" y="752" width="3600" height="18" fill="#0a1216"/>
+<rect x="-1000" y="770" width="3600" height="130" fill="url(#floor)"/><rect x="-1000" y="899" width="3600" height="700" fill="#2b1d18"/>
+<g stroke="#120c0a" stroke-width="2"><path d="M-1000 800H2600M-1000 840H2600M-1000 880H2600M-1000 920H2600M-1000 960H2600M-1000 1000H2600M-1000 1040H2600M-1000 1080H2600"/></g>
+<path d="M-1000 806H2600V1600H-1000z" fill="url(#runner)" opacity=".9"/><path d="M-1000 806H2600" stroke="#c79b3b" stroke-width="4"/>
+
+<!-- colour spilling from each door -->
+<g filter="url(#soft)" opacity=".5">
+  <ellipse cx="200" cy="800" rx="160" ry="46" fill="#ffb347"/><ellipse cx="480" cy="800" rx="160" ry="46" fill="#39e6ff"/><ellipse cx="760" cy="800" rx="160" ry="46" fill="#b48cff"/>
+  <ellipse cx="1040" cy="800" rx="160" ry="46" fill="#cfeee0"/><ellipse cx="1320" cy="800" rx="160" ry="46" fill="#ff6a4a"/><ellipse cx="1600" cy="800" rx="160" ry="46" fill="#f4e04d"/>
+</g>
+
+<!-- the sign -->
+<g id="neonOn">
+  <text x="820" y="150" class="neonB" filter="url(#glow2)">KEYHOLE</text>
+  <text x="820" y="150" class="neon">KEYHOLE</text>
+  <g transform="translate(440 76)" fill="none" stroke="#39e6ff" stroke-width="5"><g filter="url(#glow)" opacity=".8"><circle cx="30" cy="26" r="24"/><path d="M18 46l-10 44h44l-10-44"/></g><circle cx="30" cy="26" r="24"/><path d="M18 46l-10 44h44l-10-44"/></g>
+</g>
+<text x="800" y="208" class="sub">SIX DOORS · EACH ONE OPENS WITH WHAT YOU NOTICE</text>
+
+<!-- 1  MYSTERY -->
+<g class="door shut" data-t="mystery" transform="translate(100 320)">
+  <text x="100" y="-52" class="t-my" font-size="32" fill="#e2c06a" letter-spacing="3">MYSTERY</text>
+  <text id="sub-mystery" x="100" y="-24" class="t-my" font-size="18" fill="#d9cfb4" letter-spacing="1">Somebody did it</text>
+  <rect x="-14" y="-10" width="228" height="454" fill="#1c120c"/>
+  <path d="M0 44q0-44 100-44t100 44z" fill="url(#amber)"/><path d="M100 0v44M40 14l60 30M160 14l-60 30" stroke="#1c120c" stroke-width="5"/>
+  <rect x="0" y="50" width="200" height="390" fill="url(#g1)"/>
+  <g fill="none" stroke="#0d241d" stroke-width="4"><rect x="16" y="66" width="76" height="110"/><rect x="108" y="66" width="76" height="110"/><rect x="16" y="192" width="76" height="100"/><rect x="108" y="192" width="76" height="100"/><rect x="16" y="308" width="76" height="116"/><rect x="108" y="308" width="76" height="116"/></g>
+  <circle cx="100" cy="128" r="15" fill="none" stroke="url(#brass)" stroke-width="5"/><circle cx="100" cy="110" r="6" fill="url(#brass)"/>
+  <circle cx="178" cy="246" r="9" fill="url(#brass)"/>
+  <g transform="rotate(8 170 290)"><path d="M178 254v20" stroke="#d9cfb4" stroke-width="1.5"/><rect x="140" y="272" width="62" height="30" fill="#f3ecd9"/><text x="171" y="293" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="600" font-size="14" letter-spacing="1.5" fill="#8c2f24" id="tag1">COME IN</text></g>
+  <ellipse cx="100" cy="24" rx="150" ry="120" fill="url(#pool)" opacity=".12" style="mix-blend-mode:screen"/>
+</g>
+
+<!-- 2  SCI-FI -->
+<g class="door shut" data-t="scifi" transform="translate(380 320)">
+  <text x="100" y="-52" class="t-sf" font-size="30" fill="#39e6ff" letter-spacing="6">SCI-FI</text>
+  <text id="sub-scifi" x="100" y="-24" class="t-sf2" font-size="17" fill="#a9c7d1">Seven Hours of Air</text>
+  <rect x="-18" y="-10" width="236" height="454" rx="14" fill="#1d242c"/>
+  <rect x="0" y="6" width="200" height="434" rx="8" fill="url(#steel)"/>
+  <path d="M100 6v434M0 250h200M0 330h200" stroke="#27313b" stroke-width="4"/>
+  <g fill="#27313b"><circle cx="14" cy="22" r="4"/><circle cx="186" cy="22" r="4"/><circle cx="14" cy="424" r="4"/><circle cx="186" cy="424" r="4"/><circle cx="14" cy="236" r="4"/><circle cx="186" cy="236" r="4"/></g>
+  <circle cx="100" cy="132" r="52" fill="#232c35"/><circle cx="100" cy="132" r="42" fill="#050a1c"/>
+  <g fill="#e9f3ff"><circle cx="82" cy="112" r="1.800"/><circle cx="118" cy="104" r="1.300"/><circle cx="126" cy="140" r="1.600"/><circle cx="76" cy="146" r="1.200"/><circle cx="104" cy="122" r="1"/></g>
+  <path d="M62 166q38-34 76 0q-38 24-76 0z" fill="#2f6fb5" opacity=".9"/><path d="M70 160q30-20 60 0" stroke="#7fb6ea" stroke-width="2" fill="none"/>
+  <rect x="0" y="372" width="200" height="40" fill="url(#hazard)"/>
+  <g class="led"><rect x="-12" y="16" width="6" height="414" fill="#39e6ff" filter="url(#glow)"/><rect x="206" y="16" width="6" height="414" fill="#39e6ff" filter="url(#glow)"/><rect x="-11" y="16" width="4" height="414" fill="#c9f8ff"/><rect x="207" y="16" width="4" height="414" fill="#c9f8ff"/></g>
+  <rect x="128" y="264" width="54" height="56" rx="4" fill="#12171d"/><g fill="#39e6ff" opacity=".85"><rect x="136" y="288" width="9" height="9"/><rect x="150" y="288" width="9" height="9"/><rect x="164" y="288" width="9" height="9"/><rect x="136" y="302" width="9" height="9"/><rect x="150" y="302" width="9" height="9"/><rect x="164" y="302" width="9" height="9"/></g>
+  <text id="led-scifi" x="155" y="281" class="t-sf2 blink" font-size="12" fill="#ff5a4a">SEALED</text>
+</g>
+
+<!-- 3  FANTASY -->
+<g class="door shut" data-t="fantasy" transform="translate(660 320)">
+  <text x="100" y="-58" class="t-fa" font-size="30" fill="#d6b8ff">Fantasy</text>
+  <text id="sub-fantasy" x="100" y="-30" class="t-fa" font-size="14.500" fill="#d9cfb4">The Library That Locks at Dusk</text>
+  <path d="M-24 444V112Q-24-18 100-18Q224-18 224 112V444Z" fill="#59606e"/>
+  <g stroke="#434a57" stroke-width="3" fill="none"><path d="M-24 380h24M-24 310h24M-24 240h24M-24 170h24M200 380h24M200 310h24M200 240h24M200 170h24M-12 78l22 14M34 14l12 22M100-18v22M166 14l-12 22M212 78l-22 14"/></g>
+  <path d="M0 444V114Q0 6 100 6Q200 6 200 114V444Z" fill="url(#oak)"/>
+  <path d="M40 30v414M80 10v434M120 10v434M160 30v414" stroke="#4a2f16" stroke-width="3"/>
+  <g fill="#16171a"><path d="M0 150h120l14 9-14 9H0z"/><path d="M0 330h120l14 9-14 9H0z"/></g>
+  <circle cx="160" cy="250" r="17" fill="none" stroke="#16171a" stroke-width="6"/><circle cx="160" cy="230" r="6" fill="#16171a"/>
+  <g filter="url(#glow)"><circle cx="160" cy="296" r="6" fill="#ffd66b"/></g><path d="M160 290a5 5 0 1 1 0 .1zM157 296h6l2 12h-10z" fill="#ffe9a8"/>
+  <g stroke="#c9a6ff" stroke-width="3.500" fill="none" stroke-linecap="round" filter="url(#glow)" opacity=".9">
+    <path class="rune" d="M-14 300v-22l10 10-10 10"/><path class="rune" d="M-16 210h12M-10 198v24"/><path class="rune" d="M4 96l12 12-12 12M16 96l-12 24"/><path class="rune" d="M60 20l8 18 8-18"/><path class="rune" d="M132 18v20M124 24l16 8"/><path class="rune" d="M186 98l10 22M196 98l-10 22"/><path class="rune" d="M204 208l10 10-10 10-0-20"/><path class="rune" d="M206 290h12l-12 18h12"/>
+  </g>
+  <g stroke="#e9d9ff" stroke-width="1.600" fill="none" stroke-linecap="round" opacity=".9"><path d="M-14 300v-22l10 10-10 10M-16 210h12M-10 198v24M4 96l12 12-12 12M16 96l-12 24M60 20l8 18 8-18M132 18v20M124 24l16 8M186 98l10 22M196 98l-10 22M204 208l10 10-10 10-0-20M206 290h12l-12 18h12"/></g>
+  <path d="M-30 444q-4-80 14-140t-6-120" stroke="#2f5a34" stroke-width="5" fill="none"/>
+  <g fill="#3f7a45"><ellipse cx="-34" cy="400" rx="12" ry="7" transform="rotate(-30 -34 400)"/><ellipse cx="-14" cy="350" rx="12" ry="7" transform="rotate(30 -14 350)"/><ellipse cx="-30" cy="310" rx="11" ry="6" transform="rotate(-40 -30 310)"/><ellipse cx="-12" cy="262" rx="11" ry="6" transform="rotate(20 -12 262)"/><ellipse cx="-30" cy="216" rx="10" ry="6" transform="rotate(-30 -30 216)"/></g>
+</g>
+
+<!-- 4  GHOST STORY -->
+<g class="door shut" data-t="ghost" transform="translate(940 320)">
+  <text x="100" y="-56" class="t-gh" font-size="20" fill="#dfe8df">Ghost Story</text>
+  <text id="sub-ghost" x="100" y="-24" class="t-gh2" font-size="15.500" fill="#b9c2b8">Room 13 Is Not on the Plan</text>
+  <path d="M229-268v160" stroke="#0a1014" stroke-width="3"/><g id="bulb"><circle cx="229" cy="-94" r="40" fill="#f4ffe9" opacity=".22" filter="url(#glow2)"/><ellipse cx="229" cy="-94" rx="10" ry="13" fill="#f4ffe9"/></g>
+  <rect x="-14" y="-10" width="228" height="454" fill="#232624"/>
+  <rect x="0" y="4" width="200" height="436" fill="url(#pale)"/>
+  <g fill="#6f776c" opacity=".35"><ellipse cx="40" cy="330" rx="46" ry="90"/><ellipse cx="170" cy="120" rx="30" ry="70"/></g>
+  <g fill="none" stroke="#7a8277" stroke-width="3"><rect x="18" y="24" width="72" height="150"/><rect x="110" y="24" width="72" height="150"/><rect x="18" y="200" width="72" height="220"/><rect x="110" y="200" width="72" height="220"/></g>
+  <g stroke="#454b44" stroke-width="1.600" fill="none"><path d="M30 4l14 60-10 40 16 70M150 440l-10-70 14-50-8-60M88 200l-20 30 8 24"/></g>
+  <g fill="#c7cdc2"><path d="M120 250l14 4-6 14-10-6zM60 110l10-6 6 12-12 4zM150 380l12 6-10 10z"/></g>
+  <text x="84" y="124" font-family="Cinzel,serif" font-weight="700" font-size="54" fill="#8a6a1f" stroke="#3a2a08" stroke-width="1.5" text-anchor="middle">1</text>
+  <text x="122" y="124" font-family="Cinzel,serif" font-weight="700" font-size="54" fill="#8a6a1f" stroke="#3a2a08" stroke-width="1.5" text-anchor="middle" transform="rotate(16 122 104)">3</text>
+  <circle cx="174" cy="248" r="10" fill="#7a6a3a"/>
+  <g transform="rotate(-9 150 300)"><path d="M174 258v18" stroke="#c9c9c0" stroke-width="1.500"/><rect x="118" y="274" width="84" height="40" fill="#e9e6da"/><text x="160" y="291" class="t-gh2" font-size="11" fill="#5a2a22">DO NOT</text><text x="160" y="306" class="t-gh2" font-size="11" fill="#5a2a22">DISTURB</text></g>
+  <g stroke="#cfd6cc" stroke-width="1" fill="none" opacity=".55"><path d="M-14-10l46 30M-14-10l30 50M-14-10l10 60M-4 22q12-4 20-14M-8 38q20-4 32-26"/></g>
+  <g id="underdoor"><rect x="0" y="436" width="200" height="6" fill="#e6fbff"/><path d="M0 442h200l40 60H-40z" fill="#dff6ff" opacity=".22" filter="url(#glow)"/></g>
+</g>
+
+<!-- 5  ADVENTURE -->
+<g class="door shut" data-t="adventure" transform="translate(1220 320)">
+  <text x="100" y="-52" class="t-ad" font-size="30" fill="#f0c95a" letter-spacing="2">ADVENTURE</text>
+  <text id="sub-adventure" x="100" y="-24" class="t-ad" font-size="17" fill="#e9d9b4">The Night Train to Orvo</text>
+  <rect x="-34" y="-10" width="268" height="454" fill="#3d111a"/><rect x="-24" y="2" width="248" height="430" fill="none" stroke="#c79b3b" stroke-width="2"/>
+  <rect x="0" y="14" width="200" height="426" rx="6" fill="url(#wine)"/><rect x="10" y="24" width="180" height="406" rx="4" fill="none" stroke="#d9ae48" stroke-width="2"/>
+  <rect x="34" y="46" width="132" height="162" rx="66" fill="#d9ae48"/><rect x="40" y="52" width="120" height="150" rx="60" fill="url(#nightwin)"/>
+  <g clip-path="url(#trainwin)"><path d="M40 176q30-26 60-8t60-12v46H40z" fill="#0c1730"/>
+    <g fill="#ffd98a"><circle class="pass" cx="100" cy="150" r="3.500"/><circle class="pass p2" cx="100" cy="120" r="2.500"/><circle class="pass p3" cx="100" cy="166" r="3"/></g>
+    <circle cx="126" cy="86" r="11" fill="#f3f0dc"/><path d="M52 60l46 140" stroke="#fff" stroke-width="6" opacity=".12"/></g>
+  <rect x="34" y="234" width="132" height="40" rx="4" fill="#f3efe2"/><text x="100" y="263" class="t-ad" font-size="25" fill="#3d111a" letter-spacing="6">ORVO</text>
+  <circle cx="100" cy="350" r="34" fill="none" stroke="#d9ae48" stroke-width="3"/><path d="M100 326l7 16 17 2-13 12 4 17-15-9-15 9 4-17-13-12 17-2z" fill="#d9ae48"/>
+  <rect x="178" y="226" width="8" height="110" rx="4" fill="url(#brass)"/>
+  <rect x="-16" y="440" width="232" height="14" fill="#1f1f24"/>
+  <text id="dep-adventure" x="100" y="418" class="t-ad" font-size="11" fill="#e9d9b4" letter-spacing="2">NEXT DEPARTURE: SOON</text>
+</g>
+
+<!-- 6  CIPHER -->
+<g class="door shut" data-t="cipher" transform="translate(1500 320)">
+  <text x="100" y="-52" class="t-ci" font-size="34" fill="#f4e04d" letter-spacing="9">CIPHER</text>
+  <text id="sub-cipher" x="100" y="-24" class="t-gh2" font-size="16" fill="#d7d2bd">Every lock is a word</text>
+  <rect x="-14" y="-10" width="228" height="454" fill="#08090a"/>
+  <rect x="0" y="4" width="200" height="436" fill="url(#ink)"/>
+  <rect x="8" y="12" width="184" height="420" fill="none" stroke="#3d4049" stroke-width="2"/>
+  <rect x="18.500" y="26.500" width="163" height="163" fill="#08090a"/>
+  <path fill="#f1eee2" d="M19.500 27.500h26v26h-26zM73.500 27.500h26v26h-26zM127.500 27.500h26v26h-26zM19.500 54.500h26v26h-26zM73.500 54.500h26v26h-26zM127.500 54.500h26v26h-26zM19.500 108.500h26v26h-26zM73.500 108.500h26v26h-26zM127.500 108.500h26v26h-26zM46.500 135.500h26v26h-26zM73.500 135.500h26v26h-26zM100.500 135.500h26v26h-26zM154.500 135.500h26v26h-26zM19.500 162.500h26v26h-26zM73.500 162.500h26v26h-26zM127.500 162.500h26v26h-26zM154.500 162.500h26v26h-26z"/>
+  <path fill="#f4e04d" d="M19.500 81.500h26v26h-26zM46.500 81.500h26v26h-26zM73.500 81.500h26v26h-26zM100.500 81.500h26v26h-26zM127.500 81.500h26v26h-26zM154.500 81.500h26v26h-26z"/>
+  <g class="xw" font-size="7" fill="#55524a" style="text-anchor:start"><text x="21.500" y="35">1</text><text x="75.500" y="62">2</text><text x="129.500" y="62">3</text><text x="21.500" y="89">4</text></g>
+  <g class="xw xw-let" font-size="19" fill="#141518">
+    <text x="32.500" y="47.500">L</text><text x="32.500" y="74.500">O</text><text x="32.500" y="101.500">C</text><text x="32.500" y="128.500">K</text>
+    <text x="86.500" y="74.500">S</text><text x="86.500" y="101.500">P</text><text x="86.500" y="128.500">Y</text>
+    <text x="140.500" y="74.500">K</text><text x="140.500" y="101.500">E</text><text x="140.500" y="128.500">Y</text>
+    <text x="59.500" y="101.500">I</text><text x="113.500" y="101.500">H</text><text x="167.500" y="101.500">R</text>
+  </g>
+  <rect x="46" y="210" width="108" height="36" rx="3" fill="url(#brass)"/><rect x="56" y="227" width="88" height="9" rx="2" fill="#0a0b0d"/>
+  <text x="100" y="222" class="xw" font-size="8" fill="#4a3a12" letter-spacing="3">LETTERS</text>
+  <rect x="50" y="270" width="100" height="42" rx="5" fill="url(#brass)"/>
+  <g fill="#0a0b0d"><rect x="57" y="277" width="19" height="28" rx="2"/><rect x="80" y="277" width="19" height="28" rx="2"/><rect x="103" y="277" width="19" height="28" rx="2"/><rect x="126" y="277" width="19" height="28" rx="2"/></g>
+  <g class="xw" font-size="18" fill="#f4e04d"><text id="drum0" x="66.500" y="298">?</text><text id="drum1" x="89.500" y="298">?</text><text id="drum2" x="112.500" y="298">?</text><text id="drum3" x="135.500" y="298">?</text></g>
+  <circle cx="176" cy="291" r="9" fill="url(#brass)"/>
+  <g transform="rotate(-8 100 372)"><rect x="-22" y="357" width="244" height="30" fill="#f4e04d"/><path d="M-22 357h244M-22 387h244" stroke="#0c0d0f" stroke-width="2"/>
+    <text x="100" y="377" class="xw" font-size="13" fill="#0c0d0f" letter-spacing="2">WORDS ONLY · WORDS ONLY</text></g>
+</g>
+</svg>
+
+<div class="cap" id="cap"></div>
+
+<script src="assets/shelf.js"></script>
+<script>
+(function () {
+  var THEMES = {"mystery":{"name":"Mystery","stories":[{"id":"gloria","title":"Where Is Gloria?","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"The heaviest pumpkin at the village show has gone. She weighs forty-one kilos, and nobody saw a thing.","rooms":4,"first":"tent.html","firstId":"tent","last":"prize"},{"id":"forty","title":"Forty Minutes of Dark","stars":4,"minutes":"50-70","hold":false,"level":"B1","blurb":"A harbour museum on its last night, a storm, and a ship's clock that has never been allowed to stop.","rooms":7,"first":"street.html","firstId":"street","last":"morning"}]},"scifi":{"name":"Sci-Fi","stories":[{"id":"air","title":"Seven Hours of Air","stars":3,"minutes":"25-40","hold":false,"level":"A2+ to B1","blurb":"A small station above an ice moon, an air alarm at ten past two in the morning, and nobody on board but you and a very polite computer.","rooms":5,"first":"cabin.html","firstId":"cabin","last":"docking"}]},"fantasy":{"name":"Fantasy","stories":[{"id":"library","title":"The Library That Locks at Dusk","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"You sat down to read one page. Now it is dusk, every door has locked itself, and the night librarian is a moth.","rooms":4,"first":"reading.html","firstId":"reading","last":"dawn"}]},"ghost":{"name":"Ghost Story","stories":[{"id":"room13","title":"Room 13 Is Not on the Plan","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"Every night at ten past nine, a bell rings for Room 13. The Swan Hotel has no Room 13. It says so on the plan.","rooms":4,"first":"lobby.html","firstId":"lobby","last":"morning"}]},"adventure":{"name":"Adventure","stories":[{"id":"orvo","title":"The Night Train to Orvo","stars":1,"minutes":"10-15","hold":false,"level":"A2","blurb":"A snowy station at midnight. A guard with a watch. A train that is never late. Tonight you are the assistant.","rooms":3,"first":"halm.html","firstId":"halm","last":"arrival"}]},"cipher":{"name":"Cipher","stories":[{"id":"wrong","title":"Wrong Number","stars":1,"minutes":"15-20","hold":false,"level":"B1","blurb":"Twenty to midnight on a wet Friday. A phone box rings as you walk past. Nobody speaks, but words come up on its little screen, and parts of them are missing.","rooms":3,"first":"phonebox.html","firstId":"phonebox","last":"midnight"},{"id":"lexicon","title":"The Final Word","stars":2,"minutes":"20-30","hold":false,"level":"B1+","blurb":"Half an hour before a live television word quiz goes on air, the computer that runs the game locks everybody into separate rooms. Everybody except the one who fetches the water: you.","rooms":4,"first":"corridor.html","firstId":"corridor","last":"onair"},{"id":"exam","title":"Answer All Questions","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Nine o’clock at night, the evening before the English exam. You have come back to school for your revision cards. The exam cupboard is standing open, the papers are gone, and somebody has just locked you in.","rooms":5,"first":"staffroom.html","firstId":"staffroom","last":"hall"}]}}, cap = document.getElementById('cap'), capT = 0;
+  var SHUT = {
+    mystery: 'The files are not on the desk yet. Try again another day.',
+    scifi: 'ACCESS DENIED. This airlock is still being built.',
+    fantasy: 'The door hums and stays shut. Its story has not been written yet.',
+    ghost: 'On the other side, something tries the handle too. Then it stops. Not yet.',
+    adventure: 'The night train has not come in. Try again another day.',
+    cipher: 'The letters on the lock will not turn yet. Try again another day.'
+  };
+  function say(t) { cap.textContent = t; cap.classList.add('on'); clearTimeout(capT); capT = setTimeout(function () { cap.classList.remove('on'); }, 3800); }
+  function txt(id, t) { var n = document.getElementById(id); if (n) n.textContent = t; return n; }
+  Shelf.init();
+
+  Array.prototype.forEach.call(document.querySelectorAll('.door'), function (d) {
+    var t = d.getAttribute('data-t'), info = THEMES[t], list = info ? info.stories : [];
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');   /* an inner group, so a locked door can rattle */
+    while (d.firstChild) g.appendChild(d.firstChild);
+    d.appendChild(g);
+    if (list.length) {
+      var going = 0, solved = 0;
+      list.forEach(function (s) { var st = Shelf.status(t, s).state; if (st === 'going') going++; if (st === 'solved') solved++; });
+      d.classList.remove('shut');
+      txt('sub-' + t, list.length === 1 ? '1 story inside' : list.length + ' stories inside');
+      if (t === 'mystery') txt('tag1', going ? 'GO ON' : solved === list.length ? 'SOLVED' : 'COME IN');
+      if (t === 'scifi') { var led = txt('led-scifi', 'OPEN'); led.setAttribute('fill', '#5dff9a'); led.classList.remove('blink'); }
+      if (t === 'adventure') txt('dep-adventure', 'NOW BOARDING');
+      if (t === 'cipher') 'OPEN'.split('').forEach(function (c, i) { txt('drum' + i, c); });
+    }
+    d.addEventListener('click', function () {
+      if (list.length) { Shelf.go(t + '/index.html'); return; }
+      say(SHUT[t]);
+      g.classList.remove('shake'); void g.getBoundingClientRect(); g.classList.add('shake');
+    });
+  });
+  setTimeout(function () { say('Choose a door.'); }, 1400);
+})();
+</script>
+</body>
+</html>

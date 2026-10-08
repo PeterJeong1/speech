@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Hall · Answer All Questions</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0a0b0d;--accent:#f4e04d;--font-display:'Special Elite',monospace;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(8,9,11,.97);--tc-ink:#f1ecdf;--cap-bg:rgba(12,12,13,.93);--panel:#16171a;--face-bg:#16241b;--q-ink:#e6d58a;--fade:#000;--hud-bg:rgba(12,12,13,.78)}
+  .tc-room{letter-spacing:.02em}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .veil{position:fixed;top:0;right:0;bottom:0;left:0;z-index:5;background:#050607;transition:opacity 2.6s}
+  .veil.off{opacity:0;pointer-events:none}
+  .mote{animation:mote 9s linear infinite;opacity:0}
+  .mote.m2{animation-delay:-3s}.mote.m3{animation-delay:-6s}
+  @keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.7}100%{transform:translate(60px,-150px);opacity:0}}
+  #mypaper{transition:transform .5s}
+  #mydesk.ready{cursor:pointer}
+  #mydesk.ready #mypaper{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-7px)}}
+
+  /* three questions that are not on the paper */
+  .qp{width:min(900px,95vw);background:#fdfdf9;color:#16171c;padding:16px 38px 14px;font-family:'Courier Prime',monospace;font-size:16.5px;line-height:1.32;box-shadow:0 26px 70px rgba(0,0,0,.7);
+    -webkit-user-select:none;user-select:none}
+  .qp h4{margin:0;display:flex;justify-content:space-between;align-items:baseline;font-family:'Playfair Display',serif;font-weight:900;font-size:21px;border-bottom:3px double #16171c;padding-bottom:6px}
+  .qp h4 span{font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase}
+  .qp .ins{margin:7px 0 6px;font-size:15px;color:#3b382f}
+  .qp h5{margin:7px 0 3px;font-size:17.5px;font-weight:700;display:flex;justify-content:space-between}
+  .qp h5 small{font-weight:400;font-size:13.5px;color:#6b6453}
+  .qo{position:relative;display:flex;gap:10px;padding:3px 6px 2px 4px;cursor:pointer;border-radius:3px}
+  .qo:hover{background:rgba(244,224,77,.35)}
+  .qo i{position:relative;flex:0 0 18px;width:18px;height:18px;margin-top:2px;border:2px solid #16171c;font-style:normal}
+  .qo i:after{content:attr(data-m);position:absolute;left:-1px;top:-13px;font-family:'Caveat',cursive;font-weight:700;font-size:34px;line-height:1;color:#c8281d}
+  .qo b{flex:0 0 18px}
+  .qo.no{cursor:default;color:#8d8776}
+  .qo.no span{text-decoration:line-through;text-decoration-color:#c8281d}
+  .qo.no:hover,.qo.yes:hover,.qq.fin .qo:hover{background:none}
+  .qo.yes{cursor:default;font-weight:700}
+  .qq.fin .qo{cursor:default}
+  .qq .rc{min-height:22px;margin:0 0 0 32px;font-family:'Caveat',cursive;font-weight:700;font-size:22px;line-height:1.05;color:#c8281d}
+  .qp-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid #16171c;font-size:14.5px;color:#3b382f}
+  .qp-mark{font-family:'Caveat',cursive;font-weight:700;font-size:38px;line-height:1;color:#c8281d;transform:rotate(-4deg)}
+  /* the slip at the end */
+  .done{position:fixed;right:3vw;top:66px;z-index:34;width:min(450px,92vw);padding:22px 28px 18px;display:none;background:#f3eedf linear-gradient(175deg,rgba(255,255,255,.5),rgba(120,100,60,.14));
+    color:#1c1b18;border-top:10px solid #16171c;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .done.on{display:block}
+  .okstamp{display:inline-block;padding:4px 16px 1px;border:4px solid #c8281d;color:#c8281d;font-family:'Stardos Stencil',serif;font-weight:700;font-size:30px;letter-spacing:.14em;transform:rotate(-4deg);margin-bottom:12px}
+  .done h6{margin:0 0 10px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:#6b6453}
+  .done p{margin:0 0 7px;font-family:'Courier Prime',monospace;font-size:17px;line-height:1.35}
+  .done .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .done .btn{--accent:#16171c;font-size:13px;padding:8px 14px}
+  .done .btn:hover:not([disabled]){color:#f3eedf}
+  .done small{display:block;margin-top:13px;font-family:'Courier Prime',monospace;font-size:13px;opacity:.7;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+  /* question 4 */
+  .rp{width:min(760px,94vw);max-height:84vh;overflow:auto;background:#fdfdf9;color:#16171c;padding:26px 38px 22px;box-shadow:0 26px 70px rgba(0,0,0,.6);-webkit-user-select:text;user-select:text}
+  .rp h4{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#6b6453}
+  .rp h3{margin:0 0 12px;font-family:'Playfair Display',serif;font-weight:900;font-size:24px;border-bottom:3px double #16171c;padding-bottom:8px}
+  .rp label{display:block;font-family:'Courier Prime',monospace;font-size:17.5px;line-height:1.4;margin:10px 0 6px}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Caveat',cursive;font-size:25px;line-height:34px;color:#1d2a4a;background:#fbf9f0 repeating-linear-gradient(transparent 0 33px,#b9c7d6 33px 34px);border:1px solid #b9b09a;
+    padding:0 12px;border-radius:0;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:204px}
+  .rp input[type=text]{height:36px}
+  .rp .count{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right;margin-top:4px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:12px}
+  .rp .foot span{flex:1;font-family:'Courier Prime',monospace;font-size:14.5px;opacity:.7}
+  .rp .btn{--accent:#16171c}.rp .btn:hover:not([disabled]){color:#fdfdf9}
+  .rp .w:hover{color:#8c2f24}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3ecda"/><stop offset="1" stop-color="#d9cfb8"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98f58"/><stop offset=".5" stop-color="#cba56c"/><stop offset="1" stop-color="#a47a45"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9d3f0"/><stop offset="1" stop-color="#e9f5fb"/></linearGradient>
+  <linearGradient id="curtG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6e1f24"/><stop offset=".25" stop-color="#8f2a30"/><stop offset=".5" stop-color="#6e1f24"/><stop offset=".75" stop-color="#8f2a30"/><stop offset="1" stop-color="#5a171c"/></linearGradient>
+  <linearGradient id="sunG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff6c8" stop-opacity=".55"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2ab72"/><stop offset="1" stop-color="#a47c48"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#2a1a00" stop-opacity=".12"/><stop offset="1" stop-color="#1a1000" stop-opacity=".55"/></radialGradient>
+</defs>
+
+<!-- the front wall -->
+<rect x="-1000" y="-400" width="3600" height="830" fill="url(#wallG)"/>
+<rect x="-1000" y="396" width="3600" height="30" fill="#b9ad92"/>
+<g id="wins"><rect x="70" y="60" width="150" height="300" fill="#8d8368"/><rect x="80" y="70" width="130" height="280" fill="url(#skyG)"/><path d="M145 70v280M80 164h130M80 258h130" stroke="#8d8368" stroke-width="6"/>
+  <rect x="250" y="60" width="150" height="300" fill="#8d8368"/><rect x="260" y="70" width="130" height="280" fill="url(#skyG)"/><path d="M325 70v280M260 164h130M260 258h130" stroke="#8d8368" stroke-width="6"/>
+  <path d="M96 300q30-36 50-10t40-18 24 30v48H80z" fill="#6fa86a" opacity=".7"/><path d="M270 310q26-30 52-8t50-22 18 30v40H260z" fill="#6fa86a" opacity=".7"/></g>
+<!-- the stage -->
+<g id="stage" class="hot"><rect x="452" y="96" width="696" height="244" fill="#2c2028"/>
+  <g fill="#4a3a44"><rect x="880" y="250" width="26" height="80"/><rect x="912" y="240" width="26" height="90"/><rect x="944" y="250" width="26" height="80"/><rect x="976" y="236" width="26" height="94"/></g>
+  <g><path d="M606 330l28-150M694 330l-28-150M650 180v150" stroke="#8a6a3a" stroke-width="5"/><rect x="574" y="150" width="152" height="112" fill="#16171c"/><rect x="574" y="150" width="152" height="112" fill="none" stroke="#8a6a3a" stroke-width="5"/>
+    <text x="650" y="182" class="sT" font-size="15" fill="#f4e04d" letter-spacing="2">YEAR 9 ENGLISH</text><text x="650" y="212" class="sT" font-size="15" fill="#f1ecdf" letter-spacing="1">START 9.00</text><text x="650" y="238" class="sT" font-size="15" fill="#f1ecdf" letter-spacing="1">FINISH 10.30</text></g>
+  <rect x="440" y="96" width="92" height="250" fill="url(#curtG)"/><rect x="1068" y="96" width="92" height="250" fill="url(#curtG)"/>
+  <path d="M430 56h740v52q-46 26-92 0t-93 0-92 0-93 0-92 0-93 0-92 0-93 0z" fill="#7d2329"/><path d="M430 56h740" stroke="#c9a23a" stroke-width="6"/>
+  <rect x="430" y="338" width="740" height="76" fill="#8a6a42"/><g stroke="#6b4f2e" stroke-width="3"><path d="M430 338h740M560 344v64M700 344v64M840 344v64M980 344v64M1100 344v64"/></g></g>
+<!-- the hall clock: nine o'clock exactly -->
+<g id="clock" class="hot"><circle cx="1312" cy="100" r="46" fill="#3b2a1a"/><circle cx="1312" cy="100" r="38" fill="#fdfdf9"/><g stroke="#16171c" stroke-width="3"><path d="M1312 66v8M1312 126v8M1278 100h8M1338 100h8"/></g>
+  <path d="M1312 100h-22" stroke="#16171c" stroke-width="6" stroke-linecap="round"/><path d="M1312 100V70" stroke="#16171c" stroke-width="3.5" stroke-linecap="round"/><circle cx="1312" cy="100" r="4" fill="#c8281d"/></g>
+<!-- wall bars, and the side door -->
+<g id="bars" class="hot"><rect x="1216" y="170" width="196" height="246" fill="#c9a36a" opacity=".5"/><g stroke="#8a6a3a" stroke-width="7"><path d="M1222 170v246M1314 170v246M1406 170v246"/></g><g id="rungs" stroke="#a9824e" stroke-width="5"></g></g>
+<g id="sdoor" class="hot"><rect x="1452" y="140" width="128" height="286" fill="#6b4f2e"/><rect x="1462" y="150" width="108" height="276" fill="#7d8a86"/><rect x="1480" y="170" width="72" height="90" fill="#cfe6f5"/><path d="M1516 170v90M1480 215h72" stroke="#7d8a86" stroke-width="5"/><rect x="1470" y="296" width="10" height="34" rx="4" fill="#30383b"/></g>
+
+<!-- the floor of the hall -->
+<rect x="-1000" y="424" width="3600" height="900" fill="url(#floorG)"/>
+<g id="planks" stroke="#8f6a3a" stroke-width="2" opacity=".55"></g>
+<g fill="none" stroke="#f1ecdf" stroke-width="5" opacity=".5"><path d="M-200 470H1800"/><ellipse cx="800" cy="700" rx="420" ry="96"/><path d="M-400 900L330 424M2000 900L1270 424"/></g>
+<path d="M80 424h310l520 500H-420z" fill="url(#sunG)" pointer-events="none"/>
+<g fill="#fff6c8"><circle class="mote" cx="330" cy="560" r="3"/><circle class="mote m2" cx="470" cy="640" r="2.5"/><circle class="mote m3" cx="250" cy="500" r="2.5"/><circle class="mote m2" cx="560" cy="720" r="3"/></g>
+
+<!-- a hundred and twenty desks (twenty-eight of them, anyway) -->
+<g id="rows"></g>
+<!-- Mrs Calloway, with the papers -->
+<g id="calloway" class="hot" transform="translate(905 392)">
+  <ellipse cx="0" cy="188" rx="36" ry="8" fill="#000" opacity=".22"/>
+  <path d="M-22 182v-66h44v66" fill="#3a3f47"/><path d="M-12 182v12M12 182v12" stroke="#1c1b18" stroke-width="9" stroke-linecap="round"/>
+  <path d="M-30 124q-6-74 30-78t30 78z" fill="#59616a"/>
+  <path d="M-18 52q18 16 36 0l10 74q-28 10-56 0z" fill="#59616a"/>
+  <path d="M-16 50q16 14 32 0l-4 18q-12 8-24 0z" fill="#b3261c"/><path d="M8 62l10 86" stroke="#b3261c" stroke-width="13" stroke-linecap="round"/><path d="M12 150l-3 12M20 148l2 12" stroke="#b3261c" stroke-width="3"/>
+  <circle cx="0" cy="26" r="22" fill="#e6c9a8"/><path d="M-22 22q2-26 22-26t22 26q-10-14-22-14t-22 14z" fill="#c9ced3"/><circle cx="14" cy="2" r="11" fill="#c9ced3"/>
+  <path d="M-12 26h9M3 26h9" stroke="#1c1b18" stroke-width="2"/><circle cx="-8" cy="27" r="6" fill="none" stroke="#1c1b18" stroke-width="1.6"/><circle cx="8" cy="27" r="6" fill="none" stroke="#1c1b18" stroke-width="1.6"/>
+  <path d="M-34 96l34 10 6 22-38-8z" fill="#fdfdf9"/><path d="M-34 100l34 10M-34 105l34 10" stroke="#c9c2ad" stroke-width="1.5"/><path d="M-30 70q-12 26-4 44" stroke="#59616a" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M30 70q10 30-22 46" stroke="#59616a" stroke-width="13" fill="none" stroke-linecap="round"/>
+</g>
+<!-- Miss Nwosu, by the wall bars -->
+<g id="nwosu" class="hot" transform="translate(1432 300)">
+  <ellipse cx="0" cy="128" rx="24" ry="5" fill="#000" opacity=".2"/>
+  <path d="M-14 124v-48h28v48" fill="#2a3531"/><path d="M-20 82q-4-50 20-52t20 52z" fill="#d9a22b"/><path d="M-6 32l6 16 6-16z" fill="#f3eedf"/>
+  <circle cx="0" cy="16" r="15" fill="#99653f"/><circle cx="0" cy="-6" r="13" fill="#1b1614"/><path d="M-15 12q2-18 15-18t15 18q-8-9-15-9t-15 9z" fill="#1b1614"/><path d="M-13 4q13-9 26 0" stroke="#c8281d" stroke-width="3" fill="none"/>
+  <path d="M14 8l5 16" stroke="#f4e04d" stroke-width="2.5" stroke-linecap="round"/><path d="M-18 46q-6 22 6 34M18 46q6 22-6 34" stroke="#d9a22b" stroke-width="9" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- your own desk -->
+<g id="mydesk">
+  <path d="M470 820h660l70 120H400z" fill="url(#deskG)"/><path d="M470 820h660" stroke="#e6c690" stroke-width="4"/>
+  <g id="mypaper"><path d="M640 834h300l26 72H612z" fill="#fdfdf9"/><path d="M640 834h300l26 72H612z" fill="none" stroke="#c9c2ad" stroke-width="2"/></g>
+  <g transform="rotate(-14 1030 862)"><rect x="996" y="846" width="76" height="34" fill="#fbfaf4"/><rect x="996" y="842" width="76" height="34" fill="#f1eee2" stroke="#c9c2ad"/><path d="M1034 838v44" stroke="#c8281d" stroke-width="4"/></g>
+  <path d="M520 876l92-22" stroke="#1d2a52" stroke-width="7" stroke-linecap="round"/><path d="M612 854l12-3" stroke="#c9ced3" stroke-width="5" stroke-linecap="round"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="veil" id="veil"></div>
+<div class="done" id="done">
+  <div class="okstamp" id="d-stamp">3 OUT OF 3</div>
+  <h6>Kestrel Hill School &middot; Thursday night</h6>
+  <p id="d-time"></p><p id="d-gate"></p><p id="d-words"></p><p id="d-hints"></p>
+  <div class="row"><button type="button" class="btn" id="b-q4">Question 4</button><button type="button" class="btn" id="b-book">Open the notebook</button><button type="button" class="btn" id="b-lobby">Back to the files</button></div>
+  <small>Answer All Questions &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, ready = false, qBox = null, right = [false, false, false], tries = [0, 0, 0];
+
+  /* floorboards, wall bars, the rows of desks */
+  (function () {
+    var s = '', i, x, r, c, sc, y, h, HAIR = ['#1b1614', '#3a2a1c', '#6b4a2a', '#c9a060', '#1b1614', '#8a3a20', '#2a1c12'], Y = [470, 528, 606, 706], S = [0.42, 0.56, 0.74, 0.98];
+    for (i = -14; i <= 14; i++) s += '<path d="M' + (800 + i * 46) + ' 424L' + (800 + i * 210) + ' 1300"/>';
+    $('#planks').innerHTML = s; s = '';
+    for (i = 0; i < 9; i++) s += '<path d="M1222 ' + (190 + i * 26) + 'h184"/>';
+    $('#rungs').innerHTML = s; s = '';
+    for (r = 0; r < 4; r++) for (c = 0; c < 7; c++) {
+      sc = S[r]; y = Y[r]; x = 800 + (c - 3) * 222 * sc; h = HAIR[(r * 3 + c * 5) % 7];
+      if (r === 3 && c === 3) continue;                     /* the middle of the back row is where you are sitting */
+      s += '<g transform="translate(' + x.toFixed(1) + ' ' + y + ') scale(' + sc + ')">' +
+        '<ellipse cx="0" cy="94" rx="70" ry="10" fill="#000" opacity=".14"/>' +
+        '<path d="M-52 4v86M52 4v86" stroke="#59616a" stroke-width="5"/><rect x="-60" y="-6" width="120" height="12" rx="2" fill="#d2ab72"/><rect x="-60" y="4" width="120" height="4" fill="#8f6a3a"/>' +
+        '<rect x="-52" y="-9" width="30" height="4" fill="#fdfdf9"/>' +
+        '<path d="M-34 62q-4-64 34-66t34 66z" fill="' + ((r + c) % 3 ? '#24304d' : '#2b3859') + '"/>' +
+        '<rect x="-9" y="-22" width="18" height="20" fill="#d9b08c"/>' +
+        '<circle cx="0" cy="-36" r="21" fill="' + h + '"/>' + ((r + c * 2) % 4 === 0 ? '<path d="M0 -22q10 16 2 38" stroke="' + h + '" stroke-width="10" fill="none" stroke-linecap="round"/>' : '') +
+        '<rect x="-31" y="30" width="62" height="58" rx="5" fill="#8f6a3a"/><path d="M-31 48h62M-31 66h62" stroke="#6b4f2e" stroke-width="3"/><path d="M-27 88v10M27 88v10" stroke="#59616a" stroke-width="5"/></g>';
+    }
+    $('#rows').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'exam', storyTitle: 'Answer All Questions', id: 'hall', no: 'V', title: 'The Hall',
+    go: 'The door opens',
+    intro: [
+      'The strips of the note went back in order because each one pointed at the one before it: &ldquo;found it open&rdquo;, &ldquo;those photographs&rdquo;, &ldquo;one of them&rdquo;.',
+      'The note began with one word, &ldquo;Miss&rdquo;. At Kestrel Hill that can only mean Mrs Calloway or Miss Nwosu, and the four scraps decided between them. COLOR, CENTER, TRAVELED and FAVORITE are how America spells. One teacher at this school came here from Boston: the one whose note on the staffroom fridge had been corrected in red.',
+      'You said her name before the door was fully open.'
+    ],
+    exit: null, tags: {"q1":["8c8f307b"],"q2":["43378021"],"q3":["ac93e6f6"]},
+    sound: ['corridor', { root: 48, bpm: 50, drop: ['mel', 'ost'], level: 0.85 }],      /* still Thursday night at the library door; Friday has music of its own (see morning) */
+    onBegin: begin
+  });
+  EXAM.clock();
+
+  function isBusy() { return busy; }
+  function veilOff() { $('#veil').classList.add('off'); }
+
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    EXAM.freeze();
+    if (ER.flag('e-done')) { veilOff(); EXAM.setClock('Friday', '9.00', 'am'); busy = false; ready = true; finish(); return; }
+    if (ER.flag('e-morning')) { morning(true); return; }
+    ER.talk({
+      who: 'Miss Nwosu', role: 'English teacher · at the library door, Thursday night', face: window.FACE(),
+      lines: [
+        { note: 'The door opens. Miss Nwosu, in a yellow cardigan, with a pencil behind her ear and a cardboard box in her arms. She looks at you. She looks at the note on the table, and at the four scraps in your hand.',
+          a: '&ldquo;Well,&rdquo; she says. &ldquo;Good evening. You are supposed to be locked in the staffroom.&rdquo;' },
+        { q: 'So it was you who locked me in.',
+          a: 'It was. I saw a pupil standing in front of an empty exam cupboard at nine o&rsquo;clock at night, and I needed twenty more minutes. But I left you the key box. I teach you on Tuesdays. I knew that you could find six wrong words if you really had to.' },
+        { q: 'Why did you take the papers?',
+          a: 'You have read Jonah&rsquo;s note. By this morning Paper A was on half the phones in Year 9. If I tell Mr Kettle, the exam is cancelled, a hundred and twenty people come back in the holidays, and somebody is thrown out of school. So I am not telling Mr Kettle. Tomorrow there will simply be a different paper, and those photographs will be worth nothing at all.' },
+        { q: 'Why not tell Mrs Calloway?',
+          a: 'Because it was her cupboard. She was counting the papers when the fire bell rang, and the rule says: leave everything and walk. She has set this exam for twenty-six years, and she retires in July. I was not going to let an open cupboard be the last thing that anybody remembered about her.' },
+        { q: 'How did you do it?',
+          a: 'The same way that you got out. Six wrong words, the key box, key number 14. Then four hours at a keyboard, writing eight new pages. Then the shredder, which ate one page of Paper A and died. The other hundred and nineteen copies are in those boxes until the recycling goes on Friday.' },
+        { note: 'She puts her box down on the table. It says PAPER B on the lid.',
+          a: '&ldquo;Now it is my turn to ask. How did you know that it was me?&rdquo;</p><p>You hold out the four scraps. COLOR. CENTER. TRAVELED. FAVORITE.</p><p>She shuts her eyes. &ldquo;Four years in Boston. And I have been so careful, all year. Tell me the truth. Is it in the paper too?&rdquo;' },
+        { a: 'You tell her that you did not turn the paper over.</p><p>She looks at you for quite a long time. &ldquo;No,&rdquo; she says. &ldquo;I don&rsquo;t suppose you did.&rdquo;' },
+        { a: '&ldquo;Mr Drummond locks the side door at half past. Go home. You came for your revision cards and you found them, and that is all that happened tonight. And for what it is worth, question one tomorrow is not about China.&rdquo;' }
+      ],
+      clue: { id: 'nwosu', title: 'Miss Nwosu, at the library door', kind: 'What she said' }, last: 'Go home',
+      done: night
+    });
+  }
+  function night() {
+    ER.narrate([
+      'Mr Drummond was standing at the side door with his keys in one hand and a mug of tea in the other. He looked at his watch. &ldquo;' + EXAM.time() + ',&rdquo; he said. &ldquo;I said five minutes.&rdquo;',
+      '&ldquo;Find what you came for?&rdquo; You held up forty cards and a rubber band. He wrote OUT in the visitors&rsquo; book beside your name. &ldquo;Quiet night,&rdquo; he said. &ldquo;Just you and me in the whole building.&rdquo;',
+      'The mug in his hand was grey, and it had a bear on it. You decided not to say anything about that, either.',
+      'You went home, and read forty revision cards, and did not sleep very well.'
+    ], function () { morning(false); });
+  }
+  function morning(quick) {
+    ER.flag('e-morning', 1); EXAM.setClock('Friday', '9.00', 'am'); veilOff(); ER.sfx.bell();
+    try { if (ER.track) ER.track.play(['morning', { root: 52, bpm: 68, drop: ['mel'] }]); } catch (e) {}      /* the story turns a corner: a major key, and no small bright notes after the school bell */
+    setTimeout(function () {
+      ER.narrate([
+        'Friday. The hall. A hundred and twenty desks in rows, a hundred and twenty pupils, and one clock that everybody is watching.',
+        'Half of Year 9 look very calm indeed. They have seen this paper before, on their phones. They think.',
+        'Mrs Calloway is back, grey in the face and wrapped in a long red scarf. She has been here since seven o&rsquo;clock. She walks along the rows and puts one paper, face down, on every desk.',
+        'Miss Nwosu is standing at the side of the hall with a pencil behind her ear, looking at the floor.',
+        '&ldquo;There is one thing that this school will never be short of, Miss Nwosu,&rdquo; says Mrs Calloway as she passes her, quite quietly. &ldquo;And that is the letter U.&rdquo;',
+        'Then she says what she has said every June for twenty-six years. &ldquo;You may turn over now.&rdquo;'
+      ], function () {
+        EXAM.sfx.rustle();
+        ER.narrate([
+          'Paper B. On page three, in every one of the hundred and twenty copies, somebody has changed COLOR into COLOUR with a red pen. There is not an American spelling left in the building.',
+          'Three rows in front of you, a boy who was very calm a minute ago has gone the colour of the paper. Two desks to your left, Jonah Ashby reads question one, picks up his pen, and begins.',
+          'You have three questions of your own to answer first. They are not on the paper.'
+        ], function () { busy = false; ready = true; $('#mydesk').classList.add('ready'); openQs(); });
+      });
+    }, quick ? 500 : 2400);
+  }
+
+  /* ---------- things in the hall ---------- */
+  EXAM.thing('#calloway', null, 'Mrs Calloway, with the papers. She keeps a red pen behind her ear, in just the place where Miss Nwosu keeps a pencil.', isBusy);
+  EXAM.thing('#nwosu', null, 'Miss Nwosu, looking at the floor. She has not had much sleep either.', isBusy);
+  EXAM.thing('#clock', null, 'Nine o&rsquo;clock exactly. The hall clock is never slow. Mr Tibbs sees to that.', isBusy);
+  EXAM.thing('#stage', 'stage', 'The board on the stage says: YEAR 9 ENGLISH. START 9.00. FINISH 10.30.', isBusy);
+  EXAM.thing('#bars', 'wall bars', null, isBusy);
+  EXAM.thing('#sdoor', null, 'The side door of the hall. Nobody is allowed out before half past ten.', isBusy);
+  $('#mydesk').addEventListener('click', function () { if (busy || !ready) return; if (ER.flag('e-done')) { ER.say('Your paper. You have ninety minutes, and you have already answered the three hardest questions.'); return; } openQs(); });
+
+  /* ---------- answer all questions ---------- */
+  var QS = [
+    ['Who took Paper A out of the grey cupboard?', [
+      ['a', 'Mr Drummond, who has a key to every door in the building.', 'He has keys of his own, and no need of the key box. And he spent the evening whistling in the yard.'],
+      ['b', 'Mrs Calloway, who wrote it.', 'She was at home in bed. And she has never written COLOR in her life.'],
+      ['c', 'Jonah Ashby, who needed it most.', 'He wrote the note. He would not even look at the photographs.'],
+      ['d', 'Miss Nwosu, who teaches you on Tuesdays.', 'She was at school all evening. But then, so were you.']],
+      'Yes. The note began &ldquo;Miss&rdquo;, and the scraps were spelt the American way.'],
+    ['How did that person get into a locked cupboard?', [
+      ['a', 'By breaking the lock.', 'The lock was not broken. You looked.'],
+      ['b', 'By asking Mr Drummond for his keys.', 'Mr Drummond thought that he and you were the only two people in the building.'],
+      ['c', 'By finding the six wrong words in the bulletin, opening the key box and taking key 14.', 'Six wrong words are a great deal of trouble to take for a key.'],
+      ['d', 'There was no need. The cupboard is never locked.', 'It is locked every day of the year. It stood open for three minutes and forty seconds on Wednesday, and that was the trouble.']],
+      'Yes. The same way that you got out of the staffroom.'],
+    ['Why were the papers taken?', [
+      ['a', 'To give the answers to one class.', 'Then nobody would have fed page one to a shredder.'],
+      ['b', 'Because photographs of Paper A were already on half the phones in Year 9. A new paper made them worth nothing, and nobody had to be thrown out of school.', 'A long answer is not always the right one.'],
+      ['c', 'To get Mrs Calloway into trouble before she retires.', 'The other way round. Whose cupboard was left open on Wednesday?'],
+      ['d', 'Because Mr Kettle said so.', 'Mr Kettle was in Leeds. And his rule would have cancelled the exam.']],
+      'Yes. Nobody steals an exam in order to shred it.']
+  ];
+  function buildQs() {
+    var box = ER.el('div', 'qp'), s = '<h4>Kestrel Hill School<span>Thursday night &middot; Paper C</span></h4><p class="ins">Answer all questions. Tick one box for each. Time allowed: as long as it takes Mrs Calloway to walk back to the front of the hall.</p>';
+    QS.forEach(function (q, i) {
+      s += '<div class="qq" data-q="' + (i + 1) + '"><h5><span>' + (i + 1) + '. ' + q[0] + '</span><small>[1 mark]</small></h5>' +
+        q[1].map(function (o) { return '<div class="qo" data-o="' + o[0] + '"><i></i><b>' + o[0].toUpperCase() + '</b><span>' + o[1] + '</span></div>'; }).join('') + '<div class="rc"></div></div>';
+    });
+    box.innerHTML = s + '<div class="qp-foot"><span>Kestrel Hill School. This paper may not be taken out of the hall.</span><span class="qp-mark"></span></div>';
+    ER.$$('.qq', box).forEach(function (qq, qi) {
+      ER.$$('.qo', qq).forEach(function (qo) {
+        qo.addEventListener('click', function () {
+          if (right[qi] || qo.classList.contains('no')) return;
+          var o = qo.getAttribute('data-o'), rc = qq.querySelector('.rc');
+          tries[qi]++;
+          if (ER.check('q' + (qi + 1), o)) {
+            right[qi] = true; qo.classList.add('yes'); qo.querySelector('i').setAttribute('data-m', '✓'); qq.classList.add('fin'); rc.innerHTML = QS[qi][2]; EXAM.sfx.pen();
+            if (right[0] && right[1] && right[2]) all();
+            return;
+          }
+          qo.classList.add('no'); qo.querySelector('i').setAttribute('data-m', '×'); ER.sfx.no(); ER.shake(qo);
+          rc.innerHTML = QS[qi][1].filter(function (x) { return x[0] === o; })[0][2];
+        });
+      });
+    });
+    function all() {
+      var marks = tries.filter(function (t) { return t === 1; }).length;
+      ER.flag('e-marks', marks); ER.flag('e-done', 1);
+      box.querySelector('.qp-mark').textContent = marks + ' / 3';
+      setTimeout(function () { EXAM.sfx.stamp(); }, 500);
+      setTimeout(function () { ER.closeAll(); finish(); EXAM.solved(); }, 2600);
+    }
+    return box;
+  }
+  function openQs() {
+    if (!qBox) qBox = buildQs();
+    ER.open('ov-lock', qBox);
+  }
+
+  /* ---------- the slip at the end ---------- */
+  function finish() {
+    var st = ER.state(), mins = EXAM.minutesPlayed(), hn = ER.hintsUsed(), sp = EXAM.spare(), marks = ER.flag('e-marks');
+    $('#d-stamp').textContent = (marks == null ? 3 : marks) + ' OUT OF 3';
+    $('#d-time').textContent = 'The night took you ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-gate').textContent = 'Mr Drummond locked the side door behind you at ' + EXAM.time() + ', with ' + (sp === 1 ? 'one minute' : sp + ' minutes') + ' to spare.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+    $('#done').classList.add('on');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* question 4: the one that nobody can mark */
+  $('#b-q4').addEventListener('click', function () {
+    var saved = ER.flag('q4') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Kestrel Hill School &middot; Year 9 English</h4><h3>Question 4</h3>' +
+      '<label for="r1">Mr Kettle comes back from Leeds on Monday. Do you tell him what happened on Thursday night? Write 50 to 80 words, and give two reasons. You could begin: &ldquo;I would tell him&rdquo; or &ldquo;I would not tell him&rdquo;.</label><textarea id="r1"></textarea>' +
+      '<div class="count"></div><label for="r2">Name</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>No marks for this one. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('q4', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>On Air · The Final Word</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="lex.css">
+<style>
+  body{--bg:#05030a;--accent:#ff6a5a;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(6,3,10,.95);--tc-ink:#f4eef2;--cap-bg:rgba(8,4,12,.93);--panel:#170d1a;--face-bg:#2a1830;--q-ink:#ff6a5a;--fade:#000;--hud-bg:rgba(8,4,12,.74)}
+  .tc-room{letter-spacing:.12em;color:#ff6a5a;font-size:clamp(46px,7vw,96px)}
+  .tc-text,.cap{font-weight:300}
+  .sg{font-family:'Bebas Neue',sans-serif;text-anchor:middle}
+  .led{font-family:'VT323',monospace;text-anchor:middle}
+  .logo{font-family:'Playfair Display',serif;font-weight:900;text-anchor:middle}
+  .ft rect{fill:#1d2f7a;transition:fill .25s}
+  .ft text{font-family:'Bebas Neue',sans-serif;font-size:118px;text-anchor:middle;fill:#141518;opacity:0}
+  .ft .q{font-family:'Playfair Display',serif;font-weight:900;font-size:70px;fill:#3a55b8;opacity:1}
+  .ft.up rect{fill:url(#tileG)}.ft.up .l{opacity:1}.ft.up .q{opacity:0}
+  .ft.ok rect{fill:url(#tileOk)}
+  .ft.flip{animation:flip .3s steps(4,end)}
+  @keyframes flip{0%{opacity:.2}100%{opacity:1}}
+  .beam{animation:beam 5s steps(8,end) infinite alternate}
+  .beam.b2{animation-duration:7s;animation-delay:-2s}
+  @keyframes beam{from{opacity:.45}to{opacity:1}}
+  #lampOn{animation:lampOn 1.6s steps(1,end) infinite}
+  @keyframes lampOn{0%{opacity:1}50%{opacity:.72}}
+  #tally{animation:lampOn 1.1s steps(1,end) infinite}
+  .bz{fill:#5a120c}.bz.on{fill:#ff3b2a}
+  .bzg{opacity:0}.bzg.on{opacity:1;animation:lampOn .4s steps(1,end) infinite}
+  #fB{transition:opacity 2.4s}
+  #fB.gone{opacity:0}
+  .cf{transform-box:fill-box;transform-origin:50% 50%;animation:cf 4.6s linear infinite}
+  @keyframes cf{from{transform:translateY(-120px) rotate(0)}to{transform:translateY(1050px) rotate(320deg)}}
+
+  /* the final conundrum */
+  .fc{width:min(860px,94vw);--wk-size:62px;border-color:#f4c430;box-shadow:0 0 0 8px #1a0d30,0 0 70px rgba(244,196,48,.25),0 30px 80px rgba(0,0,0,.7);
+    background:#12081f radial-gradient(ellipse at 50% 0,rgba(199,125,255,.24),rgba(199,125,255,0) 65%)}
+  .fc .lx-top{border-bottom-color:rgba(244,196,48,.5)}
+  .fc .lx-top b{background:#ff3b2a;color:#fff}
+  .fc .lx-top i{color:#f4c430}
+  .fc-clue{margin:14px 0 0;padding:14px 22px 13px;background:#f1eee2;color:#141518;font-family:'Courier Prime',monospace;font-size:21px;line-height:1.34;border-radius:3px;transform:rotate(.5deg);
+    box-shadow:0 8px 18px rgba(0,0,0,.5)}
+  .fc-clue small{display:block;margin-bottom:3px;font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.6}
+  .fc-rack{margin:18px 0 4px;padding:16px 8px 14px;border-radius:8px;background:#3a1670 linear-gradient(#5a2596,#2a1050);box-shadow:inset 0 3px 0 rgba(255,255,255,.16),0 6px 0 #150828}
+  .fc .wk-tiles .wk-tile{min-width:62px;height:78px;margin:4px 5px;padding:6px 0 0;border:0;border-radius:6px;font-family:'Bebas Neue',sans-serif;font-size:54px;font-weight:normal;color:#141518;
+    background:#f4e04d linear-gradient(#fffbe0,#f4e04d 60%,#d9c12a);box-shadow:0 5px 0 #8f8320,0 9px 12px rgba(0,0,0,.4)}
+  .fc .wk-tiles .wk-tile.held{outline:3px solid #fff;outline-offset:3px}
+  .fc .wk-tiles.done .wk-tile{background:#3ddc6a linear-gradient(#e0ffe6,#3ddc6a 60%,#1f9d4a);box-shadow:0 5px 0 #0f5a28,0 9px 12px rgba(0,0,0,.4)}
+  .fc-help{font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:#f4c430;opacity:.7;text-align:center}
+  .fc .lx-msg{border-left-color:#f4c430;background:rgba(244,196,48,.08)}
+
+  /* the numbers, and the report */
+  .done{position:fixed;left:3vw;bottom:5vh;z-index:34;width:min(440px,92vw);padding:22px 28px 20px;display:none;background:rgba(10,5,16,.93);border:1px solid #6a2fb0;border-top:5px solid #f4e04d;
+    color:#f4eef2;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .done.on{display:block}
+  .okstamp{display:inline-block;margin-bottom:14px;padding:6px 16px 2px;border:3px solid #f4e04d;color:#f4e04d;font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:.16em;line-height:1;transform:rotate(-3deg)}
+  .done p{margin:0 0 8px;font-family:'Outfit',sans-serif;font-weight:300;font-size:19px;line-height:1.4}
+  .done .row{display:flex;flex-wrap:wrap;margin:14px -4px 0}
+  .done .btn{margin:4px;font-size:13px;padding:8px 14px;--accent:#f4e04d}
+  .done small{display:block;margin-top:14px;font-family:'Courier Prime',monospace;font-size:12.5px;opacity:.6;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+  .rp{width:min(760px,94vw);max-height:84vh;overflow:auto;background:#f1eee2;color:#1b1a16;padding:24px 38px 20px;box-shadow:0 26px 70px rgba(0,0,0,.6);border-top:10px solid #f4e04d;
+    -webkit-user-select:text;user-select:text}
+  .rp h4{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:#6b6657}
+  .rp h3{margin:0 0 10px;padding-bottom:8px;border-bottom:2px solid #1b1a16;font-family:'Bebas Neue',sans-serif;font-weight:normal;font-size:32px;letter-spacing:.06em;line-height:1}
+  .rp label{display:block;margin:11px 0 5px;font-family:'Outfit',sans-serif;font-size:18px;font-weight:600}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Courier Prime',monospace;font-size:17px;line-height:1.45;color:#1b1a16;background:#fff;border:1px solid #b9b3a0;padding:9px 12px;border-radius:2px;
+    resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:70px}
+  .rp .yn{display:flex;font-family:'Courier Prime',monospace;font-size:18px;margin:4px 0 8px}
+  .rp .yn label{display:inline-flex;align-items:center;margin:0 22px 0 0;font:inherit;font-weight:normal;cursor:pointer}
+  .rp .yn input{margin-right:8px}
+  .rp .count{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right}
+  .rp .foot{display:flex;align-items:center;margin-top:14px}
+  .rp .foot span{flex:1;font-family:'Outfit',sans-serif;font-size:15.5px;opacity:.7}
+  .rp .btn{margin-left:10px;--accent:#1b1a16}.rp .btn:hover{color:#f1eee2}
+  .rp .w:hover{color:#8c2f24}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible;background:#fff}
+    .rp textarea,.rp input[type=text]{border:0;border-bottom:1px solid #999}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="setG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a36c8"/><stop offset=".55" stop-color="#5a1f9c"/><stop offset="1" stop-color="#2a0f55"/></linearGradient>
+  <linearGradient id="goldG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0b0"/><stop offset=".5" stop-color="#f4c430"/><stop offset="1" stop-color="#9a6f10"/></linearGradient>
+  <linearGradient id="tileG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe0"/><stop offset=".6" stop-color="#f4e04d"/><stop offset="1" stop-color="#d9c12a"/></linearGradient>
+  <linearGradient id="tileOk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0ffe6"/><stop offset=".6" stop-color="#3ddc6a"/><stop offset="1" stop-color="#1f9d4a"/></linearGradient>
+  <linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".42"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="beamP" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8ae4" stop-opacity=".4"/><stop offset="1" stop-color="#ff8ae4" stop-opacity="0"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a1050"/><stop offset=".5" stop-color="#7a3fc8"/><stop offset="1" stop-color="#2a1050"/></linearGradient>
+  <linearGradient id="fl4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1050"/><stop offset="1" stop-color="#05030a"/></linearGradient>
+  <radialGradient id="redGl"><stop offset="0" stop-color="#ff3b2a" stop-opacity=".6"/><stop offset="1" stop-color="#ff3b2a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="warm" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#ffd98a" stop-opacity=".34"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="44%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".66" stop-color="#000" stop-opacity=".2"/><stop offset="1" stop-color="#000" stop-opacity=".92"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="#05030a"/>
+<path d="M-1000 54H2600M-1000 84H2600" stroke="#1d1826" stroke-width="7"/>
+<g id="rig"></g>
+<path d="M60 660V200Q800 96 1540 200V660Z" fill="url(#setG)"/>
+<g stroke="url(#goldG)" stroke-width="6" opacity=".85"><path d="M190 184V660M1410 184V660"/></g>
+<path d="M60 200Q800 96 1540 200" stroke="url(#goldG)" stroke-width="10" fill="none"/>
+<g fill="#fff3b0" id="bulbs"></g>
+<g pointer-events="none">
+  <path class="beam" d="M368 110L150 660H560Z" fill="url(#beamG)"/><path class="beam b2" d="M628 110L470 660H800Z" fill="url(#beamP)"/>
+  <path class="beam" d="M972 110L800 660H1130Z" fill="url(#beamP)"/><path class="beam b2" d="M1232 110L1040 660H1450Z" fill="url(#beamG)"/>
+</g>
+<ellipse cx="800" cy="430" rx="760" ry="330" fill="url(#warm)" pointer-events="none"/>
+
+<!-- the board: nine tiles -->
+<rect x="250" y="152" width="1100" height="196" rx="14" fill="url(#goldG)"/><rect x="260" y="162" width="1080" height="176" rx="8" fill="#12081f"/>
+<g id="ftiles"></g>
+
+<!-- floor -->
+<rect x="-1000" y="660" width="3600" height="700" fill="url(#fl4)"/>
+<ellipse cx="800" cy="736" rx="760" ry="96" fill="#3a1670"/><ellipse cx="800" cy="736" rx="760" ry="96" fill="none" stroke="url(#goldG)" stroke-width="5" opacity=".8"/>
+<ellipse cx="800" cy="730" rx="640" ry="66" fill="url(#warm)"/>
+
+<!-- Mr Bloom -->
+<g id="fB">
+  <path d="M300 592h180l-8 120H308z" fill="#6a5a3c"/>
+  <use href="#ch-bloom" x="300" y="358" width="180" height="234"/>
+</g>
+<g>
+  <path d="M236 730l16-128h276l16 128z" fill="url(#deskG)"/><rect x="246" y="592" width="288" height="14" rx="3" fill="url(#goldG)"/>
+  <rect x="290" y="630" width="130" height="40" rx="3" fill="#12081f"/><text x="355" y="661" class="sg" font-size="32" fill="#f4e04d" letter-spacing="3">BLOOM</text>
+  <rect x="436" y="630" width="64" height="40" rx="3" fill="#12081f"/><text x="468" y="662" class="led" font-size="38" fill="#ff4a36">70</text>
+  <circle class="bzg" id="bzBg" cx="390" cy="586" r="60" fill="url(#redGl)"/><ellipse cx="390" cy="592" rx="30" ry="8" fill="#12081f"/><path class="bz" id="bzB" d="M366 590a24 20 0 0 1 48 0z"/>
+</g>
+
+<!-- Dexter Valentine -->
+<g>
+  <path d="M710 592h180l-8 120H718z" fill="#5a2a8c"/>
+  <use href="#ch-dex" x="710" y="358" width="180" height="234"/>
+  <path d="M724 736l14-150h124l14 150z" fill="url(#deskG)"/><rect x="730" y="576" width="140" height="14" rx="3" fill="url(#goldG)"/>
+  <circle cx="800" cy="656" r="30" fill="#12081f"/><circle cx="800" cy="656" r="30" fill="none" stroke="url(#goldG)" stroke-width="3"/><text x="800" y="668" class="logo" font-size="34" fill="#f4c430">L</text>
+  <g transform="rotate(-8 846 566)"><rect x="826" y="548" width="44" height="30" rx="2" fill="#1f5fd0"/><rect x="830" y="552" width="36" height="6" fill="#fff" opacity=".8"/></g>
+</g>
+
+<!-- Miss Okafor -->
+<g>
+  <path d="M1120 592h180l-8 120h-164z" fill="#f2c230"/>
+  <use href="#ch-joy" x="1120" y="358" width="180" height="234"/>
+  <path d="M1056 730l16-128h276l16 128z" fill="url(#deskG)"/><rect x="1066" y="592" width="288" height="14" rx="3" fill="url(#goldG)"/>
+  <rect x="1100" y="630" width="140" height="40" rx="3" fill="#12081f"/><text x="1170" y="661" class="sg" font-size="32" fill="#f4e04d" letter-spacing="3">OKAFOR</text>
+  <rect x="1256" y="630" width="64" height="40" rx="3" fill="#12081f"/><text x="1288" y="662" class="led" font-size="38" fill="#ff4a36">70</text>
+  <circle class="bzg" id="bzJg" cx="1210" cy="586" r="60" fill="url(#redGl)"/><ellipse cx="1210" cy="592" rx="30" ry="8" fill="#12081f"/><path class="bz" id="bzJ" d="M1186 590a24 20 0 0 1 48 0z"/>
+</g>
+
+<!-- the lamp is on -->
+<ellipse cx="1470" cy="110" rx="230" ry="150" fill="url(#redGl)" pointer-events="none"/>
+<rect x="1380" y="80" width="180" height="58" rx="8" fill="#12100f"/><rect id="lampOn" x="1388" y="88" width="164" height="42" rx="4" fill="#ff3b2a"/>
+<text x="1473" y="122" class="sg" font-size="34" fill="#fff" letter-spacing="6">ON AIR</text>
+
+<!-- camera two, and the people who came to watch -->
+<g>
+  <path d="M96 900V640h40v260z" fill="#08080b"/>
+  <rect x="10" y="500" width="236" height="150" rx="14" fill="#0e0e13"/><path d="M246 530l70-24v140l-70-24z" fill="#0a0a0e"/><ellipse cx="316" cy="576" rx="14" ry="70" fill="#07070a"/><ellipse cx="316" cy="576" rx="8" ry="54" fill="#22344a"/>
+  <circle id="tally" cx="222" cy="520" r="9" fill="#ff3b2a"/><text x="70" y="596" class="sg" font-size="60" fill="#3a3a46">2</text>
+</g>
+<g id="crowd" fill="#07040d"></g>
+<g id="confetti" pointer-events="none"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">OFF AIR</div>
+  <p id="d-time"></p><p id="d-words"></p><p id="d-hints"></p>
+  <div class="row"><button type="button" class="btn" id="b-report">Write your report</button><button type="button" class="btn" id="b-book">Open the notebook</button><button type="button" class="btn" id="b-lobby">Back to the files</button></div>
+  <small>The Final Word &middot; LEXICON, Studio Two &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="lex.js"></script>
+<script>
+(function () {
+  var $ = ER.$, done, phase = 'intro', inFc = false, CF = '';
+  var BOARD = 'tentation';                 /* the nine letters as LEX deals them tonight: the question, not the answer */
+  var SOUND = ['studio', { root: 53, bpm: 120, beds: [['crowd', 0.5]] }];      /* the show itself: the brightest key of the four, and an audience */
+
+  /* the lighting rig, the bulbs round the set, nine tiles, the audience */
+  (function () {
+    var s = '', i, x, t, cols = ['#ff3b2a', '#f4e04d', '#3ddc6a', '#7fe8ff', '#c77dff', '#fff'];
+    for (x = -400; x < 2000; x += 60) s += '<path d="M' + x + ' 54l30 30l30-30" stroke="#1d1826" stroke-width="4" fill="none"/>';
+    [140, 368, 628, 800, 972, 1232, 1460].forEach(function (lx, n) {
+      s += '<path d="M' + (lx - 5) + ' 84v14h10v-14z" fill="#1d1826"/><path d="M' + (lx - 22) + ' 98h44l8 26h-60z" fill="#15121c"/>' +
+        '<ellipse cx="' + lx + '" cy="125" rx="29" ry="6" fill="' + (n === 2 || n === 4 ? '#ffb0ec' : '#fff6d8') + '"/>';
+    });
+    $('#rig').innerHTML = s; s = '';
+    for (i = 1; i < 46; i++) { t = i / 46; s += '<circle cx="' + (60 + 1480 * t).toFixed(1) + '" cy="' + (214 - 208 * t * (1 - t)).toFixed(1) + '" r="4"/>'; }
+    $('#bulbs').innerHTML = s; s = '';
+    for (i = 0; i < 9; i++) {
+      x = 276 + i * 118;
+      s += '<g class="ft" id="ft' + i + '"><rect x="' + x + '" y="180" width="104" height="140" rx="8"/><text class="q" x="' + (x + 52) + '" y="276">?</text>' +
+        '<text class="l" x="' + (x + 52) + '" y="294"></text></g>';
+    }
+    $('#ftiles').innerHTML = s; s = '';
+    for (i = 0; i < 20; i++) {
+      x = -110 + i * 94;
+      s += '<circle cx="' + (x + 40) + '" cy="' + (806 + (i % 3) * 6) + '" r="27"/><path d="M' + (x - 6) + ' 900q0-62 46-62t46 62z"/>';
+    }
+    for (i = 0; i < 21; i++) {
+      x = -160 + i * 94;
+      s += '<circle cx="' + (x + 40) + '" cy="' + (862 + (i % 2) * 5) + '" r="31"/><path d="M' + (x - 12) + ' 960q0-66 52-66t52 66z"/>';
+    }
+    $('#crowd').innerHTML = s; s = '';
+    for (i = 0; i < 44; i++) {
+      s += '<rect class="cf" x="' + (40 + (i * 367) % 1520) + '" y="-40" width="' + (10 + (i % 3) * 4) + '" height="' + (16 + (i % 4) * 3) + '" fill="' + cols[i % 6] +
+        '" style="animation-delay:-' + ((i * 0.37) % 4.6).toFixed(2) + 's;animation-duration:' + (3.6 + (i % 5) * 0.5).toFixed(1) + 's"/>';
+    }
+    CF = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'lexicon', storyTitle: 'The Final Word', id: 'onair', no: 'IV', title: 'On Air',
+    go: 'Eight o’clock',
+    intro: [
+      'Sixteen words went into four sets: ways of speaking, things you can break, things on television, and four words with an EAR inside them. Then you pressed the buzzer with PRYCE on it, because only one person in the building says &ldquo;kindly&rdquo;.',
+      'Mrs Pryce did not argue. She started LOCKED IN herself. She did not want the envelope. She wanted ten minutes in which Mr Valentine said his last card to the mirror, and both finalists sat on the other side of a thin wall.',
+      'Why would the person who writes the questions want that? &ldquo;Watch the board,&rdquo; she said. &ldquo;Then watch him.&rdquo; The doors are open. The audience is in. Over the door, the lamp turns red.'
+    ],
+    exit: null, tags: {"f1":["c5da3238"],"f1@":["4a9bdfe0","eaf0e235","f995167a","d289c5c6","c3986266","0a381074","0fd92345","7e963f1f","de63d957"],"f1?":["da2f4a8a","ce710440","6e0e0ed0","add425f8","6f9ada9c","798b76b6","accfb27c","67ca0be0","4b356776"],"f1#":["2ff99544"]},
+    sound: SOUND,
+    hints: hints,
+    onBegin: begin
+  });
+  LEX.clock({ live: true });
+  done = !!ER.flag('fdone');
+
+  function cls(sel, c) { $(sel).setAttribute('class', c); }
+  function tile(i, ch, ok, quiet) {
+    var g = $('#ft' + i);
+    g.querySelector('.l').textContent = ch.toUpperCase();
+    g.setAttribute('class', 'ft up' + (ok ? ' ok' : '') + (quiet ? '' : ' flip'));
+    if (!quiet) LEX.sfx.flip();
+  }
+  function buzzer(who, on) { cls('#bz' + who, 'bz' + (on ? ' on' : '')); cls('#bz' + who + 'g', 'bzg' + (on ? ' on' : '')); }
+  function begin() {
+    var i;
+    if (done) {
+      for (i = 0; i < 9; i++) tile(i, (ER.flag('fword') || '?????????').charAt(i), true, true);
+      cls('#fB', 'gone'); phase = 'done'; finish();
+      return;
+    }
+    LEX.sfx.sting(); LEX.sfx.clap(3);
+    ER.narrate([
+      'Eight o&rsquo;clock. &ldquo;Good evening, and welcome to the final of... LEXICON!&rdquo; Two hundred people clap. You stand in the dark beside the board desk, where nobody can see you.',
+      'It is a very good final. Barnaby Bloom is fast and right. Joy Okafor is slow and right. At four minutes to nine they have seventy points each.',
+      '&ldquo;Finalists,&rdquo; says Dexter Valentine, &ldquo;for the series: the final conundrum. Fingers on buzzers.&rdquo;',
+      'The nine tiles on the big board begin to turn over, one at a time. The first is a T. The second is an E.'
+    ], function () {
+      ER.mood('tense');
+      setTimeout(function () { tile(0, BOARD.charAt(0)); }, 400);
+      setTimeout(function () { tile(1, BOARD.charAt(1)); }, 1100);
+      setTimeout(function () {
+        buzzer('B', true); LEX.sfx.buzz();
+        ER.narrate([
+          'A buzzer. Mr Bloom is not looking at the board. He never does. He is smiling at camera two. &ldquo;OVERHEARD,&rdquo; he says. One second.'
+        ], function () {
+          for (i = 2; i < 9; i++) (function (n) { setTimeout(function () { tile(n, BOARD.charAt(n)); }, (n - 2) * 260 + 200); })(i);
+          setTimeout(function () {
+            buzzer('B', false);
+            ER.narrate([
+              'The other seven tiles turn over. There is no V on the board. There is no H. There is no D.',
+              '&ldquo;Overheard?&rdquo; says Dexter. &ldquo;But that is the word on my OLD card! The one Nora took away at five to eight. I have only ever said that word to my mirror, Barnaby, so how did you...&rdquo; He stops. Even Dexter Valentine has understood.',
+              'Nobody in Studio Two says anything. Four million people are listening to it.',
+              'Joy Okafor has not looked at Mr Bloom once. She is looking at the board, and so are you.'
+            ], function () { phase = 'ready'; openFc(); });
+          }, 7 * 260 + 700);
+        });
+      }, 1900);
+    });
+  }
+  $('#ftiles').addEventListener('click', function () { if (phase === 'ready' && !ER.isOpen()) openFc(); });
+
+  /* ---------- the final conundrum ---------- */
+  function openFc() {
+    var box = ER.el('div', 'lx-screen fc'), msgEl, moves = 0;
+    box.innerHTML = '<div class="lx-top"><b>LIVE</b><span>THE FINAL CONUNDRUM</span><i>BLOOM 70 &middot; OKAFOR 70</i></div>' +
+      '<div class="fc-clue"><small>The clue, on the card in Dexter&rsquo;s hand</small>&ldquo;You pay it, but it costs you nothing.&rdquo;</div>' +
+      '<div class="fc-rack"></div><div class="fc-help">drag a letter to a new place &middot; or click two letters to change them over</div><div class="lx-msg"></div>';
+    msgEl = box.querySelector('.lx-msg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    msg('Mr Bloom has given his answer. Miss Okafor has not given hers. She is still looking at the nine letters, and so are you. There is no clock on this one.');
+    WK.tiles(box.querySelector('.fc-rack'), {
+      key: 'f1', items: BOARD,
+      onMove: function () {
+        LEX.sfx.flip(); moves++;
+        if (moves === 1) msg('Not yet. In the gallery Miss Teague has started to count the seconds of silence. She has reached four.');
+        if (moves === 7) msg('Not yet. Miss Teague has reached eleven. Mr Bloom is still smiling at camera two, but only with his mouth.');
+      },
+      onDone: function (text) { win(text, msg); }
+    });
+    ER.open('ov-lock', box, function () {
+      inFc = false;
+      if (!done) ER.say('The nine letters are still up there, and nobody has answered them yet. Click on the big board.');
+    });
+    inFc = true;
+  }
+  function win(text, msg) {
+    var W = text.toUpperCase(), i;
+    done = true; phase = 'done'; ER.flag('fdone', 1); ER.flag('fword', text);
+    LEX.learn(text); LEX.sfx.ding();
+    msg('Nine letters, one word. Out on the set, somebody presses a buzzer.');
+    setTimeout(function () {
+      ER.closeAll();
+      for (i = 0; i < 9; i++) tile(i, text.charAt(i), true);
+      buzzer('J', true); LEX.sfx.press(); ER.mood('calm');
+      try { if (ER.track && ER.music()) ER.track.sting('solved'); } catch (e) {}       /* the fanfare; the music then holds its breath while the story ends */
+      ER.narrate([
+        'Joy&rsquo;s buzzer. &ldquo;' + W.charAt(0) + text.slice(1) + ',&rdquo; she says. &ldquo;You pay ' + text + '.&rdquo;',
+        'Dexter breaks the red wax and opens the envelope that nobody has touched since noon. He holds the card up to camera one. ' + W + '.',
+        'Mr Bloom takes off his microphone, puts it down on his desk and walks off the set. It takes him a good deal longer than one second.'
+      ], function () {
+        cls('#fB', 'gone'); buzzer('J', false); LEX.sfx.clap(3.4);
+        ER.narrate([
+          'Afterwards Maxine Teague comes down from the gallery with three old memos in her hand. &ldquo;Nora,&rdquo; she says. &ldquo;Kindly explain.&rdquo; It is the first time in nine weeks that anybody has listened to Mrs Pryce.',
+          '&ldquo;The word on Dexter&rsquo;s card was never the final word,&rdquo; says Mrs Pryce. &ldquo;It was round three of practice set 14. So was the rest of it. Round one says LISTEN, if you read down the first letters, and round two says why. You have all played that set nine Fridays running.&rdquo;',
+          'Then she sends you to find Dexter some water without bubbles. This time there is a whole box of it, under her desk.'
+        ], finish);
+      });
+    }, 1700);
+  }
+
+  /* ---------- the numbers ---------- */
+  function finish() {
+    var st = ER.state(), mins = LEX.minutes(), hn = ER.hintsUsed();
+    $('#d-time').textContent = 'You had twenty-nine minutes to open the building. You took ' + mins + (mins === 1 ? ' minute' : ' minutes') +
+      (mins > 29 ? ', and LEX was kind enough not to notice.' : '.');
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+    $('#confetti').innerHTML = CF;
+    $('#done').classList.add('on');
+    try { if (ER.track && ER.kicked) ER.track.play(SOUND); else ER.sfx.ok(); } catch (e) {}      /* and the show's tune comes back for the last card */
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* the report for school: the one part nobody can open for you */
+  $('#b-report').addEventListener('click', function () {
+    var saved = ER.flag('report') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Work experience &middot; week 1</h4><h3>My report: Friday at Studio Two</h3>' +
+      '<label for="r1">1. What happened at 7.31, and who made it happen? Write it in order.</label><textarea id="r1"></textarea>' +
+      '<label for="r2">2. How did Mr Bloom know the word OVERHEARD? Begin with &ldquo;Because&rdquo;.</label><textarea id="r2"></textarea>' +
+      '<label>3. Was Mrs Pryce right to lock everybody in?</label><div class="yn"><label><input type="radio" name="yn" value="yes"> Yes</label><label><input type="radio" name="yn" value="no"> No</label></div>' +
+      '<textarea id="r3" placeholder="Because&hellip;"></textarea>' +
+      '<label for="r4">Signed (the runner)</label><input type="text" id="r4" maxlength="60">' +
+      '<div class="count"></div><div class="foot"><span>Saved in this browser as you type.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { box.querySelector('#' + k).value = saved[k] || ''; });
+    if (saved.yn) { var r = box.querySelector('input[value=' + saved.yn + ']'); if (r) r.checked = true; }
+    function keep() {
+      var o = {}, n = 0, c = box.querySelector('input[name=yn]:checked');
+      ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { o[k] = box.querySelector('#' + k).value; });
+      o.yn = c ? c.value : '';
+      ['r1', 'r2', 'r3'].forEach(function (k) { n += (o[k].match(/[A-Za-z’']+/g) || []).length; });
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('report', o);
+    }
+    box.addEventListener('input', keep); box.addEventListener('change', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+
+  function hints() {
+    if (inFc) return ['f1', [
+      'Look at the end of the word first. Four of the nine letters are already standing where they belong.',
+      'The word ends in -TION. Five letters are left for the beginning, and two of those five are T.',
+      'It begins with A. A teacher asks you to pay it. So did Mrs Pryce, for nine weeks.'
+    ]];
+    return null;
+  }
+})();
+</script>
+</body>
+</html>

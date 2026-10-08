@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Mystery · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-mystery.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{color:#eadfc8;font-family:'EB Garamond',Georgia,serif;-webkit-user-select:none;user-select:none;
+    background:#150e09;
+    background-image:radial-gradient(ellipse 900px 520px at 50% -60px,rgba(255,205,120,.34),rgba(255,180,90,.08) 55%,transparent 75%),
+      repeating-linear-gradient(92deg,rgba(255,255,255,.018) 0 3px,transparent 3px 11px),linear-gradient(#2a1a10,#150e09)}
+  .back{position:fixed;left:14px;top:12px;height:36px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(255,255,255,.24);
+    background:rgba(8,6,4,.6);color:#efe9dc;border-radius:3px;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#e2b65a;color:#e2b65a}
+  header{text-align:center;padding:64px 20px 26px}
+  h1{margin:0;font-family:'IM Fell English SC',serif;font-weight:normal;font-size:clamp(46px,7vw,84px);letter-spacing:.08em;color:#e2c06a;line-height:1}
+  header p{margin:12px 0 0;font-family:'Special Elite',monospace;font-size:17px;color:#cdbf9f}
+  main{max-width:1180px;margin:0 auto;padding:8px 24px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:34px 26px}
+  .file{position:relative;display:block;text-align:left;padding:26px 24px 22px;border:0;color:#2b2218;cursor:pointer;font:inherit;
+    background:linear-gradient(170deg,#e6cc94,#cfae70);box-shadow:0 14px 34px rgba(0,0,0,.55);transition:transform .18s,box-shadow .18s}
+  .file:before{content:attr(data-no);position:absolute;left:0;top:-22px;height:22px;padding:4px 16px 0;background:#dcc084;border-radius:6px 6px 0 0;
+    font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.2em;color:#6b5330}
+  .file:nth-child(3n+1){transform:rotate(-.7deg)}.file:nth-child(3n+2){transform:rotate(.5deg)}.file:nth-child(3n){transform:rotate(-.2deg)}
+  .file:hover{transform:translateY(-6px) rotate(0);box-shadow:0 22px 44px rgba(0,0,0,.6)}
+  .file h2{margin:0 0 8px;font-family:'Special Elite',monospace;font-weight:normal;font-size:24px;line-height:1.2}
+  .stars{font-size:25px;letter-spacing:3px;color:#8c2f24;line-height:1}
+  .meta{margin:10px 0 12px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:#6b5330}
+  .file p{margin:0;font-size:19px;line-height:1.4}
+  .stamp{position:absolute;right:16px;top:14px;padding:3px 10px 2px;border:3px solid;font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;
+    letter-spacing:.18em;transform:rotate(9deg);opacity:.85;display:none}
+  .file.going .stamp{display:block;color:#1f3a8a}
+  .file.solved .stamp{display:block;color:#b3261c}
+  .more{display:grid;place-items:center;min-height:190px;border:2px dashed rgba(226,192,106,.35);color:rgba(226,192,106,.6);
+    font-family:'Special Elite',monospace;font-size:17px;text-align:center;padding:20px}
+  footer{max-width:1180px;margin:0 auto;padding:6px 24px 50px;font-family:'Special Elite',monospace;font-size:15px;color:#a8997a;text-align:center;line-height:1.7}
+  footer b{color:#e2c06a;font-weight:normal;letter-spacing:2px}
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<header>
+  <h1>Mystery</h1>
+  <p>Case files. Somebody did it, and everything you need is in the file.</p>
+</header>
+<main id="files"></main>
+<footer><b>&#9733;</b> a short one for a first try &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;</b> a full case &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> long, and nothing is handed to you</footer>
+
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"gloria","title":"Where Is Gloria?","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"The heaviest pumpkin at the village show has gone. She weighs forty-one kilos, and nobody saw a thing.","rooms":4,"first":"tent.html","firstId":"tent","last":"prize"},{"id":"forty","title":"Forty Minutes of Dark","stars":4,"minutes":"50-70","hold":false,"level":"B1","blurb":"A harbour museum on its last night, a storm, and a ship's clock that has never been allowed to stop.","rooms":7,"first":"street.html","firstId":"street","last":"morning"}]), box = document.getElementById('files');
+  Shelf.init();
+  STORIES.forEach(function (s, i) {
+    var st = Shelf.status('mystery', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'file ' + st.state; b.setAttribute('data-story', s.id);
+    b.setAttribute('data-no', 'CASE FILE ' + (i + 1));
+    b.innerHTML = '<span class="stamp"></span><h2></h2><div class="stars"></div><div class="meta"></div><p></p>';
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('.stars').textContent = Shelf.stars(s.stars);
+    b.querySelector('.stars').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.meta').textContent = s.minutes + ' min · ' + s.rooms + ' rooms' + (s.level ? ' · level ' + s.level : '');
+    b.querySelector('p').textContent = s.blurb;
+    b.querySelector('.stamp').textContent = st.state === 'solved' ? 'CLOSED' : 'IN PROGRESS';
+    b.addEventListener('click', function () { Shelf.open('mystery', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 5) {
+    var m = document.createElement('div'); m.className = 'more'; m.textContent = 'More files are still being written.';
+    box.appendChild(m);
+  }
+})();
+</script>
+</body>
+</html>

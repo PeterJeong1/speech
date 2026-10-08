@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Show Tent · Where Is Gloria?</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="gloria.css">
+<style>
+  body{--bg:#4f8a2e;--accent:#e9832b;--font-display:'Alfa Slab One',serif;--font-ui:'Oswald',sans-serif;--font-body:'Outfit',Arial,sans-serif;
+    --tc-bg:repeating-linear-gradient(90deg,#f8f1de 0 110px,#f1e8d0 110px 220px);--tc-ink:#2b2a20;
+    --cap-bg:rgba(255,251,238,.97);--cap-ink:#2b2a20;--panel:#fffaf0;--panel-ink:#2b2a20;--q-ink:#3d6b3f;
+    --hud-bg:rgba(34,58,38,.88);--hud-ink:#fff8e6;--hud-line:rgba(255,248,230,.38);--ov-bg:rgba(24,40,26,.74);--fade:#f6efdc}
+  .tc-theme{color:#c2611a}
+  .tc-room{font-size:clamp(36px,5.6vw,74px);letter-spacing:.01em;color:#2c6a3f}
+  .tc .btn,.tk .btn{--accent:#c2611a}
+  .cap{box-shadow:0 14px 44px rgba(30,40,20,.35)}
+  .cap em{color:#c2611a}
+  .tk{border-color:#cdbf9d}
+  .tk-name{font-size:24px;letter-spacing:.01em;color:#2c6a3f}
+  .tk-role{color:#c2611a}
+
+  .banT{font-family:'Alfa Slab One',serif;font-size:35px;letter-spacing:2px;fill:#2c6a3f;text-anchor:middle}
+  .clsT{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;letter-spacing:5px;fill:#c2611a;text-anchor:middle}
+  .sgnT{font-family:'Alfa Slab One',serif;font-size:27px;letter-spacing:1px;fill:#2c6a3f;text-anchor:middle}
+  .sgnS{font-family:'Alfa Slab One',serif;font-size:17px;fill:#2c6a3f;text-anchor:middle}
+  .crdT{font-family:'Patrick Hand',cursive;font-size:14px;fill:#1f2f63;text-anchor:middle}
+  .crdB{font-family:'Oswald',sans-serif;font-weight:700;font-size:9.5px;letter-spacing:1px;fill:#fff;text-anchor:middle}
+  .tagT{font-family:'Oswald',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;fill:#3a2a14;text-anchor:middle}
+  .dialT{font-family:'Oswald',sans-serif;font-weight:600;font-size:11px;fill:#3d5a4c;text-anchor:middle}
+  .camT{font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:2px;fill:#fff8e6;text-anchor:middle;pointer-events:none}
+  .polT{font-family:'Patrick Hand',cursive;font-size:19px;fill:#1f2f63;text-anchor:middle;pointer-events:none}
+  .polX{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:1px;fill:#b3372b;text-anchor:middle;opacity:0;pointer-events:none}
+  .pol:hover .polX{opacity:1}
+
+  .flag{animation:flag 3.2s ease-in-out infinite alternate}
+  @keyframes flag{from{transform:rotate(-4deg)}to{transform:rotate(5deg)}}
+  #rope{animation:rope 4.4s ease-in-out infinite alternate;transform-origin:1440px 300px}
+  @keyframes rope{from{transform:rotate(-2.5deg)}to{transform:rotate(3deg)}}
+  #cloud{animation:cloud 50s linear infinite}
+  @keyframes cloud{from{transform:translateX(-90px)}to{transform:translateX(150px)}}
+  #clothEdge{animation:nudge 2.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-5px)}}
+  #cam{transition:opacity .4s}
+  #cam .ring{animation:camPulse 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+  #cam.used .ring{animation:none;opacity:0}
+  @keyframes camPulse{from{transform:scale(.6);opacity:.9}to{transform:scale(1.25);opacity:0}}
+  .gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:2px solid #2c6a3f;
+    color:#fff8e6;background:#2c6a3f;font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.16em;text-transform:uppercase;border-radius:4px;
+    box-shadow:0 8px 22px rgba(20,40,20,.4)}
+  .gobtn.on{display:block}
+  .gobtn:hover{background:#e9832b;border-color:#e9832b;color:#2b2a20}
+
+  /* looking down at the ground outside the back door */
+  .outv{width:min(780px,94vw);background:#fffaf0;padding:14px 14px 16px;box-shadow:0 26px 70px rgba(0,0,0,.55);border-radius:4px}
+  .outv svg{display:block;width:100%;height:auto;border-radius:2px}
+  .outv h5{margin:0 4px 10px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#c2611a}
+  .outv p{margin:12px 6px 0;font-size:20px;line-height:1.45;color:#2b2a20}
+  .outv .got{display:none;margin-top:10px;padding:8px 16px;background:#efe6cf;font-family:'Caveat',cursive;font-weight:700;font-size:30px;line-height:1.25;color:#23335e;
+    transform:rotate(-1deg)}
+  .outv .got p{margin:0;font-size:30px;line-height:1.25;color:#23335e}
+  .outv.has .got{display:block}
+  #scrapHot{animation:scrapGlow 2.2s ease-in-out infinite}
+  .outv.has #scrapHot{animation:none;opacity:.25}
+  @keyframes scrapGlow{50%{filter:brightness(1.18)}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="canvasG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9dfc4"/><stop offset=".3" stop-color="#f6efdd"/><stop offset="1" stop-color="#f0e7cf"/></linearGradient>
+  <linearGradient id="eaveSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a6a3c" stop-opacity=".3"/><stop offset="1" stop-color="#7a6a3c" stop-opacity="0"/></linearGradient>
+  <pattern id="seams" width="230" height="20" patternUnits="userSpaceOnUse"><rect width="115" height="20" fill="#8a7a48" opacity=".05"/><rect x="113" width="3" height="20" fill="#b9a977" opacity=".4"/><rect x="228" width="2" height="20" fill="#b9a977" opacity=".25"/></pattern>
+  <linearGradient id="grassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fc44d"/><stop offset=".5" stop-color="#75ad3c"/><stop offset="1" stop-color="#5c962f"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8f6030"/><stop offset=".45" stop-color="#c08d52"/><stop offset="1" stop-color="#845828"/></linearGradient>
+  <linearGradient id="plankG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d3a468"/><stop offset="1" stop-color="#a87840"/></linearGradient>
+  <linearGradient id="clothG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e6e2d6"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fcdf0"/><stop offset="1" stop-color="#e6f5fb"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7e938e"/><stop offset=".45" stop-color="#b9c9c4"/><stop offset="1" stop-color="#71857f"/></linearGradient>
+  <radialGradient id="sunIn" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fffbe0" stop-opacity=".75"/><stop offset=".5" stop-color="#fff6c8" stop-opacity=".2"/><stop offset="1" stop-color="#fff6c8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="55%" cy="52%" r="75%"><stop offset="0" stop-color="#2a3a14" stop-opacity="0"/><stop offset=".7" stop-color="#2a3a14" stop-opacity=".08"/><stop offset="1" stop-color="#1a2a0c" stop-opacity=".42"/></radialGradient>
+  <pattern id="straw" width="26" height="14" patternUnits="userSpaceOnUse"><rect width="26" height="14" fill="#e3c257"/><path d="M0 3h13M9 7h17M2 11h11M16 12h10M15 2h9" stroke="#c9a53c" stroke-width="1.6"/><path d="M4 6h6M18 9h6" stroke="#f3dc86" stroke-width="1.4"/></pattern>
+  <pattern id="tweed" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#6b7f52"/><path d="M0 6h12M6 0v12" stroke="#586a44" stroke-width="1.5"/><path d="M0 0l12 12" stroke="#8a9c6c" stroke-width=".8"/></pattern>
+  <clipPath id="doorClip"><rect x="1436" y="236" width="136" height="454"/></clipPath>
+  <symbol id="rosR" viewBox="-20 -20 40 62"><path d="M-9 10l-6 30 11-8 4 9 4-9 11 8-6-30z" fill="#b3372b"/><circle r="18" fill="#d2452f"/><circle r="18" fill="none" stroke="#b3372b" stroke-width="3" stroke-dasharray="4 3.2"/><circle r="10" fill="#fff6e0"/></symbol>
+</defs>
+
+<g id="world">
+<!-- roof and back wall of the tent -->
+<rect x="-1000" y="-700" width="3600" height="860" fill="#e3d8ba"/>
+<g id="roofSeams" stroke="#cdbf98" stroke-width="3"></g>
+<rect x="-1000" y="150" width="3600" height="546" fill="url(#canvasG)"/>
+<rect x="-1000" y="150" width="3600" height="546" fill="url(#seams)"/>
+<rect x="-1000" y="150" width="3600" height="70" fill="url(#eaveSh)"/>
+<path id="pelmet" fill="#fffdf6" stroke="#2c6a3f" stroke-width="3"/>
+<rect x="-1000" y="140" width="3600" height="13" fill="#b08448"/><rect x="-1000" y="140" width="3600" height="4" fill="#cda46a"/>
+
+<!-- the banner -->
+<g id="banner" class="hot">
+  <path d="M606 140V72M1206 140V72" stroke="#8a6a3a" stroke-width="3"/>
+  <path d="M576 66H1236L1224 98L1236 130H576L588 98Z" fill="#fff8e2" stroke="#2c6a3f" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M592 76H1220M592 120H1220" stroke="#e9832b" stroke-width="2.500"/>
+  <text x="906" y="111" class="banT">WICKERBY VEGETABLE SHOW</text>
+</g>
+
+<!-- the back door, and what is outside it -->
+<g id="door" class="hot">
+  <rect x="1436" y="236" width="136" height="454" fill="url(#skyG)"/>
+  <g clip-path="url(#doorClip)">
+    <g id="cloud"><ellipse cx="1470" cy="318" rx="44" ry="13" fill="#fff"/><ellipse cx="1496" cy="308" rx="28" ry="13" fill="#fff"/></g>
+    <path d="M1436 548q30-30 62-10t40-14 34 8v76h-136z" fill="#5a9a3e"/>
+    <path d="M1436 572q50-16 136 0v30h-136z" fill="#4a8734"/>
+    <rect x="1436" y="596" width="136" height="100" fill="#a9d66b"/>
+    <path d="M1436 618h136M1436 646h136" stroke="#97c85a" stroke-width="6"/>
+    <path d="M1482 696L1500 596h13l27 100z" fill="#e6d7a6"/>
+    <rect x="1492" y="574" width="30" height="24" fill="none" stroke="#8a6a3a" stroke-width="3"/><path d="M1492 586h30M1502 574v24M1512 574v24" stroke="#8a6a3a" stroke-width="2"/>
+    <path d="M1508 692q-6-44-1-94" stroke="#7a5a3a" stroke-width="3" fill="none"/>
+  </g>
+  <path d="M1436 236Q1424 440 1392 690H1436Z" fill="#ece2c6"/>
+  <path d="M1434 250Q1420 450 1404 688M1428 300Q1416 480 1418 688" stroke="#cfc3a0" stroke-width="2.500" fill="none"/>
+  <path d="M1572 236V690H1556Q1566 470 1572 236Z" fill="#e3d8ba"/>
+  <rect x="1428" y="226" width="152" height="14" fill="#ece2c6"/><path d="M1428 240h152" stroke="#cfc3a0" stroke-width="2"/>
+  <g fill="#8a7a52"><circle cx="1441" cy="280" r="3.500"/><circle cx="1441" cy="360" r="3.500"/><circle cx="1441" cy="440" r="3.500"/><circle cx="1567" cy="280" r="3.500"/><circle cx="1567" cy="360" r="3.500"/><circle cx="1567" cy="440" r="3.500"/></g>
+  <path id="rope" d="M1441 284q-16 44 0 84t-10 86q-4 18 8 26" stroke="#b98a4e" stroke-width="4.500" fill="none" stroke-linecap="round"/>
+  <path d="M1567 284q10 50-2 96q-6 22 4 36" stroke="#b98a4e" stroke-width="4.500" fill="none" stroke-linecap="round"/>
+</g>
+<circle cx="1500" cy="520" r="420" fill="url(#sunIn)" pointer-events="none"/>
+
+<!-- grass -->
+<rect x="-1000" y="690" width="3600" height="800" fill="url(#grassG)"/>
+<g id="stripes" fill="#a8d766" opacity=".34"></g>
+<rect x="-1000" y="686" width="2436" height="9" fill="#bdb18c"/><rect x="1572" y="686" width="1100" height="9" fill="#bdb18c"/>
+<path d="M1436 690H1572L1700 960H1210Z" fill="#fff7c2" opacity=".2" pointer-events="none"/>
+<g id="tufts" stroke="#4f8a2b" stroke-width="2.500" stroke-linecap="round" fill="none"></g>
+<path id="trackIn" d="M1404 842Q1470 836 1493 788Q1512 742 1504 694" stroke="#4a7a28" stroke-width="7" fill="none" stroke-linecap="round" opacity=".6"/>
+
+<!-- the onion table -->
+<g id="veg" class="hot">
+  <rect x="270" y="372" width="196" height="46" rx="4" fill="#fff8e2" stroke="#2c6a3f" stroke-width="3"/>
+  <text x="368" y="392" class="clsT" font-size="11">CLASS 3</text><text x="368" y="411" class="sgnS">ONIONS</text>
+  <path d="M30 566H470L456 548H44Z" fill="#fdfdf8"/>
+  <rect x="30" y="566" width="440" height="184" fill="url(#clothG)"/>
+  <path d="M120 570q-8 90 4 178M250 570q8 90-2 178M380 570q-6 80 4 178" stroke="#d6d1c2" stroke-width="2.500" fill="none"/>
+  <path d="M30 750h440" stroke="#000" stroke-width="5" opacity=".14"/>
+  <rect x="220" y="538" width="246" height="14" rx="2" fill="#20241f"/>
+  <g id="onions"></g>
+  <g fill="#ef7e2a"><path d="M228 541L452 536L452 541Z"/><path d="M232 548L462 544L462 549Z"/></g>
+  <g stroke="#4f9a3a" stroke-width="3" fill="none" stroke-linecap="round"><path d="M228 541q-14-10-8-22M228 541q-18-2-22-14M232 548q-18 0-24 10"/></g>
+  <use href="#rosR" x="296" y="470" width="30" height="46"/>
+  <g stroke="#4f9a3a" stroke-width="3" fill="none" stroke-linecap="round"><path d="M432 512q-8-22-12-34M438 512q0-28 4-46M444 512q8-18 16-28"/></g>
+  <g><circle cx="419" cy="472" r="12" fill="#e9558a"/><circle cx="419" cy="472" r="6" fill="#f6a6c0"/><circle cx="443" cy="458" r="13" fill="#f2c230"/><circle cx="443" cy="458" r="6" fill="#f8de7a"/><circle cx="462" cy="478" r="11" fill="#e9832b"/><circle cx="462" cy="478" r="5" fill="#f6b46a"/></g>
+  <path d="M424 508h28l-2 40h-24z" fill="#cfe8ee" fill-opacity=".75" stroke="#fff" stroke-width="2"/><path d="M426 526h24l-1 20h-22z" fill="#9bd0e0" opacity=".7"/><rect x="422" y="504" width="32" height="6" rx="2" fill="#d2452f"/>
+</g>
+
+<!-- Mrs Bell -->
+<g id="bell" class="hot">
+  <ellipse cx="120" cy="840" rx="96" ry="10" fill="#000" opacity=".18"/>
+  <rect x="84" y="790" width="22" height="40" fill="#e7c3a2"/><rect x="134" y="790" width="22" height="40" fill="#e7c3a2"/>
+  <path d="M74 840q0-14 18-14h16v14zM124 840q0-14 18-14h16v14z" fill="#2f4a36"/>
+  <path d="M54 688h132l12 110H42z" fill="url(#tweed)"/>
+  <rect x="24" y="560" width="30" height="150" rx="14" fill="#274372" transform="rotate(4 39 560)"/><circle cx="32" cy="716" r="12" fill="#f3cdac"/>
+  <path d="M46 552h148l6 146H40z" fill="#2c4a7c"/>
+  <path d="M120 560v138" stroke="#223a63" stroke-width="3"/><g fill="#d8b150"><circle cx="128" cy="600" r="4.500"/><circle cx="128" cy="636" r="4.500"/><circle cx="128" cy="672" r="4.500"/></g>
+  <rect x="178" y="556" width="30" height="96" rx="14" fill="#274372" transform="rotate(-16 193 560)"/>
+  <g transform="rotate(7 236 650)">
+    <rect x="200" y="604" width="74" height="98" rx="4" fill="#9a6b38"/><rect x="207" y="616" width="60" height="80" fill="#fffef7"/>
+    <rect x="224" y="598" width="26" height="14" rx="3" fill="#aeb4b4"/>
+    <path d="M213 630h48M213 641h48M213 652h40M213 663h48M213 674h34M213 685h44" stroke="#3d5a9a" stroke-width="2"/>
+  </g>
+  <circle cx="212" cy="668" r="12" fill="#f3cdac"/>
+  <use href="#ch-iris" x="40" y="350" width="160" height="208"/>
+</g>
+
+<!-- tent pole, results sheet, watering can, scale -->
+<g id="pole" class="hot"><rect x="497" y="-300" width="16" height="1024" fill="url(#woodG)"/><rect x="486" y="722" width="38" height="12" rx="3" fill="#7a5530"/></g>
+<g id="weigh" class="hot" transform="rotate(-3 505 420)">
+  <rect x="472" y="378" width="66" height="88" fill="#fffdf5" stroke="#2c6a3f" stroke-width="2"/><rect x="472" y="378" width="66" height="16" fill="#2c6a3f"/>
+  <path d="M480 406h50M480 418h50M480 430h50M480 442h50M480 454h30" stroke="#8a9a84" stroke-width="2"/><path d="M480 406h8M480 418h8M480 430h8M480 442h8" stroke="#b3372b" stroke-width="3"/>
+  <circle cx="505" cy="384" r="4" fill="#e9832b"/>
+</g>
+<g id="can" class="hot">
+  <path d="M536 716l-26-24" stroke="url(#steelG)" stroke-width="9" stroke-linecap="round"/>
+  <ellipse cx="508" cy="690" rx="9" ry="6" fill="#8ea39d" transform="rotate(-42 508 690)"/>
+  <path d="M532 704h50l-4 58h-42z" fill="url(#steelG)"/><ellipse cx="557" cy="704" rx="25" ry="6" fill="#5f736d"/>
+  <path d="M580 714q22 4 18 26t-20 16" stroke="#8ea39d" stroke-width="6" fill="none"/>
+  <path d="M536 730h44M537 746h42" stroke="#6f837d" stroke-width="2"/>
+</g>
+<g id="scale" class="hot">
+  <rect x="590" y="746" width="102" height="14" rx="3" fill="#3d5a4c"/><rect x="596" y="737" width="90" height="9" rx="2" fill="#c1c9c8"/><rect x="596" y="737" width="90" height="3" fill="#e2e8e7"/>
+  <rect x="633" y="538" width="16" height="200" fill="#3d5a4c"/><rect x="637" y="538" width="4" height="200" fill="#56776a"/>
+  <circle cx="641" cy="492" r="52" fill="#3d5a4c"/><circle cx="641" cy="492" r="43" fill="#fbf7e8"/>
+  <g id="dialTicks" stroke="#3d5a4c" stroke-linecap="round"></g>
+  <text x="641" y="517" class="dialT">kg</text>
+  <path d="M641 492V456" stroke="#c0392b" stroke-width="3.500" stroke-linecap="round"/><circle cx="641" cy="492" r="5" fill="#3d5a4c"/>
+</g>
+
+<!-- the pumpkin table -->
+<g id="sign" class="hot">
+  <path d="M862 262V152M1128 262V152" stroke="#8a6a3a" stroke-width="3"/>
+  <rect x="830" y="262" width="330" height="74" rx="5" fill="#fff8e2" stroke="#2c6a3f" stroke-width="4"/>
+  <rect x="838" y="270" width="314" height="58" rx="2" fill="none" stroke="#e9832b" stroke-width="1.500"/>
+  <text x="995" y="290" class="clsT">CLASS 12</text><text x="995" y="319" class="sgnT">HEAVIEST PUMPKIN</text>
+</g>
+<g id="flags" class="hot"></g>
+<g id="pegg" class="hot">
+  <path d="M1172 512H1308V552H1172Z" fill="#5a7d4e"/>
+  <path d="M1180 476L1188 548M1300 476L1300 548" stroke="#54764a" stroke-width="27" stroke-linecap="round"/>
+  <use href="#ch-pegg" x="1158" y="306" width="164" height="213"/>
+</g>
+<path d="M700 566H1320L1306 548H714Z" fill="#fdfdf8"/>
+<g id="cloth1" class="hot">
+  <rect x="700" y="566" width="314" height="190" fill="url(#clothG)"/>
+  <path d="M790 570q-8 90 4 184M930 570q8 90-2 184" stroke="#d6d1c2" stroke-width="2.500" fill="none"/>
+  <path d="M700 756h314" stroke="#000" stroke-width="5" opacity=".14"/>
+</g>
+<!-- under the table -->
+<g id="under">
+  <rect x="1006" y="568" width="312" height="150" fill="#27331f"/><rect x="1006" y="716" width="312" height="42" fill="#3f6a26"/>
+  <path d="M1262 570l40 186M1302 570l-40 186" stroke="#8a6a3a" stroke-width="9"/>
+  <path d="M1030 570l-8 186" stroke="#6f5330" stroke-width="9"/>
+  <g id="box" class="hot">
+    <ellipse cx="1132" cy="752" rx="78" ry="7" fill="#000" opacity=".3"/>
+    <ellipse cx="1132" cy="672" rx="46" ry="30" fill="#d9641f"/><ellipse cx="1118" cy="672" rx="18" ry="28" fill="#ee7f28"/><ellipse cx="1146" cy="672" rx="18" ry="28" fill="#ee7f28"/><ellipse cx="1132" cy="672" rx="14" ry="30" fill="#f29a3e"/>
+    <path d="M1128 644q-2-12 8-16l6 5q-6 4-5 12z" fill="#6f7a34"/>
+    <path d="M1062 672h140l-8 80h-124z" fill="#3f9a52"/><path d="M1062 672h140l-2 16h-136z" fill="#56b568"/>
+    <path d="M1068 706h128M1072 728h120" stroke="#2f7d41" stroke-width="3"/><rect x="1108" y="694" width="48" height="12" rx="6" fill="#27331f"/>
+    <path d="M1180 690q14 4 16 16" stroke="#8a6a3a" stroke-width="2" fill="none"/>
+    <g transform="rotate(10 1204 722)"><path d="M1174 708h56l8 12-8 12h-56z" fill="#e3c388"/><circle cx="1229" cy="720" r="2.500" fill="#27331f"/><text x="1200" y="724" class="tagT">TEA TENT</text></g>
+  </g>
+</g>
+<g id="cloth" class="drag"><path id="clothP" fill="url(#clothG)"/><g id="clothF" stroke="#d6d1c2" stroke-width="2.500" fill="none"></g>
+  <path id="clothEdge" d="M1150 744l11-12 11 12" stroke="#e9832b" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g id="pumps" class="hot"></g>
+<g id="gap" class="hot">
+  <ellipse cx="1240" cy="557" rx="68" ry="8" fill="#d6d1c2"/><ellipse cx="1240" cy="557" rx="52" ry="5.500" fill="#e9e6dc"/>
+  <path d="M1196 551l12 3M1274 562l10-2M1290 553l8 3M1182 560l9-1" stroke="#d9b84a" stroke-width="2" stroke-linecap="round"/>
+  <g fill="#f6ecc9" stroke="#c9b06a" stroke-width="1"><ellipse cx="1214" cy="554" rx="6" ry="3" transform="rotate(-20 1214 554)"/><ellipse cx="1262" cy="559" rx="6" ry="3" transform="rotate(14 1262 559)"/></g>
+</g>
+<g fill="#ecb89a"><circle cx="1188" cy="551" r="11.500"/><circle cx="1300" cy="551" r="11.500"/></g>
+
+<!-- straw bales, the plank, the card on the grass -->
+<g class="bale hot" data-b="a">
+  <ellipse cx="817" cy="774" rx="84" ry="7" fill="#000" opacity=".18"/>
+  <rect x="742" y="700" width="150" height="72" rx="7" fill="url(#straw)"/><rect x="742" y="700" width="150" height="10" rx="5" fill="#f1da84" opacity=".8"/>
+  <path d="M784 700v72M852 700v72" stroke="#2f6fa8" stroke-width="4"/>
+  <path d="M748 700l-8-9M770 700l-3-11M880 700l8-9M892 730l10-3M742 748l-10 4" stroke="#d9b84a" stroke-width="2.200" stroke-linecap="round"/>
+</g>
+<g class="bale hot" data-b="b">
+  <ellipse cx="1456" cy="704" rx="60" ry="6" fill="#000" opacity=".18"/>
+  <rect x="1404" y="636" width="104" height="66" rx="7" fill="url(#straw)"/><rect x="1404" y="636" width="104" height="9" rx="4.500" fill="#f1da84" opacity=".8"/>
+  <path d="M1434 636v66M1480 636v66" stroke="#2f6fa8" stroke-width="4"/>
+  <path d="M1410 636l-7-9M1500 636l8-8M1508 664l9-2" stroke="#d9b84a" stroke-width="2.200" stroke-linecap="round"/>
+</g>
+<g id="card" class="hot" transform="rotate(-13 1492 786)">
+  <rect x="1452" y="760" width="80" height="54" fill="#000" opacity=".16" transform="translate(3 4)"/>
+  <rect x="1452" y="760" width="80" height="54" fill="#fffdf6"/><rect x="1452" y="760" width="80" height="15" fill="#d2452f"/>
+  <text x="1492" y="771.500" class="crdB">FIRST PRIZE</text><text x="1492" y="792" class="crdT">W. Pegg</text><text x="1492" y="808" class="crdT">41 kg</text>
+  <path d="M1446 806L1538 772" stroke="#5b4526" stroke-width="6" opacity=".62" stroke-linecap="round"/>
+</g>
+<g id="plank" class="hot">
+  <path d="M1318 792L1420 846L1398 852L1300 800Z" fill="#000" opacity=".12"/>
+  <path d="M1298 559L1326 551L1416 828L1386 838Z" fill="url(#plankG)"/>
+  <path d="M1298 559L1326 551L1329 560L1301 568Z" fill="#8f6030"/>
+  <path d="M1310 566L1392 826M1318 562L1404 828" stroke="#9a6d3a" stroke-width="1.600" opacity=".7"/>
+  <ellipse cx="1352" cy="690" rx="4" ry="7" fill="#8f6030" transform="rotate(-18 1352 690)"/>
+</g>
+<rect x="-1000" y="-700" width="3600" height="2200" fill="url(#vig)" pointer-events="none"/>
+</g>
+
+<!-- your photographs, hung on a line, and the camera -->
+<g id="photos"></g>
+<g id="cam" class="drag" style="display:none">
+  <rect x="-128" y="-98" width="256" height="196" rx="14" fill="#fff" fill-opacity=".07" stroke="#1d1f1d" stroke-width="10"/>
+  <path d="M-108 -58V-78H-88M108 -58V-78H88M-108 58V78H-88M108 58V78H88" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle class="ring" r="34" fill="none" stroke="#e9832b" stroke-width="5"/>
+  <circle r="19" fill="none" stroke="#fff" stroke-width="1.800" opacity=".8"/><path d="M-11 0H11M0 -11V11" stroke="#fff" stroke-width="2.600"/>
+  <g transform="translate(0 -103)"><rect x="-74" y="-28" width="148" height="28" rx="6" fill="#1d1f1d"/><circle cx="-56" cy="-14" r="6" fill="#e9432f"/><text x="8" y="-9" class="camT">SHOW CAMERA</text></g>
+  <g transform="translate(0 103)"><rect x="-118" y="0" width="236" height="27" rx="6" fill="#1d1f1d"/><text x="0" y="18.500" class="camT">DRAG ME · CLICK = PHOTO</text></g>
+</g>
+<rect id="flash" x="-1000" y="-700" width="3600" height="2200" fill="#fff" opacity="0" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="show">Show Mrs Bell the photographs</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), cam = $('#cam'), busy = false, briefed = false, solved = false;
+  var found = { under: 0, out: 0 }, photos = [], cx = 330, cy = 640, clothH = 0, gotScrap = false;
+  var NAMES = { card: 'the card', box: 'the box', plank: 'the plank', bales: 'the bales', scale: 'the scale', can: 'the can', flags: 'the flags', door: 'the door' };
+  var NOTE = { card: 2, box: 3, plank: 4, bales: 5, scale: 6, can: 7, flags: 8, door: 9 };
+
+  function E(n, a, inner) {
+    var s = '<' + n, k;
+    for (k in a) s += ' ' + k + '="' + a[k] + '"';
+    return s + (inner == null ? '/>' : '>' + inner + '</' + n + '>');
+  }
+
+  /* things that come by the dozen: seams, scallops, grass, flags, vegetables */
+  function pumpkin(x, by, rx, ry, dark, mid, light) {
+    var s = E('ellipse', { cx: x, cy: by + 2, rx: rx * 0.94, ry: 7, fill: '#000', opacity: 0.16 }) + E('ellipse', { cx: x, cy: by - ry, rx: rx, ry: ry, fill: dark });
+    [-2, 2, -1, 1, 0].forEach(function (k) {
+      var a = Math.abs(k);
+      s += E('ellipse', { cx: x + k * rx * 0.33, cy: by - ry, rx: rx * (0.47 - a * 0.075), ry: ry * (1 - a * 0.04), fill: a === 2 ? dark : (a ? mid : light), stroke: dark, 'stroke-width': 1.4 });
+    });
+    s += E('ellipse', { cx: x - rx * 0.32, cy: by - ry * 1.46, rx: rx * 0.17, ry: ry * 0.13, fill: '#fff', opacity: 0.32 });
+    return s + E('path', { d: 'M' + (x - 6) + ' ' + (by - ry * 1.95) + 'q-4-16 9-23l8 6q-8 6-5 17z', fill: '#6f7a34' });
+  }
+  function showCard(x, band, l1, l2) {
+    return E('rect', { x: x - 39, y: 524, width: 78, height: 46, fill: '#fffdf6', stroke: '#d6d1c2', 'stroke-width': 1 }) +
+      E('rect', { x: x - 39, y: 524, width: 78, height: 13, fill: band[0] }) + E('text', { x: x, y: 534.5, 'class': 'crdB' }, band[1]) +
+      E('text', { x: x, y: 551, 'class': 'crdT' }, l1) + E('text', { x: x, y: 566, 'class': 'crdT' }, l2);
+  }
+  (function () {
+    var s = '', x, i, t, a, b, y, an, cols = ['#d2452f', '#f2c230', '#3a7fb8', '#6ea83c', '#fff8e2', '#e9832b'];
+    for (x = -1000; x <= 2600; x += 170) s += E('path', { d: 'M' + x + ' 150L' + (800 + (x - 800) * 0.6).toFixed(0) + ' -700' });
+    $('#roofSeams').innerHTML = s; s = '';
+    for (x = -1012; x < 2600; x += 46) s += 'M' + x + ' 152a23 23 0 0 0 46 0Z';
+    $('#pelmet').setAttribute('d', s); s = '';
+    for (i = -9; i < 9; i++) {
+      if (i & 1) continue;
+      a = i * 190; b = (i + 1) * 190;
+      s += E('path', { d: 'M' + (800 + a * 0.62).toFixed(0) + ' 694L' + (800 + b * 0.62).toFixed(0) + ' 694L' + (800 + b * 1.5).toFixed(0) + ' 1400L' + (800 + a * 1.5).toFixed(0) + ' 1400Z' });
+    }
+    $('#stripes').innerHTML = s; s = '';
+    for (i = 0; i < 150; i++) {
+      x = (i * 577) % 1840 - 120; y = 706 + ((i * 331) % 190);
+      if (x > 690 && x < 1330 && y < 762) continue;
+      s += 'M' + x + ' ' + y + 'l-4-9M' + x + ' ' + y + 'l1-11M' + x + ' ' + y + 'l5-8';
+    }
+    $('#tufts').innerHTML = E('path', { d: s }); s = '';
+    /* the row of flags above the pumpkin table */
+    var pts = [];
+    for (i = 0; i <= 22; i++) { t = i / 22; pts.push([520 + 860 * t, 178 + 46 * Math.sin(Math.PI * t)]); }
+    s = E('path', { d: 'M' + pts.map(function (p) { return p[0].toFixed(0) + ' ' + p[1].toFixed(1); }).join('L'), stroke: '#8a6a3a', 'stroke-width': 2.5, fill: 'none' });
+    for (i = 0; i < 22; i++) {
+      a = pts[i]; b = pts[i + 1]; an = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+      s += '<g transform="translate(' + ((a[0] + b[0]) / 2).toFixed(1) + ' ' + ((a[1] + b[1]) / 2).toFixed(1) + ') rotate(' + an.toFixed(1) + ')">' +
+        E('path', { 'class': 'flag', d: 'M-17 0H17L0 40Z', fill: cols[i % 6], style: 'animation-delay:' + (-(i * 0.37) % 3.2).toFixed(2) + 's' }) + '</g>';
+    }
+    $('#flags').innerHTML = s; s = '';
+    /* three onions on rings */
+    [[258, 24], [316, 29], [376, 25]].forEach(function (o) {
+      var ox = o[0], r = o[1], oy = 536 - r;
+      s += E('ellipse', { cx: ox, cy: 537, rx: r * 0.6, ry: 4, fill: '#8a6a3a' }) + E('ellipse', { cx: ox, cy: oy, rx: r, ry: r * 0.94, fill: '#d9a13a' }) +
+        E('path', { d: 'M' + ox + ' ' + (oy - r) + 'q-' + (r * 0.7) + ' ' + r + ' 0 ' + (r * 1.9) + 'M' + ox + ' ' + (oy - r) + 'q' + (r * 0.7) + ' ' + r + ' 0 ' + (r * 1.9), stroke: '#b9832a', 'stroke-width': 2, fill: 'none' }) +
+        E('ellipse', { cx: ox - r * 0.4, cy: oy - r * 0.35, rx: r * 0.18, ry: r * 0.3, fill: '#f3cf7a', opacity: 0.7 }) +
+        E('path', { d: 'M' + (ox - 4) + ' ' + (oy - r + 2) + 'l-2-13h12l-2 13z', fill: '#c9a45a' }) + E('path', { d: 'M' + (ox - 6) + ' ' + (oy - r - 5) + 'h12', stroke: '#7a5a36', 'stroke-width': 2 });
+    });
+    $('#onions').innerHTML = s; s = '';
+    for (i = 0; i < 11; i++) {
+      an = (-150 + i * 30) * Math.PI / 180;
+      s += E('path', { d: 'M' + (641 + Math.sin(an) * 34).toFixed(1) + ' ' + (492 - Math.cos(an) * 34).toFixed(1) + 'L' + (641 + Math.sin(an) * 40).toFixed(1) + ' ' + (492 - Math.cos(an) * 40).toFixed(1), 'stroke-width': i % 5 ? 2 : 3.5 });
+    }
+    $('#dialTicks').innerHTML = s;
+    $('#pumps').innerHTML =
+      E('g', { id: 'p-school' }, pumpkin(800, 552, 62, 48, '#d9641f', '#ee7f28', '#f6983c') + showCard(800, ['#f2c230', 'THIRD'], 'Wickerby School', '19 kg')) +
+      E('g', { id: 'p-tan' }, pumpkin(944, 552, 48, 38, '#d0701c', '#e98a2c', '#f3a548') + showCard(944, ['#8a9a84', 'FOURTH'], 'O. Tan', '12 kg')) +
+      E('g', { id: 'p-nash' }, pumpkin(1090, 552, 82, 62, '#c9571a', '#e2701f', '#ec8530') + showCard(1090, ['#2f6fb5', 'SECOND'], 'T. Nash', '36 kg'));
+  })();
+
+  ER.init({
+    theme: 'mystery', story: 'gloria', storyTitle: 'Where Is Gloria?', id: 'tent', no: 'I', title: 'The Show Tent',
+    go: 'Go into the tent',
+    intro: [
+      'Wickerby is a small village with a big vegetable show. People here grow onions as big as footballs and carrots as long as your arm. They do not think it is funny.',
+      'Today is your day off. You came for the cake stall. But at twenty to twelve somebody shouted, &ldquo;Is there a detective on the field?&rdquo; and your badge was in your pocket.',
+      'Gloria is missing. Gloria weighs forty-one kilos. Gloria is a pumpkin.'
+    ],
+    exit: {"next":"plots","w":{"5fad1548":"0df9545a"}}, tags: {"changed":["b40a81c3","2431b41a","a6628102","7f883221"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var CHECK = '<h4>Wickerby Vegetable Show</h4><p class="sub">Tent check &middot; half past nine &middot; Class 12 corner</p><ol>' +
+    '<li>There were four pumpkins on the table. The heaviest one was at the end, next to the back door.</li>' +
+    '<li>The first-prize card was on the table, in front of the heaviest pumpkin.</li>' +
+    '<li>There was a green box under the table. (The tea tent&rsquo;s. Not my business.)</li>' +
+    '<li>There was a long plank behind the table.</li>' +
+    '<li>There were two straw bales in front of the table, one on top of the other.</li>' +
+    '<li>The scale was between the table and the tent pole.</li>' +
+    '<li>There was a watering can next to the scale.</li>' +
+    '<li>There was a row of flags above the table.</li>' +
+    '<li>The back door was tied shut.</li></ol>' +
+    '<p class="sig">Everything was in its place. I. Bell</p>';
+  var SHEET = '<h4>Class 12 &middot; Heaviest Pumpkin</h4><p class="sub">Weighed at nine o&rsquo;clock</p><table>' +
+    '<tr><td>1st</td><td>W. Pegg, &ldquo;Gloria&rdquo;</td><td>41 kg</td></tr>' +
+    '<tr><td>2nd</td><td>T. Nash, &ldquo;Bruce&rdquo;</td><td>36 kg</td></tr>' +
+    '<tr><td>3rd</td><td>Wickerby School, &ldquo;Mr Orange&rdquo;</td><td>19 kg</td></tr>' +
+    '<tr><td>4th</td><td>O. Tan (no name)</td><td>12 kg</td></tr></table>' +
+    '<p class="foot">The silver cup will be given at three o&rsquo;clock.</p>';
+  var SCRAP = '<p>&hellip;ble, in the green box.</p><p>&hellip;g one on the table!</p>';
+  var JOT_BOX = '<h4>Under the pumpkin table</h4><p>A green box. In it: one pumpkin, about as big as a football.</p><p>A label on the box says TEA TENT.</p><p>Nobody has touched it.</p>';
+  var JOT_OUT = '<h4>Outside the back door</h4><p>One thin line in the mud. It is deep, so the thing was heavy. It had one wheel.</p><p>Small boot prints on both sides of the line.</p>';
+
+  function hints() {
+    if (solved) return null;
+    if (!briefed) return ['bell', [
+      'A woman in a straw hat is guarding the onions. Click on her, and listen to the end.',
+      'Keep clicking Next. On the last page she gives you two things: her notes and a camera.'
+    ]];
+    if (!found.under || !found.out) return ['look', [
+      'Mrs Bell&rsquo;s notes say what this corner was like at half past nine. They are in your Notebook. Read one line, then look at the tent. Is it still true?',
+      'You cannot see everything yet. ' + (found.under ? '' : 'What is under the pumpkin table? Drag the white cloth up, on the right. ') + (found.out ? '' : 'What is outside the back door? Click on the door.')
+    ]];
+    return ['photos', [
+      'Four things are not the same as the notes. Drag the camera over each one and click. The words that matter say where a thing is: on, under, behind, in front of, next to, between.',
+      'Go down the notes from number 2 to number 9. For each line, find the thing in the tent and ask: is that still true? The scale was between the table and the tent pole. It still is. So do not photograph the scale.',
+      'Somebody came in at the back, did something at the end of the table, and went out again. The four things that have changed are all near the back door. Is a photograph wrong? Click it to throw it away.'
+    ]];
+  }
+  function pips() { ER.pips((briefed ? 1 : 0) + found.under + found.out + (solved ? 1 : 0), 4); }
+  function begin() {
+    pips();
+    ER.narrate([
+      'The show tent is hot and quiet. It smells of onions and cut grass.',
+      'A woman in a straw hat is guarding the vegetables. At the far table a man is looking at a place where nothing is.'
+    ]);
+  }
+
+  /* ---------- things to look at ---------- */
+  function thing(sel, word, line) {
+    ER.$$(sel).forEach(function (n) {
+      n.addEventListener('click', function (e) { if (busy) return; if (word) ER.wordAt(e.clientX, e.clientY, word); if (line) ER.say(line); });
+    });
+  }
+  thing('#banner', null, 'WICKERBY VEGETABLE SHOW. Somebody has painted every letter by hand.');
+  thing('#veg', 'rosette', 'Class 3, onions. The biggest one is wearing a red rosette. It looks pleased with itself.');
+  thing('#pole', 'tent pole', null);
+  thing('#can', 'watering can', 'A watering can. It is empty.');
+  thing('#scale', 'scale', 'The show scale. It goes up to a hundred kilos.');
+  thing('#sign', null, 'Class 12, heaviest pumpkin. They were all weighed at nine o&rsquo;clock this morning.');
+  thing('#flags', 'flags', 'A row of little flags. Red, yellow, blue, green.');
+  thing('#gap', 'seeds', 'A round mark on the white cloth, as big as a bicycle wheel. Two seeds. Nothing else.');
+  thing('.bale[data-b=a]', 'straw bales', 'A straw bale. It is heavier than it looks.');
+  thing('.bale[data-b=b]', 'straw bales', 'A straw bale. It is holding the door open.');
+  thing('#plank', 'plank', 'A long plank. One end is on the table and the other end is on the grass.');
+  thing('#card', null, 'FIRST PRIZE. W. Pegg. 41 kg. There is a thin line of mud across the card.');
+  thing('#cloth1', 'tablecloth', 'A white tablecloth. It hangs all the way down to the grass.');
+  thing('#p-school', 'pumpkin', 'Wickerby School. Nineteen kilos. Third prize, and a name: Mr Orange.');
+  thing('#p-tan', 'pumpkin', 'O. Tan. Twelve kilos. Fourth out of four.');
+  thing('#p-nash', 'pumpkin', 'T. Nash. Thirty-six kilos. This one is called Bruce. Second prize.');
+  $('#weigh').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: SHEET, cls: 'sheet', clue: { id: 'sheet', title: 'Results on the tent pole', kind: 'Show paper' } });
+  });
+  $('#box').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'label');
+    ER.say('A green box. In it is one pumpkin, about as big as a football. A label on the box says TEA TENT.');
+  });
+
+  /* the cloth: drag it up to see under the table */
+  function setCloth(h) {
+    clothH = h;
+    var y = 756 - h, s = '', i, x;
+    $('#clothP').setAttribute('d', 'M1004 566H1320V' + y + 'Q1240 ' + (y + (h > 20 ? 9 : 0)) + ' 1162 ' + y + 'T1004 ' + y + 'Z');
+    for (i = 0; i < 3; i++) { x = 1080 + i * 84; s += 'M' + x + ' 570q' + (i & 1 ? 8 : -8) + ' ' + ((y - 570) / 2).toFixed(0) + ' 3 ' + (y - 572); }
+    for (i = 0; h > 40 && i < 3; i++) s += 'M1010 ' + (y - 8 - i * 9) + 'q150 ' + (10 - i * 3) + ' 304 0';
+    $('#clothF').innerHTML = E('path', { d: s });
+    $('#clothEdge').style.display = h ? 'none' : '';
+  }
+  setCloth(0);
+  (function () {
+    var y0 = 0;
+    ER.drag($('#cloth'), {
+      start: function (e) { if (busy || found.under) return false; y0 = ER.pt(svg, e).y; },
+      move: function (e) { setCloth(Math.max(0, Math.min(152, y0 - ER.pt(svg, e).y))); },
+      end: function (e, moved) {
+        if (clothH < 55) {
+          setCloth(0);
+          ER.say(moved ? 'The cloth falls back. Drag it higher.' : 'A white tablecloth. It hangs down to the grass. You could lift it: drag it up.');
+          return;
+        }
+        setCloth(152); found.under = 1; pips(); ER.sfx.paper();
+        $('#cloth').style.pointerEvents = 'none';
+        ER.addClue('box', 'Under the pumpkin table', JOT_BOX, 'jot', 'What you saw');
+        ER.say('Under the table there is a green box. In it is one pumpkin, about as big as a football. A label on the box says TEA TENT.', 7000);
+      }
+    });
+  })();
+
+  /* the back door: what is on the ground outside */
+  var OUT = '<svg viewBox="0 0 760 400" xmlns="http://www.w3.org/2000/svg">' +
+    '<rect width="760" height="400" fill="#7fb244"/>' +
+    '<path d="M-10 110Q150 40 330 76T650 52Q790 90 780 220T610 360Q420 420 240 372T-10 330Z" fill="#8a6843"/>' +
+    '<path d="M60 150Q200 100 330 130T600 110Q700 140 690 220T560 320Q400 360 250 330T70 290Q30 220 60 150Z" fill="#7a5a38" opacity=".55"/>' +
+    '<path d="M-20 318Q190 300 372 214T780 70" stroke="#4a3520" stroke-width="22" fill="none"/>' +
+    '<path d="M-20 318Q190 300 372 214T780 70" stroke="#6e5234" stroke-width="9" fill="none" stroke-dasharray="3 10"/>' +
+    '<g id="outPrints"></g>' +
+    '<g fill="#f6ecc9" stroke="#b99f5c" stroke-width="1.200"><ellipse cx="300" cy="300" rx="9" ry="4.500" transform="rotate(-30 300 300)"/><ellipse cx="520" cy="110" rx="9" ry="4.500" transform="rotate(20 520 110)"/><ellipse cx="610" cy="210" rx="9" ry="4.500" transform="rotate(-60 610 210)"/></g>' +
+    '<g transform="translate(96 62) rotate(-8)"><rect width="150" height="20" fill="#f2c230"/><path d="M0 0v20M50 0v12M100 0v12M150 0v20M25 0v7M75 0v7M125 0v7" stroke="#2b2a20" stroke-width="2"/>' +
+    '<text x="50" y="18" font-family="Oswald,sans-serif" font-size="9" font-weight="600" fill="#2b2a20" text-anchor="middle">10</text><text x="100" y="18" font-family="Oswald,sans-serif" font-size="9" font-weight="600" fill="#2b2a20" text-anchor="middle">20</text><text x="136" y="18" font-family="Oswald,sans-serif" font-size="9" font-weight="600" fill="#2b2a20" text-anchor="middle">cm</text></g>' +
+    '<g id="scrapHot" class="hot" transform="translate(470 262) rotate(16)"><path d="M-58 -30L-30 -36L4 -31L40 -37L60 -28L55 -6L61 18L44 33L10 28L-22 35L-56 29L-61 6Z" fill="#000" opacity=".2" transform="translate(4 5)"/>' +
+    '<path d="M-58 -30L-30 -36L4 -31L40 -37L60 -28L55 -6L61 18L44 33L10 28L-22 35L-56 29L-61 6Z" fill="#efe6cf"/>' +
+    '<path d="M-44 -12q10-8 18 0t18 0 18 0 18 0M-44 10q10-8 18 0t18 0 18 0 18 0" stroke="#23335e" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+    '<path d="M-64 24L30 -40" stroke="#5b4526" stroke-width="12" opacity=".4"/></g>' +
+    '<g stroke="#4f8a2b" stroke-width="3" stroke-linecap="round" fill="none"><path d="M30 40l-5-14M30 40l2-16M30 40l8-12M700 360l-5-14M700 360l2-16M700 360l8-12M90 380l-5-14M90 380l2-16M640 30l-5-14M640 30l2-16M640 30l8-12"/></g>' +
+    '<g transform="translate(686 310)"><g fill="#fff"><circle cy="-9" r="5.500"/><circle cx="8.500" cy="-3" r="5.500"/><circle cx="5.500" cy="7" r="5.500"/><circle cx="-5.500" cy="7" r="5.500"/><circle cx="-8.500" cy="-3" r="5.500"/></g><circle r="4.500" fill="#f2c230"/></g>' +
+    '</svg>';
+  function printsHtml() {
+    var s = '', i, t, x, y, side, P = [[-20, 318], [190, 300], [372, 214]], Q = [[372, 214], [554, 128], [780, 70]], pts = [];
+    function bez(p, u) { return [(1 - u) * (1 - u) * p[0][0] + 2 * (1 - u) * u * p[1][0] + u * u * p[2][0], (1 - u) * (1 - u) * p[0][1] + 2 * (1 - u) * u * p[1][1] + u * u * p[2][1]]; }
+    for (i = 0; i < 4; i++) pts.push(bez(P, 0.18 + i * 0.24));
+    for (i = 0; i < 4; i++) pts.push(bez(Q, 0.12 + i * 0.24));
+    pts.forEach(function (p, j) {
+      side = j & 1 ? 1 : -1; t = j < 4 ? 72 : 64;
+      x = p[0] + side * 20; y = p[1] + side * 44;
+      s += '<g transform="translate(' + x.toFixed(0) + ' ' + y.toFixed(0) + ') rotate(' + t + ')">' +
+        E('ellipse', { cx: 0, cy: -16, rx: 13, ry: 21, fill: '#55401f' }) + E('ellipse', { cx: 0, cy: 22, rx: 10, ry: 11, fill: '#55401f' }) +
+        E('path', { d: 'M-9 -26h18M-11 -18h22M-11 -10h22M-9 -2h18M-6 20h12M-6 26h12', stroke: '#8a6843', 'stroke-width': 2.4 }) + '</g>';
+    });
+    return s;
+  }
+  $('#door').addEventListener('click', function () {
+    if (busy) return;
+    var box = ER.el('div', 'outv' + (gotScrap ? ' has' : ''));
+    box.innerHTML = '<h5>Outside the back door</h5>' + OUT +
+      '<p class="say">One thin line in the mud, and it is deep. Something heavy went out this way on one wheel. The boot prints beside it are small.</p>' +
+      '<p class="say2">A scrap of paper is lying in the mud. Click on it.</p><div class="got">' + SCRAP + '</div>';
+    box.querySelector('#outPrints').innerHTML = printsHtml();
+    ER.glossIn(box, '.say, .say2');
+    function show() { box.classList.add('has'); box.querySelector('.say2').textContent = 'The wheel has gone over it. You put the scrap in your Notebook.'; }
+    if (gotScrap) show();
+    box.querySelector('#scrapHot').addEventListener('click', function () {
+      if (gotScrap) return;
+      gotScrap = true; show(); ER.sfx.paper();
+      ER.addClue('scrap1', 'A scrap of paper from the mud', SCRAP, 'scrap', 'Torn paper');
+    });
+    ER.sfx.paper();
+    ER.open('ov-read', box, function () {
+      ER.addClue('track', 'Outside the back door', JOT_OUT, 'jot', 'What you saw', true);
+      if (!found.out) { found.out = 1; pips(); }
+    });
+  });
+
+  /* ---------- the two people ---------- */
+  $('#bell').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.iris;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('iris'), last: briefed ? 'Close' : 'Take the notes and the camera',
+      lines: [
+        'You&rsquo;re the detective? Good. Iris Bell, Show Secretary. Please don&rsquo;t touch the onions.',
+        'At nine o&rsquo;clock we weighed the pumpkins. Mr Pegg&rsquo;s was the heaviest: forty-one kilos. He calls it Gloria. First prize, and the silver cup at three o&rsquo;clock.',
+        'At half past nine I checked the tent, as I do every year. Then I tied both doors shut and sat outside the front one, selling programmes. Nobody came past me. Nobody.',
+        'At half past eleven I opened the tent again. Three pumpkins. There were four at half past nine.',
+        { q: 'Who would want to take a pumpkin?', a: 'I&rsquo;m not saying anything. But Ted Nash has come second for five years. And at about ten o&rsquo;clock I saw him going away across the field with a wheelbarrow.' },
+        'Here are my notes from half past nine. I write everything down. And this is the show camera. There are four photographs left in it.',
+        'Find four things in this corner that are NOT the same as my notes, and photograph them. Not the pumpkin. I know about the pumpkin.'
+      ],
+      clue: { id: 'bell', title: 'Mrs Bell, in the show tent' },
+      done: function (seen) {
+        if (!seen || briefed) return;
+        briefed = true; pips();
+        ER.read({ html: CHECK, cls: 'check', clue: { id: 'check', title: 'Mrs Bell’s tent check', kind: 'Notes' }, done: giveCamera });
+      }
+    });
+  });
+  $('#pegg').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.pegg;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('pegg'),
+      lines: [
+        'Forty-one kilos. I planted her in April. I gave her water every morning, and milk on Sundays.',
+        { a: 'I talked to her, too. People laugh. But in June she was only as big as an apple, and look at her now.', note: '' },
+        { note: 'He looks at the empty place on the table.', a: 'Well. Don&rsquo;t look at her now.' },
+        { q: 'Could one person carry her?', a: 'Carry Gloria? She is heavier than my dog, and he is not a small dog. Two of us lifted her onto that table this morning, and we had to sit down afterwards.' },
+        { q: 'When did you last see her?', a: 'At nine o&rsquo;clock, on the scale. Then I went home to put on a clean shirt for the photograph.' }
+      ],
+      clue: { id: 'pegg', title: 'Mr Pegg, in the show tent' }
+    });
+  });
+
+  /* ---------- the camera ---------- */
+  var ZONES = [['card', 1446, 752, 1540, 822], ['bales', 1404, 632, 1510, 704], ['bales', 740, 696, 894, 774], ['box', 1052, 636, 1240, 756],
+    ['gap', 1176, 532, 1308, 566], ['pegg', 1166, 312, 1318, 548], ['pumps', 734, 430, 1176, 570], ['door', 1392, 226, 1582, 690],
+    ['scale', 588, 438, 694, 762], ['can', 498, 680, 600, 764], ['flags', 520, 170, 1380, 266], ['bell', 20, 350, 284, 842]];
+  function zoneAt(x, y) {
+    var ax = 1312, ay = 555, bx = 1401, by = 833, t = ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / ((bx - ax) * (bx - ax) + (by - ay) * (by - ay)), i, z;
+    t = Math.max(0, Math.min(1, t));
+    if (Math.hypot(x - (ax + t * (bx - ax)), y - (ay + t * (by - ay))) < 24) return 'plank';
+    for (i = 0; i < ZONES.length; i++) {
+      z = ZONES[i];
+      if (x >= z[1] && x <= z[3] && y >= z[2] && y <= z[4]) return z[0] === 'box' && !found.under ? 'cloth' : z[0];
+    }
+    return x > 1004 && x < 1320 && y > 566 && y < 756 && !found.under ? 'cloth' : null;
+  }
+  function placeCam() { cam.style.transform = 'translate(' + cx + 'px,' + cy + 'px)'; }
+  function giveCamera() {
+    cam.style.display = ''; placeCam(); drawPhotos();
+    ER.say('You have the show camera. Drag it over a thing, then click to take the photograph.', 7000);
+  }
+  (function () {
+    var ox = 0, oy = 0;
+    ER.drag(cam, {
+      start: function (e) { if (busy || solved) return false; var p = ER.pt(svg, e); ox = p.x - cx; oy = p.y - cy; },
+      move: function (e, moved) {
+        if (!moved) return;
+        var p = ER.pt(svg, e); cx = Math.max(110, Math.min(1490, p.x - ox)); cy = Math.max(150, Math.min(778, p.y - oy));
+        placeCam(); cam.classList.add('used');
+      },
+      end: function (e, moved) { if (!moved) snap(); }
+    });
+  })();
+  function flash() {
+    ER.sfx.click(); setTimeout(ER.sfx.tick, 90);
+    try { $('#flash').animate([{ opacity: 0 }, { opacity: 0.85, offset: 0.15 }, { opacity: 0 }], { duration: 320 }); } catch (e) {}
+  }
+  function snap() {
+    var id = zoneAt(cx, cy);
+    if (photos.length >= 4) { ER.say('The camera is empty. Click one of your four photographs to throw it away.'); return; }
+    flash();
+    if (!id) return ER.say('A photograph of nothing much. You throw it away.');
+    if (id === 'cloth') return ER.say('A photograph of a white tablecloth. What is under it?');
+    if (id === 'gap') return ER.say('Mrs Bell shakes her head. &ldquo;Not the pumpkin, dear. I know about the pumpkin.&rdquo;');
+    if (id === 'pumps') return ER.say('&ldquo;Those three have not moved,&rdquo; says Mrs Bell. &ldquo;I counted them twice.&rdquo;');
+    if (id === 'pegg') return ER.say('Mr Pegg tries to smile for the camera. He cannot do it. You do not keep the photograph.');
+    if (id === 'bell') return ER.say('&ldquo;Not me, dear,&rdquo; says Mrs Bell. &ldquo;I have not changed since 1987.&rdquo;');
+    if (photos.some(function (p) { return p.id === id; })) return ER.say('You already have a photograph of that.');
+    photos.push({ id: id, vb: [Math.round(cx - 120), Math.round(cy - 90), 240, 180] });
+    drawPhotos();
+    ER.say(photos.length < 4 ? 'Click. Photograph ' + photos.length + ' of 4: ' + NAMES[id] + '.' : 'Click. That is the last one: ' + NAMES[id] + '. Now show Mrs Bell.', 3200);
+  }
+  function drawPhotos() {
+    var s = E('path', { d: 'M22 190Q255 212 488 190', stroke: '#8a6a3a', 'stroke-width': 3, fill: 'none' }), i, p, x;
+    for (i = 0; i < 4; i++) {
+      x = 86 + i * 111; p = photos[i];
+      if (p) {
+        s += '<g class="pol hot" data-i="' + i + '" transform="translate(' + x + ' 206) rotate(' + [-3, 2, -1.5, 3][i] + ')">' +
+          E('rect', { x: -45, y: 4, width: 96, height: 118, fill: '#000', opacity: 0.2 }) + E('rect', { x: -48, y: 0, width: 96, height: 118, fill: '#fffdf6' }) +
+          E('svg', { x: -42, y: 7, width: 84, height: 63, viewBox: p.vb.join(' '), preserveAspectRatio: ['xMidYMid', 'slice'].join(' ') }, E('use', { href: '#world' })) +
+          E('rect', { x: -42, y: 7, width: 84, height: 63, fill: 'none', stroke: '#cfc8b4', 'stroke-width': 1 }) +
+          E('text', { x: 0, y: 93, 'class': 'polT' }, NAMES[p.id]) + E('text', { x: 0, y: 110, 'class': 'polX' }, 'THROW AWAY') + '</g>';
+      }
+      s += E('rect', { x: x - 4, y: 192 + (i === 0 || i === 3 ? 2 : 6), width: 8, height: 20, rx: 2, fill: '#c08d52', stroke: '#8f6030', 'stroke-width': 1 });
+    }
+    $('#photos').innerHTML = s;
+    $('#show').classList.toggle('on', photos.length === 4 && !solved);
+  }
+  $('#photos').addEventListener('click', function (e) {
+    var g = e.target.closest ? e.target.closest('.pol') : null;
+    if (!g || busy || solved) return;
+    photos.splice(+g.getAttribute('data-i'), 1); ER.sfx.paper(); drawPhotos();
+    ER.say('You throw that photograph away. The camera has room for another.', 2600);
+  });
+  $('#show').addEventListener('click', function () {
+    if (busy || solved || photos.length < 4) return;
+    if (!found.under) return ER.say('&ldquo;Have you looked under the table?&rdquo; says Mrs Bell. &ldquo;My notes say there was a box there.&rdquo;');
+    if (!found.out) return ER.say('&ldquo;And the back door?&rdquo; says Mrs Bell. &ldquo;Go and look outside it first.&rdquo;');
+    var ids = photos.map(function (p) { return p.id; }).sort(), n = 0, bad = null;
+    if (ER.exit([ids.join('+')], { delay: 6400 })) {
+      solved = true; busy = true; pips();
+      $('#show').classList.remove('on'); cam.style.opacity = 0;
+      ER.say('Mrs Bell puts the four photographs in a row and looks at them for a long time. Then she looks at the grass outside the back door. &ldquo;Somebody has been busy,&rdquo; she says.', 6400);
+      return;
+    }
+    photos.forEach(function (p) { if (ER.check('changed', p.id)) n++; else if (!bad) bad = p; });
+    ER.sfx.no();
+    ER.say('Mrs Bell looks at the four photographs. &ldquo;' + ['None', 'One', 'Two', 'Three'][n] + ' of these ' + (n === 1 ? 'is' : 'are') +
+      ' different from my notes,&rdquo; she says. &ldquo;Look at ' + NAMES[bad.id] + ' again, and read number ' + NOTE[bad.id] + '.&rdquo;', 9000);
+  });
+})();
+</script>
+</body>
+</html>
