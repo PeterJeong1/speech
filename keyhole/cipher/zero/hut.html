@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Hut · Station Zero</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0b0e0c;--accent:#f4e04d;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(8,10,8,.95);--cap-bg:rgba(10,12,10,.93);--panel:#15181a;--face-bg:#161a17;--q-ink:#c9c39a;--fade:#040504;--hud-bg:rgba(10,12,10,.76)}
+  .tc-room{letter-spacing:.1em}
+  .lbl{font-family:'Permanent Marker',cursive;font-size:13px;fill:#1c1b18;text-anchor:middle}
+  .sten{font-family:'Stardos Stencil',serif;font-weight:700;fill:#f4e04d;text-anchor:middle}
+  .plate{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:3px;fill:#d9d2b8;text-anchor:middle}
+  .signT{font-family:'Bebas Neue',sans-serif;fill:#141518;text-anchor:middle}
+  #lampA,#lampB{animation:key 1.1s steps(1,end) infinite}
+  #lampB{animation-duration:.7s;animation-delay:-.3s}
+  @keyframes key{0%{opacity:1}22%{opacity:.25}34%{opacity:1}60%{opacity:.25}70%{opacity:1}}
+  #ndl{transform-origin:1420px 282px;animation:ndl .9s steps(4) infinite alternate}
+  @keyframes ndl{from{transform:rotate(-18deg)}to{transform:rotate(24deg)}}
+  #loop{animation:loop 1.2s linear infinite}
+  @keyframes loop{to{stroke-dashoffset:-36}}
+  #valve{animation:glow 3s steps(5) infinite alternate}
+  @keyframes glow{from{opacity:.55}to{opacity:1}}
+  #mastlamp{animation:mast 2.4s steps(1,end) infinite}
+  @keyframes mast{0%{opacity:1}50%{opacity:.08}}
+  #rainW{animation:rainw .5s linear infinite}
+  @keyframes rainw{to{transform:translate(-12px,40px)}}
+  #strip{animation:strip 3s steps(6) infinite}
+  @keyframes strip{to{stroke-dashoffset:-48}}
+  #cone{animation:cone 7s steps(1,end) infinite}
+  @keyframes cone{0%{opacity:.5}92%{opacity:.5}94%{opacity:.3}96%{opacity:.5}}
+  .set.open .back{display:block}
+  .set .back{display:none}
+  #keyG{display:none}
+  #keyG.on{display:block}
+
+  /* the wheel, close up */
+  .wh{display:grid;grid-template-columns:410px minmax(0,560px);gap:26px;align-items:start;width:min(1010px,96vw);padding:22px 24px 20px;background:#1b1f1c;
+    border:1px solid #3a4038;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .wh svg{display:block;width:100%;height:auto;touch-action:none}
+  .wh-ring{font-family:'Courier Prime',monospace;font-weight:700;font-size:21px;text-anchor:middle}
+  #inner{cursor:grab}
+  #inner.on{cursor:grabbing}
+  .wh-set{margin:10px 0 0;text-align:center;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#c9c39a}
+  .wh-set b{font-family:'VT323',monospace;font-weight:normal;font-size:26px;color:#f4e04d;letter-spacing:.06em;vertical-align:-2px}
+  .wh h5{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:#a8a495}
+  .wh-len{margin:0 0 12px;padding:10px 12px 6px;background:#e6dfcb;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+  .grp{display:inline-block;margin:0 9px 6px 0;font-family:'Courier Prime',monospace;font-weight:700;font-size:16.5px;letter-spacing:.06em;line-height:1.1}
+  .grp i{display:block;font-style:normal;color:#8a8370}
+  .grp b{display:block;color:#1c1b18}
+  .wh-len.done{background:#f6f1e2}
+  .wh-len.done p{margin:0 0 6px;font-family:'Caveat',cursive;font-weight:700;font-size:25px;line-height:1.12;color:#1d2a52}
+  .wh-foot{display:flex;gap:14px;align-items:center;margin-top:4px}
+  .wh-foot .pmsg{flex:1;font-size:16px}
+  .lever{flex:none;padding:12px 18px 10px;border:2px solid #f4e04d;background:#23261f;color:#f4e04d;font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.14em;border-radius:3px}
+  .lever:hover{background:#f4e04d;color:#141518}
+  @media (max-width:980px){.wh{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18211c"/><stop offset=".6" stop-color="#26332b"/><stop offset="1" stop-color="#1b241f"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2318"/><stop offset="1" stop-color="#0f0c08"/></linearGradient>
+  <linearGradient id="setG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6c7566"/><stop offset="1" stop-color="#454d42"/></linearGradient>
+  <linearGradient id="cabG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0c0d0e"/><stop offset=".5" stop-color="#1d1f22"/><stop offset="1" stop-color="#0a0b0c"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1d98c"/><stop offset=".5" stop-color="#b8923a"/><stop offset="1" stop-color="#7c5e1e"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a4628"/><stop offset="1" stop-color="#33260f"/></linearGradient>
+  <radialGradient id="coneG" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#ffe9a6" stop-opacity=".55"/><stop offset=".5" stop-color="#ffe9a6" stop-opacity=".12"/><stop offset="1" stop-color="#ffe9a6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="ampG"><stop offset="0" stop-color="#ffb347" stop-opacity=".8"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="74%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#000" stop-opacity=".34"/><stop offset="1" stop-color="#000" stop-opacity=".92"/></radialGradient>
+  <clipPath id="winC"><rect x="724" y="174" width="172" height="152"/></clipPath>
+  <clipPath id="meshC"><rect x="1378" y="318" width="144" height="110" rx="4"/></clipPath>
+</defs>
+
+<!-- wall of boards, floor -->
+<rect x="-1000" y="-400" width="3600" height="1050" fill="url(#wallG)"/>
+<g id="boards" stroke="#141b17" stroke-width="2"></g>
+<rect x="-1000" y="632" width="3600" height="16" fill="#111712"/>
+<rect x="-1000" y="648" width="3600" height="700" fill="url(#floorG)"/>
+<g stroke="#171208" stroke-width="3"><path d="M-1000 708H2600M-1000 790H2600"/></g>
+<ellipse id="cone" cx="800" cy="-40" rx="900" ry="820" fill="url(#coneG)" opacity=".5" pointer-events="none"/>
+<path d="M800 -400V18" stroke="#0a0c0a" stroke-width="5"/><path d="M748 46q52-58 104 0z" fill="#101410"/><ellipse cx="800" cy="46" rx="52" ry="7" fill="#fff3c4"/>
+
+<!-- the front door, and Mrs Holloway's new sign -->
+<g id="outdoor" class="hot">
+  <rect x="62" y="196" width="176" height="444" fill="#0f1411"/><rect x="74" y="208" width="152" height="432" fill="#34422f"/>
+  <g stroke="#232e21" stroke-width="3"><path d="M112 208v432M150 208v432M188 208v432"/></g>
+  <rect x="112" y="250" width="76" height="92" fill="#060a10"/><g stroke="#8fa6c4" stroke-width="1.6" opacity=".5"><path d="M124 256l-8 34M146 262l-8 40M168 254l-8 36M180 290l-8 40M134 300l-8 36"/></g>
+  <rect x="112" y="250" width="76" height="92" fill="none" stroke="#1b241a" stroke-width="5"/>
+  <circle cx="208" cy="442" r="9" fill="url(#brassG)"/><rect x="92" y="382" width="120" height="16" rx="3" fill="#161b15"/><rect x="92" y="520" width="120" height="16" rx="3" fill="#161b15"/>
+</g>
+<g id="plaque" class="hot">
+  <path d="M258 222h124v96q-60 14-124 0z" fill="#8c2f24"/><path d="M258 222h124v18q-62 10-124 0z" fill="#a8402f"/>
+  <g stroke="#6e2018" stroke-width="2" fill="none"><path d="M280 240q4 40-2 78M320 242q-4 40 2 80M356 240q4 38-2 76"/></g>
+  <path d="M372 300l12 16-14 6z" fill="url(#brassG)"/>
+</g>
+<g id="card" class="hot" transform="rotate(2 320 368)"><rect x="278" y="340" width="86" height="58" fill="#fbfaf4"/><rect x="278" y="340" width="86" height="12" fill="#141518"/>
+  <g stroke="#8a8676" stroke-width="2"><path d="M286 362h70M286 372h60M286 382h70M286 390h40"/></g><circle cx="321" cy="344" r="3.5" fill="#c8281d"/></g>
+<g id="sign" class="hot" transform="rotate(-7 320 540)">
+  <rect x="250" y="436" width="150" height="204" fill="#f4e04d"/><rect x="250" y="436" width="150" height="204" fill="none" stroke="#141518" stroke-width="6"/>
+  <text x="325" y="492" class="signT" font-size="34">STATION</text><text x="325" y="548" class="signT" font-size="62">ZERO</text>
+  <rect x="266" y="562" width="118" height="3" fill="#141518"/><text x="325" y="588" class="signT" font-size="15" letter-spacing="1.5">THE SECRET LISTENERS</text>
+  <text x="325" y="616" class="signT" font-size="15" letter-spacing="1.5">OPENS SATURDAY</text>
+</g>
+<g transform="translate(404 612)"><rect x="-22" y="-8" width="44" height="36" rx="3" fill="#8a8f93"/><rect x="-24" y="-12" width="48" height="8" rx="3" fill="#b9bfc4"/><path d="M-10 -12q4 10 10 4" stroke="#f4e04d" stroke-width="5" fill="none"/><rect x="-14" y="2" width="28" height="14" fill="#f1ede1"/></g>
+
+<!-- clock, photograph, window, notice -->
+<g id="clock" class="hot"><circle cx="482" cy="252" r="50" fill="#0f1310"/><circle cx="482" cy="252" r="43" fill="#ece6d2"/>
+  <g id="ticks" stroke="#1c1b18" stroke-width="2.5"></g>
+  <path id="hh" d="M482 252V224" stroke="#1c1b18" stroke-width="5" stroke-linecap="round"/><path id="mh" d="M482 252V216" stroke="#1c1b18" stroke-width="3" stroke-linecap="round"/><circle cx="482" cy="252" r="4" fill="#c8281d"/></g>
+<g id="photo" class="hot"><rect x="566" y="204" width="118" height="88" fill="#1a130b"/><rect x="574" y="212" width="102" height="72" fill="#b9b3a2"/>
+  <rect x="574" y="252" width="102" height="32" fill="#8d8878"/>
+  <g fill="#3b3a36"><circle cx="590" cy="246" r="5"/><circle cx="604" cy="244" r="5"/><circle cx="618" cy="246" r="5"/><circle cx="632" cy="243" r="5"/><circle cx="646" cy="246" r="5"/><circle cx="660" cy="242" r="5"/>
+    <rect x="585" y="251" width="10" height="22"/><rect x="599" y="249" width="10" height="24"/><rect x="613" y="251" width="10" height="22"/><rect x="627" y="248" width="10" height="25"/><rect x="641" y="251" width="10" height="22"/><rect x="655" y="247" width="10" height="26"/></g>
+  <path d="M580 216l30 60" stroke="#fff" stroke-width="7" opacity=".12"/></g>
+<g id="window" class="hot"><rect x="712" y="162" width="196" height="176" fill="#0d120f"/>
+  <g clip-path="url(#winC)"><rect x="724" y="174" width="172" height="152" fill="#05080e"/>
+    <path d="M800 326V196M800 196l-26 130M800 196l26 130M786 262h28M781 292h38" stroke="#18212d" stroke-width="3" fill="none"/>
+    <circle id="mastlamp" cx="800" cy="194" r="6" fill="#ff4a36"/>
+    <g id="rainW" stroke="#8fa6c4" stroke-width="1.5" opacity=".45"><path d="M740 150l-12 40M770 160l-12 40M830 150l-12 40M860 170l-12 40M890 150l-12 40M752 230l-12 40M812 240l-12 40M872 236l-12 40M790 290l-12 40M850 300l-12 40M900 280l-12 40M730 300l-12 40"/></g></g>
+  <path d="M810 174v152M724 250h172" stroke="#0d120f" stroke-width="7"/></g>
+<g id="notice" class="hot" transform="rotate(1.5 986 256)"><rect x="932" y="192" width="108" height="130" fill="#e9e4d2"/><rect x="932" y="192" width="108" height="20" fill="#2f3a2c"/>
+  <text x="986" y="207" class="plate" font-size="9.5" letter-spacing="1.5">WATCHKEEPING</text>
+  <g stroke="#6d685c" stroke-width="2"><path d="M942 226h88M942 238h70M942 250h88M942 262h80M942 274h88M942 286h60M942 298h88M942 310h50"/></g></g>
+
+<!-- the long bench and the six sets -->
+<rect x="392" y="470" width="704" height="18" fill="#4a3a1f"/><rect x="392" y="486" width="704" height="8" fill="#2a2010"/>
+<g fill="#2e2412"><rect x="404" y="494" width="16" height="146"/><rect x="1068" y="494" width="16" height="146"/><rect x="736" y="494" width="16" height="146"/></g>
+<g id="sets"></g>
+<g id="keyG"><circle cx="796" cy="418" r="15" fill="none" stroke="url(#brassG)" stroke-width="5"/><path d="M796 433v34M796 455h10M796 465h8" stroke="#d9b65a" stroke-width="5" stroke-linecap="round"/></g>
+
+<!-- the door of the cipher room -->
+<g id="cdoor" class="hot">
+  <rect x="1106" y="204" width="152" height="436" fill="#0f1411"/><rect x="1116" y="214" width="132" height="426" fill="#3b3125"/>
+  <rect x="1130" y="232" width="104" height="170" fill="none" stroke="#2a2218" stroke-width="4"/><rect x="1130" y="424" width="104" height="194" fill="none" stroke="#2a2218" stroke-width="4"/>
+  <rect x="1130" y="286" width="104" height="34" fill="#141518"/><text x="1182" y="309" class="plate" font-size="14">CIPHER ROOM</text>
+  <circle cx="1232" cy="420" r="8" fill="url(#brassG)"/><rect x="1226" y="434" width="12" height="18" rx="3" fill="#0d0f0c"/>
+</g>
+
+<!-- item 31 -->
+<g id="phone" class="hot"><g>
+  <rect x="1270" y="292" width="58" height="96" rx="5" fill="#3d4a34"/><rect x="1270" y="292" width="58" height="96" rx="5" fill="none" stroke="#232b1f" stroke-width="3"/>
+  <rect x="1276" y="298" width="46" height="26" rx="3" fill="#2c3626"/><circle cx="1330" cy="352" r="6" fill="#1b1f18"/><path d="M1330 352h10v-8" stroke="#8d8a7c" stroke-width="3" fill="none"/>
+  <path d="M1262 304q-8 34 0 72" stroke="#0c0d0b" stroke-width="9" fill="none" stroke-linecap="round"/><rect x="1255" y="296" width="15" height="18" rx="6" fill="#141612"/><rect x="1255" y="366" width="15" height="18" rx="6" fill="#141612"/>
+  <path d="M1262 384q2 30 20 26" stroke="#0c0d0b" stroke-width="3" fill="none"/>
+  <g transform="rotate(-3 1299 352)"><rect x="1273" y="336" width="52" height="24" fill="#f1ede1"/><rect x="1273" y="336" width="52" height="6" fill="#f4e04d"/><text x="1299" y="356" class="lbl" font-size="10.5">ITEM 31</text></g>
+</g></g>
+
+<!-- the sender -->
+<ellipse cx="1450" cy="372" rx="210" ry="170" fill="url(#ampG)" opacity=".35" pointer-events="none"/>
+<g id="sender" class="hot">
+  <rect x="1346" y="140" width="208" height="508" fill="#060707"/><rect x="1352" y="146" width="196" height="496" rx="4" fill="url(#cabG)"/>
+  <g stroke="#2c2f33" stroke-width="2"><path d="M1352 300h196M1352 444h196M1352 560h196"/></g>
+  <g fill="#3a3d42"><circle cx="1364" cy="158" r="3.5"/><circle cx="1536" cy="158" r="3.5"/><circle cx="1364" cy="630" r="3.5"/><circle cx="1536" cy="630" r="3.5"/></g>
+  <circle cx="1392" cy="190" r="16" fill="#0a0b0c"/><circle id="lampA" cx="1392" cy="190" r="11" fill="#ffb347"/>
+  <circle cx="1434" cy="190" r="16" fill="#0a0b0c"/><circle id="lampB" cx="1434" cy="190" r="11" fill="#ffb347"/>
+  <text x="1500" y="196" class="plate" font-size="11" fill="#8d8a7c">SENDING</text>
+  <path d="M1372 284a48 48 0 0 1 96 0z" fill="#ece6d2"/><path d="M1372 284a48 48 0 0 1 96 0" fill="none" stroke="#0a0b0c" stroke-width="5"/>
+  <path id="ndl" d="M1420 282v-38" stroke="#c8281d" stroke-width="3" stroke-linecap="round"/><rect x="1368" y="282" width="104" height="8" fill="#0a0b0c"/>
+  <rect x="1374" y="314" width="152" height="118" rx="6" fill="#050505"/>
+  <g clip-path="url(#meshC)"><g id="valve"><ellipse cx="1418" cy="384" rx="20" ry="40" fill="#ff8a2a" opacity=".8"/><ellipse cx="1482" cy="384" rx="20" ry="40" fill="#ff8a2a" opacity=".8"/>
+    <ellipse cx="1418" cy="390" rx="8" ry="24" fill="#ffe2a0"/><ellipse cx="1482" cy="390" rx="8" ry="24" fill="#ffe2a0"/></g>
+    <g stroke="#0a0b0c" stroke-width="3" opacity=".9"><path d="M1378 330h144M1378 344h144M1378 358h144M1378 372h144M1378 386h144M1378 400h144M1378 414h144M1390 318v110M1410 318v110M1430 318v110M1450 318v110M1470 318v110M1490 318v110M1510 318v110"/></g></g>
+  <rect x="1374" y="456" width="152" height="92" rx="4" fill="#0a0b0c"/>
+  <circle cx="1408" cy="502" r="24" fill="#26292d"/><circle cx="1492" cy="502" r="24" fill="#26292d"/><circle cx="1408" cy="502" r="6" fill="#0a0b0c"/><circle cx="1492" cy="502" r="6" fill="#0a0b0c"/>
+  <path id="loop" d="M1408 478H1492a24 24 0 0 1 0 48H1408a24 24 0 0 1 0-48z" fill="none" stroke="#efe6c8" stroke-width="7" stroke-dasharray="14 4"/>
+  <rect x="1380" y="574" width="140" height="44" fill="#141518"/><rect x="1380" y="574" width="140" height="44" fill="none" stroke="#f4e04d" stroke-width="2"/>
+  <text x="1450" y="592" class="sten" font-size="14">DANGER</text><text x="1450" y="610" class="sten" font-size="14">2000 VOLTS</text>
+  <g transform="rotate(3 1512 222)"><rect x="1486" y="208" width="52" height="24" fill="#f1ede1"/><rect x="1486" y="208" width="52" height="6" fill="#f4e04d"/><text x="1512" y="228" class="lbl" font-size="11.5">ITEM 7</text></g>
+</g>
+<path d="M1352 640q-90 40-190 20" stroke="#070808" stroke-width="9" fill="none"/>
+
+<!-- the desk: tape printer, strip, the Varga wheel, a teapot -->
+<path d="M540 716L596 660H1040L1096 716z" fill="url(#deskG)"/><rect x="540" y="716" width="556" height="20" fill="#241a0a"/>
+<g fill="#1c1408"><rect x="560" y="736" width="20" height="200"/><rect x="1056" y="736" width="20" height="200"/></g>
+<g id="printer" class="hot">
+  <rect x="612" y="620" width="128" height="72" rx="6" fill="#23272b"/><rect x="612" y="620" width="128" height="18" rx="6" fill="#3a3f45"/>
+  <circle cx="644" cy="664" r="16" fill="#0d0f10"/><circle cx="644" cy="664" r="5" fill="#8d8a7c"/><rect x="676" y="652" width="50" height="26" rx="3" fill="#0d0f10"/><circle cx="716" cy="630" r="4" fill="#ffb347"/>
+  <path d="M726 668q60-14 110 10t120-12q40-14 70 6" stroke="#efe6c8" stroke-width="15" fill="none" stroke-linecap="round"/>
+  <path id="strip" d="M732 667q56-13 104 10t120-12q38-13 62 4" stroke="#6d685c" stroke-width="5" fill="none" stroke-dasharray="3 5"/>
+</g>
+<g id="wheel" class="hot"><ellipse cx="900" cy="690" rx="62" ry="20" fill="#120d05" opacity=".6"/><ellipse cx="900" cy="682" rx="60" ry="19" fill="url(#brassG)"/><ellipse cx="900" cy="680" rx="44" ry="13.5" fill="#8c6c22"/>
+  <ellipse cx="900" cy="679" rx="42" ry="12.5" fill="url(#brassG)"/><ellipse cx="900" cy="678" rx="10" ry="3.5" fill="#3a2a08"/>
+  <g stroke="#3a2a08" stroke-width="1.6"><path d="M852 682l8-2M860 690l7-4M874 696l5-5M892 699l2-6M910 699l-2-6M926 696l-5-5M940 690l-7-4M948 682l-8-2"/></g></g>
+<g id="teapot" class="hot"><ellipse cx="1016" cy="700" rx="30" ry="6" fill="#120d05" opacity=".6"/><path d="M990 690q-4-34 26-34t26 34q-26 10-52 0z" fill="#5d3a22"/><path d="M1042 672q20-8 22-22" stroke="#5d3a22" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M990 668q-18 2-14 14t16 6" stroke="#5d3a22" stroke-width="6" fill="none"/><ellipse cx="1016" cy="656" rx="13" ry="4" fill="#472a17"/><circle cx="1016" cy="651" r="4" fill="#472a17"/>
+  <rect x="1002" y="672" width="28" height="14" fill="#f1ede1" transform="rotate(-4 1016 679)"/><text x="1016" y="683" class="lbl" font-size="9">212</text></g>
+<!-- the operator's chair -->
+<g fill="#0c0e0c"><rect x="742" y="770" width="160" height="150" rx="16"/><rect x="760" y="752" width="124" height="30" rx="12"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', called = false, got = [false, false], hasKey = false, opened = {}, leaving = false, k = 0;
+  /* the strip as it came off the printer: two lengths, each through the wheel at its own setting */
+  var LEN = ['KF DP IVCZVW. KYZJ KRGV ZJ KYV CRJK JZXERC WIFD XREEVK YVRU. UF EFK JKFG ZK. CVK EFSFUP YLIIP PFL. EFN KLIE KYV NYVVC SRTB JVMVE GCRTVJ.',
+             'ZKBD DGY SC SX DRO XSQRD MSZROB. DKUO SD DY DRO MSZROB BYYW. DRO UOI DY DRKD NYYB RKXQC SXCSNO DRO PYEBDR COD PBYW DRO PBYXD NYYB. R.D.'];
+
+  /* boards on the wall, clock ticks, the six sets (you began labelling at the far end of the bench) */
+  (function () {
+    var s = '', x, i, a;
+    for (x = -990; x < 2600; x += 46) s += '<path d="M' + x + ' -400V632"/>';
+    $('#boards').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { a = i * Math.PI / 6; s += '<path d="M' + (482 + 36 * Math.sin(a)).toFixed(1) + ' ' + (252 - 36 * Math.cos(a)).toFixed(1) + 'L' + (482 + 41 * Math.sin(a)).toFixed(1) + ' ' + (252 - 41 * Math.cos(a)).toFixed(1) + '"/>'; }
+    $('#ticks').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) {
+      x = 410 + i * 113;
+      s += '<g class="set hot" data-pos="' + (i + 1) + '" data-item="' + (6 - i) + '">' +
+        '<rect x="' + x + '" y="364" width="100" height="106" rx="5" fill="#161a15"/><rect x="' + (x + 3) + '" y="367" width="94" height="100" rx="4" fill="url(#setG)"/>' +
+        '<circle cx="' + (x + 36) + '" cy="408" r="24" fill="#1c211b"/><circle cx="' + (x + 36) + '" cy="408" r="18" fill="#d9d2b8"/>' +
+        '<path d="M' + (x + 36) + ' 408l' + [8, -12, 14, -4, -10, 12][i] + ' ' + [-14, -10, 2, -16, -12, 8][i] + '" stroke="#c8281d" stroke-width="2.5" stroke-linecap="round"/><circle cx="' + (x + 36) + '" cy="408" r="3" fill="#1c211b"/>' +
+        '<rect x="' + (x + 68) + '" y="382" width="22" height="16" fill="#ece6d2"/><path d="M' + (x + 79) + ' 396l' + [4, -5, 6, 0, -3, 5][i] + ' -10" stroke="#1c1b18" stroke-width="1.5"/>' +
+        '<circle cx="' + (x + 72) + '" cy="418" r="6" fill="#1c211b"/><circle cx="' + (x + 88) + '" cy="418" r="6" fill="#1c211b"/>' +
+        '<g transform="rotate(' + [-2, 3, -1, 2, -3, 1][i] + ' ' + (x + 50) + ' 450)"><rect x="' + (x + 22) + '" y="440" width="56" height="20" fill="#f1ede1"/><rect x="' + (x + 22) + '" y="440" width="56" height="5" fill="#f4e04d"/>' +
+        '<text x="' + (x + 50) + '" y="457" class="lbl" font-size="11.5">ITEM ' + (6 - i) + '</text></g>' +
+        '<path d="M' + (x + 16) + ' 364q-10 -26 14 -30t26 30" stroke="#0c0e0c" stroke-width="5" fill="none"/>' +
+        '<g class="back"><rect x="' + (x + 3) + '" y="367" width="94" height="100" rx="4" fill="#0b0d0b"/>' +
+        '<g fill="#3a2f1c"><rect x="' + (x + 12) + '" y="404" width="14" height="52" rx="6"/><rect x="' + (x + 74) + '" y="398" width="14" height="58" rx="6"/></g>' +
+        '<path d="M' + (x + 8) + ' 458h84M' + (x + 30) + ' 380q20 16 40 0" stroke="#4a3a1f" stroke-width="3" fill="none"/></g></g>';
+    }
+    $('#sets').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'zero', storyTitle: 'Station Zero', id: 'hut', no: 'I', title: 'The Hut',
+    sound: ['shore', { drop: ['mel'] }],
+    go: 'Listen',
+    intro: [
+      'Gannet Head is a lump of rock with the sea on three sides. On top of it stands a long green hut, and in that hut, until thirty years ago this month, people sat in headphones all night and listened to other people&rsquo;s wireless. Then the hut was locked, and nobody came.',
+      'On Saturday it opens again, as a small museum. You are making the catalogue: a number and a label for every single thing in it. You asked for the job. Your grandmother, Hester Thorne, was the last operator who ever sat in this room.',
+      'It is a Thursday night in November. The storm has put the sea over the only road, so you are not going home, and you have just labelled item 212, a teapot.',
+      'At three minutes to midnight the lights go out. Out in the yard an old engine coughs, catches, and brings them back. And at midnight exactly, the big black cabinet in the corner, the one you were told not to touch, lights two lamps and begins to send.'
+    ],
+    exit: {"next":"cipher","w":{"b0a68fff":"b0017a65"}}, tags: {"w1":["6f70ce32"],"w2":["475f8829"],"set":["2c5e2189"]},
+    hints: hints,
+    onBegin: begin
+  });
+  ZERO.clock();
+  got = [!!ER.flag('h1'), !!ER.flag('h2')]; called = !!ER.flag('call1');
+  setInterval(function () { $('#mh').setAttribute('transform', 'rotate(' + ZERO.minute() * 6 + ' 482 252)'); $('#hh').setAttribute('transform', 'rotate(' + ZERO.minute() / 2 + ' 482 252)'); }, 1000);
+
+  var SIGN = '<h4>Station Zero</h4><p>THE SECRET LISTENERS &middot; Opens Saturday &middot; Adults &pound;4</p>' +
+    '<p>You painted this board yourself, on Monday. The name is Mrs Holloway&rsquo;s. She made it up in March.</p>' +
+    '<p>&ldquo;Nobody will pay four pounds to see a Coast Wireless Station, dear. They will pay it to see Station Zero.&rdquo;</p>' +
+    '<p>In every old paper you have catalogued so far, the place is plain Gannet Head.</p>';
+  var PLAQUE = '<h4>The Quince Room</h4><p>In this room, on the night of the ninth of November, Station Officer AUBREY QUINCE heard the last call of the trawler <i>Kittiwake</i>, and six men came home.</p>' +
+    '<p class="pen">Item 208. Plaque (new). Keep covered until Saturday!</p>';
+  var CARD = '<h4>Station Zero</h4><h5>Opening day &middot; Saturday</h5>' +
+    '<p><b>11.00</b> Mrs D. Holloway, Chair of the Gannet Head Trust, welcomes our guests.</p>' +
+    '<p><b>11.15</b> Sir Aubrey Quince unveils the plaque. Sir Aubrey was Station Officer here for eleven years. He has lived ever since in the old Station Officer&rsquo;s house, at the foot of the hill.</p>' +
+    '<p><b>11.30</b> Tea in the hut. (The teapot is item 212. It may be used.)</p>' +
+    '<p class="pen">Do NOT trouble Sir Aubrey before Saturday. He is very old and very distinguished. D.H.</p>';
+  var NOTICE = '<h4>Watchkeeping</h4><p>The night is divided into watches. The middle watch runs from midnight to 0400.</p>' +
+    '<p>An operator on watch does not leave her set for any reason until her relief has arrived.</p>' +
+    '<p>Her relief is the operator who takes the next watch.</p>' +
+    '<p>A relief who is late is to be met with silence. It is worse than anything you could say.</p>';
+  var PHOTO = '<h4>Item 190 &middot; photograph</h4><p>The staff of Gannet Head, in the yard, in their last summer. Eleven people, ten of them squinting at the sun.</p>' +
+    '<p>Your grandmother is at the end of the back row, not squinting. She used to say she had the best ears on the coast, and that it was no use to anybody now.</p>' +
+    '<p>When you told her you were going to help at the Head, she said one thing only. &ldquo;If the old sender ever speaks, write it down. All of it. And don&rsquo;t let anybody hurry you.&rdquo;</p>' +
+    '<p>You thought it was a joke.</p>';
+
+  function hints() {
+    if (!called) return ['phone', [
+      'Something on the wall is ringing, and it is not going to stop by itself.',
+      'The field telephone is on the wall beside the tall black cabinet. It has your own label on it: item 31. Click on it, and hear the caller out.'
+    ]];
+    if (!got[0]) return ['w1', [
+      'A strip of letters is coming out of the printer on the desk, and a brass wheel lies beside it. Click on either.',
+      'Drag the inner ring of the wheel round, a place at a time, and watch the dark line under each group. At most settings it is nonsense. At one setting it is English with the spaces taken out, so look for a word that starts in one group and ends in the next.',
+      'Control told you to set H against A. Try it, and see what you think of Control&rsquo;s advice. The right setting makes the first two groups begin with the words TO MY. When you can see them, pull the lever.'
+    ]];
+    if (!got[1]) return ['w2', [
+      'Read your pencil copy of the first length to its end. The last sentence is an order.',
+      'BACK SEVEN PLACES: the letter that stands under the plain A must go back seven letters in the alphabet. Count them as they pass.',
+      'When the second length begins PARTT WOISI, you are there. Pull the lever again.'
+    ]];
+    if (!hasKey) return ['set', [
+      'The second length says where a key is. Read it again in your notebook, slowly.',
+      'In this hut a receiver is called a set. There are six of them on the long bench. At which end of the bench is the front door?',
+      'Count from the front door, not from your labels: you began labelling at the far end of the bench. Click on the set you want.'
+    ]];
+    return ['door', ['You have the key. The door marked CIPHER ROOM is at the end of the bench.']];
+  }
+  function pips() { ER.pips((called ? 1 : 0) + (got[0] ? 1 : 0) + (got[1] ? 1 : 0) + (hasKey ? 1 : 0), 4); }
+  function busy() { return leaving; }
+  function begin() {
+    pips(); ZERO.keying(0.014);
+    if (called) return;
+    ZERO.sfx.cough();
+    ER.narrate([
+      'Dots and dashes, very fast, from a machine that has been dead since before you were born. A paper strip crawls out of the printer on the desk, covered in letters. Five at a time. No words.',
+      'Then something on the wall begins to ring. It is item 31. You stuck the label on it yourself, on Tuesday: field telephone.'
+    ], function () { ZERO.ring($('#phone g')); ZERO.mood('tense'); });
+  }
+
+  ZERO.thing('#outdoor', null, 'The wind is leaning on the front door from the other side. The road is under the sea until the tide goes down. Nobody is coming, and you are not going.', busy);
+  ZERO.thing('#clock', null, function () { return 'The station clock, wound by you on Monday. It says ' + ZERO.minute() + ' minutes past midnight.'; }, busy);
+  ZERO.thing('#window', 'mast', 'Rain, and the red lamp at the top of the mast, going on and off. Beyond that, nothing. The town is across the bay, and the bay is busy tonight.', busy);
+  ZERO.thing('#teapot', null, 'Item 212. A brown teapot with a chipped spout. It is the only thing in this hut that was never a secret.', busy);
+  ZERO.thing('#sender', 'sender', 'Item 7, the sender: the station&rsquo;s own transmitter, taller than you are. Two lamps are lit. Inside, a loop of punched paper tape goes round and round. Mrs Holloway&rsquo;s orders were short: &ldquo;Don&rsquo;t touch the big one in the corner, dear.&rdquo;', busy);
+  $('#sign').addEventListener('click', function () { if (!leaving) ER.read({ html: SIGN, cls: 'tag', clue: { id: 'sign', title: 'The new sign', kind: 'Painted by you' } }); });
+  $('#plaque').addEventListener('click', function () { if (!leaving) ER.read({ html: PLAQUE, cls: 'brass', clue: { id: 'plaque', title: 'The plaque under the cloth', kind: 'Brass plaque' } }); });
+  $('#card').addEventListener('click', function () { if (!leaving) ER.read({ html: CARD, cls: 'card', clue: { id: 'card', title: 'Saturday&rsquo;s programme', kind: 'Printed card' } }); });
+  $('#notice').addEventListener('click', function () { if (!leaving) ER.read({ html: NOTICE, cls: 'order', clue: { id: 'notice', title: 'Watchkeeping', kind: 'Notice on the wall' } }); });
+  $('#photo').addEventListener('click', function () { if (!leaving) ER.read({ html: PHOTO, cls: 'tag', clue: { id: 'photo', title: 'The staff photograph', kind: 'Item 190' } }); });
+
+  $('#phone').addEventListener('click', function (e) {
+    if (leaving) return;
+    if (called && !ZERO.ringing()) { ER.wordAt(e.clientX, e.clientY, 'field telephone'); ER.say('Item 31. A telephone with a handle and no dial. You labelled it on Tuesday, and stuck the label on straight. You were rather proud of that.'); return; }
+    ZERO.call('control', [
+      '&ldquo;Station Zero? Station Zero, this is Control. Answer, please.&rdquo;',
+      { q: 'Who is this?', a: '&ldquo;Control. I shall not say it a third time. Your sender came on the air at midnight, on a frequency that has been silent for thirty years. Who is on watch?&rdquo;' },
+      { q: 'Nobody is. I am only here to make the catalogue.', a: '&ldquo;Then tonight you are the operator, and I am sorry for it. Listen carefully. I shall be quick, because there is no time to be anything else.&rdquo;' },
+      '&ldquo;That sender is sitting on top of the lifeboat&rsquo;s working channel. There is a boat out in this weather tonight, and while your tape runs, her wireless is full of your noise. Every minute matters.&rdquo;',
+      { q: 'Then I will switch it off.', a: '&ldquo;You will not touch that cabinet. Two thousand volts, and a lock older than you are. The tape must be stopped from the engine shed, and there are two locked doors between you and the shed. Hester Thorne hid the keys before she left. She was that sort of woman.&rdquo;' },
+      { q: 'The printer is giving me letters. Groups of five.', a: '&ldquo;A wheel cipher. A cipher for children. The wheel is on the desk in front of you. Set H against A: she always used H. If it tells you where a key is, good. Never mind the rest.&rdquo;' },
+      '&ldquo;And be fast, Thorne. Ring off now.&rdquo;'
+    ], { id: 'call1', title: 'Control: the first call', kind: 'Field telephone' }, function (seen) {
+      if (!seen) { if (!called) ZERO.ring($('#phone g')); return; }
+      if (!called) { called = true; ER.flag('call1', 1); pips(); ER.say('You hang up. Two locked doors. On the desk, the strip is still coming out of the printer, and the brass wheel lies beside it.'); }
+    });
+  });
+
+  /* ---------- the Varga wheel ---------- */
+  function shift(text, n) {
+    return text.replace(/[A-Z]/g, function (c) { return A.charAt((A.indexOf(c) - n + 26) % 26); });
+  }
+  function wheelSvg() {
+    var s = '<defs><linearGradient id="wB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1d98c"/><stop offset=".5" stop-color="#b8923a"/><stop offset="1" stop-color="#7c5e1e"/></linearGradient>' +
+      '<linearGradient id="wS" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9e6dc"/><stop offset="1" stop-color="#9a978b"/></linearGradient></defs>', i, a;
+    s += '<circle cx="210" cy="210" r="204" fill="#0b0d0b"/><circle cx="210" cy="210" r="198" fill="url(#wB)"/><circle cx="210" cy="210" r="156" fill="#3a2a08"/>';
+    for (i = 0; i < 26; i++) {
+      a = i * 360 / 26;
+      s += '<g transform="rotate(' + a.toFixed(2) + ' 210 210)"><path d="M210 14v10" stroke="#3a2a08" stroke-width="2"/><text x="210" y="46" class="wh-ring" fill="#2e2106">' + A.charAt(i) + '</text></g>';
+    }
+    s += '<g id="inner" class="drag"><circle cx="210" cy="210" r="153" fill="url(#wS)"/><circle cx="210" cy="210" r="112" fill="none" stroke="#6d6a5e" stroke-width="2"/>';
+    for (i = 0; i < 26; i++) {
+      a = i * 360 / 26;
+      s += '<g transform="rotate(' + a.toFixed(2) + ' 210 210)"><path d="M210 58v8" stroke="#55524a" stroke-width="2"/><text x="210" y="90" class="wh-ring" fill="#141518">' + A.charAt(i) + '</text>' +
+        (i % 2 ? '' : '<circle cx="210" cy="118" r="3.4" fill="#55524a"/>') + '</g>';
+    }
+    s += '</g><g pointer-events="none"><circle cx="210" cy="210" r="60" fill="url(#wB)"/><circle cx="210" cy="210" r="60" fill="none" stroke="#3a2a08" stroke-width="2"/>' +
+      '<text x="210" y="204" text-anchor="middle" font-family="Playfair Display,serif" font-weight="700" font-size="17" fill="#2e2106">VARGA</text>' +
+      '<text x="210" y="224" text-anchor="middle" font-family="Oswald,sans-serif" font-size="11" letter-spacing="2" fill="#2e2106">PATTERN No. 3</text></g>';
+    s += '<path d="M210 4l-9 -2h18z" fill="#c8281d"/><path d="M201 2h18v52l-9 9l-9-9z" fill="none" stroke="#c8281d" stroke-width="2.5"/>';
+    return s;
+  }
+  function openWheel() {
+    var box = ER.el('div', 'wh'), ms, inner, last = 0, ang = 0, msgEl, setEl;
+    box.innerHTML = '<div><svg viewBox="0 0 420 420">' + wheelSvg() + '</svg><p class="wh-set">Plain A stands against <b></b></p></div>' +
+      '<div><h5>Tape printer &middot; first length</h5><div class="wh-len" data-n="0"></div><h5>Second length</h5><div class="wh-len" data-n="1"></div>' +
+      '<div class="wh-foot"><p class="pmsg"></p><button type="button" class="lever">Take it down</button></div></div>';
+    ms = box.querySelector('svg'); inner = box.querySelector('#inner'); msgEl = box.querySelector('.pmsg'); setEl = box.querySelector('.wh-set b');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function groups(n) { return LEN[n].replace(/[^A-Z]/g, '').match(/.{1,5}/g); }
+    function paint() {
+      inner.style.transform = 'rotate(' + (-k * 360 / 26).toFixed(2) + 'deg)'; inner.style.transformOrigin = '210px 210px';
+      setEl.textContent = A.charAt(k); box.setAttribute('data-k', k);
+      [0, 1].forEach(function (n) {
+        var el = box.querySelector('.wh-len[data-n="' + n + '"]');
+        if (got[n]) { el.className = 'wh-len done'; el.innerHTML = '<p>' + shift(LEN[n], k0(n)) + '</p>'; return; }
+        el.innerHTML = groups(n).map(function (g) { return '<span class="grp"><i>' + g + '</i><b>' + shift(g, k) + '</b></span>'; }).join('');
+      });
+    }
+    function k0(n) { return ER.flag('k' + n); }
+    ER.drag(inner, {
+      start: function (e) { var q = ER.pt(ms, e); last = Math.atan2(q.y - 210, q.x - 210) * 180 / Math.PI; ang = -k * 360 / 26; },
+      move: function (e) {
+        var q = ER.pt(ms, e), a = Math.atan2(q.y - 210, q.x - 210) * 180 / Math.PI, d = a - last, nk;
+        if (d > 180) d -= 360; if (d < -180) d += 360;
+        last = a; ang += d; nk = ((Math.round(-ang / (360 / 26)) % 26) + 26) % 26;
+        if (nk !== k) { k = nk; ZERO.sfx.notch(); paint(); }
+      }
+    });
+    WK.keys(box, function (key) { if (key !== 'left' && key !== 'right') return false; k = (k + (key === 'left' ? 1 : 25)) % 26; ZERO.sfx.notch(); paint(); });
+    box.querySelector('.lever').addEventListener('click', function () {
+      var n = got[0] ? 1 : 0, first = groups(n).slice(0, 3).map(function (g) { return shift(g, k); }).join(' ');
+      if (got[1]) return;
+      ZERO.sfx.lever();
+      if (!ER.check('w' + (n + 1), k)) {
+        ZERO.burn(2); ER.shake(box.querySelector('.wh-len[data-n="' + n + '"]')); ER.sfx.no();
+        if (got[0] && ER.check('w1', k)) msg('The first length reads at this setting. The second does not: <b>' + first + '</b>. What did the first length tell you to do with the wheel?');
+        else if (k === 7 && !got[0]) msg('H against A, as Control said. You take it down in pencil: <b>' + first + '</b>. If Hester Thorne always used H, she did not use it on her last night.');
+        else msg('You take it down in pencil: <b>' + first + '</b>. It is not English. It is not anything. Out in the yard, the engine has burnt a little more fuel while you wrote.');
+        return;
+      }
+      got[n] = true; ER.flag('h' + (n + 1), 1); ER.flag('k' + n, k); pips(); paint(); ER.sfx.ok();
+      ER.addClue('tape1' + 'ab'.charAt(n), 'The tape, part one (' + (n ? 'second' : 'first') + ' length)',
+        '<h4>The tape &middot; part one &middot; ' + (n ? 'second' : 'first') + ' length</h4><p>' + groups(n).join(' ') + '</p><p class="pen">' + shift(LEN[n], k) + '</p>', 'strip', 'Off the printer');
+      if (!n) msg('Your pencil stops. It is English. There are no spaces, so you put them in yourself. The second length is still nonsense at this setting, and the first has told you why.');
+      else { msg('The second length gives way. That is all of part one.'); setTimeout(function () { ER.closeAll(); ER.say('The fourth set from the front door. You look along the bench. Behind you, the strip goes on coming: part two, then part three, yards of it.', 6500); }, 2600); }
+    });
+    paint();
+    msg(got[0] ? 'The first length is plain. Now the second.' : 'The Varga wheel: two rings of letters. The outer ring is plain English and does not move. Drag the inner ring round (the arrow keys turn it too), and watch what the wheel makes of the strip.');
+    ER.open('ov-lock', box);
+  }
+  function tryWheel() {
+    if (leaving) return;
+    if (!called) { ER.say('Letters in groups of five, and a brass wheel with the alphabet on it twice. But the telephone is still ringing.'); return; }
+    if (got[1]) { ER.say('Part one is in your notebook, both lengths. The strip has gone on to part two: the same sort of letters, but with gaps like words, and the wheel can make nothing of them.'); return; }
+    openWheel();
+  }
+  $('#printer').addEventListener('click', tryWheel);
+  $('#wheel').addEventListener('click', tryWheel);
+
+  /* ---------- the sets, and the key ---------- */
+  ER.$$('.set').forEach(function (n) {
+    n.addEventListener('click', function (e) {
+      var pos = n.getAttribute('data-pos'), item = n.getAttribute('data-item');
+      if (leaving) return;
+      if (!got[1]) {
+        ER.wordAt(e.clientX, e.clientY, 'set');
+        ER.say(['', 'Item 1, the first thing you ever labelled. A receiver the size of a suitcase. The people who worked here called it a set.',
+          'Item 2. Its dial still stands where somebody left it thirty years ago, on a station that is no longer there.',
+          'Item 3. A set like the others, except that it rattles when you move it. You wrote &ldquo;rattles&rdquo; in the catalogue and went on to item 4.',
+          'Item 4. The headphones on this one are held together with sticking plaster.',
+          'Item 5. Somebody has scratched a gull into the paint with a pin. A long watch, by the look of it.',
+          'Item 6. The newest set in the hut, which is to say it is only fifty years old.'][+item]);
+        return;
+      }
+      if (hasKey || opened[pos]) { ER.say(opened[pos] && !hasKey ? 'You have had the back off that one already. Valves and dust.' : 'You have the key. The door marked CIPHER ROOM is at the end of the bench.'); return; }
+      opened[pos] = true; n.classList.add('open'); ZERO.sfx.relay();
+      if (!ER.check('set', pos)) {
+        ZERO.burn(2);
+        ER.say(item === '4' ? 'You take the back off item 4. It is the fourth set you labelled, which is not the same thing as the fourth set from the front door. Valves, dust, and no key.'
+          : 'You take the back off item ' + item + '. Valves, dust, and a spider with strong opinions. No key. Which end of the bench is the front door at?');
+        return;
+      }
+      hasKey = pos; pips(); $('#keyG').classList.add('on'); ER.sfx.chain();
+      ER.say('Item ' + item + ', the set that rattles. Where the last valve should be, a door key hangs on a loop of string. It has been waiting there for thirty years. You take it.', 6000);
+    });
+  });
+  $('#cdoor').addEventListener('click', function () {
+    if (leaving) return;
+    if (!hasKey) { ER.say('CIPHER ROOM. Locked. In three days of cataloguing you have not found the key, and Mrs Holloway has &ldquo;never liked to ask&rdquo;.'); return; }
+    if (!ER.exit([ER.flag('k0') + '-' + ER.flag('k1') + '-' + hasKey], { delay: 4200 })) { ER.say('The key turns half way and sticks.'); return; }
+    leaving = true; ZERO.sfx.bolt();
+    ER.say('The key turns as if it had been oiled yesterday. You tear the rest of the strip off the printer, yards of it, and take it with you.', 4000);
+  });
+})();
+</script>
+</body>
+</html>

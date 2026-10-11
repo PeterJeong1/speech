@@ -73,7 +73,7 @@
 <header>
   <h1>Adventure</h1>
   <div class="dep">Departures</div>
-  <p>Pick a train, mind the step, and read every sign.</p>
+  <p>Pick a journey, mind the step, and read every sign.</p>
 </header>
 <div class="pano">
   <svg viewBox="0 0 1200 176" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -113,10 +113,11 @@
 <main id="trains"></main>
 <footer><b>&#9733;</b> a short ride for a first try &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;</b> a full journey &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> a long way, and nobody carries your bags</footer>
 
+<script src="../assets/account.js"></script>
 <script src="../assets/shelf.js"></script>
 <script>
 (function () {
-  var STORIES = Shelf.visible([{"id":"orvo","title":"The Night Train to Orvo","stars":1,"minutes":"10-15","hold":false,"level":"A2","blurb":"A snowy station at midnight. A guard with a watch. A train that is never late. Tonight you are the assistant.","rooms":3,"first":"halm.html","firstId":"halm","last":"arrival"}]), box = document.getElementById('trains');
+  var STORIES = Shelf.visible([{"id":"orvo","title":"The Night Train to Orvo","stars":1,"minutes":"10-15","hold":false,"level":"A2","blurb":"A snowy station at midnight. A guard with a watch. A train that is never late. Tonight you are the assistant.","rooms":3,"first":"halm.html","firstId":"halm","last":"arrival"},{"id":"mail","title":"Seven Sacks for Tolver","stars":3,"minutes":"35-45","hold":false,"level":"B1+–B2","blurb":"Tolver gets its letters over the mountains by air: in an old brown mail ship that makes fifty kilometres an hour. This morning a new silver one that makes eighty is on the same field. Seven sacks each. The first ship there keeps the mail, and you are the Post Office's newest clerk.","rooms":5,"first":"shed.html","firstId":"shed","last":"tolver"}]), box = document.getElementById('trains');
   var STATE = { 'new': 'Now boarding', going: 'On the way', solved: 'Arrived' };
   Shelf.init();
   STORIES.forEach(function (s, i) {
@@ -129,7 +130,7 @@
     b.querySelector('.mins').textContent = s.minutes + ' min';
     b.querySelector('.rooms').textContent = s.rooms + ' rooms';
     b.querySelector('.lvl').textContent = s.level ? 'level ' + s.level : '';
-    b.querySelector('.no').textContent = 'Train ' + (i + 1) + ' · platform 5';
+    b.querySelector('.no').textContent = 'Departure ' + (i + 1);
     b.querySelector('h2').textContent = s.title;
     b.querySelector('p').textContent = s.blurb;
     b.querySelector('.state').textContent = STATE[st.state] || '';
@@ -137,7 +138,7 @@
     box.appendChild(b);
   });
   if (STORIES.length < 4) {
-    var m = document.createElement('div'); m.className = 'more'; m.textContent = 'More trains are on their way.';
+    var m = document.createElement('div'); m.className = 'more'; m.textContent = 'More journeys are on their way.';
     box.appendChild(m);
   }
 })();

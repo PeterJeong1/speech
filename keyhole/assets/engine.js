@@ -7,7 +7,10 @@
 (function () {
 'use strict';
 var ER = window.ER = { cfg: null };
-var KEY = 'keyhole.v2';
+var BASEKEY = 'keyhole.v2';
+/* A player who is signed in (account.js) has a saved game of their own; without a name there is one for the computer. */
+function whoId() { try { var u = JSON.parse(localStorage.getItem('keyhole.user')); return u && u.id ? String(u.id) : ''; } catch (e) { return ''; } }
+var KEY = BASEKEY + (whoId() ? '@' + whoId() : '');
 var D = document;
 var HOME = ((D.currentScript && D.currentScript.src) || '').replace(/engine\.js.*$/, '');      /* where the shared files are */
 var S = {};
@@ -31,7 +34,10 @@ function pad(scope, c) { return xmur3('k|' + scope + '|' + c)(); }
 
 /* ---------- saved state ---------- */
 function load() { try { S = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { S = {}; } }
-function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+/* quiet: nothing the player did (only the clock): the story is not marked as changed, so it is not sent to the record book */
+function save(quiet) {
+  try { if (!quiet && ER.cfg && ER.cfg.story && S[NS()]) S[NS()].upd = Date.now(); localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+}
 function NS() { return ER.cfg.theme + '/' + ER.cfg.story; }
 function scope() { return NS() + '/' + ER.cfg.id; }
 function T() {
@@ -42,7 +48,15 @@ function T() {
 ER.state = function () { return T(); };
 ER.flag = function (k, v) { var f = T().flags; if (v === undefined) return f[k]; f[k] = v; save(); return v; };
 ER.readStore = function () { load(); return S; };
-ER.resetStory = function () { load(); delete S[NS()]; save(); };
+ER.persist = function (changed) { save(!changed); };
+/* Emptied, not removed: the date tells the record book to empty its copy too. The clock and the hints go on counting
+   (a second start is not a faster one), and a story that was finished before is marked: only the first time is a record. */
+ER.resetStory = function () {
+  load(); var o = S[NS()] || {}, n = { secs: o.secs || 0, hints: o.hints || 0 };
+  if (o.fin) { n.secs = o.fin.secs || 0; n.hints = o.fin.hints || 0; }
+  if (o.fin || o.again) n.again = 1;
+  S[NS()] = n; save();
+};
 
 /* ---------- small helpers ---------- */
 function el(t, cls, html) { var e = D.createElement(t); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
@@ -125,7 +139,7 @@ function tipShow(node, sticky) {
 /* ---------- sound (all synthesised, no files) ---------- */
 /* Sound effects go to master; the music (soundtrack.js) goes through mus, so that it can be switched off by itself. */
 var AC = null, master = null, mus = null, noiseBuf = null, soundOn = true, musicOn = true, ambNodes = null, humNodes = null;
-try { soundOn = localStorage.getItem(KEY + '.snd') !== '0'; musicOn = localStorage.getItem(KEY + '.mus') !== '0'; } catch (e) {}
+try { soundOn = localStorage.getItem(BASEKEY + '.snd') !== '0'; musicOn = localStorage.getItem(BASEKEY + '.mus') !== '0'; } catch (e) {}
 function ac() {
   if (!AC) {
     var C = window.AudioContext || window.webkitAudioContext;
@@ -228,14 +242,14 @@ function paintSound() {
 ER.sound = function (on) {
   if (on === undefined) return soundOn;
   soundOn = !!on;
-  try { localStorage.setItem(KEY + '.snd', soundOn ? '1' : '0'); } catch (e) {}
+  try { localStorage.setItem(BASEKEY + '.snd', soundOn ? '1' : '0'); } catch (e) {}
   if (master && AC) master.gain.setTargetAtTime(soundOn ? 1 : 0, AC.currentTime, 0.05);
   paintSound();
 };
 ER.music = function (on) {
   if (on === undefined) return soundOn && musicOn;
   musicOn = !!on;
-  try { localStorage.setItem(KEY + '.mus', musicOn ? '1' : '0'); } catch (e) {}
+  try { localStorage.setItem(BASEKEY + '.mus', musicOn ? '1' : '0'); } catch (e) {}
   if (mus && AC) mus.gain.setTargetAtTime(musicOn ? 1 : 0, AC.currentTime, 0.3);
   paintSound();
 };
@@ -596,7 +610,7 @@ ER.check = function (name, cand) {
   return list.indexOf(tag(scope() + '.' + name, String(cand))) >= 0;
 };
 ER.exitOk = function (cands) {
-  var x = ER.cfg.exit, i, w; if (!x) return null;
+  var x = ER.cfg.exit, i, w; if (!x || !x.w) return null;
   for (i = 0; i < cands.length; i++) {
     w = x.w[tag(scope(), String(cands[i]))];
     if (w) return x.next + '-' + hex8((parseInt(w, 16) ^ pad(scope(), String(cands[i]))) >>> 0) + '.html';
@@ -629,6 +643,28 @@ ER.init = function (cfg) {
   var st = T();
   if (!cfg.transient) st.at = { id: cfg.id, title: cfg.title, no: cfg.no || '', file: location.pathname.split('/').pop() };
   if (!st.t0) st.t0 = Date.now();
+  if (!cfg.transient) {
+    /* The record of a story: the time really played (seconds with the page in front and the player doing something)
+       and the hints taken. It is fixed when the last room is reached. A room reached by a short cut leaves a gap in
+       seen, and such a run is kept out of the records. */
+    var lastAct = Date.now(), beat = 0, x = cfg.exit;
+    st.seen = st.seen || []; if (st.seen.indexOf(cfg.id) < 0) st.seen.push(cfg.id);
+    if (x && x.last && !st.fin) {
+      st.fin = { secs: st.secs || 0, hints: st.hints || 0, at: Date.now(), title: cfg.storyTitle || '', stars: x.stars || 0, skipped: st.seen.length < (x.rooms || 0) };
+      if (st.again) st.fin.again = 1;
+      if (st.secs) st.t0 = Date.now() - st.fin.secs * 1000;       /* an ending that counts from t0 now shows the time really played */
+    }
+    ['pointerdown', 'pointermove', 'keydown', 'wheel'].forEach(function (ev) { D.addEventListener(ev, function () { lastAct = Date.now(); }, true); });
+    setInterval(function () {
+      var s = T(); if (s.fin || D.hidden || Date.now() - lastAct > 180000) return;
+      s.secs = (s.secs || 0) + 1;
+      if (++beat % 60 === 0) save(); else if (beat % 5 === 0) save(true);      /* once a minute the clock goes to the record book too */
+    }, 1000);
+    window.addEventListener('pagehide', function () { save(true); });
+    if (HOME && !window.Account && !D.getElementById('er-acct')) {        /* the player's name, the copy in the record book, the week's records */
+      var acct = D.createElement('script'); acct.id = 'er-acct'; acct.src = HOME + 'account.js'; D.head.appendChild(acct);
+    }
+  }
   save();
   if (window.CAST_SVG) { var c = el('div', 'cast-sprite', window.CAST_SVG); D.body.insertBefore(c, D.body.firstChild); }
   buildUi();

@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Watch Relieved · Station Zero</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#1b2430;--accent:#f4e04d;--font-display:'Playfair Display',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(16,22,30,.95);--cap-bg:rgba(14,19,26,.93);--panel:#17202a;--fade:#0a0e13;--hud-bg:rgba(14,19,26,.74)}
+  .tc-room{font-weight:900;font-style:italic}
+  .sten{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .signT{font-family:'Bebas Neue',sans-serif;fill:#141518;text-anchor:middle}
+  .lbl{font-family:'Permanent Marker',cursive;fill:#1c1b18;text-anchor:middle}
+  .gull{animation:gull 16s linear infinite}
+  .gull.g2{animation-duration:23s;animation-delay:-9s}
+  @keyframes gull{from{transform:translate(-200px,30px)}to{transform:translate(1900px,-60px)}}
+  .wing{animation:wing .7s ease-in-out infinite alternate}
+  @keyframes wing{from{transform:scaleY(1)}to{transform:scaleY(.3)}}
+  #glit{animation:glit 3s steps(4) infinite alternate}
+  @keyframes glit{from{opacity:.35}to{opacity:.8}}
+  #man{transition:transform 30s linear;transform:translate(0,0)}
+  body.bolted #man{transform:translate(-430px,-120px)}
+  #bolt{cursor:grab;transition:transform .18s}
+  #bolt.on{cursor:grabbing;transition:none}
+  #sat{display:none}
+  body.sat #sat{display:block}
+  .flag{transform-box:fill-box;transform-origin:50% 0;animation:flag 1.4s ease-in-out infinite alternate}
+  .flag:nth-child(2n){animation-delay:-.6s}
+  @keyframes flag{from{transform:rotate(-8deg)}to{transform:rotate(9deg)}}
+
+  .done{position:fixed;right:3vw;top:66px;z-index:34;width:min(450px,92vw);padding:22px 26px 18px;display:none;background:#f1ede1 linear-gradient(175deg,rgba(255,255,255,.4),rgba(120,100,60,.12));
+    color:#1c1b18;border-top:8px solid #141518;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .done.on{display:block}
+  .okstamp{display:inline-block;padding:4px 14px 2px;border:4px solid #b3261c;color:#b3261c;font-family:'Stardos Stencil',serif;font-weight:700;font-size:25px;letter-spacing:.14em;transform:rotate(-3deg);margin-bottom:12px}
+  .done p{margin:0 0 7px;font-family:'Courier Prime',monospace;font-size:17px;line-height:1.38}
+  .done .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .done .btn{font-size:13px;padding:8px 13px;--accent:#141518}
+  .done .btn:hover{color:#f1ede1}
+  .done small{display:block;margin-top:12px;font-family:'Courier Prime',monospace;font-size:12.5px;color:#6d685c;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+
+  .rp{width:min(780px,94vw);max-height:86vh;overflow:auto;background:#efe9d6 repeating-linear-gradient(transparent 0 31px,rgba(60,90,140,.16) 31px 32px);color:#1c1b18;padding:22px 34px 18px;box-shadow:0 26px 70px rgba(0,0,0,.6);
+    border-left:22px solid #2b2f3a;-webkit-user-select:text;user-select:text}
+  .rp h4{margin:0 0 2px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:15px;letter-spacing:.2em;color:#2f3a2c}
+  .rp h3{margin:0 0 8px;font-family:'Courier Prime',monospace;font-weight:700;font-size:21px}
+  .rp label{display:block;font-family:'Courier Prime',monospace;font-size:16px;font-weight:700;line-height:1.35;margin:9px 0 5px}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Caveat',cursive;font-weight:700;font-size:23px;line-height:1.25;color:#1d2a52;background:rgba(255,255,255,.6);border:1px solid #a39b84;padding:6px 12px;border-radius:2px;
+    resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:76px}
+  .rp .count{font-family:'Courier Prime',monospace;font-size:12.5px;color:#6d685c;text-align:right}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .rp .foot span{flex:1;font-family:'Courier Prime',monospace;font-size:14px;color:#6d685c}
+  .rp .btn{--accent:#141518}.rp .btn:hover{color:#efe9d6}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible;background:#fff}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#27384c"/><stop offset=".55" stop-color="#8f8f9c"/><stop offset=".8" stop-color="#e8b79c"/><stop offset="1" stop-color="#f6dfa4"/></linearGradient>
+  <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9b9a4"/><stop offset=".3" stop-color="#6f8796"/><stop offset="1" stop-color="#34495a"/></linearGradient>
+  <linearGradient id="gndG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f6a45"/><stop offset="1" stop-color="#1c2a1e"/></linearGradient>
+  <linearGradient id="hutG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f5a44"/><stop offset="1" stop-color="#2a3d30"/></linearGradient>
+  <linearGradient id="brG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1d98c"/><stop offset=".5" stop-color="#b8923a"/><stop offset="1" stop-color="#7c5e1e"/></linearGradient>
+  <radialGradient id="sunG"><stop offset="0" stop-color="#fff3c4" stop-opacity=".95"/><stop offset=".4" stop-color="#ffd27a" stop-opacity=".4"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#000" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="960" fill="url(#skyG)"/>
+<circle cx="1330" cy="560" r="330" fill="url(#sunG)"/>
+<g fill="#5c6878" opacity=".55"><ellipse cx="420" cy="170" rx="460" ry="26"/><ellipse cx="1300" cy="250" rx="520" ry="20"/><ellipse cx="900" cy="90" rx="380" ry="18"/></g>
+<g fill="#3a4658" opacity=".7"><ellipse cx="1500" cy="130" rx="400" ry="22"/><ellipse cx="100" cy="300" rx="340" ry="16"/></g>
+<rect x="-1000" y="556" width="3600" height="140" fill="url(#seaG)"/>
+<g id="glit" stroke="#fff3c4" stroke-width="3" stroke-linecap="round"><path d="M1240 574h70M1300 590h110M1220 606h60M1340 622h90M1270 640h50M1180 590h30M1420 606h40"/></g>
+<path d="M-1000 556h900l90 6h-990z" fill="#4a5a50"/><g fill="#3a4a44"><rect x="-470" y="538" width="30" height="20"/><rect x="-420" y="530" width="20" height="28"/><rect x="-380" y="542" width="40" height="16"/></g>
+<g class="gull"><path class="wing" d="M0 200q14-14 28 0q14-14 28 0" stroke="#f1ede1" stroke-width="3.5" fill="none" stroke-linecap="round" style="transform-origin:28px 200px"/></g>
+<g class="gull g2"><path class="wing" d="M0 320q10-10 20 0q10-10 20 0" stroke="#f1ede1" stroke-width="3" fill="none" stroke-linecap="round" style="transform-origin:20px 320px"/></g>
+
+<!-- the headland, the road back, the house at the foot of the hill -->
+<path d="M-1000 640Q200 560 800 600T1700 720Q2100 760 2600 720V1400H-1000z" fill="url(#gndG)"/>
+<g id="road" class="hot"><path d="M860 1160Q1120 790 1420 716T1760 640" stroke="#b9ad92" stroke-width="34" fill="none" stroke-linecap="round" opacity=".85"/><path d="M860 1160Q1120 790 1420 716T1760 640" stroke="#8d8370" stroke-width="3" fill="none" stroke-dasharray="20 22"/></g>
+<g id="house"><path d="M1500 690v-44l40-26l40 26v44z" fill="#2b3440"/><rect x="1560" y="618" width="9" height="20" fill="#2b3440"/><rect x="1530" y="656" width="16" height="18" fill="#17202a"/></g>
+<g id="man"><ellipse cx="1470" cy="736" rx="16" ry="4" fill="#000" opacity=".25"/><path d="M1462 734v-38q0-12 9-12t9 12v38z" fill="#1a1c22"/><circle cx="1471" cy="676" r="7.5" fill="#d9c7b0"/><path d="M1463 672q8-9 16 0" stroke="#1a1c22" stroke-width="4" fill="none"/><path d="M1482 704l8 30" stroke="#3a2a16" stroke-width="2.5"/></g>
+
+<!-- the mast, and the hut -->
+<g stroke="#34424f" stroke-width="5" fill="none"><path d="M1010 -400L980 600M1010 -400L1040 600"/><path d="M1004 -200h12M1000 -60l20 70l-22 70l24 70l-26 70l28 70l-30 70l32 70l-34 70M999 -60h22M996 80h28M993 220h34M990 360h40M987 500h46"/></g>
+<path d="M90 300L500 210L910 300V720H90z" fill="url(#hutG)"/><path d="M60 306L500 204L940 306" stroke="#1d2a22" stroke-width="16" fill="none" stroke-linecap="round"/>
+<g id="boards" stroke="#243529" stroke-width="2.5"></g>
+<rect x="640" y="400" width="180" height="150" fill="#16211a"/><rect x="650" y="410" width="160" height="130" fill="#f2d48a" opacity=".5"/><path d="M730 410v130M650 475h160" stroke="#16211a" stroke-width="8"/>
+<g id="door">
+  <rect x="330" y="380" width="190" height="340" fill="#121a14"/><rect x="342" y="392" width="166" height="328" fill="#2f4a36"/>
+  <g stroke="#213526" stroke-width="3"><path d="M384 392v328M426 392v328M468 392v328"/></g>
+  <rect x="384" y="430" width="84" height="80" fill="#0e1410"/><rect x="384" y="430" width="84" height="80" fill="none" stroke="#1a281e" stroke-width="5"/>
+  <rect x="356" y="566" width="150" height="34" rx="4" fill="#17191a"/><rect x="494" y="560" width="44" height="46" rx="5" fill="#26292b"/><rect x="506" y="572" width="20" height="22" rx="3" fill="#0a0b0c"/>
+  <g id="bolt" class="drag"><rect x="350" y="556" width="140" height="54" fill="transparent"/><rect x="362" y="574" width="118" height="18" rx="6" fill="url(#brG)"/><rect x="392" y="560" width="20" height="46" rx="6" fill="url(#brG)"/><circle cx="402" cy="566" r="9" fill="#7c5e1e"/></g>
+</g>
+<g id="sign" transform="rotate(-6 250 600)"><rect x="170" y="490" width="150" height="204" fill="#f4e04d"/><rect x="170" y="490" width="150" height="204" fill="none" stroke="#141518" stroke-width="6"/>
+  <text x="245" y="546" class="signT" font-size="34">STATION</text><text x="245" y="602" class="signT" font-size="62">ZERO</text><rect x="186" y="616" width="118" height="3" fill="#141518"/>
+  <text x="245" y="642" class="signT" font-size="15" letter-spacing="1.5">THE SECRET LISTENERS</text><text x="245" y="670" class="signT" font-size="15" letter-spacing="1.5">OPENS SATURDAY</text></g>
+<g fill="#a9c0cf" opacity=".5"><ellipse cx="620" cy="790" rx="110" ry="13"/><ellipse cx="960" cy="840" rx="70" ry="9"/><ellipse cx="280" cy="830" rx="60" ry="8"/></g>
+
+<!-- Saturday -->
+<g id="sat">
+  <path d="M100 318Q500 400 900 318" stroke="#f1ede1" stroke-width="3" fill="none"/>
+  <g id="bunting"></g>
+  <g transform="rotate(-1 730 360)"><rect x="640" y="324" width="180" height="62" fill="url(#brG)"/><rect x="640" y="324" width="180" height="62" fill="none" stroke="#6f531a" stroke-width="3"/>
+    <g stroke="#3a2a08" stroke-width="2.5"><path d="M656 344h148M656 372h110"/></g><rect x="652" y="350" width="120" height="16" fill="#f1ede1" transform="rotate(-2 712 358)"/><text x="712" y="363" class="lbl" font-size="11.5" transform="rotate(-2 712 358)">HESTER THORNE</text></g>
+</g>
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">WATCH RELIEVED</div>
+  <p id="d-time"></p><p id="d-fuel"></p><p id="d-words"></p><p id="d-hints"></p>
+  <div class="row"><button type="button" class="btn" id="b-report">Write up the log</button><button type="button" class="btn" id="b-book">Open the notebook</button><button type="button" class="btn" id="b-lobby">Back to the files</button></div>
+  <small>Station Zero &middot; Gannet Head &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, B = document.body, bolted = false, bx = 0;
+  (function () {
+    var s = '', x, i, c = ['#f4e04d', '#c8281d', '#f1ede1', '#2f6a4c', '#f4e04d', '#1d2a52'];
+    for (x = 130; x < 900; x += 44) s += '<path d="M' + x + ' ' + (300 + Math.abs(x - 500) * 0.01) + 'V720"/>';
+    $('#boards').innerHTML = s; s = '';
+    for (i = 0; i < 15; i++) { x = 130 + i * 53; s += '<path class="flag" d="M' + (x - 14) + ' ' + (322 + 78 * (1 - Math.pow((x - 500) / 400, 2))).toFixed(0) + 'h28l-14 34z" fill="' + c[i % 6] + '"/>'; }
+    $('#bunting').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'zero', storyTitle: 'Station Zero', id: 'relieved', no: 'VII', title: 'Watch Relieved',
+    sound: ['morning', { root: 54, bpm: 66, beds: [['sea', 0.7], ['birds', 0.4]] }],
+    go: 'Step outside',
+    intro: [
+      'The voice was never Control. Control cannot telephone: that line runs to one house, and the man in it knew too much too early, spelt one word wrongly, and called the station by a name eight months old. You said his name. Then three tapes went out behind your grandmother&rsquo;s report (for discussion, no penalty, a mistake) and after them one word, by hand, the word that only a relief can send: RELIEVED.',
+      'At a quarter past one the mains came back, and the old engine in the yard stopped by itself, as it was built to do. You slept in the operator&rsquo;s chair with the log for a pillow.',
+      'Now it is nearly seven, and getting light, and there is one thing left on her list.'
+    ],
+    exit: {"last":true,"rooms":7,"stars":5}, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+  ZERO.clock(); ZERO.over('06:52');
+  bolted = !!ER.flag('fast');
+
+  function hints() {
+    if (bolted) return null;
+    return ['fast', [
+      'Read the last line of your grandmother&rsquo;s note again. It is in your notebook, and so is her red word book.',
+      'FAST has two meanings, and all night one man has used only the first. The door is shut, but its bolt is drawn back. Drag the brass bolt across.'
+    ]];
+  }
+  function finish(first) {
+    var st = ER.state(), mins = ZERO.minutesPlayed(), hn = ER.hintsUsed(), fuel = Math.max(4, Math.min(100, 70 + (ER.flag('add') || 0) - (ER.flag('lost') || 0) - Math.floor((ER.flag('played') || 0) / 100)));
+    function card() {
+      B.classList.add('sat');
+      $('#d-time').textContent = 'Her watch was open for thirty years. You closed it in ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+      $('#d-fuel').textContent = 'Fuel left in the tank when the mains came back: ' + fuel + ' parts in a hundred.';
+      $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' papers and ' + Object.keys(st.words).length + ' words.';
+      $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+      $('#done').classList.add('on');
+    }
+    if (!first) { card(); return; }
+    ER.narrate([
+      'The bolt goes home with a clunk, and you hang the padlock on it. Fast: fixed, so that it cannot move. It is the first time all night that the word has not meant hurry.',
+      'The sea has gone back off the road. An old man in a long coat is coming up the path with a stick, one step at a time. When he reaches you he has no breath left. He does not ask for the page. He asks whether he may read it, and he reads it standing in the wind, twice.',
+      '&ldquo;I should like to put my name to that,&rdquo; says Sir Aubrey Quince. &ldquo;Standing Orders are quite clear about a wrong entry.&rdquo; So you unbolt the door again. He strikes his own page through, so that it can still be read, and writes his initials beside it. His hand shakes, but the pen does not.',
+      'On Saturday there has been no time to make a new plaque. It is unveiled with a strip of your label tape across two words, and Mrs Holloway says it looks dreadful and that she has never been so proud of anything. Your grandmother cuts the ribbon. She says nothing to Sir Aubrey, and he says nothing to her, and they stand side by side for the whole of the tea.',
+      'At noon item 3, the set that rattles, which old Mr Ito has brought back to life for the visitors, begins to tick by itself. You are the only person in the hut who can take it down. GANNET HEAD FROM CONTROL. YOUR SIGNAL OF 30 NOVEMBER RECEIVED. REGRET DELAY. WATCH RELIEVED.',
+      'It is correctly spelt. Nobody at the Department will say who sent it. The Department says it has no record of any station at Gannet Head.'
+    ], function () { card(); ER.sfx.ok(); });
+  }
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    if (bolted) { B.classList.add('bolted'); $('#bolt').style.transform = 'translateX(46px)'; finish(false); return; }
+    setTimeout(ER.sfx.gull, 1500);
+    ER.narrate([
+      'Outside, the storm has blown itself out. The air is cold and clean, and the gulls are back. You pull the door of the hut shut behind you.',
+      'Her last line: &ldquo;Then make the hut fast behind you.&rdquo; Down at the foot of the hill, a door opens too, and somebody comes out.'
+    ]);
+  }
+  ZERO.thing('#road', null, function () { return bolted ? 'The road home, with the sea on both sides of it and none on top.' : 'You could run for the road. That would be fast, in one way. It is not the way she meant, and you know it: you have her word book.'; });
+  ZERO.thing('#sign', null, 'STATION ZERO. Wet through, and still the brightest thing on the hill. Nobody who worked here ever called it that. Perhaps, after last night, somebody will.');
+  ER.drag($('#bolt'), {
+    start: function (e) { if (bolted) return false; bx = ER.pt($('#scene'), e).x; },
+    move: function (e) { var d = Math.max(0, Math.min(46, ER.pt($('#scene'), e).x - bx)); $('#bolt').style.transform = 'translateX(' + d.toFixed(1) + 'px)'; $('#bolt').d = d; },
+    end: function (e, moved) {
+      var d = $('#bolt').d || 0;
+      if (!moved) { ER.say('A brass bolt, drawn back. Take hold of it and pull it across.'); return; }
+      if (d < 38) { $('#bolt').style.transform = ''; $('#bolt').d = 0; ER.say('Not far enough. It has to go right home.'); return; }
+      bolted = true; ER.flag('fast', 1); B.classList.add('bolted'); $('#bolt').style.transform = 'translateX(46px)'; ZERO.sfx.bolt(); WK.learn('fast', true);
+      setTimeout(function () { finish(true); }, 700);
+    }
+  });
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* the log, written up: the one part nobody can do for you */
+  $('#b-report').addEventListener('click', function () {
+    var saved = ER.flag('report') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Gannet Head</h4><h3>Station log &middot; the middle watch, written up</h3>' +
+      '<label for="r1">1. Write the log of your own watch, from midnight until the last word went out. Write it as a log is written: short, true, in order, with the times.</label><textarea id="r1"></textarea>' +
+      '<label for="r2">2. Your grandmother asked that nobody should be sanctioned. Was she right? Use &ldquo;although&rdquo; or &ldquo;whereas&rdquo; in your answer.</label><textarea id="r2"></textarea>' +
+      '<label for="r3">3. Choose one of the words that face both ways (table, sanction, oversight, fast, relief, left, dust). Write two sentences that show its two meanings.</label><textarea id="r3"></textarea>' +
+      '<label for="r4">Initials of the operator</label><input type="text" id="r4" maxlength="40">' +
+      '<div class="count"></div><div class="foot"><span>Kept in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { box.querySelector('#' + k).value = saved[k] || ''; });
+    function keep() {
+      var o = {}, n = 0;
+      ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { o[k] = box.querySelector('#' + k).value; });
+      ['r1', 'r2', 'r3'].forEach(function (k) { n += (o[k].match(/[A-Za-z’']+/g) || []).length; });
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('report', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

@@ -7,8 +7,10 @@ window.Shelf = (function () {
   'use strict';
   var KEY = 'keyhole.v2', D = document, fade = null, pick = null;
 
-  function store() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
-  function put(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+  /* a player who is signed in (account.js) has a saved game of their own */
+  function key() { try { var u = JSON.parse(localStorage.getItem('keyhole.user')); return KEY + (u && u.id ? '@' + u.id : ''); } catch (e) { return KEY; } }
+  function store() { try { return JSON.parse(localStorage.getItem(key())) || {}; } catch (e) { return {}; } }
+  function put(s) { try { localStorage.setItem(key(), JSON.stringify(s)); } catch (e) {} }
   function el(t, cls, html) { var e = D.createElement(t); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 
   function css() {
@@ -51,7 +53,15 @@ window.Shelf = (function () {
     pick.querySelector('p').textContent = st.state === 'solved' ? 'You have already finished this one.' : 'You have been here before. You got as far as ' + st.at.title + '.';
     pick.querySelector('.a').textContent = st.state === 'solved' ? 'Look at the last page again' : 'Go on from ' + st.at.title;
     pick.querySelector('.a').addEventListener('click', function () { go(base + st.at.file); });
-    pick.querySelector('.b').addEventListener('click', function () { var all = store(); delete all[theme + '/' + s.id]; put(all); go(base + s.first); });
+    pick.querySelector('.b').addEventListener('click', function () {
+      /* An empty story with a date: the copy in the record book is emptied too. The clock and the hints go on counting,
+         and a story that was finished before is marked: only the first time is a record. */
+      var all = store(), o = all[theme + '/' + s.id] || {}, n = { upd: Date.now(), secs: o.secs || 0, hints: o.hints || 0 };
+      if (o.fin) { n.secs = o.fin.secs || 0; n.hints = o.fin.hints || 0; }
+      if (o.fin || o.again) n.again = 1;
+      all[theme + '/' + s.id] = n;
+      put(all); go(base + s.first);
+    });
     pick.querySelector('.q').addEventListener('click', function () { pick.classList.remove('on'); });
     pick.classList.add('on');
   }
@@ -61,6 +71,7 @@ window.Shelf = (function () {
     pick = el('div', 'sh-pick'); D.body.appendChild(pick);
     fade = el('div', 'sh-fade on'); D.body.appendChild(fade);
     setTimeout(function () { fade.classList.remove('on'); }, 80);
+    if (window.Account) Account.ui.chip();                      /* who is playing, the records, another player */
   }
   /* stories that are held back (still being written) are listed only when the address ends in ?all=1 */
   function visible(list) { return /[?&]all=1/.test(location.search) ? list : list.filter(function (s) { return !s.hold; }); }

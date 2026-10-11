@@ -107,10 +107,40 @@ var SCAPES = {
   shore: { level: 0.77, bpm: 46, root: 42, scale: MIN, prog: [[0, 4], [5, 4]], lead: 'ping', sting: 'soft', beds: [['sea', 1], ['static', 0.6]], voices: [
     { k: 'pad', i: 'glass', o: 1 }, { k: 'pad', i: 'pad', v: 0.7 }, { k: 'bass', i: 'bass', v: 0.6 },
     { k: 'mel', i: 'ping', o: 3, c: 2, every: 2, len: 1, pr: 0.55, cells: [[8], [4, 4], [6, 2]] },
-    { k: 'ost', i: 'pulse', p: [0, null, null, null, null, null, 0, null], when: 'tense' }] }
+    { k: 'ost', i: 'pulse', p: [0, null, null, null, null, null, 0, null], when: 'tense' }] },
+  /* forensics: a laboratory at night. Careful, curious, one thing at a time */
+  lab: { level: 0.85, bpm: 80, root: 52, scale: DOR, prog: [[0, 2], [3, 2], [0, 2], [4, 2]], lead: 'vibes', voices: [
+    { k: 'pad', i: 'glass', v: 0.8 }, { k: 'bass', i: 'bass', o: -1, v: 0.7 },
+    { k: 'arp', i: 'pizz', p: [0, null, 1, null, 2, null, 1, null], v: 0.5, pr: 0.9 },
+    { k: 'mel', i: 'vibes', o: 1, c: 4, every: 4, len: 2, pr: 0.6 },
+    { k: 'ost', i: 'pulse', o: -1, p: [0, null, 0, null, 0, null, 0, 3], when: 'tense' }] },
+  /* history: an archive, and then the day itself. Warm, a little grand, in no hurry */
+  archive: { bpm: 63, root: 53, scale: MAJ, prog: [[0, 2], [2, 2], [3, 2], [4, 2]], lead: 'harp', sting: 'run', voices: [
+    { k: 'pad', i: 'pad', v: 0.8 }, { k: 'bass', i: 'bass', o: -1, v: 0.7 },
+    { k: 'arp', i: 'harp', p: [0, null, null, 1, null, 2, null, null], pr: 0.9, v: 0.8 },
+    { k: 'mel', i: 'reed', o: 1, c: 2, every: 4, len: 2, pr: 0.7 },
+    { k: 'ost', i: 'pulse', o: -1, p: [0, null, null, null, 0, null, null, 4], when: 'tense' }] },
+  /* court: polished wood, long silences, everybody waiting for one answer. Nothing struck: it could be taken for a gavel */
+  bench: { level: 0.84, bpm: 69, root: 45, scale: MIN, prog: [[0, 2], [3, 2], [4, 2], [0, 2]], lead: 'keys', sting: 'soft', voices: [
+    { k: 'pad', i: 'pad' }, { k: 'pad', i: 'glass', o: 1, v: 0.5 }, { k: 'bass', i: 'bass', o: -1, v: 0.8 },
+    { k: 'mel', i: 'reed', o: 1, c: 4, every: 4, len: 2, pr: 0.55 },
+    { k: 'ost', i: 'pulse', p: [0, null, null, 0, null, null, 0, null], v: 0.7, when: 'tense' }] },
+  /* news: a desk with a deadline. Quick fingers, and a clock that nobody mentions (there is none in the music) */
+  desk: { level: 0.83, bpm: 112, root: 45, scale: DOR, prog: [[0, 2], [3, 2], [6, 2], [4, 2]], lead: 'vibes', voices: [
+    { k: 'pad', i: 'glass', v: 0.6 }, { k: 'bass', i: 'bass', o: -1, v: 0.9 },
+    { k: 'ost', i: 'pulse', p: [0, null, 0, null, 0, 0, null, 0], v: 0.55 },
+    { k: 'mel', i: 'vibes', o: 1, c: 4, every: 4, len: 2, pr: 0.6 },
+    { k: 'ost', i: 'pulse', o: 1, p: [null, null, 4, null, null, null, 7, null], v: 0.5, when: 'tense' }] },
+  /* the wild: a great deal of land and sky, and one small party in it */
+  trail: { level: 0.7, bpm: 56, root: 48, scale: MAJ, prog: [[0, 4], [3, 2], [4, 2]], lead: 'harp', sting: 'soft', beds: [['wind', 0.8]], voices: [
+    { k: 'pad', i: 'glass' }, { k: 'pad', i: 'pad', o: -1, v: 0.6 }, { k: 'bass', i: 'bass', v: 0.6 },
+    { k: 'mel', i: 'reed', o: 1, c: 4, every: 4, len: 2, pr: 0.65 },
+    { k: 'arp', i: 'harp', o: 1, p: [0, null, null, null, 2, null, null, null], pr: 0.6, v: 0.6 },
+    { k: 'ost', i: 'pulse', o: -1, p: [0, null, null, null, 0, null, null, null], when: 'tense' }] }
 };
 
-var THEME = { mystery: 'noir', scifi: 'orbit', fantasy: 'candle', ghost: 'hush', adventure: 'nighttrain', cipher: 'wire' };
+var THEME = { mystery: 'noir', scifi: 'orbit', fantasy: 'candle', ghost: 'hush', adventure: 'nighttrain', cipher: 'wire',
+  forensic: 'lab', history: 'archive', court: 'bench', news: 'desk', wild: 'trail' };
 
 /* Room by room. A room that already makes its own rain, wind or hum gets music only. */
 var ROOMS = {
@@ -148,14 +178,116 @@ var ROOMS = {
   'cipher/wrong/shop': ['wire', { root: 43, bpm: 88, drop: ['ost'] }],                       /* a shop full of clocks: no beat */
   'cipher/wrong/midnight': ['wire', { root: 38, bpm: 76, mood: 'tense', drop: ['mel', 'ost'], then: ['morning', { root: 50, bpm: 66, drop: ['mel'] }] }],
   'cipher/lexicon/corridor': ['studio', { bpm: 104, drop: ['hit'] }],                        /* somebody knocks on a door: no plucked chords */
-  'cipher/lexicon/gallery': ['studio', { root: 45, bpm: 92, drop: ['arp', 'hit', 'ost'], beds: [['hum', 0.6]] }],     /* much to read, a clock to listen for */
+  'cipher/lexicon/gallery': ['studio', { root: 45, bpm: 92, drop: ['arp', 'hit', 'ost'], level: 1.2, beds: [['hum', 0.6]] }],     /* much to read, a clock to listen for */
   'cipher/lexicon/studio': ['studio', { root: 50, bpm: 108, drop: ['hit'] }],
   'cipher/lexicon/onair': ['studio', { root: 53, bpm: 120, beds: [['crowd', 0.5]] }],
   'cipher/exam/staffroom': ['corridor', { drop: ['mel'] }],                                  /* the caretaker whistles: no tune */
   'cipher/exam/corridor': ['corridor', { root: 43, bpm: 56, drop: ['ost'] }],                /* the copier behind the door keeps time */
   'cipher/exam/copyroom': ['corridor', { root: 50, bpm: 64, drop: ['ost'] }],
   'cipher/exam/library': ['corridor', { root: 45, bpm: 54, drop: ['mel'] }],
-  'cipher/exam/hall': ['corridor', { root: 48, bpm: 50, drop: ['mel', 'ost'], level: 0.85, then: ['morning', { root: 52, bpm: 68, drop: ['mel'] }] }]
+  'cipher/exam/hall': ['corridor', { root: 48, bpm: 50, drop: ['mel', 'ost'], level: 0.85, then: ['morning', { root: 52, bpm: 68, drop: ['mel'] }] }],
+  'cipher/zero/hut': ['shore', { drop: ['mel'] }],                                           /* the sender is sending Morse: no small bright notes */
+  'cipher/zero/cipher': ['shore', { root: 45, bpm: 42, drop: ['mel', 'ost'], beds: [['sea', 0.5], ['static', 0.5]] }],      /* the longest read of the story */
+  'cipher/zero/store': ['shore', { root: 40, bpm: 40, drop: ['mel', 'ost'], beds: [['sea', 0.45]] }],
+  'cipher/zero/mast': ['shore', { mood: 'tense', drop: ['mel'], beds: [['sea', 0.9], ['wind', 0.6], ['rain', 0.5]] }],
+  'cipher/zero/cellar': ['shore', { root: 38, bpm: 44, drop: ['mel', 'ost'], beds: [['drips', 0.6], ['sea', 0.35]] }],
+  'cipher/zero/key': ['shore', { root: 43, bpm: 50, mood: 'tense', drop: ['mel'], beds: [['static', 0.8], ['sea', 0.5]] }],             /* a word is keyed in Morse here */
+  'cipher/zero/relieved': ['morning', { root: 54, bpm: 66, beds: [['sea', 0.7], ['birds', 0.4]] }],
+  'cipher/seven/desk': ['press', { bpm: 88, drop: ['mel'] }],                                 /* a telephone rings in every room of this story: no small bright notes */
+  'cipher/seven/library': ['press', { root: 48, bpm: 76, drop: ['ost', 'mel'] }],             /* a room for reading, under a sign that says SILENCE */
+  'cipher/seven/composing': ['press', { root: 53, bpm: 96, drop: ['mel'] }],
+  'cipher/seven/press': ['press', { root: 45, bpm: 104, mood: 'tense' }],                     /* the clock is running now */
+  'cipher/seven/landing': ['press', { root: 47, bpm: 80, mood: 'tense', drop: ['ost', 'mel'], level: 0.85 }],      /* whispering, and feet on the stairs to listen for */
+  'cipher/seven/edition': ['press', { root: 50, bpm: 84, drop: ['mel'], then: ['morning', { root: 50, bpm: 72, drop: ['mel'] }] }],    /* a bell is rung at two; then the major key */
+  /* The stories of the study wing name their scapes in ER.init as well; these lines repeat them. */
+  'forensic/fair/hall': ['lab', { root: 50, bpm: 72, drop: ['mel'], beds: [['rain', 0.5]] }],            /* a big empty hall, rain, much to read: no tune */
+  'forensic/fair/prep': ['lab', { root: 52, bpm: 80, drop: ['arp'] }],                                    /* drops fall and powders fizz: nothing plucked */
+  'forensic/fair/office': ['lab', { root: 47, bpm: 66, drop: ['arp'] }],                                  /* reading and measuring: slower */
+  'forensic/fair/van': ['lab', { root: 45, bpm: 76, mood: 'tense', drop: ['arp'], beds: [['rain', 0.8]] }],
+  'forensic/fair/judging': ['morning', { root: 52, bpm: 72 }],
+  'history/apollo/backroom': ['archive', { root: 50, bpm: 58, drop: ['mel'], beds: [['hum', 0.6]] }],           /* a speaker beeps and talks in this room: no small bright notes */
+  'history/apollo/chart': ['archive', { root: 48, bpm: 56, mood: 'tense', drop: ['mel', 'arp'] }],
+  'history/apollo/desk': ['archive', { root: 53, bpm: 54, drop: ['ost'], beds: [['night', 0.45]] }],            /* the calm room: sums by lamplight */
+  'history/apollo/bench': ['archive', { root: 45, bpm: 60, mood: 'tense', drop: ['mel'], beds: [['hum', 0.4]] }],
+  'history/apollo/splash': ['archive', { root: 50, bpm: 50, drop: ['mel', 'arp', 'ost'], level: 1.05, then: ['morning', { root: 53, bpm: 70, beds: [['crowd', 0.6]] }] }],    /* seven minutes of silence, then the parachutes */
+  'court/glass/hall': ['bench', { beds: [['rain', 0.55], ['crowd', 0.3]] }],                               /* a hall full of people waiting, and rain on tall windows */
+  'court/glass/consult': ['bench', { root: 47, bpm: 60, drop: ['mel'], beds: [['rain', 0.4]] }],
+  'court/glass/exhibits': ['bench', { root: 50, bpm: 63, drop: ['mel'], beds: [['rain', 0.3]] }],
+  'court/glass/hearing': ['bench', { root: 43, bpm: 66, drop: ['ost'], beds: [['rain', 0.25]] }],          /* nothing in the music that could be taken for a knock */
+  'court/glass/judgment': ['bench', { root: 45, bpm: 60, drop: ['mel', 'ost'], then: ['bench', { scale: MAJ, root: 48, bpm: 72, drop: ['ost'], beds: [['birds', 0.45]] }] }],    /* the same music in a major key, on the steps outside */
+  'news/rumour/newsroom': ['desk', { bpm: 100, drop: ['mel'] }],                                           /* a small room and a great deal to read: the pulse, no tune */
+  'news/rumour/corridor': ['desk', { root: 47, bpm: 108, drop: ['mel'], beds: [['crowd', 0.6]] }],
+  'news/rumour/library': ['desk', { root: 43, bpm: 84, drop: ['ost'] }],                                   /* slower, lower, and without the pulse */
+  'news/rumour/e7': ['desk', { root: 48, bpm: 116, mood: 'tense' }],                                       /* ten minutes and a headline to write */
+  'news/rumour/four': ['morning', { root: 50, bpm: 76, beds: [['crowd', 0.35]] }],
+  /* wild/ridge: no reed tune anywhere, because a whistle is part of the story */
+  'wild/ridge/cairn': ['trail', { root: 45, bpm: 52, drop: ['mel', 'arp'], beds: [['wind', 0.9]] }],
+  'wild/ridge/whaleback': ['trail', { root: 50, bpm: 50, drop: ['mel', 'arp', 'bass'], level: 0.9, beds: [['wind', 1.1]] }],      /* the thinnest: pads and wind */
+  'wild/ridge/door': ['trail', { root: 43, bpm: 60, mood: 'tense', drop: ['mel'], beds: [['wind', 1.25], ['rain', 0.45]] }],
+  'wild/ridge/meetings': ['trail', { root: 48, bpm: 58, mood: 'tense', drop: ['mel'], beds: [['wind', 0.4], ['rain', 0.4]] }],
+  'wild/ridge/hut': ['trail', { root: 55, bpm: 54, drop: ['mel', 'ost'], level: 0.95, beds: [['fire', 0.7], ['wind', 0.25]] }],     /* blasts are counted here: nothing with a beat */
+  'fantasy/toll/gate': ['candle', { root: 50, bpm: 60, beds: [['wind', 0.5]] }],                           /* dusk by a river */
+  'fantasy/toll/arch': ['candle', { root: 45, bpm: 56, drop: ['mel'], beds: [['night', 0.5], ['drips', 0.5]] }],      /* pennies ring in this room: no small bright notes */
+  'fantasy/toll/counting': ['candle', { root: 48, bpm: 58, drop: ['mel'] }],                               /* the most to read */
+  'fantasy/toll/house': ['candle', { root: 52, bpm: 72, beds: [['fire', 0.7], ['rain', 0.3]] }],
+  'fantasy/toll/crow': ['candle', { root: 50, bpm: 60, drop: ['mel'], beds: [['night', 0.5]], then: ['morning', { root: 50, bpm: 70, beds: [['birds', 0.5]] }] }],     /* a cock crows here */
+  /* ghost/ferry: no bass anywhere, because the ship's whistle is a low long note */
+  'ghost/ferry/quay': ['hush', { bpm: 50, drop: ['bass'], beds: [['sea', 0.5]] }],
+  'ghost/ferry/saloon': ['hush', { root: 48, bpm: 54, drop: ['bass'], beds: [['hum', 0.55]] }],
+  'ghost/ferry/deck': ['hush', { root: 43, bpm: 48, drop: ['bass'], beds: [['sea', 0.85], ['wind', 0.3]] }],
+  'ghost/ferry/wheel': ['hush', { root: 40, bpm: 50, drop: ['bass', 'mel'], beds: [['hum', 0.5], ['sea', 0.3]] }],      /* the telegraph gong rings here */
+  'ghost/ferry/pier': ['hush', { scale: MAJ, root: 48, bpm: 56, drop: ['bass'], beds: [['sea', 0.6]] }],             /* the same tune in a major key */
+  /* adventure/mail: an airship is not a train, so not the theme's waltz. No reed tune: a whistle in a speaking tube is listened for */
+  'adventure/mail/shed': ['archive', { root: 48, bpm: 60, drop: ['mel'], beds: [['wind', 0.35], ['birds', 0.3]] }],
+  'adventure/mail/gondola': ['archive', { root: 50, bpm: 66, drop: ['mel'], beds: [['hum', 0.7], ['wind', 0.45], ['rain', 0.35]] }],
+  'adventure/mail/keel': ['archive', { root: 45, bpm: 58, drop: ['mel', 'arp'], level: 1.1, beds: [['hum', 0.4], ['wind', 0.3], ['drips', 0.5]] }],
+  'adventure/mail/windgate': ['archive', { root: 43, bpm: 72, mood: 'tense', drop: ['mel'], beds: [['wind', 1.1], ['hum', 0.35]] }],
+  'adventure/mail/tolver': ['archive', { root: 53, bpm: 68, drop: ['mel'], beds: [['birds', 0.45], ['wind', 0.25], ['crowd', 0.25]], then: ['archive', { root: 55, bpm: 76, beds: [['birds', 0.5], ['crowd', 0.35]] }] }],
+  'forensic/cake/shop': ['lab', { root: 53, bpm: 70, drop: ['arp'], beds: [['hum', 0.35]] }],
+  'forensic/cake/bake': ['lab', { root: 46, bpm: 66, drop: ['mel'], beds: [['hum', 0.5]] }],
+  'forensic/cake/store': ['lab', { root: 50, bpm: 76, drop: ['arp'] }],
+  'forensic/cake/office': ['lab', { root: 45, bpm: 60, drop: ['arp', 'mel'] }],                             /* slanting light and a great deal of reading */
+  'forensic/cake/yard': ['morning', { root: 53, bpm: 70, beds: [['birds', 0.6]] }],
+  'history/carpathia/shack': ['archive', { root: 50, bpm: 54, drop: ['mel', 'arp', 'ost'], beds: [['static', 0.55], ['sea', 0.35]] }],      /* Morse is read and sent here: no tune and no beat */
+  'history/carpathia/chartroom': ['archive', { root: 48, bpm: 56, mood: 'tense', drop: ['mel'], beds: [['sea', 0.5]] }],
+  'history/carpathia/engines': ['archive', { root: 45, bpm: 66, mood: 'tense', drop: ['mel', 'arp'], beds: [['hum', 1.1]] }],
+  'history/carpathia/saloon': ['archive', { root: 53, bpm: 58, drop: ['ost'], beds: [['hum', 0.35]] }],
+  'history/carpathia/daybreak': ['archive', { root: 50, bpm: 48, drop: ['mel', 'arp', 'ost'], sting: 'soft', beds: [['sea', 0.8]] }],
+  'court/gambit/chamber': ['bench', { root: 45, bpm: 60, drop: ['ost'], level: 0.8 }],                      /* a chess hall between rounds: nothing in the music that could be a clock */
+  'court/gambit/desk': ['bench', { root: 48, bpm: 63, drop: ['mel', 'ost'], beds: [['crowd', 0.25]] }],
+  'court/gambit/parlour': ['bench', { root: 50, bpm: 56, drop: ['mel', 'ost'], beds: [['fire', 0.35]] }],
+  'court/gambit/corridor': ['bench', { root: 43, bpm: 66, drop: ['ost'], beds: [['hum', 0.3]] }],
+  'court/gambit/boardone': ['bench', { scale: MAJ, root: 48, bpm: 72, drop: ['ost'], beds: [['crowd', 0.3]] }],   /* the same music in a major key: the hall fills up again for round five */
+  'news/flood/board': ['desk', { bpm: 96, drop: ['mel'], beds: [['rain', 0.6]] }],                         /* rain on the window: the pulse of the desk, and no tune */
+  'news/flood/front': ['desk', { root: 47, bpm: 104, drop: ['mel'], beds: [['crowd', 0.3], ['rain', 0.25]] }],
+  'news/flood/records': ['desk', { root: 43, bpm: 80, drop: ['mel', 'ost'], beds: [['rain', 0.45]] }],     /* the quietest room in the building */
+  'news/flood/studio': ['desk', { root: 48, bpm: 110, mood: 'tense', drop: ['mel'], beds: [['hum', 0.5], ['static', 0.35]] }],    /* no tune: the station's own four notes are heard in this room */
+  'news/flood/light': ['morning', { root: 53, bpm: 66, beds: [['birds', 0.5]] }],
+  'mystery/understudy/corner': ['noir', { root: 50, bpm: 54, drop: ['mel', 'ost'], beds: [['crowd', 0.3], ['hum', 0.35]] }],      /* the dark side of the curtain: no tune and no beat anywhere in this story, because a theatre runs on cues */
+  'mystery/understudy/box': ['noir', { root: 53, bpm: 58, drop: ['mel', 'ost'], beds: [['crowd', 0.75], ['hum', 0.4]] }],
+  'mystery/understudy/wings': ['noir', { root: 45, bpm: 52, drop: ['mel', 'ost'], level: 0.9, beds: [['crowd', 0.22], ['rain', 0.3]] }],
+  'mystery/understudy/dressing': ['noir', { root: 48, bpm: 56, drop: ['mel', 'ost'], beds: [['rain', 0.45]] }],
+  'mystery/understudy/stage': ['noir', { root: 43, bpm: 60, mood: 'tense', drop: ['mel', 'ost'], beds: [['crowd', 0.6]], then: ['noir', { scale: MAJ, root: 50, bpm: 66, drop: ['ost'], beds: [['crowd', 0.35]] }] }],   /* when the curtain goes up: the same music in a major key, with its tune back */
+  'wild/tide/shed': ['trail', { root: 48, bpm: 54, drop: ['mel'], beds: [['sea', 0.45], ['birds', 0.5]] }],            /* a horn belongs to this story: no tune in any of its rooms */
+  'wild/tide/scar': ['trail', { root: 50, bpm: 50, drop: ['mel', 'arp'], beds: [['sea', 0.8], ['wind', 0.5]] }],
+  'wild/tide/ford': ['trail', { root: 43, bpm: 58, mood: 'tense', drop: ['mel'], beds: [['sea', 1.0], ['wind', 0.5]] }],
+  'wild/tide/gap': ['trail', { root: 45, bpm: 48, drop: ['mel', 'arp', 'ost', 'bass'], level: 1.05, beds: [['sea', 0.7], ['wind', 0.5]] }],     /* two horns and a bell are counted against a watch: nothing with a beat */
+  'wild/tide/box': ['trail', { root: 55, bpm: 50, drop: ['mel', 'arp', 'ost', 'bass'], level: 1.05, beds: [['sea', 0.9], ['wind', 0.3]] }],     /* a boat's horn is answered with a bell: nothing with a beat */
+  'scifi/benthos/watch': ['orbit', { root: 45, bpm: 44, drop: ['mel'], lead: 'keys', beds: [['hum', 0.6]] }],            /* pings carry meaning in this story: the tune of the scape is a ping, so it is dropped, and the solved phrase is played on keys */
+  'scifi/benthos/lab': ['orbit', { root: 52, bpm: 50, drop: ['mel'], lead: 'keys', beds: [['drips', 0.5], ['hum', 0.3]] }],
+  'scifi/benthos/pumps': ['orbit', { root: 43, bpm: 52, mood: 'tense', drop: ['mel'], lead: 'keys', beds: [['hum', 1], ['drips', 0.4]] }],
+  'scifi/benthos/floor': ['orbit', { root: 40, bpm: 42, mood: 'tense', drop: ['mel', 'ost'], lead: 'keys', beds: [['static', 0.5]] }],    /* orders go out and pings come back: no tune and no pulse */
+  'scifi/benthos/dock': ['orbit', { root: 50, bpm: 50, drop: ['mel'], lead: 'keys', beds: [['drips', 0.7]], then: ['morning', { root: 50, bpm: 66 }] }],
+  'fantasy/hours/stair': ['candle', { root: 50, bpm: 60, drop: ['mel'], beds: [['night', 0.5], ['wind', 0.3]] }],            /* a clock ticks and strikes in this story: no small bright notes */
+  'fantasy/hours/weights': ['candle', { root: 45, bpm: 54, drop: ['mel', 'arp'], beds: [['wind', 0.45]] }],
+  'fantasy/hours/dial': ['candle', { root: 48, bpm: 56, drop: ['mel', 'arp'], beds: [['wind', 0.6], ['night', 0.3]] }],
+  'fantasy/hours/workroom': ['candle', { root: 52, bpm: 66, drop: ['mel'], beds: [['fire', 0.6]] }],
+  'fantasy/hours/loft': ['candle', { root: 50, bpm: 50, drop: ['mel', 'arp', 'bass'], beds: [['wind', 0.7], ['night', 0.4]], then: ['morning', { root: 50, bpm: 66, drop: ['mel'], beds: [['night', 0.4]] }] }],   /* eleven strokes are counted here: held notes and wind only */
+  'ghost/orchard/kitchen': ['hush', { bpm: 52, drop: ['bass'], beds: [['wind', 0.3]] }],                    /* a cold stone kitchen with the range out */
+  'ghost/orchard/backroom': ['hush', { root: 48, bpm: 48, drop: ['mel', 'bass'], beds: [['wind', 0.22]] }],  /* the room with most to read: no tune */
+  'ghost/orchard/churchyard': ['hush', { root: 50, bpm: 50, drop: ['mel'], beds: [['birds', 0.45], ['wind', 0.3]] }],
+  'ghost/orchard/orchard': ['hush', { root: 43, bpm: 50, drop: ['bass'], beds: [['night', 0.5], ['wind', 0.35]] }],
+  'ghost/orchard/supper': ['hush', { scale: MAJ, root: 48, bpm: 56, beds: [['fire', 0.6]] }]                 /* the same slow tune in a major key, and a fire in the range */
 };
 
 /* ---------- the sounding part ---------- */

@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Puzzles Desk · Seven Down</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="seven.css">
+<style>
+  body{--bg:#0b0e0c;--accent:#f4e04d;--font-display:'Playfair Display',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(8,11,9,.96);--tc-ink:#efe9d8;--cap-bg:rgba(9,12,10,.94);--panel:#141a16;--face-bg:#1a1d1b;--q-ink:#e6d58a;--fade:#040605;--hud-bg:rgba(9,12,10,.8)}
+  .tc-room{font-weight:900;letter-spacing:.01em}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .neon{font-family:'Bebas Neue',sans-serif;font-size:74px;letter-spacing:6px;fill:#ff5a48}
+  #neon{animation:nf 7.3s steps(1,end) infinite}
+  @keyframes nf{0%{opacity:1}61%{opacity:.25}62%{opacity:1}64%{opacity:.4}65%{opacity:1}88%{opacity:.7}89%{opacity:1}}
+  #neonGlow{animation:ng 7.3s steps(1,end) infinite}
+  @keyframes ng{0%{opacity:.5}61%{opacity:.14}62%{opacity:.5}64%{opacity:.2}65%{opacity:.5}}
+  #lampGlow{animation:lg 5.1s steps(1,end) infinite}
+  @keyframes lg{0%{opacity:1}47%{opacity:.93}53%{opacity:1}}
+  #phone.ring{animation:ring .12s steps(2,end) infinite}
+  @keyframes ring{0%{transform:translate(0,0) rotate(0)}50%{transform:translate(2px,-2px) rotate(.6deg)}}
+  #phone{transform-box:fill-box;transform-origin:50% 90%}
+  #steam path{animation:steam 3.4s ease-in-out infinite;opacity:0}
+  #steam path:nth-child(2){animation-delay:-1.2s}#steam path:nth-child(3){animation-delay:-2.3s}
+  @keyframes steam{0%{opacity:0;transform:translateY(8px)}30%{opacity:.5}100%{opacity:0;transform:translateY(-34px)}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17201b"/><stop offset=".7" stop-color="#202b24"/><stop offset="1" stop-color="#141b17"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b4029"/><stop offset=".25" stop-color="#4a3321"/><stop offset="1" stop-color="#2a1c12"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1020"/><stop offset="1" stop-color="#1c2740"/></linearGradient>
+  <linearGradient id="shadeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f8a5e"/><stop offset="1" stop-color="#145238"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffd98a" stop-opacity=".58"/><stop offset=".4" stop-color="#ffc35a" stop-opacity=".2"/><stop offset=".75" stop-color="#ffc35a" stop-opacity=".05"/><stop offset="1" stop-color="#ffc35a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="redG"><stop offset="0" stop-color="#ff5a48" stop-opacity=".5"/><stop offset="1" stop-color="#ff5a48" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="48%" cy="62%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity=".93"/></radialGradient>
+  <pattern id="gridP" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#fbf8ee"/><path d="M16 0H0V16" fill="none" stroke="#1c1b18" stroke-width="1.6"/></pattern>
+  <pattern id="lat" width="34" height="68" patternUnits="userSpaceOnUse"><path d="M0 0L17 34L0 68M34 0L17 34L34 68" fill="none" stroke="#b08a3a" stroke-width="3"/></pattern>
+  <clipPath id="winC"><rect x="96" y="96" width="330" height="424"/></clipPath>
+</defs>
+
+<!-- wall -->
+<rect x="-1000" y="-400" width="3600" height="1100" fill="url(#wallG)"/>
+<g stroke="#101713" stroke-width="3" opacity=".8"><path d="M-1000 560H2600"/></g>
+<rect x="-1000" y="560" width="3600" height="120" fill="#121815"/>
+
+<!-- the window: the city, and the Clarion's own sign from behind -->
+<g id="window" class="hot">
+  <rect x="80" y="80" width="362" height="456" fill="#0d1210"/>
+  <g clip-path="url(#winC)">
+    <rect x="96" y="96" width="330" height="424" fill="url(#skyG)"/>
+    <g fill="#0b0f1a"><rect x="96" y="330" width="70" height="190"/><rect x="160" y="290" width="54" height="230"/><rect x="214" y="350" width="80" height="170"/><rect x="290" y="300" width="60" height="220"/><rect x="346" y="360" width="80" height="160"/></g>
+    <g fill="#ffd98a" opacity=".8" id="lights"></g>
+    <circle id="neonGlow" cx="262" cy="196" r="200" fill="url(#redG)"/>
+    <g id="neon"><text class="neon" transform="translate(400 222) scale(-1 1)">CLARION</text></g>
+    <path d="M110 232H414M124 150V232M400 150V232" stroke="#1b1e24" stroke-width="5"/>
+  </g>
+  <path d="M96 308H426M261 96V520" stroke="#0d1210" stroke-width="10"/>
+  <rect x="70" y="524" width="382" height="18" fill="#2a362f"/>
+</g>
+
+<!-- the clock -->
+<g id="wclock" class="hot"><circle cx="498" cy="150" r="46" fill="#0d1210"/><circle cx="498" cy="150" r="39" fill="#efe9d8"/><g stroke="#1c1b18" stroke-width="3"><path d="M498 116v8M498 176v8M464 150h8M524 150h8"/></g>
+  <path id="hh" d="M498 150V128" stroke="#1c1b18" stroke-width="6" stroke-linecap="round"/><path id="mh" d="M498 150V118" stroke="#1c1b18" stroke-width="3.5" stroke-linecap="round"/><circle cx="498" cy="150" r="4" fill="#c8281d"/></g>
+
+<!-- the pigeonholes -->
+<g id="holes" class="hot">
+  <rect x="570" y="110" width="500" height="250" fill="#3b2a1b"/><rect x="570" y="110" width="500" height="250" fill="none" stroke="#231709" stroke-width="5"/>
+  <g id="holeCells"></g>
+</g>
+<g id="sphinxhole" class="hot"><rect x="820" y="194" width="120" height="78" fill="#0d0a06"/><rect x="842" y="254" width="76" height="16" fill="url(#brassG)"/><text x="880" y="266" class="sT" font-size="10.500" fill="#3a2a08" letter-spacing="1.5">SPHINX</text></g>
+
+<!-- tomorrow's bill -->
+<g id="bill" class="hot" transform="rotate(1.4 1205 226)">
+  <rect x="1118" y="116" width="176" height="226" fill="#f4e04d"/><rect x="1118" y="116" width="176" height="226" fill="none" stroke="#141518" stroke-width="5"/>
+  <text x="1206" y="150" class="sT" font-size="17" fill="#141518" letter-spacing="2">THE CLARION</text><path d="M1132 160h148" stroke="#141518" stroke-width="3"/>
+  <text x="1206" y="190" class="sT" font-size="22" fill="#141518">TOMORROW</text><text x="1206" y="232" class="sT" font-size="33" fill="#141518">No. 10,000</text>
+  <text x="1206" y="268" class="sT" font-size="20" fill="#c8281d">SPHINX</text><text x="1206" y="294" class="sT" font-size="20" fill="#c8281d">UNMASKED</text><text x="1206" y="322" class="sT" font-size="13" fill="#141518" letter-spacing="2">AT LAST</text>
+  <circle cx="1206" cy="122" r="5" fill="#b3261c"/>
+</g>
+
+<!-- the doorway, and the lift across the corridor -->
+<g id="door" class="hot">
+  <rect x="1352" y="96" width="330" height="584" fill="#070908"/>
+  <rect x="1404" y="232" width="176" height="448" fill="#16110a"/>
+  <rect x="1404" y="232" width="176" height="448" fill="url(#lat)" opacity=".85"/>
+  <rect x="1396" y="224" width="192" height="12" fill="url(#brassG)"/><path d="M1404 232V680M1580 232V680" stroke="#7d5f1d" stroke-width="7"/>
+  <g transform="rotate(-3 1492 430)"><path d="M1492 386v20" stroke="#d9d5c8" stroke-width="2"/><rect x="1440" y="404" width="104" height="58" fill="#fbf8ee"/>
+    <text x="1492" y="428" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="21" fill="#2450a8" letter-spacing="1">OUT OF</text><text x="1492" y="451" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="21" fill="#2450a8" letter-spacing="1">ORDER</text></g>
+  <path d="M1352 96V680" stroke="#2a362f" stroke-width="14"/>
+</g>
+<g id="dial" class="hot">
+  <path d="M1432 206a60 60 0 0 1 120 0z" fill="url(#brassG)"/><path d="M1440 204a52 52 0 0 1 104 0z" fill="#efe9d8"/>
+  <g id="dialNums" font-family="Oswald,sans-serif" font-weight="600" font-size="11" fill="#1c1b18" text-anchor="middle"></g>
+  <path d="M1492 204L1535 188" stroke="#c8281d" stroke-width="4" stroke-linecap="round"/><circle cx="1492" cy="204" r="6" fill="#1c1b18"/>
+</g>
+
+<!-- the desk -->
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#deskG)"/><rect x="-1000" y="640" width="3600" height="10" fill="#6f5136"/>
+<ellipse id="lampGlow" cx="560" cy="650" rx="900" ry="520" fill="url(#lampG)" pointer-events="none"/>
+<path d="M360 690h620l70 196H290z" fill="#1f4a39"/><path d="M360 690h620" stroke="#2f6a52" stroke-width="4"/>
+
+<!-- the solutions book -->
+<g id="book" class="hot" transform="rotate(-9 240 760)">
+  <rect x="130" y="716" width="226" height="118" rx="5" fill="#1f1a14"/><rect x="138" y="708" width="226" height="118" rx="5" fill="#4a3526"/><rect x="138" y="708" width="24" height="118" fill="#2e2016"/>
+  <rect x="186" y="734" width="150" height="40" fill="#efe9d8"/><text x="261" y="752" class="sT" font-size="13" fill="#1c1b18" letter-spacing="2">SOLUTIONS</text><text x="261" y="768" font-family="Caveat,cursive" font-size="15" text-anchor="middle" fill="#1d2a52">puzzles desk</text>
+  <path d="M364 716v106" stroke="#efe9d8" stroke-width="5"/>
+</g>
+
+<!-- the lamp -->
+<g id="lamp" class="hot">
+  <ellipse cx="470" cy="668" rx="62" ry="13" fill="#0b0f0d"/><path d="M470 662V520" stroke="#c79b3b" stroke-width="9"/><path d="M467 662V520" stroke="#f5df98" stroke-width="2"/>
+  <path d="M386 520q84-78 168 0l-16 30H402z" fill="url(#shadeG)"/><path d="M402 550h136" stroke="#ffe9a8" stroke-width="5"/><path d="M398 520q72-58 144 0" stroke="#6fd0a0" stroke-width="3" fill="none" opacity=".5"/>
+  <path d="M520 560v34" stroke="#c79b3b" stroke-width="2"/><circle cx="520" cy="598" r="5" fill="#c79b3b"/>
+</g>
+
+<!-- what was not there before -->
+<g id="sheet" class="hot">
+  <path d="M584 700h250l22 150H566z" fill="#000" opacity=".3" transform="translate(8 8)"/>
+  <path d="M584 700h250l22 150H566z" fill="#f3eedf"/>
+  <path d="M640 726h140l10 104H632z" fill="url(#gridP)" stroke="#1c1b18" stroke-width="2"/>
+  <g stroke="#2450a8" stroke-width="2.6" stroke-linecap="round"><path d="M604 712h120M736 712h76"/></g>
+  <g stroke="#3b382f" stroke-width="1.6"><path d="M800 742h36M800 754h40M802 766h34M802 778h40M804 790h30M592 742h30M590 754h34M588 766h30M588 778h34"/></g>
+</g>
+
+<!-- the house telephone -->
+<g id="phone" class="hot">
+  <ellipse cx="1010" cy="692" rx="92" ry="12" fill="#000" opacity=".4"/>
+  <path d="M938 690q0-62 72-62t72 62z" fill="#0c0c0d"/><circle cx="1010" cy="664" r="22" fill="#efe9d8"/><text x="1010" y="672" class="sT" font-size="20" fill="#1c1b18">6</text>
+  <path d="M986 630v-16h48v16" fill="none" stroke="#0c0c0d" stroke-width="10"/>
+  <path d="M930 598q80-40 160 0l-10 26q-16-12-26-6l-8-14h-72l-8 14q-10-6-26 6z" fill="#0c0c0d"/><path d="M950 594q60-26 120 0" stroke="#3b3b40" stroke-width="4" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- whose desk this is -->
+<g id="plate" class="hot"><path d="M1296 786l196-8 6 34-198 10z" fill="#7d5f1d"/><path d="M1296 786l196-8 4 26-198 9z" fill="url(#brassG)"/><text x="1396" y="804" class="sT" font-size="15" fill="#3a2a08" letter-spacing="2" transform="rotate(-2.4 1396 804)">E. QUILL</text></g>
+<g id="books" class="hot"><rect x="60" y="590" width="44" height="64" fill="#7b2c22"/><rect x="104" y="574" width="36" height="80" fill="#1d2a52"/><rect x="140" y="598" width="50" height="56" fill="#2f5a4a"/><g stroke="#e0b354" stroke-width="3"><path d="M68 606h28M112 592h20M148 612h34"/></g></g>
+<!-- tea, and the spike -->
+<g id="mug" class="hot"><ellipse cx="1150" cy="728" rx="36" ry="8" fill="#000" opacity=".35"/><path d="M1120 664h60v52q0 14-30 14t-30-14z" fill="#d9d5c8"/><ellipse cx="1150" cy="664" rx="30" ry="7" fill="#8a6a44"/><path d="M1180 676q22 2 22 18t-22 18" fill="none" stroke="#d9d5c8" stroke-width="7"/>
+  <g id="steam" stroke="#efe9d8" stroke-width="4" stroke-linecap="round" fill="none"><path d="M1140 652q-8-12 0-24"/><path d="M1152 650q8-12 0-26"/><path d="M1162 652q-6-10 2-20"/></g></g>
+<g id="spike" class="hot"><ellipse cx="1262" cy="716" rx="36" ry="9" fill="#2a2118"/><path d="M1262 712V586" stroke="#c9cdd2" stroke-width="3"/>
+  <g fill="#efe9d8" stroke="#b9b3a2" stroke-width="1"><path d="M1226 690l72-8 4 12-74 8z"/><path d="M1230 674l66-4 2 12-66 6z"/><path d="M1228 658l70 2-2 12-68-2z"/></g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="sv-go" id="go">Go down to the library</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="seven.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, rang = false, told = {};
+  var MINE = ['a15', 'a5', 'd4', 'a14', 'd13'];
+
+  /* pigeonholes, lit windows across the street, the numbers on the lift's dial */
+  (function () {
+    var s = '', r, c, x, y, i, a, LAB = ['NEWS', 'SPORT', 'LETTERS', 'CHESS', 'BRIDGE', 'WEATHER', '', 'STARS', 'RECIPES', 'NATURE', 'RADIO', 'MR QUILL'];
+    for (r = 0; r < 3; r++) for (c = 0; c < 4; c++) {
+      if (r === 1 && c === 2) continue;
+      x = 580 + c * 122; y = 120 + r * 78; i = r * 4 + c;
+      s += '<rect x="' + x + '" y="' + y + '" width="114" height="70" fill="#120d08"/>';
+      if (i % 3 !== 1) s += '<path d="M' + (x + 10) + ' ' + (y + 60) + 'l' + (60 + i * 3) + ' -' + (6 + i % 4) + 'v-' + (14 + i % 5 * 3) + 'l-' + (60 + i * 3) + ' ' + (4 + i % 3) + 'z" fill="' + (i % 2 ? '#efe9d8' : '#d9cfb4') + '"/>';
+      s += '<rect x="' + (x + 22) + '" y="' + (y + 56) + '" width="70" height="12" fill="#c79b3b"/><text x="' + (x + 57) + '" y="' + (y + 66) + '" class="sT" font-size="8.500" fill="#3a2a08" letter-spacing="1">' + LAB[i] + '</text>';
+    }
+    $('#holeCells').innerHTML = s; s = '';
+    for (i = 0; i < 26; i++) { x = 104 + (i * 53) % 310; y = 336 + (i * 37) % 170; if ((i * 7) % 5 < 2) s += '<rect x="' + x + '" y="' + y + '" width="7" height="9"/>'; }
+    $('#lights').innerHTML = s; s = '';
+    ['B', 'G', '1', '2', '3', '4', '5', '6', '7'].forEach(function (t, n) {
+      a = Math.PI * (1 - (n + 0.5) / 9);
+      s += '<text x="' + (1492 + 42 * Math.cos(a)).toFixed(1) + '" y="' + (204 - 40 * Math.sin(a) + 4).toFixed(1) + '">' + t + '</text>';
+    });
+    $('#dialNums').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'seven', storyTitle: 'Seven Down', id: 'desk', no: 'I', title: 'The Puzzles Desk',
+    go: 'Sit down',
+    intro: [
+      'Eleven o&rsquo;clock on a Monday night, on the sixth floor of Clarion House. The Clarion goes to press at two.',
+      'You are the junior on the puzzles desk, and you have been in the building since last Tuesday. Every morning you do the Clarion crossword in the lift, in ink, before it reaches the sixth floor. It is the reason you asked for this job.',
+      'The crossword is set by somebody who signs himself SPHINX. Nobody at the Clarion has ever met him. For thirty-two years his envelope has been on this desk by six in the evening, and tomorrow&rsquo;s puzzle is number 10,000.',
+      'Tonight no envelope came. At a quarter to eleven you went down to the canteen for tea. When you came back, there was something on the desk that had not been there before.'
+    ],
+    exit: {"next":"library","w":{"0301986f":"108baa50"}}, tags: {"a15":["bc032b18"],"a15@":["8905f18e","108d034b","2363e285"],"a15?":["7da1daaa","4f35feae","024d5a31"],"a15#":["8781cb7c"],"a5":["ddc5f3e1"],"a5@":["ebed3c1b","c07d5a14","d3ad923f"],"a5?":["e0b3b626","f06a8594","b19bb250"],"a5#":["df26f210"],"d4":["ccbd4a1b"],"d4@":["744c592d","f08f452b","9ef942e2","7f7d2acb","fc42fa35"],"d4?":["5185dc37","f76343a7","0a5fe8c1","c089a000","2a92e4b9"],"d4#":["e827d8d7"],"a14":["68012ed7"],"a14@":["fdab262c","92f8c533","b9fbba5e","8970cfa3","20c32454","acd7bc19","4ff5e4d9"],"a14?":["9a7de141","c97f8982","f82729c7","5204b373","dc6be114","c15188ea","a95fdff8"],"a14#":["3b315109"],"d13":["740c813f"],"d13@":["76ba840d","79f0b73d","2e14aacc","33512eb1"],"d13?":["f3456893","b7f01f2d","1e39e5bb","9ea49ea0"],"d13#":["95318bc3"]},
+    sound: ['press', { bpm: 88, drop: ['mel'] }],          /* the telephone rings in here: no small bright notes */
+    hints: hints, onBegin: begin
+  });
+  SEV.clock({ from: 2, to: 30 }); SEV.wall('#hh', '#mh', 498, 150);
+  nextFile = ER.flag('d-file') || null; rang = !!ER.flag('d-rang'); told = ER.flag('d-told') || {};
+
+  var BILL = '<h4>THE CLARION</h4><p>TOMORROW</p><p>PUZZLE No. 10,000</p><p style="color:#c8281d">SPHINX UNMASKED AT LAST</p><small>AFTER THIRTY-TWO YEARS &middot; ONLY IN THE CLARION</small>';
+  var WRONG = {
+    a15: { ink: 'Ink is what it is full of. And nobody ever had an ink name.', nib: 'The nib is only the point of it. The clue wants the whole thing.',
+      pet: 'A pet name is what your grandmother calls you. A writer hides behind a different kind.' },
+    a5: { yes: 'That is what they answer. The clue wants the name of the promise itself.', ido: 'Those are the words they say. The clue wants the name of the promise itself.',
+      oat: 'OATH has four letters. Its shorter cousin has three, and you hear it at every wedding.' },
+    d4: { truth: 'Truth is one thing. The clue says THINGS, so the answer is a plural.', proof: 'Proof is one thing. The clue says THINGS, so the answer is a plural.',
+      dates: 'A reporter checks those as well. But a date can be wrong. The clue wants the things that are KNOWN to be true.',
+      names: 'A reporter checks those as well. But the clue wants every kind of thing that is known to be true.', clues: 'A clue only points at what is true. This is the true thing itself.' },
+    a14: { strange: 'Strange is not the same as uncomfortable. Think of two people in a lift who have nothing to say to each other.' },
+    d13: { look: 'A look can be over in a second. This one goes on and on.', peer: 'To peer is to look hard because you cannot see well. This is a long, steady look, at something you admire or cannot believe.',
+      gape: 'To gape is to stare with your mouth open. Shut the mouth, and two of the letters change.', scan: 'To scan is to look quickly over the whole of something. This is the opposite: one thing, for a long time.',
+      star: 'STARE has five letters. Sphinx wants the four-letter word, which is a gentler thing.', view: 'A view is what you look at. The clue wants what you DO.',
+      gate: 'A gate is what hangs across the lift. The clue is a way of looking.', daze: 'A daze is what you are in after a knock on the head. Close, but the clue is a way of looking, and it begins with another letter.',
+      maze: 'A maze is a puzzle to walk about in. It rhymes with the answer, and that is all.', game: 'Not a game. A way of looking: long, and steady.' }
+  };
+  var HINTS = {
+    a15: ['Start with the easiest clue on the sheet: 15 Across, three letters. It has two halves, with AND between them. One word has to fit both halves.',
+      'Sphinx is not his real name. What do we call the name that a writer hides behind? It is a &hellip; name.',
+      'You have probably got one in your pencil case. It begins with P.'],
+    a5: ['5 Across has a star. Its first sentence is the meaning. Its second sentence is Sphinx talking about himself.',
+      'Think of a wedding. The two people make promises out loud, and each of those promises has a short name of three letters.',
+      'It rhymes with NOW, and it begins with V.'],
+    d4: ['4 Down says THINGS that are known to be true. So the answer is a plural.',
+      'A newspaper is supposed to print these, and not rumours or opinions. &ldquo;Never mind what you think,&rdquo; says an editor. &ldquo;Give me the &hellip;&rdquo;',
+      'One of them is a FACT. The clue wants more than one.'],
+    a14: ['14 Across gives two meanings, with a semicolon between them. One word has to fit both.',
+      'Somebody who drops things and walks into doors is this. So is the moment after somebody has said exactly the wrong thing.',
+      'It begins with A, and it has two Ws in it.'],
+    d13: ['13 Down, with a star, is a way of looking. Not a quick look: a long one.',
+      'You do it at the stars, or out of a window, or at somebody you admire. STARE has five letters. This word has four.',
+      'It begins G, A. The third letter is one of the rarest in English.']
+  };
+
+  function hints() {
+    if (nextFile) return ['go', ['Five answers are in ink. Every other clue is waiting somewhere else in the building. Use the button at the bottom of the screen to go down to the library.']];
+    var k = SEV.cur();
+    if (k && HINTS[k]) return [k, HINTS[k]];
+    return ['look', [
+      'Something is lying on the green blotter that was not there before you went for tea. Click on it.',
+      'It is a crossword. Five of its clues can be done from this chair: 5, 14 and 15 Across, and 4 and 13 Down. Click a clue, and type the answer on the keyboard. The other clues only say where they are waiting.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function after() {
+    ER.pips(SEV.count(MINE), MINE.length);
+    if (nextFile) $('#go').classList.add('on');
+  }
+  function begin() {
+    after(); SEV.keep();
+    if (!tell('in')) { ER.say('The puzzles desk. The grid is where you left it.'); return; }
+    busy = true;
+    ER.narrate([
+      'A sheet of paper, square in the middle of the blotter: a crossword grid with every square empty. Across the top somebody has written two sentences, in small blue capitals.',
+      'You know those capitals. They have been on every envelope you have opened since last Tuesday.',
+      'Nobody passed you on the stairs.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the grid ---------- */
+  function openGrid() {
+    if (busy) return;
+    SEV.openSheet({
+      type: MINE, onRight: right, onWrong: function (k, w) { return (WRONG[k] || {})[w] || null; },
+      shut: function (k) { return k === 'd7' ? '7 Down has no clue, and four other words run across it. Leave it until they are in.' : 'That clue is not on the sheet. All it says is where it is waiting: you cannot do it from this chair.'; },
+      msg: nextFile ? 'Five answers in ink. The rest are waiting somewhere else in the building.' : 'Click a clue, or a square, and type. The answers that can be found from this chair are 5, 14 and 15 Across, and 4 and 13 Down.'
+    });
+  }
+  SEV.onGrid = openGrid;
+  $('#sheet').addEventListener('click', openGrid);
+  function right(k, w, sh) {
+    after();
+    var t = k === 'a5' ? '<b>VOW.</b> A star. You have written that word before, and not long ago: in the lift, last Wednesday, somewhere between the second floor and the third.'
+      : k === 'd13' ? '<b>GAZE.</b> Another star, and another word you have met. Friday&rsquo;s puzzle. You remember the Z.'
+      : k === 'a15' ? '<b>PEN.</b> A pen name. It goes in, in ink.'
+      : k === 'd4' ? '<b>FACTS.</b> It goes in, in ink.' : '<b>AWKWARD.</b> It goes in, in ink.';
+    sh.msg(t);
+    if (SEV.count(MINE) === MINE.length) { finish(); return; }
+    if (!rang && SEV.count(MINE) >= 2) setTimeout(ringNow, 1500);
+  }
+  function finish() {
+    var file = ER.exitOk([MINE.map(SEV.word).join('-')]), st;
+    if (!file) return;
+    nextFile = file; ER.flag('d-file', file); st = ER.state(); st.done = st.done || {}; st.done.desk = 1; ER.flag('d-out', 1);
+    busy = true; SEV.solved();
+    setTimeout(function () {
+      ER.closeAll();
+      ER.narrate([
+        'Five answers in ink. Every other clue on the sheet sends you somewhere else: to the library, to the composing room, to the press hall.',
+        'And one clue sends you nowhere at all. 7 Down: <em>no clue. It has never needed one.</em>',
+        'So this is not a crossword for the readers of the Clarion. It is a crossword for one person, who has to walk about the building at night in order to finish it. And it was left on your desk.',
+        'The library is two floors down. You will have to walk: the lift is still out of order.'
+      ], function () { busy = false; after(); if (!rang) ringNow(); });
+    }, 1700);
+  }
+
+  /* ---------- Mr Quill, from the seventh floor ---------- */
+  function ringNow() {
+    if (rang || busy) { if (!rang) setTimeout(ringNow, 1200); return; }
+    busy = true; rang = true; ER.flag('d-rang', 1);
+    ER.closeAll(); SEV.sfx.phone(); $('#phone').classList.add('ring');
+    ER.narrate([
+      'The house telephone rings. A small lamp has come on beside the number 7. The seventh floor: upstairs.'
+    ], function () { $('#phone').classList.remove('ring'); busy = false; quill(); });
+  }
+  function quill() {
+    var c = window.CAST.quill;
+    ER.talk({ who: c.who, role: c.role, face: window.FACE('quill'), last: 'Put the telephone down',
+      lines: [
+        '&ldquo;Junior? Quill. I am on the seventh floor with the Editor&rsquo;s papers, and I have no time. Has the envelope come?&rdquo;',
+        { note: 'The blue capitals say: tell nobody upstairs.', q: 'No, Mr Quill. No envelope.', a: 'It is true. A sheet of paper is not an envelope.' },
+        '&ldquo;Then listen. At ten tomorrow morning the Lord Mayor shakes Sphinx by the hand, in front of four photographers. It is all arranged. A late envelope changes nothing. I shall see to number ten thousand myself.&rdquo;',
+        { q: 'Yourself, sir?', a: '&ldquo;Who better? Go home, Junior. There is nothing more for you to do tonight. And use the stairs. That wretched lift has been out of order since six.&rdquo;' },
+        { note: 'He rings off. You look at the telephone. Then you look at the grid.' }
+      ],
+      clue: { id: 'quill1', title: 'Mr Quill: go home', kind: 'House telephone' },
+      done: function () { SEV.sfx.hangup(); ER.say('You do not go home.'); }
+    });
+  }
+  $('#phone').addEventListener('click', function (e) {
+    if (busy) return;
+    if (rang) { quill(); return; }
+    ER.wordAt(e.clientX, e.clientY, 'receiver');
+    ER.say('The house telephone. It has no dial: you lift the receiver and ask the switchboard for a floor. The note says to tell nobody upstairs, so you leave it where it is.');
+  });
+
+  /* ---------- things in the room ---------- */
+  $('#bill').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BILL, cls: 'bill', clue: { id: 'bill', title: 'Tomorrow&rsquo;s bill', kind: 'Poster' }, done: function () {
+      if (tell('bill')) ER.say('Unmasked. But the first thing anybody tells you on the puzzles desk is that nobody at the Clarion knows who Sphinx is. So who is going to do the unmasking?', 9000);
+    } });
+  });
+  $('#book').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: SEV.solbook(), cls: 'solbook', clue: { id: 'solbook', title: 'Your solutions book', kind: 'Puzzles desk' }, done: function () {
+      if (tell('book')) ER.say('Your second job, after the tea. Every evening you paste the day&rsquo;s solution into the book. There are six of them so far, and you did every one of those puzzles yourself, in the lift.', 9000);
+    } });
+  });
+  $('#sphinxhole').addEventListener('click', function (e) {
+    e.stopPropagation(); if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'pigeonhole');
+    ER.say('The pigeonhole marked SPHINX. By six o&rsquo;clock every evening for thirty-two years there has been an envelope in it. Nobody has ever seen one arrive. Tonight it is empty.', 8000);
+  });
+  SEV.thing('#holes', 'pigeonhole', 'Pigeonholes: one for everything the sixth floor sends down to be printed. Chess, bridge, the weather, the stars.', isBusy);
+  SEV.thing('#window', null, 'The Clarion&rsquo;s red sign, seen from behind: NOIRALC. From up here, half the city reads backwards.', isBusy);
+  SEV.thing('#lamp', 'blotter', 'The lamp makes one warm circle on the green blotter. The rest of the sixth floor went home at half past ten.', isBusy);
+  SEV.thing('#mug', null, 'Canteen tea, the colour of the corridor. You carried it up three floors, because of the lift.', isBusy);
+  SEV.thing('#spike', 'spike', 'The spike. Anything that will not be printed ends up on it. Mr Quill puts readers&rsquo; letters there, with a certain pleasure.', isBusy);
+  SEV.thing('#plate', null, 'E. QUILL, PUZZLES EDITOR. It is Mr Quill&rsquo;s desk. Yours is the corner of it nearest the door.', isBusy);
+  SEV.thing('#books', 'thesaurus', 'A dictionary, a thesaurus and an atlas. Mr Quill says that Sphinx has never needed any of them, and that he, Mr Quill, has never needed them either.', isBusy);
+  SEV.thing('#wclock', null, function () { return 'The clock on the wall says ' + SEV.time() + '. The first edition goes to press at two.'; }, isBusy);
+  $('#dial').addEventListener('click', function (e) {
+    e.stopPropagation(); if (busy) return;
+    ER.say('The brass arrow over the gate shows where the lift is. It has stopped between 6 and 7, and it has been there all evening.');
+  });
+  $('#door').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'lift gate');
+    ER.say('The lift is ten steps from your desk. A card hangs on the gate, in blue pencil: OUT OF ORDER. It has hung there since six, which is why you carried the tea up three floors.', 8000);
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; SEV.sfx.steps(5);
+    setTimeout(function () { ER.leave(nextFile); }, 900);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Three Sisters · Seven Sacks for Tolver</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="mail.css">
+<style>
+  body{--bg:#3a2614;--accent:#e9b655;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(40,27,15,.95);--tc-ink:#f3ead6;--cap-bg:rgba(32,22,12,.93);--panel:#2e2013;--face-bg:#1b2233;--q-ink:#f0c98a;--fade:#1c130a;--hud-bg:rgba(32,22,12,.8)}
+  .dialT{font-family:'Josefin Sans',sans-serif;font-weight:700;fill:#22201c;text-anchor:middle}
+  #rain{animation:rain .9s linear infinite}
+  @keyframes rain{from{transform:translate(0,0)}to{transform:translate(-40px,120px)}}
+  .drop{animation:drop 5.5s ease-in infinite}
+  .drop.b{animation-duration:7.3s;animation-delay:-2.6s}
+  .drop.c{animation-duration:6.2s;animation-delay:-4.1s}
+  @keyframes drop{0%{transform:translateY(0)}60%{transform:translateY(120px)}100%{transform:translateY(470px)}}
+  #wheel{transform-origin:700px 722px;animation:rock 5s ease-in-out infinite alternate}
+  @keyframes rock{from{transform:rotate(-4deg)}to{transform:rotate(5deg)}}
+  #catbody{transform-origin:150px 730px;animation:breathe 3.4s ease-in-out infinite alternate}
+  @keyframes breathe{to{transform:scaleY(1.07)}}
+  #altn{transform-origin:1090px 672px;animation:tremble 1.3s steps(2,end) infinite}
+  @keyframes tremble{50%{transform:rotate(2deg)}}
+  #window.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.12)}}
+  .lampglow{animation:flick 3.7s steps(1,end) infinite}
+  @keyframes flick{0%{opacity:.9}31%{opacity:.75}52%{opacity:1}77%{opacity:.84}}
+
+  /* the view ahead, with the strip map's four pins */
+  .bx.view{width:min(1020px,95vw)}
+  .bx.view .bx-foot{flex-wrap:wrap;justify-content:flex-end;gap:8px 10px;min-height:0}
+  .bx.view .pmsg{flex:1 1 100%;min-height:48px}
+  .pinb{display:inline-flex;align-items:center;gap:8px;height:40px;padding:3px 14px 0 5px;border:1px solid rgba(255,255,255,.35);border-radius:22px;background:rgba(0,0,0,.45);color:#f1ecdf;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase}
+  .pinb i{display:inline-grid;place-items:center;width:30px;height:30px;margin-top:-3px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f7e7ae,#b08a35 60%,#6f531a);color:#2a1c06;font-style:normal;font-weight:700;font-size:15px;padding-top:3px}
+  .pinb.sel{border-color:#e9b655;color:#e9b655;box-shadow:0 0 0 2px rgba(233,182,85,.35)}
+  .pinb.put{opacity:.6}
+  .hs{cursor:pointer}
+  .hs circle{fill:rgba(255,255,255,0);stroke:#fff;stroke-width:1.6;stroke-dasharray:4 4;opacity:.55}
+  .hs:hover circle{opacity:1;stroke:#ffd98a;stroke-width:2.4}
+  .pn circle{fill:#c9a24a;stroke:#3a2a08;stroke-width:1.6}
+  .pn text{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:15px;fill:#2a1c06;text-anchor:middle}
+  .pn path{stroke:#3a2a08;stroke-width:2}
+  .vrain{animation:rain 1.1s linear infinite;opacity:.35}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#727e87"/><stop offset=".55" stop-color="#a9b3b4"/><stop offset="1" stop-color="#c3c9c2"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3f26"/><stop offset="1" stop-color="#3a2614"/></linearGradient>
+  <radialGradient id="lampG2"><stop offset="0" stop-color="#ffd98a" stop-opacity=".7"/><stop offset=".4" stop-color="#f0b85a" stop-opacity=".2"/><stop offset="1" stop-color="#f0b85a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="brassG" cx="35%" cy="30%"><stop offset="0" stop-color="#f7e7ae"/><stop offset=".6" stop-color="#b08a35"/><stop offset="1" stop-color="#6f531a"/></radialGradient>
+  <clipPath id="paneC"><rect x="60" y="120" width="1340" height="480"/></clipPath>
+</defs>
+
+<!-- what is outside: the cloud, the wall of the range with three valleys in it, Carrow, and rain -->
+<g id="window" class="hot">
+  <rect x="60" y="120" width="1340" height="480" fill="url(#skyG)"/>
+  <g clip-path="url(#paneC)">
+    <path d="M60 120h1340v150q-90 26 -180 0t-200 14 -210 -10 -220 16 -200 -12 -190 14 -140 -18z" fill="#6a7680"/>
+    <path d="M60 250q150 30 300 6t280 12 300 -8 260 14 200 -12v90H60z" fill="#59656f" opacity=".7"/>
+    <path d="M60 300h1340v150H60z" fill="#46525e"/>
+    <g fill="#687a70"><path d="M640 450l44 -150h32l44 150z"/><path d="M840 450l44 -150h32l44 150z"/><path d="M1040 450l44 -150h32l44 150z"/></g>
+    <g stroke="#3a454f" stroke-width="3" fill="none" opacity=".8"><path d="M200 300l60 150M420 300l-30 150M600 300l40 150M770 300l20 150M970 300l20 150M1170 300l40 150M1290 300l-30 150"/></g>
+    <path d="M60 440q200 -16 420 0t460 -8 460 6v170H60z" fill="#7d8468"/>
+    <g fill="#8f9474"><path d="M100 480l160 -10 30 50 -180 16z"/><path d="M420 500l200 -14 20 60 -210 10z"/><path d="M980 470l180 -4 30 44 -200 14z"/><path d="M1200 520l160 -10 20 60 -170 6z"/></g>
+    <g stroke="#d6dde2" stroke-width="3" fill="none" opacity=".8"><path d="M700 450q-10 40 30 70t-20 80"/><path d="M900 450q14 50 -10 80t10 70"/><path d="M1100 450q-6 40 20 70t-10 80"/></g>
+    <path d="M60 492q340 -14 700 0t640 -8" stroke="#3a3f38" stroke-width="2.500" fill="none"/>
+    <g fill="#9c5a45"><rect x="842" y="520" width="16" height="10"/><rect x="866" y="524" width="18" height="10"/><rect x="820" y="530" width="14" height="9"/><rect x="890" y="512" width="14" height="9"/><rect x="850" y="538" width="20" height="10"/><rect x="910" y="530" width="16" height="10"/></g>
+    <g id="rain" stroke="#dfe6ea" stroke-width="1.600" opacity=".4"></g>
+    <g fill="#eef3f5" opacity=".7"><ellipse class="drop" cx="240" cy="130" rx="4" ry="7"/><ellipse class="drop b" cx="560" cy="126" rx="3.500" ry="6"/><ellipse class="drop c" cx="900" cy="132" rx="4" ry="7"/><ellipse class="drop b" cx="1240" cy="128" rx="4" ry="7"/><ellipse class="drop" cx="1110" cy="124" rx="3" ry="6"/></g>
+  </g>
+</g>
+<!-- the gondola round it: beams, mullions, the sill -->
+<g pointer-events="none">
+  <path d="M-1000 -400h3600v520H-1000z" fill="#3a2614"/><path d="M-1000 96h3600v24H-1000z" fill="#5a3f26"/>
+  <path d="M-1000 120H60v480h-1060zM1400 120h1200v480H1400z" fill="url(#woodG)"/>
+  <g fill="#5a3f26"><rect x="48" y="120" width="24" height="480"/><rect x="383" y="120" width="24" height="480"/><rect x="718" y="120" width="24" height="480"/><rect x="1053" y="120" width="24" height="480"/><rect x="1388" y="120" width="24" height="480"/></g>
+  <g stroke="#3a2614" stroke-width="2"><path d="M1500 120v480M1700 120v480M-80 120v480"/></g>
+</g>
+<rect x="-1000" y="600" width="3600" height="150" fill="#5a3f26"/><rect x="-1000" y="600" width="3600" height="12" fill="#7a5a36"/><rect x="-1000" y="750" width="3600" height="80" fill="#3a2614"/>
+<rect x="-1000" y="830" width="3600" height="490" fill="#2e1e10"/><g id="planks" stroke="#1e130a" stroke-width="3"></g>
+
+<!-- the chart table, the strip map, and the cat on the strip map -->
+<circle class="lampglow" cx="240" cy="560" r="230" fill="url(#lampG2)" pointer-events="none"/>
+<g><path d="M240 120v396" stroke="#22201c" stroke-width="3"/><path d="M222 516h36l10 44h-56z" fill="#ffe9a8"/><path d="M216 516h48M206 560h68" stroke="#22201c" stroke-width="5"/></g>
+<path d="M70 696H410L440 770H40Z" fill="#6b4a2a"/><rect x="40" y="770" width="400" height="16" fill="#4a3219"/><path d="M70 786v120M410 786v120" stroke="#3a2614" stroke-width="14"/>
+<g id="stripmap" class="hot"><path d="M196 712l44 -7 44 9 44 -9 44 9 30 -5 6 34 -32 5 -44 -9 -44 9 -44 -9 -44 8z" fill="#efe6cc" stroke="#a8956a" stroke-width="1.500"/>
+  <path d="M240 705l4 35M284 714l4 34M328 705l4 35M372 714l4 34" stroke="#a8956a" stroke-width="1.500"/><path d="M204 728q60 -12 100 0t96 -6" stroke="#7a1f1f" stroke-width="2.500" fill="none"/>
+  <g fill="#3a3024"><circle cx="226" cy="725" r="3"/><circle cx="300" cy="727" r="3"/><circle cx="352" cy="724" r="3"/></g></g>
+<g id="cat2" class="hot"><g id="catbody"><ellipse cx="150" cy="716" rx="50" ry="19" fill="#d98a3c"/><path d="M118 706q22 -12 50 -8" stroke="#b56a22" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M140 702l8 14M162 701l6 15" stroke="#b56a22" stroke-width="4" stroke-linecap="round"/></g>
+  <path d="M104 722q-24 6 -30 26" stroke="#d98a3c" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="196" cy="714" r="17" fill="#d98a3c"/><path d="M186 702l-2 -14 12 8zM200 698l8 -12 5 15z" fill="#d98a3c"/>
+  <path d="M188 716q3 3 7 0M200 716q3 3 7 0" stroke="#3a2010" stroke-width="2" fill="none"/></g>
+
+<!-- the wheel, and the Captain at it -->
+<g id="wheelbox" class="hot"><g id="wheel"><circle cx="700" cy="722" r="104" fill="none" stroke="#7a5a36" stroke-width="15"/><circle cx="700" cy="722" r="104" fill="none" stroke="#9a7648" stroke-width="4"/>
+  <g stroke="#7a5a36" stroke-width="9" stroke-linecap="round"><path d="M700 592v260M570 722h260M608 630l184 184M792 630L608 814"/></g><circle cx="700" cy="722" r="20" fill="#b08a35"/></g></g>
+<g id="capt2" class="hot" transform="translate(700 0)">
+  <ellipse cx="0" cy="912" rx="100" ry="10" fill="#000" opacity=".4"/>
+  <path d="M-30 920v-130h24v130zM6 920v-130h24v130z" fill="#26262c"/>
+  <path d="M-60 590q-70 44 -100 118" stroke="#4e321c" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M60 590q70 44 100 118" stroke="#4e321c" stroke-width="26" fill="none" stroke-linecap="round"/>
+  <circle cx="-102" cy="712" r="13" fill="#c99a6e"/><circle cx="102" cy="712" r="13" fill="#c99a6e"/>
+  <path d="M-66 580q66 -22 132 0l22 320h-176z" fill="#5a3a22"/><path d="M0 590v310" stroke="#3a2414" stroke-width="3"/><path d="M-76 730h152" stroke="#3a2414" stroke-width="9"/>
+  <path d="M-40 572q40 -18 80 0l-8 22q-32 -12 -64 0z" fill="#6e4829"/>
+  <circle cx="0" cy="538" r="28" fill="#4a2f1c"/><path d="M-28 534h56" stroke="#22201c" stroke-width="6"/><circle cx="0" cy="566" r="10" fill="#c9cdd0"/><ellipse cx="-29" cy="546" rx="5" ry="8" fill="#c99a6e"/><ellipse cx="29" cy="546" rx="5" ry="8" fill="#c99a6e"/>
+  <path d="M-31 540l-5 -17M31 540l5 -17" stroke="#e8b017" stroke-width="3.500" stroke-linecap="round"/>
+</g>
+
+<!-- what she reads: the compass, the height, the clock; and the engine telegraph -->
+<g id="compass" class="hot"><path d="M884 644q46 -66 92 0z" fill="url(#brassG)"/><rect x="872" y="640" width="116" height="16" rx="4" fill="#6f531a"/><ellipse cx="930" cy="626" rx="26" ry="10" fill="#1e2a2e"/><text x="930" y="631" class="dialT" font-size="15" style="fill:#f6f2e6">E</text></g>
+<g id="altim" class="hot"><circle cx="1090" cy="672" r="44" fill="url(#brassG)"/><circle cx="1090" cy="672" r="35" fill="#f3efe2"/><g stroke="#22201c" stroke-width="2"><path d="M1090 641v7M1121 672h-7M1090 703v-7M1059 672h7"/></g>
+  <path id="altn" d="M1090 672l22 -18" stroke="#b3271f" stroke-width="3.500" stroke-linecap="round"/><circle cx="1090" cy="672" r="4" fill="#22201c"/><text x="1090" y="694" class="dialT" font-size="10">METRES</text></g>
+<g id="clock2" class="hot"><circle cx="1210" cy="672" r="44" fill="url(#brassG)"/><circle cx="1210" cy="672" r="35" fill="#f3efe2"/><path d="M1210 672v-28M1210 672l-21 12" stroke="#22201c" stroke-width="3.500" stroke-linecap="round"/><circle cx="1210" cy="672" r="4" fill="#22201c"/></g>
+<g id="teleg" class="hot"><path d="M1290 700a50 50 0 0 1 100 0z" fill="url(#brassG)"/><path d="M1340 700l24 -62" stroke="#22201c" stroke-width="7" stroke-linecap="round"/><circle cx="1366" cy="634" r="9" fill="#7a1f1f"/><rect x="1282" y="700" width="116" height="14" fill="#6f531a"/></g>
+<!-- two speaking tubes -->
+<g id="tubes" class="hot"><path d="M1470 -400V540q0 30 -22 44" stroke="#8a6a26" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M1540 -400V560q0 30 -22 44" stroke="#8a6a26" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <path d="M1466 -400V540" stroke="#e6c873" stroke-width="4"/><path d="M1536 -400V560" stroke="#e6c873" stroke-width="4"/>
+  <path d="M1456 574l-28 22q-8 14 4 26q16 8 28 -4l16 -32z" fill="#b08a35"/><path d="M1526 594l-28 22q-8 14 4 26q16 8 28 -4l16 -32z" fill="#b08a35"/>
+  <ellipse cx="1440" cy="612" rx="14" ry="10" transform="rotate(38 1440 612)" fill="#1e1509"/><ellipse cx="1510" cy="632" rx="14" ry="10" transform="rotate(38 1510 632)" fill="#1e1509"/></g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Up the ladder</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="mail.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  /* rain past the windows, and the boards of the floor */
+  (function () {
+    var s = '', i;
+    for (i = 0; i < 70; i++) s += '<path d="M' + (60 + (i * 211) % 1400) + ' ' + (0 + (i * 97) % 620) + 'l-8 24"/>';
+    $('#rain').innerHTML = s; s = '';
+    for (i = -14; i <= 14; i++) s += '<path d="M' + (800 + i * 90) + ' 830L' + (800 + i * 250) + ' 1320"/>';
+    $('#planks').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'mail', storyTitle: 'Seven Sacks for Tolver', id: 'gondola', no: 'II', title: 'The Three Sisters',
+    go: 'Look out of the window',
+    intro: [
+      'The plan on the board was this. 1,500 metres across the plain: under the cloud, and with a west wind behind you, where at 1,000 the wind was from the east and in your face. 2,500 over the Windgate: high enough to clear the pass by 300 metres, and at 3,000 the wind was 85, which rule six forbids. Then down to 2,000 at once, to save gas. An hour, half an hour, half an hour: Tolver at eight.',
+      'So far the plan is right to the minute. At seven o&rsquo;clock exactly the railway town of Carrow slides under the gondola, and the mountains stand up in front of you like a wall with its head in the cloud.',
+      'It has rained on you, gently, all the way.'
+    ],
+    exit: {"next":"keel","w":{"e4674d46":"ac7d0e6c"}}, tags: {"p1":["3d3647dc"],"p2":["7ae1bbd8"],"p3":["43af099e"],"p4":["c0e4f0ad"]},
+    sound: ['archive', { root: 50, bpm: 66, drop: ['mel'], beds: [['hum', 0.7], ['wind', 0.45], ['rain', 0.35]] }],      /* two engines, the wind, rain on the glass, and a map to read: no tune */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#window').classList.toggle('ready', !!(told.cap && told.strip && !nextFile));
+    ER.pips((told.cap ? 1 : 0) + (told.strip ? 1 : 0) + (nextFile ? 2 : 0), 4);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The ship is pointing up the right valley. Somebody wants you inside her: the ladder is behind you.']];
+    if (bench && bench.isOpen()) return ['pins', [
+      'The strip map names four marks of the Yar. Find each kind of thing in all three valleys first. Then read what the map says about it, word by word.',
+      'Count the arches of every bridge. Look at the very top of every church. Count the falls. That leaves two phrases to think about: LEFT BANK and NORTH SIDE.',
+      'You are flying east, so north is on your left. And a river&rsquo;s left bank is on ITS left as it runs downhill, which is towards you: so it is on your right. In one valley only, the church is to the right of the river and the quarry to the left.'
+    ]];
+    if (!told.cap) return ['cap', ['The Captain is at the wheel, with her back to you. Ask her what she wants.']];
+    if (!told.strip) return ['strip', ['The strip map is on the chart table on the left, under the lamp. The cat is asleep on one end of it.']];
+    return ['window', ['Now look out of the window, at the three valleys ahead.']];
+  }
+
+  function begin() {
+    MAIL.mine('plan', 'The flight plan', '<p>Leg 1, 70 km: 1,500 m. Wind W 20, behind us: 70 km/h over the ground. 60 minutes.</p><p>Leg 2, 55 km: 2,500 m. Wind W 60, behind us: 110 km/h over the ground. 30 minutes.</p><p>Leg 3, 40 km: 2,000 m. Wind W 30, behind us: 80 km/h over the ground. 30 minutes.</p><p>Cast off 06.00. Tolver at <b>08.00</b>.</p>', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The right-hand valley is in the middle of the window now.'); return; }
+    if (told.in) { busy = false; ER.say('The gondola, over Carrow. Seven o&rsquo;clock, and rain.'); return; }
+    tell('in');
+    ER.narrate([
+      'The gondola is a long wooden room that hangs under the ship&rsquo;s chin, with windows all round it and rain running down every one. The Captain stands at the wheel. The floor hums. Everything smells of petrol, wet canvas and cat.',
+      '&ldquo;Now,&rdquo; says the Captain. &ldquo;Three rivers come out of that wall, side by side, and each of them has a valley. One valley leads to the Windgate. The other two lead to a great deal of rock.&rdquo;',
+      '&ldquo;I know which is which. I have known for thirty-one years. That is exactly when a pilot flies up the wrong one: when she knows. So on this ship the one at the wheel never finds the way alone. The third hand reads the strip map, and checks every mark on it against the window.&rdquo;',
+      '&ldquo;Port is left and starboard is right, when you face the bow. The strip map is on the chart table, under the cat. Read it. Then show me the four marks of the Yar.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the Captain ---------- */
+  $('#capt2').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    if (nextFile) { ER.say('&ldquo;Up the ladder, Clerk,&rdquo; says the Captain, without turning round. &ldquo;And do not step off the plank.&rdquo;'); return; }
+    ER.talk({
+      who: 'Captain Montalvo', role: 'At the wheel · over Carrow', face: window.FACE('mont'),
+      lines: [
+        { note: 'She steers with one hand and wipes the window with the other. It makes no difference to the window.', a: '&ldquo;We are over Carrow at 1,500 metres, heading due east. The cloud begins 300 metres above your hat, and the top of the Windgate is inside it.&rdquo;' },
+        { q: 'Why not just climb?', a: 'Because above the cloud there are no valleys, Clerk. There is a white floor, and it all looks the same. I must go up through it over the right river, pointing the right way. Then I hold my course and count the minutes. If I go up over the wrong river, I count the same minutes, and arrive at a cliff.' },
+        { q: 'What is a strip map?', a: 'A map of one road and nothing else, folded like a fan. Ours is the Windgate road: every mark that I pass, in order, and what it looks like from up here. Driscoll drew the pictures. I wrote the words, so the words are right.' },
+        { q: 'Is there anything I should know?', a: 'Read the little box about banks. A river has its own idea of left and right, and it is not yours. Mr Varley got that wrong in his first week with me. Only once.' }
+      ],
+      clue: { id: 'cap2', title: 'Captain Montalvo, at the wheel', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('cap')) { paint(); ER.say('The strip map is on the chart table on the left. Most of it is under the cat.'); } }
+    });
+  });
+
+  /* ---------- the strip map ---------- */
+  var T = 'font-family="Caveat,cursive" font-size="17" fill="#2b2418" text-anchor="middle"', K = 'stroke="#2b2418" fill="none"', W = 'fill="#a9c8dc" stroke="#3f6a8a" stroke-width="1.5"';
+  var ROAD = '<svg class="road" viewBox="0 0 960 118"><path d="M40 74H914" stroke="#7a1f1f" stroke-width="2.500" stroke-dasharray="9 5" fill="none"/>' +
+    [[0, 40, 46], [40, 252, 252], [70, 411, 376], [125, 702, 662], [165, 914, 914]].map(function (q) { return '<path d="M' + q[1] + ' 67v14" ' + K + ' stroke-width="2"/><text x="' + q[2] + '" y="100" ' + T + '>km ' + q[0] + '</text>'; }).join('') +
+    '<ellipse cx="70" cy="50" rx="26" ry="9" ' + W + '/><path d="M26 62a14 13 0 0 1 28 0z" fill="#6b5a3c"/><text x="60" y="28" ' + T + '>Lowmere</text>' +
+    '<circle cx="238" cy="46" r="11" ' + W + '/><circle cx="268" cy="46" r="11" ' + W + '/><path d="M249 46h8" stroke="#3f6a8a" stroke-width="3"/><text x="253" y="24" ' + T + '>the Spectacles</text>' +
+    '<path d="M411 14q-9 26 4 46t-6 50" stroke="#3f6a8a" stroke-width="2.500" fill="none"/><path d="M396 74h30M400 74v9M407 74v9M415 74v9M422 74v9" ' + K + ' stroke-width="2"/><text x="452" y="62" ' + T + '>Carrow</text>' +
+    '<path d="M486 62l20 -24 18 22 22 -30 22 32 24 -32 22 30" ' + K + ' stroke-width="1.800" stroke-linejoin="round"/><path d="M490 112l18 -20 18 18 20 -22 22 24 24 -24 20 24" ' + K + ' stroke-width="1.800" stroke-linejoin="round"/>' +
+    '<path d="M644 64l26 -46 24 46z" fill="#efe6cc" ' + 'stroke="#2b2418" stroke-width="2.200" stroke-linejoin="round"/><path d="M661 34l9 -16 8 15 -6 5 -5 -5z" fill="#2b2418" opacity=".25"/><text x="596" y="17" ' + T + '>the Widow</text><path d="M630 14l22 12" ' + K + ' stroke-width="1.200"/>' +
+    '<path d="M706 114l10 -26h30l12 26z" fill="#efe6cc" stroke="#2b2418" stroke-width="2.200" stroke-linejoin="round"/><text x="800" y="110" ' + T + '>the Anvil</text>' +
+    '<path d="M695 74v-9l7 -6 7 6v9z" fill="#b5402c" stroke="#2b2418" stroke-width="1.200"/><path d="M724 64v20M728 66l7 3M728 73l7 3M728 80l7 3" ' + K + ' stroke-width="1.800"/><text x="752" y="32" ' + T + '>the Windgate</text><path d="M722 38l-14 22" ' + K + ' stroke-width="1.200"/>' +
+    '<path d="M790 64l16 -18 14 16 18 -20 16 22" ' + K + ' stroke-width="1.800" stroke-linejoin="round"/>' +
+    '<path d="M900 74V40M893 74l7 -34 7 34" ' + K + ' stroke-width="2"/><circle cx="930" cy="50" r="8" ' + K + ' stroke-width="2"/><path d="M930 58v16M922 74h16" ' + K + ' stroke-width="2"/><text x="880" y="28" ' + T + '>Tolver</text>' +
+    '<path d="M946 112V90M941 97l5 -8 5 8" ' + K + ' stroke-width="2"/><text x="946" y="86" ' + T + '>N</text></svg>';
+  var STRIP = '<h4>The Windgate Road<small>strip map &middot; Lowmere to Tolver &middot; words I. Montalvo, pictures D. Driscoll</small></h4>' + ROAD +
+    '<div class="pan"><div><h5>km 40 &middot; The Spectacles</h5><p>Two round lakes joined by a short river, like a pair of glasses left lying on the plain. If you can see them, you are on the road.</p>' +
+    '<p class="bank"><b>LEFT BANK, RIGHT BANK.</b> A river&rsquo;s banks are named as the river sees them. Face the way the water runs: the left bank is on your left. Fly UP a river, and they change sides.</p></div>' +
+    '<div><h5>km 70 &middot; Carrow and the Three Sisters</h5><p>Three rivers come down out of the range side by side: the Lode, the Sallow and the Yar. From the air their valleys look like three sisters. Only the Yar leads to the Windgate. Check all four of its marks before you climb.</p>' +
+    '<p><b>1. THE VIADUCT.</b> The railway crosses the Yar on five tall arches. (The old road bridge, downstream of it, has seven low ones.)</p>' +
+    '<p><b>2. THE CHURCH.</b> Upstream of the viaduct, on the LEFT BANK: a white church with a green spire, standing by itself.</p>' +
+    '<p><b>3. THE QUARRY.</b> On the north side of the valley, facing the church across the river: a white scar in the hill.</p>' +
+    '<p><b>4. THE FALLS.</b> At the head of the valley, just under the cloud: the river falls twice, with a pool between.</p>' +
+    '<p>The other two valleys have bridges, churches, quarries and falls of their own. They are not quite the same, and they end in rock.</p></div>' +
+    '<div><h5>km 125 &middot; The Windgate, 2,100 m</h5><p>The only gap in the range for sixty kilometres. The Widow (3,040 m) stands on its north side, the Anvil (2,880 m) on its south. From Carrow church steer due east.</p>' +
+    '<p>Under you as you cross, from west to east: a frozen tarn, a stone cross on a knoll, the red roof of the Hospice, a wide snowfield, and then the Lip, where the ground stops.</p></div>' +
+    '<div><h5>km 165 &middot; Tolver, 800 m</h5><p>A mast and a wind sock on the field below the mine. No shed. Ground crew: twenty miners of the early shift, who will catch anything.</p></div></div>';
+  $('#stripmap').addEventListener('click', function () {
+    if (busy) return;
+    if (!told.cap) { ER.say('A long map, folded like a fan, with a cat asleep on one end of it. The Captain has something to say first.'); return; }
+    ER.read({ html: STRIP, cls: 'strip', clue: { id: 'strip', title: 'The strip map', kind: 'The Windgate road' }, done: function () {
+      MAIL.words(['strip map', 'viaduct', 'upstream', 'downstream', 'bank', 'spire', 'quarry', 'tarn', 'knoll']);
+      if (tell('strip')) { paint(); ER.say('Four marks: a viaduct, a church, a quarry and the falls. Now the window.'); }
+    } });
+  });
+
+  /* ---------- things in the gondola ---------- */
+  MAIL.thing('#compass', 'compass', 'The compass, under its brass dome. The letter at the front of the card is E: the ship is heading due east.', isBusy);
+  MAIL.thing('#altim', 'altimeter', 'The altimeter shows how high the ship is. Its needle stands at 1,500 metres, and trembles.', isBusy);
+  MAIL.thing('#clock2', null, 'Seven o&rsquo;clock. One hour from Lowmere, as the plan said.', isBusy);
+  MAIL.thing('#teleg', null, 'A brass handle that rings a bell in the engine car, where Mr Nkemelu lives. It stands at FULL.', isBusy);
+  MAIL.thing('#tubes', 'speaking tube', 'Two speaking tubes: brass pipes with a whistle plugged into the end of each. One goes to the engine car and one up into the ship. Blow into your end, and the whistle sounds at the other.', isBusy);
+  MAIL.thing('#cat2', null, 'Ballast is asleep on the Spectacles, with her tail across Lowmere.', isBusy);
+  MAIL.thing('#wheelbox', 'rudder', 'The wheel turns the rudder, and the rudder turns the ship. The Captain holds it the way other people hold a cup of tea.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#window').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Seven low arches, five tall ones, a green spire: the Yar, coming up the middle of the window.'); return; }
+    if (!told.cap) { ER.say('Rain, cloud, and a wall of mountains with its head in the cloud. The Captain is waiting to tell you what to look for.'); return; }
+    if (!told.strip) { ER.say('&ldquo;The strip map first, Clerk,&rdquo; says the Captain. &ldquo;On the chart table. Under the cat.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the window: four pins from the strip map, each on the thing it names ---------- */
+  function makeBench() {
+    var VX = { a: 190, b: 500, c: 810 }, KINDS = ['via', 'church', 'quarry', 'falls'], PINNAME = ['the viaduct', 'the church', 'the quarry', 'the falls'],
+      KNAME = { via: 'a bridge', church: 'a church', quarry: 'a quarry', falls: 'a waterfall' }, SIDE = { a: 'port', b: 'middle', c: 'starboard' },
+      HOT = { 'a-via': [196, 386, 'via'], 'a-church': [134, 316, 'church'], 'a-quarry': [268, 268, 'quarry'], 'a-falls': [191, 184, 'falls'],
+        'b-via': [506, 386, 'via'], 'b-church': [548, 316, 'church'], 'b-quarry': [578, 264, 'quarry'], 'b-falls': [501, 184, 'falls'],
+        'c-bridge': [812, 482, 'via'], 'c-via': [816, 386, 'via'], 'c-church': [858, 316, 'church'], 'c-quarry': [732, 268, 'quarry'], 'c-falls': [811, 184, 'falls'] },
+      pins = ER.flag('b-pins') || {}, sel = 0, wait = false, box = ER.el('div', 'bx view'), s, k, i;
+    function bridge(x, y, n, w, h) {
+      var pw = 3, ow = (w - (n + 1) * pw) / n, r = ow / 2, o = '<rect x="' + (x - w / 2) + '" y="' + (y - h) + '" width="' + w + '" height="' + h + '" fill="#cfc7b2"/>', j, ox;
+      for (j = 0; j < n; j++) { ox = x - w / 2 + pw + j * (ow + pw); o += '<path d="M' + ox.toFixed(1) + ' ' + y + 'V' + (y - h + r + 4).toFixed(1) + 'a' + r.toFixed(1) + ' ' + r.toFixed(1) + ' 0 0 1 ' + ow.toFixed(1) + ' 0V' + y + 'Z" fill="#42514f"/>'; }
+      return o + '<rect x="' + (x - w / 2 - 5) + '" y="' + (y - h - 4) + '" width="' + (w + 10) + '" height="4" fill="#8d8672"/>';
+    }
+    function church(x, y, dome) {
+      return '<g transform="translate(' + x + ' ' + y + ') scale(1.3) translate(' + (-x) + ' ' + (-y) + ')"><ellipse cx="' + (x - 4) + '" cy="' + (y + 2) + '" rx="34" ry="7" fill="#58694f"/><rect x="' + (x - 10) + '" y="' + (y - 13) + '" width="26" height="13" fill="#f6f3ea"/><path d="M' + (x - 12) + ' ' + (y - 13) + 'l15 -10 15 10z" fill="#6b6f76"/>' +
+        '<rect x="' + (x - 22) + '" y="' + (y - 28) + '" width="12" height="28" fill="#f6f3ea"/>' +
+        (dome ? '<path d="M' + (x - 24) + ' ' + (y - 28) + 'a8 9 0 0 1 16 0z" fill="#2f7a4f"/><circle cx="' + (x - 16) + '" cy="' + (y - 38) + '" r="1.800" fill="#2f7a4f"/>' : '<path d="M' + (x - 24) + ' ' + (y - 28) + 'l8 -27 8 27z" fill="#2f7a4f"/>') + '</g>';
+    }
+    function quarry(x, y) { return '<path d="M' + (x - 28) + ' ' + (y + 15) + 'l8 -25 16 -9 23 10 9 24z" fill="#eef0ea" stroke="#9aa0a6" stroke-width="1.200"/><path d="M' + (x - 21) + ' ' + (y + 3) + 'h42M' + (x - 15) + ' ' + (y - 8) + 'h32" stroke="#9aa0a6" stroke-width="1.600"/>'; }
+    function falls(x, twice) {
+      return '<path d="M' + (x - 26) + ' 146h52v72h-52z" fill="#3a4550"/>' + (twice ? '<path d="M' + x + ' 150V176M' + (x + 4) + ' 187V214" stroke="#fff" stroke-width="6" stroke-linecap="round"/><ellipse cx="' + (x + 2) + '" cy="182" rx="11" ry="4.500" fill="#9fc3d9" stroke="#e9f2f7" stroke-width="1"/>' :
+        '<path d="M' + x + ' 150V214" stroke="#fff" stroke-width="6" stroke-linecap="round"/>') + '<ellipse cx="' + (x + 2) + '" cy="217" rx="13" ry="4" fill="#e9f2f7" opacity=".8"/>';
+    }
+    s = '<svg viewBox="0 0 1000 540"><rect width="1000" height="540" fill="#7d8468"/><path d="M0 110H1000V348H0Z" fill="#46525e"/>' +
+      '<g fill="#525f6b"><path d="M0 348l40 -200 30 200zM300 348l44 -210 40 210zM610 348l46 -214 38 214zM920 348l50 -200 30 200z"/></g>' +
+      '<g stroke="#39444e" stroke-width="2.500" fill="none"><path d="M60 140l-30 208M330 140l-40 208M370 140l30 208M640 140l-36 208M680 140l30 208M950 140l-30 208"/></g>';
+    for (k in VX) s += '<path d="M' + (VX[k] - 100) + ' 348L' + (VX[k] - 24) + ' 146h48L' + (VX[k] + 100) + ' 348Z" fill="#67786d"/><path d="M' + (VX[k] - 100) + ' 348L' + (VX[k] - 24) + ' 146h14L' + (VX[k] - 56) + ' 348Z" fill="#596a60"/>';
+    s += '<g fill="#8b9070"><path d="M20 380l150 -8 20 50 -160 12zM330 372l120 -4 16 60 -130 6zM610 440l140 -8 10 60 -150 8zM880 366l110 -6 10 60 -116 4zM40 470l110 -4 10 60 -116 6z"/></g>' +
+      '<g fill="#6f7a5a"><path d="M250 440l130 -8 14 70 -140 8zM560 370l40 -2 6 50 -44 2zM900 450l90 -4v80l-84 4z"/></g>';
+    for (k in VX) s += '<path d="M' + VX[k] + ' 214C' + (VX[k] - 22) + ' 250 ' + (VX[k] + 22) + ' 280 ' + (VX[k] - 4) + ' 322S' + (VX[k] + 28) + ' 384 ' + (VX[k] + 6) + ' 424S' + (VX[k] - 24) + ' 486 ' + (VX[k] - 6) + ' 540" stroke="#cfe0ea" stroke-width="6" fill="none" stroke-linecap="round"/>';
+    s += '<path d="M0 484q250 -10 500 -2t500 -8" stroke="#b9a882" stroke-width="4" fill="none"/><path d="M0 390q250 -10 500 -4t500 -8" stroke="#2c2c2a" stroke-width="2.600" fill="none"/><path d="M0 390q250 -10 500 -4t500 -8" stroke="#2c2c2a" stroke-width="7" fill="none" stroke-dasharray="1.500 9"/>' +
+      bridge(196, 404, 5, 112, 38) + bridge(506, 404, 5, 112, 38) + bridge(816, 404, 5, 112, 38) + bridge(812, 490, 7, 130, 14) +
+      '<rect x="162" y="478" width="44" height="7" fill="#8d8672"/><rect x="472" y="481" width="44" height="7" fill="#8d8672"/>' +
+      church(138, 334, false) + church(552, 334, true) + church(862, 334, false) + quarry(268, 268) + quarry(578, 264) + quarry(732, 268) + falls(190, true) + falls(500, false) + falls(810, true) +
+      '<g fill="#9c5a45"><rect x="640" y="500" width="18" height="11"/><rect x="664" y="506" width="20" height="11"/><rect x="622" y="512" width="16" height="10"/><rect x="690" y="494" width="16" height="10"/><rect x="650" y="520" width="22" height="11"/><rect x="700" y="512" width="18" height="11"/></g><rect x="676" y="470" width="8" height="26" fill="#cfc7b2"/>' +
+      '<path d="M0 0H1000V126q-60 24 -130 4t-140 12 -150 -8 -160 14 -150 -12 -140 10 -130 -8z" fill="#8f9aa2"/><path d="M0 0H1000V84q-120 26 -260 4t-250 10 -250 -12 -240 8z" fill="#a4aeb4"/>' +
+      '<g class="vrain" stroke="#eef3f5" stroke-width="1.300">';
+    for (i = 0; i < 60; i++) s += '<path d="M' + ((i * 173) % 1060) + ' ' + ((i * 89) % 520 - 60) + 'l-7 22"/>';
+    s += '</g><g transform="translate(64 478)"><circle r="44" fill="#22201c" opacity=".55"/><circle r="38" fill="none" stroke="#e6c873" stroke-width="3"/><path d="M0 -38v12" stroke="#e6c873" stroke-width="3"/>' +
+      '<g font-family="Josefin Sans,sans-serif" font-weight="700" font-size="17" fill="#f6f2e6" text-anchor="middle"><text y="-8" fill="#ffd98a">E</text><text x="-24" y="8">N</text><text x="24" y="8">S</text><text y="26">W</text></g></g>' +
+      '<rect width="1000" height="540" fill="none" stroke="#5a3f26" stroke-width="14"/><g id="b-hot">';
+    for (k in HOT) s += '<g class="hs" data-id="' + k + '"><circle cx="' + HOT[k][0] + '" cy="' + HOT[k][1] + '" r="' + (HOT[k][2] === 'via' ? 26 : 23) + '"/></g>';
+    s += '</g><g id="b-pins" pointer-events="none"></g></svg>';
+    box.innerHTML = '<div class="frame">' + s + '</div><div class="bx-foot"><p class="pmsg"></p>' +
+      PINNAME.map(function (n, j) { return '<button type="button" class="pinb" data-k="' + (j + 1) + '"><i>' + (j + 1) + '</i>' + n + '</button>'; }).join('') + '<button type="button" class="btn" id="b-go">Show the Captain</button></div>';
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#b-go'), layer = box.querySelector('#b-pins'), btns = ER.$$('.pinb', box);
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() {
+      var o = '';
+      for (k = 1; k <= 4; k++) if (pins[k]) o += '<g class="pn" transform="translate(' + HOT[pins[k]][0] + ' ' + HOT[pins[k]][1] + ')"><path d="M0 0v-22"/><circle cy="-33" r="13"/><text y="-28">' + k + '</text></g>';
+      layer.innerHTML = o;
+      btns.forEach(function (b, j) { b.classList.toggle('sel', sel === j + 1); b.classList.toggle('put', !!pins[j + 1] && sel !== j + 1); });
+    }
+    function hold(n) { sel = n; draw(); if (n) msg('Pin ' + n + ', ' + PINNAME[n - 1] + '. Now click the thing in the window that it belongs on.'); }
+    btns.forEach(function (b, j) { b.addEventListener('click', function () { if (wait) return; ER.sfx.click(); hold(j + 1); }); });
+    box.querySelector('#b-hot').addEventListener('click', function (e) {
+      var g = e.target.closest ? e.target.closest('.hs') : null, id, on = 0, nx = 0;
+      if (!g || wait) return;
+      id = g.getAttribute('data-id');
+      for (k = 1; k <= 4; k++) if (pins[k] === id) on = k;
+      if (!sel) {
+        if (on) { delete pins[on]; ER.flag('b-pins', pins); hold(on); } else msg('Take a pin from the row below first: 1, 2, 3 or 4. Then click here again.');
+        return;
+      }
+      if (on && on !== sel) delete pins[on];
+      pins[sel] = id; ER.flag('b-pins', pins); MAIL.sfx.pin();
+      for (k = 4; k >= 1; k--) if (!pins[k]) nx = k;
+      sel = 0; draw();
+      if (nx) hold(nx); else msg('Four pins in the window. Change any of them you like: click a pin to pick it up again. Then show the Captain.');
+    });
+
+    var C = '&rdquo; says the Captain. &ldquo;', WHY = {
+      'a-via': '&ldquo;Five tall arches: so far, so good,' + C + 'All three sisters have five tall arches somewhere. Look hard at the church in that valley before you trust its bridge.&rdquo;',
+      'a-church': '&ldquo;Left bank,' + C + 'Whose left? Read the little box about banks. Which way is that river running: towards us, or away from us?&rdquo;',
+      'a-quarry': '&ldquo;We are flying east, Clerk, so north is to port: on your left hand,' + C + 'Which side of its valley is that quarry on?&rdquo;',
+      'a-falls': '&ldquo;It falls twice, with a pool between: I grant you,' + C + 'So does one of its sisters. A waterfall proves nothing by itself. Look at the church in that valley.&rdquo;',
+      'b-via': '&ldquo;Five tall arches. Yes,' + C + 'So have the other two. Look at the church upstream of it. Look at the very top of the church.&rdquo;',
+      'b-church': '&ldquo;Look at the top of that church,' + C + 'A spire is a point. That is a pudding.&rdquo;',
+      'b-quarry': '&ldquo;The quarry FACES the church across the river,' + C + 'Is that one across the river from its church, or next door to it?&rdquo;',
+      'b-falls': '&ldquo;Count the falls,' + C + 'The Yar falls twice, with a pool between.&rdquo;',
+      'c-bridge': '&ldquo;Count the arches,' + C + 'And see how low they are. Which of those two bridges is downstream of the other? Downstream is the way the water goes: towards us.&rdquo;'
+    };
+    go.addEventListener('click', function () {
+      var ids = [], file, side;
+      if (wait || nextFile) return;
+      for (k = 1; k <= 4; k++) { if (!pins[k]) { msg('Four marks, four pins. Take a pin from the row below, and then click the thing in the window that it belongs on.'); return; } ids.push(pins[k]); }
+      for (k = 1; k <= 4; k++) if (HOT[pins[k]][2] !== KINDS[k - 1]) { ER.sfx.no(); msg('&ldquo;Pin ' + k + ' is for ' + PINNAME[k - 1] + ', Clerk,' + C + 'That is ' + KNAME[HOT[pins[k]][2]] + '.&rdquo;'); return; }
+      for (k = 1; k <= 4; k++) if (!ER.check('p' + k, pins[k])) { ER.sfx.no(); msg('<b>Pin ' + k + '.</b> ' + (WHY[pins[k]] || '&ldquo;Why that one?&rdquo; asks the Captain.')); return; }
+      file = ER.exit([ids.join('|')], { wait: true });
+      if (!file) { msg('The pins will not hold. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('b-file', file); side = SIDE[ids[0].charAt(0)];
+      MAIL.mine('yar', 'Which valley is the Yar', '<p>The ' + side + ' valley of the three.</p><p>Five tall arches, upstream of seven low ones. A green spire on the river&rsquo;s left bank: our right, because we were flying up the river. The quarry on the north side, facing the church. Two falls, with a pool between.</p>', true);
+      msg('&ldquo;The ' + side + ' valley,' + C + 'Five arches above seven. A spire on the river&rsquo;s left bank, which is our right hand. The quarry to the north of it. Two falls. That is the Yar, Clerk, and now two of us know it.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'The Captain turns the wheel a little to starboard, and the right-hand valley swings into the middle of the window: seven low arches, five tall ones, a green spire.',
+          'Then one of the brass tubes on the wall whistles. She pulls the plug out with her teeth. A small tin voice says: &ldquo;Captain? Nkemelu. You will not like this. She is heavy.&rdquo;',
+          '&ldquo;How heavy?&rdquo; &ldquo;Come-and-look heavy. An hour of rain is sitting in her skin, and you want a thousand metres out of her.&rdquo;',
+          'The Captain puts the plug back. &ldquo;Up the ladder behind you, Clerk, and into the ship. Do exactly what Mr Nkemelu tells you. And do not step off the plank: the floor in there is cloth.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 3600);
+    });
+    for (k = 4; k >= 1; k--) if (!pins[k]) sel = k;
+    draw();
+    msg('Three valleys, and the cloud sitting on all of them. The compass card in the corner shows which way you are looking. ' + (sel ? 'Pin ' + sel + ', ' + PINNAME[sel - 1] + ', is in your hand: click the thing in the window that it belongs on.' : 'Your four pins are in. Click one to pick it up again.'));
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

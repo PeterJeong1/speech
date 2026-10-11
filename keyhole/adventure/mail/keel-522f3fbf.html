@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Inside the Ship · Seven Sacks for Tolver</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="mail.css">
+<style>
+  body{--bg:#241a0e;--accent:#f2d27a;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(30,22,12,.95);--tc-ink:#f6ecd2;--cap-bg:rgba(26,19,10,.93);--panel:#2c2112;--face-bg:#8a6f3a;--q-ink:#f2d99a;--fade:#140e06;--hud-bg:rgba(26,19,10,.8)}
+  .stn{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .bag{animation:breathe 6s ease-in-out infinite alternate;transform-origin:800px 430px}
+  .bag.b{animation-duration:7.5s;animation-delay:-3s}
+  @keyframes breathe{to{transform:scale(1.012)}}
+  .drip{animation:drip 2.9s ease-in infinite;opacity:0}
+  .drip.b{animation-delay:-1.3s;animation-duration:3.7s}
+  @keyframes drip{0%{transform:translateY(0);opacity:0}10%{opacity:.9}90%{opacity:.9}100%{transform:translateY(420px);opacity:0}}
+  #shaft{animation:shaft 4.4s steps(1,end) infinite}
+  @keyframes shaft{0%{opacity:.2}40%{opacity:.14}70%{opacity:.22}}
+  #sheet.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3)}}
+  #ctail{transform-origin:776px 806px;animation:tail 3.1s ease-in-out infinite alternate}
+  @keyframes tail{from{transform:rotate(-10deg)}to{transform:rotate(12deg)}}
+  body.gone #grap,body.gone #prop,body.gone #lines3,body.gone #trunk,body.gone #six{display:none}
+
+  /* the load sheet on its clipboard, a red crayon, and a spring balance */
+  .bx.ld{width:min(1060px,96vw)}
+  .ld .two{display:grid;grid-template-columns:1fr 214px;gap:0 14px;align-items:start}
+  .ld .clip{background:#f1e9cf linear-gradient(175deg,rgba(255,255,255,.4),rgba(130,100,40,.12));color:#241f16;padding:9px 16px 8px;border-top:20px solid #4a3a26;box-shadow:0 20px 50px rgba(0,0,0,.6);font-family:'Special Elite','Courier New',monospace;font-size:13px;line-height:1.2}
+  .ld h4{margin:0 0 2px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:20px;letter-spacing:.1em}
+  .ld .sub{margin:0 0 3px;border-bottom:2px solid #241f16;padding-bottom:3px}
+  .ld .hand,.ld .pencil{font-family:'Caveat',cursive;font-size:18px;line-height:1;color:#1d2a55}
+  .ld .pencil{color:#4d4d55}
+  .ld table{width:100%;border-collapse:collapse}
+  .ld td{padding:2px 8px 0 0;border-bottom:1px dotted #9c8b68;vertical-align:middle}
+  .ld td.it{font-weight:bold;white-space:nowrap}
+  .ld td.kg{white-space:nowrap;text-align:right;font-weight:bold}
+  .ld td.fo{font-family:'Caveat',cursive;font-size:17.5px;line-height:.98;color:#3a3530;padding-top:1px;padding-bottom:2px}
+  .ld td.fo.own{color:#1d2a55}
+  .ld td.ct{width:74px;padding-right:0;text-align:right;white-space:nowrap}
+  .ld tr.row{cursor:pointer}
+  .ld tr.row:hover td{background:rgba(200,64,44,.07)}
+  .ld tr.out td.it,.ld tr.out td.kg{text-decoration:line-through;text-decoration-color:#c8402c;text-decoration-thickness:3px;color:#8a2a1c}
+  .ld .tick{display:inline-block;width:26px;height:24px;border:2px solid #8a7f62;border-radius:3px;vertical-align:middle;position:relative}
+  .ld tr.out .tick{border-color:#c8402c}
+  .ld tr.out .tick:after{content:'';position:absolute;left:3px;top:-5px;width:16px;height:24px;border:solid #c8402c;border-width:0 5px 5px 0;transform:rotate(40deg) skewX(8deg);border-radius:2px}
+  .ld .stp{display:inline-flex;align-items:center;gap:2px}
+  .ld .stp button{width:22px;height:24px;border:2px solid #8a7f62;border-radius:3px;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:16px;line-height:20px;color:#5a5346}
+  .ld .stp button:hover{border-color:#c8402c;color:#c8402c}
+  .ld .stp b{display:inline-block;width:20px;text-align:center;font-family:'Caveat',cursive;font-size:25px;line-height:22px;color:#c8402c}
+  .ld .foot{margin:4px 0 0}
+  .ld .side{display:grid;gap:10px;justify-items:center}
+  .ld .side svg{width:214px;height:auto}
+  .ld .side .btn{background:rgba(0,0,0,.45);text-align:center;line-height:1.3}
+  .ld .bx-foot{min-height:54px;margin-top:7px}
+  .dl-num{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:13px;fill:#22201c;text-anchor:middle}
+  #c-needle{transition:transform .5s cubic-bezier(.3,1.5,.5,1);transform-origin:0 0}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <radialGradient id="bagG" cx="50%" cy="42%" r="60%"><stop offset="0" stop-color="#f6e6b4"/><stop offset=".6" stop-color="#e2c98a"/><stop offset="1" stop-color="#b3964f"/></radialGradient>
+  <radialGradient id="farG"><stop offset="0" stop-color="#fff1c4" stop-opacity=".9"/><stop offset="1" stop-color="#fff1c4" stop-opacity="0"/></radialGradient>
+  <linearGradient id="hatchG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f7"/><stop offset="1" stop-color="#b9c2c8"/></linearGradient>
+  <linearGradient id="shaftG" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#eef3f5" stop-opacity=".9"/><stop offset="1" stop-color="#eef3f5" stop-opacity="0"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".85"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#241a0e"/>
+<g id="cells" class="hot"></g>
+<circle cx="800" cy="430" r="120" fill="url(#farG)" pointer-events="none"/>
+<g id="floor"></g>
+<g id="frames" fill="none" stroke="#3a2a16" stroke-linecap="round" pointer-events="none"></g>
+
+<!-- on the port side: sand, petrol, a propeller, a grapnel -->
+<g id="prop" class="hot"><path d="M640 524q-22 -60 12 -96q10 44 -12 96zM640 524q24 56 -6 96q-14 -44 6 -96z" fill="#9a6a34" stroke="#5a3a1a" stroke-width="2"/><circle cx="640" cy="524" r="8" fill="#5a3a1a"/><path d="M630 450l22 8M628 598l22 -8" stroke="#d9d2bd" stroke-width="3"/></g>
+<g id="tanks" class="hot"><path d="M500 396h150" stroke="#3a2a16" stroke-width="5"/><g id="tankrow"></g></g>
+<g id="grap" class="hot"><path d="M250 150v180" stroke="#c9bfa3" stroke-width="5"/><path d="M250 330v60M250 390q-50 6 -56 -40M250 390q50 6 56 -40M250 390q-20 30 -50 26M250 390q20 30 50 26" stroke="#59616a" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="250" cy="330" r="9" fill="none" stroke="#59616a" stroke-width="5"/></g>
+<g id="sand" class="hot"><path d="M300 520h260" stroke="#3a2a16" stroke-width="7"/><g id="sandrow"></g></g>
+<g id="lines3" class="hot"><ellipse cx="190" cy="800" rx="74" ry="26" fill="none" stroke="#c9bfa3" stroke-width="13"/><ellipse cx="190" cy="786" rx="70" ry="24" fill="none" stroke="#b3a886" stroke-width="12"/><ellipse cx="330" cy="822" rx="62" ry="22" fill="none" stroke="#c9bfa3" stroke-width="12"/>
+  <path d="M130 846l44 4 -4 30 -44 -4z" fill="#e6d7ae"/><text x="150" y="870" class="stn" font-size="13" fill="#3a3024" transform="rotate(5 150 870)">SHED</text></g>
+
+<!-- on the starboard side: the mail, the parachutes, the trail rope, a crate, a trunk -->
+<g id="rope" class="hot"><ellipse cx="972" cy="486" rx="30" ry="40" fill="none" stroke="#c9b98a" stroke-width="13"/><ellipse cx="972" cy="486" rx="20" ry="30" fill="none" stroke="#a8956a" stroke-width="5"/><path d="M972 440v-26" stroke="#3a2a16" stroke-width="5"/></g>
+<g id="chutes" class="hot"><path d="M1010 420h170" stroke="#3a2a16" stroke-width="5"/><g id="chuterow"></g></g>
+<g id="sacks3" class="hot"><g id="sackrow3"></g>
+  <path d="M1296 470v40" stroke="#c9bfa3" stroke-width="3"/><path d="M1270 590q-8 -50 12 -62q6 -8 2 -16h30q-4 8 2 16q20 12 12 62z" fill="#6f7780"/><rect x="1280" y="504" width="38" height="13" rx="6.500" fill="#c8402c"/></g>
+<g id="crate3" class="hot"><path d="M1360 720h170v124h-170z" fill="#7a5a36"/><path d="M1360 760h170M1360 804h170M1404 720v124M1486 720v124" stroke="#4a3219" stroke-width="3"/><text x="1445" y="776" class="stn" font-size="19" fill="#2a1c0e">TOLVER</text><text x="1445" y="798" class="stn" font-size="19" fill="#2a1c0e">MINE</text></g>
+<g id="trunk" class="hot"><path d="M1150 770h180v92h-180z" fill="#5a2f22"/><path d="M1150 770q90 -30 180 0z" fill="#6e3a2a"/><path d="M1150 800h180" stroke="#3a1c14" stroke-width="4"/><rect x="1228" y="792" width="24" height="18" fill="#c9a24a"/><path d="M1180 770v92M1300 770v92" stroke="#c9a24a" stroke-width="5"/><text x="1240" y="842" class="stn" font-size="18" fill="#e6c873">I.M.</text></g>
+
+<!-- the hatch, the light that comes up through it, and six bags of sand ready to go -->
+<path id="shaft" d="M852 678L1004 754L1040 250L900 250Z" fill="url(#shaftG)" pointer-events="none"/>
+<g id="hatch" class="hot"><path d="M856 678h96l52 76H876z" fill="url(#hatchG)" stroke="#3a2a16" stroke-width="6" stroke-linejoin="round"/><path d="M870 700q40 -10 80 4M884 730q50 -12 100 6" stroke="#fff" stroke-width="4" fill="none" opacity=".8"/>
+  <path d="M952 678l40 -70 50 80 -38 66z" fill="#6b4a2a" stroke="#3a2a16" stroke-width="4" stroke-linejoin="round"/></g>
+<g id="six" class="hot"><path d="M884 566h140" stroke="#3a2a16" stroke-width="5"/><g id="sixrow"></g></g>
+
+<!-- Mr Nkemelu, holding the load sheet up to the light -->
+<g id="eng" class="hot" transform="translate(790 690)">
+  <ellipse cx="0" cy="2" rx="56" ry="7" fill="#000" opacity=".4"/>
+  <path d="M-16 0v-86h13V0zM4 0v-86h13V0z" fill="#234a72"/><path d="M-22 0h22v8h-25zM1 0h22v8h-20z" fill="#17120d"/>
+  <path d="M-32 -80q-8 -96 32 -104t36 104z" fill="#2f5d8c"/><path d="M-20 -150v70M20 -150v70" stroke="#234a72" stroke-width="7"/><path d="M-20 -128h40v48h-40z" fill="#366a9e"/>
+  <path d="M-26 -166q-20 30 -12 64" stroke="#2a5480" stroke-width="14" fill="none" stroke-linecap="round"/><circle cx="-38" cy="-98" r="8" fill="#6b4423"/>
+  <path d="M26 -168q30 -6 44 -34" stroke="#2f5d8c" stroke-width="14" fill="none" stroke-linecap="round"/><circle cx="72" cy="-206" r="8" fill="#6b4423"/>
+  <path d="M-30 -176q-16 4 -26 30l14 6q6 -18 18 -22z" fill="#c9bfa3"/>
+  <rect x="-5" y="-200" width="12" height="14" fill="#5a3a1f"/><circle cx="1" cy="-214" r="20" fill="#6b4423"/><path d="M-19 -218q2 -20 20 -20t20 20q-10 -8 -20 -8t-20 8z" fill="#1c1410"/>
+  <path d="M3 -214h6M13 -214h5" stroke="#1c1410" stroke-width="2.400"/><path d="M4 -204q6 4 12 0" stroke="#f7f1e6" stroke-width="2.400" fill="none"/>
+</g>
+<g id="sheet" class="hot"><circle cx="872" cy="456" r="46" fill="#fff" opacity="0"/><path d="M846 418l56 -8 8 78 -56 8z" fill="#4a3a26"/><path d="M851 426l46 -6 7 64 -46 6z" fill="#f1e9cf"/><g stroke="#3a3024" stroke-width="1.600"><path d="M857 436l34 -5M858 445l34 -5M859 454l34 -5M860 463l34 -5M861 472l24 -4"/></g><path d="M866 414l16 -3 1 8 -16 3z" fill="#8a8f93"/></g>
+
+<!-- the cat, and the rain coming through -->
+<g id="cat3" class="hot"><path id="ctail" d="M776 806q-34 4 -40 -22" stroke="#d98a3c" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M770 812q-6 -44 22 -50q30 4 26 50z" fill="#d98a3c"/><circle cx="794" cy="756" r="16" fill="#d98a3c"/><path d="M782 746l-2 -14 12 8zM798 742l8 -12 4 14z" fill="#d98a3c"/>
+  <path d="M787 756h5M798 756h5" stroke="#3a2010" stroke-width="2.200"/><path d="M790 764l4 2 4 -2" stroke="#f6f3ea" stroke-width="2.600" fill="none"/><path d="M782 790q10 6 22 0" stroke="#b56a22" stroke-width="4" fill="none"/></g>
+<g fill="#cfe0ea" pointer-events="none"><ellipse class="drip" cx="420" cy="230" rx="3" ry="6"/><ellipse class="drip b" cx="1180" cy="200" rx="3" ry="6"/><ellipse class="drip b" cx="700" cy="130" rx="2.500" ry="5"/></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Hold on to the rope</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="mail.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  /* the inside of an airship: ribs running away to a point, gas cells bulging between them, and what hangs on the hooks */
+  (function () {
+    var S = [1.25, 0.8, 0.52, 0.34, 0.22, 0.145, 0.095], VX = 800, VY = 430, s = '', i, m, w, n = 0;
+    function f(v) { return v.toFixed(1); }
+    for (i = S.length - 2; i >= 0; i--) {
+      m = (S[i] + S[i + 1]) / 2;
+      [-1, 1].forEach(function (d) {
+        var cx = VX + d * 610 * m, cy = VY - 120 * m;
+        s += '<g class="' + (m < 0.5 ? 'bag' + (i % 2 ? ' b' : '') : '') + '"><ellipse cx="' + f(cx) + '" cy="' + f(cy) + '" rx="' + f(330 * m) + '" ry="' + f(520 * m) + '" fill="url(#bagG)"/>' +
+          '<path d="M' + f(cx - 120 * m) + ' ' + f(cy - 480 * m) + 'q' + f(-90 * m) + ' ' + f(480 * m) + ' 0 ' + f(960 * m) + 'M' + f(cx + 120 * m) + ' ' + f(cy - 480 * m) + 'q' + f(90 * m) + ' ' + f(480 * m) + ' 0 ' + f(960 * m) + '" stroke="#b3964f" stroke-width="' + f(Math.max(1, 3 * m)) + '" fill="none" opacity=".6"/></g>';
+      });
+      s += '<ellipse cx="800" cy="' + f(VY - 660 * m) + '" rx="' + f(380 * m) + '" ry="' + f(250 * m) + '" fill="url(#bagG)"/>';
+    }
+    $('#cells').innerHTML = s;
+    s = '<path d="M' + (VX - 87.5) + ' 930H' + (VX - 537.5) + 'L800 430Z" fill="#5c4a26"/><path d="M' + (VX + 87.5) + ' 930H' + (VX + 537.5) + 'L800 430Z" fill="#544322"/><path d="M' + (VX - 87.5) + ' 930h175L800 430Z" fill="#8a6a3c"/>';
+    S.forEach(function (v) { s += '<path d="M' + f(VX - 70 * v) + ' ' + f(VY + 400 * v) + 'h' + f(140 * v) + '" stroke="#5a4220" stroke-width="' + f(Math.max(1, 3 * v)) + '"/>'; });
+    s += '<path d="M' + (VX - 118.75) + ' ' + (VY + 312.5) + 'L800 430L' + (VX + 118.75) + ' ' + (VY + 312.5) + '" stroke="#d9c9a0" stroke-width="3" fill="none"/>';
+    $('#floor').innerHTML = s; s = '';
+    S.forEach(function (v) {
+      w = Math.max(2, 20 * v);
+      s += '<path d="M' + f(VX - 430 * v) + ' ' + f(VY + 400 * v) + 'L800 ' + f(VY - 520 * v) + 'L' + f(VX + 430 * v) + ' ' + f(VY + 400 * v) + 'M' + f(VX - 215 * v) + ' ' + f(VY - 60 * v) + 'h' + f(430 * v) + '" stroke-width="' + f(w) + '" stroke-linejoin="round"/>' +
+        '<path d="M' + f(VX - 95 * v) + ' ' + f(VY + 250 * v) + 'L' + f(VX - 75 * v) + ' ' + f(VY + 400 * v) + 'M' + f(VX + 95 * v) + ' ' + f(VY + 250 * v) + 'L' + f(VX + 75 * v) + ' ' + f(VY + 400 * v) + '" stroke-width="' + f(Math.max(1.5, 6 * v)) + '"/>';
+    });
+    s += '<path d="M800 -220V430M262.500 930L800 430L1337.500 930M531 355L800 430L1069 355" stroke-width="4"/>';
+    $('#frames').innerHTML = s; s = '';
+    [512, 548, 584, 620].forEach(function (x) { s += '<path d="M' + (x + 13) + ' 396v10" stroke="#22201c" stroke-width="3"/><rect x="' + x + '" y="404" width="26" height="74" rx="10" fill="#8d949c"/><rect x="' + x + '" y="412" width="26" height="9" fill="#b3271f"/><path d="M' + (x + 6) + ' 430v40" stroke="#b9c0c8" stroke-width="3"/>'; });
+    $('#tankrow').innerHTML = s; s = '';
+    function bag(x, y, k, lab) {
+      return '<g transform="translate(' + x + ' ' + y + ') scale(' + k + ')"><path d="M-4 0h8v16q26 18 22 62q-4 30 -26 30t-26 -30q-4 -44 22 -62z" fill="#c9b98a" stroke="#8a7a50" stroke-width="2"/><path d="M-8 18h16" stroke="#8a7a50" stroke-width="3"/>' +
+        (lab ? '<text y="76" class="stn" font-size="26" fill="#5a4a26">' + lab + '</text>' : '') + '</g>';
+    }
+    [330, 394, 458, 522].forEach(function (x, j) { s += bag(x, 522, 1, j + 1); });
+    $('#sandrow').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) s += bag(896 + i * 23, 567, 0.42, '');
+    $('#sixrow').innerHTML = s; s = '';
+    [1030, 1072, 1114, 1156].forEach(function (x) { s += '<path d="M' + (x + 16) + ' 420v10" stroke="#22201c" stroke-width="3"/><rect x="' + x + '" y="428" width="32" height="44" rx="7" fill="#b9a36a"/><path d="M' + x + ' 440l32 20M' + (x + 32) + ' 440l-32 20" stroke="#6b5a30" stroke-width="3"/><rect x="' + (x + 11) + '" y="444" width="10" height="10" fill="#c8402c"/>'; });
+    $('#chuterow').innerHTML = s; s = '';
+    function sack(x, b) {
+      n++;
+      return '<path d="M' + x + ' ' + b + 'q-10 -66 14 -84q8 -10 2 -16h40q-6 6 2 16q24 18 14 84z" fill="#8d949c"/><path d="M' + (x + 14) + ' ' + (b - 84) + 'h44" stroke="#5c636b" stroke-width="4"/><text x="' + (x + 36) + '" y="' + (b - 34) + '" class="stn" font-size="17" fill="#2c3138" opacity=".75">P.O.</text>';
+    }
+    [1076, 1150, 1224].forEach(function (x) { s += sack(x, 706); });
+    [1112, 1186].forEach(function (x) { s += sack(x, 624); });
+    $('#sackrow3').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'mail', storyTitle: 'Seven Sacks for Tolver', id: 'keel', no: 'III', title: 'Inside the Ship',
+    go: 'Climb the ladder',
+    intro: [
+      'The starboard valley was the Yar. Its viaduct had five tall arches, upstream of an old bridge with seven low ones. Its church had a spire, not a dome, and stood on the river&rsquo;s left bank: which was on your right, because a river&rsquo;s banks are named facing downstream and you were flying up it. Its quarry faced the church from the north side, and its river fell twice.',
+      'So the Dunnock is pointing the right way. But to cross the Windgate she must climb a thousand metres through the cloud, and Mr Nkemelu, her engineer, says that she is too heavy to do it.',
+      'At the top of the ladder there is a hatch. On the other side of the hatch is the inside of an airship.'
+    ],
+    exit: {"next":"windgate","w":{"52261921":"de234f77"}}, tags: {"go":["3811889b","41dd355b","e1143b53","4d671d8c"],"h":["47184297"],"i":["94ab8182"]},
+    sound: ['archive', { root: 45, bpm: 58, drop: ['mel', 'arp'], level: 1.1, beds: [['hum', 0.4], ['wind', 0.3], ['drips', 0.5]] }],      /* inside the ship: low, slow, dripping, and a long sheet to read */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#sheet').classList.toggle('ready', !!(told.eng && !nextFile));
+    document.body.classList.toggle('gone', !!nextFile);
+    ER.pips((told.eng ? 1 : 0) + (told.sheet ? 1 : 0) + (nextFile ? 2 : 0), 4);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['She is climbing. Hold on to the rope, and wait for the top of the cloud.']];
+    if (bench && bench.isOpen()) return ['sheet', [
+      'Go down the sheet one line at a time, and ask of each: will this be needed between here and the mast at Tolver? Some lines answer that question themselves.',
+      'Four lines can go whole. One cannot be used in the air. One is only for landing where nobody is waiting. One belongs in a shed. One has a note on it from its owner, to say that it may go. (The strip map says who is waiting at Tolver, and what is not there. The rules of the Trial say where you may land.)',
+      'Two lines want counting. Parachutes: how many souls are aboard today? Petrol: it is 07.15 now, and Tolver is at 08.40. How many hours is that, if part of an hour counts as a whole one? Then add the tank that is never touched.'
+    ]];
+    if (!told.eng) return ['eng', ['The man in blue overalls, standing on the plank by the hatch. He has bad news, and he would like to share it.']];
+    return ['open', ['Mr Nkemelu is holding the load sheet up to the light for you. Take it.']];
+  }
+
+  function begin() {
+    MAIL.mine('yar', 'Which valley is the Yar', '<p>The starboard valley of the three.</p><p>Five tall arches, upstream of seven low ones. A green spire on the river&rsquo;s left bank: our right, because we were flying up the river. The quarry on the north side, facing the church. Two falls, with a pool between.</p>', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The light through the hatch has turned white. You are inside the cloud, and going up.'); return; }
+    if (told.in) { busy = false; ER.say('Inside the ship, a quarter past seven. Rain is ticking on her skin.'); return; }
+    tell('in');
+    ER.narrate([
+      'You had thought of an airship as a balloon: one big bag. It is not. It is a long cathedral of wooden ribs and wire, and hanging in it, one behind another, are the gas cells: huge soft bags the colour of pale honey, which breathe a little as the ship moves.',
+      'Along the very bottom runs a plank one boot wide, with a rope for a handrail. This is the keel. Everything heavy on the ship hangs beside it: tanks, sacks, sandbags, coils of rope. On either side of the plank there is canvas, and under the canvas there are fifteen hundred metres of nothing.',
+      'A man in oily blue overalls is standing by an open hatch in the floor, holding a clipboard up to the grey light that comes in through it. &ldquo;Nkemelu,&rdquo; he says. &ldquo;Engines, sand and bad news. Mind the cat.&rdquo;',
+      'Rain is ticking on the outside of the ship, all the way along, like a hundred small clocks.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- Mr Nkemelu ---------- */
+  $('#eng').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Up she goes,&rdquo; says Mr Nkemelu, with one hand on a rib, listening to his engines.'); return; }
+    ER.talk({
+      who: 'Mr Nkemelu', role: 'Engineer of the Dunnock', face: window.FACE('nkem'),
+      lines: [
+        { note: 'He speaks quietly, as if the engines might be listening.', a: '&ldquo;An airship does not fly, you know. She floats. The gas in those cells is lighter than air, so it lifts her: and it lifts just so many kilos, and not one more. If the ship weighs less than that, she goes up. If she weighs more, she comes down. That is the whole trick.&rdquo;' },
+        { q: 'So why is she heavy?', a: 'Rain. That canvas has been drinking for an hour, and every litre of water in her skin is a kilo that we never loaded. And now the Captain wants a thousand metres of height. To go up, we must get lighter. So we let go ballast: weight that a ship carries for no other reason than to drop it.' },
+        { q: 'And to come down?', a: 'We let out gas. Less gas, less lift, and down she comes. So going up costs sand and coming down costs gas, and there is no shop for either between here and Tolver. That is why nobody on this ship drops anything, or lets anything out, without knowing why.' },
+        { q: 'How much has to go?', a: 'I have done the sum twice. Six bags of sand first: 120 kilos, on the hooks beside the hatch. Ours is plain yellow river sand, by the way. The Brandreth Line dyes its sand red, so that people on the ground can see how little a Brandreth ship needs to drop. And after the sand, 170 kilos more, which I have not got in sand.' },
+        { q: 'What about the other four bags?', a: 'Not to be touched. Four bags are kept for the Windgate and the landing, numbered One to Four from the bow: Captain&rsquo;s order. So the 170 must come off the load sheet. Read what every line on it is FOR. Some of those things we cannot land without. Some are no use to anybody today. I think the useless ones come to 170 exactly. But I have been wrong before. Once.' }
+      ],
+      clue: { id: 'eng1', title: 'Mr Nkemelu, at the hatch', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('eng')) { MAIL.words(['ballast', 'gas cell', 'lift']); paint(); ER.say('He holds the clipboard out to you, and with it a red crayon. &ldquo;Strike off what goes. I shall check it before anything leaves the ship.&rdquo;'); } }
+    });
+  });
+
+  /* ---------- what hangs beside the keel ---------- */
+  MAIL.thing('#cells', 'gas cell', 'A gas cell: a huge soft bag of gas that is lighter than air. There are nine of them in a row, and they are what holds the Dunnock up. This one is breathing.', isBusy);
+  MAIL.thing('#sand', 'ballast', 'Four bags of sand on their hooks, numbered One to Four from the bow. They are the Captain&rsquo;s, and not to be touched.', isBusy);
+  MAIL.thing('#six', null, 'Six more bags of sand on the hooks beside the hatch: 120 kilos of plain yellow river sand, ready to go.', isBusy);
+  MAIL.thing('#tanks', 'slip hook', 'Four full petrol tanks, each on a slip hook: pull out the pin, and the tank is gone. A fifth, somewhere over your head, is feeding the engines.', isBusy);
+  MAIL.thing('#chutes', 'parachute', 'Four parachutes on four hooks. Somebody has chalked a name on each. The last one says DRISCOLL.', isBusy);
+  MAIL.thing('#rope', 'trail rope', 'The trail rope: a hundred and twenty metres of it, as thick as your wrist.', isBusy);
+  MAIL.thing('#prop', 'propeller', 'A spare propeller, lashed to the ribs. It is taller than you are.', isBusy);
+  MAIL.thing('#grap', 'grapnel', 'The grapnel: an iron hook with four points, hanging on the end of its line.', isBusy);
+  MAIL.thing('#lines3', 'coil', 'Two coils of rope, with a label tied to them: SHED. LOWMERE. RETURN.', isBusy);
+  MAIL.thing('#trunk', 'trunk', 'A leather trunk with I.M. on the front, in brass letters.', isBusy);
+  MAIL.thing('#crate3', 'crate', 'A crate for Tolver Mine. Somebody has written on it, in a hurry: PUMP. URGENT.', isBusy);
+  MAIL.thing('#sacks3', 'sack', 'Your seven sacks, with the grey bag for the Hospice hanging above them. You count them again. Seven.', isBusy);
+  MAIL.thing('#hatch', 'hatch', function () { return nextFile ? 'The hatch is full of white. A minute ago it was grey.' : 'An open hatch in the floor of the ship. Under it grey cloud is going past, and under that, a long way down, is Carrow.'; }, isBusy);
+  MAIL.thing('#cat3', null, function () { return nextFile ? 'The cat has walked along the plank to the place where the trunk was. She looks at the empty place, and sits down in it anyway.' : 'Ballast is sitting on the plank, exactly where you need to put your feet.'; }, isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#sheet').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The load sheet, with red crayon all over it. Mr Nkemelu has signed it at the bottom, twice.'); return; }
+    if (!told.eng) { ER.say('A load sheet on a clipboard. The man who is holding it has not finished frowning at it.'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the load sheet: strike off what goes down the hatch ---------- */
+  var ROWS = [
+    ['a', 'Mail for Tolver, 7 sacks', 175, 1, 'The Post Office&rsquo;s. Not ours.'],
+    ['b', 'Bag for Windgate Hospice', 6, 1, 'To be dropped over the Hospice, by the clerk, and nowhere else.'],
+    ['c', 'Sand, bags One to Four', 80, 1, 'Kept for the Windgate and the landing. Captain&rsquo;s order.'],
+    ['d', 'Trail rope, 120 m', 60, 1, 'Let down at the landing field for the ground crew to catch. Without it nobody can get hold of her.'],
+    ['e', 'Grapnel and line', 30, 1, 'An iron hook on a rope. Thrown out to catch in trees or rocks when she must land where there is no ground crew.'],
+    ['f', 'Spare propeller (wood)', 45, 1, 'For the port engine. Can be fitted only in the shed, with the engine cold and a crane.'],
+    ['g', 'Engine spares, tool roll', 30, 1, 'Plugs, belts, wire. What stops in the air must be mended in the air.'],
+    ['h', 'Petrol, 4 full tanks', 45, 4, 'On slip hooks. Keep one full tank for every hour still to fly (part of an hour counts as a whole one), and one more that is never touched. The fifth tank, now in use, is nearly dry: do not count it.'],
+    ['i', 'Parachutes, 4', 10, 4, 'One for every soul aboard. Air Board rule 12.'],
+    ['j', 'Crate, Tolver Mine', 40, 1, 'Freight, paid for. A new valve for the mine&rsquo;s pump: the bottom level has been under water since Sunday.'],
+    ['k', 'Shed lines, 2 coils', 20, 1, 'Property of Lowmere shed. For walking her in and out of the shed doors. Left aboard by mistake: RETURN. (Shedmaster)'],
+    ['l', 'Captain&rsquo;s trunk', 20, 1, 'Charts, a tin of biscuits, one good hat. If weight has to go, this goes before anything the ship needs. I.M.', 1],
+    ['m', 'Cat (Ballast)', 4, 1, 'Not on any sheet. Not to be dropped in any circumstances. I.M.', 1]
+  ];
+  var HEAD = '<h4>LOAD SHEET</h4><p class="sub">Mail ship DUNNOCK &middot; Thursday &middot; Souls aboard: Capt. Montalvo, Mr Nkemelu, <s>Mr Driscoll</s> <span class="hand">the P.O. clerk</span></p>',
+    FOOT = '<p class="foot pencil">07.15, over Carrow. The Captain&rsquo;s new time for Tolver: 08.40, not 08.00. &mdash; C.N.</p>';
+  function makeBench() {
+    var TARGET = 170, sel = ER.flag('c-sel') || {}, wait = false, box = ER.el('div', 'bx ld'), s = '', v, a;
+    ROWS.forEach(function (r) {
+      s += '<tr class="row" data-id="' + r[0] + '"><td class="it">' + r[1] + '</td><td class="kg">' + r[2] + (r[3] > 1 ? ' kg each' : ' kg') + '</td><td class="fo' + (r[5] ? ' own' : '') + '">' + r[4] + '</td><td class="ct">' +
+        (r[3] > 1 ? '<span class="stp"><button type="button" data-d="-1" title="one fewer">&minus;</button><b>0</b><button type="button" data-d="1" title="one more">+</button></span>' : '<span class="tick"></span>') + '</td></tr>';
+    });
+    var dial = '<svg viewBox="-110 -110 220 220"><circle r="104" fill="#6f531a"/><circle r="98" fill="#b08a35"/><circle r="88" fill="#f3efe2"/>';
+    for (v = 0; v <= 300; v += 10) {
+      a = (-120 + v * 0.8) * Math.PI / 180;
+      dial += '<path d="M' + (Math.sin(a) * 84).toFixed(1) + ' ' + (-Math.cos(a) * 84).toFixed(1) + 'L' + (Math.sin(a) * (v % 50 ? 77 : 70)).toFixed(1) + ' ' + (-Math.cos(a) * (v % 50 ? 77 : 70)).toFixed(1) + '" stroke="#22201c" stroke-width="' + (v % 50 ? 1.2 : 2.4) + '"/>';
+      if (v % 50 === 0) dial += '<text class="dl-num" x="' + (Math.sin(a) * 57).toFixed(1) + '" y="' + (-Math.cos(a) * 57 + 5).toFixed(1) + '">' + v + '</text>';
+    }
+    a = (-120 + TARGET * 0.8) * Math.PI / 180;
+    dial += '<path d="M' + (Math.sin(a) * 86).toFixed(1) + ' ' + (-Math.cos(a) * 86).toFixed(1) + 'l' + (Math.sin(a + 0.3) * 16).toFixed(1) + ' ' + (-Math.cos(a + 0.3) * 16).toFixed(1) + 'l' + (Math.sin(a - 1.57) * 9.5).toFixed(1) + ' ' + (-Math.cos(a - 1.57) * 9.5).toFixed(1) + 'z" fill="#c8402c" stroke="#7a1f1f" stroke-width="1"/>' +
+      '<text class="dl-num" y="50" style="font-size:9.500px;letter-spacing:.14em">KILOS TO GO</text><text class="dl-num" id="c-total" y="76" style="font-size:24px">0</text>' +
+      '<g id="c-needle"><path d="M-4 0L0 -76L4 0Z" fill="#c8402c"/></g><circle r="7" fill="#22201c"/></svg>';
+    box.innerHTML = '<div class="two"><div class="clip">' + HEAD + '<table>' + s + '</table>' + FOOT + '</div><div class="side">' + dial +
+      '<button type="button" class="btn" id="c-go">Send it down<br>the hatch</button></div></div><div class="bx-foot"><p class="pmsg"></p></div>';
+    ER.glossIn(box, '.clip td.fo, .clip .foot');
+    var msgEl = box.querySelector('.pmsg'), go = box.querySelector('#c-go'), rows = ER.$$('tr.row', box);
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function total() { var t = 0; ROWS.forEach(function (r) { t += (sel[r[0]] || 0) * r[2]; }); return t; }
+    function draw() {
+      rows.forEach(function (tr, j) {
+        var n = sel[ROWS[j][0]] || 0, b = tr.querySelector('.stp b');
+        tr.classList.toggle('out', n > 0); if (b) b.textContent = n;
+      });
+      box.querySelector('#c-total').textContent = total();
+      box.querySelector('#c-needle').setAttribute('transform', 'rotate(' + (-120 + Math.min(300, total()) * 0.8).toFixed(1) + ')');
+    }
+    box.querySelector('table').addEventListener('click', function (e) {
+      var tr = e.target.closest ? e.target.closest('tr.row') : null, b = e.target.closest ? e.target.closest('.stp button') : null, r, id;
+      if (!tr || wait || (e.target.closest && e.target.closest('.w'))) return;
+      id = tr.getAttribute('data-id'); r = ROWS.filter(function (x) { return x[0] === id; })[0];
+      if (r[3] > 1) { if (!b) return; sel[id] = MAIL.clamp((sel[id] || 0) + (+b.getAttribute('data-d')), 0, r[3]); }
+      else sel[id] = sel[id] ? 0 : 1;
+      ER.flag('c-sel', sel); MAIL.sfx.crayon(); draw();
+    });
+
+    var N = '&rdquo; says Mr Nkemelu. &ldquo;', WHY = {
+      a: '&ldquo;The mail,&rdquo; says Mr Nkemelu. He says it very quietly. &ldquo;We are the mail ship. Without the mail we are three people and a cat, going to Tolver for no reason at all.&rdquo;',
+      b: '&ldquo;That bag is to be dropped,' + N + 'Once, by you, over one roof. Not over Carrow.&rdquo;',
+      c: '&ldquo;Captain&rsquo;s order,' + N + 'Those four bags are for the Windgate and the landing. If I drop them now I shall have to explain it to her, and I would rather walk home.&rdquo;',
+      d: '&ldquo;The trail rope?' + N + 'And when we come to Tolver, what do twenty miners catch hold of? Read what it is for.&rdquo;',
+      g: '&ldquo;If an engine stops over the Windgate, I should like to have a spanner,' + N + 'Read that line again.&rdquo;',
+      j: '&ldquo;That one is not ours,' + N + 'Somebody has paid for it to get to Tolver, and there are men standing in water waiting for it.&rdquo;',
+      m: 'Mr Nkemelu takes the red crayon out of your hand, rubs out the line with his thumb, and gives the crayon back. He does not say anything. Neither does the cat.'
+    };
+    go.addEventListener('click', function () {
+      var t = total(), bad = '', ids = [], n, file;
+      if (wait || nextFile) return;
+      if (!t) { msg('Nothing is struck off yet. Click a line of the sheet to put the red crayon through it. For the tanks and the parachutes, say how many.'); return; }
+      ROWS.forEach(function (r) { if (r[3] === 1 && sel[r[0]]) { ids.push(r[0]); if (!bad && !ER.check('go', r[0])) bad = r[0]; } });
+      if (bad) { ER.sfx.no(); msg(WHY[bad] || '&ldquo;Read what that one is for,&rdquo; says Mr Nkemelu.'); if (bad === 'm') { sel.m = 0; ER.flag('c-sel', sel); draw(); } return; }
+      n = sel.i || 0;
+      if (n && !ER.check('i', n)) { ER.sfx.no(); msg('&ldquo;One for every soul aboard,' + N + 'Count the souls on this sheet. You have left us ' + ['', '', 'two parachutes', 'one parachute', 'no parachutes at all'][n] + '. Which of us were you thinking of?&rdquo;'); return; }
+      n = sel.h || 0;
+      if (n && !ER.check('h', n)) { ER.sfx.no(); msg('&ldquo;It is a quarter past seven, and Tolver is at twenty to nine,' + N + 'An hour and twenty-five minutes: and the sheet says that part of an hour counts as a whole one. How many tanks is that? Then one more that is never touched. Now count what you have left me.&rdquo;'); return; }
+      if (t < TARGET) { ER.sfx.no(); msg('&ldquo;' + t + ' kilos, and nothing in it that we need. Good,' + N + 'But I want ' + TARGET + '. Something else on this sheet is no use to anybody today. Read what each thing is FOR.&rdquo;'); return; }
+      file = ER.exit([ids.join('-') + '-h' + (sel.h || 0) + '-i' + (sel.i || 0)], { wait: true });
+      if (!file) { msg('The crayon has broken. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('c-file', file);
+      MAIL.mine('gone', 'What went down the hatch', '<p>' + ROWS.filter(function (r) { return sel[r[0]]; }).map(function (r) { return (r[3] > 1 ? 'one of the ' + r[1].toLowerCase().replace(/, 4.*/, r[0] === 'h' ? ' tanks' : '') : r[1].replace(/ \(.*| and line|, 2 coils/g, '')) + ' (' + r[2] + ' kg)'; }).join(', ') + ': ' + t + ' kilos, and nothing that the ship needs before Tolver.</p><p>Then six bags of sand, 120 kilos. Four bags are left, One to Four from the bow.</p><p>The Brandreth Line&rsquo;s sand is dyed red. Ours is yellow.</p>', true);
+      msg('&ldquo;' + t + ', to the kilo,' + N + 'The grapnel: we land at Tolver or nowhere, and Tolver has twenty miners. The propeller: no crane up here. One tank, one parachute, the shedmaster&rsquo;s rope.&rdquo; He stops at the last red line. &ldquo;She wrote that one herself, you know. Thirty-one years of charts.&rdquo; He takes hold of one handle of the trunk. &ldquo;Take the other end.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true; MAIL.sfx.sand();
+        ER.narrate([
+          'It all goes down through the hatch into the grey, a piece at a time, and none of it makes a sound. The six bags of sand go last, in six yellow puffs.',
+          'For a moment nothing happens. Then the plank presses up against your boots, gently, like a lift starting. The light in the hatch turns from grey to white. You are inside the cloud.',
+          '&ldquo;Up she goes,&rdquo; says Mr Nkemelu. &ldquo;Four bags left, and they hang beside the next hatch along. So does the Hospice bag. So, I think, will you: the Captain needs both her hands for the Windgate.&rdquo;',
+          'The cat walks along the plank to the place where the trunk was, looks at it for some time, and sits down there anyway.'
+        ], function () { busy = false; showGo(); });
+      }, 5200);
+    });
+    draw();
+    msg('The load sheet, and a red crayon. Click a line to strike it off; click again to rub the crayon out. The needle shows what you have struck off so far: Mr Nkemelu wants ' + TARGET + ' kilos.');
+    return {
+      open: function () {
+        ER.open('ov-lock', box);
+        if (tell('sheet')) { ER.addClue('load', 'The load sheet', HEAD + '<table>' + ROWS.map(function (r) { return '<tr><td>' + r[1] + '</td><td>' + r[2] + (r[3] > 1 ? ' kg each' : ' kg') + '</td><td class="' + (r[5] ? 'hand' : 'pencil') + '">' + r[4] + '</td></tr>'; }).join('') + '</table>' + FOOT, 'load', 'On Mr Nkemelu’s clipboard'); MAIL.words(['trail rope', 'grapnel', 'soul', 'freight']); paint(); }
+      },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

@@ -44,6 +44,33 @@
   @keyframes blink{50%{opacity:.2}}
   .pass{animation:pass 3.2s linear infinite}.pass.p2{animation-duration:4.6s;animation-delay:-2s}.pass.p3{animation-duration:2.4s;animation-delay:-1s}
   @keyframes pass{from{transform:translateX(140px)}to{transform:translateX(-140px)}}
+  .t-fo{font-family:'Barlow Condensed','Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .t-hi{font-family:'Cormorant SC','IM Fell English SC',serif;font-weight:700;text-anchor:middle}
+  .t-co{font-family:'Cinzel',serif;font-weight:700;text-anchor:middle}
+  .t-ne{font-family:'UnifrakturCook','IM Fell English SC',serif;font-weight:700;text-anchor:middle}
+  .t-wi{font-family:'Staatliches','Oswald',sans-serif;text-anchor:middle}
+  /* two wings: the corridor slides */
+  #walk{transition:transform .95s cubic-bezier(.65,0,.25,1)}
+  body.w1 #walk{transform:translateX(-1800px)}
+  body.now #walk{transition:none}
+  .wing{position:fixed;top:50%;z-index:4;width:46px;height:210px;margin-top:-105px;padding:0;border:1px solid #7d5f1d;cursor:pointer;
+    background:linear-gradient(90deg,#c79b3b,#f5df98 45%,#c79b3b);color:#2b1d08;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.24em;
+    text-transform:uppercase;box-shadow:0 10px 26px rgba(0,0,0,.55)}
+  .wing span{position:absolute;left:0;top:0;display:block;width:210px;height:46px;line-height:46px;text-align:center;white-space:nowrap;transform-origin:0 0}
+  .wing.next{right:0;border-right:0;border-radius:6px 0 0 6px}.wing.next span{transform:translate(46px,0) rotate(90deg)}
+  .wing.prev{left:0;border-left:0;border-radius:0 6px 6px 0}.wing.prev span{transform:translate(0,210px) rotate(-90deg)}
+  .wing:hover{filter:brightness(1.12)}
+  body.w1 .wing.next,body:not(.w1) .wing.prev{display:none}
+  /* what a door shows only when it is open, or only when it is shut */
+  .door.shut .lit{opacity:.1;animation:none}
+  .door:not(.shut) .tape{display:none}
+  .hb{animation:back 48s linear infinite}.hb2{animation:back 4s linear infinite}
+  .door.shut .hb,.door.shut .hb2{animation:none}
+  @keyframes back{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+  .fall{animation:fall 3.4s linear infinite}.fall.f2{animation-duration:4.4s;animation-delay:-1.2s}.fall.f3{animation-duration:2.8s;animation-delay:-2s}.fall.f4{animation-duration:5s;animation-delay:-3.1s}
+  @keyframes fall{from{transform:translateY(-8px)}to{transform:translateY(78px)}}
+  .sos{animation:sos 7.4s steps(1,end) infinite}
+  @keyframes sos{0%,5.4%,10.8%,21.6%,32.4%,43.2%,59.5%,64.9%,70.3%{opacity:1}2.7%,8.1%,13.5%,29.7%,40.5%,51.4%,62.2%,67.6%,73%,100%{opacity:.08}}
   .cap{position:fixed;left:50%;bottom:5vh;transform:translate(-50%,10px);width:min(760px,92vw);padding:14px 24px 15px;background:rgba(6,10,13,.92);
     border-top:2px solid #ff4fa3;font-size:clamp(17px,1.45vw,21px);line-height:1.45;text-align:center;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
   .cap.on{opacity:1;transform:translate(-50%,0)}
@@ -82,16 +109,27 @@
   <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="28"/></filter>
   <linearGradient id="ink" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#17181c"/><stop offset=".5" stop-color="#2a2c33"/><stop offset="1" stop-color="#131417"/></linearGradient>
   <clipPath id="trainwin"><rect x="40" y="52" width="120" height="150" rx="60"/></clipPath>
+  <linearGradient id="lab" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b9c6ca"/><stop offset=".5" stop-color="#dfe7e9"/><stop offset="1" stop-color="#aebbc0"/></linearGradient>
+  <radialGradient id="uv" cx=".5" cy=".55" r=".75"><stop offset="0" stop-color="#6a5cf0"/><stop offset=".6" stop-color="#2a2a78"/><stop offset="1" stop-color="#10122e"/></radialGradient>
+  <linearGradient id="walnut" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b2415"/><stop offset=".5" stop-color="#5a3922"/><stop offset="1" stop-color="#352011"/></linearGradient>
+  <linearGradient id="baize" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#143d2a"/><stop offset=".5" stop-color="#1f5a3e"/><stop offset="1" stop-color="#123524"/></linearGradient>
+  <linearGradient id="deal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b4a2a"/><stop offset=".5" stop-color="#8a6238"/><stop offset="1" stop-color="#604224"/></linearGradient>
+  <linearGradient id="frost" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfd8d2"/><stop offset=".5" stop-color="#aab8b4"/><stop offset="1" stop-color="#8b9a98"/></linearGradient>
+  <linearGradient id="hut" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b9541c"/><stop offset=".5" stop-color="#d96f2a"/><stop offset="1" stop-color="#a84a18"/></linearGradient>
+  <clipPath id="hutwin"><rect x="64" y="116" width="72" height="72"/></clipPath>
 </defs>
+<g id="walk">
 
 <!-- corridor -->
-<rect x="-1000" width="3600" height="770" fill="url(#wall)"/>
-<g stroke="#213d48" stroke-width="2" opacity=".7"><path d="M50 0v770M330 0v770M610 0v770M890 0v770M1170 0v770M1450 0v770M1730 0v770"/></g>
-<rect x="-1000" y="-700" width="3600" height="752" fill="#081014"/><rect x="-1000" y="52" width="3600" height="6" fill="#c79b3b" opacity=".55"/>
-<rect x="-1000" y="752" width="3600" height="18" fill="#0a1216"/>
-<rect x="-1000" y="770" width="3600" height="130" fill="url(#floor)"/><rect x="-1000" y="899" width="3600" height="700" fill="#2b1d18"/>
-<g stroke="#120c0a" stroke-width="2"><path d="M-1000 800H2600M-1000 840H2600M-1000 880H2600M-1000 920H2600M-1000 960H2600M-1000 1000H2600M-1000 1040H2600M-1000 1080H2600"/></g>
-<path d="M-1000 806H2600V1600H-1000z" fill="url(#runner)" opacity=".9"/><path d="M-1000 806H2600" stroke="#c79b3b" stroke-width="4"/>
+<rect x="-1000" width="6400" height="770" fill="url(#wall)"/>
+<g stroke="#213d48" stroke-width="2" opacity=".7"><path d="M50 0v770M330 0v770M610 0v770M890 0v770M1170 0v770M1450 0v770M1730 0v770M1990 0v770M2270 0v770M2550 0v770M2830 0v770M3110 0v770M3390 0v770"/></g>
+<rect x="-1000" y="-700" width="6400" height="752" fill="#081014"/><rect x="-1000" y="52" width="6400" height="6" fill="#c79b3b" opacity=".55"/>
+<rect x="-1000" y="752" width="6400" height="18" fill="#0a1216"/>
+<rect x="-1000" y="770" width="6400" height="130" fill="url(#floor)"/><rect x="-1000" y="899" width="6400" height="700" fill="#2b1d18"/>
+<g stroke="#120c0a" stroke-width="2"><path d="M-1000 800H5400M-1000 840H5400M-1000 880H5400M-1000 920H5400M-1000 960H5400M-1000 1000H5400M-1000 1040H5400M-1000 1080H5400"/></g>
+<path d="M-1000 806H5400V1600H-1000z" fill="url(#runner)" opacity=".9"/><path d="M-1000 806H5400" stroke="#c79b3b" stroke-width="4"/>
+<!-- the pier between the two wings -->
+<rect x="1772" y="58" width="56" height="712" fill="#0c171c"/><path d="M1772 58v712M1828 58v712" stroke="#c79b3b" stroke-width="2" opacity=".5"/>
 
 <!-- colour spilling from each door -->
 <g filter="url(#soft)" opacity=".5">
@@ -99,14 +137,7 @@
   <ellipse cx="1040" cy="800" rx="160" ry="46" fill="#cfeee0"/><ellipse cx="1320" cy="800" rx="160" ry="46" fill="#ff6a4a"/><ellipse cx="1600" cy="800" rx="160" ry="46" fill="#f4e04d"/>
 </g>
 
-<!-- the sign -->
-<g id="neonOn">
-  <text x="820" y="150" class="neonB" filter="url(#glow2)">KEYHOLE</text>
-  <text x="820" y="150" class="neon">KEYHOLE</text>
-  <g transform="translate(440 76)" fill="none" stroke="#39e6ff" stroke-width="5"><g filter="url(#glow)" opacity=".8"><circle cx="30" cy="26" r="24"/><path d="M18 46l-10 44h44l-10-44"/></g><circle cx="30" cy="26" r="24"/><path d="M18 46l-10 44h44l-10-44"/></g>
-</g>
-<text x="800" y="208" class="sub">SIX DOORS · EACH ONE OPENS WITH WHAT YOU NOTICE</text>
-
+<g data-wing="0">
 <!-- 1  MYSTERY -->
 <g class="door shut" data-t="mystery" transform="translate(100 320)">
   <text x="100" y="-52" class="t-my" font-size="32" fill="#e2c06a" letter-spacing="3">MYSTERY</text>
@@ -219,25 +250,145 @@
   <g transform="rotate(-8 100 372)"><rect x="-22" y="357" width="244" height="30" fill="#f4e04d"/><path d="M-22 357h244M-22 387h244" stroke="#0c0d0f" stroke-width="2"/>
     <text x="100" y="377" class="xw" font-size="13" fill="#0c0d0f" letter-spacing="2">WORDS ONLY · WORDS ONLY</text></g>
 </g>
+</g>
+
+<!-- the second wing: five doors that teach a subject -->
+<g data-wing="1" transform="translate(1800 0)">
+<g filter="url(#soft)" opacity=".5">
+  <ellipse cx="340" cy="800" rx="160" ry="46" fill="#8f9bff"/><ellipse cx="620" cy="800" rx="160" ry="46" fill="#f0c070"/><ellipse cx="900" cy="800" rx="160" ry="46" fill="#58c08f"/>
+  <ellipse cx="1180" cy="800" rx="160" ry="46" fill="#f4f4ee"/><ellipse cx="1460" cy="800" rx="160" ry="46" fill="#ff8a3a"/>
+</g>
+
+<!-- 7  FORENSICS -->
+<g class="door shut" data-t="forensic" transform="translate(240 320)">
+  <text x="100" y="-52" class="t-fo" font-size="34" fill="#cfd6ff" letter-spacing="6">FORENSICS</text>
+  <text id="sub-forensic" x="100" y="-24" class="t-sf2" font-size="15.500" fill="#aab3d9">Every contact leaves a trace</text>
+  <rect x="-16" y="-10" width="232" height="454" fill="#10151c"/>
+  <rect x="0" y="4" width="200" height="436" fill="url(#lab)"/>
+  <rect x="18" y="22" width="164" height="210" rx="4" fill="#0b0f1e"/><rect x="24" y="28" width="152" height="198" rx="2" fill="url(#uv)"/>
+  <g fill="none" stroke="#dfe3ff" stroke-width="2.400" stroke-linecap="round" opacity=".92">
+    <path d="M90 164q-2-12 2-24a8 9 0 1 1 16 0q0 12-4 24"/><path d="M82 164q-2-12 2-24a16 18 0 1 1 32 0q0 12-4 24"/><path d="M74 164q-2-12 2-24a24 27 0 1 1 48 0q0 12-4 24"/>
+    <path d="M66 164q-2-12 2-24a32 36 0 1 1 64 0q0 12-4 24"/><path d="M58 164q-2-12 2-24a40 45 0 1 1 80 0q0 12-4 24"/><path d="M50 164q-2-12 2-24a48 54 0 1 1 96 0q0 12-4 24"/>
+    <path d="M100 138v14M62 180q38 14 76 0M56 194q44 16 88 0M54 208q46 14 92 0"/>
+  </g>
+  <circle cx="132" cy="140" r="8" fill="none" stroke="#ff5a4a" stroke-width="2"/><path d="M139 134l12-10" stroke="#ff5a4a" stroke-width="2"/><text x="157" y="124" class="xw" font-size="12" fill="#ff5a4a">1</text>
+  <rect x="18" y="242" width="112" height="20" fill="#eef2f3"/><text x="74" y="257" class="xw" font-size="11" fill="#2a3340" letter-spacing="2">LAB 3 · TRACE</text>
+  <rect x="146" y="262" width="36" height="58" rx="4" fill="#12171d"/><rect x="152" y="270" width="24" height="5" fill="#2b3440"/><circle id="led-forensic" class="blink" cx="164" cy="304" r="5" fill="#ff5a4a"/>
+  <rect x="150" y="336" width="34" height="8" rx="4" fill="url(#steel)"/>
+  <rect x="0" y="400" width="200" height="40" fill="#a4b0b5"/><path d="M0 400h200" stroke="#8b979c" stroke-width="2"/>
+  <g transform="translate(-60 398)"><path d="M0 46l16-46h18l16 46z" fill="#f4e04d"/><path d="M16 0h18" stroke="#b9a51f" stroke-width="2"/><text x="25" y="36" class="xw" font-size="24" fill="#141518">7</text></g>
+  <g class="tape"><g transform="rotate(-12 100 300)"><rect x="-34" y="286" width="268" height="24" fill="#f2f4ff"/><path d="M-34 286h268M-34 310h268" stroke="#2438a8" stroke-width="2"/>
+    <text x="100" y="303" class="xw" font-size="12" fill="#2438a8" letter-spacing="2.5">EVIDENCE · DO NOT ENTER · EVIDENCE</text></g></g>
+</g>
+
+<!-- 8  TIME SLIP -->
+<g class="door shut" data-t="history" transform="translate(520 320)">
+  <text x="100" y="-52" class="t-hi" font-size="36" fill="#f0d9a0" letter-spacing="3">Time Slip</text>
+  <text id="sub-history" x="100" y="-24" class="t-my" font-size="17" fill="#d9cfb4" letter-spacing="1">Real days. You are there.</text>
+  <rect x="-20" y="-10" width="240" height="454" fill="#1d120b"/>
+  <rect x="0" y="4" width="200" height="436" fill="url(#walnut)"/>
+  <g fill="none" stroke="#24150b" stroke-width="3"><rect x="16" y="256" width="168" height="76"/><rect x="16" y="346" width="168" height="80"/></g>
+  <circle cx="100" cy="104" r="70" fill="url(#brass)"/><circle cx="100" cy="104" r="61" fill="#f3ecd9"/>
+  <path d="M100 47v7M128.500 54.600l-3 5.200M149.400 75.500l-5.200 3M157 104h-6M149.400 132.500l-5.200-3M128.500 153.400l-3-5.200M100 161v-6M71.500 153.400l3-5.200M50.600 132.500l5.200-3M43 104h6M50.600 75.500l5.200 3M71.500 54.600l3 5.200" stroke="#3a2a08" stroke-width="2.500"/>
+  <g font-family="Cinzel,serif" font-weight="700" font-size="13" fill="#3a2a08" text-anchor="middle"><text x="100" y="74">XII</text><text x="139" y="109">III</text><text x="100" y="146">VI</text><text x="61" y="109">IX</text></g>
+  <g transform="translate(100 104)"><g class="hb"><path d="M0 6V-28" stroke="#1d120b" stroke-width="5" stroke-linecap="round"/></g><g class="hb2"><path d="M0 9V-44" stroke="#1d120b" stroke-width="3" stroke-linecap="round"/></g><circle r="5" fill="#8c2f24"/></g>
+  <rect x="46" y="194" width="108" height="42" rx="3" fill="url(#brass)"/>
+  <g fill="#0a0b0d"><rect x="53" y="201" width="21" height="28" rx="2"/><rect x="77" y="201" width="21" height="28" rx="2"/><rect x="101" y="201" width="21" height="28" rx="2"/><rect x="125" y="201" width="21" height="28" rx="2"/></g>
+  <g class="xw" font-size="19" fill="#f3ecd9"><text id="yr0" x="63.500" y="222">–</text><text id="yr1" x="87.500" y="222">–</text><text id="yr2" x="111.500" y="222">–</text><text id="yr3" x="135.500" y="222">–</text></g>
+  <rect x="40" y="281" width="120" height="26" fill="url(#brass)"/><text x="100" y="299" class="xw" font-size="12" fill="#3a2a08" letter-spacing="3">THE ARCHIVE</text>
+  <circle cx="178" cy="386" r="9" fill="url(#brass)"/><path d="M178 400a3 3 0 1 1 0 .1zM176.500 402h3l1.500 9h-6z" fill="#0a0b0d"/>
+</g>
+
+<!-- 9  THE VERDICT -->
+<g class="door shut" data-t="court" transform="translate(800 320)">
+  <text x="100" y="-52" class="t-co" font-size="27" fill="#e9dfc0" letter-spacing="3">THE VERDICT</text>
+  <text id="sub-court" x="100" y="-24" class="t-my" font-size="17" fill="#d9cfb4" letter-spacing="1">Find the hole in the story</text>
+  <rect x="-26" y="-10" width="252" height="454" fill="#2e2016"/><rect x="-16" y="-2" width="232" height="446" fill="#1a120b"/>
+  <rect x="0" y="4" width="200" height="436" fill="url(#baize)"/>
+  <path d="M100 4v436" stroke="#0b2015" stroke-width="5"/>
+  <path d="M12 20V424M88 20V424M112 20V424M188 20V424M12 20H88M112 20H188M12 424H88M112 424H188" fill="none" stroke="#c79b3b" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 28.800"/>
+  <rect x="38" y="44" width="124" height="24" rx="3" fill="#1a0d0b"/><text x="100" y="61" class="xw lit" font-size="13" fill="#ff6a5a" letter-spacing="4">IN SESSION</text>
+  <g><circle cx="50" cy="128" r="30" fill="url(#brass)"/><circle cx="50" cy="128" r="23" fill="#1b140c"/><circle class="lit" cx="50" cy="128" r="23" fill="#f6dfa0"/>
+     <circle cx="150" cy="128" r="30" fill="url(#brass)"/><circle cx="150" cy="128" r="23" fill="#1b140c"/><circle class="lit" cx="150" cy="128" r="23" fill="#f6dfa0"/></g>
+  <rect x="30" y="178" width="140" height="22" fill="url(#brass)"/><text x="100" y="194" class="xw" font-size="12" fill="#3a2a08" letter-spacing="4">COURT 2</text>
+  <rect x="80" y="222" width="12" height="118" rx="3" fill="url(#brass)"/><rect x="108" y="222" width="12" height="118" rx="3" fill="url(#brass)"/>
+  <rect x="24" y="392" width="64" height="22" fill="url(#brass)" opacity=".85"/><rect x="112" y="392" width="64" height="22" fill="url(#brass)" opacity=".85"/>
+</g>
+
+<!-- 10  DEADLINE -->
+<g class="door shut" data-t="news" transform="translate(1080 320)">
+  <text x="100" y="-48" class="t-ne" font-size="42" fill="#f3f1e8">Deadline</text>
+  <text id="sub-news" x="100" y="-24" class="t-gh2" font-size="15.500" fill="#cfcabb">Is it true? Can we print it?</text>
+  <rect x="-14" y="-10" width="228" height="454" fill="#15110d"/>
+  <rect x="0" y="4" width="200" height="436" fill="url(#deal)"/>
+  <rect x="16" y="20" width="168" height="254" fill="#1c1a16"/><rect x="20" y="24" width="160" height="246" fill="url(#frost)"/>
+  <ellipse class="lit" cx="118" cy="196" rx="58" ry="66" fill="#ffd98a" opacity=".5" filter="url(#glow2)"/>
+  <path d="M20 68h160M20 88h160M20 108h160M20 128h160M20 148h160M20 168h160M20 188h160M20 208h160M20 228h160M20 248h160" stroke="#fff" stroke-opacity=".2" stroke-width="2"/>
+  <rect x="52" y="30" width="96" height="26" rx="3" fill="#0c0d0f"/><text x="100" y="49" class="t-sf2 lit" font-size="16" fill="#ff5a4a" letter-spacing="2">23:00</text>
+  <g class="xw" font-size="30" fill="#d9ae48" stroke="#3a2a08" stroke-width=".8" letter-spacing="6"><text x="103" y="128">NEWS</text><text x="103" y="166">DESK</text></g>
+  <path d="M50 182h100" stroke="#d9ae48" stroke-width="2"/>
+  <rect x="56" y="292" width="88" height="14" rx="3" fill="url(#brass)"/><rect x="62" y="297" width="76" height="4" fill="#0a0b0d"/>
+  <path d="M70 301h60l5 64-9 4-9-5-10 5-9-4-9 5-8-4-6 3z" fill="#f3efe2"/><path d="M79 314h42M79 324h36M79 334h44M79 344h26" stroke="#3b3a36" stroke-width="2"/><circle cx="116" cy="345" r="9" fill="none" stroke="#c9302a" stroke-width="2"/>
+  <circle cx="176" cy="290" r="9" fill="url(#brass)"/>
+  <g transform="translate(218 408)"><rect x="0" y="10" width="40" height="26" fill="#e9e6da"/><path d="M0 18h40M0 25h40M0 31h40" stroke="#b9b5a6" stroke-width="1.500"/><rect x="3" y="0" width="35" height="10" fill="#f3efe2"/><path d="M7 5h22" stroke="#27231d" stroke-width="3"/><path d="M20 0v36M0 22h40" stroke="#8c2f24" stroke-width="2"/></g>
+</g>
+
+<!-- 11  LOST SIGNAL -->
+<g class="door shut" data-t="wild" transform="translate(1360 320)">
+  <text x="100" y="-56" class="t-wi" font-size="37" fill="#ffb066" letter-spacing="4">LOST SIGNAL</text>
+  <text id="sub-wild" x="100" y="-29" class="t-gh2" font-size="15.500" fill="#d7d2bd">Read the land. Get home.</text>
+  <rect x="-18" y="-10" width="236" height="454" fill="#2a1b12"/>
+  <path d="M-26-8h252v-4q-34-7-74-4t-82-3-96 4z" fill="#eef4f6"/>
+  <rect x="0" y="4" width="200" height="436" fill="url(#hut)"/>
+  <path d="M40 4v436M80 4v436M120 4v436M160 4v436" stroke="#8a3a12" stroke-width="2.500"/>
+  <g fill="#17191c"><path d="M0 60h96l12 8-12 8H0z"/><path d="M0 368h96l12 8-12 8H0z"/></g>
+  <rect x="58" y="110" width="84" height="84" fill="#17191c"/><rect x="64" y="116" width="72" height="72" fill="url(#nightwin)"/>
+  <g fill="#fff" clip-path="url(#hutwin)"><circle class="fall" cx="80" cy="120" r="2"/><circle class="fall f2" cx="112" cy="120" r="1.600"/><circle class="fall f3" cx="126" cy="120" r="2.200"/><circle class="fall f4" cx="94" cy="120" r="1.400"/></g>
+  <path d="M64 116h24q-16 6-24 24zM136 188h-22q14-6 22-22z" fill="#dff1f6" opacity=".75"/><path d="M100 116v72M64 152h72" stroke="#17191c" stroke-width="4"/>
+  <text x="92" y="252" class="t-wi" font-size="24" fill="#fff" opacity=".85" letter-spacing="3">HUT 4</text>
+  <path d="M164 222v18" stroke="#17191c" stroke-width="4"/><g fill="none" stroke="#e3d3a4" stroke-width="5"><circle cx="164" cy="262" r="20"/><circle cx="164" cy="262" r="11"/></g>
+  <rect x="146" y="312" width="40" height="10" rx="3" fill="#17191c"/><circle cx="152" cy="317" r="8" fill="#17191c"/>
+  <g transform="translate(208 -2)"><rect x="-6" y="0" width="12" height="12" fill="#17191c"/><g class="lit sos"><circle cy="-8" r="30" fill="#ff5a3a" opacity=".55" filter="url(#glow2)"/><circle cy="-8" r="8" fill="#ffd0c0"/></g><circle cy="-8" r="8" fill="#b9402a" opacity=".55"/></g>
+  <path d="M-30 444q22-28 54-18t40 18zM146 444q30-24 62-12t26 12z" fill="#eef4f6"/>
+</g>
+</g>
+</g><!-- /walk -->
+
+<!-- the sign -->
+<g id="neonOn">
+  <text x="820" y="150" class="neonB" filter="url(#glow2)">KEYHOLE</text>
+  <text x="820" y="150" class="neon">KEYHOLE</text>
+  <g transform="translate(440 76)" fill="none" stroke="#39e6ff" stroke-width="5"><g filter="url(#glow)" opacity=".8"><circle cx="30" cy="26" r="24"/><path d="M18 46l-10 44h44l-10-44"/></g><circle cx="30" cy="26" r="24"/><path d="M18 46l-10 44h44l-10-44"/></g>
+</g>
+<text x="800" y="208" class="sub">ELEVEN DOORS · EACH ONE OPENS WITH WHAT YOU NOTICE</text>
 </svg>
 
+<button type="button" class="wing next" id="wingNext"><span>More doors &rsaquo;</span></button>
+<button type="button" class="wing prev" id="wingPrev"><span>&lsaquo; First doors</span></button>
 <div class="cap" id="cap"></div>
 
+<script src="assets/account.js"></script>
 <script src="assets/shelf.js"></script>
 <script>
 (function () {
-  var THEMES = {"mystery":{"name":"Mystery","stories":[{"id":"gloria","title":"Where Is Gloria?","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"The heaviest pumpkin at the village show has gone. She weighs forty-one kilos, and nobody saw a thing.","rooms":4,"first":"tent.html","firstId":"tent","last":"prize"},{"id":"forty","title":"Forty Minutes of Dark","stars":4,"minutes":"50-70","hold":false,"level":"B1","blurb":"A harbour museum on its last night, a storm, and a ship's clock that has never been allowed to stop.","rooms":7,"first":"street.html","firstId":"street","last":"morning"}]},"scifi":{"name":"Sci-Fi","stories":[{"id":"air","title":"Seven Hours of Air","stars":3,"minutes":"25-40","hold":false,"level":"A2+ to B1","blurb":"A small station above an ice moon, an air alarm at ten past two in the morning, and nobody on board but you and a very polite computer.","rooms":5,"first":"cabin.html","firstId":"cabin","last":"docking"}]},"fantasy":{"name":"Fantasy","stories":[{"id":"library","title":"The Library That Locks at Dusk","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"You sat down to read one page. Now it is dusk, every door has locked itself, and the night librarian is a moth.","rooms":4,"first":"reading.html","firstId":"reading","last":"dawn"}]},"ghost":{"name":"Ghost Story","stories":[{"id":"room13","title":"Room 13 Is Not on the Plan","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"Every night at ten past nine, a bell rings for Room 13. The Swan Hotel has no Room 13. It says so on the plan.","rooms":4,"first":"lobby.html","firstId":"lobby","last":"morning"}]},"adventure":{"name":"Adventure","stories":[{"id":"orvo","title":"The Night Train to Orvo","stars":1,"minutes":"10-15","hold":false,"level":"A2","blurb":"A snowy station at midnight. A guard with a watch. A train that is never late. Tonight you are the assistant.","rooms":3,"first":"halm.html","firstId":"halm","last":"arrival"}]},"cipher":{"name":"Cipher","stories":[{"id":"wrong","title":"Wrong Number","stars":1,"minutes":"15-20","hold":false,"level":"B1","blurb":"Twenty to midnight on a wet Friday. A phone box rings as you walk past. Nobody speaks, but words come up on its little screen, and parts of them are missing.","rooms":3,"first":"phonebox.html","firstId":"phonebox","last":"midnight"},{"id":"lexicon","title":"The Final Word","stars":2,"minutes":"20-30","hold":false,"level":"B1+","blurb":"Half an hour before a live television word quiz goes on air, the computer that runs the game locks everybody into separate rooms. Everybody except the one who fetches the water: you.","rooms":4,"first":"corridor.html","firstId":"corridor","last":"onair"},{"id":"exam","title":"Answer All Questions","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Nine o’clock at night, the evening before the English exam. You have come back to school for your revision cards. The exam cupboard is standing open, the papers are gone, and somebody has just locked you in.","rooms":5,"first":"staffroom.html","firstId":"staffroom","last":"hall"}]}}, cap = document.getElementById('cap'), capT = 0;
+  var THEMES = {"mystery":{"name":"Mystery","stories":[{"id":"gloria","title":"Where Is Gloria?","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"The heaviest pumpkin at the village show has gone. She weighs forty-one kilos, and nobody saw a thing.","rooms":4,"first":"tent.html","firstId":"tent","last":"prize"},{"id":"understudy","title":"The Understudy","stars":3,"minutes":"35-45","hold":false,"level":"B1+–B2","blurb":"A very small theatre, a first night. The necklace was real when the curtain went up. At the interval it is glass, and you are only here on work experience.","rooms":5,"first":"corner.html","firstId":"corner","last":"stage"},{"id":"forty","title":"Forty Minutes of Dark","stars":4,"minutes":"50-70","hold":false,"level":"B1","blurb":"A harbour museum on its last night, a storm, and a ship's clock that has never been allowed to stop.","rooms":7,"first":"street.html","firstId":"street","last":"morning"}]},"scifi":{"name":"Sci-Fi","stories":[{"id":"air","title":"Seven Hours of Air","stars":3,"minutes":"25-40","hold":false,"level":"A2+ to B1","blurb":"A small station above an ice moon, an air alarm at ten past two in the morning, and nobody on board but you and a very polite computer.","rooms":5,"first":"cabin.html","firstId":"cabin","last":"docking"},{"id":"benthos","title":"Word for Word","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A laboratory on the sea bed, a storm on top of it, and a robot submarine that does exactly what it is told. Since five o'clock it has answered every order with the same two pings: CANNOT. At ten past two in the morning, the watch is yours.","rooms":5,"first":"watch.html","firstId":"watch","last":"dock"}]},"fantasy":{"name":"Fantasy","stories":[{"id":"library","title":"The Library That Locks at Dusk","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"You sat down to read one page. Now it is dusk, every door has locked itself, and the night librarian is a moth.","rooms":4,"first":"reading.html","firstId":"reading","last":"dawn"},{"id":"toll","title":"The Keeper Gives No Change","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A troll keeps Stickle Bridge, and every word of his Charter. You have nine cheeses, one goose and a fair to reach by sunrise. He will not eat you. He will read to you. It is worse.","rooms":5,"first":"gate.html","firstId":"gate","last":"crow"},{"id":"hours","title":"The Eleventh Hour","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"In Gilderby the town clock does whatever it is told: to the letter. It has stopped at a quarter to eleven, one of its hours is missing, and the only one who will talk is a jackdaw who speaks in proverbs.","rooms":5,"first":"stair.html","firstId":"stair","last":"loft"}]},"ghost":{"name":"Ghost Story","stories":[{"id":"room13","title":"Room 13 Is Not on the Plan","stars":2,"minutes":"15-25","hold":false,"level":"A2+","blurb":"Every night at ten past nine, a bell rings for Room 13. The Swan Hotel has no Room 13. It says so on the plan.","rooms":4,"first":"lobby.html","firstId":"lobby","last":"morning"},{"id":"ferry","title":"When the Tide Serves","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"The last ferry of the night leaves Lantern Quay at 21.40, in fog. The purser's list has eight names on it. Her counter says nine. She has counted three times.","rooms":5,"first":"quay.html","firstId":"quay","last":"pier"},{"id":"orchard","title":"Your Place Is Laid","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Nobody has lived at Sweetings Farm since the winter before last. Every evening at dusk the kitchen table is laid for one. Every morning Mrs Bellamy clears it away, and she has stopped telling her husband.","rooms":5,"first":"kitchen.html","firstId":"kitchen","last":"supper"}]},"adventure":{"name":"Adventure","stories":[{"id":"orvo","title":"The Night Train to Orvo","stars":1,"minutes":"10-15","hold":false,"level":"A2","blurb":"A snowy station at midnight. A guard with a watch. A train that is never late. Tonight you are the assistant.","rooms":3,"first":"halm.html","firstId":"halm","last":"arrival"},{"id":"mail","title":"Seven Sacks for Tolver","stars":3,"minutes":"35-45","hold":false,"level":"B1+–B2","blurb":"Tolver gets its letters over the mountains by air: in an old brown mail ship that makes fifty kilometres an hour. This morning a new silver one that makes eighty is on the same field. Seven sacks each. The first ship there keeps the mail, and you are the Post Office's newest clerk.","rooms":5,"first":"shed.html","firstId":"shed","last":"tolver"}]},"cipher":{"name":"Cipher","stories":[{"id":"wrong","title":"Wrong Number","stars":1,"minutes":"15-20","hold":false,"level":"B1","blurb":"Twenty to midnight on a wet Friday. A phone box rings as you walk past. Nobody speaks, but words come up on its little screen, and parts of them are missing.","rooms":3,"first":"phonebox.html","firstId":"phonebox","last":"midnight"},{"id":"lexicon","title":"The Final Word","stars":2,"minutes":"20-30","hold":false,"level":"B1+","blurb":"Half an hour before a live television word quiz goes on air, the computer that runs the game locks everybody into separate rooms. Everybody except the one who fetches the water: you.","rooms":4,"first":"corridor.html","firstId":"corridor","last":"onair"},{"id":"exam","title":"Answer All Questions","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Nine o’clock at night, the evening before the English exam. You have come back to school for your revision cards. The exam cupboard is standing open, the papers are gone, and somebody has just locked you in.","rooms":5,"first":"staffroom.html","firstId":"staffroom","last":"hall"},{"id":"seven","title":"Seven Down","stars":4,"minutes":"50-65","hold":false,"level":"B2","blurb":"Eleven at night in a newspaper building. The presses roll at two, the crossword setter has not missed a day in thirty-two years, and tonight no puzzle came. Only a grid with every square empty, and a line in blue pencil: finish it and you can find me.","rooms":6,"first":"desk.html","firstId":"desk","last":"edition"},{"id":"zero","title":"Station Zero","stars":5,"minutes":"75-90","hold":false,"level":"B2+ to C1","blurb":"A listening post on the coast, shut for thirty years. At midnight, in a storm, its dead transmitter begins to send, and a voice on the telephone tells you exactly what to do about it. The voice is very helpful. Read everything twice.","rooms":7,"first":"hut.html","firstId":"hut","last":"relieved"}]},"forensic":{"name":"Forensics","stories":[{"id":"fair","title":"A Smell of Vinegar","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Thursday night in a school hall, twelve hours before the science fair is judged. The best project in the room lies in pieces in a cloud of white powder, the air smells of vinegar, and the head teacher has already written her letter about the boy with the volcano. All she wants from the laboratory is a signature.","rooms":5,"first":"hall.html","firstId":"hall","last":"judging"},{"id":"cake","title":"Warm in the Middle","stars":3,"minutes":"40-50","hold":false,"level":"B1+ to B2","blurb":"Friday night in a cake shop, fourteen hours before the wedding of the year. The cake has gone green down one side, somebody has walked through a sack of flour, and a small sponge on the rack is still warm in the middle. The new assistant locked up. The baker would like to be wrong about her, and cannot see how.","rooms":5,"first":"shop.html","firstId":"shop","last":"yard"}]},"history":{"name":"Time Slip","stories":[{"id":"carpathia","title":"Come at Once","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"The North Atlantic, 15 April 1912, twenty past midnight. A small liner is three days out of New York, and her passengers are asleep. You are her bridge messenger, and you are teaching yourself the code that the wireless man uses. Then the biggest ship in the world asks for help.","rooms":5,"first":"shack.html","firstId":"shack","last":"daybreak"},{"id":"apollo","title":"Lots and Lots of People","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Houston, Monday 13 April 1970, nine at night. Three men are on their way to the Moon. You are the newest person in the building, and your job is paper. Then a voice on the speaker says that they have had a problem.","rooms":5,"first":"backroom.html","firstId":"backroom","last":"splash"}]},"court":{"name":"The Verdict","stories":[{"id":"glass","title":"A Quarter Past Four","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A wet Tuesday at Hatherwick County Court. A retired signalman wants £900 for a wrecked greenhouse, and he has brought the football that did it, with a boy’s name on it. The solicitor who was going to speak for the boy is stuck on a train. You were only supposed to carry the file.","rooms":5,"first":"hall.html","firstId":"hall","last":"judgment"},{"id":"gambit","title":"Move Sixteen","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Sunday afternoon at Brindlow Town Hall, round four of the junior chess congress. A girl of twelve has just beaten the top seed with a move that nobody expected, and half an hour later her win has been taken off the wall chart: a steward saw her in the corridor with a telephone. She may appeal, and she may bring one friend to speak for her. You are only the runner. You carry the result slips.","rooms":5,"first":"chamber.html","firstId":"chamber","last":"boardone"}]},"news":{"name":"Deadline","stories":[{"id":"rumour","title":"Says Who?","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Friday, twenty past three, at Petherwick School. Since eight this morning one picture has been going from phone to phone: SCHOOL TO CLOSE IN JULY. It's official, apparently. At four o'clock the school's news site sends its bulletin to every family, the top story is already written, and nobody on the desk can say where it came from. You are the trainee. Trainees fetch, carry and doubt.","rooms":5,"first":"newsroom.html","firstId":"newsroom","last":"four"},{"id":"flood","title":"Two Aunts","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A Tuesday night in February, ten to nine, and the River Wend is coming up through Wendford. Wend Valley Radio is at the top of the highest street in the town, and everything the valley knows, thinks or has been told by a cousin is landing on its news desk at once. At half past nine Danny Sato reads the news, and people will do what he says. You are the trainee. You were meant to go home at five. And nothing goes on air in this building, the news editor says, without two aunts.","rooms":5,"first":"board.html","firstId":"board","last":"light"}]},"wild":{"name":"Lost Signal","stories":[{"id":"ridge","title":"The Cold Door","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A Saturday in October, cloud on Skallan Edge, and the leader of your party has just sat down very hard on a wet rock. The hut is five hundred metres straight below you, and that way is shut. Mrs MacAskill knows another way off by heart. But her glasses have gone over the edge, there are three hours of daylight left, and you are the one holding the map.","rooms":5,"first":"cairn.html","firstId":"cairn","last":"hut"},{"id":"tide","title":"The Box at Pole Seven","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A Thursday in June. The sea has gone away and left three kilometres of sand between the island of Tarrow and the mainland, with seals to count, a line of poles to walk by, and a tide card that says the road is dry until the afternoon. Mr Nyberg has crossed for thirty years and likes forty minutes in hand. But a card is only a promise, there is a white wall out at sea, and you are the one carrying the bag.","rooms":5,"first":"shed.html","firstId":"shed","last":"box"}]}}, cap = document.getElementById('cap'), capT = 0;
   var SHUT = {
     mystery: 'The files are not on the desk yet. Try again another day.',
     scifi: 'ACCESS DENIED. This airlock is still being built.',
     fantasy: 'The door hums and stays shut. Its story has not been written yet.',
     ghost: 'On the other side, something tries the handle too. Then it stops. Not yet.',
     adventure: 'The night train has not come in. Try again another day.',
-    cipher: 'The letters on the lock will not turn yet. Try again another day.'
+    cipher: 'The letters on the lock will not turn yet. Try again another day.',
+    forensic: 'The lab is sealed. The evidence has not come in yet.',
+    history: 'The archive is closed today. The box you want has not been brought up yet.',
+    court: 'The court is not sitting yet. Come back when the list is up.',
+    news: 'Nobody is at the news desk yet. The first story has not come in.',
+    wild: 'The hut is snowed in. Try again another day.'
   };
   function say(t) { cap.textContent = t; cap.classList.add('on'); clearTimeout(capT); capT = setTimeout(function () { cap.classList.remove('on'); }, 3800); }
   function txt(id, t) { var n = document.getElementById(id); if (n) n.textContent = t; return n; }
   Shelf.init();
+  if (window.Account) Account.ui.welcome();          /* who is playing? (asked once; the page is read again for a new player) */
 
   Array.prototype.forEach.call(document.querySelectorAll('.door'), function (d) {
     var t = d.getAttribute('data-t'), info = THEMES[t], list = info ? info.stories : [];
@@ -253,6 +404,12 @@
       if (t === 'scifi') { var led = txt('led-scifi', 'OPEN'); led.setAttribute('fill', '#5dff9a'); led.classList.remove('blink'); }
       if (t === 'adventure') txt('dep-adventure', 'NOW BOARDING');
       if (t === 'cipher') 'OPEN'.split('').forEach(function (c, i) { txt('drum' + i, c); });
+      if (t === 'forensic') { var fl = document.getElementById('led-forensic'); fl.setAttribute('fill', '#5dff9a'); fl.classList.remove('blink'); }
+      if (t === 'history') {                                  /* the year on the door will not keep still */
+        var YEARS = ['1666', '1822', '1854', '1912', '1953', '1970'], yi = 0;
+        var flip = function () { YEARS[yi++ % YEARS.length].split('').forEach(function (c, i) { txt('yr' + i, c); }); };
+        flip(); setInterval(flip, 2600);
+      }
     }
     d.addEventListener('click', function () {
       if (list.length) { Shelf.go(t + '/index.html'); return; }
@@ -260,6 +417,14 @@
       g.classList.remove('shake'); void g.getBoundingClientRect(); g.classList.add('shake');
     });
   });
+  /* the corridor has two wings; it remembers which one this visitor was in */
+  var body = document.body, wing = 0;
+  try { wing = localStorage.getItem('keyhole.wing') === '1' ? 1 : 0; } catch (e) {}
+  function show(w) { wing = w; if (w) body.classList.add('w1'); else body.classList.remove('w1'); try { localStorage.setItem('keyhole.wing', String(w)); } catch (e) {} }
+  body.classList.add('now'); show(wing); void body.offsetWidth; setTimeout(function () { body.classList.remove('now'); }, 60);
+  document.getElementById('wingNext').addEventListener('click', function () { show(1); });
+  document.getElementById('wingPrev').addEventListener('click', function () { show(0); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') show(1); else if (e.key === 'ArrowLeft') show(0); });
   setTimeout(function () { say('Choose a door.'); }, 1400);
 })();
 </script>
