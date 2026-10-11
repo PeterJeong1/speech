@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The First Edition · Seven Down</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="seven.css">
+<style>
+  body{--bg:#1a120b;--accent:#f4e04d;--font-display:'Playfair Display',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(20,13,8,.96);--tc-ink:#f3e9d6;--cap-bg:rgba(20,13,8,.94);--panel:#1d140c;--face-bg:#5a3b1e;--q-ink:#e6d58a;--fade:#0a0604;--hud-bg:rgba(20,13,8,.82)}
+  .tc-room{font-weight:900;letter-spacing:.01em}
+  .mast{font-family:'Playfair Display',serif;font-weight:900;text-anchor:middle;fill:#141518}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .hd{font-family:'Playfair Display',serif;font-weight:900;fill:#141518}
+  .bd{font-family:'EB Garamond',Georgia,serif;fill:#22201c}
+  #paper.run{animation:shk .16s steps(2,end) infinite}
+  @keyframes shk{50%{transform:translate(1.2px,-.8px)}}
+  #lampL{animation:ll 6.1s steps(1,end) infinite}
+  @keyframes ll{0%{opacity:.9}48%{opacity:.8}52%{opacity:.9}}
+
+  .endc{position:fixed;right:3vw;top:66px;z-index:34;width:min(430px,92vw);padding:22px 26px 18px;display:none;background:#f3eedf linear-gradient(170deg,rgba(255,255,255,.5),rgba(120,100,60,.16));color:#141518;border-top:10px solid #141518;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .endc.on{display:block}
+  .endc h3{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.3em;color:#c8281d}
+  .endc h2{margin:0 0 12px;padding-bottom:9px;border-bottom:2px solid #141518;font-family:'Playfair Display',serif;font-weight:900;font-size:33px;line-height:1.05}
+  .endc p{margin:0 0 7px;font-family:'Courier Prime',monospace;font-size:16.5px;line-height:1.36}
+  .endc .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .endc .btn{--accent:#141518;font-size:12.5px;padding:8px 13px}
+  .endc .btn:hover{color:#f3eedf}
+  .endc small{display:block;margin-top:13px;font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;line-height:1.5}
+  .endc small button{text-decoration:underline;font:inherit;letter-spacing:inherit;text-transform:inherit}
+
+  /* the wet proof of the clue for 7 Down */
+  .lp{width:min(840px,94vw);padding:24px 36px 24px;background:#f3eedf linear-gradient(175deg,rgba(255,255,255,.45),rgba(120,100,60,.14));color:#141518;box-shadow:0 26px 70px rgba(0,0,0,.65);border-top:10px solid #141518;transform:rotate(-.4deg)}
+  .lp h5{margin:0 0 10px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.24em;display:flex;justify-content:space-between}
+  .lp .clue{margin:0 0 12px;font-family:'EB Garamond',Georgia,serif;font-size:27px;line-height:1.4}
+  .lp .clue b{font-family:'Playfair Display',serif;font-weight:900;margin-right:8px}
+  .lp .wk-gap{--wk-line:#c8281d;--wk-cur:rgba(244,224,77,.7);--wk-hit:#2450a8;font-family:'Playfair Display',serif;font-weight:900}
+  .lp .wk-gap .wk-cell.blank{border-bottom:3px solid #c8281d;width:.8em}
+  .lp .sv-msg{color:#3b382f;min-height:48px;font-size:15.5px}
+
+  .rp{width:min(780px,94vw);max-height:86vh;overflow:auto;background:#f3eedf;color:#141518;padding:22px 34px 18px;box-shadow:0 26px 70px rgba(0,0,0,.6);border-top:10px solid #141518;-webkit-user-select:text;user-select:text}
+  .rp h4{margin:0 0 3px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.28em;color:#c8281d}
+  .rp h3{margin:0 0 8px;padding-bottom:7px;border-bottom:2px solid #141518;font-family:'Playfair Display',serif;font-weight:900;font-size:26px}
+  .rp label{display:block;font-family:'Courier Prime',monospace;font-size:16px;line-height:1.34;font-weight:700;margin:9px 0 4px}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Courier Prime',monospace;font-size:16.5px;line-height:1.45;color:#141518;background:#fff;border:1px solid #a8a495;padding:7px 11px;border-radius:2px;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:58px}
+  .rp .count{font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;opacity:.65;text-align:right;margin-top:4px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .rp .foot span{flex:1;font-family:'Courier Prime',monospace;font-size:14.5px;opacity:.75}
+  .rp .btn{--accent:#141518}.rp .btn:hover{color:#f3eedf}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible;background:#fff}
+    .rp textarea,.rp input[type=text]{border:0;border-bottom:1px solid #999}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2415"/><stop offset="1" stop-color="#1c110a"/></linearGradient>
+  <linearGradient id="paperG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6f1e3"/><stop offset="1" stop-color="#e3dcc8"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <radialGradient id="warmG"><stop offset="0" stop-color="#ffd27a" stop-opacity=".5"/><stop offset=".5" stop-color="#ffb347" stop-opacity=".14"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="42%" cy="50%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#0a0503" stop-opacity=".3"/><stop offset="1" stop-color="#0a0503" stop-opacity=".9"/></radialGradient>
+  <pattern id="plank" width="170" height="900" patternUnits="userSpaceOnUse"><path d="M0 0V900" stroke="#140c07" stroke-width="4"/></pattern>
+  <pattern id="lat" width="46" height="92" patternUnits="userSpaceOnUse"><path d="M0 0L23 46L0 92M46 0L23 46L46 92" fill="none" stroke="#c79b3b" stroke-width="4.500"/></pattern>
+</defs>
+
+<!-- the floor of the lift, the gate, the handle -->
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#floorG)"/><rect x="-1000" y="-400" width="3600" height="1800" fill="url(#plank)"/>
+<g id="cage" class="hot"><rect x="1180" y="-400" width="1420" height="1800" fill="#0d0805"/><rect x="1180" y="-400" width="1420" height="1800" fill="url(#lat)" opacity=".8"/><path d="M1180 -400V1400" stroke="#7d5f1d" stroke-width="12"/></g>
+<ellipse id="lampL" cx="600" cy="380" rx="900" ry="620" fill="url(#warmG)" pointer-events="none"/>
+<g id="handle" class="hot" transform="translate(310 560)"><rect x="984" y="64" width="212" height="212" rx="10" fill="#24160c" stroke="#7d5f1d" stroke-width="4"/><circle cx="1090" cy="170" r="74" fill="url(#brassG)"/><circle cx="1090" cy="170" r="58" fill="#3a2415"/><path d="M1090 170L1140 96" stroke="url(#brassG)" stroke-width="14" stroke-linecap="round"/><circle cx="1146" cy="88" r="17" fill="#1c110a"/><circle cx="1090" cy="170" r="13" fill="url(#brassG)"/>
+  <text x="1048" y="150" class="sT" font-size="13" fill="#e0b354">UP</text><text x="1052" y="204" class="sT" font-size="13" fill="#e0b354">DOWN</text></g>
+
+<!-- the first copy -->
+<g id="paper" class="hot" transform="rotate(-2.2 560 480)">
+  <rect x="96" y="56" width="940" height="1300" fill="#000" opacity=".35" transform="translate(12 12)"/>
+  <rect x="96" y="56" width="940" height="1300" fill="url(#paperG)"/>
+  <text x="566" y="150" class="mast" font-size="92" letter-spacing="3">THE CLARION</text>
+  <path d="M126 172H1006M126 180H1006" stroke="#141518" stroke-width="3"/>
+  <text x="566" y="206" class="sT" font-size="15" fill="#141518" letter-spacing="4">TUESDAY 19 NOVEMBER 1968 &#183; FIRST EDITION &#183; PAGE 12</text>
+  <path d="M126 220H1006" stroke="#141518" stroke-width="1.500"/>
+  <text x="136" y="268" class="hd" font-size="38">Crossword No. 10,000</text><text x="136" y="296" class="bd" font-size="20" font-style="italic">set, as on every morning since 1936, by SPHINX</text>
+  <g id="pgrid"></g>
+  <g id="pclues"></g>
+  <rect x="566" y="640" width="430" height="150" fill="none" stroke="#141518" stroke-width="3"/><rect x="574" y="648" width="414" height="134" fill="none" stroke="#141518" stroke-width="1"/>
+  <text x="781" y="690" class="hd" font-size="27" text-anchor="middle">SPHINX</text>
+  <text x="781" y="722" class="bd" font-size="19" text-anchor="middle">thanks his readers for ten thousand mornings,</text><text x="781" y="746" class="bd" font-size="19" text-anchor="middle">and hopes to see them again tomorrow.</text>
+  <text x="781" y="772" class="sT" font-size="11" fill="#141518" letter-spacing="3">HE HAS ASKED US NOT TO SAY MORE</text>
+  <g id="pcols" stroke="#8a8676" stroke-width="2"></g>
+</g>
+<!-- what he writes with -->
+<g id="pencil" class="hot" transform="rotate(24 1010 640)"><rect x="900" y="630" width="210" height="18" fill="#2450a8"/><path d="M900 630l-34 9 34 9z" fill="#e9d6b0"/><path d="M874 637l-8 2 8 2z" fill="#2450a8"/><rect x="1110" y="630" width="14" height="18" fill="#c79b3b"/></g>
+<g id="flask" class="hot"><ellipse cx="1090" cy="770" rx="56" ry="14" fill="#000" opacity=".4"/><rect x="1046" y="560" width="88" height="208" rx="14" fill="#2f5a4a"/><rect x="1054" y="520" width="72" height="50" rx="8" fill="#c9cdd2"/><rect x="1046" y="610" width="88" height="14" fill="#1f3a31"/><rect x="1046" y="700" width="88" height="14" fill="#1f3a31"/><path d="M1060 574v180" stroke="#6fa890" stroke-width="5" opacity=".5"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="endc" id="done">
+  <h3>STOP PRESS</h3><h2>No. 10,000 is in the paper.</h2>
+  <p id="d-time"></p><p id="d-words"></p><p id="d-hints"></p>
+  <div class="row"><button type="button" class="btn" id="b-write">Set number 10,001</button><button type="button" class="btn" id="b-book">Open the notebook</button><button type="button" class="btn" id="b-lobby">Back to the files</button></div>
+  <small>Seven Down &middot; The Clarion &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="seven.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, told = {}, last = false;
+  var ALL = ['a15', 'a5', 'd4', 'a14', 'd13', 'd2', 'd6', 'd12', 'a16', 'd3', 'a1', 'a8', 'a9', 'a10', 'd11', 'd7'];
+
+  /* the puzzle as the readers will see it: every square empty */
+  (function () {
+    var s = '', r, c, x, y, G = 30, X0 = 136, Y0 = 322, k;
+    s += '<rect x="' + (X0 - 3) + '" y="' + (Y0 - 3) + '" width="' + (11 * G + 6) + '" height="' + (11 * G + 6) + '" fill="#141518"/>';
+    for (r = 0; r < 11; r++) for (c = 0; c < 11; c++) {
+      if (SEV.pat[r].charAt(c) !== '.') continue;
+      x = X0 + c * G; y = Y0 + r * G; k = r + ',' + c;
+      s += '<rect x="' + (x + 1) + '" y="' + (y + 1) + '" width="' + (G - 2) + '" height="' + (G - 2) + '" fill="#fbf8ee"/>';
+      if (SEV.nums[k]) s += '<text x="' + (x + 3) + '" y="' + (y + 11) + '" font-family="Oswald,sans-serif" font-size="8.500" fill="#141518">' + SEV.nums[k] + '</text>';
+    }
+    $('#pgrid').innerHTML = s; s = '';
+    for (r = 0; r < 2; r++) {
+      s += '<text x="' + (566 + r * 220) + '" y="340" class="sT" font-size="14" fill="#141518" letter-spacing="3" style="text-anchor:start">' + (r ? 'DOWN' : 'ACROSS') + '</text>';
+      for (c = 0; c < 15; c++) s += '<path d="M' + (566 + r * 220) + ' ' + (358 + c * 18) + 'h' + (150 + ((c * 7 + r * 3) % 5) * 12) + '" stroke="#55524a" stroke-width="' + (c % 2 ? 2 : 3) + '"/>';
+    }
+    $('#pclues').innerHTML = s; s = '';
+    for (r = 0; r < 4; r++) for (c = 0; c < 26; c++) s += '<path d="M' + (136 + r * 220) + ' ' + (826 + c * 16) + 'h' + (170 + ((c * 5 + r) % 4) * 9) + '"/>';
+    $('#pcols').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'seven', storyTitle: 'Seven Down', id: 'edition', no: 'VI', title: 'The First Edition',
+    go: 'Step into the lift',
+    intro: [
+      'Six of the answers had stars, because Sphinx had used them before: each had been the 7 Down of one of the last six puzzles. Hung on the gate in the order of the week, from Monday to Saturday, their first letters made a name. Loophole, Omen, Vow, Alibi, Gaze, Extra: LOVAGE.',
+      'It was the name in the cuttings: the man who has worked the lift at Clarion House since 1936. The card on his gate told the truth about his six words, which were out of order. It never told the truth about his lift.',
+      'What happened in the next half hour happened on a landing, in a lift and in a composing room. None of it will ever be printed.'
+    ],
+    exit: {"last":true,"rooms":6,"stars":4}, tags: {"a15":["b256e726"],"a15@":["379d75f0","871d3f9a","b88e2e32"],"a15?":["33ca9ccf","45d98e4d","00510983"],"a15#":["62c065ca"],"a5":["de8d093a"],"a5@":["bdad6525","3276ea5e","ec842a3a"],"a5?":["42515128","e2a9345d","414bbb76"],"a5#":["dab97d6e"],"d4":["6a18951c"],"d4@":["8ae6334d","9f832d80","db84c947","dae5787b","9b52b072"],"d4?":["8c42deb6","97909c03","133b055a","2ed259fd","b6aaf68a"],"d4#":["8effe288"],"a14":["ac7f9617"],"a14@":["9e8d8795","bf17c160","d345d579","77676ef9","558cd513","7a4a62fc","7a2ac43c"],"a14?":["8979c2db","7ebb462c","cb6cfcb6","a6fc8f9a","95363271","681ede19","11afb79b"],"a14#":["7d7756b9"],"d13":["aa3b1d0f"],"d13@":["313d3b86","cb4586e5","2ae796e4","fd988ec4"],"d13?":["80dc1526","bf5b572a","2ecbc9ba","453ec17f"],"d13#":["898670f4"],"d2":["59abf2f4"],"d2@":["669cf0c2","afd287a5","41f2d97f","d33fb463","717290e3"],"d2?":["3c0b5785","13524c2e","a9953d15","ea0697b8","446fcf9f"],"d2#":["c5a2722c"],"d6":["73da16d4"],"d6@":["5acd2d3c","169752ea","9dcf87a5","f62e8aae"],"d6?":["6702d31b","73c18bdc","b523937f","726f4ad8"],"d6#":["5cf79248"],"d12":["cd17b00d"],"d12@":["529f3115","4267a86b","7f4f79d3","882a1b49","8bd00138"],"d12?":["215c6087","65f0c2f7","86d686b6","85e1b6b5","6292f5e3"],"d12#":["348309d1"],"a16":["590adbb4"],"a16@":["66c331b3","a8e5f867","235e320e","d976eca2","3605d3cc","b70ce2f3","fad1a2f9"],"a16?":["56980de5","bc1e72c7","2a452571","f9426ea6","d7b5a4e0","5ba244df","39b2f519"],"a16#":["91f94acc"],"d3":["67958b1d"],"d3@":["311a495f","6608feac","86568c31","32d8060f","52034dbc","bb078254","473644db","e904453f","11b3770e","1ab8cf65"],"d3?":["b5f69a3f","ca67ac8b","92e350cf","cf5c27dd","fad956df","5f25b19a","fdc16944","b0a670d5","8785b125","aa45d60b"],"d3#":["ab7dee03"],"a1":["941d820c"],"a1@":["ce09bf58","6306ea9b","e22d3ce8","663758f2","d96f0192","827b4a5a","233a5e6a"],"a1?":["a28ad928","0a6de60d","b7c747d7","8dc02340","5ab6462a","a2074b4f","1e7b8067"],"a1#":["d69f7712"],"a8":["21f93f43"],"a8@":["d38b18b5","440781b9","dbbfc51c","0b3287c5","a7958fd7","9db5d4bd","97939fcb"],"a8?":["d11099bd","ffef2511","8b5a74fa","a853e697","05b0b1f3","0b883ba5","bd00f0af"],"a8#":["78a32082"],"a9":["c3b75456"],"a9@":["df1b4a4d","9d29ecc3","9327bb7c","0b2e55e9","74c627dc","a45eaa09","457f61e8","96770f46"],"a9?":["d03a2821","1764f43a","2310410d","dc62d501","0bcb4437","3c107a30","02f698f9","a0362712"],"a9#":["3dcb4d9a"],"a10":["c02b167d"],"a10@":["c7f73182","7f98e87c","cab14a6d","ec6fb43a","2c0075e6","dae44b2b","17746fd9","95d07529"],"a10?":["c75076f2","23442491","ed62d9df","7befd89e","278781c5","7b623174","fe436ec3","146408aa"],"a10#":["4a528a00"],"d11":["1a6c26e7"],"d11@":["3600f359","d37fe57a","8d1a86e9","2d4fe2f0","1cd33834"],"d11?":["3fdc1fed","671f1780","4da0e1f8","f2b1e3aa","fc4ff443"],"d11#":["4e025974"],"d7":["918788ae"],"d7@":["0c1a2778","3cbb5432","ca141225","d20d9968","71bf5f76","028b1f00","574a9681","74158a9b","b34a5c9d","dadf77e5"],"d7?":["b40e79fc","bf2ec115","03f502f1","3ac8efa6","80ec8469","ded1803d","ffe2010f","43387ded","8300a8f5","7d13a9aa"],"d7#":["705ab885"],"last":["d75aaec3"],"last@":["749d81ab","76723830","d0d4f073","d20bcac7"],"last?":["f7e8ed38","4e5bc533","4d2195eb","0ef588cb"],"last#":["a6e6b4b0"]},
+    sound: ['press', { root: 50, bpm: 84, drop: ['mel'] }],          /* a bell is rung at two o'clock: no bright notes until it has rung. Then the room turns to a major key (see two()) */
+    hints: hints, onBegin: begin
+  });
+  SEV.clock({ fixed: 162, day: 'Tue' });
+  SEV.ensure(ALL);
+  told = ER.flag('e-told') || {}; last = !!ER.flag('e-last');
+
+  function hints() {
+    if (last || !told.talk) return null;
+    return ['last', [
+      'Mr Fenwick&rsquo;s wet proof has two letters missing from one short word. Type them.',
+      'Four letters. It goes up and down, and tonight, for the first time in thirty-two years, it did neither.'
+    ]];
+  }
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('e-told', told); return true; }
+  function isBusy() { return busy; }
+  function begin() {
+    if (last) { finish(true); return; }
+    busy = true;
+    ER.narrate([
+      'The lift did not go down at once. Mr Lovage poured you half a cup of tea from his flask, because you had climbed eight floors. Then he answered your questions, in the order in which you asked them.'
+    ], function () { busy = false; lovage(); });
+  }
+  function lovage() {
+    var c = window.CAST.lovage;
+    ER.talk({ who: c.who, role: c.role, face: window.FACE('lovage'), last: 'Finish the tea',
+      lines: [
+        { q: 'Why did the puzzle not come?', a: '&ldquo;It did come. It has been in my pocket since six o&rsquo;clock, finished, the same as every evening. I bring it up in the lift and leave it on the puzzles desk as I go by. Nobody looks at the liftman.&rdquo;' },
+        '&ldquo;At ten to six I took the Editor down from the seventh floor, and tonight Mr Quill was with her. People talk in a lift as if the man at the handle were part of the machine. She said: thirty-two years, Quill, and under my own roof. He said: one does not like to boast.&rdquo;',
+        { q: 'So you stopped the lift.', a: '&ldquo;I stopped delivering. If I had left that envelope on your desk, he would have carried it upstairs and been Sphinx by breakfast. A man can steal a name. He cannot steal tomorrow&rsquo;s puzzle. So I kept it, and hung a card on every gate, and waited to see what he would set by himself.&rdquo;' },
+        { q: 'Why not go to the Editor yourself?', a: '&ldquo;With what? Hearsay: a liftman&rsquo;s word against a gentleman&rsquo;s. And the old promise had a loophole in it. Nobody was ever to ask my name, but nothing stopped a man from giving one. I needed somebody to walk in with the whole thing worked out, and with no reason to love Mr Quill.&rdquo;' },
+        { q: 'Why me?', a: '&ldquo;Six mornings I have watched you do my crossword between the ground floor and the sixth. In ink. On Thursday you had finished before the fourth. Thursdays are the hard ones.&rdquo;' },
+        { q: 'And seven down?', a: '&ldquo;A small joke, and I have made it ten thousand times. Seven is my top floor, and down is the only way to go from it. So seven down has always carried a letter of my name: L on a Monday, E on a Saturday. I never thought that anybody would look.&rdquo;' }
+      ],
+      clue: { id: 'lovage', title: 'Mr Lovage: since six o&rsquo;clock', kind: 'In the lift' },
+      done: function () { tell('talk'); landing(); }
+    });
+  }
+  function landing() {
+    busy = true;
+    ER.narrate([
+      'Then the glass door opened. Mrs Penhale stood on the landing in a green evening dress, with Mr Quill&rsquo;s crossword in her hand. She had come back from the Lord Mayor&rsquo;s dinner at one o&rsquo;clock. By the stairs.',
+      'Mr Quill arrived a minute later, by the same stairs. For some time he could not speak at all.',
+      'You gave her the grid and your solutions book. She read them both, standing up. Then she asked one question. &ldquo;Mr Quill. What is tomorrow&rsquo;s seven down?&rdquo;',
+      '&ldquo;Banana,&rdquo; said Mr Quill, when he had the breath for it.',
+      '&ldquo;Mr Lovage?&rdquo; &ldquo;It is on the card behind you, madam,&rdquo; said Mr Lovage. It was the only time that anybody has seen the Editor of the Clarion read a lift notice twice.',
+      'At twenty to two the lift went down to the second floor, in perfect order, with a plain envelope in it. Mr Fenwick had kept page 12 loose. Mr Quill&rsquo;s crossword fell on the floor. By accident.'
+    ], function () { two(); });
+  }
+  /* two o'clock: the bell, the presses, and the music turns to a major key */
+  function two() {
+    SEV.setClock('Tue', 180); ER.sfx.bell(); setTimeout(function () { SEV.sfx.rumble(3.2); $('#paper').classList.add('run'); }, 700);
+    try { if (ER.track) { ER.cfg.sound = ['morning', { root: 50, bpm: 72, drop: ['mel'] }]; ER.track.play(ER.cfg.sound); } } catch (e) {}
+    ER.narrate([
+      'At two o&rsquo;clock a bell rang under the street, and the whole of Clarion House began to shake.',
+      'Mr Fenwick came up with the first copy himself, and a strip of wet proof. &ldquo;Seven down has a clue after all,&rdquo; he said. &ldquo;He wrote it in the lift. But a piece of type has broken, and I am too proud to ask him what it says.&rdquo;'
+    ], function () { busy = false; openLast(); });
+  }
+
+  /* ---------- the last gap ---------- */
+  function openLast() {
+    if (busy || last) return;
+    var box = ER.el('div', 'lp'), msgEl;
+    box.innerHTML = '<h5><span>THE CLARION &middot; No. 10,000</span><span>PROOF</span></h5>' +
+      '<p class="clue"><b>7</b>Not working: like the <span class="wk-gap" data-key="last" data-show="l__t"></span> at Clarion House until two o&rsquo;clock this morning (3, 2, 5)</p><p class="sv-msg"></p>';
+    msgEl = box.querySelector('.sv-msg');
+    msgEl.innerHTML = ER.gloss('Two letters have not printed. Type them.');
+    WK.gaps(box, { mark: false,
+      onMiss: function () { msgEl.innerHTML = ER.gloss('Mr Fenwick looks at you over his glasses. &ldquo;After tonight?&rdquo; he says.'); },
+      onDone: function () {
+        last = true; ER.flag('e-last', 1); if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+        msgEl.innerHTML = ER.gloss('&ldquo;LIFT,&rdquo; says Mr Fenwick. &ldquo;I might have known.&rdquo;'); ER.sfx.ok();
+        busy = true;
+        setTimeout(function () { ER.closeAll(); finish(false); }, 1700);
+      } });
+    ER.open('ov-lock', box);
+  }
+  function finish(again) {
+    var st = ER.state();
+    $('#paper').classList.add('run');
+    function card() {
+      var mins = SEV.minutesPlayed(), hn = ER.hintsUsed(), sl = ER.flag('slips') || 0;
+      $('#d-time').textContent = 'The first edition went to press at two. It took you ' + mins + (mins === 1 ? ' minute' : ' minutes') + ' to get the crossword into it.';
+      $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words. You rubbed out ' + sl + (sl === 1 ? ' wrong answer.' : ' wrong answers.');
+      $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+      $('#done').classList.add('on'); busy = false;
+    }
+    if (again) { SEV.setClock('Tue', 180); card(); return; }
+    busy = true;
+    ER.narrate([
+      'Nobody at the Clarion was unmasked. The box on page 1 was lifted out, and a smaller one went into page 12: SPHINX THANKS HIS READERS FOR TEN THOUSAND MORNINGS.',
+      'Mr Lovage took the Lord Mayor&rsquo;s cheque, and nothing else. &ldquo;The money, yes,&rdquo; he said. &ldquo;The name, no. I like to hear what they say about me on the way up.&rdquo;',
+      'Mr Quill has left the Clarion, to give more time to his own crosswords. So far, nobody has asked to see them.',
+      'In the spring the lift is to have push buttons, and Mr Lovage will be sixty. Sphinx is going to need a desk. He has asked for the corner of yours, and for somebody to check his clues who is not afraid to cross one out.',
+      'On Wednesday morning you got into the lift with the Clarion under your arm. &ldquo;Seven down is a hard one today,&rdquo; said Mr Lovage. &ldquo;It begins with V,&rdquo; you said. The lift went up very slowly indeed.'
+    ], function () { card(); ER.sfx.ok(); });
+  }
+
+  /* ---------- things in the lift ---------- */
+  $('#paper').addEventListener('click', function () {
+    if (busy) return;
+    if (!last && told.talk) { openLast(); return; }
+    ER.say(last ? 'The first copy of Tuesday&rsquo;s Clarion, still warm. Page 12: Crossword No. 10,000. Every square is empty. Sixty thousand people are about to begin where you began.' : 'A newspaper that has not been printed yet. Mr Lovage is still talking.');
+  });
+  SEV.thing('#handle', null, 'The brass handle. Forward for up, back for down, and in the middle the lift stops wherever its attendant likes: between two floors, for instance.', isBusy);
+  SEV.thing('#pencil', null, 'A blue pencil, worn down to half its length. It has written ten thousand crosswords and nine cards, one for every gate.', isBusy);
+  SEV.thing('#flask', null, 'A flask of tea. He was ready for a long night.', isBusy);
+  SEV.thing('#cage', null, 'The lift, from the inside. A wooden stool, a brass handle, and the floors going by on the other side of the gate.', isBusy);
+  SEV.onGrid = function () { if (!busy) SEV.openSheet({ type: [], msg: 'Sixteen answers, in ink. Tomorrow&rsquo;s readers will get the same grid with every square empty, and clues of their own.' }); };
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+
+  /* number 10,001: the one part that nobody can do for you */
+  $('#b-write').addEventListener('click', function () {
+    var saved = ER.flag('report') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>THE CLARION &middot; PUZZLES DESK</h4><h3>Number 10,001: your turn</h3>' +
+      '<label for="r1">1. Choose one of tonight&rsquo;s sixteen answers. Write a clue for it as Sphinx does: a plain meaning, without using the word itself.</label><textarea id="r1"></textarea>' +
+      '<label for="r2">2. Now hide a word. Write a sentence in which a word of your own begins inside one word and ends inside another, as OMEN hid in &ldquo;two men&rdquo;. Under it, write the meaning of the hidden word.</label><textarea id="r2"></textarea>' +
+      '<label for="r3">3. The Clarion cannot print Sphinx&rsquo;s name. In about sixty words, tell its readers what happened last night without giving him away.</label><textarea id="r3"></textarea>' +
+      '<label for="r4">Signed (a pen name will do)</label><input type="text" id="r4" maxlength="60">' +
+      '<div class="count"></div><div class="foot"><span>Saved in this browser as you type.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { box.querySelector('#' + k).value = saved[k] || ''; });
+    function keep() {
+      var o = {}, n = 0;
+      ['r1', 'r2', 'r3', 'r4'].forEach(function (k) { o[k] = box.querySelector('#' + k).value; });
+      ['r1', 'r2', 'r3'].forEach(function (k) { n += (o[k].match(/[A-Za-z’']+/g) || []).length; });
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('report', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

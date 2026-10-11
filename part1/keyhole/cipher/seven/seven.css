@@ -1,0 +1,151 @@
+/* Seven Down - what every room of the story shares: the press clock, the unfinished grid, the paper of a newspaper
+   building, and a black-and-yellow skin for the notebook, the hints and the word tags. Each room sets its own palette on <body>. */
+
+/* ---- the press clock: Monday night, and the first edition goes at two ---- */
+.sv-clk{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:52;height:36px;display:flex;align-items:center;gap:0;
+  border:1px solid var(--hud-line,rgba(255,255,255,.24));background:var(--hud-bg,rgba(8,8,9,.76));border-radius:3px;color:var(--accent,#f4e04d);white-space:nowrap}
+.sv-clk span{display:flex;align-items:baseline;gap:8px;padding:0 13px 0 14px;pointer-events:none}
+.sv-clk small{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;opacity:.8}
+.sv-clk b{font-family:'Special Elite',monospace;font-weight:normal;font-size:21px;line-height:1;letter-spacing:.02em;position:relative;top:2px}
+.sv-clk i{font-family:'Oswald',sans-serif;font-style:normal;font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.8}
+.sv-clk.hit{animation:svhit .7s}
+.sv-clk.late b{color:#ff6b5e}
+@keyframes svhit{25%{transform:translateX(-50%) scale(1.22)}}
+.sv-gbtn{height:34px;margin:0;padding:0 14px;border:0;border-left:1px solid var(--hud-line,rgba(255,255,255,.24));background:transparent;color:inherit;cursor:pointer;
+  font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px}
+.sv-gbtn:hover{background:var(--accent,#f4e04d);color:#111}
+.sv-gbtn u{display:inline-block;width:15px;height:15px;text-decoration:none;background:
+  linear-gradient(currentColor,currentColor) 0 0/5px 5px no-repeat,linear-gradient(currentColor,currentColor) 10px 5px/5px 5px no-repeat,
+  linear-gradient(currentColor,currentColor) 5px 10px/5px 5px no-repeat;box-shadow:inset 0 0 0 1px currentColor}
+.sv-gbtn.ping{animation:svping .8s}
+@keyframes svping{30%{background:var(--accent,#f4e04d);color:#111}}
+
+/* ---- shared bits ---- */
+.tc-theme{font-family:'Oswald',sans-serif}
+.tc-text{font-family:'Courier Prime','Special Elite',monospace}
+.cap{font-family:'Courier Prime','Special Elite',monospace}
+.tk-name{font-family:'Playfair Display',serif;font-weight:900;letter-spacing:.02em}
+.tk-text{font-family:'Courier Prime',monospace}
+.toast{font-family:'Oswald',sans-serif;background:rgba(10,10,11,.94)}
+.sv-go{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:1px solid var(--accent,#f4e04d);
+  color:var(--accent,#f4e04d);background:var(--hud-bg,rgba(8,8,9,.92));font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.18em;text-transform:uppercase;border-radius:3px;cursor:pointer}
+.sv-go.on{display:block}
+.sv-go:hover{background:var(--accent,#f4e04d);color:#111}
+.sv-msg{min-height:58px;margin:0;font-family:'Courier Prime',monospace;font-size:16.5px;line-height:1.36;color:#f1ecdf}
+.sv-msg b{color:#f4e04d;font-weight:normal}
+/* the setter's hand: small square capitals in blue pencil */
+.sv-hand{font-family:'Caveat',cursive;font-weight:700;color:#2450a8;letter-spacing:.04em;text-transform:uppercase}
+.sv-star{color:#2450a8;font-family:Arial,sans-serif;font-style:normal;font-weight:bold}
+
+/* ---- the unfinished grid ---- */
+.sv-g{display:grid;grid-template-columns:auto minmax(0,470px);gap:20px;align-items:start;width:min(1090px,96vw)}
+.sv-sheet{position:relative;padding:16px 20px 14px;background:#f3eedf linear-gradient(172deg,rgba(255,255,255,.5),rgba(120,100,60,.14));color:#1c1b18;box-shadow:0 24px 60px rgba(0,0,0,.6);transform:rotate(-.5deg)}
+.sv-sheet h5{margin:0 0 9px;display:flex;justify-content:space-between;align-items:baseline;font-family:'Special Elite',monospace;font-weight:normal;font-size:15px;letter-spacing:.12em}
+.sv-sheet h5 span{font-family:'Caveat',cursive;font-weight:700;font-size:21px;letter-spacing:.03em;color:#2450a8;text-transform:uppercase}
+.sv-grid{--gs:42px;display:grid;grid-template-columns:repeat(11,var(--gs));grid-template-rows:repeat(11,var(--gs));border:2px solid #141518;background:#141518;gap:1px;width:max-content}
+.sv-c{position:relative;background:#fbf8ee;cursor:default;display:flex;align-items:center;justify-content:center}
+.sv-x{background:#141518}
+.sv-c i{position:absolute;left:2px;top:1px;font-family:'Oswald',sans-serif;font-style:normal;font-size:calc(var(--gs)*.24);line-height:1;color:#3c3a33}
+.sv-c b{font-family:'Courier Prime',monospace;font-weight:700;font-size:calc(var(--gs)*.58);line-height:1;color:#141518;text-transform:uppercase;position:relative;top:calc(var(--gs)*.06)}
+.sv-c.pen b{font-family:'Caveat',cursive;font-size:calc(var(--gs)*.74);color:#2450a8;top:0}
+.sv-c.can{cursor:pointer}
+.sv-c.in{background:#fff3a8}
+.sv-c.at{background:#f4e04d;box-shadow:inset 0 0 0 2px #141518}
+.sv-c.hl{background:#ffe9a0}
+.sv-c.new b{animation:svink .7s}
+@keyframes svink{0%{opacity:0;transform:scale(1.9)}60%{opacity:1}100%{transform:scale(1)}}
+.sv-c.sev{background:#e9eefb}
+.sv-c.sev.in{background:#fff3a8}.sv-c.sev.at{background:#f4e04d}
+.sv-note{margin:10px 0 0;font-family:'Caveat',cursive;font-weight:700;font-size:21px;line-height:1.1;color:#2450a8;letter-spacing:.03em;text-transform:uppercase;max-width:calc(11*42px + 10px)}
+.sv-clues{background:#141518;border:1px solid #3a3a3e;padding:12px 16px 0;color:#e9e6dc;box-shadow:0 24px 60px rgba(0,0,0,.6);max-height:calc(100vh - 110px);overflow:auto}
+.sv-clues h6{margin:0 0 4px;font-family:'Bebas Neue',sans-serif;font-weight:normal;font-size:19px;letter-spacing:.2em;color:#f4e04d}
+.sv-clues h6+ol{margin-bottom:8px}
+.sv-clues ol{list-style:none;margin:0;padding:0}
+.sv-clues li{position:relative;margin:0;padding:3px 6px 3px 34px;font-family:'Courier Prime',monospace;font-size:14.5px;line-height:1.28;border-left:3px solid transparent;color:#cfcabb}
+.sv-clues li>b{position:absolute;left:6px;top:3px;font-family:'Oswald',sans-serif;font-weight:500;font-size:14px;color:#f4e04d}
+.sv-clues li em{font-style:normal;color:#8f8b7e}
+.sv-clues li .sv-hand{color:#8fb0ff;font-size:17px;line-height:1}
+.sv-clues li .sv-star{color:#8fb0ff}
+.sv-clues li.open{cursor:pointer;color:#f1ecdf}
+.sv-clues li.open:hover{background:rgba(244,224,77,.1)}
+.sv-clues li.cur{border-left-color:#f4e04d;background:rgba(244,224,77,.14)}
+.sv-clues li.shut{color:#7d796d}
+.sv-clues li.done{color:#8f8b7e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.sv-clues li.done.full{white-space:normal}
+.sv-clues li.done u{text-decoration:none;font-weight:700;color:#f4e04d;letter-spacing:.08em;margin-right:3px}
+.sv-sheet h5 span.fin{color:#1c1b18}
+.sv-clues .sv-msg{margin:8px 0 0;padding:9px 0 12px;border-top:1px dashed #4a4a4e;min-height:76px;font-size:15.5px;position:-webkit-sticky;position:sticky;bottom:0;background:#141518}
+.sv-grid.sv-mini{--gs:19px;border-width:1px}
+.sv-mini .sv-c i{display:none}
+.sv-mini .sv-c b{font-size:13px;top:1px}
+@media (max-width:1330px){.sv-grid{--gs:38px}.sv-note{max-width:calc(11*38px + 10px)}.sv-g{grid-template-columns:auto minmax(0,430px);gap:16px}.sv-clues li{font-size:13.5px;padding-top:2px;padding-bottom:2px}.sv-clues li>b{top:2px}}
+@media (max-height:760px){.sv-grid{--gs:36px}}
+
+/* ---- the paper of a newspaper building ---- */
+.doc .sv-hand{font-size:1.25em;line-height:1}
+/* typed on the office machine */
+.doc.typed{background:#f3eedf linear-gradient(175deg,rgba(255,255,255,.4),rgba(120,100,60,.12));font-family:'Courier Prime',monospace;font-size:18px;line-height:1.45}
+.doc.typed h4{font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;letter-spacing:.14em}
+/* a cutting: one column of newsprint, pasted into a book */
+.doc.cutting{width:min(520px,92vw);padding:26px 34px 28px;background:#e9e2cf linear-gradient(100deg,rgba(255,255,255,.4),rgba(110,90,50,.2));font-family:'EB Garamond',Georgia,serif;font-size:19px;line-height:1.42;
+  color:#1c1b18;box-shadow:0 0 0 12px #2b2a26,0 26px 70px rgba(0,0,0,.6);text-align:justify}
+.doc.cutting h4{margin:0 0 4px;font-family:'Playfair Display',serif;font-weight:900;font-size:26px;line-height:1.1;text-align:left}
+.doc.cutting h5{margin:0 0 12px;padding-bottom:7px;border-bottom:1px solid #1c1b18;font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#5d594d;text-align:left}
+.doc.cutting p{margin:0 0 9px;text-indent:1em}
+.doc.cutting p:first-of-type{text-indent:0}
+.doc.cutting .red{font-family:'Caveat',cursive;font-weight:700;font-size:1.22em;line-height:1;color:#c8281d;text-indent:0;text-align:left}
+/* a poster for the newsagents */
+.doc.bill{width:min(470px,92vw);padding:26px 30px 24px;background:#f4e04d;color:#141518;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:44px;line-height:1.02;letter-spacing:.03em;border:6px solid #141518}
+.doc.bill h4{margin:0 0 14px;padding-bottom:10px;border-bottom:4px solid #141518;font-family:'Playfair Display',serif;font-weight:900;font-size:30px;letter-spacing:.06em}
+.doc.bill p{margin:0 0 8px}
+.doc.bill small{display:block;margin-top:12px;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.2em}
+/* the solutions book: six strips of newsprint, pasted in by you */
+.doc.solbook{width:min(820px,94vw);padding:22px 26px 24px;background:#39322a;color:#1c1b18;border-left:22px solid #1f1a14;font-family:'EB Garamond',Georgia,serif}
+.doc.solbook h4{margin:0 0 12px;font-family:'Caveat',cursive;font-weight:700;font-size:27px;color:#f3eedf}
+.sv-sols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sv-sol{background:#e9e2cf linear-gradient(120deg,rgba(255,255,255,.35),rgba(110,90,50,.16));color:#1c1b18;font-family:'EB Garamond',Georgia,serif;padding:9px 12px 10px;font-size:14.5px;line-height:1.3;box-shadow:0 3px 8px rgba(0,0,0,.5)}
+.sv-sol:nth-child(odd){transform:rotate(-.6deg)}.sv-sol:nth-child(even){transform:rotate(.5deg)}
+.sv-sol h6{margin:0 0 5px;padding-bottom:4px;border-bottom:1px solid #1c1b18;font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:space-between}
+.sv-sol p{margin:0 0 4px}
+.sv-sol b{font-family:'Oswald',sans-serif;font-weight:500;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase}
+/* the house telephone: what somebody said down the wire */
+.doc.statement{background:#f3eedf;font-family:'Courier Prime',monospace;font-size:18px;border-left:6px solid #141518}
+.doc.statement h4{color:#141518;font-family:'Oswald',sans-serif}
+/* what you worked out for yourself */
+.doc.mine{width:min(560px,92vw);background:#161719;color:#f1ecdf;font-family:'Courier Prime',monospace;font-size:17.5px;line-height:1.45;border-left:6px solid #f4e04d;padding:26px 30px 28px}
+.doc.mine h4{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.14em;color:#f4e04d;margin-bottom:10px}
+.doc.mine b{color:#f4e04d;font-weight:normal}
+.doc.mine .w:hover{color:#f4e04d}
+/* the sheet itself, as it is kept in the notebook */
+.doc.sheet{width:min(600px,92vw);background:#f3eedf;font-family:'Courier Prime',monospace;font-size:16px;line-height:1.36;padding:24px 30px 26px}
+.doc.sheet h4{font-family:'Special Elite',monospace;font-size:16px;letter-spacing:.12em;margin-bottom:8px}
+.doc.sheet p{margin:0 0 6px}
+.doc.sheet h5{margin:10px 0 4px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.2em}
+
+/* ---- the notebook: black cover, yellow tabs, newsprint inside ---- */
+.nb{background:#141518 linear-gradient(150deg,#1d1e22,#0c0c0e);border:1px solid #3a3a3e;border-radius:4px;color:#e9e6dc;box-shadow:0 30px 90px rgba(0,0,0,.75),inset 0 0 0 5px #08080a}
+.nb-tabs{border-bottom-color:#3a3a3e}
+.nb-tabs button{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.14em;color:#a8a495}
+.nb-tabs button.on{background:#f4e04d;color:#141518;border-color:#f4e04d}
+.nb-list{border-right-color:#3a3a3e}
+.nb-list button{font-family:'Courier Prime',monospace;font-size:16.5px;color:#e9e6dc}
+.nb-list button small{font-family:'Oswald',sans-serif}
+.nb-list button.on{background:#f4e04d;color:#141518}
+.nb-view{background:#0a0a0c}
+.nb-empty{font-family:'Courier Prime',monospace;font-style:normal}
+.nb-words{background:#f1ede1;color:#1c1b18}
+.nb-words b{font-family:'Courier Prime',monospace;font-weight:700}
+.nb-words span{font-family:'Courier Prime',monospace;font-size:16px;line-height:1.3;color:#4a473e}
+.nb-ko{border-color:#8a8676;color:#4a473e}
+.nb-ko.on{background:#141518;color:#f4e04d;border-color:#141518}
+.wtip,.wtag{background:#f1ede1;color:#1c1b18;border-radius:2px;box-shadow:0 10px 26px rgba(0,0,0,.6),inset 5px 0 0 #f4e04d}
+.wtag{transform:rotate(-1deg);padding-left:20px}
+.wtag:before{display:none}
+.wtip{padding-left:19px}
+.wtip b,.wtag b{font-family:'Courier Prime',monospace;font-weight:700;font-size:18px}
+.wtip span,.wtag span{font-family:'Courier Prime',monospace;font-size:16px;line-height:1.3;color:#4a473e}
+.hintbox{background:#f1ede1;color:#1c1b18;border-top:6px solid #f4e04d;border-radius:2px}
+.hintbox h6{font-family:'Bebas Neue',sans-serif;font-weight:normal;font-size:20px;letter-spacing:.2em;color:#1c1b18}
+.hintbox p{font-family:'Courier Prime',monospace;font-size:16.5px;line-height:1.36}
+.hintbox p i{background:#1c1b18;color:#f4e04d}
+.hintbox p.hint-none{font-style:normal;color:#5d594d;font-size:15.5px}

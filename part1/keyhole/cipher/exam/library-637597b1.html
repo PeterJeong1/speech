@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Library · Answer All Questions</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0a0d0a;--accent:#f4e04d;--font-display:'Playfair Display',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(8,11,8,.96);--tc-ink:#f1ecdf;--cap-bg:rgba(9,12,9,.94);--panel:#131712;--q-ink:#e6d58a;--fade:#040604;--hud-bg:rgba(9,12,9,.8)}
+  .tc-room{font-weight:700}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .mk{font-family:'Permanent Marker',cursive;text-anchor:middle}
+  #lampGlow{animation:lg 7s steps(1,end) infinite}
+  @keyframes lg{0%{opacity:1}70%{opacity:.94}74%{opacity:1}}
+  #torch{animation:torch 19s ease-in-out infinite alternate}
+  @keyframes torch{from{transform:translate(0,0)}to{transform:translate(-110px,4px)}}
+  #scr{animation:scr 4s steps(1,end) infinite}
+  @keyframes scr{50%{opacity:.8}}
+  #dlight{opacity:0;transition:opacity 2s}
+  #door.near #dlight{opacity:1}
+  #dhandle{transition:transform 1.6s;transform-origin:1474px 452px}
+  #door.turn #dhandle{transform:rotate(24deg)}
+
+  /* the big dictionary */
+  .dc{display:grid;grid-template-columns:1fr 1fr;width:min(900px,94vw);min-height:430px;background:#fbf8ee;color:#1c1b18;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 1px #d9d2bf;border-radius:4px;
+    font-family:'EB Garamond',Georgia,serif;font-size:20px;line-height:1.4;border:10px solid #3b2a1a;border-bottom-width:16px}
+  .dc>div{padding:26px 30px 24px}
+  .dc-l{border-right:2px solid #c9c0a8;background:linear-gradient(90deg,rgba(0,0,0,0) 86%,rgba(0,0,0,.09))}
+  .dc-r{background:linear-gradient(270deg,rgba(0,0,0,0) 86%,rgba(0,0,0,.09))}
+  .dc h4{margin:0 0 10px;font-family:'Playfair Display',serif;font-weight:900;font-size:23px}
+  .dc p{margin:0 0 10px}
+  .dc small{display:block;margin:14px 0 8px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#6b6453}
+  .dc-tabs{display:flex;flex-wrap:wrap;gap:8px}
+  .dc-tabs button{padding:4px 12px 3px;background:#fff;border:1px solid #1c1b18;font-family:'Outfit',Arial,sans-serif;font-weight:500;font-size:16px;color:#1c1b18;box-shadow:0 2px 5px rgba(0,0,0,.25)}
+  .dc-tabs button:nth-child(odd){transform:rotate(-2deg)}.dc-tabs button:nth-child(even){transform:rotate(2deg)}
+  .dc-tabs button.on{background:#f4e04d}
+  .dc-entry b{font-family:'Playfair Display',serif;font-weight:900;font-size:27px}
+  .dc-entry i{color:#6b6453}
+  .dc-entry .us{display:inline-block;margin:0 0 0 4px;padding:0 8px;border:1px solid #8c2f24;color:#8c2f24;font-family:'Oswald',sans-serif;font-size:15px;letter-spacing:.06em}
+  .dc-entry .us b{font-family:inherit;font-size:inherit;font-weight:600}
+  .dc-none{color:#8d8776;font-style:italic}
+  .dc .w:hover{color:#8c2f24}
+
+  /* the torn note */
+  .tn{display:grid;grid-template-columns:minmax(0,700px) 300px;gap:24px;width:min(1040px,96vw);align-items:start}
+  .tn-desk{background:#23432f radial-gradient(ellipse at 30% 0,rgba(255,236,170,.3),rgba(0,0,0,0) 62%);border:12px solid #5a3c22;border-radius:6px;padding:16px 22px 18px;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 40px rgba(0,0,0,.5)}
+  .tn-list{margin:0;padding:0;list-style:none}
+  .tn-strip{position:relative;margin:0 0 9px;padding:9px 20px 7px 44px;background:#fbf9f0 linear-gradient(90deg,rgba(0,0,0,0) 30px,#e8a5a0 30px,#e8a5a0 32px,rgba(0,0,0,0) 32px);color:#1d2a4a;font-family:'Caveat',cursive;font-size:24.5px;line-height:1.12;
+    cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;box-shadow:0 4px 9px rgba(0,0,0,.45);
+    clip-path:polygon(0 7%,7% 0,16% 8%,28% 1%,41% 9%,55% 0,68% 8%,80% 1%,91% 9%,100% 2%,100% 93%,93% 100%,82% 92%,70% 100%,57% 91%,44% 100%,31% 92%,19% 100%,8% 92%,0 100%)}
+  .tn-strip:nth-child(odd){transform:rotate(-.5deg)}.tn-strip:nth-child(even){transform:rotate(.6deg)}
+  .tn-strip.lift{z-index:5;cursor:grabbing;box-shadow:0 14px 28px rgba(0,0,0,.6)}
+  .tn-strip.held{background-color:#fff6c9}
+  .tn-strip.taped:after{content:'';position:absolute;left:46%;bottom:-13px;width:74px;height:20px;background:rgba(255,246,190,.62);border-left:2px dashed rgba(120,100,40,.4);border-right:2px dashed rgba(120,100,40,.4);transform:rotate(-3deg);z-index:3}
+  .tn-strip.taped{clip-path:none}
+  .tn.whole .tn-strip{margin:0;transform:none;clip-path:none;box-shadow:none;cursor:default;padding-top:4px;padding-bottom:3px}
+  .tn.whole .tn-strip.taped:after{display:none}
+  .tn-side .pmsg{min-height:210px}
+  .tn-side .btn{margin-top:10px;font-size:15px;padding:11px 22px}
+  /* saying the name */
+  .nm{width:min(760px,94vw);background:#0d120e linear-gradient(170deg,#161d17,#070a08);border:1px solid #2f3a31;border-radius:6px;padding:20px 28px 20px;box-shadow:0 26px 70px rgba(0,0,0,.8)}
+  .nm svg{display:block;width:100%;height:auto;margin-bottom:8px}
+  .nm-say{font-family:'Courier Prime',monospace;font-size:33px;line-height:1.3;color:#f1ecdf;text-align:center}
+  .nm-gap{display:inline-block;min-width:190px;border-bottom:3px solid #f4e04d;color:#f4e04d;white-space:nowrap;text-align:left;padding:0 4px}
+  .nm-gap u{display:inline-block;width:14px;height:26px;margin-left:2px;background:#f4e04d;vertical-align:-3px;text-decoration:none;animation:cur 1s steps(1,end) infinite}
+  @keyframes cur{50%{opacity:0}}
+  .nm .wk-key{--s:42px;border-radius:5px}
+  .nm .pmsg{margin-top:12px;min-height:82px}
+  #nmDoor{transition:transform 1.2s;transform-origin:520px 100px}
+  @media (max-width:900px){.tn{grid-template-columns:1fr}.dc{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1611"/><stop offset="1" stop-color="#2a2219"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3523"/><stop offset="1" stop-color="#1f150d"/></linearGradient>
+  <linearGradient id="oakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6f40"/><stop offset="1" stop-color="#6b4826"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1428"/><stop offset="1" stop-color="#1b2f52"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a3220"/><stop offset=".5" stop-color="#5d4029"/><stop offset="1" stop-color="#3d2916"/></linearGradient>
+  <linearGradient id="boxG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b08a5a"/><stop offset="1" stop-color="#86683f"/></linearGradient>
+  <linearGradient id="shaftG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcd3ff" stop-opacity=".2"/><stop offset="1" stop-color="#bcd3ff" stop-opacity="0"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#fff0b0" stop-opacity=".7"/><stop offset=".3" stop-color="#d9e88a" stop-opacity=".24"/><stop offset="1" stop-color="#9ad08a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="torchG"><stop offset="0" stop-color="#fff6c8"/><stop offset=".3" stop-color="#ffe48a" stop-opacity=".6"/><stop offset="1" stop-color="#ffe48a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="48%" cy="62%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#000" stop-opacity=".5"/><stop offset="1" stop-color="#000" stop-opacity=".96"/></radialGradient>
+  <pattern id="plank" width="260" height="64" patternUnits="userSpaceOnUse"><rect width="260" height="64" fill="none"/><path d="M0 0H260M0 32H260M90 0V32M210 32V64" stroke="#1a110a" stroke-width="2.5"/></pattern>
+  <clipPath id="winC"><path d="M1228 480V190q0-84 82-84t82 84v290z"/></clipPath>
+</defs>
+
+<!-- wall, shelves of books, floor -->
+<rect x="-1000" y="-400" width="3600" height="1110" fill="url(#wallG)"/>
+<g id="shelves" class="hot"><rect x="40" y="70" width="1150" height="560" fill="#2b1e13"/><g id="books"></g><g id="boards"></g></g>
+<rect x="-1000" y="630" width="3600" height="74" fill="#33241a"/><g id="doors2"></g><rect x="-1000" y="622" width="3600" height="10" fill="#1d140d"/>
+<rect x="-1000" y="702" width="3600" height="620" fill="url(#floorG)"/><rect x="-1000" y="702" width="3600" height="620" fill="url(#plank)"/>
+
+<!-- the ladder -->
+<g id="ladder" class="hot"><path d="M322 96L286 704M382 96L352 704" stroke="#6b4826" stroke-width="9"/><g stroke="#7d5730" stroke-width="7"><path d="M318 170h60M312 250h62M308 330h62M303 410h62M298 490h62M294 570h62M290 650h60"/></g></g>
+
+<!-- the tall window, the moon, the yard -->
+<g id="win" class="hot">
+  <path d="M1216 492V190q0-96 94-96t94 96v302z" fill="#1d140d"/>
+  <g clip-path="url(#winC)"><rect x="1220" y="100" width="180" height="390" fill="url(#skyG)"/><circle cx="1352" cy="176" r="19" fill="#e9eef8"/><circle cx="1344" cy="171" r="18" fill="#0d1a33"/>
+    <rect x="1220" y="410" width="180" height="80" fill="#070c14"/><path d="M1220 416h180" stroke="#18233a" stroke-width="2"/><g stroke="#18233a" stroke-width="2"><path d="M1250 416v70M1290 416v70M1330 416v70M1370 416v70"/></g>
+    <circle id="torch" cx="1376" cy="444" r="26" fill="url(#torchG)"/></g>
+  <path d="M1310 100v390M1228 300h164" stroke="#1d140d" stroke-width="7"/>
+  <rect x="1206" y="488" width="208" height="14" fill="#3b2a1a"/>
+</g>
+<path d="M1228 500h164l110 380h-360z" fill="url(#shaftG)" pointer-events="none"/>
+
+<!-- the door, and the clock over it -->
+<g id="clock" class="hot"><circle cx="1516" cy="112" r="38" fill="#3b2a1a"/><circle cx="1516" cy="112" r="31" fill="#f3eedf"/><g stroke="#1c1b18" stroke-width="3"><path d="M1516 85v6M1516 133v6M1489 112h6M1537 112h6"/></g>
+  <path id="hh" d="M1516 112V95" stroke="#1c1b18" stroke-width="5" stroke-linecap="round"/><path id="mh" d="M1516 112V87" stroke="#1c1b18" stroke-width="3" stroke-linecap="round"/><circle cx="1516" cy="112" r="3.5" fill="#c8281d"/></g>
+<g id="door" class="hot">
+  <rect x="1440" y="170" width="170" height="536" fill="#1d140d"/><rect x="1452" y="182" width="158" height="522" fill="url(#doorG)"/>
+  <g stroke="#2f2015" stroke-width="3" fill="none"><rect x="1474" y="208" width="114" height="190"/><rect x="1474" y="486" width="114" height="186"/></g>
+  <rect id="dlight" x="1452" y="696" width="158" height="9" fill="#ffe9a8"/>
+  <rect x="1464" y="430" width="16" height="48" rx="3" fill="#c9b27a"/><g id="dhandle"><path d="M1474 452h34" stroke="#d9c58a" stroke-width="9" stroke-linecap="round"/></g>
+  <rect x="1478" y="230" width="106" height="26" fill="#16171c"/><text x="1531" y="249" class="sT" font-size="14" fill="#f4e04d" letter-spacing="3">LIBRARY</text>
+</g>
+
+<!-- computer desk -->
+<g id="pc" class="hot">
+  <rect x="64" y="612" width="270" height="14" fill="#6b4826"/><path d="M76 626v150M322 626v150" stroke="#4a3220" stroke-width="10"/>
+  <rect x="128" y="474" width="150" height="110" rx="6" fill="#16181c"/><rect id="scr" x="138" y="484" width="130" height="90" rx="2" fill="#16284a"/><rect x="176" y="514" width="54" height="30" rx="3" fill="none" stroke="#5d7fb8" stroke-width="2"/><circle cx="203" cy="524" r="5" fill="none" stroke="#5d7fb8" stroke-width="2"/>
+  <rect x="190" y="584" width="26" height="20" fill="#24282b"/><rect x="160" y="602" width="86" height="10" rx="3" fill="#24282b"/>
+  <rect x="250" y="470" width="40" height="34" fill="#ffe36b" transform="rotate(6 270 487)"/><path d="M256 482h28M256 490h22" stroke="#3a4a7a" stroke-width="2" transform="rotate(6 270 487)"/>
+  <text x="203" y="470" class="sT" font-size="11" fill="#8d8776" letter-spacing="2">PC 2</text>
+</g>
+
+<!-- the long table: lamp, globe, tea, paper -->
+<circle id="lampGlow" cx="770" cy="560" r="520" fill="url(#lampG)" pointer-events="none"/>
+<g id="boxes" class="hot">
+  <rect x="470" y="722" width="190" height="118" fill="url(#boxG)"/><rect x="680" y="716" width="196" height="124" fill="url(#boxG)"/><rect x="896" y="728" width="180" height="112" fill="url(#boxG)"/>
+  <g stroke="#e9dcc0" stroke-width="3"><path d="M565 722v118M470 780h190M778 716v124M680 776h196M986 728v112M896 784h180"/></g>
+  <rect x="700" y="734" width="156" height="34" fill="#fdfdf6" transform="rotate(-2 778 751)"/><text x="778" y="750" class="mk" font-size="13" fill="#16171c" transform="rotate(-2 778 751)">RECYCLING</text><text x="778" y="763" class="mk" font-size="8.5" fill="#16171c" transform="rotate(-2 778 751)">NOT BEFORE FRIDAY 10 A.M.</text>
+  <g stroke="#5a4326" stroke-width="2"><path d="M470 722h190M680 716h196M896 728h180"/></g>
+</g>
+<g id="table"><path d="M410 616h700l56 68H352z" fill="url(#oakG)"/><path d="M352 684h814v18H352z" fill="#4a3220"/><path d="M378 702v150M1140 702v150" stroke="#3d2916" stroke-width="16"/><path d="M410 616h700" stroke="#b98a55" stroke-width="3"/></g>
+<g id="globe" class="hot"><ellipse cx="478" cy="640" rx="34" ry="8" fill="#3d2916"/><path d="M478 640v-16" stroke="#3d2916" stroke-width="6"/><circle cx="478" cy="584" r="42" fill="#2c5f7a"/><path d="M452 566q14-18 34-8t10 26-24 6-20-24zM486 606q14-10 22 2-6 16-22 12z" fill="#7a9a52"/><path d="M440 600a42 42 0 0 0 76-34" stroke="#c9b27a" stroke-width="4" fill="none"/></g>
+<g id="lamp" class="hot"><ellipse cx="770" cy="650" rx="46" ry="9" fill="#8a6a26"/><path d="M770 648v-70" stroke="#b08a35" stroke-width="7"/><path d="M700 578q0-34 70-34t70 34z" fill="#1f7a4a"/><path d="M704 574q4-24 66-24" stroke="#7be0a0" stroke-width="3" fill="none" opacity=".7"/><path d="M700 578h140" stroke="#b08a35" stroke-width="5"/><ellipse cx="770" cy="582" rx="56" ry="6" fill="#fff6c8"/><path d="M806 600v24" stroke="#b08a35" stroke-width="2"/><circle cx="806" cy="627" r="4" fill="#d9c58a"/></g>
+<g id="tea" class="hot"><ellipse cx="930" cy="664" rx="34" ry="7" fill="#3d2916" opacity=".5"/><rect x="906" y="622" width="46" height="40" rx="5" fill="#f1eee2"/><path d="M952 632q18 2 0 22" stroke="#f1eee2" stroke-width="6" fill="none"/><ellipse cx="929" cy="624" rx="21" ry="5" fill="#6b4420"/></g>
+<g id="papers" class="hot"><path d="M560 640h124l10 30H548z" fill="#fbfaf4"/><path d="M566 636h124l10 30H554z" fill="#f1eee2"/><path d="M1000 646l66-10 4 8-66 12z" fill="#e9b24a"/><path d="M1066 636l14-4-10 12z" fill="#3b2a1a"/><g fill="#d9a05a"><circle cx="1020" cy="668" r="4"/><circle cx="1034" cy="672" r="3"/><circle cx="1010" cy="674" r="3"/></g></g>
+
+<!-- the wastepaper bin -->
+<g id="bin" class="hot">
+  <ellipse cx="1180" cy="846" rx="50" ry="10" fill="#000" opacity=".4"/>
+  <g fill="#fbf9f0" stroke="#b9c7d6" stroke-width="1"><path d="M1150 742l40-22 10 16-38 24z"/><path d="M1176 730l44 6-2 16-44-6z"/><path d="M1160 716l30-14 8 14-30 16z"/><path d="M1196 716l22 12-8 14-22-12z"/></g>
+  <path d="M1136 744h88l-12 100h-64z" fill="#22262b" opacity=".85"/><g stroke="#8b949d" stroke-width="2.5" fill="none"><path d="M1136 744h88l-12 100h-64z"/><path d="M1150 744l8 100M1166 744l4 100M1182 744v100M1198 744l-4 100M1212 744l-8 100M1140 778h80M1144 812h72"/></g>
+</g>
+
+<!-- the dictionary on its stand -->
+<g id="dict" class="hot">
+  <path d="M1310 600v190" stroke="#4a3220" stroke-width="16"/><path d="M1262 800h96" stroke="#4a3220" stroke-width="14" stroke-linecap="round"/>
+  <path d="M1222 584l176-34 8 28-176 36z" fill="#6b4826"/>
+  <path d="M1232 572l78-24 2 30-74 18z" fill="#fbf8ee"/><path d="M1310 548l80-8 4 28-82 10z" fill="#f1eee2"/><path d="M1310 548l2 30" stroke="#b9b09a" stroke-width="2"/>
+  <g stroke="#8d8776" stroke-width="1.6"><path d="M1242 572l60-17M1243 580l60-16M1244 588l52-14M1320 552l62-6M1320 560l62-6M1321 568l54-5"/></g>
+  <path d="M1228 596l172-34" stroke="#3b2a1a" stroke-width="5"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, noteDone = false, inNote = false, inName = false, told = {}, tnBox = null, taped = {}, stage = 0, looked = {};
+
+  /* books, shelf boards, and the cupboards under the shelves */
+  (function () {
+    var s = '', b = '', COL = ['#6e2f2a', '#2f4a3a', '#27405e', '#8a6a3a', '#4a3a5a', '#7a4a2a', '#31525a', '#5a2a3a', '#3a3a3a', '#a08050'], row, x, w, h, i = 0, y;
+    for (row = 0; row < 5; row++) {
+      y = 172 + row * 112;
+      b += '<rect x="40" y="' + y + '" width="1150" height="10" fill="#4a3523"/>';
+      for (x = 52; x < 1172;) {
+        i++; w = 12 + (i * 7) % 15; h = 62 + (i * 13) % 30;
+        if (i % 17 === 0) { x += 26; continue; }
+        if ((x - 40) % 230 > 206 || (x - 40) % 230 < 8) { x += 10; continue; }
+        s += '<rect x="' + x + '" y="' + (y - h) + '" width="' + w + '" height="' + h + '" fill="' + COL[(i * 3 + row) % 10] + '"/>' + (i % 3 === 0 ? '<rect x="' + x + '" y="' + (y - h + 12) + '" width="' + w + '" height="5" fill="#d9c58a" opacity=".55"/>' : '');
+        x += w + 1;
+      }
+    }
+    for (x = 40; x <= 1190; x += 230) b += '<rect x="' + (x - 5) + '" y="70" width="10" height="560" fill="#4a3523"/>';
+    b += '<rect x="35" y="62" width="1160" height="12" fill="#4a3523"/>';
+    $('#books').innerHTML = s; $('#boards').innerHTML = b; s = '';
+    for (x = -980; x < 2600; x += 230) s += '<rect x="' + (x + 30) + '" y="642" width="200" height="50" fill="none" stroke="#1d140d" stroke-width="3"/><circle cx="' + (x + 130) + '" cy="667" r="4" fill="#c9b27a"/>';
+    $('#doors2').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'exam', storyTitle: 'Answer All Questions', id: 'library', no: 'IV', title: 'The Library',
+    go: 'Go down',
+    intro: [
+      'The page in the shredder was page one of tomorrow&rsquo;s exam. Each gap took the one word that the rest of its sentence allowed: you PASS an examination, you RECOGNISE somebody&rsquo;s handwriting, and a system is ABOLISHED. Four scraps were left over that fitted nowhere, because they came from some other sheet of paper: COLOR, CENTER, TRAVELED, FAVORITE.',
+      'Upstairs the copier is printing a hundred and twenty copies of something called PAPER B. Its orders came from a computer in the library.',
+      'The library is on the ground floor, beside the side door. There is a lamp on in there, too.'
+    ],
+    exit: {"next":"hall","w":{"2ea1bb3d":"51db3a7b","702ada25":"5e0553f9","da90187a":"b563e6d8","3f8bd17c":"fe14f7c8","59faee3c":"98a595ae"}}, tags: {"join":["43884e34","50da2f6d","a99c6dee","ff527ebb","3d3f521d","95ea0a1a"],"order":["58dabeb4"],"first":["1944b20e"],"last":["d6bad0d9"]},
+    sound: ['corridor', { root: 45, bpm: 54, drop: ['mel'] }],      /* the whistle in the yard is heard here too: no tune; the pulse comes in with the steps */
+    hints: hints, onBegin: begin
+  });
+  EXAM.clock(); EXAM.wall('#hh', '#mh', 1516, 112);
+  nextFile = ER.flag('d-file') || null; noteDone = !!ER.flag('d-note'); told = ER.flag('d-told') || {}; stage = ER.flag('d-stage') || 0;
+
+  /* the note, as it came out of the bin */
+  var STRIPS = [
+    ['r', 'By the next morning those photographs were on half the phones in Year 9.'],
+    ['h', 'And please never say who told you. J.A.'],
+    ['t', 'On Wednesday, when the fire bell rang, the grey cupboard in the staffroom was left open.'],
+    ['w', 'Mine is not one of them, because I want my mark to be my own, even if it is a bad one.'],
+    ['k', 'Miss, I am no good at telling tales, so I am writing this down instead.'],
+    ['p', 'So please could you do something before Friday, without anybody being thrown out of school?'],
+    ['m', 'While everybody was out in the yard, somebody from our year went back in, found it open, and photographed Friday&rsquo;s paper.']
+  ];
+  var DICT = {
+    color: ['colour', 'noun', 'what you see when light falls on a thing. Red, blue and green are colours.'],
+    center: ['centre', 'noun', 'the middle of something: <i>the centre of the town</i>.'],
+    traveled: ['travelled', 'verb', 'the past of <i>travel</i>: went from one place to another.'],
+    favorite: ['favourite', 'adjective', 'liked more than all the others: <i>my favourite mug</i>.']
+  };
+  var NO = {
+    calloway: 'You open your mouth, and shut it again. Mrs Calloway spells COLOUR with a U, and corrects everybody who does not. The four scraps never came out of her typewriter.',
+    drummond: 'No. You can hear Mr Drummond through the window, whistling in the yard. And nobody ever began a note to Mr Drummond with the word &ldquo;Miss&rdquo;.',
+    tibbs: 'No. Nobody has ever called Mr Tibbs &ldquo;Miss&rdquo;. And Mrs Calloway&rsquo;s key box was not made for people who teach Maths.',
+    ashby: 'No. Jonah Ashby wrote the note. He did not read it and tear it up. He would not even look at the photographs.',
+    jonah: 'No. Jonah Ashby wrote the note. He did not read it and tear it up. He would not even look at the photographs.',
+    kettle: 'No. Mr Kettle is in Leeds until Monday. And if Mr Kettle knew about any of this, there would be no exam tomorrow at all.',
+    miss: 'Miss who? Two people at this school are called &ldquo;Miss&rdquo; by every pupil in it. Say the name.'
+  };
+  var NEAR = ['The steps are on the stairs.', 'The steps have reached the bottom of the stairs.', 'The steps are in the corridor, just outside.', 'The handle is going down, very slowly.'];
+
+  function hints() {
+    if (nextFile) return null;
+    if (noteDone && !inName) return ['door', ['Somebody is coming down the stairs. Click on the library door, on the right, and be ready to speak first.']];
+    if (noteDone) return ['name', [
+      'The note says who it was written to, in its very first word. How many people at Kestrel Hill does a pupil call that? Look at the staff board in your notebook.',
+      'Two are left. One of them corrects other people&rsquo;s spelling in red ink. Now look at your four scraps again, and look each of them up in the big dictionary under the window.',
+      'All four scraps are spelt the American way. Somebody at this school wrote a note that was spelt like that, and Mrs Calloway corrected it. It is on the staffroom fridge, and it is signed with two initials. Whose are they?'
+    ]];
+    if (inNote) return ['note', [
+      'There are seven strips. Find the one that can only be the beginning, and the one that can only be the end.',
+      'Small words join the strips together: &ldquo;it&rdquo;, &ldquo;those&rdquo;, &ldquo;them&rdquo;, &ldquo;So&rdquo;, &ldquo;And&rdquo;. Each of them points back at something in the strip before.',
+      '&ldquo;Miss&rdquo; begins it and the initials end it. &ldquo;Found it open&rdquo; must come after the thing that was left open. &ldquo;Those photographs&rdquo; must come after somebody has photographed something. And &ldquo;Mine is not one of them&rdquo; must come straight after the phones.'
+    ]];
+    return ['look', [
+      'Somebody has been working at the long table all evening. Look at what they have left on it, under it and beside it.',
+      'The wire bin at the end of the table is full of torn paper. Somebody has torn up a note. Click on the bin.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function near() { $('#door').classList.add('near'); ER.pips(noteDone ? 1 : 0, 2); EXAM.mood('tense'); }
+
+  function begin() {
+    ER.pips(noteDone ? 1 : 0, 2);
+    setInterval(function () { if (!ER.isOpen() && !busy && Math.random() < 0.5) EXAM.sfx.whistle(); }, 26000);
+    if (noteDone) { near(); ER.say('The library. The steps are coming.'); return; }
+    if (told.in) { ER.say('The library. The lamp is still on.'); return; }
+    busy = true; tell('in');
+    ER.narrate([
+      'The library. Somebody has been working at the long table: a green lamp, a cup of tea, pencil shavings.',
+      'Under the table there are three boxes tied up with string. Beside it, the wastepaper bin is full of torn paper.',
+      'It is very quiet. Upstairs, the copier has stopped.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things in the room ---------- */
+  EXAM.thing('#shelves', null, 'Eleven thousand books. The one that matters tonight is lying open on its stand, under the window.', isBusy);
+  EXAM.thing('#ladder', 'ladder', null, isBusy);
+  EXAM.thing('#globe', 'globe', 'A globe. Somebody has turned it so that America faces the lamp.', isBusy);
+  EXAM.thing('#lamp', null, 'A green reading lamp, and the glass is hot. Somebody has been sitting under it all evening.', isBusy);
+  EXAM.thing('#tea', null, 'A cup of tea, gone cold, with the tea bag still in it. Whoever made it had no time to drink it.', isBusy);
+  EXAM.thing('#papers', null, 'Clean paper, a pencil worn down to a stump, and pencil shavings. Somebody has been writing something long, in a hurry.', isBusy);
+  EXAM.thing('#pc', null, 'PC 2: the computer that sent PAPER B to the copier. The screen is locked. A note on the frame says: SAVE YOUR WORK. EVERYTHING IS SWITCHED OFF AT HALF PAST NINE. F.D.', isBusy);
+  EXAM.thing('#win', null, 'The yard. Mr Drummond&rsquo;s torch is on its way back towards the side door. It must be nearly half past.', isBusy);
+  EXAM.thing('#clock', null, function () { return 'The library clock says ' + EXAM.time() + '.'; }, isBusy);
+  $('#boxes').addEventListener('click', function () {
+    if (busy) return;
+    ER.say('Three boxes, tied up with string. You lift the corner of a lid. YEAR 9 ENGLISH, PAPER A, again and again and again: a hundred and nineteen of them. On the middle box somebody has written in marker pen: RECYCLING. NOT BEFORE FRIDAY 10 A.M.', 11000);
+    EXAM.mine('boxes', 'Three boxes under the table', '<p>In the library: the other hundred and nineteen copies of Paper A, tied up with string. Nobody has sold them or copied them. Nobody has even opened them.</p>' +
+      '<p>On the middle box, in marker pen: <b>RECYCLING. NOT BEFORE FRIDAY 10 A.M.</b></p><p>They are waiting to be thrown away, an hour after the exam has begun.</p>');
+  });
+  $('#door').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.leave(nextFile); return; }
+    if (!noteDone) { ER.say('The door to the stairs. Nobody is on them. Not yet.'); return; }
+    openName();
+  });
+  $('#bin').addEventListener('click', function () {
+    if (busy) return;
+    if (noteDone) { ER.say('The bin is empty now. The note is in your notebook, in one piece.'); return; }
+    openNote();
+  });
+
+  /* ---------- the big dictionary ---------- */
+  $('#dict').addEventListener('click', function () {
+    if (busy) return;
+    var box = ER.el('div', 'dc');
+    box.innerHTML = '<div class="dc-l"><h4>How to use this dictionary</h4><p>Every word is printed first in the spelling that is used in Britain.</p>' +
+      '<p><span class="dc-entry"><span class="us">US</span></span> shows the spelling that is used in the United States of America, where it is different.</p>' +
+      '<small>Your four scraps</small><div class="dc-tabs">' + Object.keys(DICT).map(function (w) { return '<button type="button" data-w="' + w + '">' + w + '</button>'; }).join('') + '</div></div>' +
+      '<div class="dc-r"><p class="dc-none">It is a very big dictionary, and it is open at the letter M. Choose one of your scraps, and look it up.</p></div>';
+    ER.$$('.dc-tabs button', box).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var w = b.getAttribute('data-w'), d = DICT[w];
+        ER.$$('.dc-tabs button', box).forEach(function (o) { o.classList.toggle('on', o === b); });
+        box.querySelector('.dc-r').innerHTML = '<p class="dc-entry"><b>' + d[0] + '</b> <i>' + d[1] + '</i> <span class="us">US <b>' + w + '</b></span></p><p>' + d[2] + '</p>' +
+          '<p class="dc-none">There is no page for &ldquo;' + w + '&rdquo; by itself. The dictionary sends you here.</p>';
+        ER.sfx.paper(); WK.learn(d[0]); looked[w] = 1; box.setAttribute('data-looked', Object.keys(looked).length);
+        if (Object.keys(looked).length === 4) EXAM.mine('dict', 'The big dictionary', '<p>I looked up the four scraps. Not one of them is the spelling that the dictionary prints first.</p>' +
+          '<p>colour (US <b>color</b>) &middot; centre (US <b>center</b>) &middot; travelled (US <b>traveled</b>) &middot; favourite (US <b>favorite</b>)</p><p>US = the spelling that is used in the United States of America.</p>');
+      });
+    });
+    ER.open('ov-read', box, function () {
+      if (Object.keys(looked).length < 4 || !tell('dict')) return;
+      ER.say('Four scraps, and every one of them is spelt the American way. Whoever typed the page they came from does not spell like Mrs Calloway.', 9000);
+    });
+  });
+
+  /* ---------- the torn note: seven strips ---------- */
+  function buildNote() {
+    var box = ER.el('div', 'tn'), list, msgEl, held = null, lock = false, NUM = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+    box.innerHTML = '<div class="tn-desk"><ul class="tn-list">' + STRIPS.map(function (s) { return '<li class="tn-strip" data-id="' + s[0] + '">' + ER.gloss(s[1]) + '</li>'; }).join('') + '</ul></div>' +
+      '<div class="tn-side"><p class="pmsg"></p><button type="button" class="btn" id="tn-go">Read it through</button></div>';
+    list = box.querySelector('.tn-list'); msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function kids() { return ER.$$('.tn-strip', list); }
+    function ids() { return kids().map(function (n) { return n.getAttribute('data-id'); }); }
+    function tape() { var a = ids(); kids().forEach(function (n, i) { n.classList.toggle('taped', i < a.length - 1 && !!taped[a[i] + a[i + 1]]); }); box.setAttribute('data-order', a.join('')); }
+    function hold(n) { if (held) held.classList.remove('held'); held = n; if (n) n.classList.add('held'); }
+    list.addEventListener('pointerdown', function (e) {
+      var it = e.target.closest ? e.target.closest('.tn-strip') : null;
+      if (!it || e.button || lock) return;
+      e.preventDefault();
+      var sy = e.clientY, moved = false;
+      function mv(ev) {
+        if (!moved) { if (Math.abs(ev.clientY - sy) < 6) return; moved = true; hold(null); it.classList.add('lift'); }
+        it.style.transform = 'translateY(' + (ev.clientY - sy) + 'px) rotate(-1deg)';
+      }
+      function up(ev) {
+        document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
+        var others, ref = null, i, r, a, an;
+        if (!moved) {                                          /* a click: pick it up, or change places with the one already picked up */
+          if (!held) { hold(it); return; }
+          if (held === it) { hold(null); return; }
+          a = held; an = a.nextSibling === it ? a : a.nextSibling; hold(null);
+          list.insertBefore(a, it); list.insertBefore(it, an); ER.sfx.paper(); tape(); return;
+        }
+        it.classList.remove('lift'); it.style.transform = '';
+        others = kids().filter(function (k) { return k !== it; });
+        for (i = 0; i < others.length; i++) { r = others[i].getBoundingClientRect(); if (ev.clientY < r.top + r.height / 2) { ref = others[i]; break; } }
+        list.insertBefore(it, ref); ER.sfx.paper(); tape();
+      }
+      document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
+    });
+    box.querySelector('#tn-go').addEventListener('click', function () {
+      if (lock) return;
+      var a = ids(), good = 0, i, t;
+      if (ER.check('order', a.join(''))) { win(a); return; }
+      for (i = 0; i < a.length - 1; i++) if (ER.check('join', a[i] + a[i + 1])) { taped[a[i] + a[i + 1]] = 1; good++; }
+      tape(); EXAM.slip(1); EXAM.sfx.tape(); ER.shake(box.querySelector('.tn-desk'));
+      box.setAttribute('data-tries', (+box.getAttribute('data-tries') || 0) + 1);
+      if (!ER.check('first', a[0])) t = 'It does not begin there. A note to a teacher begins by speaking to the teacher.';
+      else if (!ER.check('last', a[a.length - 1])) t = 'It begins well. But it cannot end like that. A note ends with the name of the person who wrote it, or at least the initials.';
+      else t = 'The beginning and the end are right. The middle does not follow.';
+      t += good ? ' ' + (good === 1 ? 'One join reads well, and you put a piece of tape across it.' : NUM[good] + ' of the joins read well, and you put a piece of tape across each.') : ' Not one of the joins reads well yet.';
+      msg(t + ' Look at the small words: what is &ldquo;it&rdquo;, which are &ldquo;those&rdquo;, who are &ldquo;them&rdquo;?');
+    });
+    function win(a) {
+      lock = true; noteDone = true; ER.flag('d-note', 1); hold(null);
+      for (var i = 0; i < a.length - 1; i++) taped[a[i] + a[i + 1]] = 1;
+      tape(); box.classList.add('whole'); EXAM.sfx.tape(); ER.sfx.ok();
+      ER.addClue('note', 'The torn note', kids().map(function (n) { return '<p>' + n.textContent + '</p>'; }).join(''), 'lined', 'Seven strips, in order');
+      msg('It reads from top to bottom without a bump. Seven strips, one note, and two initials at the end of it.');
+      setTimeout(function () {
+        ER.closeAll(); busy = true;
+        ER.narrate([
+          'J.A. So that is what Jonah Ashby was doing outside the staffroom at ten past four. He was not waiting to take anything. He was waiting to give somebody this.',
+          'And somebody read it, and tore it into seven pieces so that nobody would ever know who wrote it. And then spent the whole evening doing what it asked.'
+        ], function () {
+          near(); EXAM.sfx.stepsNear(6);
+          ER.narrate([
+            'Steps on the stairs. Not a whistle this time: steps. Whoever has been at work in this school all evening is coming back for the boxes.',
+            'There is nowhere to hide in a library. But you can speak first. If you say the right name, you are somebody who understands. If you say the wrong one, you are a pupil in the dark with a hundred and nineteen exam papers.'
+          ], function () { busy = false; openName(); });
+        });
+      }, 3000);
+    }
+    msg('Seven strips of lined paper, in somebody&rsquo;s best handwriting. Drag a strip up or down, or click two strips to make them change places. When you think it reads properly, read it through.');
+    tape();
+    return box;
+  }
+  function openNote() {
+    if (!tnBox) tnBox = buildNote();
+    inNote = true;
+    ER.open('ov-lock', tnBox, function () { inNote = false; });
+  }
+
+  /* ---------- say the name before the door opens ---------- */
+  function openName() {
+    var box = ER.el('div', 'nm'), buf = '', wait = false, msgEl;
+    box.innerHTML = '<svg viewBox="0 0 700 130"><rect width="700" height="130" fill="#070a08"/><rect x="430" y="6" width="180" height="124" fill="#ffe9a8"/><g id="nmDoor"><rect x="430" y="6" width="180" height="124" fill="#3d2916"/>' +
+      '<rect x="448" y="20" width="144" height="96" fill="none" stroke="#2a1b0f" stroke-width="3"/><path d="M448 74h26" stroke="#d9c58a" stroke-width="8" stroke-linecap="round"/></g>' +
+      '<rect x="418" y="0" width="12" height="130" fill="#1d140d"/><rect x="610" y="0" width="12" height="130" fill="#1d140d"/>' +
+      '<g fill="#23432f" opacity=".9"><rect x="40" y="96" width="330" height="10"/></g><g id="nmBooks"></g></svg>' +
+      '<div class="nm-say">&ldquo;Good evening, <span class="nm-gap"><b></b><u></u></span>.&rdquo;</div><div class="nm-keys wk"></div><p class="pmsg"></p>';
+    msgEl = box.querySelector('.pmsg');
+    (function () { var s = '', i, C = ['#6e2f2a', '#2f4a3a', '#27405e', '#8a6a3a', '#4a3a5a']; for (i = 0; i < 22; i++) s += '<rect x="' + (46 + i * 14.5) + '" y="' + (44 + (i * 7) % 16) + '" width="12" height="' + (52 - (i * 7) % 16) + '" fill="' + C[i % 5] + '"/>'; box.querySelector('#nmBooks').innerHTML = s; })();
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() { box.querySelector('.nm-gap b').textContent = buf.toUpperCase(); }
+    function door() { box.querySelector('#nmDoor').style.transform = 'scaleX(' + (1 - Math.min(stage, 3) * 0.045).toFixed(3) + ')'; box.setAttribute('data-stage', stage); }
+    function press(k) {
+      if (wait) return false;
+      if (k === 'back') { buf = buf.slice(0, -1); draw(); return; }
+      if (k === 'enter') { if (buf) say(); return; }
+      if (k.length !== 1) return false;
+      if (buf.length < 18) { buf += k; ER.sfx.tick(); draw(); }
+    }
+    function say() {
+      var g = buf.toLowerCase(), bare = g.replace(/^(mrs|miss|mr|ms)(?=.)/, ''), file = ER.exitOk([g, bare]), st;
+      if (file) {
+        wait = true; nextFile = file; ER.flag('d-file', file); EXAM.freeze(); st = ER.state(); st.done = st.done || {}; st.done.library = 1; ER.flag('d-out', 1);
+        EXAM.solved(); $('#door').classList.add('turn'); ER.pips(2, 2);
+        msg('You say it before the door is fully open. On the other side somebody stands quite still, with a hand on the handle.');
+        setTimeout(function () { ER.leave(file); }, 3800);
+        return;
+      }
+      stage++; ER.flag('d-stage', stage); EXAM.slip(1); EXAM.sfx.stepsNear(3); ER.shake(box.querySelector('.nm-say')); door();
+      msg((NO[bare] || NO[g] || 'There is nobody of that name at Kestrel Hill. Look at the staff board in your notebook.') + ' <b>' + NEAR[Math.min(stage, 3)] + '</b>');
+      buf = ''; draw();
+    }
+    WK.board(box.querySelector('.nm-keys'), { back: true, enter: 'Say it', key: press });
+    WK.keys(box, press);
+    door(); draw();
+    msg('Type the name, and press Enter. Your notebook is open to you: who works here, how they write, and what was left in the bin of the shredder. <b>' + NEAR[Math.min(stage, 3)] + '</b>');
+    inName = true;
+    ER.open('ov-lock', box, function () { inName = false; });
+  }
+})();
+</script>
+</body>
+</html>

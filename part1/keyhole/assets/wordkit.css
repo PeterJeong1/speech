@@ -1,0 +1,98 @@
+/* KEYHOLE word kit: shapes only. A room gives the look, by setting these on .wk (or on any parent):
+     --wk-size   one letter cell (default 40px)        --wk-font   the lettering
+     --wk-ink    letters                               --wk-line   cell edges and underlines
+     --wk-fill   inside of a cell                      --wk-key    an on-screen key
+     --wk-hit    right (green)   --wk-near   nearly (amber)   --wk-miss   wrong letter (grey)   --wk-bad   a wrong try (red)
+   and by restyling any wk-* class it likes. */
+.wk{--s:var(--wk-size,40px);font-family:var(--wk-font,var(--font-ui,'Oswald',sans-serif));color:var(--wk-ink,#f1ecdf)}
+
+/* letter cells */
+.wk-word{display:flex;flex-wrap:wrap;justify-content:center;margin:0 calc(var(--s)*-.3)}
+.wk-part{display:inline-flex;white-space:nowrap;margin:calc(var(--s)*.18) calc(var(--s)*.3)}
+.wk-cell{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:var(--s);height:calc(var(--s)*1.2);margin:0 calc(var(--s)*.07);
+  font-size:calc(var(--s)*.72);line-height:1;font-weight:600;text-transform:uppercase;background:var(--wk-fill,transparent);
+  border-bottom:3px solid var(--wk-line,rgba(255,255,255,.6))}
+.wk-cell.given{opacity:.72}
+.wk-lit{display:inline-flex;align-items:flex-end;padding:0 3px calc(var(--s)*.12);font-size:calc(var(--s)*.72);line-height:1}
+.wk-hang.won .wk-cell{border-bottom-color:var(--wk-hit,#3f9d5a)}
+.wk-hang.lost .wk-cell{border-bottom-color:var(--wk-bad,#c0453a)}
+.wk-lives{margin:12px 0 0;text-align:center;line-height:0}
+.wk-lives i{display:inline-block;width:11px;height:11px;margin:0 4px;border-radius:50%;border:1px solid currentColor;opacity:.3}
+.wk-lives i.on{background:currentColor;opacity:1}
+
+/* on-screen keyboard */
+.wk-board{margin-top:16px;text-align:center}
+.wk-row{display:flex;justify-content:center;margin:5px 0}
+.wk-key{width:calc(var(--s)*.92);height:calc(var(--s)*1.05);margin:0 2px;padding:0;border:1px solid var(--wk-line,rgba(255,255,255,.45));border-radius:4px;
+  background:var(--wk-key,rgba(255,255,255,.08));color:inherit;font:inherit;font-size:calc(var(--s)*.44);font-weight:600;cursor:pointer}
+.wk-key.wide{width:calc(var(--s)*1.7);font-size:calc(var(--s)*.34);letter-spacing:.06em}
+.wk-key:hover:not(:disabled){border-color:var(--accent,#e0b354)}
+.wk-key.hit{background:var(--wk-hit,#3f9d5a);border-color:transparent}
+.wk-key.near{background:var(--wk-near,#c79a2b);border-color:transparent}
+.wk-key.miss{background:var(--wk-miss,#4a4f57);border-color:transparent;opacity:.5}
+.wk-key:disabled{cursor:default}
+
+/* gaps: words with letters missing, inside running text (sizes follow the text) */
+.wk-gap{display:inline-flex;vertical-align:baseline;white-space:nowrap;cursor:text}
+.wk-gap .wk-part{margin:0 .22em 0 0}
+.wk-gap .wk-part:last-child{margin-right:0}
+.wk-gap .wk-cell{width:.92em;height:1.3em;margin:0 1px;font-size:1em;font-weight:inherit;border-bottom:2px solid var(--wk-line,currentColor);background:var(--wk-fill,transparent)}
+.wk-gap .wk-cell.given{opacity:1;border-bottom-color:transparent}
+.wk-gap .wk-cell.blank{cursor:pointer}
+.wk-gap .wk-cell.cur{background:var(--wk-cur,rgba(224,179,84,.35));border-bottom-color:var(--accent,#e0b354)}
+.wk-gap .wk-cell.fix{border-bottom-color:var(--wk-hit,#3f9d5a);cursor:default}
+.wk-gap.bad .wk-cell.blank:not(.fix){color:var(--wk-bad,#c0453a)}
+.wk-gap.ok{cursor:default}
+.wk-gap.ok .wk-cell{width:auto;margin:0;border-bottom-color:transparent;cursor:default}      /* a solved word closes up and reads as a word */
+.wk-gap .wk-lit{padding:0 1px;font-size:1em}
+
+/* a word in so many tries */
+.wk-grid{display:flex;flex-direction:column;align-items:center}
+.wk-try{display:flex;margin:3px 0}
+.wk-grid .wk-cell{margin:0 3px;border:2px solid var(--wk-line,rgba(255,255,255,.35));transition:background .25s,border-color .25s}
+.wk-try.cur .wk-cell.on{border-color:var(--wk-ink,#f1ecdf)}
+.wk-grid .wk-cell.hit{background:var(--wk-hit,#3f9d5a);border-color:transparent}
+.wk-grid .wk-cell.near{background:var(--wk-near,#c79a2b);border-color:transparent}
+.wk-grid .wk-cell.miss{background:var(--wk-miss,#4a4f57);border-color:transparent}
+
+/* tiles to put in order */
+.wk-tiles{display:flex;flex-wrap:wrap;justify-content:center}
+.wk-tiles .wk-tile{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:var(--s);height:calc(var(--s)*1.2);margin:4px;padding:0 calc(var(--s)*.2);
+  font-size:calc(var(--s)*.66);font-weight:600;line-height:1;border:2px solid var(--wk-line,rgba(255,255,255,.6));border-radius:4px;background:var(--wk-fill,rgba(255,255,255,.08));
+  cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
+.wk-tiles.wk-words .wk-tile{font-size:calc(var(--s)*.5);padding:0 calc(var(--s)*.34)}
+.wk-tiles .wk-tile.held{outline:2px solid var(--accent,#e0b354);outline-offset:3px}
+.wk-tiles .wk-tile.drag{position:relative;z-index:5;cursor:grabbing;box-shadow:0 10px 24px rgba(0,0,0,.45)}
+.wk-tiles.done .wk-tile{border-color:var(--wk-hit,#3f9d5a);cursor:default}
+.wk-tiles.wk-column{flex-direction:column;flex-wrap:nowrap;align-items:stretch}
+.wk-tiles.wk-column .wk-tile{height:auto;min-height:calc(var(--s)*1.2);justify-content:flex-start;text-align:left;line-height:1.3;padding:calc(var(--s)*.18) calc(var(--s)*.34)}
+
+/* a text with gaps and a tray of words */
+.wk-blank{display:inline-block;box-sizing:border-box;min-width:6.2em;min-height:1.55em;margin:0 .2em;padding:0 .2em;text-align:center;vertical-align:bottom;
+  border-bottom:2px solid var(--wk-line,currentColor)}
+.wk-blank.ok{border-bottom-color:var(--wk-hit,#3f9d5a)}
+.wk-bank{display:flex;flex-wrap:wrap;justify-content:center;min-height:2.4em;margin-top:18px;padding:8px;border:1px dashed var(--wk-line,rgba(255,255,255,.4))}
+.wk-chip,.wk-set{display:inline-block;padding:.12em .7em;border-radius:3px;line-height:1.3;-webkit-user-select:none;user-select:none}
+.wk-chip{margin:.25em;border:1px solid var(--wk-line,currentColor);background:var(--wk-fill,rgba(255,255,255,.08))}
+.wk-blank .wk-chip{margin:0;border-color:transparent;background:transparent;padding:0 .2em}
+.wk-blank .wk-set{padding:0 .2em;font-weight:600}
+
+/* pick the word */
+.wk-pick .wk-w{cursor:pointer;border-radius:2px}
+.wk-pick .wk-w:hover{background:var(--wk-cur,rgba(224,179,84,.3))}
+.wk-pick .wk-w.ok{background:var(--wk-hit,#3f9d5a);color:#fff}
+.wk-pick .wk-w.shake{display:inline-block}
+
+/* sort the words into sets */
+.wk-pool{display:flex;flex-wrap:wrap;justify-content:center}
+.wk-groups .wk-tile{box-sizing:border-box;width:calc(25% - 10px);min-height:calc(var(--s)*1.5);margin:5px;padding:4px 6px;border:1px solid var(--wk-line,rgba(255,255,255,.45));border-radius:4px;
+  background:var(--wk-fill,rgba(255,255,255,.08));color:inherit;font:inherit;font-size:calc(var(--s)*.46);font-weight:600;cursor:pointer}
+.wk-groups .wk-tile.sel{background:var(--wk-ink,#f1ecdf);color:var(--wk-sel-ink,#14110b)}
+.wk-groups .wk-set{display:block;margin:5px;padding:9px 12px;text-align:center;border-radius:4px;background:var(--wk-hit,#3f9d5a);color:#fff}
+.wk-groups .wk-set b{display:block;font-size:calc(var(--s)*.4);letter-spacing:.08em;text-transform:uppercase}
+.wk-groups .wk-set span{font-size:calc(var(--s)*.42)}
+
+/* a line to type on */
+.wk-typed{min-width:calc(var(--s)*8);min-height:calc(var(--s)*1.3);padding:0 12px;box-sizing:border-box;text-align:center;font-size:calc(var(--s)*.8);line-height:calc(var(--s)*1.3);
+  letter-spacing:.14em;border-bottom:3px solid var(--wk-line,rgba(255,255,255,.6));white-space:pre}
+.wk-typed.empty{opacity:.4;letter-spacing:.04em;font-size:calc(var(--s)*.5)}

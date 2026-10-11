@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Shed · Seven Sacks for Tolver</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="mail.css">
+<style>
+  body{--bg:#131826;--accent:#f0b85a;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(13,17,28,.95);--tc-ink:#f3ead6;--cap-bg:rgba(10,13,22,.93);--panel:#1a2030;--face-bg:#1b2233;--q-ink:#f0c98a;--fade:#070910;--hud-bg:rgba(10,13,22,.78)}
+  .hullT{font-family:'Limelight',serif;font-size:74px;letter-spacing:10px;fill:#c8a878;opacity:.5}
+  .stn{font-family:'Stardos Stencil',serif;font-weight:700;fill:#2c3138;text-anchor:middle;opacity:.75}
+  .chk{font-family:'Caveat',cursive;font-weight:700;fill:#eef0ea;text-anchor:middle}
+  .flick{animation:flick 3.1s steps(1,end) infinite}
+  .flick.b{animation-duration:4.3s;animation-delay:-1.4s}
+  @keyframes flick{0%{opacity:.95}23%{opacity:.8}41%{opacity:1}67%{opacity:.86}84%{opacity:.97}}
+  #goshL{animation:blinkL 2.2s steps(1,end) infinite}
+  @keyframes blinkL{50%{opacity:.15}}
+  #tail{transform-origin:1392px 622px;animation:tail 3.6s ease-in-out infinite alternate}
+  @keyframes tail{from{transform:rotate(-7deg)}to{transform:rotate(9deg)}}
+  #board.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.35)}}
+  #boardEta{display:none}
+  body.planned #boardEta{display:block}
+
+  /* the blackboard, close to */
+  .bd-bg{fill:#20262a}
+  .bd-line{stroke:#eef0ea;stroke-width:.8;opacity:.28}
+  .bd-num{font-family:'Caveat',cursive;font-size:19px;fill:#eef0ea;opacity:.75;text-anchor:end}
+  .bd-ground{fill:#3a4248;stroke:#eef0ea;stroke-width:2.6;stroke-linejoin:round}
+  .bd-leg{stroke:#ffd98a;stroke-width:1.6;stroke-dasharray:7 6;opacity:.8}
+  .bd-legT{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.14em;fill:#ffd98a;text-anchor:middle}
+  .bd-spot{font-family:'Caveat',cursive;font-size:21px;fill:#eef0ea;text-anchor:middle}
+  .bd-rung{fill:#20262a;stroke:#eef0ea;stroke-width:1.6;opacity:.7;cursor:pointer}
+  .bd-rung:hover{stroke:#ffd98a;opacity:1;stroke-width:2.6}
+  .bd-ship{cursor:grab}
+  .bd-ship.on{cursor:grabbing}
+  .bd-ship path{fill:#f6f2e6;stroke:#20262a;stroke-width:1.5}
+  .bd-ship text{font-family:'Caveat',cursive;font-weight:700;font-size:23px;fill:#ffd98a;text-anchor:middle}
+  .bd-rail{stroke:#eef0ea;stroke-width:1.2;opacity:.4}
+  .bd-rung.at{opacity:0}
+  .bx.board{width:min(980px,95vw)}
+  .bx.board .bx-foot{flex-wrap:wrap;justify-content:flex-end;gap:8px 12px;min-height:0}
+  .bx.board .pmsg{flex:1 1 100%;min-height:48px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="dawnG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2748"/><stop offset=".55" stop-color="#4d5580"/><stop offset=".85" stop-color="#c98a62"/><stop offset="1" stop-color="#f0c088"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3246"/><stop offset="1" stop-color="#0b0e15"/></linearGradient>
+  <linearGradient id="hullG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2919"/><stop offset=".7" stop-color="#76573a"/><stop offset="1" stop-color="#93704a"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffd98a" stop-opacity=".8"/><stop offset=".35" stop-color="#f0b85a" stop-opacity=".25"/><stop offset="1" stop-color="#f0b85a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="56%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".65" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".86"/></radialGradient>
+</defs>
+
+<!-- the far end of the shed: the doors are open, and it is not quite day -->
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#131826"/>
+<rect x="560" y="250" width="740" height="392" fill="url(#dawnG)"/>
+<g fill="#eaf0ff"><circle cx="640" cy="290" r="1.600"/><circle cx="760" cy="270" r="1.200"/><circle cx="1180" cy="284" r="1.500"/><circle cx="1240" cy="330" r="1.100"/><circle cx="700" cy="350" r="1"/></g>
+<path d="M560 600q120 -30 240 -6t260 -16 240 10v54H560z" fill="#28324a"/><rect x="560" y="614" width="740" height="28" fill="#1c2626"/>
+<g id="gosh" class="hot">
+  <path d="M1150 444v170M1141 614l9 -170 9 170M1144 560h12M1146 500h8" stroke="#3a4560" stroke-width="2.500" fill="none"/>
+  <path d="M884 440l-30 -22v44z" fill="#aeb8c4"/><ellipse cx="1012" cy="440" rx="132" ry="27" fill="#c9d2dc"/><path d="M892 430q120 -22 240 0" stroke="#f3f6fa" stroke-width="4" fill="none"/>
+  <path d="M882 446h260" stroke="#b3271f" stroke-width="5"/><rect x="1036" y="465" width="44" height="11" rx="3" fill="#59616a"/><circle id="goshL" cx="1143" cy="440" r="3.500" fill="#ffe9a8"/>
+</g>
+<g fill="#1c2334" stroke="#2a3348" stroke-width="3"><path d="M430 226h130v430H430zM1300 226h130v430H1300z"/><path d="M430 226l130 430M560 226l-130 430M1300 226l130 430M1430 226l-130 430" fill="none"/></g>
+<g id="truss" fill="none" stroke="#232c40" stroke-linecap="round"></g>
+<path d="M560 642H1300L2600 1320H-1000Z" fill="url(#floorG)"/>
+<path d="M800 642L300 1320M1060 642L1560 1320" stroke="#3a4258" stroke-width="5" opacity=".7"/>
+
+<!-- the Dunnock, which is most of the shed -->
+<g id="ship" class="hot">
+  <path d="M-1000 -400H1560Q1420 60 1262 150Q1000 300 600 372Q200 424 -1000 384Z" fill="url(#hullG)"/>
+  <g fill="none" stroke="#3a2919" stroke-width="2.500" opacity=".6"><path d="M-1000 250Q200 300 760 190T1440 -160"/><path d="M-1000 110Q200 150 700 60T1300 -260"/><path d="M-1000 330Q300 380 880 250T1500 -60"/></g>
+  <g fill="#a8845a" stroke="#5a3f26" stroke-width="2" stroke-dasharray="5 4" opacity=".8"><path d="M300 250l80 -8 6 50 -80 8z"/><path d="M760 150l64 -18 12 44 -64 18z"/><path d="M60 300l54 0 0 44 -54 0z"/><path d="M1090 40l50 -26 18 36 -50 26z"/></g>
+  <text x="870" y="262" class="hullT" transform="rotate(-21 870 262)">DUNNOCK</text>
+  <path d="M1262 150q40 -22 70 -64" stroke="#c9ced3" stroke-width="10" fill="none" stroke-linecap="round" opacity=".6"/>
+</g>
+<g id="gond" class="hot">
+  <path d="M300 398v20M430 404v14M560 396v22M640 388v30" stroke="#22201c" stroke-width="4"/>
+  <path d="M250 414h430l-34 86H292z" fill="#5a3f26"/><path d="M250 414h430" stroke="#3a2614" stroke-width="5"/>
+  <g fill="#ffd98a" class="flick b"><rect x="296" y="430" width="52" height="30"/><rect x="362" y="430" width="52" height="30"/><rect x="428" y="430" width="52" height="30"/><rect x="494" y="430" width="52" height="30"/><rect x="560" y="430" width="52" height="30"/></g>
+  <path d="M640 500L690 838M668 500L718 838M646 540h28M652 580h28M658 620h28M664 660h28M670 700h28M676 740h28M682 780h28" stroke="#6b4a2a" stroke-width="5" fill="none"/>
+</g>
+
+<!-- the post, with a lantern, and the rules of the Trial nailed to it -->
+<circle class="flick" cx="214" cy="446" r="230" fill="url(#lampG)" pointer-events="none"/>
+<g id="trialpost" class="hot">
+  <rect x="138" y="380" width="24" height="560" fill="#4a3219"/><path d="M162 420h44v10h-44z" fill="#4a3219"/><path d="M206 430v8" stroke="#22201c" stroke-width="2"/>
+  <path d="M196 438h20l6 34h-32z" fill="#ffe9a8"/><path d="M194 438h24M188 472h36" stroke="#22201c" stroke-width="4"/>
+  <rect x="94" y="474" width="112" height="146" fill="#f3ecd6" stroke="#7a1f1f" stroke-width="3"/><rect x="94" y="474" width="112" height="34" fill="#7a1f1f"/>
+  <g stroke="#f6ead0" stroke-width="2.500"><path d="M112 486h76M122 497h56"/></g><g stroke="#3a3024" stroke-width="2"><path d="M106 524h88M106 536h80M106 552h88M106 564h70M106 580h88M106 592h60"/></g><circle cx="150" cy="479" r="3.500" fill="#22201c"/>
+</g>
+
+<!-- the blackboard, with the wind sheet pinned to its corner -->
+<g id="board" class="hot">
+  <path d="M636 730L600 880M874 730L910 880M756 730V872" stroke="#4a3219" stroke-width="9" stroke-linecap="round"/>
+  <rect x="596" y="496" width="318" height="232" fill="#20262a" stroke="#7a5a36" stroke-width="11"/>
+  <path d="M616 690h70l20 -14 16 8 20 -40 30 -60 22 -10 8 70 28 30 40 14" stroke="#eef0ea" stroke-width="3" fill="none" stroke-linejoin="round" opacity=".85"/>
+  <g stroke="#eef0ea" stroke-width="1" opacity=".3"><path d="M616 660h280M616 630h280M616 600h280M616 570h280M616 540h280"/></g>
+  <g id="boardEta"><rect x="800" y="512" width="88" height="40" fill="none" stroke="#ffd98a" stroke-width="2.500"/><text x="844" y="542" class="chk" font-size="31" style="fill:#ffd98a">08.00</text></g>
+</g>
+<g id="metsheet" class="hot" transform="rotate(5 912 524)"><rect x="874" y="470" width="78" height="104" fill="#e9eef0"/><rect x="874" y="470" width="78" height="14" fill="#26476b"/>
+  <g stroke="#3a4a5c" stroke-width="1.600"><path d="M882 496h62M882 506h62M882 516h62M882 526h62M882 536h62M882 546h62M882 558h40"/><path d="M904 492v58M926 492v58"/></g><circle cx="913" cy="476" r="4" fill="#b3271f"/></g>
+
+<!-- Captain Montalvo -->
+<g id="capt" class="hot" transform="translate(500 846)">
+  <ellipse cx="0" cy="2" rx="74" ry="9" fill="#000" opacity=".45"/>
+  <path d="M-18 0v-96h15V0zM5 0v-96h15V0z" fill="#26262c"/><path d="M-25 0h25v9h-29zM1 0h25v9h-22z" fill="#17120d"/>
+  <path d="M-46 -74q-14 -160 46 -178t50 178z" fill="#5a3a22"/><path d="M2 -246v172" stroke="#3a2414" stroke-width="3"/><path d="M-44 -150h90" stroke="#3a2414" stroke-width="7"/><rect x="-6" y="-157" width="14" height="14" fill="#c9a24a"/>
+  <path d="M-30 -226q-26 44 -14 86" stroke="#4e321c" stroke-width="17" fill="none" stroke-linecap="round"/><circle cx="-44" cy="-136" r="9" fill="#c99a6e"/>
+  <path d="M32 -230q40 -16 66 -62" stroke="#5a3a22" stroke-width="17" fill="none" stroke-linecap="round"/><circle cx="100" cy="-296" r="9" fill="#c99a6e"/><path d="M104 -300l12 -12" stroke="#f6f2e6" stroke-width="5" stroke-linecap="round"/>
+  <path d="M-16 -252l20 16 20 -16 -8 -12h-24z" fill="#6e4829"/><rect x="-4" y="-270" width="14" height="16" fill="#b98558"/><circle cx="4" cy="-284" r="23" fill="#c99a6e"/>
+  <circle cx="-18" cy="-280" r="9" fill="#c9cdd0"/><path d="M-20 -290q2 -30 26 -30t24 26q-12 -8 -26 -6t-24 10z" fill="#4a2f1c"/><ellipse cx="2" cy="-310" rx="9" ry="6" fill="#8fb0c4" stroke="#22201c" stroke-width="3"/><ellipse cx="20" cy="-306" rx="8" ry="6" fill="#8fb0c4" stroke="#22201c" stroke-width="3"/>
+  <path d="M10 -284h8" stroke="#3a2a1a" stroke-width="2.600"/><path d="M12 -272q6 2 10 -1" stroke="#7a3f30" stroke-width="2.200" fill="none"/><path d="M-10 -296l-10 -22" stroke="#e8b017" stroke-width="3.500" stroke-linecap="round"/>
+</g>
+
+<!-- the crate, and her notes on it -->
+<g id="crate"><path d="M950 744h152v98H950z" fill="#6b4a2a"/><path d="M950 776h152M950 810h152M988 744v98M1064 744v98" stroke="#4a3219" stroke-width="3"/><text x="1026" y="800" class="stn" font-size="17" style="fill:#2a1c0e">UPLAND MAIL</text></g>
+<g id="notesbook" class="hot"><circle cx="1026" cy="730" r="34" fill="#fff" opacity="0"/><path d="M994 726l60 -8 5 22 -60 8z" fill="#17181c"/><path d="M996 746l60 -8" stroke="#f4ecd4" stroke-width="4"/><path d="M1002 728l44 -6" stroke="#5a5c66" stroke-width="2"/><path d="M1066 730l34 -10" stroke="#e8b017" stroke-width="4" stroke-linecap="round"/></g>
+
+<!-- Captain Varley, in the doorway, with an apple -->
+<g id="varley" class="hot" transform="translate(1218 652) rotate(5)">
+  <ellipse cx="0" cy="2" rx="50" ry="6" fill="#000" opacity=".4"/>
+  <path d="M-14 0v-70h11V0zM10 0l-16 -70h11L21 0z" fill="#2f3848"/><path d="M-19 0h18v6h-21zM6 0h18v6h-17z" fill="#17120d"/>
+  <path d="M-30 -66q-8 -84 30 -92t34 92z" fill="#b9c0c8"/><path d="M-28 -100q30 12 60 0" stroke="#b3271f" stroke-width="5" fill="none"/>
+  <path d="M-22 -142q-20 20 -10 52" stroke="#a9b0b8" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M22 -144q24 -2 22 -34" stroke="#b9c0c8" stroke-width="13" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="43" cy="-182" r="7" fill="#e8c4a2"/><circle cx="36" cy="-188" r="8" fill="#c8402c"/>
+  <path d="M-12 -160q12 12 26 0l4 12q-16 12 -34 0z" fill="#f6f3ea"/><rect x="-4" y="-176" width="11" height="12" fill="#d9b08c"/><circle cx="2" cy="-190" r="18" fill="#e8c4a2"/>
+  <path d="M-17 -192q-2 -24 20 -22t16 22q-8 -12 -18 -10t-18 10z" fill="#b08a4e"/><path d="M4 -190h6" stroke="#3f6a8a" stroke-width="2.400"/>
+  <path d="M-34 -150l-10 60" stroke="#f3cf8e" stroke-width="3" opacity=".5" stroke-linecap="round"/>
+</g>
+
+<!-- the trolley: seven sacks, a grey bag, and a cat -->
+<circle class="flick b" cx="1500" cy="520" r="250" fill="url(#lampG)" pointer-events="none"/>
+<g><path d="M1500 560v300M1470 860h60" stroke="#22201c" stroke-width="6"/><path d="M1486 520h28l8 40h-44z" fill="#ffe9a8"/><path d="M1482 520h36M1474 560h52" stroke="#22201c" stroke-width="5"/></g>
+<g id="sacks" class="hot">
+  <rect x="1140" y="838" width="380" height="14" fill="#4a3219"/><circle cx="1184" cy="868" r="20" fill="#17120d"/><circle cx="1476" cy="868" r="20" fill="#17120d"/><circle cx="1184" cy="868" r="6" fill="#59616a"/><circle cx="1476" cy="868" r="6" fill="#59616a"/>
+  <g id="sackrow"></g>
+  <path d="M1216 756l-10 34" stroke="#c9bfa3" stroke-width="2"/><path d="M1188 788l40 6 -6 44 -40 -6z" fill="#e6d7ae" stroke="#6b5a3c" stroke-width="1.500"/><path d="M1194 800l26 4M1193 810l26 4M1192 820l18 3" stroke="#3a3024" stroke-width="1.600"/>
+</g>
+<g id="hbag" class="hot"><path d="M1060 880q-10 -56 14 -70q6 -8 2 -16h34q-4 8 2 16q24 14 14 70z" fill="#6f7780"/><path d="M1070 826q22 -8 44 0" stroke="#4c5058" stroke-width="3" fill="none"/><rect x="1072" y="786" width="42" height="14" rx="7" fill="#c8402c"/><path d="M1080 793h26" stroke="#8a2a1c" stroke-width="2"/></g>
+<g id="cat" class="hot">
+  <path id="tail" d="M1392 622q34 4 40 34q4 22 -8 34" stroke="#d98a3c" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <ellipse cx="1340" cy="622" rx="54" ry="22" fill="#d98a3c"/><path d="M1300 612q20 -14 50 -12" stroke="#b56a22" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M1326 606l10 16M1350 604l8 18" stroke="#b56a22" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="1296" cy="618" r="19" fill="#d98a3c"/><path d="M1282 606l-2 -16 14 8zM1300 600l8 -14 6 16z" fill="#d98a3c"/><path d="M1284 620q4 3 8 0M1298 620q4 3 8 0" stroke="#3a2010" stroke-width="2" fill="none"/><path d="M1290 628l5 3 5 -3" stroke="#f6f3ea" stroke-width="3" fill="none"/>
+</g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Cast off</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="mail.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  /* the roof of the shed, and seven sacks on a trolley */
+  (function () {
+    var s = '', i, f, x0, x1, ty, by, n = 0;
+    for (i = 1; i < 5; i++) {
+      f = 1 + i * 0.75; x0 = 930 - 400 * f; x1 = 930 + 400 * f; ty = 440 - 230 * f; by = 440 + 202 * f;
+      s += '<path d="M' + x0 + ' ' + by + 'V' + ty + 'Q930 ' + (ty - 90 * f) + ' ' + x1 + ' ' + ty + 'V' + by + '" stroke-width="' + (5 * f) + '"/>';
+    }
+    $('#truss').innerHTML = s; s = '';
+    function sack(x, b) {
+      n++;
+      return '<path d="M' + x + ' ' + b + 'q-10 -72 16 -94q8 -10 2 -18h44q-6 8 2 18q26 22 16 94z" fill="#8d949c"/><path d="M' + (x + 16) + ' ' + (b - 94) + 'h48" stroke="#5c636b" stroke-width="4"/>' +
+        '<path d="M' + (x + 62) + ' ' + (b - 82) + 'q14 30 10 78" stroke="#737a82" stroke-width="6" fill="none" opacity=".6"/><text x="' + (x + 40) + '" y="' + (b - 46) + '" class="stn" font-size="19">P.O.</text><text x="' + (x + 40) + '" y="' + (b - 22) + '" class="stn" font-size="19">' + n + '</text>';
+    }
+    [1168, 1252, 1336, 1420].forEach(function (x) { s += sack(x, 838); });
+    [1210, 1294, 1378].forEach(function (x) { s += sack(x, 742); });
+    $('#sackrow').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'mail', storyTitle: 'Seven Sacks for Tolver', id: 'shed', no: 'I', title: 'The Shed',
+    go: 'Go in',
+    intro: [
+      'Lowmere, in the flat west of Corvale, at twenty to six on a Thursday morning in October. You have worked at the Post Office for three weeks. Last night the Postmaster gave you a grey canvas bag, a way bill and a ticket for an airship, and told you not to lose any of them.',
+      'Beyond the Harrow Range lies Tolver, a mining town that the snow shuts off from October to May. All winter its letters go over the mountains by air: for thirty-one years, in the mail ship Dunnock. This morning there is a second ship on the field, new and silver and fast. The Post Office is holding a Trial, and the ship that wins it will carry the Tolver mail for the next five years.',
+      'Each ship has seven sacks. You are to ride with the Dunnock&rsquo;s, and to drop the grey bag over a house in the mountains, because the rules say that only a Post Office hand may let go of the mail. Nobody has told you what else a third hand does on an airship.'
+    ],
+    exit: {"next":"gondola","w":{"fee7a59d":"841585a0"}}, tags: {"h1":["a4bcbe2c"],"h2":["542a0010"],"h3":["3984c840"],"m1":["22401cae"],"m2":["37756890"],"m3":["c41d1059"]},
+    sound: ['archive', { root: 48, bpm: 60, drop: ['mel'], beds: [['wind', 0.35], ['birds', 0.3]] }],      /* a great empty shed before dawn, and three papers to read: warm, slow, no tune */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('a-file') || null; told = ER.flag('a-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('a-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.cap && told.met && told.notes && told.trial; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#board').classList.toggle('ready', !!(ready() && !nextFile));
+    document.body.classList.toggle('planned', !!nextFile);
+    $('#boardEta text').textContent = ER.flag('a-eta') || '';
+    ER.pips((told.cap ? 1 : 0) + (told.met && told.notes && told.trial ? 1 : 0) + ((ER.flag('a-stage') || 0) > 0 ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The plan is on the board, and the sacks are aboard. Time to cast off.']];
+    if (bench && bench.isOpen()) return [['heights', [
+      'Take one leg at a time. First cross out the heights that the rules forbid: too close to the ground (rule three), in cloud, or above it when there is another way (rule four).',
+      'Across the plain and down the valley, two heights are left each time. Read the wind at both. A wind is named for where it comes FROM, and you are flying east: which of the two winds is behind you?',
+      'Over the mountains the pass is 2,100 metres high, and rule three wants 300 metres more. Two heights are high enough. Rule six says how strong the wind may be up there.'
+    ]], ['minutes', [
+      'Rule two: fifty kilometres an hour, and then add the wind behind her at the height you chose. That is her speed over the ground on that leg.',
+      'The length of each leg is chalked at the top of the board. A ship that makes 100 kilometres an hour over the ground does 50 kilometres in half an hour: 30 minutes. Do the same sum for each leg: how far, and how fast over the ground?'
+    ]]][bench.stage()];
+    if (!told.cap) return ['cap', ['The woman at the blackboard is waiting for you. Ask her what a third hand does.']];
+    if (!ready()) return ['read', [
+      'The Captain named three things to read before you touch her board: the wind sheet, her notes, and the rules of the Trial.',
+      'The wind sheet is the pale paper pinned to the corner of the blackboard. Her notes are the small black book on the crate. The rules are nailed to the post on the left, under the lantern.'
+    ]];
+    return ['board', ['Now the blackboard itself. The Captain has drawn the whole road on it.']];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The plan is on the board. Outside, it is nearly light.'); return; }
+    if (told.in) { busy = false; ER.say('The shed at Lowmere. A quarter to six, and the Captain is still chalking.'); return; }
+    tell('in');
+    ER.narrate([
+      'The shed is the biggest room you have ever stood in. Most of it is full of airship: sixty metres of patched brown canvas, with DUNNOCK painted on her side in letters that have faded to the colour of tea.',
+      'Under her, a woman in a long leather coat is chalking on a blackboard. She does not turn round. &ldquo;You are the Post Office. You are early: good. Driscoll, my rigger, fell off the shed steps on Tuesday and broke his leg in two places. So today you are the Post Office and you are Driscoll.&rdquo;',
+      'On a trolley stand your seven sacks, with a cat asleep on the top one. You check the way bill. Sacks 1 to 7, Tolver. One grey bag, Windgate Hospice. And one registered letter in sack 7, addressed in a small square hand: <em>Captain I. Montalvo, care of the Postmaster, Tolver. To be given to her when the Trial is over.</em>',
+      'Somebody has posted the Captain a letter to the town she is about to fly to. It would be quicker to hand it to her now. That is not how the Post Office works.',
+      '&ldquo;Twenty minutes,&rdquo; says the Captain. &ldquo;The weather office has sent its wind sheet. My notes are on the crate. The rules of the Trial are nailed to that post. Read all three, Clerk. Then come and tell me how high we fly.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#capt').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Sacks aboard, Clerk,&rdquo; says the Captain. &ldquo;The wind will not wait for us, and neither will Mr Varley.&rdquo;'); return; }
+    ER.talk({
+      who: 'Captain Montalvo', role: 'Master of the mail ship Dunnock', face: window.FACE('mont'),
+      lines: [
+        { note: 'She has chalk on both hands and a pencil behind each ear.', a: '&ldquo;Montalvo. I have flown the Windgate road since before you were born, and I still read the wind sheet every morning as if I had never seen one. So will you.&rdquo;' },
+        { q: 'What is the Trial?', a: 'Two ships, seven sacks each, one morning. The first to put all seven on the Postmaster&rsquo;s table at Tolver, with her log, carries the mail for five years. The other one goes away and carries something else. Coal, I expect.' },
+        { q: 'Can the Dunnock win?', a: 'She makes fifty kilometres an hour in still air. That silver thing outside makes eighty. But the air between here and Tolver is never still, Clerk, and it is not the same air at every height. At one height the wind is behind you. At another it is in your face. A slow ship at the right height will beat a fast ship at the wrong one.' },
+        { q: 'What do you want me to do?', a: 'The road has three legs: the plain, the mountains, and the valley down to Tolver. Choose me a height for each. The wind sheet says what the air is doing. My notes say what I will and will not do in it. Set the three heights on this board, and I shall ask you why.' },
+        { q: 'And after that?', a: 'After that you tell me how many minutes each leg will take us, and I shall tell Tolver when to put the kettle on.' }
+      ],
+      clue: { id: 'cap1', title: 'Captain Montalvo, in the shed', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('cap')) { paint(); ER.say('The wind sheet is pinned to the corner of the blackboard. Her notes are the small black book on the crate. The rules are nailed to the post on the left, under the lantern.'); } }
+    });
+  });
+  $('#varley').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The doorway is empty. There is an apple core in the bucket, exactly in the middle.'); return; }
+    ER.talk({
+      who: 'Captain Varley', role: 'Master of the Goshawk · the Brandreth Line', face: window.FACE('varley'),
+      lines: [
+        { note: 'He is leaning in the doorway in a silver-grey jacket, eating an apple. He looks about thirty-five, and very wide awake.', a: '&ldquo;Rafe Varley. The Goshawk is mine. Well, she is Mr Brandreth&rsquo;s, but I am allowed to drive. You are the new Driscoll? Don&rsquo;t let her frighten you. She frightened me for nine years, and look at me now.&rdquo;' },
+        { q: 'Nine years?', a: 'I was her mate. Everything I know about that road I learned standing behind her at that wheel. Then the Brandreth Line built a ship that makes eighty in still air, and wanted somebody to fly it. I am not proud. Well. I am a bit.' },
+        { q: 'How high will you fly?', a: 'Three thousand metres, the whole way. Have you seen the wind sheet? Eighty-five kilometres an hour at three thousand, from the west, on both sides of the range. Add that to my eighty. I shall be in Tolver before her kettle boils.' },
+        { q: 'The Captain has rules about that.', a: 'She has a little black book with seven rules in it, and I know them all by heart. I have even kept most of them.</p><p class="note">He throws the apple core over his shoulder. It lands in a bucket six metres away.</p><p>Number six is for slow ships.' }
+      ],
+      clue: { id: 'var1', title: 'Captain Varley, in the doorway', kind: 'What he said' },
+      done: function (seen) { if (seen) tell('var'); }
+    });
+  });
+
+  /* ---------- papers ---------- */
+  $('#metsheet').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    ER.read({ html: MAIL.met(), cls: 'met', clue: { id: 'met', title: 'The wind sheet', kind: 'Lowmere Weather Office, 05.00' }, done: function () {
+      MAIL.words(['range', 'telegraph']);
+      if (tell('met')) { paint(); ER.say('The same country, the same morning, and six different winds, one on top of another.'); }
+    } });
+  });
+  var NOTES = '<h4>The Windgate road, going east</h4>' +
+    '<p class="legs">Leg 1. Lowmere to Carrow, 70 km: the plain. Highest ground 600 m.</p>' +
+    '<p class="legs">Leg 2. Carrow to the Lip, over the Windgate, 55 km: the range. Highest ground on our line: the Windgate itself, 2,100 m.</p>' +
+    '<p class="legs">Leg 3. The Lip to Tolver, 40 km: the valley. Highest ground 1,100 m, just under the Lip. Tolver field is at 800 m.</p>' +
+    '<ol class="gapp"><li>Our road runs east, all the way. So a west wind is behind us, and an east wind is in our face.</li>' +
+    '<li>The Dunnock makes 50 km/h through still air. A wind behind her: add it. A wind in her face: take it away. The answer is her speed over the ground, and the ground is where Tolver is.</li>' +
+    '<li>Keep 300 m of air between her keel and the highest ground on the leg. More is welcome. Less is not flying: it is luck.</li>' +
+    '<li>I find my way by what I can see. Never fly a leg IN cloud. Never fly a leg ABOVE cloud either, unless the ground leaves no other way.</li>' +
+    '<li>If the rules allow two heights, take the one that gets us there sooner.</li>' +
+    '<li>Never cross the Windgate in a wind of more than 70. Beyond the pass the air pours down the far side like water over a weir, and the stronger the wind, the deeper it falls.</li>' +
+    '<li>After the Windgate: down to 2,000 m or lower, at once. Tolver lies deep in its valley. A ship that arrives high must let out gas to get down, and gas is what holds her up.</li></ol>';
+  $('#notesbook').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: NOTES, cls: 'notes', clue: { id: 'notes', title: 'The Captain’s notes', kind: 'A small black book' }, done: function () {
+      MAIL.words(['keel', 'weir', 'pass', 'leg']);
+      if (tell('notes')) { paint(); ER.say('Seven rules, in thirty-one years. She cannot have needed many.'); }
+    } });
+  });
+  var TRIAL = '<h4><small>THE POST OFFICE OF CORVALE</small>The Tolver Mail: a Trial</h4>' +
+    '<p>To decide which airship shall carry the mail between Lowmere and Tolver for the next five years.</p>' +
+    '<ol><li>Each ship carries seven sacks.</li><li>The ships leave Lowmere together, at six o&rsquo;clock.</li>' +
+    '<li>A ship that lands anywhere between Lowmere and Tolver, for any reason whatever, is out of the Trial.</li>' +
+    '<li>The first ship to hand all seven sacks, and her log, to the Postmaster of Tolver wins. The Postmaster&rsquo;s clock is the only clock.</li></ol>' +
+    '<p class="foot">The Dunnock also carries the bag for Windgate Hospice, as she always has. It is to be dropped by a Post Office hand. &mdash; F. Mirza, Postmaster, Tolver</p>';
+  $('#trialpost').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: TRIAL, cls: 'trial', clue: { id: 'trial', title: 'The rules of the Trial', kind: 'Nailed to a post' }, done: function () {
+      MAIL.words(['log', 'sack']);
+      if (tell('trial')) { paint(); ER.say('Four rules. Whoever wrote them did not like long sentences, or excuses.'); }
+    } });
+  });
+  var BILL = '<h4>WAY BILL</h4><p>Lowmere to Tolver &middot; Thursday &middot; by air</p>' +
+    '<p>By airship DUNNOCK: sacks 1 to 7. Also one grey bag for Windgate Hospice (to be dropped; red streamer).</p><p>By airship GOSHAWK: sacks 8 to 14.</p><p>Each sack 25 kg. The bag 6 kg.</p>' +
+    '<p class="reg">REGISTERED, in sack 7: No. 311<br><span class="hand">Captain I. Montalvo, care of the Postmaster, Tolver. To be given to her when the Trial is over.</span></p>';
+  $('#sacks').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BILL, cls: 'bill', clue: { id: 'bill', title: 'The way bill', kind: 'Lowmere Post Office' }, done: function () {
+      if (tell('bill')) ER.say('Fourteen sacks, two ships, and one letter that is going a long way round.');
+    } });
+  });
+
+  /* ---------- things in the shed ---------- */
+  MAIL.thing('#ship', 'airship', 'The Dunnock: sixty metres of patched brown canvas, held up by gas. Her name has been painted again and again in thirty-one years, and every time it has faded to the same colour.', isBusy);
+  MAIL.thing('#gond', 'gondola', 'The gondola: the long wooden car that hangs under an airship, where her crew stand. There is a light on inside, and a pair of oily boots is going up the ladder.', isBusy);
+  MAIL.thing('#gosh', 'mast', function () { return nextFile ? 'The mast stands empty on the field. The Goshawk is a silver pencil, high up, going east.' : 'The Goshawk, out on the field, tied by the nose to her mast: silver, with a red stripe, and not one patch on her.'; }, isBusy);
+  MAIL.thing('#hbag', 'streamer', 'The grey bag for Windgate Hospice. A long red streamer is rolled up on top of it. When the bag falls the streamer opens, so that somebody below can see where it comes down.', isBusy);
+  MAIL.thing('#cat', null, 'The cat opens one eye, decides that you are only the Post Office, and closes it again.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#board').addEventListener('click', function () {
+    var left = [];
+    if (busy) return;
+    if (nextFile) { ER.say('Three heights, three times, and one box in the corner with the hour in it.'); return; }
+    if (!told.cap) { ER.say('A blackboard, with a chalk drawing of some very large hills. The woman with the chalk has not finished with it, or with you.'); return; }
+    if (!told.met) left.push('the wind sheet, on the corner of this board');
+    if (!told.notes) left.push('my notes, on the crate');
+    if (!told.trial) left.push('the rules of the Trial, on the post under the lantern');
+    if (left.length) { ER.say('&ldquo;Not yet, Clerk,&rdquo; says the Captain. &ldquo;You have still to read ' + left.join(', and ') + '.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the blackboard: a height for each leg, and then the clock ---------- */
+  function makeBench() {
+    var HS = [500, 1000, 1500, 2000, 2500, 3000], LEGS = [{ km: 70, mid: 35, east: 0 }, { km: 55, mid: 97.5, east: 0 }, { km: 40, mid: 150, east: 1 }],
+      GROUND = [[0, 200], [30, 200], [44, 340], [52, 600], [60, 420], [70, 300], [86, 700], [100, 1300], [112, 1800], [118, 2100], [125, 2100], [127, 1100], [140, 980], [165, 800]],
+      h = ER.flag('a-h') || [0, 0, 0], stage = ER.flag('a-stage') || 0, wait = false, box = ER.el('div', 'bx board'), s, ships = [], wl = [];
+    function X(km) { return 90 + km * 5.2; }
+    function Y(m) { return 500 - m * 0.1375; }
+    function M(m) { return MAIL.metres(m) + ' metres'; }
+    s = '<svg viewBox="0 0 1000 540"><rect class="bd-bg" width="1000" height="540"/>';
+    HS.forEach(function (m) { s += '<path class="bd-line" d="M90 ' + Y(m) + 'H950"/><text class="bd-num" x="80" y="' + (Y(m) + 6) + '">' + MAIL.metres(m) + '</text>'; });
+    s += '<text class="bd-num" x="80" y="' + (Y(0) + 6) + '">0 m</text><path class="bd-ground" d="M90 520' + GROUND.map(function (g) { return 'L' + X(g[0]).toFixed(1) + ' ' + Y(g[1]).toFixed(1); }).join('') + 'L948 520Z"/>' +
+      '<path class="bd-leg" d="M' + X(70) + ' 44V500M' + X(125) + ' 44V' + Y(2100) + '"/>' +
+      '<text class="bd-legT" x="' + X(35) + '" y="34">LEG 1 &#183; 70 KM &#183; THE PLAIN</text><text class="bd-legT" x="' + X(97.5) + '" y="34">LEG 2 &#183; 55 KM &#183; THE RANGE</text><text class="bd-legT" x="' + X(146) + '" y="34">LEG 3 &#183; 40 KM &#183; THE VALLEY</text>' +
+      '<text class="bd-spot" x="' + X(9) + '" y="' + (Y(200) + 26) + '">Lowmere</text><text class="bd-spot" x="' + X(52) + '" y="' + (Y(600) - 9) + '">600</text><text class="bd-spot" x="' + X(70) + '" y="' + (Y(300) + 30) + '">Carrow</text>' +
+      '<text class="bd-spot" x="' + X(113) + '" y="' + (Y(2100) - 12) + '">the Windgate 2,100</text><text class="bd-spot" x="' + X(128) + '" y="' + Y(1560) + '" style="text-anchor:start">the Lip</text><text class="bd-spot" x="' + X(134) + '" y="' + (Y(1100) - 8) + '">1,100</text><text class="bd-spot" x="' + X(153.5) + '" y="' + (Y(800) + 36) + '" style="text-anchor:start">Tolver 800</text>';
+    LEGS.forEach(function (L, i) {
+      s += '<path class="bd-rail" d="M' + X(L.mid) + ' ' + Y(3000) + 'V' + Y(500) + '"/>';
+      s += '<g class="bd-ship" data-l="' + i + '"><ellipse rx="46" ry="22" fill="#fff" opacity="0"/><path d="M-32 0l-10 -9v18zM-32 0q32 -17 64 0q-32 17 -64 0zM-9 9h18v6h-18z"/><text y="-17"></text></g>';
+      HS.forEach(function (m) { s += '<circle class="bd-rung" data-l="' + i + '" data-h="' + m + '" cx="' + X(L.mid) + '" cy="' + Y(m) + '" r="8"/>'; });      /* the rings lie on top, so that a ship never hides one */
+    });
+    box.innerHTML = '<div class="frame">' + s + '</svg></div><div class="bx-foot"><p class="pmsg"></p><span id="a-slot" style="display:inline-flex;gap:6px"></span><button type="button" class="btn" id="a-go"></button></div>';
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#a-go'), slot = box.querySelector('#a-slot');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function groundAt(km) { for (var j = 1; j < GROUND.length; j++) if (km <= GROUND[j][0]) return GROUND[j - 1][1] + (GROUND[j][1] - GROUND[j - 1][1]) * (km - GROUND[j - 1][0]) / (GROUND[j][0] - GROUND[j - 1][0]); return 0; }
+    function place(i, y) { ships[i].setAttribute('transform', 'translate(' + X(LEGS[i].mid) + ' ' + y.toFixed(1) + ')'); }
+    function draw() {
+      ships.forEach(function (g, i) {
+        place(i, h[i] ? Y(h[i]) : Y(groundAt(LEGS[i].mid)) - 12);
+        g.querySelector('text').textContent = h[i] ? MAIL.metres(h[i]) + ' m' : 'on the ground';
+      });
+      ER.$$('.bd-rung', svg).forEach(function (r) { r.setAttribute('class', 'bd-rung' + (h[+r.getAttribute('data-l')] === +r.getAttribute('data-h') ? ' at' : '')); });
+      slot.style.display = stage === 1 ? 'inline-flex' : 'none';
+      go.textContent = stage ? 'Those are the minutes' : 'These three heights';
+    }
+    function set(i, m) { if (wait || stage) return; h[i] = m; ER.flag('a-h', h); MAIL.sfx.chalk(); draw(); msg('Leg ' + (i + 1) + ': ' + M(m) + '. Chalk rubs out: change it as often as you like, and then tell her.'); }
+    ER.$$('.bd-ship', svg).forEach(function (g, i) {
+      ships[i] = g;
+      ER.drag(g, {
+        start: function () { if (wait || stage) return false; },
+        move: function (e) { place(i, MAIL.clamp(ER.pt(svg, e).y, Y(3000), Y(500))); },
+        end: function (e, moved) {
+          if (!moved) { draw(); return; }
+          var y = ER.pt(svg, e).y, best = HS[0];
+          HS.forEach(function (m) { if (Math.abs(Y(m) - y) < Math.abs(Y(best) - y)) best = m; });
+          set(i, best);
+        }
+      });
+    });
+    svg.addEventListener('click', function (e) {
+      var r = e.target.closest ? e.target.closest('.bd-rung') : null;
+      if (r) set(+r.getAttribute('data-l'), +r.getAttribute('data-h'));
+    });
+    LEGS.forEach(function (L, i) { wl[i] = MAIL.wheels(slot, { label: 'Leg ' + (i + 1), n: 2, unit: 'min', start: (ER.flag('a-m') || [])[i], change: function () { ER.flag('a-m', wl.map(function (w) { return w.at(); })); } }); });
+
+    var C = '&rdquo; says the Captain. &ldquo;', WHY = [{
+      500: '&ldquo;Five hundred?' + C + 'The hills before Carrow are six hundred metres high, Clerk. Read me rule three.&rdquo;',
+      1000: '&ldquo;A thousand clears the hills, and it is under the cloud: I allow it,' + C + 'Now read me the wind at a thousand, west of the range. Where does that wind come FROM? And which way are we going?&rdquo;',
+      2000: '&ldquo;Two thousand, west of the range,' + C + 'What does the wind sheet say is at two thousand, besides wind? Rule four.&rdquo;',
+      2500: '&ldquo;Sixty behind us: very nice,' + C + 'And what lies under us at two thousand five hundred, all the way across the plain? I fly by what I can see. Rule four: does the ground leave us no other way?&rdquo;',
+      3000: '&ldquo;You have been talking to Mr Varley,' + C + 'Seventy kilometres above the cloud, when the plain lets us fly under it? Rule four.&rdquo;'
+    }, {
+      500: '&ldquo;The Windgate is 2,100 metres high,' + C + 'At that height we do not go over the range, Clerk. We go into it.&rdquo;',
+      2000: '&ldquo;Two thousand. The pass is two thousand one hundred,' + C + 'I should like to be over it, not a hundred metres inside it. And rule three wants three hundred more.&rdquo;',
+      3000: '&ldquo;Three thousand clears the pass, and it is above the cloud, which cannot be helped up there,' + C + 'But how strong is the wind at three thousand? Read me rule six.&rdquo;'
+    }, {
+      500: '&ldquo;Tolver field is at 800 metres,' + C + 'At 500 we should be flying three hundred metres under the town. Even I cannot do that.&rdquo;',
+      1000: '&ldquo;The valley floor under the Lip is 1,100 metres,' + C + 'A thousand is a height for moles, not for ships. Rule three.&rdquo;',
+      1500: '&ldquo;Fifteen hundred clears the valley, and rule seven likes it,' + C + 'But read me the wind EAST of the range at fifteen hundred. Is that behind us, or in our face?&rdquo;',
+      2500: '&ldquo;Sixty behind us down the valley: I know,' + C + 'Now read rule seven, and tell me what a ship pays for arriving high.&rdquo;',
+      3000: '&ldquo;Rule seven, Clerk,' + C + 'After the Windgate we go DOWN.&rdquo;'
+    }];
+    WHY[1][1000] = WHY[1][1500] = WHY[1][500];
+
+    go.addEventListener('click', function () {
+      var i, v, w, mins, total, eta, file;
+      if (wait || nextFile) return;
+      if (!stage) {
+        if (!(h[0] && h[1] && h[2])) { msg('Three legs, three heights. Lift each chalk ship to the height it should fly at: drag it, or click a ring on its ladder.'); return; }
+        for (i = 0; i < 3; i++) if (!ER.check('h' + (i + 1), h[i])) { ER.sfx.no(); msg('<b>Leg ' + (i + 1) + '.</b> ' + (WHY[i][h[i]] || '&ldquo;Why?&rdquo; asks the Captain.')); return; }
+        stage = 1; ER.flag('a-stage', 1); MAIL.sfx.chalk(); draw(); paint();
+        msg('&ldquo;' + M(h[0]) + ' across the plain: under the cloud, with the wind behind us. ' + M(h[1]) + ' over the Windgate: high enough, and not too wild. ' + M(h[2]) + ' down the valley, for the sake of the gas. Good,' + C + 'Now the clock. How many minutes for each leg?&rdquo;');
+        return;
+      }
+      mins = wl.map(function (x) { return x.get(); });
+      for (i = 0; i < 3; i++) if (!ER.check('m' + (i + 1), mins[i])) {
+        ER.sfx.no(); w = MAIL.wind(h[i], LEGS[i].east);
+        msg('<b>Leg ' + (i + 1) + '.</b> ' + (+mins[i] === Math.round(LEGS[i].km / 50 * 60) ? '&ldquo;That is her time in still air,' + C + 'The air is not still this morning: that is the whole point of a wind sheet. Rule two.&rdquo;' :
+          '&ldquo;' + LEGS[i].km + ' kilometres,' + C + 'At ' + M(h[i]) + ' the sheet gives a ' + (w.from === 'W' ? 'west' : 'east') + ' wind of ' + w.kmh + '. Is that behind us? Then how fast is she going over the ground? And how long do ' + LEGS[i].km + ' kilometres take at that speed?&rdquo;'));
+        return;
+      }
+      file = ER.exit([h.join('-') + '-' + mins.join('-')], { wait: true });
+      if (!file) { msg('The chalk has broken. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('a-file', file); wl.forEach(function (x) { x.lock(true); });
+      total = (+mins[0]) + (+mins[1]) + (+mins[2]); eta = ('0' + (6 + Math.floor(total / 60))).slice(-2) + '.' + ('0' + total % 60).slice(-2); ER.flag('a-eta', eta);
+      MAIL.mine('plan', 'The flight plan', LEGS.map(function (L, j) {
+        var q = MAIL.wind(h[j], L.east);
+        return '<p>Leg ' + (j + 1) + ', ' + L.km + ' km: ' + MAIL.metres(h[j]) + ' m. Wind ' + q.from + ' ' + q.kmh + ', behind us: ' + (50 + q.kmh) + ' km/h over the ground. ' + mins[j] + ' minutes.</p>';
+      }).join('') + '<p>Cast off 06.00. Tolver at <b>' + eta + '</b>.</p>', true);
+      msg('&ldquo;' + mins[0] + ' minutes, ' + mins[1] + ' and ' + mins[2] + '. Six o&rsquo;clock and ' + total + ' minutes: Tolver at ' + eta + ',' + C + 'Mr Varley says half past seven. We shall see what the Windgate says.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'The Captain writes the hour in the corner of the board and draws a box round it.',
+          'Outside, an engine starts with a noise like tearing cloth, and then another. The Goshawk is off her mast already: long, silver, with a red stripe from nose to tail, climbing as if somebody were pulling her up on a string.',
+          '&ldquo;Three thousand metres,&rdquo; says the Captain, watching her go. &ldquo;Eighty-five behind him. He was always bad at rule six.&rdquo; She does not sound angry. She sounds like a teacher who has marked the same sum wrong for nine years.',
+          '&ldquo;Sacks aboard, Clerk. And the cat. Her name is Ballast, and she is the only weight on this ship that nobody is allowed to drop.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 3400);
+    });
+    draw();
+    msg(stage ? 'The three heights are chalked up. Now the minutes for each leg: the arrows turn the figures.' :
+      'The Captain has drawn the ground, from Lowmere to Tolver, and nothing else. The air is your business. Lift each chalk ship to the height it should fly at.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return stage; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

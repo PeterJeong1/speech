@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Mast · Station Zero</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#05080d;--accent:#f4e04d;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(4,7,12,.95);--cap-bg:rgba(5,8,13,.93);--panel:#10161d;--face-bg:#161a17;--q-ink:#a9bccb;--fade:#020306;--hud-bg:rgba(5,8,13,.78)}
+  .tc-room{letter-spacing:.3em}
+  .sten{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .lbl{font-family:'Permanent Marker',cursive;font-size:10px;fill:#1c1b18;text-anchor:middle}
+  #rain1{animation:rain .45s linear infinite}
+  #rain2{animation:rain .7s linear infinite}
+  @keyframes rain{to{transform:translate(-60px,160px)}}
+  #flash{animation:flash 11s steps(1,end) infinite}
+  @keyframes flash{0%{opacity:0}61%{opacity:0}62%{opacity:.5}63%{opacity:0}64%{opacity:.32}66%{opacity:0}}
+  #mastlamp{animation:ml 2.4s steps(1,end) infinite}
+  @keyframes ml{0%{opacity:1}50%{opacity:.1}}
+  body.onair #mastlamp{animation:none;opacity:1}
+  .wave{animation:wave 5s ease-in-out infinite alternate}
+  .wave.w2{animation-duration:7s;animation-delay:-2s}.wave.w3{animation-duration:6s;animation-delay:-4s}
+  @keyframes wave{from{transform:translateX(-26px)}to{transform:translateX(26px)}}
+  #foam{animation:foam 3.6s ease-in-out infinite}
+  @keyframes foam{0%{opacity:.15;transform:translateY(8px)}50%{opacity:.75;transform:translateY(-6px)}100%{opacity:.15;transform:translateY(8px)}}
+  #smoke{transform-box:fill-box;transform-origin:50% 50%;animation:smoke 1.6s linear infinite}
+  @keyframes smoke{0%{opacity:.5;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(-60px,-40px) scale(2.2)}}
+  .lead{transform-box:fill-box;transform-origin:50% 0;animation:sway 1.3s ease-in-out infinite alternate}
+  .lead.l2{animation-duration:.9s;animation-delay:-.4s}.lead.l3{animation-duration:1.6s;animation-delay:-.8s}
+  @keyframes sway{from{transform:rotate(-10deg)}to{transform:rotate(14deg)}}
+  body.onair .lead{display:none}
+  .grass{transform-box:fill-box;transform-origin:50% 100%;animation:grass 1.1s ease-in-out infinite alternate}
+  @keyframes grass{from{transform:skewX(-14deg)}to{transform:skewX(-34deg)}}
+  #shedlight{animation:sl 3s steps(3) infinite alternate}
+  @keyframes sl{from{opacity:.75}to{opacity:1}}
+  body.dead #shedlight,body.dead #doorlight,body.dead #mastlamp,body.dead #smoke{display:none}
+  body.dead #shedwin{fill:#0b0e12}
+  #ckey{display:none}
+  body.onair #ckey{display:block}
+  #boxdoor2{display:none}
+  body.onair #boxdoor2{display:block}
+
+  /* Mr Ito's box, close up */
+  .pb{display:grid;grid-template-columns:minmax(0,780px) 250px;gap:18px;width:min(1060px,96vw);align-items:start}
+  .pb svg{display:block;width:100%;height:auto;box-shadow:0 26px 70px rgba(0,0,0,.7);touch-action:none}
+  .pb-tag{font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;text-anchor:middle;fill:#1c1b18}
+  .pb-plate{font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:1px;text-anchor:middle;fill:#1c1b18}
+  .plug{cursor:grab}
+  .plug.on{cursor:grabbing}
+  .plug.held .barrel{stroke:#f4e04d;stroke-width:3}
+  .lampx{fill:#2a2620}
+  .lampx.lit{fill:#ffb347}
+  .pb.won .lampx.lit{fill:#57d27a}
+  .pb-lid{padding:16px 16px 12px;background:#d9d2b8 linear-gradient(170deg,rgba(255,255,255,.3),rgba(60,50,20,.2));color:#1c1b18;border:3px solid #55606a;box-shadow:0 20px 50px rgba(0,0,0,.6);
+    font-family:'Caveat',cursive;font-weight:700;font-size:21px;line-height:1.14}
+  .pb-lid h5{margin:0 0 6px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:15px;letter-spacing:.1em;color:#2f3a2c}
+  .pb-lid p{margin:0 0 8px}
+  .pb .pmsg{margin-top:12px;min-height:118px;font-size:15.5px}
+  @media (max-width:1000px){.pb{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04070c"/><stop offset=".7" stop-color="#101a26"/><stop offset="1" stop-color="#1a2836"/></linearGradient>
+  <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16242f"/><stop offset="1" stop-color="#070c12"/></linearGradient>
+  <linearGradient id="gndG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#121a14"/><stop offset="1" stop-color="#05080a"/></linearGradient>
+  <linearGradient id="hutG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1a241c"/><stop offset="1" stop-color="#26332a"/></linearGradient>
+  <linearGradient id="shedG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a3138"/><stop offset=".5" stop-color="#3a444d"/><stop offset="1" stop-color="#20262c"/></linearGradient>
+  <linearGradient id="boxG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4b555d"/><stop offset=".5" stop-color="#6b767d"/><stop offset="1" stop-color="#3d464d"/></linearGradient>
+  <radialGradient id="warmG"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".7"/><stop offset="1" stop-color="#ffcf7a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="redG"><stop offset="0" stop-color="#ff4a36" stop-opacity=".8"/><stop offset="1" stop-color="#ff4a36" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="74%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".9"/></radialGradient>
+</defs>
+
+<!-- sky, sea, and a long way down the hill one lit window -->
+<rect x="-1000" y="-400" width="3600" height="1000" fill="url(#skyG)"/>
+<g fill="#0b121b" opacity=".9"><ellipse cx="300" cy="120" rx="520" ry="70"/><ellipse cx="1200" cy="60" rx="640" ry="90"/><ellipse cx="900" cy="250" rx="700" ry="50"/><ellipse cx="1700" cy="210" rx="420" ry="60"/></g>
+<rect x="-1000" y="560" width="3600" height="200" fill="url(#seaG)"/>
+<g id="sea" class="hot"><rect x="1150" y="560" width="1450" height="120" fill="url(#seaG)"/>
+  <g fill="none" stroke="#6f8ba3" stroke-width="3" stroke-linecap="round" opacity=".5">
+    <path class="wave" d="M1180 590q40-10 80 0t80 0M1420 584q40-10 80 0t80 0"/><path class="wave w2" d="M1260 618q40-10 80 0t80 0M1500 626q40-10 80 0"/><path class="wave w3" d="M1340 650q40-10 80 0t80 0"/></g></g>
+<path d="M-1000 640Q200 560 760 590T1500 700Q1900 760 2600 700V1400H-1000z" fill="url(#gndG)"/>
+<path id="foam" d="M1500 706q60-16 110 0t100-6" stroke="#dfe9f2" stroke-width="6" fill="none" stroke-linecap="round" opacity=".5"/>
+<g id="house" class="hot"><path d="M1404 672v-40l36-24l36 24v40z" fill="#0a0e13"/><rect x="1458" y="606" width="8" height="18" fill="#0a0e13"/>
+  <rect id="hwin" x="1432" y="640" width="15" height="16" fill="#f2c45a"/><circle cx="1439" cy="648" r="34" fill="url(#warmG)" opacity=".55"/></g>
+<!-- one wire on short poles, from the corner of the hut down to the house -->
+<g id="wire" class="hot"><path d="M250 430Q420 470 590 452M590 452Q780 520 960 500M960 500Q1160 590 1370 590M1370 590Q1400 630 1430 628" stroke="#2d3a47" stroke-width="2.5" fill="none"/>
+  <path d="M250 430Q420 470 590 452M590 452Q780 520 960 500M960 500Q1160 590 1370 590" stroke="#000" stroke-width="16" fill="none" opacity="0"/>
+  <g stroke="#1c252e" stroke-width="6" stroke-linecap="round"><path d="M590 446v160M960 494v120M1370 584v100"/></g><g stroke="#1c252e" stroke-width="4"><path d="M578 456h24M948 504h24M1360 594h20"/></g></g>
+
+<!-- the end of the hut, and the door you came out by -->
+<g id="hutdoor" class="hot"><path d="M-1000 250H250V760H-1000z" fill="url(#hutG)"/><path d="M-1000 250L-380 130L250 250z" fill="#0f1612"/>
+  <g stroke="#111913" stroke-width="2"><path d="M-80 250V760M-20 250V760M40 250V760M100 250V760M160 250V760M220 250V760"/></g>
+  <rect x="60" y="400" width="130" height="340" fill="#0a0d0b"/><path id="doorlight" d="M72 412h106v328H72z" fill="#cfe2f2" opacity=".2"/><path d="M178 412l44 30v320l-44-22z" fill="#2b2118"/></g>
+<ellipse cx="126" cy="760" rx="170" ry="40" fill="#cfe2f2" opacity=".05" pointer-events="none"/>
+<!-- the cellar: two sloping doors beside the hut -->
+<g id="hatch" class="hot"><path d="M236 770L270 706H470L504 770z" fill="#2b2118"/><path d="M252 762L280 714H366L360 762zM372 762L372 714H460L488 762z" fill="#3b2f22"/>
+  <g stroke="#1d150e" stroke-width="3"><path d="M296 714l-18 48M330 714l-10 48M410 714l10 48M440 714l18 48"/></g>
+  <text x="370" y="702" class="sten" font-size="17" fill="#8d9499" letter-spacing="3">CELLAR</text>
+  <rect x="358" y="730" width="22" height="24" rx="4" fill="#8d9499"/><path d="M362 730v-8q7-10 14 0v8" stroke="#8d9499" stroke-width="4" fill="none"/></g>
+
+<!-- the mast -->
+<circle cx="700" cy="-20" r="160" fill="url(#redG)" opacity=".5" pointer-events="none"/>
+<g id="mastg" class="hot"><path d="M700 -400L640 700M700 -400L760 700" stroke="#2c3a48" stroke-width="9" fill="none"/>
+  <g id="lattice" stroke="#2c3a48" stroke-width="5" fill="none"></g>
+  <path d="M700 -400V20" stroke="#2c3a48" stroke-width="5"/><circle id="mastlamp" cx="700" cy="18" r="9" fill="#ff4a36"/>
+  <g stroke="#1e2933" stroke-width="2.5" fill="none"><path d="M690 120L210 640M710 120L1180 690M694 300L420 690M706 300L980 700"/></g></g>
+<!-- Mr Ito's box at the foot of it -->
+<g id="box" class="hot">
+  <rect x="566" y="560" width="190" height="150" rx="5" fill="url(#boxG)"/><rect x="578" y="572" width="166" height="126" fill="#0c1014"/>
+  <g fill="#b8923a"><circle cx="600" cy="656" r="6"/><circle cx="620" cy="656" r="6"/><circle cx="640" cy="656" r="6"/><circle cx="660" cy="656" r="6"/><circle cx="680" cy="656" r="6"/><circle cx="700" cy="656" r="6"/><circle cx="720" cy="656" r="6"/><circle cx="736" cy="656" r="5"/></g>
+  <g stroke="#17191a" stroke-width="4" stroke-linecap="round" fill="none"><path class="lead" d="M596 580v54"/><path class="lead l2" d="M616 580v60"/><path class="lead l3" d="M638 580v50"/><path class="lead" d="M658 580v62"/><path class="lead l2" d="M680 580v52"/><path class="lead l3" d="M700 580v58"/><path class="lead" d="M720 580v48"/><path class="lead l2" d="M736 580v56"/></g>
+  <g id="boxdoor2"><rect x="640" y="668" width="44" height="26" fill="#05070a"/><path id="ckey" d="M662 672v14M662 672a5 5 0 1 0 .1 0" stroke="#d9b65a" stroke-width="3" fill="none"/></g>
+  <path d="M756 560l60 -34v150l-60 34z" fill="#3d464d"/><path d="M764 568l44 -25v130l-44 25z" fill="#d9d2b8"/><g stroke="#55606a" stroke-width="2"><path d="M772 590l28-16M772 606l28-16M772 622l28-16M772 638l22-12"/></g>
+  <text x="660" y="552" class="sten" font-size="15" fill="#c9d3da" letter-spacing="2">AERIAL</text>
+</g>
+<g id="phone" class="hot"><g>
+  <rect x="770" y="430" width="50" height="78" rx="5" fill="#3d4a34"/><rect x="770" y="430" width="50" height="78" rx="5" fill="none" stroke="#232b1f" stroke-width="3"/>
+  <rect x="776" y="436" width="38" height="20" rx="3" fill="#2c3626"/><path d="M764 440q-7 28 0 58" stroke="#0c0d0b" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <g transform="rotate(3 795 482)"><rect x="774" y="470" width="42" height="20" fill="#f1ede1"/><rect x="774" y="470" width="42" height="5" fill="#f4e04d"/><text x="795" y="486" class="lbl" font-size="9">ITEM 97</text></g>
+</g></g>
+
+<!-- the engine shed -->
+<ellipse id="shedlight" cx="1180" cy="620" rx="210" ry="150" fill="url(#warmG)" opacity=".5" pointer-events="none"/>
+<g id="shed" class="hot"><path d="M1010 470l150 -56l150 56v260h-300z" fill="url(#shedG)"/><path d="M998 474l162 -62l162 62" stroke="#14181c" stroke-width="12" fill="none" stroke-linecap="round"/>
+  <g stroke="#1b2126" stroke-width="3"><path d="M1040 482v248M1070 470v260M1100 460v270M1130 448v282M1190 448v282M1220 460v270M1250 470v260M1280 482v248"/></g>
+  <rect x="1108" y="530" width="104" height="200" fill="#0b0e12"/><rect id="shedwin" x="1114" y="536" width="92" height="194" fill="#f2c45a"/>
+  <rect x="1126" y="640" width="64" height="60" fill="#3a2f22"/><circle cx="1158" cy="640" r="26" fill="#3a2f22"/><circle cx="1158" cy="640" r="15" fill="#1d1712"/><rect x="1136" y="700" width="44" height="30" fill="#1d1712"/>
+  <text x="1160" y="512" class="sten" font-size="19" fill="#c9d3da" letter-spacing="3">ENGINE</text>
+  <path d="M1270 470v-70h26" stroke="#14181c" stroke-width="10" fill="none"/><circle id="smoke" cx="1300" cy="398" r="12" fill="#8d9499" opacity=".5"/></g>
+<g id="breaker" class="hot"><rect x="1184" y="556" width="18" height="52" rx="3" fill="#14181c"/><rect x="1174" y="560" width="38" height="14" rx="5" fill="#c8281d"/></g>
+<g id="can" class="hot"><rect x="1232" y="690" width="44" height="52" rx="5" fill="#5d6a3a"/><path d="M1240 690v-10h20v10" stroke="#5d6a3a" stroke-width="6" fill="none"/><rect x="1266" y="680" width="10" height="12" fill="#3a4322"/>
+  <path d="M1238 704l32 26M1270 704l-32 26" stroke="#3a4322" stroke-width="4"/></g>
+
+<g id="tufts" fill="#17231a" pointer-events="none"></g>
+<g id="rain1" stroke="#9fb6cc" stroke-width="1.6" opacity=".4" pointer-events="none"></g>
+<g id="rain2" stroke="#9fb6cc" stroke-width="1" opacity=".26" pointer-events="none"></g>
+<ellipse cx="800" cy="930" rx="520" ry="210" fill="url(#warmG)" opacity=".3" pointer-events="none"/>
+<rect id="flash" x="-1000" y="-400" width="3600" height="1800" fill="#dbe9ff" opacity="0" pointer-events="none"/>
+<rect id="dark" x="-1000" y="-400" width="3600" height="1800" fill="#000" opacity="0" pointer-events="none" style="transition:opacity 1s"/>
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, B = document.body, called = false, solved = false, leaving = false, armed = false, dead = false;
+  var LEADS = [['take', 'TAKE'], ['keep', 'KEEP'], ['bear', 'BEAR'], ['stand', 'STAND'], ['raise', 'RAISE'], ['pay', 'PAY'], ['break', 'BREAK'], ['weather', 'WEATHER']];
+  var SOCKS = [['storm', 'THE STORM'], ['watch', 'WATCH'], ['heed', 'HEED'], ['silence', 'THE SILENCE'], ['fast', 'FAST'], ['witness', 'WITNESS'], ['bearing', 'A BEARING'], ['alarm', 'THE ALARM']];
+
+  /* the lattice of the mast, the rain, the grass */
+  (function () {
+    var s = '', y, i, l, r, l2, r2;
+    for (y = -360; y < 690; y += 70) {
+      l = 700 - 60 * (y + 400) / 1100; r = 700 + 60 * (y + 400) / 1100; l2 = 700 - 60 * (y + 470) / 1100; r2 = 700 + 60 * (y + 470) / 1100;
+      s += '<path d="M' + l.toFixed(1) + ' ' + y + 'L' + r2.toFixed(1) + ' ' + (y + 70) + 'M' + r.toFixed(1) + ' ' + y + 'L' + l2.toFixed(1) + ' ' + (y + 70) + 'M' + l.toFixed(1) + ' ' + y + 'H' + r.toFixed(1) + '"/>';
+    }
+    $('#lattice').innerHTML = s;
+    [['#rain1', 70, 46], ['#rain2', 90, 30]].forEach(function (o) {
+      for (s = '', i = 0; i < o[1]; i++) { l = -300 + (i * 7919) % 2300; y = -300 + (i * 5903) % 1400; s += '<path d="M' + l + ' ' + y + 'l-' + (o[2] * 0.38).toFixed(0) + ' ' + o[2] + '"/>'; }
+      $(o[0]).innerHTML = s;
+    });
+    for (s = '', i = 0; i < 46; i++) { l = -260 + i * 47 + (i * 13) % 20; y = 760 + (i * 37) % 120; s += '<path class="grass" style="animation-delay:-' + ((i * 7) % 11) / 10 + 's" d="M' + l + ' ' + y + 'l-4 -22l5 14l3 -20l3 20l6 -14l-3 22z"/>'; }
+    $('#tufts').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'zero', storyTitle: 'Station Zero', id: 'mast', no: 'IV', title: 'The Mast',
+    sound: ['shore', { mood: 'tense', drop: ['mel'], beds: [['sea', 0.9], ['wind', 0.6], ['rain', 0.5]] }],
+    go: 'Go out',
+    intro: [
+      'Part three was fifteen groups of three numbers: page, line, word. Counted out in Standing Orders, they gave fifteen words: TRUE PAGE IN CELLAR SAFE. CELLAR KEY IN AERIAL BOX. PUT BACK ALL EIGHT LEADS.',
+      'Control has a different reading of part three, and a great wish to see you in the engine shed.',
+      'Outside, the night is all noise. The wind comes off the sea in lumps. The mast goes up out of the lantern light and disappears, and somewhere near the top of it a red lamp is going on and off.',
+      'There is a steel box at the foot of the mast. Its door has blown open.'
+    ],
+    exit: {"next":"cellar","w":{"75c75506":"50ada322"}}, tags: {"ok":["2468abf7","d69e7ee5","40292a16","738d037a","52c20ca6","9196b33b","b77e2bef","34c2da3e","b3bb88a9","a3f4bc58","73e01d5c","17825638"]},
+    hints: hints,
+    onBegin: begin
+  });
+  ZERO.clock();
+  called = !!ER.flag('call4'); solved = !!ER.flag('s4'); ER.flag('quiet', 0);
+  if (solved) B.classList.add('onair');
+
+  function hints() {
+    if (!called) return ['phone', [
+      'There is a telephone out here as well, in a tin box on the leg of the mast.',
+      'Click on the green telephone, to the right of the aerial box, and hear Control out. Listen to what Control knows.'
+    ]];
+    if (dead) return ['dead', ['Everything has stopped, which is what Control wanted and not what your grandmother wanted. The breaker goes up as well as down.']];
+    if (!solved) return ['box', [
+      'Part three told you what to do out here, and where the cellar key hangs. Look at the foot of the mast.',
+      'Read what Mr Ito wrote inside the lid. Each lead has a word on its tag, and each socket has a word on its plate. A lead and its socket must make something that an operator does: two or three words that English people really do say together. Drag each plug into a socket.',
+      'Some leads could go into more than one socket and still make good English: there are three things here that you can TAKE. But all eight lamps must glow at once, so begin with the leads that have only one home. What is the only thing here that you can PAY? What is the only thing that you can BREAK?'
+    ]];
+    return ['hatch', ['You have the cellar key. The cellar is under the hut: its two sloping doors are in the yard, beside the wall.']];
+  }
+  function pips() { ER.pips((called ? 1 : 0) + (solved ? 1 : 0) + (leaving ? 1 : 0), 3); }
+  function busy() { return leaving; }
+  function begin() {
+    pips();
+    setInterval(function () { if (!document.hidden && !ER.isOpen() && Math.random() < 0.5) ER.burst({ type: 'lowpass', f: 170, f2: 50, dur: 2.8, peak: 0.26, a: 0.2 }); }, 11000);
+    if (called) return;
+    ZERO.sfx.gust();
+    ER.narrate([
+      'The wind hits you like a wet sack. You hold the lantern up. Mast, aerial box, engine shed: you have catalogued them all in daylight, and at night they are three different things.',
+      'On the leg of the mast, in a tin box, there is another telephone. It is ringing before you reach it.'
+    ], function () { ZERO.ring($('#phone g')); });
+  }
+
+  ZERO.thing('#mastg', 'mast', 'The mast: two hundred feet of wet steel, singing in the wind. Wires run down from it to the ground on every side, and every one of them is humming.', busy);
+  ZERO.thing('#sea', null, 'The sea, a long way down, and all of it trying to climb up.', busy);
+  ZERO.thing('#hutdoor', null, 'The end of the hut, and the door of the records store. Dry, and thirty years quieter than it is out here.', busy);
+  ZERO.thing('#house', null, 'A long way down the hill, one lit window. So somebody else is awake tonight. On Saturday&rsquo;s programme that house has a name: the old Station Officer&rsquo;s house.', busy);
+  ZERO.thing('#wire', null, 'A single wire on short poles. It comes out of the wall of the hut, goes off down the hill, and stops at the house with the lit window.', busy);
+  ZERO.thing('#shed', null, 'The engine shed. One old engine, hammering away as if thirty years had been a tea break. Inside the door there is a breaker with a red handle, and outside it a can of fuel.', busy);
+  $('#can').addEventListener('click', function () {
+    if (leaving) return;
+    if (ER.flag('can')) { ER.say('The can is empty. You shook it to make sure.'); return; }
+    ER.flag('can', 1); ZERO.sfx.pour(); ZERO.pour(25);
+    ER.say('A full can of fuel, and nobody has told you not to. You tip the whole of it into the tank. The engine does not thank you, but its note steadies.');
+  });
+  function unplugAll() { ER.flag('pb', []); }
+  $('#breaker').addEventListener('click', function () {
+    if (leaving) return;
+    if (dead) {
+      dead = false; B.classList.remove('dead'); $('#dark').style.opacity = 0; ER.flag('quiet', 0); ZERO.sfx.lever(); setTimeout(ZERO.sfx.cough, 300);
+      ER.say('You push the breaker up and swing the starting handle. The engine coughs, catches, and the tape begins again from the beginning. It has cost a good deal of fuel, and while your back was turned the wind has had every lead out of the box.', 7000);
+      return;
+    }
+    if (solved) { ER.say('No. Not now that it is going out at last.'); return; }
+    if (!called) { ER.say('A breaker with a red handle. But the telephone is ringing.'); return; }
+    if (!armed) { armed = true; ER.say('The breaker, with its red handle. One pull, and everything Control has asked for tonight is done. You stand and look at it. (Click it again if you really mean to pull it down.)', 7000); return; }
+    armed = false; dead = true; B.classList.add('dead'); $('#dark').style.opacity = 0.6; ER.flag('quiet', 1); ZERO.sfx.lever(); ZERO.sfx.die(); ZERO.burn(8); unplugAll();
+    ER.narrate([
+      'You pull it down. The engine dies. The red lamp on the mast goes out, and in the hut the tape stops in the dark, exactly as it did thirty years ago.',
+      'The telephone on the mast gives one short ring. You pick it up. &ldquo;Good,&rdquo; says Control. &ldquo;Good. Now go home.&rdquo; Then nothing.',
+      'The road is under the sea. You stand in the rain with a lantern, and think about your grandmother. She said: write it down. All of it.'
+    ]);
+  });
+
+  $('#phone').addEventListener('click', function (e) {
+    if (leaving) return;
+    if (called && !ZERO.ringing()) { ER.wordAt(e.clientX, e.clientY, 'field telephone'); ER.say('Item 97, in its tin box. You labelled this one in the rain. Nobody is ringing just now.'); return; }
+    ZERO.call('control', [
+      '&ldquo;Get away from that aerial box.&rdquo;',
+      { q: 'How do you know where I am?', a: '&ldquo;&hellip;Where else would you be? The box is beside the path. Now listen. Those leads were pulled when the station closed, all eight of them. Leave them hanging.&rdquo;' },
+      { q: 'Why?', a: '&ldquo;Because a sender with no aerial is a sender that nobody can hear, and that will suit the lifeboat very well. The shed is on your right. Inside the door is a breaker with a red handle. Pull it down, and you can go indoors and get dry.&rdquo;' },
+      { q: 'Part three says I am to put the leads back.', a: '&ldquo;Part three was written thirty years ago by a tired woman. I am telling you now. Two thousand volts, a steel mast and a thunderstorm: think about that, and be fast.&rdquo;' }
+    ], { id: 'call4', title: 'Control: the fourth call', kind: 'Field telephone' }, function (seen) {
+      if (!seen) { if (!called) ZERO.ring($('#phone g')); return; }
+      if (!called) { called = true; ER.flag('call4', 1); pips(); ER.say('You hang up, and wipe the rain out of your eyes. The aerial box. The shed. And far down the hill, one small yellow light.'); }
+    });
+  });
+
+  /* ---------- Mr Ito's night panel: eight leads, eight sockets ---------- */
+  function X(i) { return 64 + i * 93; }
+  function openBox() {
+    var box = ER.el('div', 'pb' + (solved ? ' won' : '')), at = (ER.flag('pb') || []).slice(), occ = [], held = -1, s, ms, msgEl, plugs, cables, lamps, i;
+    for (i = 0; i < 8; i++) { if (at[i] == null) at[i] = -1; occ[i] = -1; }
+    at.forEach(function (j, i) { if (j >= 0) occ[j] = i; });
+    s = '<defs><linearGradient id="pS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#59636b"/><stop offset="1" stop-color="#39424a"/></linearGradient>' +
+      '<linearGradient id="pB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f1d98c"/><stop offset=".5" stop-color="#b8923a"/><stop offset="1" stop-color="#7c5e1e"/></linearGradient></defs>' +
+      '<rect width="780" height="470" fill="url(#pS)"/><rect x="6" y="6" width="768" height="458" fill="none" stroke="#1d2328" stroke-width="4"/><rect x="20" y="30" width="740" height="44" rx="6" fill="#1d2328"/>' +
+      '<g fill="#1d2328"><circle cx="22" cy="100" r="5"/><circle cx="758" cy="100" r="5"/><circle cx="22" cy="446" r="5"/><circle cx="758" cy="446" r="5"/></g><g class="cables"></g>';
+    SOCKS.forEach(function (k, j) {
+      s += '<g class="sock" data-j="' + j + '"><circle cx="' + X(j) + '" cy="352" r="34" fill="transparent"/><circle cx="' + X(j) + '" cy="352" r="19" fill="#14181c"/><circle cx="' + X(j) + '" cy="352" r="19" fill="none" stroke="url(#pB)" stroke-width="5"/><circle cx="' + X(j) + '" cy="352" r="8" fill="#000"/>' +
+        '<rect x="' + (X(j) - 43) + '" y="384" width="86" height="25" rx="2" fill="url(#pB)"/><text x="' + X(j) + '" y="402" class="pb-plate">' + k[1] + '</text>' +
+        '<circle cx="' + X(j) + '" cy="436" r="11" fill="#14181c"/><circle class="lampx" data-j="' + j + '" cx="' + X(j) + '" cy="436" r="7.5"/></g>';
+    });
+    LEADS.forEach(function (k, i) {
+      s += '<circle cx="' + X(i) + '" cy="52" r="9" fill="#0b0d0f"/><g class="plug drag" data-i="' + i + '"><rect x="-44" y="-52" width="88" height="74" fill="transparent"/><rect class="barrel" x="-9" y="-22" width="18" height="40" rx="4" fill="url(#pB)"/><rect x="-4" y="18" width="8" height="14" fill="#c9cdc6"/>' +
+        '<g transform="rotate(' + [-4, 3, -2, 4, -3, 2, -4, 3][i] + ')"><rect x="-43" y="-50" width="86" height="23" fill="#f1ede1"/><circle cx="-37" cy="-38" r="2.5" fill="#55524a"/><text x="4" y="-33" class="pb-tag">' + k[1] + '</text></g></g>';
+    });
+    box.innerHTML = '<div><svg viewBox="0 0 780 470">' + s + '</svg></div><div><div class="pb-lid"><h5>Night panel &middot; S. Ito</h5><p>Eight leads. Eight sockets.</p><p>A lead and its socket make one thing that an operator at this station does.</p>' +
+      '<p>All eight must be good English at once, or the inner door stays shut.</p><p>I learnt every one of them here.</p><p>LEADS OUT: sender heard to the foot of the hill, and no farther.</p></div><p class="pmsg"></p></div>';
+    ms = box.querySelector('svg'); msgEl = box.querySelector('.pmsg'); plugs = ER.$$('.plug', box); cables = box.querySelector('.cables'); lamps = ER.$$('.lampx', box);
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function pos(i) { return at[i] >= 0 ? [X(at[i]), 334] : [X(i), 168]; }
+    function place(i, p) {
+      p = p || pos(i);
+      plugs[i].setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ')'); plugs[i].p = p;
+      var d = '', n;
+      for (n = 0; n < 8; n++) { p = plugs[n].p || pos(n); d += '<path d="M' + X(n) + ' 52Q' + ((X(n) + p[0]) / 2).toFixed(1) + ' ' + (Math.max(52, p[1] - 22) + 46 + Math.abs(p[0] - X(n)) * 0.16).toFixed(1) + ' ' + p[0].toFixed(1) + ' ' + (p[1] - 22).toFixed(1) + '" stroke="#0b0d0f" stroke-width="7" fill="none" stroke-linecap="round"/>'; }
+      cables.innerHTML = d;
+    }
+    function good(i) { return at[i] >= 0 && ER.check('ok', LEADS[i][0] + '>' + SOCKS[at[i]][0]); }
+    function paint() {
+      var lit = 0, n;
+      for (n = 0; n < 8; n++) { plugs[n].p = null; }
+      for (n = 0; n < 8; n++) { place(n); plugs[n].classList.toggle('held', n === held); }
+      lamps.forEach(function (l, j) { var on = occ[j] >= 0 && good(occ[j]); l.setAttribute('class', 'lampx' + (on ? ' lit' : '')); if (on) lit++; });
+      box.setAttribute('data-lit', lit); box.setAttribute('data-in', at.filter(function (j) { return j >= 0; }).length);
+      return lit;
+    }
+    function phrase(i, j) { return LEADS[i][1] + ' ' + SOCKS[j][1]; }
+    function unplug(i) { if (at[i] >= 0) occ[at[i]] = -1; at[i] = -1; ER.flag('pb', at); }
+    function plug(i, j) {
+      var lit, inn;
+      unplug(i); at[i] = j; occ[j] = i; held = -1; ER.flag('pb', at);
+      lit = paint(); inn = at.filter(function (x) { return x >= 0; }).length;
+      if (!good(i)) {
+        ZERO.sfx.spark(); ZERO.burn(1);
+        msg('<b>' + phrase(i, j) + '.</b> ' + (LEADS[i][0] === 'break' && SOCKS[j][0] === 'fast' ? 'That is a meal, not a duty. ' : '') + 'A blue spark, and the lamp stays dark. Nobody at this station ever said that, and nobody anywhere else does either.');
+        return;
+      }
+      ZERO.sfx.plug();
+      if (inn === 8 && lit === 8) { win(true); return; }
+      msg('<b>' + phrase(i, j) + '.</b> The lamp under the socket glows.' + (inn === 8 ? ' But that is eight leads in, and only ' + lit + ' lamps. Every lead has to make good English at the same time. Pull one out, and think again.' : ''));
+    }
+    function win(first) {
+      solved = true; box.classList.add('won'); paint();
+      if (!first) { msg('Eight lamps, all green. The inner door is open.'); return; }
+      ER.flag('s4', 1); ER.flag('m4', at.map(function (j, i) { return LEADS[i][0] + '>' + SOCKS[j][0]; }).sort().join('|')); pips(); ZERO.sfx.safe(); ER.sfx.ok();
+      at.forEach(function (j, i) { WK.learn(phrase(i, j).toLowerCase(), true); });
+      msg('Eight lamps, and they turn from amber to green. Something heavy lets go inside the box.');
+      setTimeout(function () {
+        ER.closeAll(); B.classList.add('onair');
+        ER.narrate([
+          'A small inner door swings open. On a nail behind it hangs a key with a wooden tag: CELLAR.',
+          'At the top of the mast the red lamp stops flashing and burns steadily. The wires over your head begin to sing a different note. For the first time in thirty years Gannet Head is on the air, properly, for anybody at all to hear.',
+          'Far down the hill, the lit window goes dark. A moment later another one lights, downstairs.'
+        ], function () { $('#hwin').setAttribute('y', 658); });
+      }, 2400);
+    }
+    plugs.forEach(function (n, i) {
+      var off = [0, 0];
+      ER.drag(n, {
+        start: function (e) { if (solved) return false; var q = ER.pt(ms, e), p = n.p || pos(i); off = [q.x - p[0], q.y - p[1]]; },
+        move: function (e, moved) {
+          if (!moved) return;
+          if (at[i] >= 0) { unplug(i); paint(); }
+          var q = ER.pt(ms, e); place(i, [Math.max(30, Math.min(750, q.x - off[0])), Math.max(100, Math.min(440, q.y - off[1]))]);
+        },
+        end: function (e, moved) {
+          var p = n.p, j, best = -1, bd = 60, d;
+          if (!moved) { if (at[i] >= 0) { unplug(i); held = -1; ZERO.sfx.plug(); msg('You pull ' + LEADS[i][1] + ' out again.'); } else held = held === i ? -1 : i; paint(); return; }
+          for (j = 0; j < 8; j++) { d = Math.abs(p[0] - X(j)) + Math.abs(p[1] - 334); if (d < bd && occ[j] < 0) { bd = d; best = j; } }
+          if (best >= 0) plug(i, best); else paint();
+        }
+      });
+    });
+    ER.$$('.sock', box).forEach(function (n) {
+      n.addEventListener('click', function () { var j = +n.getAttribute('data-j'); if (solved || held < 0 || occ[j] >= 0) return; plug(held, j); });
+    });
+    paint();
+    if (solved) win(false);
+    else msg('The inside of the aerial box. Eight leads hang from the top rail, each with a word on its tag. Drag a plug down into a socket, or click the plug and then the socket. Click a plug that is in, and it comes out.');
+    ER.open('ov-lock', box);
+  }
+  $('#box').addEventListener('click', function () {
+    if (leaving) return;
+    if (!called) { ER.say('A steel box marked AERIAL, with its door blown open and eight loose leads flying about inside. But the telephone is ringing.'); return; }
+    if (dead) { ER.say('Nothing in the box will do anything while the engine is stopped.'); return; }
+    openBox();
+  });
+  $('#hatch').addEventListener('click', function () {
+    if (leaving) return;
+    if (!solved) { ER.say('CELLAR. Two sloping doors, and a padlock the size of your fist. Part three says where its key hangs.'); return; }
+    if (!ER.exit([ER.flag('m4')], { delay: 4200 })) { ER.say('The key does not turn.'); return; }
+    leaving = true; pips(); ZERO.sfx.bolt();
+    ER.say('The padlock drops into the wet grass. You heave one of the doors up against the wind, and go down the steps with the lantern in front of you.', 4000);
+  });
+})();
+</script>
+</body>
+</html>

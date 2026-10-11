@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Cipher Room · Station Zero</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#120d08;--accent:#f4e04d;--font-display:'Playfair Display',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(14,10,6,.95);--cap-bg:rgba(16,12,8,.93);--panel:#1a1510;--face-bg:#161a17;--q-ink:#d6c59a;--fade:#070503;--hud-bg:rgba(16,12,8,.78)}
+  .tc-room{font-weight:900;font-style:italic}
+  .chalk{font-family:'Caveat',cursive;font-weight:700;fill:#e9ecdf}
+  .sten{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .prt{font-family:'Bebas Neue',sans-serif;text-anchor:middle;fill:#1c1b18}
+  .lbl{font-family:'Permanent Marker',cursive;font-size:11px;fill:#1c1b18;text-anchor:middle}
+  #moth{animation:moth 9s linear infinite}
+  @keyframes moth{0%{transform:translate(0,0)}25%{transform:translate(70px,26px)}50%{transform:translate(-10px,54px)}75%{transform:translate(-80px,20px)}100%{transform:translate(0,0)}}
+  #mothw{animation:mw .16s steps(1,end) infinite}
+  @keyframes mw{50%{opacity:.2}}
+  #cone{animation:cone 11s steps(1,end) infinite}
+  @keyframes cone{0%{opacity:.62}90%{opacity:.62}92%{opacity:.4}94%{opacity:.62}}
+  #spk{animation:spk .5s steps(1,end) infinite}
+  @keyframes spk{0%{opacity:.9}40%{opacity:.3}55%{opacity:.9}80%{opacity:.3}}
+  #steam{animation:steam 4s ease-in-out infinite}
+  @keyframes steam{0%{opacity:0;transform:translateY(6px)}50%{opacity:.35}100%{opacity:0;transform:translateY(-14px)}}
+
+  /* the work sheet */
+  .cx{display:grid;grid-template-columns:minmax(0,1fr) 304px;gap:18px;width:min(1190px,96vw);align-items:start}
+  .cx-sheet{padding:16px 20px 12px;background:#efe8d4 repeating-linear-gradient(transparent 0 43px,rgba(60,90,140,.16) 43px 44px);box-shadow:0 26px 70px rgba(0,0,0,.7);
+    border-top:10px solid #2f3a2c}
+  .cx-sheet h5{margin:0 0 8px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:15px;letter-spacing:.14em;color:#2f3a2c;display:flex;justify-content:space-between}
+  .cx-sheet h5 span{font-family:'Courier Prime',monospace;font-weight:400;font-size:13px;letter-spacing:.02em;color:#6d685c}
+  .cw{display:inline-block;white-space:nowrap;margin:0 13px 4px 0;vertical-align:top}
+  .cc{display:inline-block;width:15.5px;text-align:center;cursor:pointer;vertical-align:top}
+  .cc i{display:block;height:15px;font-style:normal;font-family:'Courier Prime',monospace;font-weight:700;font-size:13px;line-height:15px;color:#8a8370}
+  .cc b{display:block;height:24px;font-family:'Caveat',cursive;font-weight:700;font-size:24px;line-height:24px;color:#1d2a52;border-bottom:1.5px solid #a39b84}
+  .cc.sel i{color:#141518;background:#f4e04d}
+  .cc.sel b{border-bottom-color:#141518;background:rgba(244,224,77,.4)}
+  .cc:hover i{color:#141518}
+  .cp{display:inline-block;width:6px;margin-top:15px;font-family:'Caveat',cursive;font-weight:700;font-size:24px;line-height:24px;vertical-align:top;color:#1d2a52}
+  .cx.done .cc i{opacity:.45}
+  .cx.done .cc b{border-bottom-color:transparent;color:#14213d}
+  .cx-side{padding:14px 14px 12px;background:#1b1712;border:1px solid #4a3f2e;color:#eadfc8;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .cx-side h6{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:500;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:#bfa987}
+  .tally{display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:repeat(11,17px);gap:0 12px;margin-bottom:10px}
+  .tally button{display:flex;align-items:center;height:17px;font-family:'Courier Prime',monospace;font-size:13px;line-height:17px;color:#eadfc8;text-align:left}
+  .tally button b{width:15px;font-weight:700;color:#f4e04d}
+  .tally button span{display:block;height:9px;background:#8d7b52;margin-right:5px}
+  .tally button em{font-style:normal;font-size:11.5px;color:#bfa987;margin-right:auto}
+  .tally button u{text-decoration:none;font-family:'Caveat',cursive;font-weight:700;font-size:19px;color:#fff;width:14px;text-align:center}
+  .tally button.sel{background:#f4e04d}.tally button.sel b,.tally button.sel em,.tally button.sel u{color:#141518}
+  .abc{display:grid;grid-template-columns:repeat(13,1fr);gap:2px;margin-bottom:10px}
+  .abc span{display:block;text-align:center;background:#efe8d4;color:#1c1b18;padding:1px 0 0}
+  .abc span i{display:block;font-style:normal;font-family:'Caveat',cursive;font-weight:700;font-size:17px;line-height:17px;color:#1d2a52}
+  .abc span b{display:block;height:17px;font-family:'Courier Prime',monospace;font-weight:700;font-size:13.5px;line-height:17px;border-top:1px solid #a39b84;color:#8c2f24}
+  .proof{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+  .proof .lamp{flex:none;width:22px;height:22px;border-radius:50%;background:#2a2620;border:2px solid #0d0b08}
+  .proof .lamp.g{background:#57d27a;box-shadow:0 0 12px #57d27a}
+  .proof .lamp.r{background:#ff5a4a;box-shadow:0 0 12px #ff5a4a}
+  .proof button{padding:7px 12px 5px;border:2px solid #f4e04d;color:#f4e04d;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.12em;border-radius:3px}
+  .proof button:hover{background:#f4e04d;color:#141518}
+  .proof .rub{margin-left:auto;border:0;padding:0;font-family:'Courier Prime',monospace;font-size:12.5px;letter-spacing:0;color:#bfa987;text-decoration:underline}
+  .proof .rub:hover{background:none;color:#fff}
+  .cx-side .pmsg{min-height:88px;font-size:14.5px;line-height:1.32}
+  .cx-side .wk-board{margin-top:6px}
+  .cx-side .wk{--wk-size:23px;--wk-line:#6d5f45;--wk-key:#2a241b}
+  .cx-side .wk-row{margin:3px 0}
+
+  /* the steel door */
+  .sd{width:min(660px,94vw);padding:26px 30px 22px;background:#565c5e linear-gradient(160deg,rgba(255,255,255,.14),rgba(0,0,0,.3));border:6px solid #2c3032;box-shadow:0 26px 70px rgba(0,0,0,.7);text-align:center}
+  .sd h5{margin:0 0 14px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:30px;letter-spacing:.2em;color:#14171a}
+  .drums{display:inline-flex;gap:6px;padding:10px 12px;background:linear-gradient(135deg,#f5df98,#c79b3b 55%,#7d5f1d);border-radius:6px}
+  .drums span{width:44px;height:58px;border-radius:3px;background:#0a0b0d;color:#f4e04d;font-family:'Oswald',sans-serif;font-weight:600;font-size:34px;line-height:58px}
+  .drums span.cur{box-shadow:inset 0 -4px 0 #f4e04d}
+  .sd .pmsg{margin:14px 0 0;min-height:66px;text-align:left;font-size:16px}
+  .sd .wk{--wk-size:32px;--wk-line:#22262a;--wk-key:#3d4346;--wk-ink:#f1ecdf}
+  @media (max-width:1000px){.cx{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bwG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2d20"/><stop offset="1" stop-color="#4a3a28"/></linearGradient>
+  <linearGradient id="swG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1c150e"/><stop offset="1" stop-color="#33271b"/></linearGradient>
+  <linearGradient id="swG2" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#1c150e"/><stop offset="1" stop-color="#33271b"/></linearGradient>
+  <linearGradient id="flG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2118"/><stop offset="1" stop-color="#0e0a06"/></linearGradient>
+  <linearGradient id="stG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4b5154"/><stop offset=".5" stop-color="#6b7275"/><stop offset="1" stop-color="#3d4245"/></linearGradient>
+  <linearGradient id="bzG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6a45"/><stop offset="1" stop-color="#1c4229"/></linearGradient>
+  <linearGradient id="brG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1d98c"/><stop offset=".5" stop-color="#b8923a"/><stop offset="1" stop-color="#7c5e1e"/></linearGradient>
+  <radialGradient id="coneG" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".7"/><stop offset=".45" stop-color="#ffe2a0" stop-opacity=".16"/><stop offset="1" stop-color="#ffe2a0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity=".94"/></radialGradient>
+</defs>
+
+<!-- a small room with no window: ceiling, back wall, side walls, floor -->
+<rect x="-1000" y="-400" width="3600" height="1800" fill="#0c0906"/>
+<path d="M-1000 -400H2600L1400 96H200z" fill="#17110b"/>
+<rect x="200" y="96" width="1200" height="548" fill="url(#bwG)"/>
+<path d="M-1000 -400L200 96V644L-1000 1300z" fill="url(#swG)"/><path d="M2600 -400L1400 96V644L2600 1300z" fill="url(#swG2)"/>
+<path d="M200 644H1400L2600 1300H-1000z" fill="url(#flG)"/>
+<g stroke="#1b140c" stroke-width="2" opacity=".8"><path d="M200 644L-340 1300M440 644L170 1300M680 644L680 1300M920 644L1000 1300M1160 644L1500 1300M1400 644L2000 1300M-200 760H1800M-520 920H2120"/></g>
+<rect x="200" y="470" width="1200" height="6" fill="#2a2016"/><rect x="200" y="476" width="1200" height="168" fill="#2f2419" opacity=".55"/>
+<rect x="200" y="634" width="1200" height="10" fill="#1a130c"/>
+
+<!-- item 44 on this wall too: every telephone in the station is on one line -->
+<g id="phone" class="hot"><g>
+  <rect x="222" y="232" width="56" height="92" rx="5" fill="#3d4a34"/><rect x="222" y="232" width="56" height="92" rx="5" fill="none" stroke="#232b1f" stroke-width="3"/>
+  <rect x="228" y="238" width="44" height="24" rx="3" fill="#2c3626"/><circle cx="280" cy="290" r="6" fill="#1b1f18"/><path d="M280 290h10v-8" stroke="#8d8a7c" stroke-width="3" fill="none"/>
+  <path d="M214 244q-8 32 0 68" stroke="#0c0d0b" stroke-width="9" fill="none" stroke-linecap="round"/><rect x="207" y="236" width="15" height="18" rx="6" fill="#141612"/><rect x="207" y="302" width="15" height="18" rx="6" fill="#141612"/>
+  <g transform="rotate(3 250 290)"><rect x="226" y="276" width="48" height="22" fill="#f1ede1"/><rect x="226" y="276" width="48" height="5" fill="#f4e04d"/><text x="250" y="294" class="lbl" font-size="10">ITEM 44</text></g>
+</g></g>
+<g id="cal" class="hot" transform="rotate(-2 250 410)"><rect x="216" y="360" width="68" height="98" fill="#e9e4d2"/><rect x="216" y="360" width="68" height="22" fill="#8c2f24"/>
+  <text x="250" y="376" class="prt" font-size="13" style="fill:#f1ede1" letter-spacing="1">NOVEMBER</text>
+  <g fill="#8a8676"><rect x="224" y="392" width="6" height="5"/><rect x="236" y="392" width="6" height="5"/><rect x="248" y="392" width="6" height="5"/><rect x="260" y="392" width="6" height="5"/><rect x="272" y="392" width="6" height="5"/>
+    <rect x="224" y="406" width="6" height="5"/><rect x="236" y="406" width="6" height="5"/><rect x="248" y="406" width="6" height="5"/><rect x="260" y="406" width="6" height="5"/><rect x="272" y="406" width="6" height="5"/>
+    <rect x="224" y="420" width="6" height="5"/><rect x="236" y="420" width="6" height="5"/><rect x="248" y="420" width="6" height="5"/><rect x="260" y="420" width="6" height="5"/><rect x="272" y="420" width="6" height="5"/>
+    <rect x="224" y="434" width="6" height="5"/><rect x="236" y="434" width="6" height="5"/><rect x="248" y="434" width="6" height="5"/><rect x="260" y="434" width="6" height="5"/></g>
+  <circle cx="275" cy="436" r="8" fill="none" stroke="#c8281d" stroke-width="2.5"/></g>
+
+<!-- the blackboard -->
+<g id="board" class="hot">
+  <rect x="318" y="150" width="336" height="250" fill="#5a4326"/><rect x="330" y="162" width="312" height="226" fill="#1f3329"/>
+  <text x="346" y="204" class="chalk" font-size="34">CRIB</text><text x="424" y="204" class="chalk" font-size="25">= a word you</text>
+  <text x="346" y="238" class="chalk" font-size="25">EXPECT to find.</text>
+  <text x="346" y="282" class="chalk" font-size="23" opacity=".85">a name &#183; a date &#183; a ship</text>
+  <path d="M346 292q110 8 250 -2" stroke="#e9ecdf" stroke-width="2.5" fill="none" opacity=".7"/>
+  <g stroke="#e9ecdf" stroke-width="2.5" opacity=".55"><path d="M352 322v34M362 322v34M372 322v34M382 322v34M346 350l44-22M410 322v34M420 322v34M430 322v34"/></g>
+  <text x="470" y="352" class="chalk" font-size="21" opacity=".6">E E E E E !</text>
+  <rect x="330" y="388" width="312" height="10" fill="#6b5130"/><rect x="560" y="382" width="34" height="8" fill="#e9ecdf"/><rect x="420" y="380" width="52" height="10" rx="2" fill="#8a7a55"/>
+</g>
+
+<!-- English, counted -->
+<g id="freq" class="hot" transform="translate(0 58) rotate(-.8 800 290)">
+  <rect x="692" y="140" width="216" height="266" fill="#e9e4d2"/><rect x="692" y="140" width="216" height="34" fill="#2f3a2c"/>
+  <text x="800" y="164" class="sten" font-size="17" fill="#e9e4d2" letter-spacing="2">ENGLISH, COUNTED</text>
+  <g id="bars"></g>
+  <g stroke="#6d685c" stroke-width="2"><path d="M706 368h188M706 380h150M706 392h170"/></g>
+</g>
+<!-- how the night cipher is made -->
+<g id="night" class="hot" transform="rotate(1 1020 280)">
+  <rect x="940" y="160" width="164" height="232" fill="#f4e04d"/><rect x="940" y="160" width="164" height="232" fill="none" stroke="#141518" stroke-width="4"/>
+  <text x="1022" y="196" class="prt" font-size="26" letter-spacing="2">THE NIGHT</text><text x="1022" y="226" class="prt" font-size="26" letter-spacing="2">CIPHER</text>
+  <rect x="954" y="238" width="136" height="3" fill="#141518"/>
+  <g fill="#141518"><rect x="954" y="254" width="136" height="16"/></g><g stroke="#141518" stroke-width="2"><path d="M954 284h136M954 296h110M954 316h136M954 328h124M954 348h136M954 360h90M954 376h120"/></g>
+</g>
+<g id="notcode" class="hot" transform="rotate(-2 1022 428)"><rect x="948" y="408" width="150" height="40" fill="#141518"/><text x="1023" y="426" class="prt" font-size="15" style="fill:#f4e04d" letter-spacing="1">A CIPHER IS</text><text x="1023" y="442" class="prt" font-size="15" style="fill:#f4e04d" letter-spacing="1">NOT A CODE</text></g>
+
+<!-- the steel door of the records store -->
+<g id="sdoor" class="hot">
+  <rect x="1150" y="150" width="216" height="494" fill="#17191a"/><rect x="1162" y="162" width="192" height="482" fill="url(#stG)"/>
+  <g fill="#2c3032"><circle cx="1176" cy="176" r="5"/><circle cx="1340" cy="176" r="5"/><circle cx="1176" cy="630" r="5"/><circle cx="1340" cy="630" r="5"/><circle cx="1176" cy="400" r="5"/><circle cx="1340" cy="400" r="5"/></g>
+  <text x="1258" y="238" class="sten" font-size="30" fill="#14171a" letter-spacing="4">RECORDS</text>
+  <text x="1258" y="262" class="sten" font-size="13" fill="#14171a" letter-spacing="2">NO PAPER LEAVES THIS ROOM</text>
+  <rect x="1178" y="330" width="160" height="40" rx="4" fill="url(#brG)"/><g id="dr" fill="#0a0b0d"></g>
+  <rect x="1300" y="410" width="22" height="92" rx="10" fill="#17191a"/><rect x="1262" y="440" width="60" height="18" rx="8" fill="#c9cdc6"/>
+  <g stroke="#2c3032" stroke-width="5"><path d="M1162 300h192M1162 540h192"/></g>
+</g>
+<!-- the monitor: the sender, heard through the wall -->
+<g id="monitor" class="hot"><rect x="1188" y="100" width="120" height="44" rx="4" fill="#4a3320"/><rect x="1196" y="106" width="78" height="32" fill="#c9b78a"/>
+  <g stroke="#8d7b52" stroke-width="2"><path d="M1202 106v32M1212 106v32M1222 106v32M1232 106v32M1242 106v32M1252 106v32M1262 106v32"/></g>
+  <circle id="spk" cx="1291" cy="122" r="6" fill="#ffb347"/></g>
+
+<!-- pigeon holes, kettle -->
+<g id="holes" class="hot">
+  <path d="M-20 250L170 214V580L-20 668z" fill="#2a1e12"/>
+  <g stroke="#4a3a25" stroke-width="5" fill="none"><path d="M-20 250L170 214M-20 354L170 306M-20 460L170 398M-20 566L170 490M-20 668L170 580M76 232V624M170 214V580"/></g>
+  <g fill="#e9e4d2"><path d="M-10 316l70-16v-36l-70 16zM90 292l66-14v-34l-66 14zM-10 424l70-18v-40l-70 18zM92 386l62-14v-30l-62 14zM-6 528l64-18v-36l-64 18z"/></g>
+</g>
+<g id="kettle" class="hot"><rect x="96" y="548" width="74" height="12" fill="#17110b" transform="rotate(-24 133 554)"/>
+  <path d="M108 540q-4-40 28-44t30 34z" fill="#8d9499"/><path d="M164 512q20-12 22-26" stroke="#8d9499" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M116 500q14-26 40-10" stroke="#3a3f42" stroke-width="5" fill="none"/>
+  <path id="steam" d="M188 478q-8-14 0-26t0-24" stroke="#e9ecdf" stroke-width="4" fill="none" stroke-linecap="round" opacity=".3"/></g>
+
+<!-- the lamp, and the table under it -->
+<ellipse id="cone" cx="800" cy="170" rx="700" ry="660" fill="url(#coneG)" opacity=".62" pointer-events="none"/>
+<path d="M800 -400V140" stroke="#0a0806" stroke-width="5"/><path d="M724 186q76-96 152 0z" fill="#1d4a31"/><path d="M724 186q76-96 152 0" fill="none" stroke="#0e2a1b" stroke-width="4"/><ellipse cx="800" cy="186" rx="76" ry="9" fill="#fff0c0"/>
+<g id="moth" pointer-events="none"><ellipse cx="846" cy="214" rx="4" ry="2.5" fill="#c9b78a"/><path id="mothw" d="M842 212l-6-7 8 3zM850 212l6-7-8 3z" fill="#e9dfc4"/></g>
+<g id="table" class="hot">
+  <path d="M388 760L470 640H1130L1212 760z" fill="url(#bzG)"/><path d="M388 760L470 640H1130L1212 760" fill="none" stroke="#5a4326" stroke-width="10"/><rect x="384" y="760" width="832" height="26" fill="#3a2a16"/>
+  <g fill="#241a0c"><rect x="410" y="786" width="24" height="200"/><rect x="1166" y="786" width="24" height="200"/></g>
+  <path d="M560 742L604 660H1000L1044 742z" fill="#efe8d4"/><g stroke="#8a8370" stroke-width="2.5" stroke-dasharray="14 7 22 7 9 7"><path d="M606 676h380M598 692h396M590 708h410M582 724h424"/></g>
+  <path d="M486 736L520 672h58l-28 64z" fill="#f6f1e2"/><g stroke="#8a8370" stroke-width="2"><path d="M520 686h44M512 700h44M504 714h44"/></g>
+  <path d="M1070 664l70 44" stroke="#f4e04d" stroke-width="7" stroke-linecap="round"/><path d="M1136 706l10 6" stroke="#1c1b18" stroke-width="7" stroke-linecap="round"/>
+  <path d="M1086 706l52 34" stroke="#c8281d" stroke-width="7" stroke-linecap="round"/>
+  <ellipse cx="456" cy="716" rx="24" ry="9" fill="#12301e"/><rect x="434" y="682" width="44" height="34" rx="5" fill="#e9e4d2"/><ellipse cx="456" cy="682" rx="22" ry="7" fill="#2a1a0c"/><path d="M478 690q16 2 14 14t-14 8" stroke="#e9e4d2" stroke-width="6" fill="none"/>
+</g>
+<path d="M704 900V826q0-26 26-26h140q26 0 26 26v74z" fill="#0e0a06"/>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, A = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', called = false, solved = false, leaving = false;
+  /* part two of the strip, as it came off the printer */
+  var CT = 'MTZN ZN MTB MPKB PBRSPM SO MTB UZATM SO MTB UZUMT SO USJBVIBP WLNM DBLP. Z HLN LWSUB SU HLMFT. LM OSKPMBBU VZUKMBN RLNM MHS Z TBLPE L HBLX FLWW OPSV MTB MPLHWBP XZMMZHLXB. ' +
+    'Z MSSX MTB IBLPZUA LUE Z MBWBRTSUBE MTB WZOBISLM. MTB NMLMZSU SOOZFBP TBLPE USMTZUA. TB HLN LM L EZUUBP ZU MTB MSHU. ZU MTB VSPUZUA TB HPSMB MTLM RLAB SO MTB WSA LALZU LUE RKM TZVNBWO HTBPB Z TLE IBBU. ' +
+    'Z ALJB TZV VD HSPE MTLM Z HSKWE UBJBP NRBLX SO ZM. Z UBJBP TLJB. Z LV USM NRBLXZUA USH. RLPM MTPBB ZN L ISSX FZRTBP. MTB ISSX ZN NMLUEZUA SPEBPN. BLFT APSKR ZN RLAB, WZUB, HSPE. ' +
+    'MTB NMSPB ESSP SRBUN MS MTB XBD HSPE SO MTZN FZRTBP.';
+
+  /* the bars of the chart on the wall, the drums on the steel door */
+  (function () {
+    var s = '', i, h = [118, 88, 78, 74, 70, 66, 62, 58, 56, 40, 38, 28], L = 'ETAOINSHRDLU';
+    for (i = 0; i < 12; i++) s += '<rect x="' + (706 + i * 16) + '" y="' + (330 - h[i]) + '" width="11" height="' + h[i] + '" fill="#2f3a2c"/><text x="' + (711.5 + i * 16) + '" y="350" class="sten" font-size="13" fill="#1c1b18">' + L.charAt(i) + '</text>';
+    $('#bars').innerHTML = s + '<path d="M702 332h196" stroke="#1c1b18" stroke-width="2"/>'; s = '';
+    for (i = 0; i < 8; i++) s += '<rect x="' + (1184 + i * 19) + '" y="336" width="15" height="28" rx="2"/>';
+    $('#dr').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'zero', storyTitle: 'Station Zero', id: 'cipher', no: 'II', title: 'The Cipher Room',
+    sound: ['shore', { root: 45, bpm: 42, drop: ['mel', 'ost'], beds: [['sea', 0.5], ['static', 0.5]] }],
+    go: 'Sit down',
+    intro: [
+      'The wheel gave way where plain A stands against R, and the first length of the strip turned into English: TO MY RELIEF. Its last sentence told you to turn the wheel back seven places, to K, and then the second length could be read as well. The key was inside the fourth set from the front door, which is not the set you labelled item 4.',
+      'The cipher room has no window. A lamp, a table covered in green cloth, and a smell of pencils that has lasted thirty years. A loudspeaker on the wall is still joined to the sender next door, and through it you can hear the tape going round.',
+      'Part two is the longest piece of the strip, and the wheel can do nothing with it. But this time the letters come in groups of different lengths, as if they were words.'
+    ],
+    exit: {"next":"store","w":{"7f5bde81":"dda2d908"}}, tags: {"door":["cf396af0"],"door@":["50eb8172","4294d8a4","4621e27b","2c00225d","8496c138","cecb9461","b846dd01","fd610fed"],"door?":["136517f3","39a4beaa","dfb764dc","cb206ab8","2acade7c","2ef26b1a","07954da2","6a570d11"],"door#":["5e4f64b7"],"sub":["fa934bd3","525d85b8","ad219cc8","8e93e41a","b4875e61","09af8455","611979e1","7ca4de6c","c0af88b7","6b20a32f","a142e489","01814d31","b8e30c8f","0da7cc37","b09473e0","92f22cf3","41a5d00e","839ab7c8","fda9b8dd","02cd904d","69a66f9f","befc9393"]},
+    hints: hints,
+    onBegin: begin
+  });
+  ZERO.clock();
+  called = !!ER.flag('call2'); solved = !!ER.flag('s2');
+
+  var FREQ = '<h4>English, counted</h4><p>In any long piece of English the letters turn up in very nearly this order, the commonest first:</p>' +
+    '<p><b>E &nbsp;T &nbsp;A &nbsp;O &nbsp;I &nbsp;N &nbsp;S &nbsp;H &nbsp;R &nbsp;D &nbsp;L &nbsp;U</b></p>' +
+    '<p>About one letter in every eight is an E.</p><p>A word of one letter is A or I.</p>' +
+    '<p>The commonest words of two letters: OF, TO, IN, IT, IS, HE, AT, ON.</p><p>The commonest words of three letters: THE, AND, WAS, HIS, HAD.</p>' +
+    '<p>Letters that like to stand in pairs: LL, EE, SS, OO, TT, NN.</p><p>A short message can cheat. A long one cannot.</p>';
+  var NIGHT = '<h4>The night cipher</h4><p>1. Take a key word of eight letters, with no letter in it twice.</p><p>2. Write the key word under A B C D E F G H.</p>' +
+    '<p>3. Under I to Z, write the letters you have not used yet, backwards: Z first.</p>' +
+    '<p>4. Now every plain letter has a cipher letter under it. Put the message into cipher a letter at a time, and keep the gaps between the words.</p>' +
+    '<p>5. A new key word every night. Never write it down.</p><p>(Control has complained about the gaps. We keep them. The watch is long.)</p>';
+  var BOARD = '<h4>On the blackboard</h4><p>CRIB = a word you EXPECT to find.</p><p>A name &middot; a date &middot; a ship.</p>' +
+    '<p>Find the place where it fits, and it gives you half the alphabet for nothing.</p>' +
+    '<p>Under that, a row of tally marks, and E E E E E ! Whoever wrote this pressed so hard that thirty years have not rubbed it out.</p>';
+
+  function hints() {
+    if (!called) return ['phone', [
+      'The telephone on the wall is ringing in here too.',
+      'Every telephone in the station is on the same line. Click on the green box by the calendar, and hear Control out.'
+    ]];
+    if (!solved) return ['sheet', [
+      'Part two is on the table, under the lamp. Before you begin, read the blackboard and the two charts on the wall: they are the tools of this room.',
+      'Every letter on the sheet stands for one letter of English, and always the same one. Click a letter, then type what you think it is. Begin with the short words: a word of one letter can only be A or I, and the commonest word of three letters is THE. The count on the right shows which letters come most often.',
+      'A crib is a word you expect to find. Control has given you one, without meaning to: the name of a boat, nine letters long, with a double letter in the middle. Only one word on the sheet has that shape. The lever tells you whether everything you have set so far is right.'
+    ]];
+    return ['door', [
+      'Read your copy of part two as far as its last line. It says what opens the steel door.',
+      'Look at the strip of alphabet beside the sheet: plain letters on top, cipher letters underneath. The yellow chart on the wall says how such an alphabet is made. What is written under A, B, C, D, E, F, G and H?',
+      'The key word has eight letters, and it is a thing that goes out in storms. Click on the steel door and type it.'
+    ]];
+  }
+  function pips() { ER.pips((called ? 1 : 0) + (solved ? 1 : 0) + (leaving ? 1 : 0), 3); }
+  function busy() { return leaving; }
+  function begin() {
+    pips(); ZERO.keying(0.009);
+    if (called) return;
+    ER.narrate([
+      'You lay part two on the table under the lamp. A hundred and twenty-two groups. If they are words, some of them are very short ones.',
+      'The telephone on the wall begins to ring. So it is not only item 31. There is one in every room, and they are all on the same line.'
+    ], function () { ZERO.ring($('#phone g')); });
+  }
+
+  ZERO.thing('#cal', null, 'A calendar, thirty years old. November. Somebody has put a red ring round the 30th and written one word beside it: CLOSE.', busy);
+  ZERO.thing('#monitor', 'loudspeaker', 'The monitor: a loudspeaker on a wire from the room next door, so that the people in here could hear what the sender was sending. It is sending now. To you it is only a noise, like a very fast insect.', busy);
+  ZERO.thing('#holes', null, 'Pigeon-holes full of work sheets, every one covered in pencil letters in neat rows. Thirty years ago this was somebody&rsquo;s whole working day.', busy);
+  ZERO.thing('#kettle', 'kettle', 'A kettle on a gas ring. You lit it at eleven, for the last tea of the night. That seems a long time ago.', busy);
+  ZERO.thing('#notcode', null, 'A CIPHER IS NOT A CODE. And underneath, in small print: &ldquo;A code changes whole words. A cipher changes letters. We use ciphers. Say &lsquo;code&rsquo; in this room and you make the tea.&rdquo;', busy);
+  $('#board').addEventListener('click', function () { if (!leaving) ER.read({ html: BOARD, cls: 'mine', clue: { id: 'crib', title: 'The blackboard', kind: 'Chalk' } }); });
+  $('#freq').addEventListener('click', function () { if (!leaving) ER.read({ html: FREQ, cls: 'order', clue: { id: 'freq', title: 'English, counted', kind: 'Chart on the wall' } }); });
+  $('#night').addEventListener('click', function () { if (!leaving) ER.read({ html: NIGHT, cls: 'order', clue: { id: 'night', title: 'How the night cipher is made', kind: 'Chart on the wall' } }); });
+
+  $('#phone').addEventListener('click', function (e) {
+    if (leaving) return;
+    if (called && !ZERO.ringing()) { ER.wordAt(e.clientX, e.clientY, 'field telephone'); ER.say('Item 44. Another field telephone, on the same line as the one in the hut. Nobody is ringing just now.'); return; }
+    ZERO.call('control', [
+      '&ldquo;Well? Where are you?&rdquo;',
+      { q: 'In the cipher room. The key was inside one of the sets.', a: '&ldquo;Of course it was. And what did her wheel give you?&rdquo;' },
+      { q: 'It begins &ldquo;To my relief&rdquo;.', a: '&ldquo;Relief! She was relieved, was she? Glad to see the back of the place, I dare say, like the rest of us. Sentiment. Leave it.&rdquo;' },
+      { q: 'Part two is in another cipher. A long one.', a: '&ldquo;The night cipher. One letter stands for another, and it takes a trained hand an hour, and we have not got an hour. Do not read it. It will be the old story of the <i>Kittiwake</i>, and nobody who was at that dinner will thank her for telling it.&rdquo;' },
+      { q: 'What dinner?', a: '&ldquo;&hellip;The line is bad. I said nothing about a dinner. Look for the door, Thorne, not the story. What is on the door to the store?&rdquo;' },
+      { q: 'A lock with eight letters. And part one says nothing about that door.', a: '&ldquo;Then she has hidden the word in part two. She would. Very well: break it, if you must, but only as far as the door. Count the letters. The commonest will be E. And be quick about it.&rdquo;' }
+    ], { id: 'call2', title: 'Control: the second call', kind: 'Field telephone' }, function (seen) {
+      if (!seen) { if (!called) ZERO.ring($('#phone g')); return; }
+      if (!called) { called = true; ER.flag('call2', 1); pips(); ER.say('You put the handset back. On the table, part two is waiting. On the blackboard somebody once wrote a word in chalk, and pressed hard: CRIB.'); }
+    });
+  });
+
+  /* ---------- the work sheet: one letter stands for another ---------- */
+  function openSheet() {
+    var box = ER.el('div', 'cx' + (solved ? ' done' : '')), map = ER.flag('map2') || {}, sel = null, at = 0, count = {}, order, cells, msgEl, lamp, textEl, s = '', n = 0;
+    CT.replace(/[A-Z]/g, function (c) { count[c] = (count[c] || 0) + 1; });
+    order = Object.keys(count).sort(function (a, b) { return count[b] - count[a] || (a < b ? -1 : 1); });
+    CT.split(' ').forEach(function (w) {
+      s += '<span class="cw">' + w.replace(/[A-Z]/g, function (c) { return '<span class="cc" data-c="' + c + '" data-n="' + (n++) + '"><i>' + c + '</i><b></b></span>'; })
+        .replace(/[.,](?![^<]*>)/g, function (c) { return '<span class="cp">' + c + '</span>'; }) + '</span>';
+    });
+    box.innerHTML = '<div class="cx-sheet"><h5>Work sheet &middot; night cipher<span>part two of the tape &middot; small letters as received, your pencil underneath</span></h5><div class="cx-text">' + s + '</div></div>' +
+      '<div class="cx-side"><h6>Count</h6><div class="tally">' + order.map(function (c) { return '<button type="button" data-c="' + c + '"><b>' + c + '</b><span style="width:' + Math.round(count[c] * 1.1) + 'px"></span><em>' + count[c] + '</em><u></u></button>'; }).join('') + '</div>' +
+      '<h6>The alphabet: plain above, cipher below</h6><div class="abc">' + A.split('').map(function (c) { return '<span data-p="' + c + '"><i>' + c + '</i><b></b></span>'; }).join('') + '</div>' +
+      '<div class="proof"><i class="lamp"></i><button type="button" id="prove">Prove it</button><button type="button" class="rub">rub everything out</button></div><p class="pmsg"></p><div class="kb wk"></div></div>';
+    cells = ER.$$('.cc', box); msgEl = box.querySelector('.pmsg'); lamp = box.querySelector('.lamp'); textEl = box.querySelector('.cx-text');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function paint() {
+      var back = {}, c;
+      for (c in map) if (map[c]) back[map[c]] = c;
+      cells.forEach(function (n) { c = n.getAttribute('data-c'); n.lastChild.textContent = map[c] || ''; n.classList.toggle('sel', c === sel); });
+      ER.$$('.tally button', box).forEach(function (b) { c = b.getAttribute('data-c'); b.lastChild.textContent = map[c] || ''; b.classList.toggle('sel', c === sel); });
+      ER.$$('.abc span', box).forEach(function (n) { n.lastChild.textContent = back[n.getAttribute('data-p')] || ''; });
+      box.setAttribute('data-set', Object.keys(map).filter(function (k) { return map[k]; }).length);
+    }
+    function wrong() { return Object.keys(map).filter(function (c) { return map[c] && !ER.check('sub', (c + map[c]).toLowerCase()); }).length; }
+    function pick(c, quiet) {
+      if (solved) return;
+      sel = c; paint();
+      if (!quiet) msg('The letter <b>' + c + '</b> comes ' + count[c] + (count[c] === 1 ? ' time' : ' times') + ' in part two.' + (map[c] ? ' You have pencilled ' + map[c] + ' under it.' : ' Type the letter you think it stands for.'));
+    }
+    function finish(first) {
+      var plain = CT.replace(/[A-Z]/g, function (c) { return map[c]; });
+      solved = true; sel = null; box.classList.add('done'); lamp.className = 'lamp g'; paint();
+      if (first) {
+        ER.flag('s2', 1); pips(); ER.sfx.ok();
+        ER.addClue('tape2', 'The tape, part two', '<h4>The tape &middot; part two</h4><p class="pen">' + plain + '</p>', 'strip', 'Off the printer');
+      }
+      msg('It reads. All of it. You sit quite still for a moment, and then you copy it into your notebook. Its last line is about the steel door.');
+    }
+    function press(k) {
+      var c, other;
+      if (solved) return false;
+      if (k === 'left' || k === 'right') { at = (at + (k === 'left' ? -1 : 1) + cells.length) % cells.length; pick(cells[at].getAttribute('data-c')); return; }
+      if (!sel) { if (k.length === 1) msg('Click a letter on the sheet first. Then type.'); return false; }
+      if (k === 'back') { delete map[sel]; lamp.className = 'lamp'; }
+      else if (k.length === 1) {
+        k = k.toUpperCase(); other = null;
+        for (c in map) if (map[c] === k && c !== sel) other = c;
+        if (other) delete map[other];
+        map[sel] = k; ER.sfx.tick(); lamp.className = 'lamp';
+        msg(other ? 'You had ' + k + ' under ' + other + '. One plain letter cannot have two cipher letters, so it is under <b>' + sel + '</b> now.' : 'You pencil ' + k + ' under every <b>' + sel + '</b>: ' + count[sel] + (count[sel] === 1 ? ' place.' : ' places.'));
+      } else return false;
+      ER.flag('map2', map); paint();
+      if (order.every(function (x) { return map[x]; }) && !wrong()) finish(true);
+    }
+    textEl.addEventListener('click', function (e) {
+      var n = e.target.closest ? e.target.closest('.cc') : null; if (!n) return;
+      at = +n.getAttribute('data-n'); pick(n.getAttribute('data-c'));
+    });
+    box.querySelector('.tally').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('button') : null; if (b) pick(b.getAttribute('data-c')); });
+    box.querySelector('#prove').addEventListener('click', function () {
+      var set = Object.keys(map).filter(function (c) { return map[c]; }).length, w;
+      if (solved) return;
+      ZERO.sfx.lever();
+      if (!set) { msg('Pencil in a letter or two before you ask the lamp.'); return; }
+      w = wrong();
+      if (w) { lamp.className = 'lamp r'; ZERO.burn(2); ER.sfx.no(); msg('The lamp is red: <b>' + w + '</b> of your ' + set + ' letters ' + (w === 1 ? 'is' : 'are') + ' wrong. It does not say which. The engine burns a little more fuel while you look.'); }
+      else { lamp.className = 'lamp g'; msg('The lamp is green. Every one of your ' + set + ' letters is right. There are ' + (order.length - set) + ' still to find.'); }
+    });
+    box.querySelector('.rub').addEventListener('click', function () { if (solved) return; map = {}; ER.flag('map2', map); lamp.className = 'lamp'; paint(); msg('You rub it all out and blow the bits off the sheet.'); });
+    WK.board(box.querySelector('.kb'), { layout: 'abc', back: true, key: press });
+    WK.keys(box, press);
+    paint();
+    if (solved) finish(false);
+    else msg('Part two, copied on to a work sheet. Every letter stands for one letter of English, and always the same one. Click a letter, then type what you think it is.');
+    ER.open('ov-lock', box);
+  }
+  $('#table').addEventListener('click', function () {
+    if (leaving) return;
+    if (!called) { ER.say('A hundred and twenty-two groups of letters. But the telephone is still ringing.'); return; }
+    openSheet();
+  });
+
+  /* ---------- the steel door: eight drums ---------- */
+  function openDoor() {
+    var box = ER.el('div', 'sd'), buf = '', drums, msgEl;
+    box.innerHTML = '<h5>RECORDS</h5><div class="drums">' + new Array(9).join('<span></span>') + '</div><p class="pmsg"></p><div class="kb wk"></div>';
+    drums = ER.$$('.drums span', box); msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() { drums.forEach(function (d, i) { d.textContent = (buf.charAt(i) || '').toUpperCase(); d.classList.toggle('cur', i === buf.length); }); box.setAttribute('data-buf', buf); }
+    function press(k) {
+      if (leaving) return false;
+      if (k === 'back') buf = buf.slice(0, -1);
+      else if (k === 'enter') { tryIt(); return; }
+      else if (k.length === 1) { if (buf.length < 8) { buf += k; ZERO.sfx.drum(); } }
+      else return false;
+      draw();
+    }
+    function tryIt() {
+      if (buf.length < 8) { msg('Eight drums. You have set ' + buf.length + '.'); return; }
+      ZERO.sfx.lever();
+      if (!WK.is('door', buf) || !ER.exit([buf], { delay: 4200 })) {
+        ZERO.burn(2); ER.shake(box.querySelector('.drums')); ER.sfx.no();
+        msg(buf === 'kittiwak' ? 'The name of the boat has nine letters, and this door has eight drums. Besides, part two does not say &ldquo;the name of the boat&rdquo;.'
+          : !solved ? 'The handle does not move. Eight drums, with twenty-six letters on each. You could stand here guessing until Saturday.'
+          : 'The handle does not move. The key word is not a thing to guess. It is written in the alphabet you have just worked out.');
+        buf = ''; draw(); return;
+      }
+      leaving = true; pips(); ZERO.sfx.bolt(); WK.learn(buf, true);
+      msg('Eight letters. The handle goes down, and the steel door swings in without a sound.');
+      setTimeout(function () { ER.closeAll(); ER.say('You pick up the strip. What is left of it is part three, and part three is all numbers.', 4000); }, 1500);
+    }
+    WK.board(box.querySelector('.kb'), { back: true, enter: 'Try the handle', key: press });
+    WK.keys(box, press);
+    draw(); msg('Eight brass drums with a letter on each, and a handle underneath. Type a word, and press Enter to try the handle.');
+    ER.open('ov-lock', box);
+  }
+  $('#sdoor').addEventListener('click', function () {
+    if (leaving) return;
+    if (!called) { ER.say('A steel door: RECORDS. But the telephone is still ringing.'); return; }
+    openDoor();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Seventh Floor · Seven Down</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="seven.css">
+<style>
+  body{--bg:#140c07;--accent:#f4e04d;--font-display:'Playfair Display',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(18,10,6,.96);--tc-ink:#f3e9d6;--cap-bg:rgba(18,10,6,.94);--panel:#1d120b;--face-bg:#120d08;--q-ink:#e6d58a;--fade:#0a0503;--hud-bg:rgba(18,10,6,.82)}
+  .tc-room{font-weight:700;font-style:italic;letter-spacing:.01em}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .gold{font-family:'Playfair Display',serif;font-weight:700;text-anchor:middle;fill:#e0b354}
+  #carGlow{animation:cg 5.3s steps(1,end) infinite}
+  @keyframes cg{0%{opacity:.95}44%{opacity:.82}50%{opacity:.95}}
+  #steamL path{animation:stl 4.6s ease-out infinite;opacity:0}
+  #steamL path:nth-child(2){animation-delay:-1.8s}#steamL path:nth-child(3){animation-delay:-3.1s}
+  @keyframes stl{0%{opacity:0;transform:translateY(12px)}25%{opacity:.34}100%{opacity:0;transform:translateY(-80px)}}
+  #shadow{animation:sh 9s ease-in-out infinite alternate}
+  @keyframes sh{from{transform:translateX(-5px)}to{transform:translateX(7px)}}
+  #pend{transform-origin:1484px 420px;animation:pd 2.4s ease-in-out infinite alternate}
+  @keyframes pd{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+  #car{transition:transform 3.2s cubic-bezier(.3,.1,.3,1)}
+  #car.up{transform:translateY(-310px)}
+
+  /* the gate, the strips and the book */
+  .gt{display:grid;grid-template-columns:330px minmax(0,690px);gap:22px;width:min(1060px,96vw);align-items:start}
+  .gt-gate{position:relative;padding:74px 22px 18px 22px;background:#120d08;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 5px #7d5f1d,inset 0 0 0 7px #f5df98;
+    background-image:linear-gradient(45deg,transparent 46%,rgba(176,138,58,.55) 46%,rgba(176,138,58,.55) 54%,transparent 54%),linear-gradient(-45deg,transparent 46%,rgba(176,138,58,.55) 46%,rgba(176,138,58,.55) 54%,transparent 54%),linear-gradient(#120d08,#3a2a12);
+    background-size:44px 44px,44px 44px,auto}
+  .gt-card{position:absolute;left:50%;top:14px;width:150px;margin-left:-75px;padding:5px 0 3px;background:#fbf8ee;text-align:center;font-family:'Caveat',cursive;font-weight:700;font-size:22px;line-height:1;color:#2450a8;letter-spacing:.06em;transform:rotate(-3deg);box-shadow:0 4px 8px rgba(0,0,0,.5)}
+  .bar{position:relative;height:50px;margin:0 0 9px;border-radius:25px;background:linear-gradient(#f5df98,#c79b3b 45%,#7d5f1d);box-shadow:0 4px 8px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center}
+  .bar:last-child{margin-bottom:0}
+  .bar:before{content:attr(data-n);position:absolute;left:12px;top:50%;margin-top:-11px;width:22px;height:22px;border-radius:50%;background:#3a2a08;color:#f5df98;font-family:'Oswald',sans-serif;font-size:12px;line-height:22px;text-align:center}
+  .sp{box-sizing:border-box;width:206px;height:38px;padding:5px 0 0;background:#fbf8ee;color:#141518;font-family:'Courier Prime',monospace;font-weight:700;font-size:21px;line-height:30px;letter-spacing:.1em;text-align:center;text-transform:uppercase;box-shadow:0 3px 7px rgba(0,0,0,.5);-webkit-user-select:none;user-select:none}
+  .sp b{display:inline-block;font-weight:700}
+  .gt.done .sp b{color:#2450a8;box-shadow:0 0 0 2.5px #2450a8;border-radius:50%;padding:0 5px;margin-right:3px}
+  .gt-pile{display:flex;flex-wrap:wrap;gap:9px 12px;min-height:40px;padding:10px 12px;background:rgba(0,0,0,.4);border:1px dashed rgba(255,255,255,.25)}
+  .gt-pile .sp:nth-child(odd){transform:rotate(-1.5deg)}.gt-pile .sp:nth-child(even){transform:rotate(1.2deg)}
+  .gt-book{margin-top:12px;padding:12px 14px 14px;background:#39322a;border-left:14px solid #1f1a14;box-shadow:0 14px 34px rgba(0,0,0,.6)}
+  .gt-book .sv-sols{gap:9px}
+  .gt-book .sv-sol{padding:6px 9px 7px;font-size:13px;line-height:1.24}
+  .gt-book .sv-sol h6{margin-bottom:3px;font-size:11px}
+  .gt-book .sv-sol p{margin:0 0 2px}
+  .gt-side .sv-msg{margin-top:11px;min-height:92px;font-size:15.5px}
+  .gt-say{display:none;margin-top:10px;align-items:center;gap:14px}
+  .gt-say.on{display:flex}
+  .gt-say span{font-family:'Courier Prime',monospace;font-size:15.5px;color:#f1ecdf}
+  .gt-say .wk{--wk-size:30px;--wk-line:#f4e04d;--wk-ink:#fbf8ee;--wk-font:'Courier Prime',monospace}
+  .gt-say .wk-typed{min-width:260px}
+  @media (max-width:1330px){.gt{grid-template-columns:310px minmax(0,640px);gap:16px}.sp{width:190px;font-size:19px}.gt-book .sv-sol{font-size:12.5px}}
+  @media (max-width:900px){.gt{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="panG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2c18"/><stop offset="1" stop-color="#2c190d"/></linearGradient>
+  <linearGradient id="carpG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7b1f1a"/><stop offset="1" stop-color="#3d0f0c"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e2b0"/><stop offset="1" stop-color="#cdb078"/></linearGradient>
+  <linearGradient id="shaftG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050302"/><stop offset=".55" stop-color="#0d0805"/><stop offset="1" stop-color="#6b4a1c"/></linearGradient>
+  <radialGradient id="sconceG"><stop offset="0" stop-color="#ffd27a" stop-opacity=".55"/><stop offset=".5" stop-color="#ffb347" stop-opacity=".14"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="52%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#0a0402" stop-opacity=".34"/><stop offset="1" stop-color="#0a0402" stop-opacity=".9"/></radialGradient>
+  <pattern id="lat" width="46" height="92" patternUnits="userSpaceOnUse"><path d="M0 0L23 46L0 92M46 0L23 46L46 92" fill="none" stroke="#c79b3b" stroke-width="4.500"/></pattern>
+  <pattern id="carp" width="60" height="60" patternUnits="userSpaceOnUse" patternTransform="skewX(-30)"><path d="M30 6l18 24-18 24-18-24z" fill="none" stroke="#e0b354" stroke-width="2" opacity=".35"/></pattern>
+  <clipPath id="shaftC"><rect x="430" y="150" width="400" height="610"/></clipPath>
+</defs>
+
+<!-- panelled walls, a carpet -->
+<rect x="-1000" y="-400" width="3600" height="1160" fill="url(#panG)"/>
+<g id="panels" fill="none" stroke="#22130a" stroke-width="5"></g>
+<rect x="-1000" y="744" width="3600" height="20" fill="#1c1008"/>
+<rect x="-1000" y="764" width="3600" height="600" fill="url(#carpG)"/><rect x="-1000" y="764" width="3600" height="600" fill="url(#carp)"/>
+<circle cx="250" cy="330" r="330" fill="url(#sconceG)" pointer-events="none"/><circle cx="1010" cy="330" r="330" fill="url(#sconceG)" pointer-events="none"/>
+<g><path d="M250 300v-40M1010 300v-40" stroke="#7d5f1d" stroke-width="6"/><path d="M226 300q24-50 48 0zM986 300q24-50 48 0z" fill="#ffe2a0"/><rect x="232" y="298" width="36" height="8" fill="url(#brassG)"/><rect x="992" y="298" width="36" height="8" fill="url(#brassG)"/></g>
+
+<!-- the founder -->
+<g id="portrait" class="hot"><rect x="150" y="390" width="200" height="250" fill="url(#brassG)"/><rect x="164" y="404" width="172" height="222" fill="#241a12"/>
+  <ellipse cx="250" cy="484" rx="40" ry="48" fill="#b98a66"/><path d="M190 626q4-76 60-76t60 76z" fill="#0d0a08"/><path d="M212 470q38-40 76 0q-10-44-38-44t-38 44z" fill="#d9d5c8"/><path d="M226 512q24 26 48 0q-6 34-24 34t-24-34z" fill="#d9d5c8"/>
+  <rect x="196" y="644" width="108" height="20" fill="url(#brassG)"/><text x="250" y="659" class="sT" font-size="11" fill="#3a2a08" letter-spacing="1.5">H. PENHALE 1861</text></g>
+
+<!-- the lift: the shaft, the roof of the car a little way down, the gate -->
+<g id="gate" class="hot">
+  <rect x="420" y="140" width="420" height="624" fill="#1a0f08"/>
+  <rect x="430" y="150" width="400" height="610" fill="url(#shaftG)"/>
+  <g clip-path="url(#shaftC)">
+    <g id="car">
+      <rect id="carGlow" x="446" y="596" width="368" height="520" fill="#f6cf7a"/>
+      <rect x="446" y="596" width="368" height="20" fill="#5a3f1c"/><rect x="446" y="612" width="368" height="6" fill="#c79b3b"/>
+      <rect x="446" y="616" width="368" height="500" fill="#e8b85a" opacity=".5"/>
+      <g stroke="#7d5f1d" stroke-width="5"><path d="M540 616v500M720 616v500"/></g>
+      <g transform="translate(-95 0)">
+      <path d="M592 846q0-44 38-44t38 44v8h-76z" fill="#565d66"/><rect x="582" y="846" width="96" height="12" rx="4" fill="#3d434a"/><rect x="616" y="816" width="28" height="13" rx="2" fill="#e0b354"/>
+      <ellipse cx="630" cy="894" rx="36" ry="42" fill="#d7a886"/><path d="M548 1116q4-150 82-150t82 150z" fill="#6f7780"/><path d="M612 966l18 30 18-30z" fill="#f3eedf"/>
+      <path d="M664 866l12-34" stroke="#2450a8" stroke-width="5" stroke-linecap="round"/>
+      </g>
+      <rect x="700" y="1000" width="64" height="116" fill="#7b5a34"/><rect x="694" y="992" width="76" height="12" fill="#5a3f1c"/><rect x="716" y="950" width="26" height="44" rx="6" fill="#8f9aa3"/>
+      <g id="steamL" stroke="#fff3d6" stroke-width="6" stroke-linecap="round" fill="none"><path d="M760 610q-12-18 2-38"/><path d="M772 608q12-16 0-34"/><path d="M750 612q-8-12 4-28"/></g>
+    </g>
+    <path d="M630 150V600" stroke="#2a1b0c" stroke-width="5"/><path d="M642 150V600" stroke="#2a1b0c" stroke-width="3"/>
+  </g>
+  <rect x="430" y="150" width="400" height="610" fill="url(#lat)" opacity=".92"/>
+  <path d="M430 150V760M830 150V760M630 150V760" stroke="#7d5f1d" stroke-width="9"/><rect x="420" y="132" width="420" height="20" fill="url(#brassG)"/>
+  <g transform="rotate(-3 630 420)"><path d="M630 350v32" stroke="#efe9d8" stroke-width="2.500"/><rect x="528" y="380" width="204" height="106" fill="#fbf8ee"/>
+    <text x="630" y="424" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="40" fill="#2450a8" letter-spacing="2">OUT OF</text><text x="630" y="466" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="40" fill="#2450a8" letter-spacing="2">ORDER</text></g>
+</g>
+<g id="dial" class="hot">
+  <path d="M558 126a72 72 0 0 1 144 0z" fill="url(#brassG)"/><path d="M567 123a63 63 0 0 1 126 0z" fill="#efe9d8"/>
+  <g id="dialNums" font-family="Oswald,sans-serif" font-weight="600" font-size="13" fill="#1c1b18" text-anchor="middle"></g>
+  <path d="M630 123L680 105" stroke="#c8281d" stroke-width="5" stroke-linecap="round"/><circle cx="630" cy="123" r="7" fill="#1c1b18"/>
+</g>
+
+<!-- who is where -->
+<g id="board" class="hot"><rect x="880" y="400" width="250" height="300" fill="#0d0a08"/><rect x="880" y="400" width="250" height="300" fill="none" stroke="url(#brassG)" stroke-width="6"/>
+  <text x="1005" y="432" class="gold" font-size="17" letter-spacing="3">CLARION HOUSE</text><path d="M900 442h210" stroke="#7d5f1d" stroke-width="2"/>
+  <g id="floors" font-family="Oswald,sans-serif" font-size="14" fill="#efe9d8" letter-spacing="1"></g>
+  <text x="1005" y="688" class="sT" font-size="11" fill="#e0b354" letter-spacing="1.5">LIFT ATTENDED 8 A.M. TO 6 P.M.</text></g>
+
+<!-- the Editor's door -->
+<g id="edoor" class="hot">
+  <rect x="1180" y="170" width="250" height="594" fill="#1c1008"/><rect x="1194" y="184" width="222" height="566" fill="#3a2212"/>
+  <rect x="1212" y="204" width="186" height="290" fill="url(#glassG)"/>
+  <g id="shadow" fill="#5a4326" opacity=".55"><ellipse cx="1300" cy="352" rx="36" ry="42"/><path d="M1238 494q6-92 62-92t62 92z"/><path d="M1264 330q36-40 72 0q-6-36-36-36t-36 36z"/></g>
+  <rect x="1212" y="204" width="186" height="290" fill="none" stroke="#1c1008" stroke-width="6"/>
+  <text x="1305" y="246" class="gold" font-size="19" letter-spacing="2" style="fill:#3a2a08">THE EDITOR</text>
+  <rect x="1212" y="524" width="186" height="200" fill="none" stroke="#22130a" stroke-width="5"/><circle cx="1388" cy="510" r="11" fill="url(#brassG)"/>
+</g>
+
+<!-- a clock that has seen every edition go -->
+<g id="lclock" class="hot"><rect x="1452" y="210" width="64" height="554" fill="#2c190d"/><rect x="1444" y="196" width="80" height="20" fill="#1c1008"/>
+  <circle cx="1484" cy="270" r="30" fill="#efe9d8"/><circle cx="1484" cy="270" r="30" fill="none" stroke="url(#brassG)" stroke-width="5"/>
+  <path id="hh" d="M1484 270V253" stroke="#1c1b18" stroke-width="5" stroke-linecap="round"/><path id="mh" d="M1484 270V246" stroke="#1c1b18" stroke-width="3" stroke-linecap="round"/>
+  <rect x="1464" y="330" width="40" height="300" fill="#0d0a08"/><g id="pend"><path d="M1484 420V560" stroke="#c79b3b" stroke-width="3"/><circle cx="1484" cy="572" r="15" fill="url(#brassG)"/></g></g>
+
+<!-- the stairs you have just climbed -->
+<g id="stairs" class="hot"><path d="M-1000 764H90V900H-1000z" fill="#0a0503"/><g fill="#22130a"><rect x="-200" y="792" width="270" height="18"/><rect x="-200" y="826" width="240" height="18"/><rect x="-200" y="860" width="210" height="18"/></g><path d="M90 600V764" stroke="#7d5f1d" stroke-width="8"/><circle cx="90" cy="592" r="14" fill="url(#brassG)"/><path d="M90 610L-200 760" stroke="#7d5f1d" stroke-width="8"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1760" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="sv-go" id="go">Step into the lift</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="seven.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, told = {}, heard = false, ordered = false, gtBox = null, inGate = false, steps = 0;
+  var ALL = ['a15', 'a5', 'd4', 'a14', 'd13', 'd2', 'd6', 'd12', 'a16', 'd3', 'a1', 'a8', 'a9', 'a10', 'd11', 'd7'];
+  var STARS = ['a5', 'd2', 'd6', 'a10', 'd12', 'd13'];              /* the six with stars, as they lie in your hand */
+  var STAIRS = ['Far below, somebody has begun to climb the stairs. Slowly.', 'The footsteps have reached the third floor, and stopped there to breathe.',
+    'The fourth floor. He is counting the stairs aloud now.', 'The fifth floor. By the sound of it, he has sat down.', 'The fifth floor still. He is saying something to the stairs.'];
+
+  /* panelling, the dial, the board of floors */
+  (function () {
+    var s = '', x, a, F = [['7', 'THE EDITOR &middot; BOARD ROOM'], ['6', 'FEATURES &middot; PUZZLES'], ['5', 'NEWS ROOM'], ['4', 'LIBRARY'], ['3', 'ADVERTISING &middot; CANTEEN'], ['2', 'COMPOSING ROOM'], ['1', 'FOUNDRY'], ['G', 'FRONT HALL'], ['B', 'PRESS HALL']];
+    for (x = -940; x < 2600; x += 210) s += '<rect x="' + x + '" y="180" width="170" height="250"/><rect x="' + x + '" y="470" width="170" height="250"/>';
+    $('#panels').innerHTML = s; s = '';
+    ['B', 'G', '1', '2', '3', '4', '5', '6', '7'].forEach(function (t, n) {
+      a = Math.PI * (1 - (n + 0.5) / 9);
+      s += '<text x="' + (630 + 50 * Math.cos(a)).toFixed(1) + '" y="' + (123 - 47 * Math.sin(a) + 4).toFixed(1) + '">' + t + '</text>';
+    });
+    $('#dialNums').innerHTML = s; s = '';
+    F.forEach(function (f, n) { s += '<text x="906" y="' + (466 + n * 24) + '" fill="#e0b354">' + f[0] + '</text><text x="934" y="' + (466 + n * 24) + '">' + f[1] + '</text>'; });
+    $('#floors').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'seven', storyTitle: 'Seven Down', id: 'landing', no: 'V', title: 'The Seventh Floor',
+    go: 'Stop on the last stair',
+    intro: [
+      'The five framed front pages went back on their hooks with the oldest at the top, and their heads, read downwards, spelled the last clue: Peace, Lindbergh, Abdication, The war, Everest. PLATE.',
+      'That left 7 Down, which had no clue and only every second letter. It turned out to be hanging on the gate of the lift, where it has hung on every floor since six o&rsquo;clock. OUT OF ORDER.',
+      'Eight flights of stairs. Down in the press hall, Mr Strand is showing Mr Quill something very interesting about a folding machine. Mr Quill will not be interested for long.',
+      'The seventh floor has a carpet. You are out of breath, and trying to be quiet, and for once you are glad of it.'
+    ],
+    exit: {"next":"edition","w":{"d79d44d3":"a951d0a0","bf458c0e":"01abb34a","b52cd36d":"f1d7c469","3bbac353":"af4f5002","1f317c7c":"77405f72"}}, tags: {"a15":["fd8bb409"],"a15@":["30d798b1","62bb2cc2","8fc38dcb"],"a15?":["e0761488","e6e7bdf3","2c9c4c55"],"a15#":["32437c9d"],"a5":["bf17eef7"],"a5@":["70c71d8b","770b5535","d3cae9ed"],"a5?":["d968d00b","aac7f492","0efd81e5"],"a5#":["541d1b66"],"d4":["70241155"],"d4@":["5433d76c","2bccc278","a0ff18fd","64c8a795","7a2c6013"],"d4?":["c533f5e6","66eaed2d","5dfb2ef0","af478565","fa53bebc"],"d4#":["2432980f"],"a14":["fc06ea16"],"a14@":["a9d8fe1e","9cd12778","f2310dc0","cd0ddfb4","7e06b3ef","aec46501","ea81da04"],"a14?":["24dc7beb","1ac6cf5e","ee4de9dd","df5d5bca","4e05496b","32baca31","d0b3084c"],"a14#":["fde461e5"],"d13":["6b74c060"],"d13@":["e6eb0cb4","2e8fb953","b0057b16","d69c53ac"],"d13?":["eda0dcff","f1c70289","6f8f02bd","eef860c4"],"d13#":["27c8d002"],"d2":["8568032e"],"d2@":["52da27e0","0339d884","5326341f","21a75d33","bbdacd75"],"d2?":["ac065248","08796dce","2952755d","60861ee3","1738ac94"],"d2#":["974bf1f5"],"d6":["b65d7b5f"],"d6@":["d049e66c","dd424479","a55670c3","e138cd5e"],"d6?":["53d2cd59","1c140bdd","6d0060d6","47962af7"],"d6#":["bd03b9c6"],"d12":["f329a694"],"d12@":["2ab8e6a9","ccd8111c","979bb174","0dae061e","35740cf9"],"d12?":["b0174b3f","520fa8e6","b039b5ea","75d18212","7eb9b7ac"],"d12#":["e359feb8"],"a16":["7cbf384f"],"a16@":["874553fa","1803d0e5","922cbd39","8c733395","505df179","20085d13","eb7262aa"],"a16?":["b20592ba","a66db582","f632e880","99f4b418","483eaff0","df50dfa1","29b69522"],"a16#":["efaa66e6"],"d3":["fa06b44f"],"d3@":["92369d24","95a4df67","ff771cd2","bf52be58","67ccb230","071b6ad4","e32c005b","ef08fb24","5c1f24c6","d84ae8ec"],"d3?":["bbf112ea","0b57b2f2","7833f967","96d228d9","fb2fc359","58369983","0d4607ae","26099bea","2ed796f3","dba78ce2"],"d3#":["a4f4c3f3"],"a1":["6048ac6b"],"a1@":["4c6ca910","99039092","fe476b33","2d327871","bf8016d1","f3faf830","837c8be0"],"a1?":["fc5d2c2d","3d63cf04","88d66890","f84b7f41","bd4535fe","63052ab7","01d34c1a"],"a1#":["d9bd16a6"],"a8":["50d3ae75"],"a8@":["868ff56f","96b0b07e","f26cec0f","ff34ec48","0abbaa52","d1a0c9de","6a2e5720"],"a8?":["70810ba0","5465e78d","b4c1c856","f7fb6c51","a5a7552c","8496b3b7","19500f16"],"a8#":["07cb47cc"],"a9":["75a77872"],"a9@":["214aedb4","6b10f1f6","809e2591","acf253f5","4b6cef92","7608a2fd","c93fb026","90b87253"],"a9?":["9f52972b","877703cc","a254ce98","7d159da9","0a5155d0","31ecc8f5","67bef1e6","337872ed"],"a9#":["d36f0ff3"],"a10":["25f4e62e"],"a10@":["24d8f461","fa6c64d3","77882263","0fb8e9c5","dcdb17e2","8fcf20be","2f30cadc","0f73b79b"],"a10?":["7879dd5d","8583f7ad","780c91f9","5e8d5d15","8f60f874","67952280","e79a69d8","12c2e5b3"],"a10#":["d2984d36"],"d11":["aded16ad"],"d11@":["cafea005","18589b7a","0be8d2e2","20e520f6","5cf06574"],"d11?":["3aa64538","f9669d5a","f31f57ab","e67cf6b0","4f4707c3"],"d11#":["899b6c4b"],"d7":["2ef97cf5"],"d7@":["116f082c","0948b375","b1516bc8","11091ff5","ae08e742","537a96de","7f57f499","0a62fd99","fac081ad","1252169a"],"d7?":["17f2de0e","b45f69f9","5dcb3595","5bb341b1","e537ca94","5d0f56d8","bc62110e","7017dec6","1c9743e0","07a0657d"],"d7#":["7e78efab"],"week":["e56c2e00"],"bydate":["d48ea115"],"b1":["ac444404"],"b2":["e09f50cf"],"b3":["a59312f2"],"b4":["34f53fa9"],"b5":["b9094993"],"b6":["a6612435"]},
+    sound: ['press', { root: 47, bpm: 80, mood: 'tense', drop: ['ost', 'mel'], level: 0.85 }],     /* you whisper here, and listen for feet on the stairs: nothing with a beat, nothing bright, and quieter */
+    hints: hints, onBegin: begin
+  });
+  SEV.clock({ from: 140, to: 158 }); SEV.wall('#hh', '#mh', 1484, 270);
+  SEV.ensure(ALL);
+  nextFile = ER.flag('g-file') || null; told = ER.flag('g-told') || {}; heard = !!ER.flag('g-heard'); ordered = !!ER.flag('g-ordered');
+  if (nextFile) $('#car').classList.add('up');
+
+  function hints() {
+    if (nextFile) return ['go', ['The gate is open, and Mr Lovage is waiting. Use the button at the bottom of the screen.']];
+    if (!heard) return ['gate', ['The card on the gate was the answer to 7 Down. Go and stand in front of it: click on the gate of the lift.']];
+    if (!inGate) return ['open', ['The voice wants six words hung on the gate. Click on the gate again.']];
+    if (!ordered) return ['week', [
+      'Six of the answers in the grid had stars. The voice says that you have met them before. Look for each of the six in your solutions book, which is open beside the gate.',
+      'All six stand in the same place in their puzzles. Read the number in front of each one, and the day at the top of its slip. Then hang the six words on the gate in the order of the week. Drag a strip to a bar, or click the strip and then the dark number on the bar.',
+      'Each of them was the 7 Down of its day. A week at the Clarion begins on a Monday, and Monday&rsquo;s puzzle is the last slip in your book. So the word from that slip goes on the top bar.'
+    ]];
+    return ['name', ['The first letters of the six words, read down the gate, make a name. You have met it twice tonight, in the library. Type it, and press Enter.']];
+  }
+  function isBusy() { return busy; }
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('g-told', told); return true; }
+  function after() {
+    ER.pips((heard ? 1 : 0) + (ordered ? 1 : 0) + (nextFile ? 1 : 0), 3);
+    if (nextFile) $('#go').classList.add('on');
+  }
+  function begin() {
+    after();
+    if (!tell('in')) { ER.say('The seventh floor. The card is still on the gate.'); return; }
+    busy = true;
+    ER.narrate([
+      'Dark wood, a red carpet, and a clock that has watched every edition of the Clarion go to press.',
+      'There is a light behind the glass of the Editor&rsquo;s door, and the shadow of somebody reading at a desk.',
+      'And there is the lift, with its card, and the brass arrow over the gate: between 6 and 7. From the press hall that meant the top of the building. From here it means just under your feet.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the voice ---------- */
+  function voice() {
+    var c = window.CAST.voice;
+    SEV.sfx.whisper();
+    ER.talk({ who: c.who, role: c.role, face: window.FACE('voice'), last: 'Kneel down by the gate',
+      lines: [
+        'You put your face to the brass gate. A little way below your shoes, in the dark of the shaft, there is a square of yellow light: the roof of the lift. Inside it, somebody clears his throat.',
+        '&ldquo;Quietly, if you please. Is that the puzzles desk?&rdquo;',
+        { q: 'Yes. I have finished it.', a: '&ldquo;I know. I heard you counting the stairs. Twenty past one: you are quicker than I expected, and I expected you to be quick.&rdquo;' },
+        { q: 'You said that I could find you.', a: '&ldquo;You have found where I am. That was seven down. You have not found who I am, and Mrs Penhale will ask you that before anything else. She is behind that glass door, reading a crossword with a banana in it.&rdquo;' },
+        { q: 'Then who are you?', a: '&ldquo;I have told you. Six of tonight&rsquo;s answers had stars, because you had met them before: you pasted every one of them into your own book. Find where each of the six stood, and on which day. Then hang them on this gate in the order of the week.&rdquo;' },
+        '&ldquo;And read my card again. It tells the truth about my six words. It has never told the truth about my lift.&rdquo;'
+      ],
+      clue: { id: 'voice', title: 'The voice in the lift shaft', kind: 'Through the gate' },
+      done: function (seen) { if (seen && !heard) { heard = true; ER.flag('g-heard', 1); after(); setTimeout(openGate, 500); } }
+    });
+  }
+
+  /* ---------- six strips on a gate ---------- */
+  function build() {
+    var box = ER.el('div', 'gt'), bars, pile, msgEl, sayBox, line = null;
+    box.innerHTML = '<div class="gt-gate"><div class="gt-card">OUT OF ORDER</div>' + [1, 2, 3, 4, 5, 6].map(function (n) { return '<div class="bar" data-n="' + n + '"></div>'; }).join('') + '</div>' +
+      '<div class="gt-side"><div class="gt-pile"></div><div class="gt-say"><span>Say it through the gate, quietly:</span><div class="gt-line"></div></div><div class="gt-book">' + SEV.sols() + '</div><p class="sv-msg"></p></div>';
+    bars = ER.$$('.bar', box); pile = box.querySelector('.gt-pile'); msgEl = box.querySelector('.sv-msg'); sayBox = box.querySelector('.gt-say');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function strip(w) { var n = ER.el('div', 'sp dnd-item', '<b>' + w.charAt(0) + '</b>' + w.slice(1)); n.setAttribute('data-w', w); return n; }
+    function order() { return bars.map(function (b) { var x = b.querySelector('.sp'); return x ? x.getAttribute('data-w') : ''; }); }
+    function mark() { box.setAttribute('data-order', order().map(function (w) { return w ? w.charAt(0) : '-'; }).join('')); }
+    function footsteps() { var t = STAIRS[Math.min(steps, STAIRS.length - 1)]; steps++; SEV.sfx.steps(3, 0.5); return ' ' + t; }
+    function say() {
+      box.classList.add('done'); sayBox.classList.add('on'); pile.style.display = 'none';
+      if (line) return;
+      line = WK.line(sayBox.querySelector('.gt-line'), { max: 14, placeholder: 'type a name, then Enter', onEnter: function (text) {
+        var t = WK.norm(text), file = ER.exitOk([t]);
+        if (file) { win(file); return true; }
+        SEV.slip(1);
+        if (t === 'sphinx') msg('&ldquo;That is what they call me,&rdquo; says the voice. &ldquo;It is not what my mother called me.&rdquo;' + footsteps());
+        else if (/quill/.test(t)) msg('&ldquo;Mr Quill is in the press hall, admiring a folding machine. He will not admire it for much longer.&rdquo;' + footsteps());
+        else if (/abbas|fenwick|strand|penhale/.test(t)) msg('&ldquo;That one has a room in this building, and a name on the door. I have never had either. Read the six words down the gate: the first letter of each.&rdquo;' + footsteps());
+        else msg('&ldquo;No. Read the six words down the gate. Only the first letter of each.&rdquo;' + footsteps());
+        return false;
+      } });
+    }
+    STARS.forEach(function (k) { var w = SEV.word(k); if (w) pile.appendChild(strip(w)); });
+    mark();
+    if (ordered) { ['b1', 'b2', 'b3', 'b4', 'b5', 'b6'].forEach(function (b, i) { ER.$$('.sp', pile).some(function (s) { if (ER.check(b, s.getAttribute('data-w'))) { bars[i].appendChild(s); return true; } return false; }); }); mark(); }
+    ER.dnd(box, { item: '.sp', slot: '.bar', home: pile, lock: function () { return ordered || busy; }, change: function () {
+      var o = order(), wrong, sorted;
+      mark(); SEV.sfx.hook();
+      if (o.indexOf('') >= 0) { msg('Six strips, six bars. Drag a strip to a bar, or click the strip and then the dark number on the bar.'); return; }
+      if (ER.check('week', o.join('-'))) {
+        ordered = true; ER.flag('g-ordered', 1); ER.sfx.ok(); SEV.sfx.whisper(); after(); say();
+        msg('Monday, Tuesday, Wednesday, Thursday, Friday, Saturday. Six words, each of them the 7 Down of its day. You read the first letters down the gate, and they are not six letters any more.<br>&ldquo;Every week for thirty-two years,&rdquo; says the voice. &ldquo;Go on, then. Say it.&rdquo;');
+        return;
+      }
+      SEV.slip(1); ER.sfx.no(); box.setAttribute('data-miss', (+box.getAttribute('data-miss') || 0) + 1);
+      sorted = o.slice().sort();
+      wrong = o.filter(function (w, i) { return !ER.check('b' + (i + 1), w); }).length;
+      if (ER.check('bydate', o.join('-'))) msg('&ldquo;That is the order in which the Clarion printed them,&rdquo; says the voice. &ldquo;Look at my card. Out of order. A week does not begin on a Tuesday. Nor do I.&rdquo;' + footsteps());
+      else if (o.join() === sorted.join()) msg('&ldquo;Alphabetical order. Miss Abbas would be proud of you. I am not Miss Abbas.&rdquo;' + footsteps());
+      else msg('&ldquo;No. ' + ['', 'One', 'Two', 'Three', 'Four', 'Five', 'All six'][wrong] + ' of them ' + (wrong === 1 ? 'is' : 'are') + ' on the wrong bar' + (wrong === 1 ? '' : 's') + '. Find each word in your book. Look at where it stood, and at the day.&rdquo;' + footsteps());
+    } });
+    box.say = say;
+    if (ordered) { say(); msg('Six words, in the order of the week. Read the first letters down the gate.'); }
+    else msg('Six strips of paper: the six answers that had stars. Six brass bars across the gate. And your solutions book, open on the carpet.');
+    return box;
+  }
+  function openGate() {
+    if (busy || nextFile) return;
+    if (!heard) { voice(); return; }
+    if (!gtBox) gtBox = build();
+    inGate = true;
+    ER.open('ov-lock', gtBox, function () { inGate = false; });
+  }
+  $('#gate').addEventListener('click', function () { if (nextFile) { ER.say('The gate is open. Mr Lovage is holding it for you.'); return; } openGate(); });
+  function win(file) {
+    var st;
+    nextFile = file; ER.flag('g-file', file); st = ER.state(); st.done = st.done || {}; st.done.landing = 1;
+    busy = true; SEV.stopClock(); SEV.solved(); gtBox.querySelector('.sv-msg').innerHTML = '&ldquo;Lovage,&rdquo; you say.';
+    setTimeout(function () {
+      ER.closeAll(); SEV.sfx.gate(); $('#car').classList.add('up');
+      ER.narrate([
+        'For a moment nothing happens. Then, somewhere below your feet, a handle turns. The yellow light rises in the dark like a sun coming up, and the lift arrives at the seventh floor without a sound.',
+        'The gate folds back. A thin grey man in a grey uniform is sitting on a wooden stool. He has a flask of tea, a blue pencil behind his ear, and a plain envelope on his knee.',
+        '&ldquo;Thirty-two years,&rdquo; says Mr Lovage. &ldquo;And you are the first person to say that name on this floor who did not want to go down.&rdquo;'
+      ], function () { busy = false; after(); });
+    }, 1500);
+  }
+  SEV.onGrid = function () { if (!busy) SEV.openSheet({ type: [], msg: 'Sixteen answers. The grid is finished. Six of them have stars.' }); };
+
+  /* ---------- things on the landing ---------- */
+  $('#dial').addEventListener('click', function (e) { e.stopPropagation(); if (busy) return; ER.say('The brass arrow, seen at last from the floor that it is pointing at. Between 6 and 7: a little way down, and just out of reach.', 8000); });
+  SEV.thing('#edoor', null, 'THE EDITOR. A light behind the glass, and the shadow of somebody reading at a desk. Mrs Penhale is back from the Lord Mayor&rsquo;s dinner. The blue capitals said: tell nobody upstairs. Not yet.', isBusy);
+  SEV.thing('#board', null, 'CLARION HOUSE: who is on which floor. At the bottom, in small letters: LIFT ATTENDED 8 A.M. TO 6 P.M. After six, nobody expects anybody to be in it.', isBusy);
+  SEV.thing('#portrait', null, 'H. PENHALE, 1861: the first Editor of the Clarion. He climbed these stairs every day for forty years, and he looks it.', isBusy);
+  SEV.thing('#lclock', null, function () { return 'The clock on the landing says ' + SEV.time() + '. It has never been wrong, and tonight nobody is glad.'; }, isBusy);
+  SEV.thing('#stairs', null, 'The stairs. Eight flights down to the press hall, and nobody on them. Yet.', isBusy);
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; SEV.sfx.gate();
+    setTimeout(function () { ER.leave(nextFile); }, 900);
+  });
+})();
+</script>
+</body>
+</html>

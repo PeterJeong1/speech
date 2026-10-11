@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Composing Room · Seven Down</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="seven.css">
+<style>
+  body{--bg:#0e1217;--accent:#f4e04d;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(11,14,19,.96);--tc-ink:#e9eef2;--cap-bg:rgba(11,14,19,.94);--panel:#151a20;--face-bg:#262b30;--q-ink:#e6d58a;--fade:#06080b;--hud-bg:rgba(11,14,19,.8)}
+  .tc-room{letter-spacing:.06em;font-size:clamp(44px,6.4vw,84px)}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .pool{animation:pl 5.7s steps(1,end) infinite}
+  .pool.p2{animation-delay:-1.9s}.pool.p3{animation-delay:-3.7s}
+  @keyframes pl{0%{opacity:1}52%{opacity:.9}56%{opacity:1}}
+  #flywheel{transform-origin:668px 300px;animation:spin 9s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #phone3.ring{animation:ring .12s steps(2,end) infinite;transform-box:fill-box;transform-origin:50% 10%}
+  @keyframes ring{50%{transform:translate(2px,1px) rotate(1.2deg)}}
+
+  /* the composing stick, the mirror and the proofs */
+  .st{display:grid;grid-template-columns:minmax(0,700px) 330px;gap:18px;width:min(1060px,96vw);align-items:start}
+  .st-main{background:#39424b linear-gradient(160deg,#4a545e,#252b32);border:3px solid #15181c;box-shadow:0 26px 70px rgba(0,0,0,.65),inset 0 0 0 2px #5d6770;padding:14px 18px 14px;border-radius:5px}
+  .st-tags{display:flex;gap:8px;margin-bottom:12px}
+  .st-tags button{flex:1;padding:6px 6px 4px;border:0;background:#fbf8ee;color:#2450a8;font-family:'Caveat',cursive;font-weight:700;font-size:20px;line-height:1.05;letter-spacing:.03em;text-transform:uppercase;cursor:pointer;box-shadow:0 3px 6px rgba(0,0,0,.4)}
+  .st-tags button:nth-child(odd){transform:rotate(-1.2deg)}.st-tags button:nth-child(even){transform:rotate(1deg)}
+  .st-tags button small{display:block;font-family:'Special Elite',monospace;font-weight:normal;font-size:12.5px;letter-spacing:.06em;color:#1c1b18;text-transform:none}
+  .st-tags button.on{background:#f4e04d;color:#141518}
+  .st-tags button.done{background:#cfd6cf;color:#3d5a45}
+  .st-tags button.done small{color:#3d5a45}
+  .st-mirror{position:relative;margin:0 auto 12px;width:86%;height:86px;border-radius:44px;background:#dfe9ee linear-gradient(160deg,#f6fbfd,#b9c9d2 60%,#e3edf1);border:7px solid #7d5f1d;box-shadow:inset 0 0 0 2px #f5df98,0 6px 14px rgba(0,0,0,.5);
+    display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:44px;letter-spacing:.16em;color:#1c2630;text-transform:uppercase;overflow:hidden}
+  .st-mirror:before{content:'';position:absolute;left:8%;top:-20%;width:16%;height:140%;background:rgba(255,255,255,.4);transform:rotate(18deg)}
+  .st-mirror small{position:absolute;left:0;right:0;bottom:3px;text-align:center;font-family:'Oswald',sans-serif;font-weight:500;font-size:10px;letter-spacing:.3em;color:#5d6a72}
+  .st-stick{display:flex;flex-direction:row-reverse;justify-content:center;gap:5px;padding:12px 16px 14px;background:#7d5f1d linear-gradient(#c79b3b,#7d5f1d);border-radius:3px;box-shadow:inset 0 3px 0 #f5df98,0 8px 16px rgba(0,0,0,.5)}
+  .st-sort{position:relative;width:62px;height:78px;border-radius:2px;background:#aeb6bd linear-gradient(150deg,#e3e8ec,#8f989f 55%,#b9c1c8);box-shadow:inset 0 0 0 1px #5d6770,0 3px 0 #4a5158;cursor:grab;display:flex;align-items:center;justify-content:center;touch-action:none;-webkit-user-select:none;user-select:none}
+  .st-sort b{display:block;transform:scaleX(-1);font-family:'Playfair Display',serif;font-weight:900;font-size:46px;line-height:1;color:#22282e;text-shadow:0 1px 0 rgba(255,255,255,.5)}
+  .st-sort.lock{background:#6f7880 linear-gradient(150deg,#8f989f,#555d64);cursor:not-allowed}
+  .st-sort.lock:after{content:'\2713';position:absolute;right:3px;top:0;font-family:Arial,sans-serif;font-weight:bold;font-size:15px;color:#8fb0ff}
+  .st-sort.held{outline:3px solid #f4e04d;outline-offset:2px;transform:translateY(-6px)}
+  .st-sort:hover:not(.lock){box-shadow:inset 0 0 0 2px #f4e04d,0 3px 0 #4a5158}
+  .st-bar{display:flex;align-items:flex-start;gap:14px;margin-top:12px}
+  .st-bar .sv-msg{flex:1;min-height:104px;font-size:15.5px}
+  .st-bar .btn{white-space:nowrap}
+  .st-strips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;min-height:34px}
+  .st-strips span{padding:3px 12px 1px;background:#f3eedf;color:#141518;font-family:'Playfair Display',serif;font-weight:900;font-size:20px;letter-spacing:.14em;box-shadow:0 3px 6px rgba(0,0,0,.45);animation:strip .5s ease-out}
+  .st-strips span.bad{color:#8c2f24;text-decoration:line-through;font-weight:700;font-size:17px;opacity:.85}
+  @keyframes strip{from{transform:translateY(-16px);opacity:0}}
+  .st-card{background:#fbf8ee;color:#1c1b18;padding:12px 16px 12px;font-family:'Courier Prime',monospace;font-size:15.5px;line-height:1.34;box-shadow:0 10px 26px rgba(0,0,0,.5);transform:rotate(.6deg)}
+  .st-card h6{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.16em;color:#2450a8}
+  .st-card p{margin:0 0 6px}
+  .st-card .pie{font-family:'Playfair Display',serif;font-weight:900;font-size:25px;letter-spacing:.1em}
+  .st-side .sv-grid{margin:14px auto 0}
+  @media (max-width:1330px){.st{grid-template-columns:minmax(0,640px) 310px}.st-sort{width:56px;height:72px}.st-sort b{font-size:42px}}
+  @media (max-width:900px){.st{grid-template-columns:1fr}}
+
+  /* the front page, in metal */
+  .fm{width:min(760px,94vw);padding:20px 24px 18px;background:#3d464f linear-gradient(160deg,#59636c,#252b32);border:4px solid #15181c;box-shadow:0 26px 70px rgba(0,0,0,.65);border-radius:4px}
+  .fm-bars{display:flex;gap:8px;margin-bottom:10px}
+  .fm-bars i{flex:1;height:26px;background:#8f989f linear-gradient(#c9d0d6,#7b848b)}
+  .fm-bars i:nth-child(2){flex:2.4}
+  .fm-box{position:relative;padding:20px 26px 18px;background:#aeb6bd linear-gradient(150deg,#e3e8ec,#8f989f 55%,#c3cad0);box-shadow:inset 0 0 0 3px #4a5158,inset 0 0 0 9px #b9c1c8,inset 0 0 0 11px #4a5158;color:#22282e;text-shadow:0 1px 0 rgba(255,255,255,.5);
+    font-family:'Playfair Display',serif;font-weight:700;font-size:21px;line-height:1.36;text-align:center;transition:transform .7s}
+  .fm-box h4{margin:0 0 8px;font-weight:900;font-size:38px;letter-spacing:.06em}
+  .fm-box p{margin:0 0 6px}
+  .fm.metal .fm-box{transform:scaleX(-1)}
+  .fm.paper .fm-box{background:#f3eedf;box-shadow:inset 0 0 0 3px #1c1b18,inset 0 0 0 9px #f3eedf,inset 0 0 0 11px #1c1b18;color:#141518;text-shadow:none}
+  .fm-foot{display:flex;align-items:center;gap:14px;margin-top:12px}
+  .fm-foot .sv-msg{flex:1;min-height:52px}
+  .doc.proof{width:min(600px,92vw);background:#f3eedf linear-gradient(175deg,rgba(255,255,255,.4),rgba(120,100,60,.12));font-family:'Courier Prime',monospace;font-size:16.5px;line-height:1.36;padding:22px 30px 22px;border-top:10px solid #141518}
+  .doc.proof h4{font-family:'Playfair Display',serif;font-weight:900;font-size:21px;margin-bottom:4px}
+  .doc.proof h5{margin:10px 0 3px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.2em}
+  .doc.proof p{margin:0 0 3px}
+  .doc.proof .green{font-family:'Homemade Apple',cursive;font-size:15px;color:#1f7a4a;margin-bottom:8px}
+  .doc.proof .chalk{font-family:'Permanent Marker',cursive;font-size:16.5px;line-height:1.2;color:#b3261c;margin:1px 0 6px 18px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#161c23"/><stop offset="1" stop-color="#232b34"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f9aa3"/><stop offset=".2" stop-color="#6c7780"/><stop offset="1" stop-color="#2f363d"/></linearGradient>
+  <linearGradient id="leadG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3e8ec"/><stop offset=".6" stop-color="#8f989f"/><stop offset="1" stop-color="#b9c1c8"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="caseG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e5536"/><stop offset="1" stop-color="#3f3120"/></linearGradient>
+  <radialGradient id="warmG"><stop offset="0" stop-color="#ffbe5c" stop-opacity=".6"/><stop offset=".45" stop-color="#ffa53a" stop-opacity=".16"/><stop offset="1" stop-color="#ffa53a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="56%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#020408" stop-opacity=".36"/><stop offset="1" stop-color="#020408" stop-opacity=".92"/></radialGradient>
+  <pattern id="brick" width="96" height="48" patternUnits="userSpaceOnUse"><path d="M0 0H96M0 24H96M0 0V24M48 24V48" stroke="#0e1319" stroke-width="2.500" fill="none"/></pattern>
+  <pattern id="lat" width="30" height="60" patternUnits="userSpaceOnUse"><path d="M0 0L15 30L0 60M30 0L15 30L30 60" fill="none" stroke="#b08a3a" stroke-width="3"/></pattern>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1100" fill="url(#wallG)"/><rect x="-1000" y="-400" width="3600" height="1100" fill="url(#brick)" opacity=".7"/>
+<rect x="-1000" y="640" width="3600" height="60" fill="#12171c"/>
+
+<!-- the cases: capitals above, small letters below -->
+<g id="cases" class="hot">
+  <rect x="56" y="250" width="380" height="400" fill="#2a2015"/>
+  <path d="M68 262h356l-18 150H86z" fill="url(#caseG)"/><path d="M86 426h320l-12 120H98z" fill="url(#caseG)"/>
+  <g id="caseCells"></g>
+  <rect x="68" y="560" width="356" height="84" fill="#3a2c1b"/><g stroke="#231709" stroke-width="3"><path d="M68 588h356M68 616h356"/></g><g fill="url(#brassG)"><rect x="232" y="570" width="28" height="7" rx="3"/><rect x="232" y="598" width="28" height="7" rx="3"/><rect x="232" y="626" width="28" height="7" rx="3"/></g>
+</g>
+
+<!-- the Linotype -->
+<g id="lino" class="hot">
+  <rect x="540" y="330" width="240" height="320" fill="#1d242b"/><rect x="556" y="196" width="150" height="150" fill="#262e36"/><path d="M556 196l76-58 74 58z" fill="#2f3841"/>
+  <g stroke="#3d4853" stroke-width="5"><path d="M574 196v-34M598 196v-52M622 196v-58M646 196v-52M670 196v-40M694 196v-24"/></g>
+  <g id="flywheel"><circle cx="668" cy="300" r="46" fill="none" stroke="#59636c" stroke-width="9"/><path d="M668 254v92M622 300h92" stroke="#59636c" stroke-width="5"/></g><circle cx="668" cy="300" r="9" fill="#8f9aa3"/>
+  <rect x="566" y="520" width="150" height="46" fill="#11161b"/><g id="linoKeys" fill="#c9cdd2"></g>
+  <path d="M740 380h56v120h-56z" fill="#2f3841"/><ellipse cx="768" cy="380" rx="28" ry="8" fill="#ff9a3a"/><ellipse cx="768" cy="380" rx="18" ry="4" fill="#ffd98a"/>
+</g>
+
+<!-- the pillar: a mirror on a nail, and the telephone -->
+<rect x="856" y="-400" width="72" height="1050" fill="#2c353f"/><rect x="856" y="-400" width="10" height="1050" fill="#3d4853"/>
+<g id="mirror" class="hot"><path d="M892 196v24" stroke="#8f9aa3" stroke-width="2"/><circle cx="892" cy="270" r="50" fill="url(#brassG)"/><circle cx="892" cy="270" r="42" fill="#dfe9ee"/><path d="M862 254q22-28 50-16" stroke="#fff" stroke-width="7" fill="none" opacity=".7" stroke-linecap="round"/><circle cx="892" cy="196" r="4" fill="#c9cdd2"/></g>
+<g id="phone3" class="hot"><rect x="866" y="370" width="52" height="96" rx="5" fill="#0c0c0d"/><circle cx="892" cy="402" r="14" fill="#efe9d8"/><path d="M852 376q0 60 14 84" fill="none" stroke="#0c0c0d" stroke-width="9" stroke-linecap="round"/><path d="M918 440q30 30 6 76" fill="none" stroke="#0c0c0d" stroke-width="3" stroke-dasharray="3 4"/></g>
+<g id="wclock" class="hot"><circle cx="892" cy="92" r="42" fill="#0e1319"/><circle cx="892" cy="92" r="35" fill="#efe9d8"/><g stroke="#1c1b18" stroke-width="3"><path d="M892 62v7M892 115v7M862 92h7M915 92h7"/></g>
+  <path id="hh" d="M892 92V72" stroke="#1c1b18" stroke-width="5.500" stroke-linecap="round"/><path id="mh" d="M892 92V64" stroke="#1c1b18" stroke-width="3.200" stroke-linecap="round"/><circle cx="892" cy="92" r="3.600" fill="#c8281d"/></g>
+
+<!-- Mr Fenwick, in front of his own cases -->
+<g id="fenwick" class="hot"><rect x="964" y="300" width="232" height="350" fill="#262b30"/><use href="#ch-fenwick" x="972" y="350" width="216" height="280.800"/><rect x="964" y="300" width="232" height="350" fill="none" stroke="#3d4853" stroke-width="6"/><rect x="964" y="300" width="232" height="50" fill="#262b30"/><g stroke="#11151a" stroke-width="3" fill="#3a424a"><path d="M970 308h220v34H970z"/></g></g>
+
+<!-- the tube from the sixth floor, and what came down it -->
+<g id="tube" class="hot"><path d="M1262 -400V250" stroke="url(#brassG)" stroke-width="30"/><path d="M1254 -400V250" stroke="#f5df98" stroke-width="3" opacity=".7"/><rect x="1236" y="250" width="52" height="76" rx="6" fill="#7d5f1d"/><rect x="1244" y="262" width="36" height="56" rx="4" fill="#12171c"/><rect x="1250" y="330" width="24" height="60" rx="12" fill="url(#brassG)"/><rect x="1250" y="346" width="24" height="8" fill="#7b2c22"/></g>
+<g id="hook" class="hot"><path d="M1262 420v14" stroke="#c9cdd2" stroke-width="4"/><path d="M1232 432h62l6 196-74 6z" fill="#f3eedf"/><g stroke="#3b382f" stroke-width="2"><path d="M1242 452h42M1242 470h46M1241 482h40M1241 494h46M1240 506h38M1240 530h46M1239 542h40M1239 554h46M1238 566h36M1238 578h44"/></g>
+  <g stroke="#b3261c" stroke-width="4" stroke-linecap="round" fill="none"><path d="M1236 476l14 10 28-22"/><path d="M1284 548q10 6 4 16"/></g></g>
+
+<!-- the landing, and the lift -->
+<g id="door" class="hot">
+  <path d="M1352 680V250q0-110 124-110t124 110v430z" fill="#06080a"/>
+  <rect x="1404" y="280" width="150" height="400" fill="#16110a"/><rect x="1404" y="280" width="150" height="400" fill="url(#lat)" opacity=".85"/>
+  <rect x="1396" y="272" width="166" height="11" fill="url(#brassG)"/><path d="M1404 280V680M1554 280V680" stroke="#7d5f1d" stroke-width="6"/>
+  <g transform="rotate(-2 1479 460)"><path d="M1479 420v18" stroke="#d9d5c8" stroke-width="2"/><rect x="1432" y="436" width="94" height="52" fill="#fbf8ee"/>
+    <text x="1479" y="458" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="19" fill="#2450a8" letter-spacing="1">OUT OF</text><text x="1479" y="479" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="19" fill="#2450a8" letter-spacing="1">ORDER</text></g>
+  <path d="M1352 680V250q0-110 124-110t124 110v430" fill="none" stroke="#3d4853" stroke-width="12"/>
+</g>
+<g id="dial" class="hot">
+  <path d="M1427 258a52 52 0 0 1 104 0z" fill="url(#brassG)"/><path d="M1434 256a45 45 0 0 1 90 0z" fill="#efe9d8"/>
+  <g id="dialNums" font-family="Oswald,sans-serif" font-weight="600" font-size="10" fill="#1c1b18" text-anchor="middle"></g>
+  <path d="M1479 256L1516 242" stroke="#c8281d" stroke-width="3.600" stroke-linecap="round"/><circle cx="1479" cy="256" r="5" fill="#1c1b18"/>
+</g>
+
+<!-- lamps over the stone -->
+<g pointer-events="none">
+  <path d="M370 -400V470M800 -400V470M1250 -400V470" stroke="#07090c" stroke-width="4"/>
+  <g fill="#1d2a22"><path d="M316 506q54-66 108 0z"/><path d="M746 506q54-66 108 0z"/><path d="M1196 506q54-66 108 0z"/></g>
+  <g fill="#ffe2a0"><rect x="330" y="504" width="80" height="6"/><rect x="760" y="504" width="80" height="6"/><rect x="1210" y="504" width="80" height="6"/></g>
+  <ellipse class="pool" cx="370" cy="720" rx="330" ry="260" fill="url(#warmG)"/><ellipse class="pool p2" cx="800" cy="720" rx="330" ry="260" fill="url(#warmG)"/><ellipse class="pool p3" cx="1250" cy="720" rx="330" ry="260" fill="url(#warmG)"/>
+</g>
+
+<!-- the stone -->
+<path d="M-1000 690H2600V1400H-1000z" fill="url(#steelG)"/><path d="M-1000 690H2600" stroke="#c9d0d6" stroke-width="5" opacity=".7"/>
+<g id="page1" class="hot">
+  <path d="M150 720h390l30 170H110z" fill="#1c2228"/><path d="M168 734h354l24 142H134z" fill="url(#leadG)"/>
+  <g fill="#59636c"><path d="M184 746h322l3 20H181z"/><path d="M180 776h100l-5 88H170zM412 776h102l12 88H414z"/></g>
+  <path d="M294 776h104l6 88H288z" fill="#c9d0d6" stroke="#22282e" stroke-width="4"/><g stroke="#22282e" stroke-width="3"><path d="M304 792h84M303 806h86M302 820h70M301 834h88M300 848h60"/></g>
+  <path d="M284 770q60-16 126 2q14 50 4 100q-64 14-134-2q-12-52 4-100z" fill="none" stroke="#f4e04d" stroke-width="4" stroke-dasharray="10 7"/>
+  <text x="344" y="712" class="sT" font-size="15" fill="#c9d0d6" letter-spacing="4">PAGE 1</text>
+</g>
+<g id="galley" class="hot">
+  <path d="M640 730h340l26 150H614z" fill="#7d5f1d"/><path d="M652 740h316l20 130H632z" fill="#2a2015"/>
+  <g id="pie"></g>
+  <text x="810" y="722" class="sT" font-size="15" fill="#c9d0d6" letter-spacing="4">GALLEY</text>
+</g>
+<g id="page12" class="hot">
+  <path d="M1080 720h390l40 170h-470z" fill="#1c2228"/><path d="M1098 734h354l32 142h-418z" fill="url(#leadG)"/>
+  <g fill="#59636c"><path d="M1112 746h326l5 20h-336z"/><path d="M1104 776h110l-4 88h-116zM1350 776h100l22 88h-112z"/></g>
+  <path d="M1226 776h112l10 88h-126z" fill="#22282e"/><g fill="#c9d0d6"><rect x="1236" y="784" width="14" height="14"/><rect x="1254" y="784" width="14" height="14"/><rect x="1272" y="784" width="14" height="14"/><rect x="1308" y="784" width="14" height="14"/><rect x="1236" y="802" width="14" height="14"/><rect x="1290" y="802" width="14" height="14"/><rect x="1308" y="802" width="14" height="14"/><rect x="1236" y="820" width="14" height="14"/><rect x="1254" y="820" width="14" height="14"/><rect x="1290" y="820" width="14" height="14"/><rect x="1254" y="838" width="14" height="14"/><rect x="1272" y="838" width="14" height="14"/><rect x="1308" y="838" width="14" height="14"/></g>
+  <text x="1276" y="712" class="sT" font-size="15" fill="#c9d0d6" letter-spacing="4">PAGE 12</text>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="sv-go" id="go">Go down to the press hall</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="seven.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, told = {}, met = false, stBox = null, inStick = false, seenPanel = false;
+  var BEFORE = ['a15', 'a5', 'd4', 'a14', 'd13', 'd2', 'd6', 'd12', 'a16', 'd3'], MINE = ['a1', 'a8', 'a9', 'a10'];
+  /* the four lines of pie, as they lie in the galley: each is one answer with its letters in the wrong order */
+  var PIE = { a1: 'FLY AS IF', a8: 'RE CLUES', a9: 'POOR MIST', a10: 'HOLE POOL' };
+  var LAST = { a1: 'It begins FALS, like the word FALSE. What is left is a common ending for verbs.', a8: 'It begins RECL. It is a person who hides away from the world, as a hermit does.',
+    a9: 'It begins IMPOS and it ends in OR: a person, like an actor or a doctor, but not an honest one.', a10: 'It is made of two short words joined together. The second one is HOLE.' };
+
+  /* the cases, the keys of the Linotype, the pie in the galley, the dial */
+  (function () {
+    var s = '', r, c, i, a, x, y;
+    for (r = 0; r < 5; r++) for (c = 0; c < 9; c++) s += '<rect x="' + (78 + c * 38 + r * 2) + '" y="' + (270 + r * 28) + '" width="' + (32 - r * 0.4) + '" height="22" fill="#231709"/><rect x="' + (84 + c * 38 + r * 2) + '" y="' + (280 + r * 28) + '" width="18" height="9" fill="#9aa3aa" opacity="' + (0.35 + ((r * 3 + c * 5) % 4) * 0.15) + '"/>';
+    for (r = 0; r < 4; r++) for (c = 0; c < 8; c++) s += '<rect x="' + (96 + c * 38 + r * 1.5) + '" y="' + (434 + r * 28) + '" width="32" height="22" fill="#231709"/><rect x="' + (102 + c * 38 + r * 1.5) + '" y="' + (444 + r * 28) + '" width="18" height="9" fill="#9aa3aa" opacity="' + (0.35 + ((r * 5 + c * 3) % 4) * 0.15) + '"/>';
+    $('#caseCells').innerHTML = s; s = '';
+    for (r = 0; r < 3; r++) for (c = 0; c < 9; c++) s += '<rect x="' + (574 + c * 15 + r * 3) + '" y="' + (527 + r * 12) + '" width="10" height="8" rx="2"/>';
+    $('#linoKeys').innerHTML = s; s = '';
+    ['a1', 'a8', 'a9', 'a10'].forEach(function (k, n) {
+      y = 752 + n * 30; x = 664 - n * 4;
+      for (i = 0; i < 9; i++) s += '<rect x="' + (x + 62 + i * 23 + ((i * 7 + n * 3) % 5)) + '" y="' + (y + ((i * 3 + n) % 4) - 2) + '" width="19" height="22" fill="url(#leadG)" transform="rotate(' + (((i * 37 + n * 11) % 13) - 6) + ' ' + (x + 71 + i * 23) + ' ' + (y + 11) + ')"/>';
+      s += '<path d="M' + x + ' ' + (y + 2) + 'h52l-2 18h-52z" fill="#fbf8ee"/><text x="' + (x + 25) + '" y="' + (y + 17) + '" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="17" fill="#2450a8">' + k.slice(1) + ' AC.</text>';
+    });
+    $('#pie').innerHTML = s; s = '';
+    ['B', 'G', '1', '2', '3', '4', '5', '6', '7'].forEach(function (t, n) {
+      a = Math.PI * (1 - (n + 0.5) / 9);
+      s += '<text x="' + (1479 + 36 * Math.cos(a)).toFixed(1) + '" y="' + (256 - 34 * Math.sin(a) + 3).toFixed(1) + '">' + t + '</text>';
+    });
+    $('#dialNums').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'seven', storyTitle: 'Seven Down', id: 'composing', no: 'III', title: 'The Composing Room',
+    go: 'Go in',
+    intro: [
+      'Four of Sphinx&rsquo;s words were hiding in the House scrapbook. Each began inside one word of a sentence and ended inside another: OMEN in &ldquo;two men&rdquo;, EXTRA in &ldquo;text ran&rdquo;, HEARSAY in &ldquo;hears a yarn&rdquo; and ALIBI in &ldquo;usual I bit&rdquo;. The fifth clue was the book itself: SCRAPBOOKS.',
+      'The cuttings said that nobody at the Clarion has ever known who Sphinx is, and that the paper promised never to ask. Yet on Tuesday it is going to print a name. Mr Quill says that readers will be surprised.',
+      'The composing room is on the second floor. This is where every word of the Clarion is put together out of metal, a letter at a time, and back to front.'
+    ],
+    exit: {"next":"press","w":{"e44b24e1":"c09dfd31"}}, tags: {"a15":["ca9c5792"],"a15@":["0eace9d9","35c0b37d","8de651af"],"a15?":["6efc86aa","2f9310d8","a7eb9a49"],"a15#":["8f0ec984"],"a5":["2b1c24ea"],"a5@":["a68eb625","48f93c7f","8573a80b"],"a5?":["8ecd22a5","7050bc00","0529489b"],"a5#":["67c2c4c8"],"d4":["389f9635"],"d4@":["f4364313","aa77af9b","82afda53","07d3f217","057f1d10"],"d4?":["1ebb7e67","f8f6fd5b","1de1b7d8","903251e9","9f4e5c25"],"d4#":["b277827c"],"a14":["3eb3d8b6"],"a14@":["6912950c","5ebb51d2","10f844c8","e2b17dbc","5488ef1c","eb4a3720","2be1117d"],"a14?":["ee0a303d","c4e859f4","2353fbbb","fe1f6836","d8f2199d","30a755ca","c1df125d"],"a14#":["1859047c"],"d13":["025fc669"],"d13@":["35b87e53","ffb16d0b","66ed1bed","7ea4d890"],"d13?":["158fe495","6b67f2e6","ca6f6a12","7e609b3c"],"d13#":["c8cab918"],"d2":["ddef0858"],"d2@":["22c306d3","e0e71b95","7a2283cc","68c16ff9","e8c373bd"],"d2?":["1f485603","7c156fff","f6aef5d8","0d6c677b","f6403ce0"],"d2#":["b9c69748"],"d6":["886c125c"],"d6@":["1432b576","f7420e7c","87076e4b","fc655f08"],"d6?":["6cdbd42f","7f36e9d9","d0596abb","80934f7e"],"d6#":["c93d593a"],"d12":["cdbd01b2"],"d12@":["a35e565e","e45fffc6","12b01210","7fa435e0","b2e2bb56"],"d12?":["f4cf0f10","4cb82924","d8a08647","15615c68","304e9e0a"],"d12#":["bc4e4208"],"a16":["da2f6427"],"a16@":["2bbb3d1f","de3049b3","03a19d92","f3678a89","e9c99a62","aa15c220","9230d666"],"a16?":["95d658b2","d88ccc70","7aa1c07b","574737b2","d429c5f5","e736fcf6","90a2e77b"],"a16#":["62b208bf"],"d3":["48875455"],"d3@":["4e96d97e","8512c566","624ce7af","ecaa8939","a487f9ce","81465670","c97e2e51","88d05f3c","4e64c225","c23768dd"],"d3?":["ae6ebe7f","c2e011cf","0fb4ac75","4a262535","214a2f0f","6972fbe4","641db7a8","90e4de95","7d37a736","05ccd966"],"d3#":["014a6dd3"],"a1":["f6082c4b"],"a1@":["41ff5a34","8f1f98f3","75c56410","5d259584","7e96ba61","ccbed248","622aceca"],"a1?":["2f6dd223","9596f6e0","bddc174a","254640b3","98cb598f","ac0384cb","c3f56c04"],"a1#":["f3f96e94"],"a8":["20571050"],"a8@":["e5587100","228dd144","16821f2d","1ccab9a5","9a2ec552","b5b76ff5","5d34e573"],"a8?":["3adf2149","c7f59110","b3292ab2","194c1529","5ad4fa1e","abf04c5a","1f7aa7ab"],"a8#":["a7177d23"],"a9":["8d935f6d"],"a9@":["be680ccd","45d42b23","08a5895a","1e35b279","18742f1a","ddb93bda","dad8addc","80f68b58"],"a9?":["1cdd66a9","6bed0f0f","8c211100","0e19ec2c","08116a31","fc3df1bf","c22747e7","3248a310"],"a9#":["eb7123dd"],"a10":["48163ec1"],"a10@":["1a55aa66","8e2a6be0","51b3b352","98075f88","7eb62ab6","620cd044","8ac1f1c0","52d3d168"],"a10?":["359f682f","1111caa4","9f37c865","aee4cb7e","d768e4b9","507c8ef0","7082d24f","a6bc5490"],"a10#":["08bb1367"]},
+    sound: ['press', { root: 53, bpm: 96, drop: ['mel'] }],          /* the telephone rings in here as well: no small bright notes */
+    hints: hints, onBegin: begin
+  });
+  SEV.clock({ from: 68, to: 100 }); SEV.wall('#hh', '#mh', 892, 92);
+  SEV.ensure(BEFORE);
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {}; met = !!ER.flag('c-met'); seenPanel = !!ER.flag('c-panel');
+
+  var PROOF = '<h4>THE CLARION &middot; No. 10,000 &middot; by SPHINX</h4><p class="green">Set this at once for page 12. E.Q.</p>' +
+    '<h5>ACROSS</h5><p>1 Animal that says miaow (3)</p><p class="chalk">CAT.</p><p>3 The opposite of DOWN (2)</p><p>5 The colour of grass (5)</p><p>8 A copy that is made in order to deceive (7)</p>' +
+    '<p class="chalk">I have set this clue before: 14 Nov. 1959. It is Sphinx&rsquo;s own. The answer is FORGERY.</p>' +
+    '<h5>DOWN</h5><p>1 A small pet that is not a dog (3)</p><p class="chalk">CAT again!</p><p>2 Two times five (3)</p><p>6 Frozen water (3)</p><p>7 A yellow fruit (6)</p><p class="chalk">BANANA. On the ten-thousandth day.</p>';
+  var PANEL = '<h4>SPHINX</h4><p>For thirty-two years the Clarion has kept a secret that it did not know. This morning it can tell its readers who SPHINX is.</p>' +
+    '<p>He is our own Puzzles Editor, Mr EDGAR QUILL, who has set every one of the ten thousand in silence, and has asked for no thanks.</p><p>Turn to page 12.</p>';
+
+  function left() { return MINE.filter(function (k) { return !SEV.word(k); }); }
+  function hints() {
+    if (nextFile) return ['go', ['Fourteen answers are in ink. One clue is left, and it is in the press hall, at the bottom of the building. Use the button at the bottom of the screen.']];
+    if (!met) return ['fenwick', ['A man in a black apron is standing behind the long steel table. It is his room. Speak to him first.']];
+    if (!inStick) return ['look', [
+      'There are three things on the steel table, which printers call the stone: page 1, page 12, and a tray of loose type between them.',
+      'The tray is called a galley. Four lines of type are lying in it in a heap, each with a tag in blue pencil. Click on it.'
+    ]];
+    var k = stBox ? stBox.getAttribute('data-k') : null;
+    if (k && !SEV.word(k)) return ['stick-' + k, [
+      'A line of pie is one answer with its letters in the wrong order. The card on the right gives the meaning. Some pieces of type are locked: those letters are right already, because the grid has given them to you.',
+      'Click one loose piece of type and then another, and they change places. Metal type is a mirror image, so read the mirror above it and not the metal. When the mirror shows a word, pull a proof.',
+      LAST[k]
+    ]];
+    return null;
+  }
+  function isBusy() { return busy; }
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function after() {
+    ER.pips(SEV.count(MINE), MINE.length);
+    if (nextFile) $('#go').classList.add('on');
+  }
+  function begin() {
+    after();
+    if (!tell('in')) { ER.say('The composing room. Mr Fenwick has not put his apron away.'); return; }
+    busy = true;
+    ER.narrate([
+      'It smells of hot metal and ink. Under three lamps stands a long steel table with tomorrow&rsquo;s pages lying on it, made of lead, back to front.',
+      'A man in a black apron looks you up and down. He does not look pleased, and it does not seem to be because of you.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- Mr Fenwick ---------- */
+  function fenwick() {
+    var c = window.CAST.fenwick;
+    ER.talk({ who: c.who, role: c.role, face: window.FACE('fenwick'), last: 'Go to the stone',
+      lines: [
+        '&ldquo;So you are what the puzzles desk has sent me. I wanted a crossword. I have had one already tonight, and I would sooner have had a brick.&rdquo;',
+        { q: 'You have a crossword?', a: '&ldquo;It came down the tube at midnight, with Mr Quill&rsquo;s compliments. Number ten thousand, by Sphinx: it says so at the top. I have set every Sphinx for thirty-two years, and I tell you that Sphinx never wrote it. The proof is hanging on the hook. Read it and weep.&rdquo;' },
+        { q: 'Then who wrote it?', a: '&ldquo;I set type. I do not set rumours. But look at page one, there on the stone: the box in the middle. It is in metal, so it reads backwards. There is a mirror on the pillar.&rdquo;' },
+        { q: 'And the loose type in the tray?', a: '&ldquo;Now that is another matter. Somebody has been at my cases. Four lines of my best type, all in a heap, and a note in blue pencil: FOR THE JUNIOR FROM THE PUZZLES DESK. In my trade a heap of type is called pie. I have been waiting to see who would come for it.&rdquo;' },
+        '&ldquo;Set the four lines right, and pull a proof of each. Mind: type reads backwards. And page twelve closes at half past one, with Mr Quill&rsquo;s brick in it or without.&rdquo;'
+      ],
+      clue: { id: 'fenwick', title: 'Mr Fenwick: four lines of pie', kind: 'Head printer' },
+      done: function (seen) { if (seen && !met) { met = true; ER.flag('c-met', 1); ER.say('Page 1, a tray of loose type, and page 12 lie on the stone. A long strip of paper hangs from a hook on the wall.'); } }
+    });
+  }
+  $('#fenwick').addEventListener('click', function () { if (!busy) fenwick(); });
+
+  /* ---------- the front page, in metal ---------- */
+  function openPanel() {
+    if (busy) return;
+    var box = ER.el('div', 'fm metal'), msgEl;
+    box.innerHTML = '<div class="fm-bars"><i></i><i></i><i></i></div><div class="fm-box"><!--nogloss-->' + PANEL + '<!--/nogloss--></div>' +
+      '<div class="fm-foot"><p class="sv-msg"></p><button type="button" class="btn" id="b-mirror">Hold the mirror to it</button></div>';
+    msgEl = box.querySelector('.sv-msg');
+    msgEl.innerHTML = ER.gloss('The box in the middle of page 1, in lead. Every letter is the wrong way round, and so is every line.');
+    box.querySelector('#b-mirror').addEventListener('click', function () {
+      var on = box.classList.contains('metal');
+      box.classList.toggle('metal', !on); box.classList.toggle('paper', on);
+      this.textContent = on ? 'Take the mirror away' : 'Hold the mirror to it';
+      ER.sfx.glass();
+      if (!on) { msgEl.innerHTML = ER.gloss('The box in the middle of page 1, in lead. Every letter is the wrong way round, and so is every line.'); return; }
+      msgEl.innerHTML = ER.gloss('In the mirror the metal reads like a page.');
+      if (!seenPanel) { seenPanel = true; ER.flag('c-panel', 1); }
+      ER.addClue('panel', 'The box on page 1', '<h4>PAGE 1, IN THE MIRROR</h4>' + PANEL, 'typed', 'In metal');
+    });
+    ER.open('ov-lock', box, function () {
+      if (seenPanel && tell('panel')) {
+        busy = true;
+        ER.narrate([
+          'So that is the name the Clarion is going to print. Your own Mr Quill.',
+          'Mr Quill types with two fingers, and corrects in green ink. The capitals on your grid are in blue pencil.',
+          'And if Mr Quill were Sphinx, why would Sphinx send you round the building behind Mr Quill&rsquo;s back?'
+        ], function () { busy = false; });
+      }
+    });
+  }
+  $('#page1').addEventListener('click', openPanel);
+  $('#mirror').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'mirror image');
+    ER.say('A shaving mirror on a nail. Printers read metal backwards without noticing that they are doing it. The mirror is for everybody else.');
+  });
+  $('#hook').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: PROOF, cls: 'proof', clue: { id: 'qproof', title: 'Mr Quill&rsquo;s number 10,000', kind: 'Proof' }, done: function () {
+      if (tell('proof')) ER.say('The red pencil is Mr Fenwick&rsquo;s. He has ticked nothing.', 6000);
+    } });
+  });
+  $('#page12').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'forme');
+    ER.say('Page 12, locked up in its iron frame. There is a crossword in it already: Mr Quill&rsquo;s. &ldquo;I can lift it out in one piece,&rdquo; says Mr Fenwick. &ldquo;I have kept it loose on purpose.&rdquo;', 9000);
+  });
+
+  /* ---------- the stick: four lines of pie ---------- */
+  function build() {
+    var box = ER.el('div', 'st'), tags, mir, stick, msgEl, strips, card, miniBox, key = null, line = [], lock = [], held = -1, misses = {}, pbtn;
+    box.innerHTML = '<div class="st-main"><div class="st-tags">' + MINE.map(function (k) { return '<button type="button" data-k="' + k + '">' + SEV.entries[k].n + ' Across' + (SEV.clues[k].star ? ' &#10033;' : '') + '<small>' + PIE[k] + '</small></button>'; }).join('') + '</div>' +
+      '<div class="st-mirror"><span></span><small>THE MIRROR</small></div><div class="st-stick"></div>' +
+      '<div class="st-bar"><p class="sv-msg"></p><button type="button" class="btn" id="b-proof">Pull a proof</button></div><div class="st-strips"></div></div>' +
+      '<div class="st-side"><div class="st-card"></div><div class="st-mini"></div></div>';
+    tags = ER.$$('.st-tags button', box); mir = box.querySelector('.st-mirror span'); stick = box.querySelector('.st-stick'); msgEl = box.querySelector('.sv-msg');
+    strips = box.querySelector('.st-strips'); card = box.querySelector('.st-card'); miniBox = box.querySelector('.st-mini'); pbtn = box.querySelector('#b-proof');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function side() {
+      tags.forEach(function (b) { var k = b.getAttribute('data-k'); b.classList.toggle('on', k === key); b.classList.toggle('done', !!SEV.word(k)); });
+      card.innerHTML = key ? '<h6>' + SEV.entries[key].n + ' ACROSS' + (SEV.clues[key].star ? ' &#10033;' : '') + ' &middot; ' + SEV.entries[key].cells.length + ' LETTERS</h6><p class="pie">' + PIE[key] + '</p><p>' + ER.gloss(SEV.clues[key].t) + '</p>' +
+        (SEV.clues[key].h ? '<p class="sv-hand">' + ER.gloss(SEV.clues[key].h) + '</p>' : '') : '';
+      miniBox.innerHTML = ''; miniBox.appendChild(SEV.mini(key));
+      box.setAttribute('data-k', key || '');
+    }
+    /* the letters that the grid has already given are locked in their places; the rest lie in the order of the pie */
+    function load(k, reshuffle) {
+      var pat = SEV.pattern(k), pool = PIE[k].replace(/[^A-Z]/g, '').toLowerCase().split(''), i, j, w = SEV.word(k);
+      key = k; held = -1; line = []; lock = [];
+      if (w) { line = w.split(''); lock = line.map(function () { return true; }); }
+      else {
+        for (i = 0; i < pat.length; i++) if (pat.charAt(i) !== '?') { j = pool.indexOf(pat.charAt(i)); if (j >= 0) pool.splice(j, 1); }
+        if (reshuffle) pool.push(pool.shift(), pool.shift());
+        for (i = 0; i < pat.length; i++) { lock[i] = pat.charAt(i) !== '?'; line[i] = lock[i] ? pat.charAt(i) : pool.shift(); }
+      }
+      draw(); side();
+    }
+    function draw() {
+      stick.innerHTML = '';
+      line.forEach(function (ch, i) {
+        var s = ER.el('div', 'st-sort' + (lock[i] ? ' lock' : '') + (i === held ? ' held' : ''), '<b>' + ch.toUpperCase() + '</b>');
+        s.setAttribute('data-i', i); stick.appendChild(s);
+      });
+      mir.textContent = line.join('').toUpperCase();
+      box.setAttribute('data-line', line.join(''));
+    }
+    function swap(a, b) { var t = line[a]; line[a] = line[b]; line[b] = t; held = -1; SEV.sfx.sort(); draw(); }
+    function at(ev) { var n = document.elementFromPoint(ev.clientX, ev.clientY); n = n && n.closest ? n.closest('.st-sort') : null; return n && stick.contains(n) ? +n.getAttribute('data-i') : -1; }
+    stick.addEventListener('pointerdown', function (e) {
+      var i = at(e); if (i < 0 || e.button || !key || SEV.word(key)) return;
+      e.preventDefault();
+      if (lock[i]) { ER.sfx.no(); msg('That piece is right already: the grid gave you that letter. It is locked in the stick.'); return; }
+      function up(ev) {
+        document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
+        var j = at(ev);
+        if (j >= 0 && j !== i && !lock[j]) { swap(i, j); return; }            /* dragged from one piece to another */
+        if (held >= 0 && held !== i) { swap(held, i); return; }                 /* the second of two clicks */
+        held = held === i ? -1 : i; draw();
+      }
+      document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
+    });
+    pbtn.addEventListener('click', function () {
+      if (!key || SEV.word(key) || busy) return;
+      var word = line.join(''), k = key, n, sp = ER.el('span'), nxt;
+      SEV.sfx.proof();
+      if (WK.is(k, word)) {
+        SEV.put(k, word); sp.textContent = word.toUpperCase(); strips.appendChild(sp); lock = line.map(function () { return true; }); draw(); side(); after();
+        n = SEV.count(MINE);
+        var t = '<b>' + word.toUpperCase() + '.</b> Mr Fenwick reads the wet proof upside down, faster than you can read it the right way up. &ldquo;That is a word,&rdquo; he says.' + (SEV.clues[k].star ? ' It goes into ' + SEV.entries[k].n + ' Across, which has a star. Monday&rsquo;s puzzle: the newest slip in your book.' : ' It goes into ' + SEV.entries[k].n + ' Across.');
+        if (n === 2 && tell('ring')) { SEV.sfx.phone(); $('#phone3').classList.add('ring'); setTimeout(function () { $('#phone3').classList.remove('ring'); SEV.sfx.hangup(); }, 3600);
+          t += '<br>The telephone on the pillar rings. Mr Fenwick answers it with an inky thumb. &ldquo;Composing. No, Mr Quill. Nobody here but me and the mice.&rdquo; He hangs up, and winks. It takes him some time.'; }
+        msg(t);
+        if (n === MINE.length) { finish(); return; }
+        nxt = left()[0]; setTimeout(function () { if (!busy && key === k) load(nxt); }, 2600);
+        return;
+      }
+      misses[k] = (misses[k] || 0) + 1; SEV.slip(1); ER.sfx.no();
+      sp.className = 'bad'; sp.textContent = word.toUpperCase(); strips.appendChild(sp);
+      n = (ER.flag('c-miss') || 0) + 1; ER.flag('c-miss', n);
+      var say = ['&ldquo;' + word.toUpperCase() + ',&rdquo; reads Mr Fenwick. &ldquo;I have set some rubbish in forty years. But I was paid for it.&rdquo;',
+        '&ldquo;' + word.toUpperCase() + '. There is no such word. If there were, I should not print it.&rdquo;',
+        '&ldquo;' + word.toUpperCase() + '. Is that what they are teaching on the sixth floor?&rdquo;'][(n - 1) % 3];
+      if (misses[k] % 3 === 0) { say += ' He tips the loose type out of the stick, and it falls another way. &ldquo;Pie,&rdquo; he says. &ldquo;Start again.&rdquo;'; SEV.slip(1); SEV.sfx.slug(); load(k, true); }
+      box.setAttribute('data-miss', n);
+      msg(say);
+    });
+    tags.forEach(function (b) { b.addEventListener('click', function () { if (busy) return; load(b.getAttribute('data-k')); msg(SEV.word(key) ? 'That line is set, and proofed.' : 'The line marked ' + SEV.entries[key].n + ' Across. Its meaning is on the card.'); }); });
+    MINE.forEach(function (k) { var w = SEV.word(k), sp; if (w) { sp = ER.el('span'); sp.textContent = w.toUpperCase(); strips.appendChild(sp); } });
+    load(left()[0] || MINE[0]);
+    msg('Four lines of pie, and a composing stick to set them in. Click one loose piece of type and then another, and they change places. Read the mirror, not the metal. When it shows a word, pull a proof.');
+    return box;
+  }
+  function openStick() {
+    if (busy) return;
+    if (!met) { ER.say('A tray of loose type, with four tags in blue pencil. The man in the apron clears his throat. It is his tray: speak to him first.'); return; }
+    if (!stBox) stBox = build();
+    inStick = true;
+    ER.open('ov-lock', stBox, function () { inStick = false; });
+  }
+  $('#galley').addEventListener('click', openStick);
+  SEV.onGrid = function () {
+    if (busy) return;
+    SEV.openSheet({ type: [], shut: function (k) { return MINE.indexOf(k) >= 0 ? 'That one is a line of pie in the galley. Set it right in the stick, and it will be written in.' : k === 'd7' ? '7 Down has no clue. But look how many of its squares are filling up.' : 'That clue is waiting in the press hall.'; },
+      msg: nextFile ? 'Fourteen answers in ink.' : 'Four of these are lying in the galley on the stone: 1, 8, 9 and 10 Across.' });
+  };
+  function finish() {
+    var file = ER.exitOk([MINE.map(SEV.word).join('-')]), st;
+    if (!file) return;
+    nextFile = file; ER.flag('c-file', file); st = ER.state(); st.done = st.done || {}; st.done.composing = 1; ER.flag('c-out', 1);
+    busy = true; SEV.solved();
+    setTimeout(function () {
+      ER.closeAll();
+      ER.narrate([
+        'A person who pretends to be somebody else. A gap in the rules. A document changed so that it tells a lie. And a recluse, which is what the whole town thinks Sphinx is.',
+        'Sphinx is telling you something, a word at a time. And he is telling it to you, and to nobody upstairs.',
+        '&ldquo;One clue left, by the look of your sheet,&rdquo; says Mr Fenwick. &ldquo;And one that has no clue at all. The press hall is at the bottom of the building. Bring me a real Sphinx before half past one, and Mr Quill&rsquo;s brick goes on the floor. By accident.&rdquo;'
+      ], function () { busy = false; after(); if (!seenPanel) ER.say('Before you go: Mr Fenwick nods at page 1, and at the mirror on the pillar.'); });
+    }, 2400);
+  }
+
+  /* ---------- things in the room ---------- */
+  SEV.thing('#cases', 'type case', 'The cases. Capital letters are kept in the upper case, and small letters in the lower case, which is where those two names come from.', isBusy);
+  SEV.thing('#lino', null, 'A machine the size of a wardrobe, with a keyboard at the front and a pot of melted lead at the back. It sets a whole line of words at a time. It is resting.', isBusy);
+  SEV.thing('#tube', 'carrier', 'The tube from the sixth floor. Everything the puzzles desk writes comes down it in a brass carrier, with a noise like a cork. The last thing to come down was Mr Quill&rsquo;s.', isBusy);
+  SEV.thing('#wclock', null, function () { return 'The clock over the pillar says ' + SEV.time() + '. Page 12 closes at half past one.'; }, isBusy);
+  $('#phone3').addEventListener('click', function () { if (busy) return; ER.say('The telephone on the pillar has ink on it in the shape of a hand.'); });
+  $('#dial').addEventListener('click', function (e) { e.stopPropagation(); if (busy) return; ER.say('The brass arrow over the lift gate, seen from the second floor. Still between 6 and 7.'); });
+  $('#door').addEventListener('click', function () { if (busy) return; ER.say('The lift, with its card. &ldquo;Out of order since six,&rdquo; says Mr Fenwick. &ldquo;In thirty-two years I never knew that lift to stop. Lovage would not allow it.&rdquo;', 8000); });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; SEV.sfx.steps(5);
+    setTimeout(function () { ER.leave(nextFile); }, 900);
+  });
+})();
+</script>
+</body>
+</html>

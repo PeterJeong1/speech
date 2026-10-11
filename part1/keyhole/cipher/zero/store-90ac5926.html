@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Records Store · Station Zero</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0c1014;--accent:#f4e04d;--font-display:'Stardos Stencil',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(8,11,14,.95);--cap-bg:rgba(9,12,16,.93);--panel:#141a20;--face-bg:#161a17;--q-ink:#a9bccb;--fade:#04060a;--hud-bg:rgba(9,12,16,.78)}
+  .tc-room{font-weight:700;letter-spacing:.06em}
+  .sten{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .lbl{font-family:'Permanent Marker',cursive;font-size:11px;fill:#1c1b18;text-anchor:middle}
+  .bx{font-family:'Courier Prime',monospace;font-weight:700;font-size:8.5px;fill:#2a2f33;text-anchor:middle}
+  #bulb{animation:bulb 9s steps(1,end) infinite}
+  @keyframes bulb{0%{opacity:.5}88%{opacity:.5}90%{opacity:.28}93%{opacity:.5}}
+  #mouse{animation:mouse 13s steps(1,end) infinite}
+  @keyframes mouse{0%{transform:translate(0,0)}40%{transform:translate(0,0)}42%{transform:translate(26px,0)}70%{transform:translate(26px,0)}72%{transform:translate(0,0)}}
+  #underdoor{animation:ud 5s steps(1,end) infinite}
+  @keyframes ud{0%{opacity:.5}60%{opacity:.5}62%{opacity:1}64%{opacity:.5}66%{opacity:.9}68%{opacity:.5}}
+  #lanternG{animation:lan 2.6s steps(4) infinite alternate}
+  @keyframes lan{from{opacity:.6}to{opacity:1}}
+  #drip{animation:drip 3.4s linear infinite}
+  @keyframes drip{0%{transform:translateY(0);opacity:0}8%{opacity:1}60%{transform:translateY(150px);opacity:1}62%{opacity:0}100%{opacity:0}}
+
+  /* Standing Orders, and the strip of numbers */
+  .bk{display:grid;grid-template-columns:minmax(0,640px) 380px;gap:22px;width:min(1050px,96vw);align-items:start}
+  .bk-page{position:relative;padding:20px 30px 16px 26px;background:#e9e4d2 linear-gradient(100deg,rgba(0,0,0,.14),transparent 7%,transparent 94%,rgba(0,0,0,.1));box-shadow:0 26px 70px rgba(0,0,0,.7);
+    border-left:14px solid #2f3a2c;color:#1c1b18}
+  .bk-page h5{margin:0;font-family:'Stardos Stencil',serif;font-weight:700;font-size:21px;letter-spacing:.12em;color:#2f3a2c}
+  .bk-page h6{margin:0 0 10px;padding-bottom:8px;border-bottom:2px solid #2f3a2c;font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#4a473e;
+    display:flex;justify-content:space-between}
+  .bk-line{position:relative;display:flex;height:29px;font-family:'Courier Prime',monospace;font-size:15px;line-height:29px;white-space:nowrap}
+  .bk-line u{flex:none;width:32px;text-decoration:none;font-weight:700;color:#8c2f24;font-size:13.5px}
+  .bk-line em{position:absolute;right:-20px;top:0;font-style:normal;font-family:'Oswald',sans-serif;font-size:11px;color:#8a8370}
+  .bk-w{padding:1px 1px;border-radius:2px;cursor:pointer}
+  .bk-w:hover{background:rgba(244,224,77,.75)}
+  .bk-w.got{background:#2f3a2c;color:#f4e04d}
+  .bk-turn{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+  .bk-turn button{padding:5px 14px 3px;border:1.5px solid #2f3a2c;color:#2f3a2c;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.14em;border-radius:2px}
+  .bk-turn button:hover:not([disabled]){background:#2f3a2c;color:#e9e4d2}
+  .bk-turn button[disabled]{opacity:.25;cursor:default}
+  .bk-turn span{font-family:'Courier Prime',monospace;font-size:14px;color:#4a473e}
+  .bk-side h5{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:#a9bccb}
+  .bk-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
+  .bk-strip button{display:block;padding:6px 4px 4px;background:#e6dfcb;color:#1c1b18;text-align:center;box-shadow:0 2px 5px rgba(0,0,0,.5)}
+  .bk-strip button b{display:block;font-family:'Courier Prime',monospace;font-weight:700;font-size:17px;letter-spacing:.04em}
+  .bk-strip button i{display:block;height:22px;font-style:normal;font-family:'Caveat',cursive;font-weight:700;font-size:22px;line-height:22px;color:#1d2a52;text-transform:uppercase}
+  .bk-strip button.cur{outline:3px solid #f4e04d;outline-offset:1px}
+  .bk-strip button.ok{background:#f6f1e2}
+  .bk-strip button.ok b{color:#8a8370}
+  .bk-side .pmsg{min-height:96px;font-size:16px}
+  @media (max-width:1000px){.bk{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#151b21"/><stop offset="1" stop-color="#232c34"/></linearGradient>
+  <linearGradient id="flG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262d33"/><stop offset="1" stop-color="#0a0d10"/></linearGradient>
+  <linearGradient id="dG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2b2118"/><stop offset=".5" stop-color="#46372a"/><stop offset="1" stop-color="#2b2118"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3a26"/><stop offset="1" stop-color="#2a1f12"/></linearGradient>
+  <radialGradient id="bulbG" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#cfe2f2" stop-opacity=".6"/><stop offset=".5" stop-color="#cfe2f2" stop-opacity=".1"/><stop offset="1" stop-color="#cfe2f2" stop-opacity="0"/></radialGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffe9a6" stop-opacity=".75"/><stop offset=".5" stop-color="#ffe9a6" stop-opacity=".16"/><stop offset="1" stop-color="#ffe9a6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="lanG"><stop offset="0" stop-color="#ffb347" stop-opacity=".8"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="48%" r="74%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".36"/><stop offset="1" stop-color="#000" stop-opacity=".93"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1050" fill="url(#wallG)"/>
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#flG)"/>
+<g stroke="#12171b" stroke-width="3"><path d="M-1000 720H2600M-1000 820H2600M300 640L140 1300M800 640L800 1300M1300 640L1500 1300"/></g>
+<ellipse id="bulb" cx="800" cy="30" rx="900" ry="700" fill="url(#bulbG)" opacity=".5" pointer-events="none"/>
+<rect x="770" y="-400" width="60" height="460" fill="#0e1216"/><rect x="756" y="50" width="88" height="30" rx="8" fill="#2c353c"/><rect x="766" y="62" width="68" height="22" rx="10" fill="#e6f1fa"/>
+<g stroke="#2c353c" stroke-width="3"><path d="M778 60v26M790 60v26M802 60v26M814 60v26M826 60v26"/></g>
+
+<!-- steel shelves and what is on them -->
+<g id="shelves" class="hot"></g>
+<!-- a cork board in the gap, with a memo on it -->
+<rect x="548" y="196" width="164" height="210" fill="#0f1317"/><rect x="556" y="204" width="148" height="194" fill="#8a6a44"/>
+<g id="memo" class="hot" transform="rotate(-2 630 300)"><rect x="574" y="222" width="110" height="140" fill="#f3eedf"/>
+  <g stroke="#55524a" stroke-width="2"><path d="M586 242h60M586 262h86M586 274h78M586 286h86M586 298h50M586 318h86M586 330h70"/></g>
+  <g stroke="#c8281d" stroke-width="2.5" fill="none"><path d="M630 258q14-6 26 2M604 314q14-6 26 2M590 348q30 8 70-2"/></g><circle cx="629" cy="228" r="4" fill="#c8281d"/></g>
+<g id="ladder" class="hot"><g stroke="#6b5130" stroke-width="9" stroke-linecap="round"><path d="M1040 640L1100 130M1108 640L1168 130"/></g>
+  <g stroke="#6b5130" stroke-width="6"><path d="M1048 570h68M1056 500h68M1064 430h68M1072 360h68M1080 290h68M1088 220h68"/></g><circle cx="1044" cy="640" r="9" fill="#17191a"/><circle cx="1112" cy="640" r="9" fill="#17191a"/></g>
+<g id="mouse" class="hot"><ellipse cx="884" cy="502" rx="13" ry="7" fill="#7b6f63"/><circle cx="896" cy="498" r="5" fill="#7b6f63"/><circle cx="894" cy="493" r="3" fill="#a9998a"/><circle cx="898" cy="497" r=".9" fill="#000"/>
+  <path d="M871 503q-14 4-18-6" stroke="#7b6f63" stroke-width="1.8" fill="none"/></g>
+
+<!-- the yard door -->
+<rect x="1206" y="-400" width="20" height="1040" fill="#0f1317"/>
+<g id="ydoor" class="hot">
+  <rect x="1266" y="170" width="196" height="470" fill="#0c0f12"/><rect x="1276" y="180" width="176" height="460" fill="url(#dG)"/>
+  <g stroke="#1d150e" stroke-width="3"><path d="M1320 180v460M1364 180v460M1408 180v460"/></g>
+  <rect x="1256" y="380" width="216" height="26" rx="4" fill="#5a4326"/><g fill="#17191a"><rect x="1262" y="372" width="18" height="42" rx="3"/><rect x="1448" y="372" width="18" height="42" rx="3"/></g>
+  <rect x="1320" y="232" width="88" height="34" fill="#d9d2b8"/><text x="1364" y="257" class="sten" font-size="23" fill="#17191a" letter-spacing="3">YARD</text>
+  <rect id="underdoor" x="1276" y="634" width="176" height="6" fill="#bcd6f2" opacity=".5"/>
+</g>
+<path d="M1300 648q60 16 150-4q40 10 60 0v8h-240z" fill="#1a232b"/>
+<circle id="drip" cx="1250" cy="470" r="2.5" fill="#bcd6f2"/>
+<ellipse id="lanternG" cx="1236" cy="372" rx="120" ry="120" fill="url(#lanG)" pointer-events="none"/>
+<g id="lantern" class="hot"><path d="M1236 300v20" stroke="#17191a" stroke-width="4"/><path d="M1216 320h40l-6 12h-28z" fill="#3a4046"/><rect x="1222" y="332" width="28" height="42" rx="6" fill="#ffd27a"/>
+  <path d="M1236 344v18" stroke="#fff3c4" stroke-width="6" stroke-linecap="round"/><g stroke="#3a4046" stroke-width="2.5"><path d="M1222 332v42M1250 332v42M1231 332v42M1241 332v42"/></g><rect x="1216" y="374" width="40" height="16" rx="3" fill="#3a4046"/>
+  <path d="M1220 322q16-30 32 0" stroke="#3a4046" stroke-width="3" fill="none"/></g>
+<g id="phone" class="hot"><g>
+  <rect x="1494" y="282" width="56" height="92" rx="5" fill="#3d4a34"/><rect x="1494" y="282" width="56" height="92" rx="5" fill="none" stroke="#232b1f" stroke-width="3"/>
+  <rect x="1500" y="288" width="44" height="24" rx="3" fill="#2c3626"/>
+  <path d="M1486 294q-8 32 0 68" stroke="#0c0d0b" stroke-width="9" fill="none" stroke-linecap="round"/><rect x="1479" y="286" width="15" height="18" rx="6" fill="#141612"/><rect x="1479" y="352" width="15" height="18" rx="6" fill="#141612"/>
+  <g transform="rotate(-2 1522 340)"><rect x="1498" y="326" width="48" height="22" fill="#f1ede1"/><rect x="1498" y="326" width="48" height="5" fill="#f4e04d"/><text x="1522" y="344" class="lbl" font-size="10">ITEM 61</text></g>
+</g></g>
+
+<!-- the reading desk: the station log, with Mrs Holloway's bookmarks -->
+<ellipse cx="250" cy="650" rx="330" ry="210" fill="url(#lampG)" pointer-events="none"/>
+<path d="M60 760L130 668H590L660 760z" fill="url(#deskG)"/><rect x="60" y="760" width="600" height="22" fill="#1d150c"/>
+<g fill="#17110a"><rect x="84" y="782" width="22" height="200"/><rect x="614" y="782" width="22" height="200"/></g>
+<g><rect x="128" y="640" width="60" height="10" rx="3" fill="#2a2620"/><path d="M158 640v-56" stroke="#b8923a" stroke-width="7"/><path d="M104 590q54-44 108 0z" fill="#1d6a45"/><ellipse cx="158" cy="590" rx="54" ry="7" fill="#fff0c0"/></g>
+<g id="loga" class="hot"><path d="M196 748L234 684H376L360 748z" fill="#2b2f3a"/><path d="M206 742L240 690H306L290 742z" fill="#efe9d6"/><path d="M292 742L308 690H368L352 742z" fill="#efe9d6"/>
+  <g stroke="#3a4a7a" stroke-width="2"><path d="M236 704h60M228 716h60M220 728h60M312 704h46M308 716h46M304 728h46"/></g><path d="M300 686l-6 30l8-4l6 6l4-30z" fill="#c8281d"/></g>
+<g id="logb" class="hot"><path d="M392 748L412 684H556L590 748z" fill="#2b2f3a"/><path d="M404 742L420 690H482L490 742z" fill="#efe9d6"/><path d="M494 742L486 690H548L578 742z" fill="#efe9d6"/>
+  <g stroke="#3a4a7a" stroke-width="2"><path d="M424 704h50M420 716h56M418 728h40"/></g><path d="M512 686l-2 30l8-4l6 6l-2-30z" fill="#f4e04d"/></g>
+
+<!-- Standing Orders, on a chain -->
+<g id="orders" class="hot">
+  <rect x="820" y="720" width="18" height="260" fill="#1d150c"/><path d="M740 742L770 660H900L920 742z" fill="#3a2a16"/><rect x="740" y="742" width="180" height="12" fill="#1d150c"/>
+  <path d="M768 734L790 672H884L898 734z" fill="#2f3a2c"/><path d="M780 726L798 682H874L884 726z" fill="none" stroke="#d9d2b8" stroke-width="2"/>
+  <text x="836" y="702" class="sten" font-size="12" fill="#d9d2b8" letter-spacing="1.5">STANDING</text><text x="838" y="718" class="sten" font-size="12" fill="#d9d2b8" letter-spacing="1.5">ORDERS</text>
+  <path d="M900 700q30 20 26 60t-20 70" stroke="#8d9499" stroke-width="3" fill="none" stroke-dasharray="6 4"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, called = false, solved = false, leaving = false;
+  /* Standing Orders: three pages of twelve lines. NUM says which lines begin an order (the number is printed in the margin). */
+  var PAGES = [[
+    'In every signal this station is GANNET HEAD and', 'nothing else. No other name is to be used.', 'The work of the station is to listen. An operator',
+    'who is listening is ON WATCH. It is never a shift.', 'A receiver is a SET. The transmitter is the SENDER.', 'The sender is used only by order of the S.O.',
+    'An operator may not leave her set until her RELIEF,', 'the operator who takes the next watch, has come.', 'No operator closes her own watch. Only her relief',
+    'can close it, in the log and on the key, with', 'the one word that is kept for that purpose.', 'Until that word is sent, the watch is still open.'
+  ], [
+    'The log is the memory of the station. Every signal', 'heard is entered at once, in ink, at the true time.', 'No entry is ever to be rubbed out or written again.',
+    'A wrong entry is struck through, so that it can', 'still be read, and initialled by the operator.', 'No page is ever to be taken out of the log.',
+    'The safe is in the cellar. The S.O. and the senior', 'operator each hold a key to the cellar door.', 'Cipher sheets go back in the safe after each watch.',
+    'The word that opens the safe is changed on the first', 'of the month by the senior operator, and nobody else.', 'In a storm all eight aerial leads are to be watched.'
+  ], [
+    'The aerial box at the foot of the mast is Mr Ito’s.', 'Nobody else is to put a hand in it without reason.', 'If a lead comes out, put it back in its own socket.',
+    'With the leads out, the sender can be heard only as', 'far as the foot of the hill, and is no use to anybody.', 'The field telephone has one line and one bell. It is',
+    'for station business, and not for ordering fish.', 'Control is reached by the sender, and in no other way.', 'The S.O. is on call in his house every night of the',
+    'year. He is to be told at once of any distress call.', 'These orders can be changed only by Control. A true', 'copy is kept in the store, and may not be taken away.'
+  ]];
+  var NUM = [{ 1: 1, 3: 2, 5: 3, 7: 4, 9: 5, 12: 6 }, { 1: 7, 3: 8, 6: 9, 7: 10, 9: 11, 10: 12, 12: 13 }, { 1: 14, 3: 15, 4: 16, 6: 17, 8: 18, 9: 19, 11: 20 }];
+  /* part three of the strip, as it came off the printer */
+  var GROUPS = ['3.11.10', '2.6.2', '1.1.1', '2.8.8', '2.9.7', '2.7.6', '1.10.10', '3.3.9', '2.12.6', '3.1.3', '3.2.5', '2.9.4', '2.12.4', '2.12.5', '3.4.3'];
+
+  /* the shelves */
+  (function () {
+    var s = '', r, x, w, i = 0, bays = [[66, 540], [720, 1196]], names = ['WEATHER', 'SHIPPING', 'LOG', 'RETURNS', 'FUEL'], cols = ['#5d6a70', '#6b767b', '#55606a', '#7a735f', '#4d5a61'];
+    bays.forEach(function (b) {
+      s += '<rect x="' + (b[0] - 10) + '" y="96" width="' + (b[1] - b[0] + 20) + '" height="548" fill="#10151a"/>';
+      for (r = 0; r < 5; r++) {
+        for (x = b[0] + 4; x < b[1] - 44; x += w + 3) {
+          w = 38 + (i * 7) % 12; i++;
+          if (i % 11 === 0) { x += 22; continue; }
+          if (r === 2) s += '<rect x="' + x + '" y="' + (212 + r * 100 + (i % 3) * 3) + '" width="' + (w - 10) + '" height="' + (88 - (i % 3) * 3) + '" fill="' + (i % 2 ? '#2b2f3a' : '#252a35') + '"/><rect x="' + x + '" y="' + (228 + r * 100) + '" width="' + (w - 10) + '" height="5" fill="#b8923a"/>' +
+            '<text x="' + (x + (w - 10) / 2) + '" y="' + (262 + r * 100) + '" class="bx" style="fill:#b8923a">' + (20 + (i % 19)) + '</text>';
+          else s += '<rect x="' + x + '" y="' + (214 + r * 100 + (i % 4) * 2 - 100 * 0) + '" width="' + w + '" height="' + (86 - (i % 4) * 2) + '" rx="2" fill="' + cols[(i + r) % 5] + '"' + (i % 13 === 5 ? ' transform="rotate(5 ' + x + ' ' + (300 + r * 100) + ')"' : '') + '/>' +
+            '<rect x="' + (x + 5) + '" y="' + (232 + r * 100) + '" width="' + (w - 10) + '" height="26" fill="#d9d2b8"/><text x="' + (x + w / 2) + '" y="' + (243 + r * 100) + '" class="bx" font-size="6.5">' + names[r].slice(0, 4) + '</text>' +
+            '<text x="' + (x + w / 2) + '" y="' + (254 + r * 100) + '" class="bx">' + (1 + (i * 5) % 48) + '</text>';
+        }
+        s += '<rect x="' + (b[0] - 10) + '" y="' + (300 + r * 100) + '" width="' + (b[1] - b[0] + 20) + '" height="9" fill="#3a4650"/>';
+      }
+      s += '<rect x="' + (b[0] - 10) + '" y="96" width="9" height="548" fill="#3a4650"/><rect x="' + (b[1] + 1) + '" y="96" width="9" height="548" fill="#3a4650"/><rect x="' + (b[0] - 10) + '" y="200" width="' + (b[1] - b[0] + 20) + '" height="9" fill="#3a4650"/>';
+    });
+    $('#shelves').innerHTML = s.replace(/y="(\d+)"/g, function (m, y) { return 'y="' + (+y - 100) + '"'; }).replace(/rotate\(5 (\d+) (\d+)\)/g, function (m, a, b) { return 'rotate(5 ' + a + ' ' + (+b - 100) + ')'; });
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'zero', storyTitle: 'Station Zero', id: 'store', no: 'III', title: 'The Records Store',
+    sound: ['shore', { root: 40, bpm: 40, drop: ['mel', 'ost'], beds: [['sea', 0.45]] }],
+    go: 'Find the book',
+    intro: [
+      'Part two gave way to counting. The commonest letter on the sheet was E, the name of the boat gave you six letters at a stroke, and the rest came a word at a time. Written out under the plain alphabet, the cipher began with its own key word, LIFEBOAT, and the steel door opened to that.',
+      'So now you know what the tape is. It is your grandmother&rsquo;s own account of the night of the <i>Kittiwake</i>, and it is not the story on the plaque.',
+      'The records store is cold, and smells of old paper. Thirty years of nothing have happened in here, very quietly. Mrs Holloway has put two bookmarks in the station log, for the visitors.',
+      'What is left of the strip is part three: fifteen groups of numbers, with three numbers in each.'
+    ],
+    exit: {"next":"mast","w":{"b13fb3fc":"0f6866cc"}}, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+  ZERO.clock();
+  called = !!ER.flag('call3'); solved = !!ER.flag('s3');
+
+  var LOGA = '<h4>Station log &middot; night of 9 to 10 November</h4>' +
+    '<p class="q2"><b>0000</b> Middle watch opened by Operator Thorne. Wind south-west, rising.</p>' +
+    '<p class="q2"><b>0214</b> Weak distress call recieved by Station Officer from trawler Kittiwake.</p>' +
+    '<p class="q2"><b>0216</b> Bearing taken by S.O.: 304 degrees.</p>' +
+    '<p class="q2"><b>0220</b> Town lifeboat telephoned by S.O.</p>' +
+    '<p class="q2"><b>0311</b> Recieved from lifeboat: Kittiwake in tow, all six men safe.</p>' +
+    '<p class="q2"><b>0400</b> Watch relieved. D.M. &nbsp; Seen and signed: A. Quince, S.O.</p>' +
+    '<p class="gum">Mrs Holloway&rsquo;s bookmark says: &ldquo;The famous night! Show visitors.&rdquo; You look at the page for longer than a visitor would. Every other page of this book is in two or three different hands, one for each watch. This page is in one hand from top to bottom, even the initials. And it is not sewn in like the others. It has been stuck in, with gum.</p>';
+  var LOGB = '<h4>Station log &middot; 30 November &middot; the last page</h4>' +
+    '<p><b>2000</b> Watch opened. Sea moderate. Nothing heard. H.T.</p>' +
+    '<p><b>2340</b> Sender on. Tape running. H.T.</p>' +
+    '<p><b>2352</b> Main fuse drawn. Sender off. Tape not finished.</p>' +
+    '<p><b>2400</b> Station closed by order. Watch not relieved. H.T.</p>' +
+    '<p class="gum">The rest of the book is blank. You turn back through it. On every other night, every watch ends with a line in somebody else&rsquo;s writing: &ldquo;0400 Watch relieved. D.M.&rdquo; &ldquo;0800 Watch relieved. J.R.&rdquo; This is the only watch in the whole book that nobody ever closed.</p>';
+  var MEMO = '<h4>From the Station Officer &middot; to all operators</h4>' +
+    '<p>It has come to my notice that signals <s>recieved</s> <span class="red">received</span> during the night are being entered in the log in pencil.</p>' +
+    '<p>Every signal <s>recieved</s> <span class="red">received</span> at this station will be entered in ink, as Standing Orders require. I shall be looking at the log myself.</p>' +
+    '<p>A. Quince, S.O.</p><p class="red">i before e, Mr Quince, except after c. &nbsp;H.T.</p>';
+
+  function hints() {
+    if (!called) return ['phone', [
+      'The telephone is ringing again. There is one by the yard door.',
+      'Click on the green telephone on the wall, to the right of the door, and hear what Control wants this time.'
+    ]];
+    if (!solved) return ['book', [
+      'Part three is all numbers, in threes. Part two told you which book they belong to, and what the three numbers in each group are. That book is on the stand in front of you, on a chain.',
+      'Take the first group. Its first number is a page of Standing Orders, its second is a line on that page, and its third is a word in that line. Turn to the page, count down the lines, count along the words, and click the word. The small 5 and 10 at the edge of the page mark those lines.',
+      'Count every word in a line, the short ones too, and count names, capitals and S.O. as one word each. The red numbers in front of the orders stand in the margin: they are not part of any line. If your click is wrong, the sheet tells you which word you did click.'
+    ]];
+    return ['yard', [
+      'You know now where the true page is, where the key to it hangs, and what else Hester Thorne wants done. None of it is in this room.',
+      'The yard door is at the end of the shelves. Lift the bar.'
+    ]];
+  }
+  function pips() { ER.pips((called ? 1 : 0) + (solved ? 1 : 0) + (leaving ? 1 : 0), 3); }
+  function busy() { return leaving; }
+  function begin() {
+    pips();
+    if (called) return;
+    ER.narrate([
+      'Shelves to the ceiling, a reading desk, and a book on a chain. You have not taken three steps into the store before the telephone on the far wall begins to ring.'
+    ], function () { ZERO.ring($('#phone g')); });
+  }
+
+  ZERO.thing('#shelves', null, 'Box after box of other people&rsquo;s signals, taken down in pencil and never looked at again. WEATHER. SHIPPING. RETURNS. FUEL. And one long shelf of the station log, a volume for every year.', busy);
+  ZERO.thing('#ladder', null, 'A ladder on wheels, for the top shelf. On Tuesday, when nobody was looking, you rode it the whole length of the store.', busy);
+  ZERO.thing('#mouse', null, 'A mouse, on the shelf marked RETURNS. For thirty years it and its family have been the only staff. It looks at you as if you were late.', busy);
+  ZERO.thing('#lantern', 'storm lantern', 'A storm lantern, filled and lit. Whoever ran this place always kept one by the yard door, and on Monday you did the same without knowing why.', busy);
+  $('#loga').addEventListener('click', function () { if (!leaving) ER.read({ html: LOGA, cls: 'log', clue: { id: 'loga', title: 'The log: the night of the Kittiwake', kind: 'Station log' } }); });
+  $('#logb').addEventListener('click', function () { if (!leaving) ER.read({ html: LOGB, cls: 'log', clue: { id: 'logb', title: 'The log: the last page', kind: 'Station log' } }); });
+  $('#memo').addEventListener('click', function () { if (!leaving) ER.read({ html: MEMO, cls: 'memo', clue: { id: 'memo', title: 'A memo from the Station Officer', kind: 'Cork board' } }); });
+
+  $('#phone').addEventListener('click', function (e) {
+    if (leaving) return;
+    if (called && !ZERO.ringing()) { ER.wordAt(e.clientX, e.clientY, 'field telephone'); ER.say('Item 61. The same green telephone as in the other rooms, on the same line. It is quiet for the moment.'); return; }
+    ZERO.call('control', [
+      '&ldquo;You are through. Good. Now go straight down the store to the yard door at the far end. Out, turn left, and the engine shed is twenty yards off. Pull the big breaker down and the sender stops. That is all I ask of you.&rdquo;',
+      { q: 'Part three is a book cipher. The book is Standing Orders.', a: '&ldquo;Is it. Well, as it happens I have Standing Orders open in front of me, and I have done her sums for you. It says: TAPE IS A TEST. STOP IT. There. Now go.&rdquo;' },
+      { q: 'That is not what my copy gives.', a: '&ldquo;Then your copy is wrong. Before you leave that room, write one line in tonight&rsquo;s log, to keep things regular. Take it down: &lsquo;Midnight. Sender fault. Signal recieved by Control and cancelled.&rsquo;&rdquo;' },
+      { q: 'How do you spell that?', a: '&ldquo;Which word? Received? Nobody under forty can spell. R, E, C, I, E, V, E, D. Have you got it?&rdquo;' },
+      { q: 'I have got it.', a: '&ldquo;Then write it, and be fast. A log must say what happened.&rdquo;' }
+    ], { id: 'call3', title: 'Control: the third call', kind: 'Field telephone' }, function (seen) {
+      if (!seen) { if (!called) ZERO.ring($('#phone g')); return; }
+      if (!called) { called = true; ER.flag('call3', 1); pips(); ER.say('You do not write it. You have nothing to write it in: the log ends thirty years ago. And you would rather do your own sums.'); }
+    });
+  });
+
+  /* ---------- Standing Orders: page, line, word ---------- */
+  function openBook() {
+    var box = ER.el('div', 'bk'), page = 0, cur = 0, found = ER.flag('b3') || [], pageEl, msgEl, chips;
+    box.innerHTML = '<div class="bk-page"><h5>Standing Orders</h5><h6><span>Gannet Head Coast Wireless Station</span><span class="pg"></span></h6><div class="bk-lines"></div>' +
+      '<div class="bk-turn"><button type="button" data-d="-1">&larr; Back</button><span></span><button type="button" data-d="1">On &rarr;</button></div></div>' +
+      '<div class="bk-side"><h5>Part three &middot; off the printer</h5><div class="bk-strip">' + GROUPS.map(function (g, i) { return '<button type="button" data-i="' + i + '"><b>' + g + '</b><i></i></button>'; }).join('') + '</div><p class="pmsg"></p></div>';
+    pageEl = box.querySelector('.bk-lines'); msgEl = box.querySelector('.pmsg'); chips = ER.$$('.bk-strip button', box);
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function next() { for (var i = 0; i < GROUPS.length; i++) if (!found[(cur + i) % GROUPS.length]) return (cur + i) % GROUPS.length; return -1; }
+    function paint() {
+      var s = '';
+      PAGES[page].forEach(function (line, li) {
+        s += '<div class="bk-line"><u>' + (NUM[page][li + 1] ? NUM[page][li + 1] + '.' : '') + '</u><span>' + line.split(' ').map(function (w, wi) {
+          var id = (page + 1) + '.' + (li + 1) + '.' + (wi + 1), got = GROUPS.some(function (g, i) { return g === id && found[i]; });
+          return '<span class="bk-w' + (got ? ' got' : '') + '" data-id="' + id + '">' + w + '</span>';
+        }).join(' ') + '</span>' + ((li + 1) % 5 ? '' : '<em>' + (li + 1) + '</em>') + '</div>';
+      });
+      pageEl.innerHTML = s;
+      box.querySelector('.pg').textContent = 'page ' + (page + 1); box.querySelector('.bk-turn span').textContent = (page + 1) + ' of 3';
+      ER.$$('.bk-turn button', box).forEach(function (b) { b.disabled = page + (+b.getAttribute('data-d')) < 0 || page + (+b.getAttribute('data-d')) > 2; });
+      chips.forEach(function (c, i) { c.lastChild.textContent = found[i] || ''; c.className = (found[i] ? 'ok' : '') + (i === cur && !solved ? ' cur' : ''); });
+      box.setAttribute('data-page', page + 1); box.setAttribute('data-found', found.filter(Boolean).length);
+    }
+    function finish(first) {
+      var words = found.map(function (w) { return w.toUpperCase(); }), text = words.slice(0, 5).join(' ') + '. ' + words.slice(5, 10).join(' ') + '. ' + words.slice(10).join(' ') + '.';
+      solved = true; cur = -1; paint();
+      if (first) {
+        ER.flag('s3', 1); pips(); ER.sfx.ok();
+        ER.addClue('tape3', 'The tape, part three', '<h4>The tape &middot; part three</h4><p>' + GROUPS.join(' &nbsp;') + '</p><p class="pen">' + text + '</p>', 'strip', 'Off the printer');
+      }
+      msg('Fifteen words. You write them out and put in the full stops yourself: <b>' + text + '</b>');
+    }
+    box.querySelector('.bk-turn').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null; if (!b || b.disabled) return;
+      page += +b.getAttribute('data-d'); ER.sfx.paper(); paint();
+    });
+    box.querySelector('.bk-strip').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null, i; if (!b || solved) return;
+      i = +b.getAttribute('data-i'); if (found[i]) return;
+      cur = i; paint(); msg('Group <b>' + GROUPS[i] + '</b>. Page, line, word.');
+    });
+    pageEl.addEventListener('click', function (e) {
+      var w = e.target.closest ? e.target.closest('.bk-w') : null, id, p;
+      if (!w || solved) return;
+      id = w.getAttribute('data-id'); p = id.split('.');
+      if (id !== GROUPS[cur]) {
+        ZERO.burn(1); ER.shake(w); ER.sfx.no();
+        msg('You have your finger on page ' + p[0] + ', line ' + p[1] + ', word ' + p[2] + '. The group on the strip says <b>' + GROUPS[cur] + '</b>.');
+        return;
+      }
+      found[cur] = w.textContent.toLowerCase().replace(/[^a-z]/g, ''); ER.flag('b3', found); ZERO.sfx.punch();
+      msg('<b>' + GROUPS[cur] + '</b> is ' + found[cur].toUpperCase() + '.');
+      cur = next();
+      if (cur < 0) finish(true); else paint();
+    });
+    cur = next(); if (cur < 0) { finish(false); } else { paint(); msg('The strip says <b>' + GROUPS[cur] + '</b> first. Turn the pages with the buttons under the book, and put your finger on a word.'); }
+    ER.open('ov-lock', box);
+  }
+  $('#orders').addEventListener('click', function () {
+    if (leaving) return;
+    if (!called) { ER.say('STANDING ORDERS, on a chain, so that nobody could walk off with it. But the telephone is still ringing.'); return; }
+    openBook();
+  });
+  $('#ydoor').addEventListener('click', function () {
+    if (leaving) return;
+    if (!called) { ER.say('The yard door, with a wooden bar across it. Rain is coming in underneath. And the telephone is still ringing.'); return; }
+    if (!solved) { ER.say('Out there are the storm, the engine shed, and whatever Control wants pulled down inside it. In here is part three. You are not going out until you know what it says.'); return; }
+    if (!ER.exit([(ER.flag('b3') || []).join(' ')], { delay: 4200 })) { ER.say('The bar will not lift.'); return; }
+    leaving = true; pips(); ZERO.sfx.bolt(); setTimeout(ZERO.sfx.gust, 500);
+    ER.say('You lift the bar. The wind takes the door out of your hand, and very nearly takes the lantern out of the other.', 4000);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Press Hall · Seven Down</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="seven.css">
+<style>
+  body{--bg:#080c14;--accent:#f4e04d;--font-display:'Stardos Stencil',serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(7,10,17,.96);--tc-ink:#e9eef6;--cap-bg:rgba(7,10,17,.94);--panel:#111723;--face-bg:#0f1a2a;--q-ink:#e6d58a;--fade:#04060a;--hud-bg:rgba(7,10,17,.82)}
+  .tc-room{font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .stn{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  #redlamp{animation:rl 1.6s steps(1,end) infinite}
+  @keyframes rl{50%{opacity:.25}}
+  #redglow{animation:rg 1.6s steps(1,end) infinite}
+  @keyframes rg{0%{opacity:.5}50%{opacity:.12}}
+  .web{opacity:.96}
+  #quillFig{opacity:0;transition:opacity 1.2s}
+  #quillFig.on{opacity:1}
+  #steamP path{animation:st 4.2s ease-out infinite;opacity:0}
+  #steamP path:nth-child(2){animation-delay:-1.6s}#steamP path:nth-child(3){animation-delay:-2.9s}
+  @keyframes st{0%{opacity:0;transform:translateY(10px)}25%{opacity:.4}100%{opacity:0;transform:translateY(-60px)}}
+
+  /* the wall of famous front pages */
+  .fw{display:grid;grid-template-columns:400px minmax(0,560px);gap:24px;width:min(1010px,96vw);align-items:start}
+  .fw-wall{position:relative;padding:14px 22px 14px 56px;background:#3a2f2a;background-image:linear-gradient(rgba(0,0,0,.28) 2px,transparent 2px),linear-gradient(90deg,rgba(0,0,0,.28) 2px,transparent 2px),linear-gradient(#4a3a33,#33282333);
+    background-size:100% 26px,64px 26px,auto;box-shadow:0 26px 70px rgba(0,0,0,.65),inset 0 0 0 3px #1f1815}
+  .fw-wall h6{margin:0 0 8px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:16px;letter-spacing:.18em;color:#e9dcc0;text-align:center}
+  .hk{position:relative;height:108px;margin:0 0 9px;border:2px dashed rgba(244,224,77,.35);border-radius:3px;display:flex;align-items:center;justify-content:center}
+  .hk:before{content:attr(data-n);position:absolute;left:-40px;top:50%;margin-top:-17px;width:30px;height:34px;border-radius:50% 50% 50% 50%;background:linear-gradient(135deg,#f5df98,#c79b3b 55%,#7d5f1d);color:#3a2a08;font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;line-height:34px;text-align:center;box-shadow:0 3px 6px rgba(0,0,0,.5)}
+  .hk:last-child{margin-bottom:0}
+  .hk.full{border-color:transparent}
+  .fr{width:316px;height:100px;box-sizing:border-box;padding:7px 12px 6px;background:#f3eedf linear-gradient(170deg,rgba(255,255,255,.5),rgba(120,100,60,.2));color:#141518;border:6px solid #17120e;box-shadow:0 5px 12px rgba(0,0,0,.55);text-align:center;-webkit-user-select:none;user-select:none}
+  .fr small{display:flex;justify-content:space-between;font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#5d594d;border-bottom:1px solid #141518;padding-bottom:2px;margin-bottom:4px}
+  .fr b{display:block;font-family:'Playfair Display',serif;font-weight:900;font-size:22px;line-height:1.05;letter-spacing:.02em}
+  .fr i{display:block;margin-top:3px;font-family:'EB Garamond',serif;font-style:italic;font-size:14px;line-height:1.1;color:#3b382f}
+  .fw-pile{display:flex;flex-wrap:wrap;gap:12px 14px;align-content:flex-start;min-height:336px;padding:14px;background:rgba(0,0,0,.35);border:1px dashed rgba(255,255,255,.25)}
+  .fw-pile .fr:nth-child(odd){transform:rotate(-2deg)}.fw-pile .fr:nth-child(even){transform:rotate(1.6deg)}
+  .fw.done .fr{border-color:#3a2a08;box-shadow:0 5px 12px rgba(0,0,0,.55),0 0 0 2px #c79b3b}
+  .fw-side .sv-msg{margin-top:12px;min-height:112px}
+  .fw-side .btn{display:none;margin-top:6px}
+  .fw-side .btn.on{display:inline-block}
+  @media (max-width:1330px){.fw{grid-template-columns:380px minmax(0,520px);gap:18px}.fr{width:298px}.fr b{font-size:20px}}
+  @media (max-width:900px){.fw{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c121d"/><stop offset="1" stop-color="#162030"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3340"/><stop offset="1" stop-color="#11161f"/></linearGradient>
+  <linearGradient id="ironG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f5a4a"/><stop offset="1" stop-color="#16302a"/></linearGradient>
+  <linearGradient id="cylG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dfe6ea"/><stop offset=".5" stop-color="#8f9aa3"/><stop offset="1" stop-color="#4a545e"/></linearGradient>
+  <linearGradient id="reelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c9cdd2"/><stop offset=".3" stop-color="#fbfaf4"/><stop offset=".8" stop-color="#e3e0d4"/><stop offset="1" stop-color="#a8a495"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <radialGradient id="redG"><stop offset="0" stop-color="#ff4a3a" stop-opacity=".7"/><stop offset="1" stop-color="#ff4a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="coldG"><stop offset="0" stop-color="#dfeaff" stop-opacity=".3"/><stop offset="1" stop-color="#dfeaff" stop-opacity="0"/></radialGradient>
+  <clipPath id="boxC"><rect x="286" y="462" width="218" height="214"/></clipPath>
+  <radialGradient id="vig2" cx="52%" cy="50%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#01030a" stop-opacity=".34"/><stop offset="1" stop-color="#01030a" stop-opacity=".92"/></radialGradient>
+  <pattern id="haz" width="44" height="44" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="44" height="44" fill="#f4e04d"/><rect width="22" height="44" fill="#141518"/></pattern>
+  <pattern id="brick" width="96" height="48" patternUnits="userSpaceOnUse"><path d="M0 0H96M0 24H96M0 0V24M48 24V48" stroke="#070b12" stroke-width="2.500" fill="none"/></pattern>
+  <pattern id="lat" width="30" height="60" patternUnits="userSpaceOnUse"><path d="M0 0L15 30L0 60M30 0L15 30L30 60" fill="none" stroke="#b08a3a" stroke-width="3"/></pattern>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1160" fill="url(#wallG)"/><rect x="-1000" y="-400" width="3600" height="1160" fill="url(#brick)" opacity=".8"/>
+<rect x="-1000" y="752" width="3600" height="600" fill="url(#floorG)"/><rect x="-1000" y="752" width="3600" height="22" fill="url(#haz)" opacity=".85"/>
+<ellipse cx="1100" cy="330" rx="760" ry="420" fill="url(#coldG)" pointer-events="none"/>
+
+<!-- the iron gallery, and the stairs that everybody is using tonight -->
+<g id="gallery" class="hot">
+  <rect x="300" y="186" width="2300" height="14" fill="#2c3644"/><g id="rails" stroke="#3d4a5c" stroke-width="5"></g><path d="M300 118H2600" stroke="#4a586c" stroke-width="7"/>
+  <path d="M300 200L130 420" stroke="#2c3644" stroke-width="12"/><g id="treads" stroke="#3d4a5c" stroke-width="7"></g>
+</g>
+<g id="quillFig" pointer-events="none"><ellipse cx="1180" cy="98" rx="20" ry="24" fill="#0a0d13"/><path d="M1148 186q0-66 32-66t32 66z" fill="#0a0d13"/><path d="M1204 150l22 8" stroke="#0a0d13" stroke-width="8" stroke-linecap="round"/><circle cx="1230" cy="160" r="7" fill="#f4e04d"/></g>
+
+<!-- the lift, at the bottom of its shaft -->
+<g id="door" class="hot">
+  <rect x="34" y="330" width="210" height="424" fill="#04060a"/>
+  <rect x="64" y="420" width="150" height="334" fill="#16110a"/><rect x="64" y="420" width="150" height="334" fill="url(#lat)" opacity=".85"/>
+  <rect x="56" y="412" width="166" height="11" fill="url(#brassG)"/><path d="M64 420V754M214 420V754" stroke="#7d5f1d" stroke-width="6"/>
+  <g transform="rotate(4 139 560)"><path d="M139 520v18" stroke="#d9d5c8" stroke-width="2"/><rect x="92" y="536" width="94" height="52" fill="#fbf8ee"/>
+    <text x="139" y="558" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="19" fill="#2450a8" letter-spacing="1">OUT OF</text><text x="139" y="579" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="19" fill="#2450a8" letter-spacing="1">ORDER</text></g>
+  <path d="M34 754V330H244V754" fill="none" stroke="#2c3644" stroke-width="12"/>
+</g>
+<g id="dial" class="hot">
+  <path d="M87 398a52 52 0 0 1 104 0z" fill="url(#brassG)"/><path d="M94 396a45 45 0 0 1 90 0z" fill="#efe9d8"/>
+  <g id="dialNums" font-family="Oswald,sans-serif" font-weight="600" font-size="10" fill="#1c1b18" text-anchor="middle"></g>
+  <path d="M139 396L176 382" stroke="#c8281d" stroke-width="3.600" stroke-linecap="round"/><circle cx="139" cy="396" r="5" fill="#1c1b18"/>
+</g>
+
+<!-- the foreman's box -->
+<g id="strand" class="hot">
+  <rect x="270" y="440" width="250" height="314" fill="#3a2c1b"/><rect x="286" y="462" width="218" height="214" fill="#0f1a2a"/><use href="#ch-strand" x="296" y="462" width="198" height="257.400"/>
+  <rect x="286" y="462" width="218" height="214" fill="none" stroke="#6e5536" stroke-width="10"/><path d="M395 462V676" stroke="#6e5536" stroke-width="5" opacity=".0"/>
+  <rect x="270" y="676" width="250" height="78" fill="#4a3826"/><rect x="262" y="428" width="266" height="16" fill="#5a4630"/>
+  <rect x="330" y="694" width="130" height="34" fill="#141518"/><text x="395" y="718" class="stn" font-size="20" fill="#f4e04d" letter-spacing="4">FOREMAN</text>
+</g>
+
+<!-- five hooks, and five frames that have been taken down -->
+<g id="frames" class="hot">
+  <rect x="548" y="240" width="150" height="514" fill="#1a2332"/><rect x="548" y="240" width="150" height="514" fill="none" stroke="#2c3644" stroke-width="4"/>
+  <g id="hooks"></g>
+  <g id="pile"><rect x="562" y="640" width="118" height="100" fill="#17120e" transform="rotate(-9 621 690)"/><rect x="572" y="652" width="98" height="76" fill="#f3eedf" transform="rotate(-9 621 690)"/><rect x="578" y="636" width="118" height="100" fill="#17120e" transform="rotate(5 637 686)"/><rect x="588" y="648" width="98" height="76" fill="#f3eedf" transform="rotate(5 637 686)"/><g stroke="#141518" stroke-width="5" transform="rotate(5 637 686)"><path d="M598 668h78"/></g><g stroke="#5d594d" stroke-width="2" transform="rotate(5 637 686)"><path d="M598 686h78M598 698h60M598 710h70"/></g></g>
+  <text x="623" y="232" class="stn" font-size="15" fill="#8f9aa5" letter-spacing="3">FRONT PAGES</text>
+</g>
+
+<!-- the clock, the bell and the lamp -->
+<g id="pclock" class="hot"><circle cx="623" cy="110" r="62" fill="#070b12"/><circle cx="623" cy="110" r="53" fill="#efe9d8"/><g stroke="#1c1b18" stroke-width="4"><path d="M623 64v11M623 145v11M577 110h11M658 110h11"/></g>
+  <path id="hh" d="M623 110V80" stroke="#1c1b18" stroke-width="7" stroke-linecap="round"/><path id="mh" d="M623 110V68" stroke="#1c1b18" stroke-width="4" stroke-linecap="round"/><circle cx="623" cy="110" r="5" fill="#c8281d"/></g>
+<g id="bell" class="hot"><circle id="redglow" cx="760" cy="96" r="80" fill="url(#redG)"/><rect x="744" y="60" width="32" height="14" fill="#2c3644"/><circle id="redlamp" cx="760" cy="96" r="20" fill="#ff4a3a"/><circle cx="760" cy="96" r="24" fill="none" stroke="#2c3644" stroke-width="5"/>
+  <path d="M800 80q26-22 52 0v22h-52z" fill="url(#brassG)"/><circle cx="826" cy="108" r="6" fill="#7d5f1d"/></g>
+
+<!-- the press -->
+<g id="press" class="hot">
+  <rect x="770" y="250" width="800" height="504" rx="10" fill="url(#ironG)"/><rect x="770" y="250" width="800" height="504" rx="10" fill="none" stroke="#0c1a16" stroke-width="6"/>
+  <g fill="#0b1512"><path d="M800 290h220v420H800zM1060 290h220v420h-220zM1320 290h220v420h-220z"/></g>
+  <g id="units"></g>
+  <path d="M770 262H1570" stroke="#3d6a5a" stroke-width="5"/><rect x="770" y="730" width="800" height="24" fill="url(#haz)" opacity=".8"/>
+  <g fill="url(#brassG)"><circle cx="1040" cy="270" r="9"/><circle cx="1300" cy="270" r="9"/></g>
+  <rect x="1090" y="300" width="160" height="44" fill="#141518"/><text x="1170" y="331" class="stn" font-size="26" fill="#f4e04d" letter-spacing="3">CLARION</text>
+  <g id="steamP" stroke="#dfe6ea" stroke-width="7" stroke-linecap="round" fill="none"><path d="M1520 250q-14-16 0-34"/><path d="M1534 248q14-14 2-30"/><path d="M1508 250q-10-12 4-26"/></g>
+</g>
+<!-- reels of newsprint -->
+<g id="reels" class="hot">
+  <ellipse cx="850" cy="838" rx="150" ry="16" fill="#000" opacity=".4"/>
+  <rect x="712" y="700" width="236" height="138" rx="8" fill="url(#reelG)"/><ellipse cx="712" cy="769" rx="16" ry="69" fill="#e3e0d4"/><ellipse cx="712" cy="769" rx="6" ry="24" fill="#6e5536"/><ellipse cx="948" cy="769" rx="16" ry="69" fill="#a8a495"/>
+  <rect x="980" y="738" width="206" height="118" rx="8" fill="url(#reelG)"/><ellipse cx="980" cy="797" rx="14" ry="59" fill="#e3e0d4"/><ellipse cx="980" cy="797" rx="5" ry="20" fill="#6e5536"/><ellipse cx="1186" cy="797" rx="14" ry="59" fill="#a8a495"/>
+  <g transform="rotate(-3 830 730)"><rect x="770" y="716" width="120" height="30" fill="#f4e04d"/><text x="830" y="738" class="stn" font-size="16" fill="#141518" letter-spacing="2">5 MILES</text></g>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1760" fill="url(#vig2)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="sv-go" id="go">Climb the back stairs</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="seven.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, told = {}, met = false, hung = false, fwBox = null, inWall = false;
+  var BEFORE = ['a15', 'a5', 'd4', 'a14', 'd13', 'd2', 'd6', 'd12', 'a16', 'd3', 'a1', 'a8', 'a9', 'a10'], MINE = ['d11', 'd7'];
+  /* five front pages, as they lie on the floor. When: year, month, day. */
+  var FRAMES = [
+    { id: 'a', when: 19270523, date: 'Monday 23 May 1927', head: 'LINDBERGH LANDS', sub: 'To Paris, alone across the Atlantic, in thirty-three hours' },
+    { id: 'b', when: 19450508, date: 'Tuesday 8 May 1945', head: 'THE WAR IS OVER', sub: 'The Prime Minister will speak at three o&rsquo;clock' },
+    { id: 'c', when: 19181112, date: 'Tuesday 12 November 1918', head: 'PEACE', sub: 'The guns stopped at eleven o&rsquo;clock yesterday morning' },
+    { id: 'd', when: 19530602, date: 'Tuesday 2 June 1953', head: 'EVEREST IS CLIMBED', sub: 'The news reached London on the eve of the Coronation' },
+    { id: 'e', when: 19361211, date: 'Friday 11 December 1936', head: 'ABDICATION', sub: 'The King gives up his throne' }
+  ];
+
+  /* rails and treads of the gallery, the hooks, the units of the press, the dial */
+  (function () {
+    var s = '', x, i, a, u, t = '';
+    for (x = 320; x < 2600; x += 46) s += '<path d="M' + x + ' 118V186"/>';
+    $('#rails').innerHTML = s; s = '';
+    for (i = 1; i < 8; i++) s += '<path d="M' + (300 - i * 21.2 - 16) + ' ' + (200 + i * 27.5) + 'h44"/>';
+    $('#treads').innerHTML = s; s = '';
+    for (i = 0; i < 5; i++) s += '<circle cx="623" cy="' + (276 + i * 72) + '" r="7" fill="url(#brassG)"/><path d="M623 ' + (276 + i * 72) + 'v16" stroke="#c79b3b" stroke-width="3"/><rect x="578" y="' + (294 + i * 72) + '" width="90" height="44" fill="none" stroke="#2c3644" stroke-width="2" stroke-dasharray="6 5"/>';
+    $('#hooks').innerHTML = s; s = '';
+    for (u = 0; u < 3; u++) {
+      x = 910 + u * 260;
+      s += '<circle cx="' + x + '" cy="420" r="76" fill="url(#cylG)"/><circle cx="' + x + '" cy="420" r="76" fill="none" stroke="#0b1512" stroke-width="5"/><circle cx="' + x + '" cy="420" r="12" fill="#22282e"/>' +
+        '<circle cx="' + x + '" cy="580" r="76" fill="url(#cylG)"/><circle cx="' + x + '" cy="580" r="76" fill="none" stroke="#0b1512" stroke-width="5"/><circle cx="' + x + '" cy="580" r="12" fill="#22282e"/>' +
+        '<circle cx="' + (x - 84) + '" cy="326" r="20" fill="#8f9aa3"/><circle cx="' + (x + 84) + '" cy="326" r="20" fill="#8f9aa3"/><circle cx="' + (x - 88) + '" cy="672" r="18" fill="#8f9aa3"/><circle cx="' + (x + 88) + '" cy="672" r="18" fill="#8f9aa3"/>' +
+        '<path class="web" d="M' + (x - 88) + ' 706V672L' + (x - 76) + ' 580Q' + x + ' 500 ' + (x + 76) + ' 420L' + (x + 84) + ' 326V292" fill="none" stroke="#fbfaf4" stroke-width="9" stroke-linejoin="round"/>';
+    }
+    $('#units').innerHTML = s; s = '';
+    ['B', 'G', '1', '2', '3', '4', '5', '6', '7'].forEach(function (tx, n) {
+      a = Math.PI * (1 - (n + 0.5) / 9);
+      s += '<text x="' + (139 + 36 * Math.cos(a)).toFixed(1) + '" y="' + (396 - 34 * Math.sin(a) + 3).toFixed(1) + '">' + tx + '</text>';
+    });
+    $('#dialNums').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'seven', storyTitle: 'Seven Down', id: 'press', no: 'IV', title: 'The Press Hall',
+    go: 'Go down',
+    intro: [
+      'Four lines of loose type lay in a heap on Mr Fenwick&rsquo;s stone, and each was an answer with its letters in the wrong order. FLY AS IF made FALSIFY, RE CLUES made RECLUSE, POOR MIST made IMPOSTOR and HOLE POOL made LOOPHOLE. You read them in a mirror, because metal type is back to front.',
+      'The mirror showed you something else. In the middle of tomorrow&rsquo;s front page, the Clarion says that Sphinx is its own Puzzles Editor, Mr Edgar Quill. And Mr Quill has sent down a crossword of his own, with CAT in it twice.',
+      'The press hall is under the street. Fourteen answers are in ink. One clue is left, and one long answer down the middle of the grid that has no clue at all.'
+    ],
+    exit: {"next":"landing","w":{"bec53924":"e8f423eb"}}, tags: {"a15":["b98f0d73"],"a15@":["33c31225","63853d9f","4d4787af"],"a15?":["31732b16","2c74568d","f23791cd"],"a15#":["635a6bdb"],"a5":["39b2eda5"],"a5@":["3fc794ad","60c764bf","d315350a"],"a5?":["5d536b1c","d9794104","3bdcc2dd"],"a5#":["965ecf2f"],"d4":["cb184b21"],"d4@":["beb20b03","b273142e","c9eec205","b01e4ae1","9629b406"],"d4?":["9c129e3e","e264a92d","cf07c2c5","ecf79d13","12f7df2e"],"d4#":["f195dc9a"],"a14":["af3142fb"],"a14@":["b2801ae3","c1c9ed27","54502f64","e674991e","1e8f093a","185a2034","673bdf30"],"a14?":["1702a003","9f81136f","f41f178a","2379221a","0fa26f68","4380e4f3","4f09f869"],"a14#":["bce2d22d"],"d13":["653ba9eb"],"d13@":["8bb9d668","f3cc521d","a346b352","f9caf8d2"],"d13?":["28bd6a67","e26a211f","009adf2b","898c9fb8"],"d13#":["b57f99f4"],"d2":["adbf4f88"],"d2@":["eb59e629","4b6a8da7","68dd8f2e","8fedf6b7","91b47c53"],"d2?":["0f9dea6e","c56fe32f","81602c3d","b276c2c9","0cb288ea"],"d2#":["3f6033fe"],"d6":["2db0bbce"],"d6@":["276764a0","0287d7e5","73b2b087","7046eca5"],"d6?":["5b580296","650560b2","0373b26e","1c63be4b"],"d6#":["6a0c5da0"],"d12":["b5798484"],"d12@":["815928d6","a8fa1b4e","b9afd0bf","46519571","fa1dfeec"],"d12?":["35fc7b17","1d037d0a","9f895365","9ad73222","1dc9e9ba"],"d12#":["de4da645"],"a16":["bea73e49"],"a16@":["2e6d920c","576caed1","48bba904","194fae13","da36d2b3","df3ebc73","c7e8fb37"],"a16?":["97fbaff9","e3fc6760","f490d437","3eba56d2","932e6cf3","cefc452c","0a737e6c"],"a16#":["725dc325"],"d3":["3653f9b0"],"d3@":["ab4c31b1","fb0385f2","2660ee7a","25f02a0e","69e79920","e14980aa","7ed1e516","f63cf02b","3edb0f2d","eb989440"],"d3?":["aaf6f078","2024dab0","d10b5f6b","015f521f","3e3bbfef","550061db","0f79c9f3","fb56fc8a","e5bec88d","5c48ff5f"],"d3#":["9ed62de3"],"a1":["1cd45579"],"a1@":["c4270980","ceea3267","ad8f3ca7","fcac9cbd","cbe83fde","97aa97f3","123ca3d2"],"a1?":["07c4480a","06a68be1","b5c0c3e5","5c8165ce","509fd17a","a6e21d9b","f65fb06f"],"a1#":["db33e14a"],"a8":["51ae48e1"],"a8@":["825c41a2","293eff6c","df028a9b","9a314a48","f48b8f55","984ab429","b18cc07c"],"a8?":["6e21167e","225bcbcc","7dcd617e","e36dc5d8","c57ff812","28549b53","8d03d0f1"],"a8#":["b6ce9b2b"],"a9":["d856e08a"],"a9@":["8217b563","94d0240e","3c1d717c","37ab80d2","5c44c329","14cdf674","2e255bcd","871fa950"],"a9?":["caf60966","a0421b5c","d35bee03","93d08c7f","94bb8a87","f01533c3","dc6b96ff","788c5fb2"],"a9#":["83351988"],"a10":["99438993"],"a10@":["fb7b86e2","b26d2dd9","852aae5c","e4b0293c","c4f6f4ad","f4560da4","8cdf4d79","ee383345"],"a10?":["2dbdc7af","ee1ab036","78a3a1b8","c528cc63","0767edd0","8411d7a6","51678e54","7850a9c2"],"a10#":["9617bde6"],"d11":["bfa960e4"],"d11@":["03475e08","9cc61c77","b66f30e3","05e21e10","4dd66386"],"d11?":["fb065096","0cccc5b0","88820a63","f62ede4c","e7e77720"],"d11#":["8510a0ff"],"d7":["e11b436a"],"d7@":["d85b80e2","f2af3644","572a28f2","d8f25b41","debd42c0","44ce4490","aea4f57b","91d3926c","cdf44412","1fc8ed26"],"d7?":["c0be9abe","5db58bef","22204892","9f668b9a","e2659648","dca34921","07967494","026cb47b","2bfbb536","b4e4dee0"],"d7#":["da8d110d"]},
+    sound: ['press', { root: 45, bpm: 104, mood: 'tense' }],          /* the clock is running now: lower, quicker, and the second motor from the start */
+    hints: hints, onBegin: begin
+  });
+  SEV.clock({ from: 106, to: 134 }); SEV.wall('#hh', '#mh', 623, 110);
+  SEV.ensure(BEFORE);
+  nextFile = ER.flag('p-file') || null; told = ER.flag('p-told') || {}; met = !!ER.flag('p-met'); hung = !!ER.flag('p-hung');
+  if (nextFile) $('#quillFig').classList.add('on');
+
+  var WRONG = {
+    d11: { peace: 'PEACE is the head of the first frame. The clue wants what the five heads make together: a letter from each.',
+      press: 'A good guess for a press hall. But the clue says to READ THE HEADS FROM THE TOP: the answer is hanging on the wall, a letter at a time.',
+      paper: 'A good guess for a press hall. But the clue says to READ THE HEADS FROM THE TOP: the answer is hanging on the wall, a letter at a time.',
+      print: 'A good guess for a press hall. But the clue says to READ THE HEADS FROM THE TOP: the answer is hanging on the wall, a letter at a time.',
+      pages: 'A good guess for a press hall. But the clue says to READ THE HEADS FROM THE TOP: the answer is hanging on the wall, a letter at a time.' }
+  };
+  var HINTS = {
+    d11: ['11 Down sends you to the five framed front pages. They must be hanging in their right order before anybody can read them from the top.',
+      'In a crossword, the HEAD of a word is its first letter. Five frames, five heads, five squares.',
+      'Peace, Lindbergh, Abdication: P, L, A. Go on down the wall.'],
+    d7: ['7 Down has no clue. But five of its ten letters are in ink already, from the answers that cross it, and the sheet says how it is divided: 3, 2, 5.',
+      'Three words. You know every second letter. And you have walked past these three words on every floor of the building tonight.',
+      'They are written on a card, in blue pencil, and the card is hanging on a gate. The first word is OUT.']
+  };
+  function hints() {
+    if (nextFile) return ['go', ['The last answer is the card on the lift, and the arrow over the gate points to the top of the building. Use the button at the bottom of the screen, while Mr Strand keeps Mr Quill busy.']];
+    if (!met) return ['strand', ['A large man is watching you from the glass box marked FOREMAN. Nothing happens in this hall without him. Speak to him first.']];
+    var k = SEV.cur();
+    if (k && HINTS[k]) return [k, HINTS[k]];
+    if (!hung) return ['hang', [
+      'The clue for 11 Down talks about five famous heads. Five framed front pages have been taken down from the wall: click on them.',
+      'Mr Strand says that the oldest goes at the top. Read the date on each front page: the day, the month and the year. Drag each frame to a hook, or click the frame and then the brass number of the hook.',
+      'The hooks from the top: 1918, 1927, 1936, 1945, 1953.'
+    ]];
+    if (!SEV.word('d11')) return ['d11open', ['The frames are in their places. Now open the grid, with the button at the top of the screen, and do 11 Down.']];
+    return ['d7open', ['One answer is left, and it has no clue. Open the grid and look at 7 Down: five of its letters are there already.']];
+  }
+  function isBusy() { return busy; }
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('p-told', told); return true; }
+  function after() {
+    ER.pips((hung ? 1 : 0) + SEV.count(MINE), 3);
+    if (nextFile) $('#go').classList.add('on');
+  }
+  function begin() {
+    after();
+    if (!tell('in')) { ER.say('The press hall. The machine is still waiting.'); return; }
+    busy = true;
+    ER.narrate([
+      'A machine as long as a street, three storeys high, and perfectly silent. White paper runs through it from one end to the other, waiting.',
+      'High up on the wall a red lamp goes on and off. Under it, a clock.',
+      'A large man in a glass box is looking at the clock, and then at you, and then at the clock.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- Mr Strand ---------- */
+  function strand() {
+    var c = window.CAST.strand;
+    ER.talk({ who: c.who, role: c.role, face: window.FACE('strand'), last: 'Go to the frames',
+      lines: [
+        '&ldquo;PAGE TWELVE!&rdquo; The man in the glass box shouts it, although the presses are silent. Thirty years beside them have left him with only one kind of voice.',
+        { q: 'I am from the puzzles desk.', a: '&ldquo;THEN WHERE IS IT? I have fifteen pages on the machine and a hole where the sixteenth goes. At half past one the plate for page twelve is made, with whatever is in it. At two I press the button.&rdquo;' },
+        { q: 'I have to read the five famous heads.', a: '&ldquo;THE FRAMES? They are down. The Lord Mayor is coming at ten, so they have been polished. Five front pages, and old Mr Penhale hung them himself. Hang them back, if you want to read them. The oldest goes at the top. It always has.&rdquo;' },
+        { q: 'Has the lift been out of order all night?', a: '&ldquo;SINCE SIX. Lovage took the Editor down at ten to six, the same as every night, and tonight Mr Quill was with her. Then the lift went up again, empty. Then the cards. Every plate tonight has come down those stairs on a man&rsquo;s back.&rdquo;' },
+        '&ldquo;AND MIND THE GALLERY. Mr Quill has telephoned twice to say that he is coming down to see his page made. If he comes, he will come by the stairs.&rdquo;'
+      ],
+      clue: { id: 'strand', title: 'Mr Strand: the frames are down', kind: 'Foreman' },
+      done: function (seen) { if (seen && !met) { met = true; ER.flag('p-met', 1); ER.say('Five hooks on the wall, one above another, and five frames leaning against it on the floor.'); } }
+    });
+  }
+  $('#strand').addEventListener('click', function () { if (!busy) strand(); });
+
+  /* ---------- the wall of front pages ---------- */
+  function build() {
+    var box = ER.el('div', 'fw'), wall, pile, msgEl, gbtn, hooks, i, f;
+    box.innerHTML = '<div class="fw-wall"><h6>THE OLDEST AT THE TOP</h6>' + [1, 2, 3, 4, 5].map(function (n) { return '<div class="hk" data-n="' + n + '"></div>'; }).join('') + '</div>' +
+      '<div class="fw-side"><div class="fw-pile"></div><p class="sv-msg"></p><button type="button" class="btn" id="b-grid">Open the grid</button></div>';
+    wall = box.querySelector('.fw-wall'); pile = box.querySelector('.fw-pile'); msgEl = box.querySelector('.sv-msg'); gbtn = box.querySelector('#b-grid'); hooks = ER.$$('.hk', box);
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function frame(f) {
+      var n = ER.el('div', 'fr dnd-item', '<small><span>The Clarion</span><span>' + f.date + '</span></small><b>' + f.head + '</b><i>' + f.sub + '</i>');
+      n.setAttribute('data-id', f.id); n.setAttribute('data-when', f.when);
+      return n;
+    }
+    function order() { return hooks.map(function (h) { var x = h.querySelector('.fr'); return x ? +x.getAttribute('data-when') : 0; }); }
+    function mark() { hooks.forEach(function (h) { h.classList.toggle('full', !!h.querySelector('.fr')); }); box.setAttribute('data-order', hooks.map(function (h) { var x = h.querySelector('.fr'); return x ? x.getAttribute('data-id') : '-'; }).join('')); }
+    if (hung) FRAMES.slice().sort(function (a, b) { return a.when - b.when; }).forEach(function (f, n) { hooks[n].appendChild(frame(f)); });
+    else FRAMES.forEach(function (f) { pile.appendChild(frame(f)); });
+    mark();
+    function done(first) {
+      box.classList.add('done'); gbtn.classList.toggle('on', !SEV.word('d7'));
+      msg(first ? 'Five front pages, with the oldest at the top. &ldquo;THAT IS HOW HE HUNG THEM,&rdquo; says Mr Strand. &ldquo;Nobody ever asked him why he chose those five.&rdquo; The clue for 11 Down said: read the five famous heads from the top.'
+        : SEV.word('d11') ? 'Five front pages, five heads: PLATE.' : 'Five front pages, with the oldest at the top. The clue for 11 Down said: read the five famous heads from the top.');
+    }
+    ER.dnd(box, { item: '.fr', slot: '.hk', home: pile, lock: function () { return hung || busy; }, change: function () {
+      var o = order(), sorted, wrong, n;
+      mark(); SEV.sfx.hook();
+      if (o.indexOf(0) >= 0) { msg('Drag each frame to a hook, or click the frame and then the brass number of the hook. The oldest goes at the top.'); return; }
+      sorted = o.slice().sort(function (a, b) { return a - b; });
+      wrong = o.filter(function (v, j) { return v !== sorted[j]; }).length;
+      if (!wrong) { hung = true; ER.flag('p-hung', 1); ER.sfx.ok(); after(); done(true); return; }
+      SEV.slip(1); ER.sfx.no(); n = (+box.getAttribute('data-miss') || 0) + 1; box.setAttribute('data-miss', n);
+      if (o.join() === sorted.slice().reverse().join()) msg('You have hung them with the newest at the top. Mr Strand makes a noise like a press starting up. &ldquo;UPSIDE DOWN! Old Mr Penhale would come back and haunt you.&rdquo;');
+      else msg('&ldquo;NO.&rdquo; Mr Strand does not even turn his head. &ldquo;' + ['', '', 'Two', 'Three', 'Four', 'All five'][wrong] + ' of them are on the wrong hooks. The oldest at the top. Read the dates: the year first, then the month.&rdquo;');
+    } });
+    gbtn.addEventListener('click', function () { ER.close(); openGrid(); });
+    box.done = done;
+    if (hung) done(false); else msg('Five front pages in black frames, each from a day that nobody forgot. Drag each frame to a hook, or click the frame and then the brass number of the hook. Mr Strand says that the oldest goes at the top.');
+    return box;
+  }
+  function openWall() {
+    if (busy) return;
+    if (!met) { ER.say('Five black frames lean against the wall, face out. In the glass box, a large man shakes his head at you. Speak to him first.'); return; }
+    if (!fwBox) fwBox = build(); else if (hung) fwBox.done(false);
+    inWall = true;
+    ER.open('ov-lock', fwBox, function () { inWall = false; });
+  }
+  $('#frames').addEventListener('click', openWall);
+
+  /* ---------- the grid: the last clue, and the answer that has none ---------- */
+  function types() { return !hung ? [] : !SEV.word('d11') ? ['d11'] : ['d7']; }
+  function openGrid() {
+    if (busy) return;
+    SEV.openSheet({
+      type: types(), onRight: right, sel: types()[0],
+      onWrong: function (k, w) { return k === 'd7' ? 'The squares will not take it. Three words: three letters, then two, then five. You have read them tonight, more than once, in blue pencil.' : (WRONG.d11[w] || null); },
+      shut: function (k) { return k === 'd11' ? 'The clue says FROM THE TOP. At the moment the five frames are on the floor, and there is no top. Hang them first.' : k === 'd7' ? 'One clue first: 11 Down. Then the one that has none.' : 'That one is in ink already.'; },
+      msg: nextFile ? 'Sixteen answers. The grid is finished.' : !hung ? '11 Down is the last clue: the five famous heads, from the top. They are not hanging yet.' : !SEV.word('d11') ? '11 Down: read the five famous heads from the top.' : '7 Down. No clue. Five of its letters are in ink: the rest are yours.'
+    });
+  }
+  SEV.onGrid = openGrid;
+  function right(k, w, sh) {
+    after();
+    if (k === 'd11') { sh.type(types()); sh.select('d7'); sh.msg('<b>PLATE.</b> Peace, Lindbergh, Abdication, The war, Everest. Every page becomes a plate before it is printed. That was the last of the clues. Now there is only 7 Down, which never had one.'); return; }
+    var file = ER.exitOk([w]), st;
+    if (!file) return;
+    nextFile = file; ER.flag('p-file', file); st = ER.state(); st.done = st.done || {}; st.done.press = 1; ER.flag('p-out', 1);
+    busy = true; SEV.solved(); sh.msg('<b>OUT OF ORDER.</b>');
+    setTimeout(function () {
+      ER.closeAll();
+      ER.narrate([
+        'OUT OF ORDER. You look up from the grid. Across the press hall, on the gate of the lift, a white card is hanging from a piece of string.',
+        'It has been hanging on every floor of this building since six o&rsquo;clock. You have read it four times tonight. And each time you have turned away, and taken the stairs.',
+        '<em>Finish it and you can find me.</em>',
+        'The brass arrow over the gate has not moved all night. It is pointing between 6 and 7. He is at the top of the building. You are at the bottom of it. And the lift, of course, is out of order.'
+      ], function () {
+        $('#quillFig').classList.add('on'); SEV.sfx.steps(4, 0.8);
+        ER.narrate([
+          'Up on the iron gallery, a door bangs. A man with a watch in his hand is leaning on the rail, breathing like somebody who has just come down eight flights of stairs.',
+          '&ldquo;STRAND! Is my page made?&rdquo;',
+          '&ldquo;MR QUILL, SIR!&rdquo; shouts Mr Strand, more loudly than ever. &ldquo;YOU WILL WANT TO SEE THE FOLDER. THIS WAY. MIND YOUR CUFFS.&rdquo; He takes Mr Quill by the elbow and walks him round behind the largest machine in the building.',
+          'Over his shoulder, Mr Strand looks at you. Then he looks at the back stairs.'
+        ], function () { busy = false; after(); });
+      });
+    }, 1900);
+  }
+
+  /* ---------- things in the hall ---------- */
+  SEV.thing('#press', 'press', 'The press. It can print, fold and count sixty thousand copies of the Clarion in an hour. At the moment it is doing none of those things, and the whole building is listening to it.', isBusy);
+  SEV.thing('#reels', 'newsprint', 'Reels of newsprint. There are five miles of paper on each one, and the Clarion gets through forty of them in a night.', isBusy);
+  SEV.thing('#gallery', null, function () { return nextFile ? 'The iron gallery. Mr Quill has gone to look at the folder.' : 'An iron gallery, and the stairs down from the street. Nobody is on it. Yet.'; }, isBusy);
+  SEV.thing('#pclock', null, function () { return 'The clock of the press hall says ' + SEV.time() + '. The plate for page 12 is made at half past one, and Mr Strand presses the button at two.'; }, isBusy);
+  SEV.thing('#bell', null, 'The red lamp means that the press is ready. The brass bell beside it rings one minute before the machine starts, so that everybody can take their fingers out.', isBusy);
+  $('#dial').addEventListener('click', function (e) { e.stopPropagation(); if (busy) return; ER.say('The brass arrow over the lift gate. From the basement it looks a long way up: between 6 and 7.'); });
+  $('#door').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(SEV.word('d7') ? 'OUT OF ORDER. The same blue capitals as the line at the top of your grid.' : 'The lift, at the bottom of its shaft, with the same card on its gate. You have stopped looking at it.');
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; SEV.sfx.steps(6);
+    setTimeout(function () { ER.leave(nextFile); }, 900);
+  });
+})();
+</script>
+</body>
+</html>

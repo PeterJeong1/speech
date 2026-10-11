@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Windgate · Seven Sacks for Tolver</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="mail.css">
+<style>
+  body{--bg:#2e1e10;--accent:#ff8a5c;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(24,34,48,.95);--tc-ink:#f1f4f7;--cap-bg:rgba(20,28,40,.93);--panel:#1f2a3a;--face-bg:#4a3219;--q-ink:#ffc9a8;--fade:#eef3f8;--hud-bg:rgba(20,28,40,.8)}
+  .stn{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .plate{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:15px;letter-spacing:.14em;fill:#2a1c06;text-anchor:middle}
+  .streak{animation:streak 2.2s linear infinite}
+  .streak.b{animation-duration:3.1s;animation-delay:-1s}
+  @keyframes streak{from{transform:translateX(0)}to{transform:translateX(-480px)}}
+  #wtail{transform-origin:1096px 800px;animation:tail 2.6s ease-in-out infinite alternate}
+  @keyframes tail{from{transform:rotate(-14deg)}to{transform:rotate(10deg)}}
+  #cordend{transform-origin:1446px 120px;animation:sway 3.4s ease-in-out infinite alternate}
+  @keyframes sway{from{transform:rotate(-2deg)}to{transform:rotate(2.500deg)}}
+  #hatch4.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.18)}}
+  #tube4.ready{animation:ring 1.1s steps(1,end) infinite}
+  @keyframes ring{0%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(3px,-2px)}75%{transform:translate(-2px,0)}}
+  .glassA{fill:#dfe9f2}
+  body.over .glassA{fill:#b99a6a}
+  body.over .streak{display:none}
+
+  /* the hatch station, close to: what she calls, what is under you, and what your hands are on */
+  .bx.hs{width:min(1060px,96vw)}
+  .hs .two{display:grid;grid-template-columns:1fr 372px;gap:0 12px;align-items:stretch}
+  .hs .sl{background:#262b2c linear-gradient(160deg,rgba(255,255,255,.06),rgba(0,0,0,.2));color:#eef0ea;font-family:'Caveat',cursive;font-size:18.5px;line-height:1.02;padding:11px 15px 6px;border:9px solid #7a5a36;border-radius:4px}
+  .hs .sl h5{margin:0 0 5px;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:#d9c9a0}
+  .hs .sl p{margin:0 0 6px}
+  .hs .sl b{color:#ffd98a;font-weight:700}
+  .hs .sl .w:hover{color:#ffd98a}
+  .hs .bx-foot{min-height:60px;margin-top:8px}
+  .hs .bx-foot .btn.quiet{border-color:rgba(255,255,255,.4);color:#e9e4d8}
+  .callT{font-family:'Limelight',serif;font-size:31px;fill:#2a1c06;text-anchor:middle}
+  .callS{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.2em;fill:#5a4212;text-anchor:middle}
+  .lab{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11px;letter-spacing:.12em;fill:#f1e6c8;text-anchor:middle}
+  .did{font-family:'Caveat',cursive;font-size:21px;fill:#eef0ea}
+  .num{font-family:'Stardos Stencil',serif;font-weight:700;font-size:24px;fill:#5a4a26;text-anchor:middle}
+  .ct{cursor:pointer}
+  .ct:hover{filter:brightness(1.2)}
+  .ct.used{opacity:.25}
+  .ct .tk2{display:none}
+  .ct.dry .tk2{display:block}
+  .rag{animation:rag 5s linear infinite}
+  .rag.b{animation-duration:6.6s;animation-delay:-2.4s}
+  .rag.c{animation-duration:4.2s;animation-delay:-3.3s}
+  @keyframes rag{from{transform:translateX(760px)}to{transform:translateX(-520px)}}
+  .slide{animation:slide .9s ease-out}
+  @keyframes slide{from{transform:translateX(600px)}to{transform:translateX(0)}}
+  .falling{animation:fall2 .5s linear infinite}
+  @keyframes fall2{from{transform:translateY(0)}to{transform:translateY(-120px)}}
+  .dropbag{animation:dropbag 1.5s ease-in forwards}
+  @keyframes dropbag{from{transform:translate(0,0) scale(1)}to{transform:translate(-36px,96px) scale(.22)}}
+  .puff{animation:puff 1.1s ease-out forwards}
+  @keyframes puff{from{transform:scale(.3);opacity:.95}to{transform:scale(2.6);opacity:0}}
+  .shout{animation:shout 1.5s ease-out forwards}
+  @keyframes shout{0%{opacity:0}15%{opacity:1}80%{opacity:1}100%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="deckG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a3219"/><stop offset="1" stop-color="#2e1e10"/></linearGradient>
+  <radialGradient id="upG"><stop offset="0" stop-color="#f4f8fb" stop-opacity=".5"/><stop offset="1" stop-color="#f4f8fb" stop-opacity="0"/></radialGradient>
+  <radialGradient id="brassG4" cx="35%" cy="30%"><stop offset="0" stop-color="#f7e7ae"/><stop offset=".6" stop-color="#b08a35"/><stop offset="1" stop-color="#6f531a"/></radialGradient>
+  <clipPath id="g1"><rect x="470" y="318" width="260" height="264"/></clipPath><clipPath id="g2"><rect x="870" y="318" width="260" height="264"/></clipPath>
+  <radialGradient id="vig" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#000" stop-opacity=".28"/><stop offset="1" stop-color="#000" stop-opacity=".8"/></radialGradient>
+</defs>
+<!-- the floor of the keel, from above -->
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#deckG)"/>
+<g id="deck" stroke="#22160b" stroke-width="3" opacity=".8"></g>
+<g stroke="#1c1208" stroke-width="34" stroke-linecap="round"><path d="M-200 60H1800M-200 840H1800"/><path d="M140 -100V1000M1520 -100V1000" stroke-width="26"/></g>
+<circle cx="800" cy="450" r="520" fill="url(#upG)" pointer-events="none"/>
+
+<!-- the hatch: shut, with a pane of glass in each door -->
+<g id="hatch4" class="hot">
+  <rect x="400" y="220" width="800" height="460" fill="#5a3f26" stroke="#22160b" stroke-width="22"/>
+  <path d="M800 220v460" stroke="#22160b" stroke-width="10"/><g fill="#3a3a3e"><rect x="408" y="262" width="384" height="16"/><rect x="408" y="622" width="384" height="16"/><rect x="808" y="262" width="384" height="16"/><rect x="808" y="622" width="384" height="16"/></g>
+  <rect class="glassA" x="470" y="318" width="260" height="264"/><rect class="glassA" x="870" y="318" width="260" height="264"/>
+  <g clip-path="url(#g1)"><g class="streak" fill="#fff"><ellipse cx="560" cy="370" rx="130" ry="26"/><ellipse cx="820" cy="470" rx="170" ry="30"/><ellipse cx="1040" cy="380" rx="140" ry="24"/><ellipse cx="640" cy="540" rx="150" ry="22"/><ellipse cx="1150" cy="530" rx="130" ry="26"/></g>
+    <g class="streak b" fill="#c3d2e0"><ellipse cx="700" cy="420" rx="110" ry="14"/><ellipse cx="980" cy="560" rx="120" ry="12"/><ellipse cx="1180" cy="440" rx="100" ry="13"/></g></g>
+  <g clip-path="url(#g2)"><g class="streak" fill="#fff"><ellipse cx="960" cy="370" rx="130" ry="26"/><ellipse cx="1220" cy="470" rx="170" ry="30"/><ellipse cx="1440" cy="380" rx="140" ry="24"/><ellipse cx="1040" cy="540" rx="150" ry="22"/><ellipse cx="1550" cy="530" rx="130" ry="26"/></g>
+    <g class="streak b" fill="#c3d2e0"><ellipse cx="1100" cy="420" rx="110" ry="14"/><ellipse cx="1380" cy="560" rx="120" ry="12"/><ellipse cx="1580" cy="440" rx="100" ry="13"/></g></g>
+  <g fill="none" stroke="#22160b" stroke-width="8"><rect x="470" y="318" width="260" height="264"/><rect x="870" y="318" width="260" height="264"/></g>
+</g>
+<text x="1330" y="770" class="stn" font-size="30" fill="#c9b98a" opacity=".55">BOW</text><path d="M1280 792h100M1362 778l20 14 -20 14" stroke="#c9b98a" stroke-width="6" fill="none" opacity=".55"/>
+
+<!-- four bags of sand, numbered from the bow, each on a hook with a wooden toggle -->
+<g id="bags4" class="hot"></g>
+<!-- the speaking tube -->
+<g id="tube4" class="hot"><path d="M-200 -60L210 150" stroke="#8a6a26" stroke-width="26" stroke-linecap="round"/><path d="M-200 -66L206 142" stroke="#e6c873" stroke-width="5"/>
+  <circle cx="246" cy="176" r="62" fill="url(#brassG4)"/><circle cx="246" cy="176" r="42" fill="#1e1509"/><circle cx="246" cy="176" r="52" fill="none" stroke="#6f531a" stroke-width="4"/>
+  <path d="M300 214q30 20 40 54" stroke="#c9ced3" stroke-width="3" fill="none" stroke-dasharray="4 4"/><rect x="326" y="266" width="26" height="40" rx="7" fill="url(#brassG4)"/></g>
+<!-- the hatch lever -->
+<g id="lever4" class="hot"><rect x="220" y="560" width="110" height="150" rx="10" fill="#3a3a3e"/><rect x="264" y="580" width="22" height="110" rx="8" fill="#17120d"/><path d="M275 660L330 560" stroke="#8a8f93" stroke-width="16" stroke-linecap="round"/><circle cx="334" cy="552" r="22" fill="url(#brassG4)"/></g>
+<!-- the bag for the Hospice, with its streamer rolled up -->
+<g id="mbag4" class="hot"><path d="M1330 300v60" stroke="#c9bfa3" stroke-width="5"/><path d="M1270 470q-14 -90 36 -108h48q50 18 36 108q-60 26 -120 0z" fill="#6f7780"/><path d="M1282 400q48 -16 96 0" stroke="#4c5058" stroke-width="5" fill="none"/>
+  <rect x="1286" y="346" width="88" height="26" rx="13" fill="#c8402c"/><path d="M1300 359h60" stroke="#8a2a1c" stroke-width="3"/><text x="1330" y="446" class="stn" font-size="22" fill="#2c3138" opacity=".8">HOSPICE</text></g>
+<!-- the red cord -->
+<g id="cord4" class="hot"><g id="cordend"><path d="M1446 -200V640" stroke="#c8402c" stroke-width="9"/><rect x="1416" y="640" width="60" height="26" rx="12" fill="#9a6a34" stroke="#5a3a1a" stroke-width="3"/></g><circle cx="1446" cy="640" r="60" fill="#fff" opacity="0"/></g>
+<!-- your slate -->
+<g id="slate4" class="hot"><rect x="540" y="730" width="280" height="130" fill="#262b2c" stroke="#7a5a36" stroke-width="12"/><g stroke="#eef0ea" stroke-width="2.500" opacity=".8"><path d="M566 760h150M566 780h210M566 800h180M566 820h120"/></g><path d="M820 760q40 10 50 50" stroke="#c9bfa3" stroke-width="2" fill="none"/><rect x="862" y="806" width="12" height="30" rx="4" fill="#f6f2e6"/></g>
+<!-- the cat, looking down -->
+<g id="cat4" class="hot"><path id="wtail" d="M1096 800q40 30 84 6" stroke="#d98a3c" stroke-width="13" fill="none" stroke-linecap="round"/><ellipse cx="1060" cy="770" rx="44" ry="56" fill="#d98a3c"/><path d="M1040 742q20 14 40 0M1036 772q24 14 48 0M1042 800q18 10 36 0" stroke="#b56a22" stroke-width="5" fill="none"/>
+  <circle cx="1060" cy="704" r="26" fill="#d98a3c"/><path d="M1038 698l-10 -22 22 6zM1082 698l10 -22 -22 6z" fill="#d98a3c"/></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Down to Tolver</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="mail.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  /* the planks of the keel, and four bags of sand: One is nearest the bow */
+  (function () {
+    var s = '', i;
+    for (i = -6; i < 20; i++) s += '<path d="M-1000 ' + (i * 64 + 28) + 'H2600M' + (((i * 397) % 1500 + 1500) % 1500 + 40) + ' ' + (i * 64 + 28) + 'v64"/>';
+    $('#deck').innerHTML = s; s = '';
+    [1060, 900, 740, 580].forEach(function (x, j) {
+      s += '<rect x="' + (x - 9) + '" y="176" width="18" height="40" rx="7" fill="#9a6a34" stroke="#5a3a1a" stroke-width="2.500"/><circle cx="' + x + '" cy="132" r="48" fill="#c9b98a" stroke="#8a7a50" stroke-width="4"/>' +
+        '<circle cx="' + x + '" cy="132" r="9" fill="#8a7a50"/><text x="' + x + '" y="116" class="stn" font-size="30" fill="#5a4a26">' + (j + 1) + '</text>';
+    });
+    $('#bags4').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'mail', storyTitle: 'Seven Sacks for Tolver', id: 'windgate', no: 'IV', title: 'The Windgate',
+    go: 'Take your slate',
+    intro: [
+      'One hundred and seventy kilos went down the hatch, and nothing that the ship needed. The grapnel: it is only for landing where there is no ground crew, and you land at Tolver or nowhere. The spare propeller: it cannot be fitted in the air. The shed lines: Tolver has no shed. The Captain&rsquo;s own trunk, because she had written that it should go first. One parachute, since three souls are aboard and not four. And one tank of petrol: two for the hour and twenty-five minutes still to fly, one that is never touched, and the fourth to spare.',
+      'Then six bags of sand, and the Dunnock went up through the cloud like a cork through milk.',
+      'It is five past eight. She is flying at 2,500 metres in bright sun, over a white floor that goes all the way to the edge of the world. Ahead, two mountains stand up out of it, with a gap between them. You are lying on your stomach on the plank beside the hatch, because the Captain has just whistled down the tube.'
+    ],
+    exit: {"next":"tolver","w":{"de1b37a6":"8fb9bbe6","3076a8ae":"e9afcf41"}}, tags: {"d1":["241499f8"],"d2":["12ad78e3"],"d3":["b6da098c"],"d4":["1d93f893"],"d5":["225cdf79","d1e215c0"],"d6":["e270f26e"],"d7":["baf607d3"],"d8":["e566192d"],"r8":["aa5c6cea"]},
+    sound: ['archive', { root: 43, bpm: 72, mood: 'tense', drop: ['mel'], beds: [['wind', 1.1], ['hum', 0.35]] }],      /* the crossing: the clock is running, and a whistle in a tube is listened for, so no reed tune */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#tube4').classList.toggle('ready', !told.tube && !!told.in);
+    $('#hatch4').classList.toggle('ready', !!(told.tube && !nextFile));
+    document.body.classList.toggle('over', !!nextFile);
+    ER.pips((told.tube ? 1 : 0) + (ER.flag('d-drill') ? 2 : 0) + (nextFile ? 1 : 0), 4);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['You are over. The valley beyond is in the sun, and Tolver is at the far end of it.']];
+    if (bench && bench.isOpen()) return [['drill', [
+      'Her orders are not in the order of the journey. Before she calls, put them in order yourself: what happens at the tarn, at the cross, at the roof, over the snowfield, at the Lip, and after it?',
+      'Watch the small words. &ldquo;As soon as&rdquo; and &ldquo;not before&rdquo; say what comes first. &ldquo;If&rdquo; says that a thing may not happen at all. And at some calls there is nothing to do but say AYE.',
+      'At the roof there are three things, and one sentence of the orders gives their order: the bag, the shout, the hatch. After the Lip, listen to WHICH height she calls. She named two, and gave a different order for each. The red cord waits for one word.'
+    ]], ['ready', ['The dry run is done. When you are ready for the real thing, say so.']], ['real', [
+      'This is the same road, but nobody is calling it dry. Do at each call exactly what you did before.',
+      'After the Lip, listen: she may not call what she called in the dry run. Your slate says what to do if she calls two thousand two hundred.'
+    ]]][bench.mode()];
+    if (!told.tube) return ['tube', ['The speaking tube is whistling: the brass funnel, top left. Pull out the plug and answer it.']];
+    return ['hatch', ['You have your orders. Put your hands on the things round the hatch: the Captain is going to call.']];
+  }
+
+  function begin() {
+    MAIL.mine('gone', 'What went down the hatch', '<p>Grapnel (30 kg), spare propeller (45 kg), one of the petrol tanks (45 kg), one of the parachutes (10 kg), shed lines (20 kg), the Captain&rsquo;s trunk (20 kg): 170 kilos, and nothing that the ship needs before Tolver.</p><p>Then six bags of sand, 120 kilos. Four bags are left, One to Four from the bow.</p><p>The Brandreth Line&rsquo;s sand is dyed red. Ours is yellow.</p>', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The Windgate is behind you. Through the glass there is a long brown valley, in the sun.'); return; }
+    if (told.in) { busy = false; paint(); ER.say(told.tube ? 'The hatch station, five past eight. The Windgate is four minutes away.' : 'The tube is whistling.'); return; }
+    ER.narrate([
+      'The hatch is shut. Through the glass in it there is nothing to see but cloud going by underneath, very fast and all one way: east. The wind is behind you, as the plan said. Sixty kilometres an hour of it.',
+      'Round the hatch are the things that you are in charge of. Four bags of sand on four hooks, each with a wooden toggle: One, Two, Three, Four. The grey bag for the Hospice, with its red streamer rolled up tight. A red cord that goes up into the dark, to the gas valves. A lever for the hatch.',
+      'And the speaking tube: a brass pipe with a whistle plugged into the end of it. When the Captain blows into her end, it whistles at yours.',
+      'It whistles.'
+    ], function () { busy = false; tell('in'); MAIL.sfx.tube(); paint(); });
+  }
+
+  /* ---------- the Captain, by speaking tube ---------- */
+  var ORD = [
+    'The <b>sand</b> first. You have four bags on the hooks, numbered from the bow. One and Two go together at the Lip, where the ground stops. Beyond the Lip the air pours down like water over a weir, and I want her light before it takes hold of us. Not a second before the Lip: we are low enough over the house as it is.',
+    'Before any of that, <b>the mail.</b> The Hospice bag goes when the red roof is right under you. You will see a stone cross first. The cross is not the roof.',
+    'Open <b>the hatch</b> when I call the tarn, and no sooner: it is cold enough up there already. Shut it again as soon as the bag is away. But not before you have seen its streamer open, and shouted STREAMER down this tube.',
+    'After the Lip she will fall, and I shall read you <b>the needle.</b> At two thousand three hundred, let Three go. If I call two thousand two hundred, let Four go as well. If I call RISING before that, keep Four: we shall want it at Tolver.',
+    'The <b>red cord</b> you leave alone until I call RISING. Then pull it, and count five. By then she will be too light, and a ship that is too light goes up like a cork.',
+    'When I call a place and you have nothing to do there, do nothing, and say <b>AYE.</b>'
+  ];
+  var LINES = ['&ldquo;Hatch station? Good. Take your slate, Clerk. An order heard is half an order: an order written down is a whole one. I shall say this once, in the order it comes into my head. That is not the order you will do it in.&rdquo;'].concat(ORD,
+    ['&ldquo;Now. We shall do it dry first: your hands on the things, and nothing leaves the ship. I call, you do, you say AYE. If you are wrong, we begin again at the tarn. We have about four minutes. Ready?&rdquo;']);
+  $('#tube4').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The tube is quiet. The plug is back in its end, on its little chain.'); return; }
+    ER.talk({
+      who: 'Captain Montalvo', role: 'By speaking tube · from the wheel', face: window.FACE('tube'), lines: LINES,
+      clue: { id: 'orders', title: 'The Captain’s orders', kind: 'Chalked on your slate', cls: 'slate' },
+      done: function (seen) { if (seen && tell('tube')) { MAIL.words(['speaking tube', 'toggle', 'valve', 'streamer']); paint(); ER.say('Every word of it is on your slate. Now the hatch: your hands on the things round it, and she will call.'); } }
+    });
+  });
+  $('#slate4').addEventListener('click', function () {
+    if (busy) return;
+    if (!told.tube) { ER.say('A slate, and a piece of chalk on a string. Nothing is written on it yet. The tube is still whistling.'); return; }
+    ER.read({ html: '<h4>The Captain&rsquo;s orders</h4>' + LINES.map(function (l) { return '<p>' + l + '</p>'; }).join(''), cls: 'slate' });
+  });
+
+  /* ---------- the things round the hatch ---------- */
+  MAIL.thing('#bags4', 'toggle', 'Four bags of sand, hanging outside the ship on four hooks. Each hook has a wooden toggle: pull it, and the bag is gone. One is the nearest to the bow.', isBusy);
+  MAIL.thing('#mbag4', 'streamer', 'The grey bag for Windgate Hospice: six kilos of letters, and a red streamer rolled up on top.', isBusy);
+  MAIL.thing('#cord4', 'valve', 'A red cord that goes up into the dark, to the valves on top of the gas cells. Pull it, and gas goes out. It is red so that nobody pulls it by mistake.', isBusy);
+  MAIL.thing('#lever4', 'lever', 'The lever that opens the hatch, and shuts it again.', isBusy);
+  MAIL.thing('#cat4', null, function () { return nextFile ? 'Ballast is looking down through the glass at the valley, as if there might be a mouse in it.' : 'Ballast is looking down through the glass at the cloud, as if there might be a mouse in it.'; }, isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#hatch4').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Through the glass: a long brown valley in the sun, and a thread of smoke at the far end of it.'); return; }
+    if (!told.tube) { ER.say('The hatch is shut, and it is not to be opened yet. The tube is whistling: pull out the plug, and answer it.'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the hatch station: a dry run of her orders, and then the Windgate itself ---------- */
+  function makeBench() {
+    var CALLS = [
+      { c: 'Tarn!', v: 'tarn', t: 'A hole opens in the cloud. Far below lies a small round lake, frozen grey. There is nothing on the ice.' },
+      { c: 'Cross!', v: 'cross', t: 'A stone cross on a knoll, with its long morning shadow lying to the west.' },
+      { c: 'Roof!', v: 'roof', t: 'The red roof of the Hospice. Smoke from its chimney lies flat along the snow, pointing east.' },
+      { c: 'Snowfield!', v: 'snow', t: 'The snowfield, east of the house. It is red: a great fan of red sand, and through the middle of it a path trampled round and round.' },
+      { c: 'The Lip!', v: 'lip', t: 'The edge. The snow simply stops, and the cloud pours over it and down, like milk over the edge of a table.' },
+      { c: 'Two thousand four hundred!', v: 'fall', alt: '2,400', t: 'The floor goes away from under your stomach. The whole ship is falling, quite quietly.' },
+      { c: 'Two thousand three hundred!', v: 'fall', alt: '2,300', t: 'Still falling. Black rock is going up past the hatch.' },
+      { c: 'Two thousand two hundred!', v: 'fall', alt: '2,200', t: 'She has not stopped. The rock is very close.' },
+      { c: 'Rising!', v: 'rise', alt: '2,250', t: 'The needle stops. Then, slowly, it begins to climb: and then not so slowly.' }
+    ], DRY = [0, 1, 2, 3, 4, 5, 6, 8], NAME = { H: 'the hatch', M: 'the mail bag', T: 'the shout', S1: 'One', S2: 'Two', S3: 'Three', S4: 'Four', V: 'the cord' },
+      COUNT = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight'], Q = '&rdquo; says the tube. &ldquo;',
+      GEN = ['&ldquo;I called the tarn,' + Q + 'One thing happens at the tarn, and only one. Read your slate.', '&ldquo;I called the cross,' + Q + 'The cross is not the roof. And what did I tell you to do when there is nothing to do?',
+        '&ldquo;The roof,' + Q + 'Three things, Clerk, and in their order: what goes, what you shout, what you shut.', '&ldquo;Snowfield,' + Q + 'Did I give you anything to do over the snowfield?',
+        '&ldquo;The Lip,' + Q + 'Which bags go there, and how many?', '&ldquo;Two thousand four hundred,' + Q + 'Did I name that height? Then why are your hands moving?',
+        '&ldquo;Two thousand three hundred,' + Q + 'One bag, and I told you which.', '&ldquo;Rising,' + Q + 'The red cord, and a count. What count did I give you?'],
+      FALL = '<rect width="600" height="380" fill="#2b323d"/><g class="falling" stroke="#55606e" stroke-width="6" stroke-linecap="round"><path d="M60 0v70M60 120v70M60 240v70M60 360v70M60 480v40M200 30v80M200 150v60M200 270v80M200 390v80M340 10v60M340 130v80M340 250v60M340 370v90M480 40v70M480 160v70M480 280v70M480 400v80M560 0v50M560 120v60M560 240v50M560 360v70"/></g>' +
+        '<g fill="#fff" opacity=".85"><ellipse cx="140" cy="60" rx="150" ry="34"/><ellipse cx="470" cy="330" rx="170" ry="36"/></g>',
+      RISE = '<rect width="600" height="380" fill="#59677a"/><path d="M0 250q150 -50 300 -10t300 -50v190H0z" fill="#7d6a4a"/><path d="M0 310q200 -30 380 0t220 -30v100H0z" fill="#8a7a50"/><g fill="#fff" opacity=".8"><ellipse cx="120" cy="80" rx="160" ry="36"/><ellipse cx="500" cy="150" rx="150" ry="30"/></g>';
+    var mode = ER.flag('d-drill') ? 1 : 0, plan = ER.flag('d-plan') || [], runs = ER.flag('d-runs') || 1, i = 0, acts = [], done = [], tmp = [], open = false, wait = false, box = ER.el('div', 'bx hs'), s, j;
+    s = '<svg viewBox="0 0 640 560"><defs><radialGradient id="dbr" cx="35%" cy="30%"><stop offset="0" stop-color="#f7e7ae"/><stop offset=".6" stop-color="#b08a35"/><stop offset="1" stop-color="#6f531a"/></radialGradient></defs><rect width="640" height="560" fill="#3a2614"/><g stroke="#22160b" stroke-width="2.500" opacity=".8">';
+    for (j = 0; j < 10; j++) s += '<path d="M0 ' + (j * 58 + 20) + 'H640"/>';
+    s += '</g><rect x="150" y="10" width="340" height="70" rx="8" fill="url(#dbr)" stroke="#6f531a" stroke-width="3"/><text class="callS" x="320" y="29">THE TUBE SAYS</text><text class="callT" id="d-call" x="320" y="64"></text>' +
+      '<g transform="translate(584 46)"><circle r="38" fill="url(#dbr)"/><circle r="30" fill="#f3efe2"/><text class="plate" id="d-alt" y="2" style="font-size:14px;letter-spacing:0">2,500</text><text class="plate" y="15" style="font-size:8px">METRES</text></g>' +
+      '<text class="did" id="d-did" x="100" y="134"></text><text class="did" id="d-run" x="540" y="134" style="text-anchor:end;fill:#ffd98a"></text>' +
+      '<rect x="92" y="142" width="456" height="306" fill="#22160b"/><svg x="104" y="154" width="432" height="282" viewBox="0 0 600 380" preserveAspectRatio="xMidYMid slice"><g id="d-ground"></g><g id="d-fx"></g>' +
+      '<g fill="#fff"><ellipse class="rag" cx="0" cy="80" rx="200" ry="46" opacity=".92"/><ellipse class="rag b" cx="0" cy="240" rx="240" ry="54" opacity=".9"/><ellipse class="rag c" cx="0" cy="330" rx="170" ry="38" opacity=".85"/></g></svg>' +
+      '<g id="d-shut" pointer-events="none"><rect x="104" y="154" width="432" height="282" fill="#cfe0ee" opacity=".2"/><path d="M320 154v282M104 295h432" stroke="#5a3f26" stroke-width="12"/><rect x="104" y="154" width="432" height="282" fill="none" stroke="#5a3f26" stroke-width="12"/><rect x="306" y="281" width="28" height="28" rx="5" fill="#3a3a3e"/></g>' +
+      '<g id="d-open" pointer-events="none" style="display:none"><path d="M96 150h448M96 440h448" stroke="#7a5a36" stroke-width="9"/><path d="M110 166q40 -8 80 4M430 420q50 -10 96 4" stroke="#fff" stroke-width="3" fill="none" opacity=".7"/></g>' +
+      /* the things your hands are on */
+      '<g class="ct" data-a="T"><circle cx="60" cy="62" r="40" fill="url(#dbr)"/><circle cx="60" cy="62" r="26" fill="#1e1509"/><text class="lab" x="60" y="122">TUBE</text><path class="tk2" d="M82 28l8 10 16 -22" stroke="#eef0ea" stroke-width="5" fill="none"/></g>' +
+      '<g class="ct" data-a="H"><rect x="20" y="236" width="56" height="106" rx="8" fill="#3a3a3e"/><rect x="42" y="250" width="12" height="78" rx="5" fill="#17120d"/><path id="d-lev" d="M48 310L70 250" stroke="#8a8f93" stroke-width="10" stroke-linecap="round"/><circle id="d-knob" cx="72" cy="244" r="13" fill="url(#dbr)"/><text class="lab" x="48" y="362">HATCH</text><path class="tk2" d="M70 200l8 10 16 -22" stroke="#eef0ea" stroke-width="5" fill="none"/></g>' +
+      '<g class="ct" data-a="M"><path d="M592 176v24" stroke="#c9bfa3" stroke-width="4"/><path d="M562 262q-8 -52 20 -62h20q28 10 20 62q-30 14 -60 0z" fill="#6f7780"/><rect x="570" y="192" width="44" height="15" rx="7.500" fill="#c8402c"/><text class="lab" x="592" y="290">MAIL</text><path class="tk2" d="M560 160l8 10 16 -22" stroke="#eef0ea" stroke-width="5" fill="none"/></g>' +
+      '<g class="ct" data-a="V"><rect x="566" y="306" width="52" height="110" fill="#fff" opacity="0"/><path d="M592 306v78" stroke="#c8402c" stroke-width="7"/><rect x="572" y="384" width="40" height="18" rx="8" fill="#9a6a34" stroke="#5a3a1a" stroke-width="2.500"/><text class="lab" x="592" y="424">RED CORD</text><text class="did" id="d-tally" x="592" y="448" style="text-anchor:middle;fill:#ff8a5c"></text></g>';
+    [470, 370, 270, 170].forEach(function (x, n) {
+      s += '<g class="ct" data-a="S' + (n + 1) + '"><rect x="' + (x - 6) + '" y="452" width="12" height="26" rx="5" fill="#9a6a34" stroke="#5a3a1a" stroke-width="2"/><circle cx="' + x + '" cy="508" r="30" fill="#c9b98a" stroke="#8a7a50" stroke-width="3"/><text class="num" x="' + x + '" y="517">' + (n + 1) + '</text>' +
+        '<path class="tk2" d="M' + (x + 24) + ' 470l8 10 16 -22" stroke="#eef0ea" stroke-width="5" fill="none"/></g>';
+    });
+    s += '<text class="lab" x="578" y="504" style="fill:#c9b98a">BOW</text><path d="M556 516h44M590 508l12 8 -12 8" stroke="#c9b98a" stroke-width="3" fill="none"/><text class="did shout" id="d-shout" x="104" y="96" style="display:none;fill:#ffd98a;font-size:27px">&ldquo;STREAMER!&rdquo;</text></svg>';
+    box.innerHTML = '<div class="two"><div class="frame">' + s + '</div><div class="sl"><h5>Your slate &middot; what she said</h5>' + ORD.map(function (l) { return '<p>' + l + '</p>'; }).join('') + '</div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn quiet" id="d-off">Hands off</button><button type="button" class="btn" id="d-aye">Say AYE</button></div>';
+    ER.glossIn(box, '.sl p');
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.pmsg'), aye = box.querySelector('#d-aye'), off = box.querySelector('#d-off'), ground = box.querySelector('#d-ground'), fx = box.querySelector('#d-fx'), cts = {};
+    ER.$$('.ct', svg).forEach(function (g) { cts[g.getAttribute('data-a')] = g; });
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function Tx(id, t) { box.querySelector(id).textContent = t; }
+    function enc(a) { return !a.length ? '-' : a.every(function (x) { return x === 'V'; }) ? 'V' + a.length : a.join('>'); }
+    function call() { return CALLS[mode === 2 ? i : DRY[i]]; }
+    function hatch(on) { open = on; box.querySelector('#d-shut').style.display = on ? 'none' : ''; box.querySelector('#d-open').style.display = on ? '' : 'none'; box.querySelector('#d-lev').setAttribute('d', on ? 'M48 270L70 330' : 'M48 310L70 250'); box.querySelector('#d-knob').setAttribute('cy', on ? 336 : 244); }
+    function view(kind) {
+      ground.innerHTML = kind === 'fall' ? FALL : kind === 'rise' ? RISE : kind ? MAIL.vig(kind) : '<rect width="600" height="380" fill="#dfe9f2"/><ellipse cx="300" cy="190" rx="330" ry="150" fill="#f4f8fb"/>';
+      fx.innerHTML = ''; ground.setAttribute('class', ''); void ground.getBoundingClientRect(); if (kind && kind !== 'fall') ground.setAttribute('class', 'slide');
+    }
+    function did() { Tx('#d-did', acts.length ? 'this call: ' + (enc(acts).charAt(0) === 'V' ? 'the cord, ' + acts.length + (acts.length > 1 ? ' pulls' : ' pull') : acts.map(function (a) { return NAME[a]; }).join(', ')) : ''); Tx('#d-tally', acts.filter(function (a) { return a === 'V'; }).length ? COUNT[Math.min(8, acts.filter(function (a) { return a === 'V'; }).length)] + '.' : ''); }
+    function clear() { acts = []; for (var a in cts) cts[a].classList.remove('dry'); did(); }
+    function reset() { i = 0; done = []; tmp = []; clear(); hatch(false); for (var a in cts) cts[a].classList.remove('used'); Tx('#d-alt', '2,500'); }
+    function say(lead) {
+      var c = call();
+      Tx('#d-call', c.c.toUpperCase()); box.querySelector('#d-call').style.fontSize = c.c.length > 12 ? '18.500px' : ''; Tx('#d-alt', c.alt || '2,500'); MAIL.sfx.tube();
+      if (mode === 2) { view(c.v); msg((lead || '') + '<b>&ldquo;' + c.c + '&rdquo;</b> ' + c.t); } else msg((lead || '') + '<b>&ldquo;' + c.c + '&rdquo;</b> says the tube. Hands on what she wants here, in the right order, and then say AYE. Or just AYE, if there is nothing to do.');
+    }
+    function paintMode() {
+      Tx('#d-run', mode === 2 ? 'THE WINDGATE' : mode === 1 ? 'dry run: done' : 'dry run ' + runs);
+      off.style.display = mode === 0 ? '' : 'none'; aye.textContent = mode === 1 ? 'Ready, Captain' : 'Say AYE';
+    }
+    /* what really happens, when it is not a dry run */
+    function really(a) {
+      var n;
+      if (a === 'H') { hatch(!open); MAIL.sfx.lever(); msg(open ? 'The hatch swings down, and the cold comes in like a bucket of water.' : 'The hatch bangs shut. Through the glass, a small dark figure is running across the yard.'); }
+      else if (a === 'M') { cts.M.classList.add('used'); MAIL.sfx.flap(); fx.innerHTML = '<g class="dropbag" style="transform-origin:300px 190px"><rect x="282" y="172" width="36" height="36" rx="9" fill="#6f7780"/><path d="M300 172q40 -60 110 -44" stroke="#c8402c" stroke-width="9" fill="none" stroke-linecap="round"/></g>';
+        msg('The grey bag turns over twice, and then a long red streamer opens out behind it.');
+        setTimeout(function () { if (call().v === 'roof') fx.innerHTML = '<circle cx="262" cy="292" r="7" fill="#6f7780"/><path d="M262 292q30 -20 56 -6" stroke="#c8402c" stroke-width="5" fill="none" stroke-linecap="round"/>'; }, 1500); }
+      else if (a === 'T') { MAIL.sfx.tube(); n = box.querySelector('#d-shout'); n.style.display = 'none'; void n.getBoundingClientRect(); n.style.display = ''; msg('You shout it down the tube. &ldquo;STREAMER!&rdquo; The tube says: &ldquo;Good.&rdquo;'); }
+      else if (a === 'V') { MAIL.sfx.hiss(); msg('The red cord. ' + COUNT.slice(1, acts.length + 1).join('. ') + '.'); }
+      else { cts[a].classList.add('used'); MAIL.sfx.sand(); fx.innerHTML += '<circle class="puff" cx="' + (240 + acts.length * 50) + '" cy="200" r="34" fill="#e2c15a" style="transform-origin:' + (240 + acts.length * 50) + 'px 200px"/>'; msg('Bag ' + NAME[a] + ' goes, and is a long yellow smoke before it is out of sight.'); }
+    }
+    svg.addEventListener('click', function (e) {
+      var g = e.target.closest ? e.target.closest('.ct') : null, a, E, ok;
+      if (!g || wait || mode === 1 || nextFile) return;
+      a = g.getAttribute('data-a');
+      if (mode === 0) { acts.push(a); g.classList.add('dry'); MAIL.sfx.chalk(); did(); return; }
+      if (i === 7) ok = ER.check('r8', enc(acts.concat([a])));
+      else { E = plan[i > 7 ? 7 : i] || []; ok = E.every(function (x) { return x.charAt(0) === 'S'; }) ? E.indexOf(a) >= 0 && acts.indexOf(a) < 0 : E[acts.length] === a; }
+      if (!ok) { ER.sfx.no(); msg('&ldquo;Not that!' + Q + call().c + ' What does your slate say?&rdquo; Your hand stops in time.'); return; }
+      acts.push(a); really(a); did();
+    });
+    off.addEventListener('click', function () { if (mode === 0 && !wait) { clear(); msg('Hands off everything. <b>&ldquo;' + call().c + '&rdquo;</b> says the tube again.'); } });
+    aye.addEventListener('click', function () {
+      var code = enc(acts), bad, E, file;
+      if (wait || nextFile) return;
+      if (mode === 1) { mode = 2; reset(); paintMode(); wait = true; msg('The two mountains have come very close: one white, one flat on top. Between them the cloud is tearing into rags, and through the rags there is rock.'); view(null); setTimeout(function () { wait = false; say(); }, 3000); return; }
+      if (mode === 0) {
+        if (ER.check('d' + (i + 1), code)) {
+          tmp[i] = acts.slice(); i++; clear(); ER.sfx.click();
+          if (i < DRY.length) { say('&ldquo;Aye.&rdquo; '); return; }
+          plan = tmp; ER.flag('d-plan', plan); ER.flag('d-drill', 1); mode = 1; paintMode(); paint(); Tx('#d-call', 'GOOD.');
+          msg('&ldquo;Good,' + Q + 'That is how it goes, if I call RISING before two thousand two hundred. Now forget that you have done it. The real one never goes quite like the dry one. Tell me when you are ready.&rdquo;');
+          return;
+        }
+        ER.sfx.no();
+        bad = acts.indexOf('V') >= 0 && i < 7 ? '&ldquo;The red cord?' + Q + 'Did I call RISING? Hands off it until I do.' : acts.indexOf('S4') >= 0 ? '&ldquo;Four?' + Q + 'Did I call two thousand two hundred? Then Four stays on its hook.' :
+          i === 7 && code.charAt(0) === 'V' ? '&ldquo;I counted ' + acts.length + ',' + Q + 'What count did I give you?' : GEN[i];
+        runs++; ER.flag('d-runs', runs); reset(); paintMode(); wait = true;
+        msg(bad + ' From the top.&rdquo;');
+        setTimeout(function () { wait = false; say('Dry run ' + runs + '. '); }, 4200);
+        return;
+      }
+      /* the real thing: nothing wrong can leave the ship, but she will not go on until the call has been answered */
+      E = i === 7 ? null : plan[i > 7 ? 7 : i] || [];
+      if (i === 7 ? !ER.check('r8', code) : acts.length < E.length) {
+        ER.sfx.no(); MAIL.sfx.tube();
+        msg(i === 7 ? '<b>&ldquo;TWO THOUSAND TWO HUNDRED, Clerk!&rdquo;</b> says the tube. &ldquo;What did I tell you about Four?&rdquo;' : '<b>&ldquo;' + call().c + '&rdquo;</b> says the tube again, louder. There is still something to do here.');
+        return;
+      }
+      done[i] = code; i++; clear();
+      if (i < CALLS.length) { say(); return; }
+      file = ER.exit([done.join('|')], { wait: true });
+      if (!file) { msg('The tube has gone quiet. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('d-file', file); Tx('#d-call', 'OVER.'); ER.mood('calm');
+      MAIL.mine('saw', 'What I saw at the Windgate', '<p>08.10, at 2,500 m, crossing from west to east. Wind west, strong, behind us.</p><p>The tarn: frozen. Nothing on the ice.</p><p>The cross: nothing.</p><p>The roof: smoke from the chimney lying flat, pointing east. Our bag came down in the yard. Streamer seen.</p>' +
+        '<p>The snowfield, east of the house: a great fan of red sand, and a path trampled round and round in it.</p><p>The Lip: cloud pouring over it to the east, and down.</p>', true);
+      msg('Five, and the cord is still. The needle climbs for a moment longer, slows, and stops. &ldquo;Hatch station,&rdquo; says the tube. &ldquo;That will do.&rdquo; From the Captain, this is a great deal.');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'The Dunnock has dropped three hundred metres in less time than it takes to say so, and your stomach arrived a little after the rest of you. Now the needle is steady again.',
+          '&ldquo;That was the weir,&rdquo; says the tube, &ldquo;and that was a small one. At eighty-five it is more than twice as deep.&rdquo; A pause. &ldquo;Did you see the snow, east of the house?&rdquo;',
+          'You did. It was red: a great fan of red sand, thrown down all at once, and through the middle of it a path trampled round and round and round, as if four people had spent an hour looking for a dropped glove.',
+          '&ldquo;Write it on your slate,&rdquo; says the Captain. &ldquo;Just what you saw, Clerk. Not what you think.&rdquo;',
+          'Ahead the cloud ends, as if it had been cut with a knife. Beyond it lies a long brown valley in the sun, with a thread of smoke at the far end.'
+        ], function () { busy = false; showGo(); ER.toast('In your notebook: What I saw at the Windgate'); });
+      }, 3800);
+    });
+    reset(); paintMode();
+    return {
+      open: function () {
+        ER.open('ov-lock', box);
+        if (mode === 1) { Tx('#d-call', 'GOOD.'); view(null); msg('The dry run is done. &ldquo;Tell me when you are ready,&rdquo; says the tube.'); }
+        else { mode = mode === 2 ? 1 : mode; reset(); paintMode(); view(null); if (mode === 1) { Tx('#d-call', 'GOOD.'); msg('&ldquo;Tell me when you are ready,&rdquo; says the tube.'); } else say('Dry run ' + runs + ': nothing leaves the ship. '); }
+      },
+      isOpen: function () { return !!box.parentNode; },
+      mode: function () { return mode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Key · Station Zero</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0e0906;--accent:#f4e04d;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(12,8,5,.95);--cap-bg:rgba(14,9,6,.93);--panel:#1a130d;--face-bg:#161a17;--q-ink:#e0c89a;--fade:#060403;--hud-bg:rgba(14,9,6,.78)}
+  .tc-room{letter-spacing:.24em}
+  .sten{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .lbl{font-family:'Permanent Marker',cursive;fill:#1c1b18;text-anchor:middle}
+  .plt{font-family:'Oswald',sans-serif;font-weight:600;font-size:9.5px;letter-spacing:.6px;fill:#2e2106;text-anchor:middle}
+  #lampA,#lampB{animation:keyl 1.1s steps(1,end) infinite}
+  #lampB{animation-duration:.7s;animation-delay:-.3s}
+  @keyframes keyl{0%{opacity:1}22%{opacity:.25}34%{opacity:1}60%{opacity:.25}70%{opacity:1}}
+  body.sent #lampA,body.sent #lampB{animation:none;opacity:.2}
+  #loop{animation:loop 1.2s linear infinite}
+  @keyframes loop{to{stroke-dashoffset:-36}}
+  body.sent #loop{animation:none}
+  #valve{animation:glow 3s steps(5) infinite alternate}
+  @keyframes glow{from{opacity:.6}to{opacity:1}}
+  #rainW{animation:rainw .5s linear infinite}
+  @keyframes rainw{to{transform:translate(-12px,40px)}}
+  .tapeL{transform-box:fill-box;transform-origin:50% 0;animation:tsw 4s ease-in-out infinite alternate}
+  .tapeL.t2{animation-duration:5s;animation-delay:-2s}
+  @keyframes tsw{from{transform:rotate(-1.5deg)}to{transform:rotate(1.5deg)}}
+
+  /* who is it? */
+  .nm{width:min(700px,94vw);padding:24px 30px 20px;background:#1a130d;border:1px solid #5a4326;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .nm h5{margin:0 0 6px;font-family:'Courier Prime',monospace;font-weight:700;font-size:22px;color:#f1ecdf}
+  .nm h6{margin:0 0 14px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:#bfa987}
+  .nm .wk,.ky .wk{--wk-size:34px;--wk-line:#8d7b52;--wk-key:#2a2118;--wk-ink:#f4e04d;--wk-font:'Courier Prime',monospace}
+  .nm .pmsg,.ky .pmsg{margin-top:12px;min-height:74px;font-size:16px}
+  /* the service tapes */
+  .sv{display:grid;grid-template-columns:minmax(0,500px) minmax(0,520px);gap:20px;width:min(1050px,96vw);align-items:start}
+  .sv h5{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:#bfa987}
+  .sv-rack{display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:268px;padding:16px 14px 14px;background:#33261a linear-gradient(170deg,rgba(255,255,255,.07),rgba(0,0,0,.3));border:3px solid #1d150c;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .sv-tape{position:relative;padding:19px 10px 8px;background-color:#efe6c8;background-image:radial-gradient(circle,#2a2118 1.7px,transparent 2.1px);background-size:11px 10px;background-repeat:repeat-x;background-position:4px 4px;
+    box-shadow:0 3px 7px rgba(0,0,0,.55);font-family:'Courier Prime',monospace;font-weight:700;font-size:14px;line-height:1.25;color:#2e2106;text-align:center;border-radius:2px}
+  .sv-tape b{display:block;margin-bottom:5px;padding:6px 6px 5px;background:linear-gradient(135deg,#f5df98,#c79b3b 55%,#9a7626);font-family:'Oswald',sans-serif;font-weight:600;font-size:14.5px;letter-spacing:.08em;text-transform:uppercase;border-radius:2px}
+  .sv-tape:before{content:'';position:absolute;left:50%;top:-9px;width:16px;height:18px;margin-left:-8px;border:4px solid #b8923a;border-radius:9px 9px 0 0;border-bottom:0}
+  .sv-orders{padding:16px 20px 12px;background:#f4efdd linear-gradient(172deg,rgba(255,255,255,.5),rgba(120,100,50,.14));box-shadow:0 20px 50px rgba(0,0,0,.6);font-family:'Caveat',cursive;font-weight:700;font-size:22px;line-height:1.15;color:#14213d}
+  .sv-orders p{margin:0 0 4px}
+  .sv-clip{min-height:74px;margin:0 0 10px;padding:6px;border:2px dashed #8d7b52;background:rgba(60,40,10,.08);display:flex;align-items:center;justify-content:center;position:relative}
+  .sv-clip:before{content:attr(data-n);position:absolute;left:6px;top:2px;font-family:'Bebas Neue',sans-serif;font-size:19px;color:#8d7b52}
+  .sv-clip .sv-tape{width:78%}
+  .sv-clip .sv-tape:before{display:none}
+  .sv-foot{display:flex;gap:14px;align-items:center;margin-top:12px}
+  .sv-foot .pmsg{flex:1;min-height:108px;font-size:15.5px}
+  .lever{flex:none;padding:12px 18px 10px;border:2px solid #f4e04d;background:#23261f;color:#f4e04d;font-family:'Bebas Neue',sans-serif;font-size:21px;letter-spacing:.14em;border-radius:3px}
+  .lever:hover{background:#f4e04d;color:#141518}
+  /* the key */
+  .ky{width:min(760px,94vw);padding:22px 30px 18px;background:#1a130d;border:1px solid #5a4326;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .ky h6{margin:0 0 10px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:#bfa987}
+  .ky-strip{min-height:44px;margin:12px 0 0;padding:8px 14px 6px;background:#efe6c8;color:#1c1b18;font-family:'Courier Prime',monospace;font-weight:700;font-size:22px;letter-spacing:.14em;line-height:28px;box-shadow:0 2px 6px rgba(0,0,0,.5);
+    white-space:nowrap;overflow:hidden}
+  @media (max-width:1000px){.sv{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16110c"/><stop offset="1" stop-color="#2b2016"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5e4526"/><stop offset="1" stop-color="#2a1d0d"/></linearGradient>
+  <linearGradient id="cabG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1d1f22"/><stop offset="1" stop-color="#0a0b0c"/></linearGradient>
+  <linearGradient id="brG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e2a0"/><stop offset=".5" stop-color="#c39a3e"/><stop offset="1" stop-color="#7c5e1e"/></linearGradient>
+  <linearGradient id="ebG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2b2e"/><stop offset="1" stop-color="#0d0d0f"/></linearGradient>
+  <radialGradient id="ampG"><stop offset="0" stop-color="#ffb347" stop-opacity=".85"/><stop offset=".5" stop-color="#ff8a2a" stop-opacity=".2"/><stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="poolG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".55"/><stop offset="1" stop-color="#ffe2a0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="56%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".4"/><stop offset="1" stop-color="#000" stop-opacity=".95"/></radialGradient>
+  <clipPath id="winC"><rect x="96" y="112" width="150" height="190"/></clipPath>
+  <clipPath id="meshC"><rect x="1250" y="250" width="330" height="230" rx="6"/></clipPath>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1050" fill="url(#wallG)"/>
+<g id="boards" stroke="#120d08" stroke-width="2"></g>
+<ellipse cx="1420" cy="380" rx="520" ry="420" fill="url(#ampG)" opacity=".5" pointer-events="none"/>
+<ellipse cx="780" cy="700" rx="620" ry="300" fill="url(#poolG)" opacity=".6" pointer-events="none"/>
+
+<!-- a window: still dark, still raining -->
+<g id="window" class="hot"><rect x="84" y="100" width="174" height="214" fill="#0b0806"/><g clip-path="url(#winC)"><rect x="96" y="112" width="150" height="190" fill="#05080e"/>
+  <g id="rainW" stroke="#8fa6c4" stroke-width="1.5" opacity=".45"><path d="M110 90l-12 40M150 100l-12 40M200 90l-12 40M240 110l-12 40M130 170l-12 40M180 180l-12 40M230 176l-12 40M160 240l-12 40M210 250l-12 40M260 220l-12 40M120 260l-12 40"/></g></g>
+  <path d="M171 112v190M96 207h150" stroke="#0b0806" stroke-width="7"/></g>
+<!-- the clock -->
+<g id="clock" class="hot"><circle cx="760" cy="190" r="62" fill="#0b0806"/><circle cx="760" cy="190" r="54" fill="#ece6d2"/><g id="ticks" stroke="#1c1b18" stroke-width="3"></g>
+  <path d="M760 190l8 -34" stroke="#1c1b18" stroke-width="6" stroke-linecap="round"/><path id="mh" d="M760 190V144" stroke="#1c1b18" stroke-width="3.5" stroke-linecap="round"/><circle cx="760" cy="190" r="5" fill="#c8281d"/></g>
+
+<!-- the rack of service tapes -->
+<g id="rack" class="hot"><rect x="300" y="150" width="372" height="250" fill="transparent"/><rect x="300" y="150" width="372" height="26" rx="4" fill="#4a3320"/><g id="tapes"></g></g>
+
+<!-- item 31 -->
+<g id="phone" class="hot"><g>
+  <rect x="908" y="150" width="96" height="160" rx="8" fill="#3d4a34"/><rect x="908" y="150" width="96" height="160" rx="8" fill="none" stroke="#232b1f" stroke-width="4"/>
+  <rect x="918" y="160" width="76" height="44" rx="4" fill="#2c3626"/><g fill="#11150f"><circle cx="936" cy="174" r="2.4"/><circle cx="948" cy="174" r="2.4"/><circle cx="960" cy="174" r="2.4"/><circle cx="972" cy="174" r="2.4"/><circle cx="942" cy="186" r="2.4"/><circle cx="954" cy="186" r="2.4"/><circle cx="966" cy="186" r="2.4"/></g>
+  <circle cx="1008" cy="252" r="10" fill="#1b1f18"/><path d="M1008 252h18v-12" stroke="#8d8a7c" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M894 170q-12 56 0 118" stroke="#0c0d0b" stroke-width="14" fill="none" stroke-linecap="round"/><rect x="882" y="156" width="24" height="30" rx="10" fill="#141612"/><rect x="882" y="272" width="24" height="30" rx="10" fill="#141612"/>
+  <path d="M894 302q4 60 60 50" stroke="#0c0d0b" stroke-width="4" fill="none"/>
+  <rect x="922" y="258" width="68" height="20" rx="2" fill="url(#brG)"/>
+  <g transform="rotate(-3 956 250)"><rect x="920" y="226" width="72" height="40" fill="#f1ede1"/><rect x="920" y="226" width="72" height="9" fill="#f4e04d"/><text x="956" y="257" class="lbl" font-size="16">ITEM 31</text></g>
+</g></g>
+
+<!-- the sender, close to -->
+<g id="sender" class="hot">
+  <rect x="1180" y="-400" width="1500" height="1100" fill="#060707"/><rect x="1192" y="-400" width="1500" height="1090" fill="url(#cabG)"/>
+  <g stroke="#2c2f33" stroke-width="3"><path d="M1192 210h1400M1192 510h1400"/></g>
+  <circle cx="1270" cy="140" r="26" fill="#0a0b0c"/><circle id="lampA" cx="1270" cy="140" r="18" fill="#ffb347"/><circle cx="1340" cy="140" r="26" fill="#0a0b0c"/><circle id="lampB" cx="1340" cy="140" r="18" fill="#ffb347"/>
+  <text x="1470" y="150" class="sten" font-size="22" fill="#8d8a7c" letter-spacing="4">SENDING</text>
+  <rect x="1240" y="240" width="350" height="250" rx="8" fill="#050505"/>
+  <g clip-path="url(#meshC)"><g id="valve"><ellipse cx="1330" cy="380" rx="40" ry="84" fill="#ff8a2a" opacity=".85"/><ellipse cx="1460" cy="380" rx="40" ry="84" fill="#ff8a2a" opacity=".85"/><ellipse cx="1330" cy="392" rx="15" ry="50" fill="#ffe2a0"/><ellipse cx="1460" cy="392" rx="15" ry="50" fill="#ffe2a0"/></g>
+    <g id="mesh" stroke="#0a0b0c" stroke-width="5" opacity=".9"></g></g>
+  <rect x="1240" y="536" width="350" height="130" rx="6" fill="#0a0b0c"/><circle cx="1310" cy="600" r="40" fill="#26292d"/><circle cx="1500" cy="600" r="40" fill="#26292d"/><circle cx="1310" cy="600" r="9" fill="#0a0b0c"/><circle cx="1500" cy="600" r="9" fill="#0a0b0c"/>
+  <path id="loop" d="M1310 560H1500a40 40 0 0 1 0 80H1310a40 40 0 0 1 0-80z" fill="none" stroke="#efe6c8" stroke-width="11" stroke-dasharray="20 5"/>
+  <rect x="1380" y="548" width="50" height="24" rx="3" fill="#c8281d"/><text x="1405" y="566" class="sten" font-size="14" fill="#f1ede1">GATE</text>
+</g>
+
+<!-- the desk: the log, the key, and what came out of the safe -->
+<path d="M-1000 700L-600 640H2200L2600 700V1400H-1000z" fill="url(#deskG)"/><path d="M-1000 700L-600 640H2200L2600 700" stroke="#7a5c33" stroke-width="3" fill="none" opacity=".5"/>
+<g id="log" class="hot"><path d="M150 838L214 684H622L640 838z" fill="#2b2f3a"/><path d="M170 826L226 696H414L404 826z" fill="#efe9d6"/><path d="M412 826L420 696H606L622 826z" fill="#efe9d6"/>
+  <g stroke="#3a4a7a" stroke-width="3"><path d="M238 722h150M230 746h154M222 770h120M214 794h60"/></g><g stroke="#a39b84" stroke-width="1.5"><path d="M432 722h160M430 746h164M428 770h168M426 794h172"/></g></g>
+<g id="papers" class="hot"><path d="M1010 812l30 -120h150l-10 120z" fill="#efe9d6" transform="rotate(4 1090 750)"/><path d="M1060 826l10 -104h130l14 104z" fill="#f4efdd" transform="rotate(-5 1140 770)"/>
+  <g stroke="#14213d" stroke-width="2.5" transform="rotate(-5 1140 770)"><path d="M1086 746h100M1086 764h104M1088 782h90M1090 800h60"/></g>
+  <rect x="1150" y="790" width="96" height="62" rx="3" fill="#7b2c22" transform="rotate(8 1198 820)"/><rect x="1166" y="806" width="60" height="16" fill="#e6c873" transform="rotate(8 1198 820)"/></g>
+<g id="key" class="hot">
+  <ellipse cx="800" cy="806" rx="190" ry="34" fill="#150e06" opacity=".7"/><rect x="630" y="740" width="340" height="56" rx="10" fill="url(#ebG)"/><rect x="630" y="740" width="340" height="14" rx="7" fill="#3a3b3f"/>
+  <rect x="664" y="700" width="30" height="44" rx="4" fill="url(#brG)"/><rect x="900" y="708" width="26" height="36" rx="4" fill="url(#brG)"/>
+  <path d="M664 716L940 690" stroke="url(#brG)" stroke-width="16" stroke-linecap="round"/><path d="M668 712L936 687" stroke="#fff3c4" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+  <rect x="934" y="662" width="12" height="30" fill="url(#brG)"/><ellipse cx="940" cy="656" rx="42" ry="13" fill="#17130f"/><ellipse cx="940" cy="650" rx="42" ry="13" fill="#2a2420"/><ellipse cx="934" cy="647" rx="20" ry="5" fill="#fff" opacity=".12"/>
+  <circle cx="760" cy="712" r="7" fill="#7c5e1e"/><circle cx="820" cy="768" r="6" fill="#55524a"/><circle cx="680" cy="768" r="6" fill="#55524a"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, B = document.body, called = false, named = false, heard = false, taped = false, leaving = false;
+  /* the ready-made tapes on the rack: a plate, and what it says underneath. PAIR says which of her orders a tape could answer. */
+  var TAPES = { a: ['To committee', 'for discussion at the next meeting'], b: ['To file', 'discussion put off, without date'], c: ['No penalty', 'is asked for any person'],
+    d: ['No leave', 'is given to any person to see this'], e: ['Entry was a mistake', 'not noticed at the time'], f: ['Entry was made', 'under the supervision of the S.O.'] };
+  var PAIR = { a: 1, b: 1, c: 2, d: 2, e: 3, f: 3 }, ORDERS = ['1. Table this page, and my report with it.', '2. I want nobody sanctioned.', '3. If he would rather call his entry an oversight, let him.'];
+
+  (function () {
+    var s = '', x, i, a;
+    for (x = -990; x < 2600; x += 58) s += '<path d="M' + x + ' -400V650"/>';
+    $('#boards').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { a = i * Math.PI / 6; s += '<path d="M' + (760 + 45 * Math.sin(a)).toFixed(1) + ' ' + (190 - 45 * Math.cos(a)).toFixed(1) + 'L' + (760 + 52 * Math.sin(a)).toFixed(1) + ' ' + (190 - 52 * Math.cos(a)).toFixed(1) + '"/>'; }
+    $('#ticks').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) {
+      x = 332 + i * 62;
+      s += '<path d="M' + x + ' 166v14" stroke="#b8923a" stroke-width="6" stroke-linecap="round"/><g class="tapeL' + (i % 2 ? ' t2' : '') + '"><path d="M' + (x - 13) + ' 178v' + (150 + (i * 37) % 60) + 'q13 22 26 0v-' + (150 + (i * 37) % 60) + '" fill="none" stroke="#efe6c8" stroke-width="9"/>' +
+        '<path d="M' + (x - 13) + ' 190v' + (130 + (i * 37) % 60) + '" stroke="#2a2118" stroke-width="2" stroke-dasharray="2 7"/></g><rect x="' + (x - 26) + '" y="186" width="52" height="24" rx="2" fill="url(#brG)"/>' +
+        '<g stroke="#5a4310" stroke-width="2"><path d="M' + (x - 18) + ' 194h36M' + (x - 18) + ' 202h' + (20 + (i * 7) % 16) + '"/></g>';
+    }
+    $('#tapes').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) s += '<path d="M1250 ' + (262 + i * 20) + 'h340"/>';
+    for (i = 0; i < 16; i++) s += '<path d="M' + (1262 + i * 22) + ' 250v230"/>';
+    $('#mesh').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'zero', storyTitle: 'Station Zero', id: 'key', no: 'VI', title: 'The Key',
+    sound: ['shore', { root: 43, bpm: 50, mood: 'tense', drop: ['mel'], beds: [['static', 0.8], ['sea', 0.5]] }],
+    go: 'Answer it',
+    intro: [
+      'Eight small words went back into the skipper&rsquo;s telegram: IF, THOUGH, WHEREAS, ALTHOUGH, SINCE, HOWEVER, EITHER, RATHER. Their first letters, set on the eight drums of the safe, were not one word but three: IT WAS HER.',
+      'Inside were the page that was cut out of the log, a note addressed to you, though it was written before you were born, and a small red book of words that face both ways.',
+      'It is getting on for one o&rsquo;clock. Upstairs the hut is warm and smells of hot dust, and the sender is very near the end of its tape. On the wall, item 31 has started to ring again.'
+    ],
+    exit: {"next":"relieved","w":{"6bbdc68a":"4e869ece","23261754":"8766e0ab"}}, tags: {"who":["446b729f","95a9caa2","e6b51813","84601543","884765a5","06200dff"],"who@":["823f13d8","46a77fc3","6bdb6391","4628a085","759ebb35","a3ad10bd"],"who?":["7a6ad31a","dce9c8f3","85957a1e","f0c3490e","189f23ec","02c86ea6"],"who#":["15cc9a31"],"last":["cfe0c9ba","bedd30fb"],"last@":["7fb810d1","6e9b5de0","98089f58","240ef2df","2dfc2ed7","e113c965","c067f488","29ffb3a6"],"last?":["b2cdc996","a90b727a","d21601ef","248529f4","f0f27a8f","ec180f30","101bfd02","04f3cce7"],"last#":["f2ccc31a"],"t1":["7b69707c"],"t2":["61bfa350"],"t3":["befd14cc"]},
+    hints: hints,
+    onBegin: begin
+  });
+  ZERO.clock();
+  called = !!ER.flag('call6'); named = !!ER.flag('named'); heard = !!ER.flag('q6'); taped = !!ER.flag('taped');
+  setInterval(function () { $('#mh').setAttribute('transform', 'rotate(' + ZERO.minute() * 6 + ' 760 190)'); }, 1000);
+
+  function hints() {
+    if (!called) return ['phone', ['The telephone is ringing, as the voice said it would. Item 31, on the wall by the sender.']];
+    if (!named) return ['who', [
+      'The voice has asked you a question. Everything you need to answer it is in your notebook: five calls taken down word for word, and the things you have read tonight.',
+      'Control used a name for this place that nobody who worked here ever used. Where does that name come from, and who would have seen it? Control knew about a dinner. Control spelt one word in a way that you have seen twice in the store. And with the leads out of the aerial box, how far could the sender be heard?',
+      'Standing Orders say how Control is reached, and it is not by telephone. The brass plate in the cellar says where this line goes. Saturday&rsquo;s programme says who lives there. Click on the telephone, and type his surname.'
+    ]];
+    if (!heard) return ['hear', ['He is still on the line. Click on the telephone and hear him out.']];
+    if (!taped) return ['tapes', [
+      'Your grandmother&rsquo;s note gives three orders. Each has one word in it that can be read two ways, and the man on the telephone has just read all three his own way. Her red word book is in your notebook. The tapes hang on the rack on the wall.',
+      'For each order there are two tapes on the rack, one for each meaning of the word. Hang the right one on the clip with the number of that order, and then press the bar. TABLE: which country are you in? SANCTIONED: is the thing after it a plan, or a person?',
+      'AN oversight, with AN in front, is a thing you can count: so it is the mistake, not the watching-over. Nobody sanctioned means nobody punished. And to table a page, in England, is to put it forward so that it must be talked about.'
+    ]];
+    return ['last', [
+      'The tapes have gone through. One word is left, and there is no tape for it: it has to be sent by hand, on the brass key. Read the end of the note again, and then order 5 of Standing Orders.',
+      'She wrote all of this TO MY RELIEF. At this station a relief is a person: the operator who comes to take over. Her watch has stood open for thirty years because that person never came. Tonight somebody has.',
+      'Look at the last page of the log, and at how every other watch in the book ends. The line is always written by the relief, and it has two words. The second of them is the word to key.'
+    ]];
+  }
+  function pips() { ER.pips((named ? 1 : 0) + (taped ? 1 : 0) + (leaving ? 1 : 0), 3); }
+  function begin() {
+    pips(); ZERO.keying(0.014);
+    if (called) return;
+    ER.narrate(['The brass key, the open log, the rack of ready-made tapes on the wall: everything is where it was at midnight, and you look at none of it. You look at the telephone.'], function () { ZERO.ring($('#phone g')); });
+  }
+  function busy() { return leaving; }
+
+  ZERO.thing('#window', null, 'Still dark, and still raining, but the wind has gone round. The red lamp on the mast is burning without a flicker.', busy);
+  ZERO.thing('#clock', null, function () { return 'The station clock: ' + ZERO.minute() + ' minutes past midnight.'; }, busy);
+  ZERO.thing('#sender', 'sender', 'The sender, close to. You can feel the heat of it on your face. The tape is very nearly round to its end, and a small red plate beside the loop says GATE.', busy);
+  ZERO.thing('#log', null, 'The station log, open at its last page. &ldquo;2400 Station closed by order. Watch not relieved. H.T.&rdquo; Under that line the page is empty, and it has been empty for thirty years.', busy);
+  ZERO.thing('#papers', null, 'The page, the note and the red word book, out of your jacket and on the desk. They are all in your notebook as well.', busy);
+
+  /* ---------- the telephone: who is it? ---------- */
+  function askName() {
+    var box = ER.el('div', 'nm'), buf = '', out, msgEl;
+    box.innerHTML = '<h5>&ldquo;Then who am I?&rdquo;</h5><h6>The handset is still at your ear. Say the name.</h6><div class="wk wk-line"><div class="wk-typed empty">type a name, then Enter</div></div><p class="pmsg"></p><div class="kb wk"></div>';
+    out = box.querySelector('.wk-typed'); msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() { out.textContent = buf ? buf.toUpperCase() : 'type a name, then Enter'; out.classList.toggle('empty', !buf); box.setAttribute('data-buf', buf); }
+    function press(k) {
+      if (named) return false;
+      if (k === 'back') buf = buf.slice(0, -1);
+      else if (k === 'space') { if (buf && buf.slice(-1) !== ' ' && buf.length < 20) buf += ' '; }
+      else if (k === 'enter') { say(); return; }
+      else if (k.length === 1) { if (buf.length < 20) { buf += k; ER.sfx.tick(); } }
+      else return false;
+      draw();
+    }
+    function say() {
+      var g = WK.norm(buf);
+      if (!g) return;
+      if (WK.is('who', g)) {
+        named = true; ER.flag('named', 1); pips(); ER.sfx.ok();
+        msg('You say it. For a moment there is nothing on the line at all, not even the hiss.');
+        setTimeout(function () { ER.closeAll(); confess(); }, 1700);
+        return;
+      }
+      ZERO.burn(2); ER.shake(out); ER.sfx.no();
+      msg(/holloway/.test(g) ? '&ldquo;Mrs Holloway is asleep in the town,&rdquo; says the voice, &ldquo;and has never used the word &lsquo;sender&rsquo; in her life.&rdquo; True. Who else has read her leaflet?'
+        : /ito/.test(g) ? '&ldquo;Ito?&rdquo; says the voice. &ldquo;Ito could spell &lsquo;received&rsquo; in two languages.&rdquo; True, and worth thinking about.'
+        : /rask/.test(g) ? 'The skipper sent one telegram thirty years ago, to thank somebody whose name he never learned. He is not the one with something to hide.'
+        : /thorne|hester|gran/.test(g) ? '&ldquo;Hester Thorne,&rdquo; says the voice, and laughs, not happily. Your grandmother gave her word that she would never speak of it. This man has spoken of very little else all night.'
+        : /varga/.test(g) ? 'Dr Varga drew a wheel in 1941. This voice is a good deal nearer than that.'
+        : /control/.test(g) ? '&ldquo;I told you so at midnight,&rdquo; says the voice. But Standing Orders say how Control is reached, and it is not on this telephone.'
+        : '&ldquo;No,&rdquo; says the voice, and sounds almost pleased. It is somebody you have read about tonight. Look through your notebook: who knew about the dinner, and who lives at the other end of this wire?');
+      buf = ''; draw();
+    }
+    WK.board(box.querySelector('.kb'), { back: true, enter: 'Say it', key: press });
+    WK.keys(box, press);
+    draw(); msg('You have five calls in your notebook, taken down word for word. Open it if you need to (the button is at the top).');
+    ER.open('ov-lock', box);
+  }
+  function confess() {
+    ZERO.call('quince', [
+      '&ldquo;&hellip;Yes.&rdquo; It is the same voice, but all the hurry has gone out of it. &ldquo;How long have you known?&rdquo;',
+      { q: 'You called this place Station Zero. That name is eight months old.', a: '&ldquo;Mrs Holloway&rsquo;s leaflet. It is on my kitchen table. Yes.&rdquo;' },
+      { q: 'You knew about the dinner before I had read a word of part two.', a: '&ldquo;The Harbour Hotel. There were speeches. I have thought about that dinner every night for thirty-one years.&rdquo;' },
+      { q: 'You spell &ldquo;received&rdquo; the way one page of the log spells it.', a: '&ldquo;She told me so, often enough.&rdquo;' },
+      { q: 'And Control cannot telephone. This line goes to one house.', a: '&ldquo;I watched your light go from room to room all night. At midnight I heard my own sender start up, on the set beside my bed, and I knew what it must be. She never said a word, you know. Not in thirty years. I thought she had forgiven me. She was only waiting for the electricity.&rdquo;' },
+      '&ldquo;It is going out from the mast now. I can hear the difference. So. You have her note. What does she want done to me?&rdquo;',
+      { q: 'She says: table the page. Nobody is to be sanctioned. Call it an oversight, if you like.', a: '&ldquo;There! You see? Her own words. Table it: put it away in a drawer and leave it there. Nobody sanctioned: nobody is given leave to send it, or to see it. And an oversight it certainly was. I had the oversight of that station. Every watch was kept under my oversight, and the credit for a watch goes where the oversight is. It is all perfectly regular. Now stop the tape.&rdquo;' },
+      { q: 'That is not what any of those words mean here.', a: '&ldquo;Words mean what the Station Officer says they mean.&rdquo; A pause. &ldquo;They always did, on that hill.&rdquo;' }
+    ], { id: 'quince', title: 'Sir Aubrey Quince: what he says the note means', kind: 'Field telephone' }, function (seen) {
+      if (!seen || heard) return;
+      heard = true; ER.flag('q6', 1); ZERO.sfx.relay();
+      ER.say('You lay the handset on the desk without hanging up. Inside the sender something clicks, and a lamp you had not noticed comes on beside the tape: FEED SERVICE TAPES. They hang on the rack on the wall, six of them.', 8000);
+    }, 'Put the handset down');
+  }
+  $('#phone').addEventListener('click', function (e) {
+    if (leaving) return;
+    if (!called) {
+      ZERO.call('control', [
+        '&ldquo;Well? Is it burnt?&rdquo;',
+        { q: 'No.', a: '&ldquo;Then you are as obstinate as she was. Put it in the stove. That is an order, and I give it as Control.&rdquo;' },
+        { q: 'You are not Control.', a: '<p class="note">The line hisses for a while.</p><p>&ldquo;Indeed. Then who am I?&rdquo;</p>' }
+      ], { id: 'call6', title: 'Control: the last call', kind: 'Field telephone' }, function (seen) {
+        if (!seen) { ZERO.ring($('#phone g')); return; }
+        called = true; ER.flag('call6', 1); setTimeout(askName, 500);
+      }, 'Answer him');
+      return;
+    }
+    if (!named) { askName(); return; }
+    if (!heard) { confess(); return; }
+    ER.wordAt(e.clientX, e.clientY, 'field telephone');
+    ER.say('The handset lies on the desk, face up. Now and then it says something. You have stopped answering.');
+  });
+
+  /* ---------- the service tapes: one for each of her orders ---------- */
+  function openRack() {
+    var box = ER.el('div', 'sv'), order = ER.flag('rk') || 'dafcbe', rack, msgEl, lock = false;
+    box.innerHTML = '<div><h5>Service tapes &middot; ready-made</h5><div class="sv-rack"></div></div>' +
+      '<div><h5>Her orders &middot; hang one tape under each</h5><div class="sv-orders">' + ORDERS.map(function (o, i) { return '<p>' + o + '</p><div class="sv-clip" data-n="' + (i + 1) + '"></div>'; }).join('') + '</div>' +
+      '<div class="sv-foot"><p class="pmsg"></p><button type="button" class="lever">Feed the gate</button></div></div>';
+    rack = box.querySelector('.sv-rack'); msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function fill() {
+      rack.innerHTML = '';
+      order.split('').forEach(function (id) { var t = ER.el('div', 'sv-tape dnd-item', '<b>' + TAPES[id][0] + '</b>' + TAPES[id][1]); t.setAttribute('data-id', id); rack.appendChild(t); });
+    }
+    function clipped() { return ER.$$('.sv-clip', box).map(function (c) { var t = c.querySelector('.sv-tape'); return t ? t.getAttribute('data-id') : ''; }); }
+    ER.dnd(box, { item: '.sv-tape', slot: '.sv-clip', home: rack, lock: function () { return lock || taped; }, change: function () { box.setAttribute('data-clips', clipped().join('')); } });
+    box.querySelector('.lever').addEventListener('click', function () {
+      var c = clipped(), n, bad = 0;
+      if (lock || taped) return;
+      ZERO.sfx.lever();
+      if (c.indexOf('') >= 0) { msg('Three orders, three clips. One clip at least is still empty.'); return; }
+      for (n = 3; n >= 1; n--) if (!ER.check('t' + n, c[n - 1])) bad = n;
+      if (!bad) {
+        taped = true; ER.flag('taped', 1); pips(); ZERO.sfx.tape(); setTimeout(ZERO.sfx.tape, 500); setTimeout(ZERO.sfx.tape, 1000); ER.sfx.ok();
+        WK.learn('table', true); WK.learn('sanction', true); WK.learn('oversight', true);
+        msg('The gate takes all three, one after another, and they go out behind her report: for discussion, no penalty, a mistake. On the desk the handset says something sharp. Then it says nothing.');
+        setTimeout(function () { ER.closeAll(); ER.say('The loop of tape runs out of the gate and falls into its bin. The lamps on the sender burn steadily: it is waiting. There is no tape for the last word. That one is sent by hand, on the brass key.', 8000); }, 3600);
+        return;
+      }
+      ER.sfx.no(); ER.shake(ER.$$('.sv-clip', box)[bad - 1]);
+      if (PAIR[c[bad - 1]] !== bad) { ZERO.burn(1); msg('The tape on clip ' + bad + ' has nothing to do with order ' + bad + '. It answers order ' + PAIR[c[bad - 1]] + '. The clips are numbered like the orders.'); return; }
+      ZERO.burn(3); lock = true;
+      msg(bad === 1 ? '&ldquo;To file,&rdquo; says the handset on the desk, warmly. &ldquo;Quite right.&rdquo; You catch the tape with your thumb before the gate can take it. That is what the word means in America. Your grandmother has told you which country you are in.'
+        : bad === 2 ? 'The handset is pleased again, and that is reason enough to stop. To sanction a plan is to allow it. But what comes after the word in her note is not a plan. It is a person: nobody.'
+        : '&ldquo;Under my oversight. Exactly,&rdquo; says the handset. But the note says AN oversight. One of the two meanings you can count, and the red book says which.');
+      setTimeout(function () {
+        order = order.slice(1) + order.charAt(0); order = order.charAt(3) + order.slice(0, 3) + order.slice(4); ER.flag('rk', order);
+        ER.$$('.sv-clip .sv-tape', box).forEach(function (t) { t.parentNode.removeChild(t); }); fill(); lock = false; box.setAttribute('data-clips', '');
+      }, 1500);
+    });
+    fill();
+    msg('Six ready-made tapes, each with a brass plate. Drag one on to each numbered clip (or click the tape, then the clip), and then feed the gate.');
+    ER.open('ov-lock', box);
+  }
+  $('#rack').addEventListener('click', function () {
+    if (leaving) return;
+    if (!heard) { ER.say('Six loops of punched tape on brass hooks, each with a plate: the things a station says so often that nobody punches them fresh. TO COMMITTEE. TO FILE. NO PENALTY. And so on.'); return; }
+    if (taped) { ER.say('Three hooks are empty. The other three tapes will never be wanted now.'); return; }
+    openRack();
+  });
+
+  /* ---------- the key: one word, by hand ---------- */
+  function openKey() {
+    var box = ER.el('div', 'ky'), buf = '', out, strip, msgEl, tries = 0;
+    box.innerHTML = '<h6>Hand key &middot; the last word of the watch</h6><div class="wk wk-line"><div class="wk-typed empty">key the word, then Enter</div></div><div class="ky-strip"></div><p class="pmsg"></p><div class="kb wk"></div>';
+    out = box.querySelector('.wk-typed'); strip = box.querySelector('.ky-strip'); msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() {
+      out.textContent = buf ? buf.toUpperCase() : 'key the word, then Enter'; out.classList.toggle('empty', !buf);
+      strip.textContent = buf.split('').map(function (c) { return c === ' ' ? '/' : ZERO.morse(c).replace(/\./g, '·').replace(/-/g, '–'); }).join('  ');
+      box.setAttribute('data-buf', buf);
+    }
+    function press(k) {
+      if (leaving) return false;
+      if (k === 'back') buf = buf.slice(0, -1);
+      else if (k === 'space') { if (buf && buf.slice(-1) !== ' ' && buf.length < 16) buf += ' '; }
+      else if (k === 'enter') { send(); return; }
+      else if (k.length === 1) { if (buf.length < 16) { buf += k; ZERO.send(k, 0.06, 0, 700); } }
+      else return false;
+      draw();
+    }
+    function send() {
+      var g = WK.norm(buf), file;
+      if (!g) return;
+      file = WK.is('last', g) ? ER.exit([g], { wait: true }) : null;
+      if (!file) {
+        tries++; ZERO.burn(2); ER.shake(out); ER.sfx.no();
+        msg(/^closed?$/.test(g) ? 'CLOSED. But nobody can close her own watch, and you are not closing it for her either. You are doing something else for her. What did she call the person she wrote all this to?'
+          : g === 'received' ? 'RECEIVED, and correctly spelt, which is more than some people manage. But it is not the word that ends a watch. Look at how every other watch in the log ends.'
+          : /^relie(f|ve|ves|ving)$/.test(g) && g !== 'relief' ? 'Very nearly. But look at how the log writes it. By the time the word is sent, the thing has been done.'
+          : g === 'relief' ? 'RELIEF is what she called you. What does a relief do to a watch? Every watch in the log but one ends with the word.'
+          : /cancel|stop|quince|test/.test(g) ? '&ldquo;Yes!&rdquo; says the handset on the desk. You take your hand off the key. Not that.'
+          : g === 'itwasher' ? 'That opened the safe, and it has gone out already, in her page. The watch still wants its last word.'
+          : 'You key it, and lift your hand. Good Morse, but not the one word that Standing Orders keep for this. Order 5; and the last line of every watch in the log but one.');
+        buf = ''; draw(); return;
+      }
+      leaving = true; pips(); B.classList.add('sent'); ER.flag('quiet', 1); WK.learn('relief', true); ZERO.mood('calm');
+      msg('The last letter goes out, and you lift your hand from the key.');
+      setTimeout(function () {
+        ER.closeAll();
+        ER.narrate([
+          'WATCH RELIEVED. The two lamps on the sender go out, one and then the other. In the yard the engine runs on for a moment, and then, with nothing left to feed, drops to a mutter.',
+          'You write it in the log as well, under her last line, in ink, with the true time. Then your initials, because that is how it is done.',
+          'The handset on the desk is silent. After a long while it says, quite quietly: &ldquo;She had the best ears on the coast, you know. I said so in my report. That part was true.&rdquo; Then the line goes dead.'
+        ], function () { ER.leave(file); });
+      }, 2200);
+    }
+    WK.board(box.querySelector('.kb'), { back: true, enter: 'Send', key: press });
+    WK.keys(box, press);
+    draw(); msg('A brass key, worn smooth where a finger and thumb have held it. Type the word, and you will key it. The space bar puts a gap between two words.');
+    ER.open('ov-lock', box);
+  }
+  $('#key').addEventListener('click', function () {
+    if (leaving) return;
+    if (!taped) { ER.say(heard ? 'The hand key. But the lamp on the sender says FEED SERVICE TAPES, and they come first.' : 'The hand key: a brass arm on a black base, for sending a letter at a time. Your grandmother could do thirty words a minute on it.'); return; }
+    openKey();
+  });
+})();
+</script>
+</body>
+</html>

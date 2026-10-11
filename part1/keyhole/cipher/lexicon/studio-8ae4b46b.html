@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Studio Two · The Final Word</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="lex.css">
+<style>
+  body{--bg:#07040d;--accent:#f4c430;--font-display:'Playfair Display',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(8,4,15,.95);--tc-ink:#f1e9f7;--cap-bg:rgba(10,5,18,.93);--panel:#170d26;--face-bg:#3b2f1d;--q-ink:#f4c430;--fade:#030106;--hud-bg:rgba(10,5,18,.74)}
+  .tc-room{font-weight:900;font-style:italic}
+  .tc-text,.cap{font-size:clamp(19px,1.6vw,24px)}
+  .tk-text{font-size:clamp(19px,1.5vw,23px)}
+  .tk-name{font-family:'Playfair Display',serif;font-weight:700}
+  .sg{font-family:'Bebas Neue',sans-serif;text-anchor:middle}
+  .led{font-family:'VT323',monospace;text-anchor:middle}
+  .stn{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .logo{font-family:'Playfair Display',serif;font-weight:900;text-anchor:middle}
+  .tl rect{fill:url(#tileG)}
+  .tl text{font-family:'Bebas Neue',sans-serif;font-size:21px;text-anchor:middle;fill:#141518;letter-spacing:1px}
+  .tl.k1 rect{fill:#1f7a8c}.tl.k2 rect{fill:#b3261c}.tl.k3 rect{fill:#1f5fd0}.tl.k4 rect{fill:#8a3fd0}
+  .tl.k1 text,.tl.k2 text,.tl.k3 text,.tl.k4 text{fill:#fff}
+  #tiles.live .tl{animation:tl 2.6s steps(1,end) infinite}
+  #tiles.live .tl:nth-child(3n){animation-delay:-.9s}#tiles.live .tl:nth-child(4n+1){animation-delay:-1.7s}
+  @keyframes tl{0%{opacity:1}88%{opacity:.78}94%{opacity:1}}
+  .beam{animation:beam 7s steps(10,end) infinite alternate}
+  .beam.b2{animation-duration:9s;animation-delay:-3s}
+  @keyframes beam{from{opacity:.5}to{opacity:1}}
+  .bglass{transition:opacity 1.2s}
+  .booth.open .bglass{opacity:0}
+  .blamp{fill:#d8271a;animation:blamp 1.5s steps(1,end) infinite}
+  .booth.open .blamp{fill:#3ddc6a;animation:none}
+  @keyframes blamp{50%{fill:#5a120c}}
+  #pen{transform-box:fill-box;transform-origin:0 100%;animation:pen 1.3s ease-in-out infinite alternate}
+  @keyframes pen{from{transform:rotate(-7deg)}to{transform:rotate(9deg)}}
+  #deskScr{animation:dsk 1.2s steps(1,end) infinite}
+  @keyframes dsk{50%{opacity:.55}}
+
+  /* round 4: the wall */
+  .wl{width:min(820px,94vw);--wk-size:40px;--wk-hit:#3ddc6a;--wk-bad:#ff5a4a}
+  .wl .wk-groups{margin-top:8px;padding:8px 8px 6px;border-radius:8px;background:#2a1050 linear-gradient(#3a1a6c,#200c40);box-shadow:inset 0 0 0 3px #f4c430;
+    font-family:'Bebas Neue',sans-serif;color:#141518}
+  .wl .wk-groups .wk-tile{min-height:60px;padding:6px 4px 1px;border:0;border-radius:6px;font-size:30px;font-weight:normal;letter-spacing:.05em;line-height:1;color:#141518;
+    background:#f4e04d linear-gradient(#fffbe0,#f4e04d 60%,#d9c12a);box-shadow:0 4px 0 #8f8320,0 8px 10px rgba(0,0,0,.4)}
+  .wl .wk-groups .wk-tile:hover{filter:brightness(1.08)}
+  .wl .wk-groups .wk-tile.sel{background:#fff;color:#4a1f7a;box-shadow:0 0 0 4px #c77dff,0 4px 0 #6a1fb0}
+  .wl .wk-groups .wk-set{margin:5px;padding:8px 12px 4px;border-radius:6px;color:#fff}
+  .wl .wk-groups .wk-set b{font-size:20px;font-weight:normal;letter-spacing:.16em;opacity:.85}
+  .wl .wk-groups .wk-set span{font-size:27px;letter-spacing:.07em;line-height:1.1}
+  .wl .wk-set[data-key=g1]{background:#1f7a8c}.wl .wk-set[data-key=g2]{background:#b3261c}.wl .wk-set[data-key=g3]{background:#1f5fd0}.wl .wk-set[data-key=g4]{background:#8a3fd0}
+  .wl .wk-set span u{text-decoration:none;color:#f4e04d}
+  .wl-ask{display:none;margin-top:10px;padding:12px 18px 12px;background:#1b1230;border:2px dashed #c77dff;border-radius:6px;font-family:'Courier Prime',monospace;font-size:17.5px;line-height:1.35;color:#f1eee2}
+  .wl-ask.on{display:block}
+  .wl-ask p{margin:0 0 8px}
+  .wl-type{font-family:'Bebas Neue',sans-serif;font-size:46px;text-align:center}
+  .wl-type .wk-gap .wk-cell{width:1.1em;height:1.2em;margin:0 4px;padding-top:.09em;border-bottom:0;border-radius:5px;background:#0b0c0e;color:#fff;box-shadow:inset 0 -4px 0 #f4e04d}
+  .wl-type .wk-gap .wk-cell.cur{background:#3a2a5c;box-shadow:inset 0 0 0 2px #fff}
+  .wl-type .wk-gap.bad .wk-cell{color:#ff5a4a}
+  .wl-type .wk-gap.ok .wk-cell{width:1.1em;margin:0 4px;background:#f4e04d;color:#141518;box-shadow:none}
+
+  /* the board desk: who was here at half past seven? */
+  .ac{width:min(880px,94vw)}
+  .ac-note{margin:12px 0 0;padding:12px 18px;background:#070708;border:1px solid rgba(244,224,77,.5);font-family:'VT323',monospace;font-size:27px;line-height:1.1;color:#fff;text-align:center}
+  .ac-note small{display:block;margin-bottom:4px;font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.24em;color:#f4e04d;opacity:.8}
+  .ac .lx-why{min-height:176px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linaskGradient id="setG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a2596"/><stop offset=".6" stop-color="#3a1670"/><stop offset="1" stop-color="#1c0a3c"/></linaskGradient>
+  <linaskGradient id="goldG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a0"/><stop offset=".5" stop-color="#f4c430"/><stop offset="1" stop-color="#9a6f10"/></linaskGradient>
+  <linaskGradient id="fl3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#150b24"/><stop offset="1" stop-color="#030106"/></linaskGradient>
+  <linaskGradient id="tileG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe0"/><stop offset=".6" stop-color="#f4e04d"/><stop offset="1" stop-color="#d9c12a"/></linaskGradient>
+  <linaskGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linaskGradient>
+  <linaskGradient id="beamP" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7ae0" stop-opacity=".3"/><stop offset="1" stop-color="#ff7ae0" stop-opacity="0"/></linaskGradient>
+  <linaskGradient id="podG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a1050"/><stop offset=".5" stop-color="#6a2fb0"/><stop offset="1" stop-color="#2a1050"/></linaskGradient>
+  <linaskGradient id="camG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2a33"/><stop offset="1" stop-color="#0c0c10"/></linaskGradient>
+  <radialGradient id="stageG" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="#6a2fb0" stop-opacity=".6"/><stop offset="1" stop-color="#6a2fb0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="cyG"><stop offset="0" stop-color="#7fe8ff" stop-opacity=".4"/><stop offset="1" stop-color="#7fe8ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".64" stop-color="#000" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".9"/></radialGradient>
+  <clipPath id="bBc"><rect x="1150" y="300" width="216" height="344"/></clipPath>
+</defs>
+
+<!-- the dark of the studio, and its lamps -->
+<rect x="-1000" y="-400" width="3600" height="1800" fill="#07040d"/>
+<path d="M-1000 54H2600M-1000 84H2600" stroke="#1d1826" stroke-width="7"/>
+<g stroke="#1d1826" stroke-width="5"><path d="M-960 54l30 30M-900 54l30 30" id="trs"/></g>
+<g id="rig"></g>
+<g pointer-events="none">
+  <path class="beam" d="M368 110L190 640H520Z" fill="url(#beamG)"/><path class="beam b2" d="M628 110L520 640H760Z" fill="url(#beamP)"/>
+  <path class="beam" d="M972 110L840 640H1080Z" fill="url(#beamP)"/><path class="beam b2" d="M1232 110L1080 640H1410Z" fill="url(#beamG)"/>
+</g>
+
+<!-- the set -->
+<path d="M150 650V236Q800 126 1450 236V650Z" fill="url(#setG)"/>
+<g stroke="url(#goldG)" stroke-width="5" opacity=".8"><path d="M300 208V650M470 184V650M1130 184V650M1300 208V650"/></g>
+<path d="M150 236Q800 126 1450 236" stroke="url(#goldG)" stroke-width="9" fill="none"/>
+<g fill="#f4c430" opacity=".5" id="bulbs"></g>
+<text x="800" y="228" class="logo" font-size="48" fill="url(#goldG)" letter-spacing="14">LEXICON</text>
+
+<!-- the wall -->
+<g id="swall" class="hot">
+  <rect x="544" y="236" width="512" height="336" rx="12" fill="url(#goldG)"/><rect x="552" y="244" width="496" height="320" rx="7" fill="#12081f"/>
+  <g id="tiles" class="live"></g>
+</g>
+
+<!-- booth A -->
+<g id="boothA" class="booth hot">
+  <rect x="222" y="640" width="236" height="26" rx="4" fill="#0e0718"/><rect x="230" y="644" width="220" height="5" fill="#7fe8ff" opacity=".8"/>
+  <rect x="232" y="300" width="216" height="344" fill="#170c2c"/>
+  <rect x="318" y="560" width="44" height="10" rx="3" fill="#3a2a5c"/><path d="M340 570V644M324 644h32" stroke="#3a2a5c" stroke-width="6"/>
+  <rect x="384" y="470" width="50" height="6" fill="#3a2a5c"/><rect x="398" y="442" width="18" height="28" rx="2" fill="#bfe9ff" opacity=".8"/>
+  <g fill="#fff" opacity=".8"><circle cx="404" cy="452" r="1.800"/><circle cx="410" cy="460" r="1.800"/><circle cx="405" cy="464" r="1.500"/></g>
+  <rect class="bglass" x="232" y="300" width="216" height="344" fill="#7fe8ff" opacity=".13"/>
+  <path class="bglass" d="M250 300l-18 60v-60zM330 300L232 600v44h14L372 300z" fill="#fff" opacity=".06"/>
+  <rect x="232" y="300" width="216" height="344" fill="none" stroke="#7fe8ff" stroke-width="5"/>
+  <rect x="300" y="262" width="80" height="40" rx="4" fill="#0e0718"/><text x="340" y="294" class="sg" font-size="32" fill="#7fe8ff">A</text>
+  <circle class="blamp" cx="428" cy="282" r="7"/>
+</g>
+
+<!-- booth B, and Mrs Pryce -->
+<ellipse cx="1258" cy="470" rx="200" ry="240" fill="url(#cyG)" opacity=".5" pointer-events="none"/>
+<g id="boothB" class="booth hot">
+  <rect x="1140" y="640" width="236" height="26" rx="4" fill="#0e0718"/><rect x="1148" y="644" width="220" height="5" fill="#7fe8ff" opacity=".8"/>
+  <rect x="1150" y="300" width="216" height="344" fill="#1b0f33"/>
+  <g clip-path="url(#bBc)"><g id="fBooth">
+    <path d="M1183 574h150l-12 72h-126z" fill="#4f6b45"/>
+    <use href="#ch-pryce" x="1183" y="380" width="150" height="195"/>
+    <g transform="rotate(-8 1258 600)"><rect x="1214" y="578" width="92" height="62" fill="#f1eee2"/><g fill="#141518"><rect x="1222" y="586" width="9" height="9"/><rect x="1240" y="586" width="9" height="9"/><rect x="1231" y="595" width="9" height="9"/><rect x="1258" y="595" width="9" height="9"/><rect x="1222" y="604" width="9" height="9"/><rect x="1249" y="604" width="9" height="9"/><rect x="1267" y="586" width="9" height="9"/><rect x="1240" y="613" width="9" height="9"/><rect x="1276" y="604" width="9" height="9"/><rect x="1285" y="613" width="9" height="9"/></g>
+      <g stroke="#8d897a" stroke-width="1"><path d="M1222 586h72M1222 595h72M1222 604h72M1222 613h72M1222 622h72"/></g></g>
+    <path id="pen" d="M1306 600l22-34" stroke="#f4c430" stroke-width="5" stroke-linecap="round"/>
+  </g></g>
+  <rect class="bglass" x="1150" y="300" width="216" height="344" fill="#7fe8ff" opacity=".13"/>
+  <path class="bglass" d="M1168 300l-18 60v-60zM1248 300L1150 600v44h14L1290 300z" fill="#fff" opacity=".06"/>
+  <rect x="1150" y="300" width="216" height="344" fill="none" stroke="#7fe8ff" stroke-width="5"/>
+  <rect x="1218" y="262" width="80" height="40" rx="4" fill="#0e0718"/><text x="1258" y="294" class="sg" font-size="32" fill="#7fe8ff">B</text>
+  <circle class="blamp" cx="1346" cy="282" r="7"/>
+</g>
+
+<!-- the floor of the set -->
+<rect x="-1000" y="650" width="3600" height="700" fill="url(#fl3)"/>
+<ellipse cx="800" cy="720" rx="700" ry="92" fill="#1a0d30"/><ellipse cx="800" cy="720" rx="700" ry="92" fill="none" stroke="url(#goldG)" stroke-width="4" opacity=".7"/>
+<ellipse cx="800" cy="716" rx="620" ry="70" fill="url(#stageG)"/>
+<g opacity=".16"><rect x="552" y="660" width="496" height="60" fill="#f4e04d"/><rect x="232" y="666" width="216" height="46" fill="#7fe8ff"/><rect x="1150" y="666" width="216" height="46" fill="#7fe8ff"/></g>
+
+<!-- the glass case with the envelope -->
+<path d="M562 110L480 770H644Z" fill="url(#beamG)" opacity=".6" pointer-events="none"/>
+<g id="caseg" class="hot" transform="translate(-70 78)">
+  <path d="M598 700l8-96h52l8 96z" fill="url(#podG)"/><rect x="592" y="596" width="80" height="10" rx="2" fill="url(#goldG)"/>
+  <rect x="588" y="520" width="88" height="76" fill="#bfe9ff" opacity=".18"/><rect x="588" y="520" width="88" height="76" fill="none" stroke="#dff4ff" stroke-width="3"/>
+  <g transform="rotate(-6 632 566)"><rect x="606" y="550" width="52" height="34" fill="#f4ecd6"/><path d="M606 550l26 18 26-18" stroke="#c9bf9f" stroke-width="2" fill="none"/><circle cx="632" cy="570" r="6" fill="#b3261c"/></g>
+  <path d="M596 528l14 22" stroke="#fff" stroke-width="3" opacity=".4" stroke-linecap="round"/>
+</g>
+
+<!-- the host's desk -->
+<g id="podium" class="hot">
+  <path d="M744 706l12-134h88l12 134z" fill="url(#podG)"/><path d="M750 572h100l-6-12h-88z" fill="url(#goldG)"/>
+  <circle cx="800" cy="632" r="24" fill="#12081f"/><circle cx="800" cy="632" r="24" fill="none" stroke="url(#goldG)" stroke-width="3"/><text x="800" y="641" class="logo" font-size="26" fill="#f4c430">L</text>
+  <rect x="820" y="540" width="12" height="20" rx="2" fill="#bfe9ff" opacity=".8"/>
+</g>
+
+<!-- the lamp and the clock -->
+<g id="onair" class="hot">
+  <rect x="1392" y="104" width="180" height="58" rx="8" fill="#12100f"/><rect x="1400" y="112" width="164" height="42" rx="4" fill="#3a0f0c"/>
+  <text x="1485" y="146" class="sg" font-size="34" fill="#6e1c16" letter-spacing="6">ON AIR</text>
+</g>
+<g id="wclock" class="hot"><rect x="1424" y="172" width="118" height="46" rx="6" fill="#0b0c0e"/><text id="clk" x="1483" y="208" class="led" font-size="42" fill="#ff4a36">7.50</text></g>
+
+<!-- camera two -->
+<g id="cam" class="hot">
+  <path d="M96 900V600h40v300z" fill="#0c0c10"/><path d="M40 900l56-70h40l56 70z" fill="#0c0c10"/>
+  <rect x="20" y="452" width="236" height="150" rx="14" fill="url(#camG)"/><rect x="20" y="452" width="236" height="150" rx="14" fill="none" stroke="#3a3a46" stroke-width="3"/>
+  <path d="M256 482l70-24v140l-70-24z" fill="#14141a"/><ellipse cx="326" cy="528" rx="14" ry="70" fill="#0a0a0e"/><ellipse cx="326" cy="528" rx="8" ry="54" fill="#22344a"/>
+  <rect x="40" y="414" width="96" height="42" rx="6" fill="#14141a"/><rect x="50" y="422" width="60" height="26" rx="3" fill="#1d2a3a"/>
+  <circle cx="232" cy="472" r="8" fill="#4a1512"/>
+  <text x="80" y="548" class="sg" font-size="60" fill="#f1eee2">2</text>
+  <g transform="rotate(-4 170 560)"><rect x="124" y="548" width="112" height="30" fill="#f1eee2"/><text x="180" y="561" font-family="Caveat,cursive" font-weight="700" font-size="13" fill="#1d2a4a" text-anchor="middle">MR BLOOM&#8217;S</text><text x="180" y="574" font-family="Caveat,cursive" font-weight="700" font-size="13" fill="#1d2a4a" text-anchor="middle">GOOD SIDE</text></g>
+</g>
+
+<!-- the board desk -->
+<ellipse cx="1500" cy="640" rx="170" ry="120" fill="url(#cyG)" opacity=".35" pointer-events="none"/>
+<g id="bdesk" class="hot">
+  <path d="M1390 900V690l60-56h260v266z" fill="#101019"/><path d="M1390 690l60-56h260" stroke="#3a3a4c" stroke-width="4" fill="none"/>
+  <rect x="1470" y="548" width="126" height="92" rx="6" fill="#0b0c0e"/><rect id="deskScr" x="1478" y="556" width="110" height="76" fill="#17160a"/>
+  <g stroke="#f4e04d" stroke-width="2.400" opacity=".9"><path d="M1486 570h70M1486 582h92M1486 594h56M1486 606h84M1486 618h40"/></g>
+  <g><circle cx="1432" cy="700" r="15" fill="#d8271a"/><circle cx="1474" cy="690" r="15" fill="#1f5fd0"/><circle cx="1516" cy="684" r="15" fill="#f0c416"/><circle cx="1558" cy="680" r="15" fill="#1f9d4a"/></g>
+  <g fill="#fff" opacity=".35"><circle cx="1427" cy="695" r="4"/><circle cx="1469" cy="685" r="4"/><circle cx="1511" cy="679" r="4"/><circle cx="1553" cy="675" r="4"/></g>
+  <text x="1500" y="770" class="stn" font-size="22" fill="#f4e04d" opacity=".8">BOARD DESK</text>
+</g>
+
+<!-- two hundred empty seats -->
+<g id="seats" class="hot"><g id="seatRow" fill="#0d0816" stroke="#1d1430" stroke-width="3"></g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1800" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="lex.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, cleared, accused, heard, outKey, gone = false, inWall = false, wallDone = false, setsLeft = 4, wallBox = null;
+  var NOTE = 'Kindly stay where you are. This will not take long.';
+  var WORDS = ['whisper', 'news', 'heart', 'rule', 'cartoon', 'beard', 'shout', 'promise', 'record', 'mutter', 'quiz', 'pearl', 'learn', 'drama', 'silence', 'yell'];
+
+  /* the lighting rig, the bulbs round the set, the board, the seats */
+  (function () {
+    var s = '', i, x, t;
+    for (x = -400; x < 2000; x += 60) s += '<path d="M' + x + ' 54l30 30l30-30" stroke="#1d1826" stroke-width="4" fill="none"/>';
+    [140, 368, 628, 800, 972, 1232, 1460].forEach(function (lx, n) {
+      var lit = n === 1 || n === 2 || n === 4 || n === 5;
+      s += '<path d="M' + (lx - 5) + ' 84v14h10v-14z" fill="#1d1826"/><path d="M' + (lx - 22) + ' 98h44l8 26h-60z" fill="#15121c"/>' +
+        '<ellipse cx="' + lx + '" cy="125" rx="29" ry="6" fill="' + (lit ? (n === 2 || n === 4 ? '#ffb0ec' : '#fff6d8') : '#1d1826') + '"/>';
+    });
+    $('#rig').innerHTML = s; s = '';
+    for (i = 1; i < 40; i++) { t = i / 40; s += '<circle cx="' + (150 + 1300 * t).toFixed(1) + '" cy="' + (249 - 220 * t * (1 - t)).toFixed(1) + '" r="3.5"/>'; }
+    $('#bulbs').innerHTML = s; s = '';
+    WORDS.forEach(function (w, n) {
+      var tx = 561.6 + (n % 4) * 121.6, ty = 253.6 + Math.floor(n / 4) * 77.6;
+      s += '<g class="tl" data-w="' + w + '"><rect x="' + tx.toFixed(1) + '" y="' + ty.toFixed(1) + '" width="112" height="68" rx="6"/>' +
+        '<text x="' + (tx + 56).toFixed(1) + '" y="' + (ty + 42).toFixed(1) + '">' + w.toUpperCase() + '</text></g>';
+    });
+    $('#tiles').innerHTML = s; s = '';
+    for (x = -140; x < 1800; x += 104) s += '<rect x="' + x + '" y="828" width="92" height="120" rx="18"/>';
+    $('#seatRow').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'lexicon', storyTitle: 'The Final Word', id: 'studio', no: 'III', title: 'Studio Two',
+    go: 'Turn the key',
+    intro: [
+      'Nine letters at the gallery door made OVERHEARD: heard by accident, or by listening where you should not. You had heard the word before you could spell it. It is the word that Mr Valentine keeps saying to his mirror.',
+      'The log says that somebody made LOCKED IN ready at the board desk at half past seven, and typed a note for every screen: &ldquo;Kindly stay where you are. This will not take long.&rdquo; Miss Teague is sure that they wanted the envelope with the final word in it.',
+      'Her key opens the audience doors of Studio Two. Two hundred people are waiting in the foyer behind you. You go in first, and lock the doors again.'
+    ],
+    exit: {"next":"onair","w":{"7bdd257b":"15bbcbbc"}}, tags: {"h1":["9c096a0e"],"h1@":["6ab1dcb3","9761b31b","f3e7f51c"],"h1?":["ad4852f2","fa601694","f83d42a4"],"h1#":["3bc18118"],"g1":["f3cc7540"],"g1~":["e27493af","f730d8ac","aa0cd070","67403bc1"],"g2":["e8518a16"],"g2~":["20e72eb4","357c4ec8","9bfb639d","2f62dc09"],"g3":["8827668e"],"g3~":["17fc46c0","5a891408","77d93d66","885814bc"],"g4":["fdd9eb0a"],"g4~":["4251c45a","45356c37","60e96bb6","cc0438d6"],"who":["c251a064"],"why":["cae97a7e"]},
+    sound: ['studio', { root: 50, bpm: 108, drop: ['hit'] }],
+    hints: hints,
+    onBegin: begin
+  });
+  LEX.clock({ start: 50 * 60, range: 470, lin: 300 });
+  LEX.onTick(function () { $('#clk').textContent = LEX.hhmm(); });
+  cleared = !!ER.flag('s1'); accused = !!ER.flag('s2'); heard = !!ER.flag('s3'); outKey = ER.flag('sout') || null;
+
+  function isBusy() { return busy; }
+  function paint() {
+    $('#boothA').classList.toggle('open', cleared); $('#boothB').classList.toggle('open', cleared);
+    $('#tiles').setAttribute('class', cleared ? '' : 'live');
+    ER.pips((cleared ? 1 : 0) + (accused ? 1 : 0) + (heard ? 1 : 0), 3);
+    if (cleared && accused && heard && outKey) LEX.go('Stand by the board desk', function () { if (!gone) gone = ER.exit([outKey]); });
+    if (cleared && !accused) ER.mood('tense');
+  }
+  function begin() {
+    paint();
+    if (ER.flag('sseen')) {
+      if (cleared && !accused) ER.say('Miss Teague is still waiting for a name. The four buzzers are on the board desk, on the right.');
+      return;
+    }
+    ER.flag('sseen', 1);
+    ER.narrate([
+      'The set of LEXICON, with nobody on it. It is smaller than it looks on television, and a great deal more purple.',
+      'In the middle is the big board, with sixteen words on it. On each side of it stands a glass booth. In booth B a woman in a green cardigan is doing a crossword.',
+      'She looks up at you, points her pencil at the board, and goes back to her crossword.'
+    ]);
+  }
+
+  /* ---------- things on the set ---------- */
+  var DESK = '<h4>LEX &middot; ROUND 4 &middot; THE WALL</h4><p class="big">SIXTEEN WORDS. FOUR SETS OF FOUR.</p>' +
+    '<p>Some words would be happy in two sets. LEX takes each word once only.</p>' +
+    '<p>The glass booths, and the door to the corridor, open when the wall is clear.</p>' +
+    '<p>&ldquo;' + NOTE + '&rdquo;</p>';
+  LEX.thing('#caseg', 'envelope', 'A glass case on a stand, with a lamp of its own. Inside is one cream envelope, shut with red wax. There is a letter P pressed into the wax, and the wax is not broken.', isBusy);
+  LEX.thing('#boothA', null, function () { return cleared ? 'Booth A stands open. Nobody was in it.' : 'Booth A. Empty: a stool, and a glass of water. With bubbles.'; }, isBusy);
+  LEX.thing('#cam', null, 'Camera two. Somebody has stuck a label on it: MR BLOOM&rsquo;S GOOD SIDE.', isBusy);
+  LEX.thing('#podium', null, 'The host&rsquo;s desk. On it there is a glass of water, with bubbles, and a space the size of nine cards.', isBusy);
+  LEX.thing('#seats', null, 'Two hundred empty seats. Their owners are in the foyer, on the other side of the doors you have just locked again.', isBusy);
+  LEX.thing('#onair', null, 'ON AIR. Still dark. Not for long.', isBusy);
+  LEX.thing('#wclock', null, function () { return 'The studio clock says ' + LEX.hhmm() + '. Everybody is on the set at 7.55, says the call sheet. So far, everybody is you.'; }, isBusy);
+  $('#bdesk').addEventListener('click', function () {
+    if (busy) return;
+    if (cleared && !accused) { openWho(); return; }
+    if (accused) { ER.say('The board desk, with its four buzzers. From here somebody could start a game, and type a note, and still have a whole minute to walk to booth B and sit down.'); return; }
+    ER.read({ html: DESK, cls: 'lexlog plain', clue: { id: 'desk', title: 'LEX: round 4', kind: 'Board desk' } });
+  });
+  $('#swall').addEventListener('click', function () {
+    if (busy) return;
+    if (cleared) { ER.say('The wall is clear. Four sets: ways of speaking, things you can break, things on television, and four words that were hiding something.'); return; }
+    openWall();
+  });
+  $('#boothB').addEventListener('click', function () {
+    if (busy) return;
+    if (!cleared) { ER.say('Booth B. The woman inside looks up, points her pencil at the big board again, and writes in another word.'); return; }
+    if (!accused) { ER.say('The booth is open. She has not moved. She seems to be waiting to hear what you say to Miss Teague.'); return; }
+    talkBooth();
+  });
+
+  /* ---------- round 4: the wall ---------- */
+  var LABELS = { g1: 'WAYS OF SPEAKING', g2: 'YOU CAN BREAK IT', g3: 'ON TELEVISION', g4: '?  ?  ?' };
+  var FOUND = {
+    g1: 'WAYS OF SPEAKING, from the quietest to the loudest.',
+    g2: 'YOU CAN BREAK IT: and none of the four will ever need glue.',
+    g3: 'ON TELEVISION. All four are on tonight, on other channels.',
+    g4: 'LEX has no name for these four. It only knows that they belong together.'
+  };
+  function openWall() {
+    var box = wallBox;
+    if (!box) {
+      box = wallBox = ER.el('div', 'lx-screen wl');
+      box.innerHTML = '<div class="lx-top"><b>ROUND 4</b><span>THE WALL</span><i>SIXTEEN WORDS, FOUR SETS</i></div>' +
+        '<div class="lx-note">' + NOTE + '</div>' +
+        '<p class="lx-rule">Click four words that belong together. Some words would be happy in two sets, but LEX takes each word once. A wrong four costs fifteen seconds.</p>' +
+        '<div class="wl-play"></div><div class="wl-ask"><p>Three sets have a name. LEX has no name for the fourth. What is hiding inside all four of its words? <b>Three letters.</b></p>' +
+        '<div class="wl-type"></div></div><div class="lx-msg"></div>';
+      ER.glossIn(box, '.lx-rule');
+      box._msg = function (t) { box.querySelector('.lx-msg').innerHTML = ER.gloss(t); };
+      box._msg('Sixteen words light up. In booth B the pencil stops moving.');
+      WK.groups(box.querySelector('.wl-play'), {
+        words: WORDS.map(function (w) { return w.toUpperCase(); }), keys: ['g1', 'g2', 'g3', 'g4'], size: 4, labels: LABELS,
+        onGroup: function (key, names, left) {
+          setsLeft = left; LEX.sfx.ding();
+          names.forEach(function (w) { LEX.learn(w); var t = $('.tl[data-w="' + w + '"]'); if (t) t.setAttribute('class', 'tl k' + key.charAt(1)); });
+          box._msg(LEX.yes() + ' ' + FOUND[key] + (left ? '' : ' The wall is clear. Almost.'));
+        },
+        onMiss: function (away) {
+          LEX.lose(15);
+          box._msg(LEX.no() + (away ? ' Three of those four belong together. The fourth is a stranger. Fifteen seconds.' : ' Those four have very little to say to each other. Fifteen seconds.'));
+        },
+        onDone: function () { wallDone = true; box.setAttribute('data-done', '1'); askWhat(box); }
+      });
+    }
+    ER.open('ov-lock', box, function () { inWall = false; if (askG) { askG.destroy(); askG = null; } if (askBad) { askBad.stop(); askBad = null; } });
+    inWall = true;
+    if (wallDone) askWhat(box);
+  }
+  var askG = null, askBad = null, askN = 0;
+  function askWhat(box) {
+    var type = box.querySelector('.wl-type');
+    box.querySelector('.wl-ask').classList.add('on');
+    type.innerHTML = '<span class="wk-gap" data-key="h1" data-show="___"></span>';
+    if (askG) askG.destroy();
+    if (askBad) askBad.stop();
+    askBad = LEX.badWords(type);
+    askG = WK.gaps(type, {
+      mark: false,
+      onMiss: function () {
+        var w = askBad.get('h1'); LEX.lose(15);
+        box._msg(askN++ % 2 ? 'Not &ldquo;' + w + '&rdquo;. ' + LEX.no() + ' The same three letters stand side by side in every one of the four words.' :
+          '&ldquo;' + w + '&rdquo;? ' + LEX.no() + ' Do not think about what the four words mean. Look at how they are spelt.');
+      },
+      onWord: function (key, word) { winWall(word, box); }
+    });
+  }
+  function winWall(word, box) {
+    var W = word.toUpperCase(), row = box.querySelector('.wk-set[data-key=g4] span'), odd = '', c;
+    busy = true; cleared = true; ER.flag('s1', 1); LEX.sfx.ding(); ER.sfx.ok();
+    if (row) row.innerHTML = row.textContent.split(W).join('<u>' + W + '</u>');
+    ER.$$('.wk-set[data-key=g4] b', box).forEach(function (b) { b.textContent = 'EACH ONE HIDES AN ' + W; });
+    box._msg('THE WALL HAS ' + W + 'S, says the screen, and all sixteen lights go out.');
+    c = ER.state().clues.filter(function (x) { return x.id === 'odd'; })[0];
+    if (c) odd = (c.h.match(/<p class="big">([^<]*)<\/p>/) || ['', ''])[1].replace(/&middot;|·/g, '').replace(/\s+/g, ' ').trim();
+    setTimeout(function () {
+      ER.closeAll(); LEX.sfx.door(); paint(); LEX.learn('the walls have ' + word + 's');
+      ER.narrate([
+        (odd ? 'Walls, and ' + W.toLowerCase() + 's. You have read about those once already tonight: five odd words on the green-room door, one at a time. ' + odd + '.' :
+          'The wall has ' + W.toLowerCase() + 's. It is an old saying: be careful what you say, because somebody may be listening.'),
+        'Both glass booths open with a sigh. So does the door to the corridor, and Mr Valentine walks onto the set, saying something to himself.',
+        'Then Miss Teague&rsquo;s voice comes out of every loudspeaker in the studio at once. &ldquo;RUNNER! Seven minutes! You have seen everything and you have heard everybody. WHO was at that desk at half past seven? There are four buzzers on it. LEX, put the names on them!&rdquo;'
+      ], function () { busy = false; ER.mood('tense'); openWho(); });
+    }, 2600);
+  }
+
+  /* ---------- who was at the board desk? ---------- */
+  var WHO = [
+    ['valentine', 'Dexter Valentine cannot spell &ldquo;tonight&rdquo;, and at half past seven he was in Dressing Room 1 with a bottle of the wrong water. There is not one mistake in that note.'],
+    ['bloom', 'At half past seven Mr Bloom was in the green room with Miss Okafor, and the note was typed here, at this desk. Read it again. Is that how he talks?'],
+    ['teague', 'Miss Teague writes in capital letters, and she has never said &ldquo;please&rdquo; in her life. She is also the person who is asking.'],
+    ['pryce', 'Mrs Pryce has not raised her voice in twenty years, and the note does not raise its voice either.']
+  ];
+  var WHY = [
+    ['e', 'Because she wanted to steal the envelope with the final word in it.', 'Look at the glass case. The red wax is not broken. And why would she steal a word that she wrote herself?'],
+    ['k', 'Because the note says “Kindly”, and only one person here talks like that.', 'Count the people in this building who have ever said that word to you.'],
+    ['u', 'Because she was the only person who was not locked in.', 'She was locked in booth B. The only person in the building who was not locked in is holding the buzzer.']
+  ];
+  function openWho() {
+    var box = ER.el('div', 'lx-screen ac'), play, msgEl, row, picked = null, hold = false;
+    box.innerHTML = '<div class="lx-top"><b>BOARD DESK</b><span>WHO STARTED LOCKED IN?</span><i>7.30</i></div>' +
+      '<div class="ac-note"><small>TYPED AT THIS DESK FOR EVERY SCREEN</small>&ldquo;' + NOTE + '&rdquo;</div>' +
+      '<div class="ac-play"></div><div class="lx-msg"></div>';
+    play = box.querySelector('.ac-play'); msgEl = box.querySelector('.lx-msg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() {
+      play.innerHTML = '';
+      row = LEX.buzzers(play, LEX.shuffle(WHO).map(function (w) { return { id: w[0], label: w[0].toUpperCase() }; }), pressWho);
+    }
+    function fail(text) {
+      LEX.sfx.buzz(); LEX.lose(20); ER.shake(play); hold = true;
+      msg(text + ' Twenty seconds.');
+      setTimeout(function () { hold = false; draw(); }, 1300);
+    }
+    function pressWho(id, b) {
+      if (hold) return;
+      if (!ER.check('who', id)) { fail(WHO.filter(function (w) { return w[0] === id; })[0][1]); return; }
+      LEX.sfx.ding(); row.classList.add('lock'); b.classList.add('hit'); picked = id;
+      msg('&ldquo;' + id.toUpperCase() + '?&rdquo; say the loudspeakers. &ldquo;She has not raised her voice in twenty years. WHY her?&rdquo;');
+      LEX.because(play, LEX.shuffle(WHY), pressWhy);
+    }
+    function pressWhy(id) {
+      if (hold) return;
+      if (!ER.check('why', id)) { fail(WHY.filter(function (w) { return w[0] === id; })[0][2]); return; }
+      hold = true; busy = true; accused = true; ER.flag('s2', 1);
+      outKey = picked + '-' + id; if (!ER.exitOk([outKey])) outKey = null; ER.flag('sout', outKey);
+      LEX.sfx.ding(); ER.sfx.ok(); ER.mood('calm');
+      msg('The loudspeakers say nothing at all, for the first time tonight. In booth B the woman in the green cardigan folds up her crossword.');
+      setTimeout(function () { ER.closeAll(); paint(); busy = false; ER.say('She is standing in the open door of booth B, pencil in hand. She does not look sorry.'); }, 2600);
+    }
+    msg('Four buzzers, four names. One of these people was at this desk at half past seven. You have heard three of them talk, and you have read what all four of them write.');
+    draw();
+    ER.open('ov-lock', box);
+  }
+  function talkBooth() {
+    LEX.talk('pryce', [
+      '&ldquo;Kindly.&rdquo; Yes. I do say it rather often. I typed the note, I started the game, and then I sat in a glass box, so that nobody could shout at me until eight o&rsquo;clock.',
+      { q: 'Did you want the envelope?', a: 'The envelope? I sealed that envelope myself, at noon. I know what is in it. Why would I steal my own word? Look at the wax. Nobody has needed to touch it.' },
+      { q: 'Then why did you lock everybody in?', a: 'Because of the call sheet. On any other Friday, at twenty to eight, Mr Bloom is in the green room, and next door Dexter is saying his cards to the mirror. Tonight Maxine wanted both finalists in the foyer for photographs at 7.35. I needed them beside that wall.' },
+      { q: 'But you can hear the last card through that wall.', a: 'Can you? I said so on the green-room door, nine weeks ago: five odd words in a row. Practice set 14. They have played it every Friday afternoon since. Nobody has ever read the answers as a sentence.' },
+      { q: 'Why was I the one in the corridor?', a: 'Somebody had to open the doors again. You have been here since Monday. Mr Bloom has been winning for nine weeks. You are the only person in this building I am sure of. That is why there is no still water in it tonight.' },
+      'It is nearly time. Go and stand by the board desk, kindly, where it is dark. Watch the last round. Watch the board first. Then watch him.'
+    ], { id: 'pryce', title: 'Nora Pryce, at booth B', kind: 'What she said' }, function (seen) {
+      if (!seen || heard) return;
+      heard = true; ER.flag('s3', 1); paint();
+    });
+  }
+
+  /* ---------- hints ---------- */
+  function hints() {
+    if (!cleared) {
+      if (inWall && wallDone) return ['hid', [
+        'Four words that have nothing to do with each other. So stop reading them, and look at them.',
+        'The same three letters stand side by side inside all four words.',
+        'You listen with it, and you have two of them. The green-room door has already told you about them: look at round two in your notebook.'
+      ]];
+      if (inWall && setsLeft === 4) return ['wa', [
+        'Start with what you are sure of. Four of the sixteen words are kinds of television programme.',
+        'Be careful with NEWS. It is a programme, but you can also &ldquo;break the news&rdquo; to somebody. If a set will not close, one of its four words belongs somewhere else.',
+        'Four more are ways of speaking. Two of them are easy to find. Of the other two, one means to speak low and crossly, so that nobody can quite hear, and one means to shout: it has four letters.'
+      ]];
+      if (inWall && setsLeft > 1) return ['wb', [
+        'Think of things you can break without touching them. You can break a PROMISE.',
+        'Three more things can be broken in the same way. A teacher makes one. A champion holds one. The third is what you hear when nobody speaks. (A heart can be broken too, but LEX wants it somewhere else.)'
+      ]];
+      if (inWall) return ['wc', [
+        'Only four words are left, so they must be a set. Click all four.',
+        'They will not look like a set. LEX is going to ask you about that.'
+      ]];
+      return ['r4', [
+        'The woman in the booth pointed at the big board. Click on it.',
+        'Nothing in this studio will open until round four is won. The small screen on the board desk, on the right, gives the rules.'
+      ]];
+    }
+    if (!accused) return ['who', [
+      'Miss Teague wants a name. Click on the board desk if the buzzers are not in front of you. Then think about the note: you have it in your notebook, in the log.',
+      'One word in that note is a word that only one person in this building uses. Look at the memos on Miss Teague&rsquo;s pinboard. And who gave you a card at 7.25?',
+      'The word is the first word of the note. Dexter cannot spell, Miss Teague never says please, and Mr Bloom was locked in the green room.'
+    ]];
+    if (!heard) return ['booth', [
+      'The buzzer was right, and booth B is open. Click on the woman in the green cardigan.',
+      'Hear her to the end. She answers the question that Miss Teague got wrong.'
+    ]];
+    return ['go', [
+      'It is nearly eight. The yellow button takes you to the side of the set.',
+      'Before you go, the glass case is worth one more look, now that you know who shut the envelope.'
+    ]];
+  }
+})();
+</script>
+</body>
+</html>

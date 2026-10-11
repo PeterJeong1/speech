@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Phone Box · Wrong Number</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#05080d;--accent:#f4e04d;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime','Special Elite',monospace;
+    --tc-bg:rgba(5,7,11,.93);--tc-ink:#f1eee2;--cap-bg:rgba(7,9,13,.93);--cap-ink:#f1eee2;--panel:#15161a;--fade:#000;--hud-bg:rgba(7,9,13,.74)}
+  .tel{font-family:'Oswald',sans-serif;font-weight:600;font-size:27px;letter-spacing:8px;fill:#1c1b18;text-anchor:middle}
+  .fasG{font-family:'Playfair Display',serif;font-weight:900;font-size:37px;letter-spacing:6px;fill:#d9b65c;text-anchor:middle}
+  .fasL{font-family:'Bebas Neue',sans-serif;font-size:43px;letter-spacing:4px;fill:#d9cdb0;text-anchor:middle}
+  .fasP{font-family:'Playfair Display',serif;font-weight:700;font-size:29px;letter-spacing:3px;fill:#b9a47c;text-anchor:middle}
+  .fasS{font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:3px;fill:#a8926c;text-anchor:middle}
+  .busT{font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:2px;fill:#1c1b18;text-anchor:middle}
+  #rainA{animation:rain .62s linear infinite}
+  #rainB{animation:rain .9s linear infinite}
+  @keyframes rain{from{transform:translate(0,0)}to{transform:translate(-96px,480px)}}
+  .rip{transform-box:fill-box;transform-origin:50% 50%;animation:rip 1.9s ease-out infinite;opacity:0}
+  .rip.r2{animation-delay:-.7s}.rip.r3{animation-delay:-1.3s}
+  @keyframes rip{0%{transform:scale(.15);opacity:.7}100%{transform:scale(1.5);opacity:0}}
+  #ring{opacity:0}
+  .ringing #ring{animation:ring 2.4s steps(1,end) infinite}
+  @keyframes ring{0%{opacity:1}16%{opacity:0}22%{opacity:1}38%{opacity:0}100%{opacity:0}}
+  .ringing #boxlcd{animation:lcd 2.4s steps(1,end) infinite}
+  @keyframes lcd{0%{fill:#fff9c9}16%{fill:#8d7f2a}22%{fill:#fff9c9}38%{fill:#8d7f2a}}
+  #camled{animation:led 1.7s steps(1,end) infinite}
+  @keyframes led{0%{opacity:1}60%{opacity:.15}}
+  #boxGlowC{animation:bg 5.2s steps(1,end) infinite}
+  @keyframes bg{0%{opacity:1}47%{opacity:.86}50%{opacity:1}81%{opacity:.92}84%{opacity:1}}
+  #watch{transform-box:fill-box;transform-origin:50% 0;animation:sway 4.4s ease-in-out infinite alternate}
+  @keyframes sway{from{transform:rotate(-2.4deg)}to{transform:rotate(2.4deg)}}
+  #tail{transform-box:fill-box;transform-origin:0 100%;animation:tail 3.6s ease-in-out infinite alternate}
+  @keyframes tail{0%,70%{transform:rotate(0)}100%{transform:rotate(-24deg)}}
+  #gdoorOpen{display:none}
+  .opened #gdoorOpen{display:block}
+
+  /* ---- the telephone, close up ---- */
+  .ph{width:min(1060px,96vw)}
+  .ph-main{display:grid;grid-template-columns:minmax(0,1fr) 286px;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .ph-body{position:relative;padding:13px 22px 15px;background:#4b5057 linear-gradient(180deg,#a2a8b0 0,#747a82 4%,#565b63 42%,#3b3f45 100%);border:3px solid #17191c;border-right:0;border-radius:12px 0 0 12px}
+  .ph-top{display:flex;align-items:center;margin-bottom:9px;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#17191c}
+  .ph-top b{margin-right:14px;font-weight:600;font-size:14px;padding:3px 10px 2px;background:#17191c;color:#f4e04d;border-radius:2px}
+  .ph-led{margin-left:auto;width:12px;height:12px;border-radius:50%;background:#5dff9a;box-shadow:0 0 8px #5dff9a;animation:phled 1.2s steps(1,end) infinite}
+  @keyframes phled{50%{opacity:.25}}
+  .ph-scr{position:relative;height:364px;padding:9px 18px 8px;background:#12130d;border:3px solid #0a0a08;border-radius:6px;box-shadow:inset 0 0 0 2px #2b2c22,inset 0 0 50px rgba(244,224,77,.06);
+    color:#f4d94a;font-family:'VT323',monospace;font-size:26px;line-height:1.05;text-shadow:0 0 6px rgba(244,217,74,.38);overflow:hidden}
+  .ph-scr:after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;background:repeating-linear-gradient(rgba(0,0,0,0) 0,rgba(0,0,0,0) 2px,rgba(0,0,0,.17) 2px,rgba(0,0,0,.17) 3px)}
+  .ph-barx{display:flex;justify-content:space-between;margin-bottom:7px;padding-bottom:3px;border-bottom:1px dashed rgba(244,217,74,.35);font-size:20px;opacity:.62}
+  .ph-text p{margin:0 0 8px}
+  .ph-text p:last-child{margin-bottom:0}
+  .ph-text .w{border-bottom:1px dotted rgba(244,217,74,.8)}
+  .ph-text .w:hover{color:#fff}
+  .ph-text .wk-gap .wk-cell{width:auto;min-width:.4em;height:.96em;margin:0;border-bottom:0;font-weight:normal;line-height:1}
+  .ph-text .wk-gap .wk-cell.blank{width:.52em;margin:0 1px;background:rgba(244,217,74,.2);box-shadow:inset 0 0 0 1px rgba(244,217,74,.5)}
+  .ph-text .wk-gap .wk-cell.cur{background:#f4d94a;color:#12130d;text-shadow:none;animation:phcur 1s steps(1,end) infinite}
+  @keyframes phcur{50%{background:rgba(244,217,74,.45)}}
+  .ph-text .wk-gap .wk-cell.blank.fix,.ph-text .wk-gap.ok .wk-cell.blank{width:auto;margin:0;background:transparent;box-shadow:none;color:#fffbe0;text-shadow:0 0 9px #fff3a0,0 0 2px #fff}
+  .ph-text .wk-gap.bad .wk-cell.blank:not(.fix){color:#ff7a66;text-shadow:none}
+  .ph-text .wk-gap.wn-new{animation:phnew .9s steps(1,end)}
+  @keyframes phnew{0%,40%{background:rgba(244,217,74,.3)}20%,60%{background:transparent}}
+  .ph-text .wn-word i{font-style:normal;color:#fffbe0;text-shadow:0 0 9px #fff3a0,0 0 2px #fff}
+  .ph-q{color:#fffbe0}
+  .ph-hang{margin-top:4px}
+  .ph-hang .wk{--wk-size:34px;--wk-font:'VT323',monospace;--wk-ink:#fffbe0;--wk-line:rgba(244,217,74,.7);--wk-hit:#f4d94a;--wk-bad:#ff7a66}
+  .ph-hang .wk-word{justify-content:flex-start;margin:0}
+  .ph-hang .wk-part{margin:0}
+  .ph-hang .wk-cell{background:rgba(244,217,74,.1);border-bottom-width:3px;font-weight:normal;font-size:34px}
+  .ph-hang .wk-lives{display:none}
+  .ph-keys{margin-top:10px;min-height:150px}
+  .ph-keys .wk-board{margin:0;--s:38px;font-family:'Oswald',sans-serif;color:#17191c}
+  .ph-keys .wk-row{margin:5px 0}
+  .ph-keys .wk-key{background:linear-gradient(#eceef1,#aeb3ba);color:#17191c;border:1px solid #17191c;border-bottom-width:3px;border-radius:5px;font-weight:600}
+  .ph-keys .wk-key:hover:not(:disabled){border-color:#17191c;background:linear-gradient(#fff9c9,#f4d94a)}
+  .ph-keys .wk-key.hit{background:#f4d94a;border-color:#17191c}
+  .ph-keys .wk-key.miss{background:#3b3f45;color:#8a8f97;border-color:#17191c;opacity:1}
+  .ph-side{display:flex;flex-direction:column;padding:16px 16px 0;background:#5e0f0a linear-gradient(180deg,#8a1a12,#4a0c08);border:3px solid #17191c;border-radius:0 12px 12px 0;overflow:hidden}
+  .ph-card{padding:12px 15px 10px;background:#efe8d2;color:#1c1b18;font-family:'Courier Prime',monospace;font-size:15.5px;line-height:1.32;transform:rotate(.8deg);box-shadow:0 5px 14px rgba(0,0,0,.5)}
+  .ph-card h5{margin:0 0 6px;font-family:'Bebas Neue',sans-serif;font-weight:normal;font-size:25px;letter-spacing:.08em;line-height:1}
+  .ph-card p{margin:0 0 6px}
+  .ph-card b{display:inline-block;width:11px;height:16px;vertical-align:-2px;background:#1c1b18}
+  .ph-card small{display:block;font-size:13px;line-height:1.25;color:#6d685c;border-top:1px solid #a39c88;padding-top:5px}
+  .ph-slot{position:relative;margin:20px auto 0;width:150px;height:76px;border-radius:6px;background:linear-gradient(#b9bec5,#7b8189);border:2px solid #17191c;box-shadow:inset 0 2px 0 rgba(255,255,255,.4)}
+  .ph-slot i{position:absolute;left:50%;top:22px;width:54px;height:8px;margin-left:-27px;border-radius:4px;background:#0a0a08;box-shadow:0 1px 0 rgba(255,255,255,.5)}
+  .ph-slot span{position:absolute;left:0;right:0;bottom:9px;text-align:center;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.2em;color:#17191c}
+  .ph-shelf{margin:auto -16px 0;padding:0 16px 14px;border-top:10px solid #2a1a10;background:linear-gradient(#3a2416,#22140b)}
+  .ph-coins{position:relative;display:flex;justify-content:center;height:58px;margin-top:-34px}
+  .ph-coins:after{content:'';position:absolute;left:50%;bottom:-4px;width:210px;height:26px;margin-left:-105px;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#f4f1e6,#b9b4a4 70%,#7d7868);z-index:0}
+  .ph-coins i{position:relative;z-index:1;width:40px;height:40px;margin:0 -5px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#f6f7f9,#aab0b8 58%,#636870);border:2px solid #4a4e55;
+    font-family:'Oswald',sans-serif;font-style:normal;font-weight:600;font-size:15px;line-height:36px;text-align:center;color:#3a3e44;box-shadow:0 3px 5px rgba(0,0,0,.5);transition:transform .55s,opacity .55s}
+  .ph-coins i.off{transform:translate(0,-170px) scale(.5);opacity:0}
+  .ph-note{margin:12px auto 0;width:200px;padding:6px 8px 5px;background:#efe8d2;color:#1c1b18;font-family:'Special Elite',monospace;font-size:13.5px;line-height:1.3;text-align:center;transform:rotate(-1.6deg)}
+
+  /* ---- the shop window, close up ---- */
+  .sf{width:min(1080px,96vw)}
+  .sf-main{display:grid;grid-template-columns:minmax(0,1fr) 300px;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .sf-win{position:relative;padding:26px 42px 30px;background:#0b1522 linear-gradient(155deg,#1a2b44 0,#0b1522 38%,#0d1826 100%);border:12px solid #12352a;box-shadow:inset 0 0 0 2px #d9b65c,inset 0 0 90px rgba(0,0,0,.65);overflow:hidden}
+  .sf-win:before{content:'';position:absolute;left:-30px;top:40px;width:120px;height:330px;background:linear-gradient(90deg,rgba(194,46,34,0),rgba(194,46,34,.34),rgba(255,217,138,.3),rgba(194,46,34,.3),rgba(194,46,34,0));transform:skewX(-7deg);pointer-events:none}
+  .sf-drops{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;opacity:.5;
+    background-image:radial-gradient(circle,rgba(200,225,255,.6) 0,rgba(200,225,255,.6) 1.5px,transparent 2.6px),radial-gradient(circle,rgba(200,225,255,.45) 0,rgba(200,225,255,.45) 2.4px,transparent 3.6px),linear-gradient(transparent,transparent);
+    background-size:67px 83px,113px 131px,auto;background-position:11px 7px,53px 61px,0 0}
+  .sf-notice{position:relative;padding:20px 30px 18px;background:#efe8d2 linear-gradient(175deg,rgba(255,255,255,.5),rgba(120,95,50,.17));color:#1c1b18;transform:rotate(-.5deg);
+    font-family:'Special Elite','Courier Prime',monospace;font-size:17.5px;line-height:1.46;box-shadow:0 12px 34px rgba(0,0,0,.7);-webkit-user-select:none;user-select:none}
+  .sf-notice:before,.sf-notice:after{content:'';position:absolute;top:-9px;width:74px;height:22px;background:rgba(244,224,77,.5);box-shadow:0 1px 2px rgba(0,0,0,.25)}
+  .sf-notice:before{left:26px;transform:rotate(-4deg)}.sf-notice:after{right:26px;transform:rotate(3deg)}
+  .sf-notice h4{margin:0 0 10px;font-family:'Playfair Display',serif;font-weight:900;font-size:24px;letter-spacing:.12em;text-align:center;text-transform:uppercase}
+  .sf-notice p{margin:0 0 9px}
+  .sf-notice .sig{margin:6px 0 0;font-family:'Homemade Apple',cursive;font-size:18px;text-align:right;color:#1d2a52}
+  .sf-notice .w{border-bottom-color:#8a8170}
+  .sf-notice .w:hover{color:inherit}
+  .sf-notice.wk-pick .wk-w{padding:1px 0}
+  .sf-notice.wk-pick .wk-w:hover{background:#f4e04d}
+  .sf-notice.wk-pick .wk-w.ok{background:#141518;color:#f4e04d}
+  .sf-side{display:flex;flex-direction:column;padding:22px 20px 18px;background:#0f2e24 linear-gradient(90deg,#0a2019,#15402f 30%,#0f2e24);border:3px solid #071711;border-left:0}
+  .sf-brass{position:relative;padding:14px 14px 12px;border-radius:5px;background:linear-gradient(135deg,#8a6a26,#e6c873 30%,#b08a35 55%,#f0d98f 78%,#8a6a26);border:2px solid #5a4313;box-shadow:0 6px 16px rgba(0,0,0,.5)}
+  .sf-brass em{display:block;margin-bottom:9px;font-family:'Playfair Display',serif;font-style:normal;font-weight:900;font-size:13px;letter-spacing:.34em;text-align:center;text-transform:uppercase;color:#3a2a08}
+  .sf-slot{display:flex;align-items:center;height:44px;margin-bottom:8px;padding:0 10px;background:#0a0a08;border-radius:3px;box-shadow:inset 0 2px 6px #000}
+  .sf-slot small{font-family:'Oswald',sans-serif;font-size:12px;color:#8a6a26;margin-right:10px}
+  .sf-slot b{flex:1;font-family:'VT323',monospace;font-weight:normal;font-size:30px;letter-spacing:.1em;color:#f4e04d;text-shadow:0 0 8px rgba(244,224,77,.6)}
+  .sf-jewels{display:flex;justify-content:center;gap:12px;margin-top:10px}
+  .sf-jewels i{width:13px;height:13px;border-radius:50%;background:#3a1512;box-shadow:inset 0 0 0 2px #5a4313}
+  .sf-jewels i.on{background:#ff4a3a;box-shadow:inset 0 0 0 2px #5a4313,0 0 9px #ff4a3a}
+  .sf-jewels.ok i{background:#5dff9a;box-shadow:inset 0 0 0 2px #5a4313,0 0 9px #5dff9a}
+  .sf-jewels.count i.on{animation:phled .5s steps(1,end) infinite}
+  .sf-ask{margin-top:18px;padding:12px 14px 10px;background:#fff7c2;color:#1d2a52;font-family:'Caveat',cursive;font-size:23px;line-height:1.08;transform:rotate(1.4deg);box-shadow:0 6px 14px rgba(0,0,0,.45)}
+  .sf-ask h5{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:500;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#6d685c}
+  .sf-ask p{margin:0 0 7px}
+  .sf-ask p.done{text-decoration:line-through;opacity:.5}
+  @media (max-width:900px){.ph-main,.sf-main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" class="ringing" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05080f"/><stop offset="1" stop-color="#101827"/></linearGradient>
+  <linearGradient id="wallSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04060a" stop-opacity=".85"/><stop offset="1" stop-color="#04060a" stop-opacity=".15"/></linearGradient>
+  <linearGradient id="roadG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141d2b"/><stop offset="1" stop-color="#070b12"/></linearGradient>
+  <linearGradient id="paveG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2230"/><stop offset="1" stop-color="#0b0f17"/></linearGradient>
+  <linearGradient id="redG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#70130d"/><stop offset=".22" stop-color="#c62f23"/><stop offset=".6" stop-color="#a5211a"/><stop offset="1" stop-color="#560d09"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3bf"/><stop offset=".4" stop-color="#f1cc6c"/><stop offset="1" stop-color="#7b5d27"/></linearGradient>
+  <linearGradient id="darkGl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b2a40"/><stop offset=".45" stop-color="#0b131f"/><stop offset="1" stop-color="#0d1826"/></linearGradient>
+  <linearGradient id="strkY" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc14d" stop-opacity=".42"/><stop offset="1" stop-color="#ffc14d" stop-opacity="0"/></linearGradient>
+  <linearGradient id="strkR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a4a" stop-opacity="0"/><stop offset=".3" stop-color="#ff5a4a" stop-opacity=".22"/><stop offset="1" stop-color="#ffd98a" stop-opacity=".2"/></linearGradient>
+  <linearGradient id="coneG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd98a" stop-opacity=".3"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></linearGradient>
+  <radialGradient id="boxGlow"><stop offset="0" stop-color="#ffd98a" stop-opacity=".42"/><stop offset=".45" stop-color="#ffc14d" stop-opacity=".1"/><stop offset="1" stop-color="#ffc14d" stop-opacity="0"/></radialGradient>
+  <radialGradient id="lampGlow"><stop offset="0" stop-color="#ffd98a" stop-opacity=".7"/><stop offset=".25" stop-color="#ffb347" stop-opacity=".2"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+  <radialGradient id="goldG" cx="35%" cy="30%"><stop offset="0" stop-color="#fff0b0"/><stop offset=".55" stop-color="#d9b043"/><stop offset="1" stop-color="#7d5f1d"/></radialGradient>
+  <radialGradient id="vig" cx="45%" cy="50%" r="75%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".22"/><stop offset="1" stop-color="#000" stop-opacity=".86"/></radialGradient>
+  <pattern id="brick" width="52" height="26" patternUnits="userSpaceOnUse"><rect width="52" height="26" fill="#251f27"/><path d="M0 0H52M0 13H52M0 0V13M26 13V26" stroke="#15121a" stroke-width="2.200"/></pattern>
+  <pattern id="slabs" width="150" height="46" patternUnits="userSpaceOnUse"><path d="M0 0H150M40 0V46" stroke="#05070b" stroke-width="2.500" opacity=".7"/></pattern>
+</defs>
+
+<!-- the far side of Mercer Row -->
+<rect x="-1000" y="-500" width="3600" height="900" fill="url(#skyG)"/>
+<rect x="-1000" y="-90" width="3600" height="356" fill="url(#brick)"/>
+<rect x="-1000" y="-90" width="3600" height="356" fill="url(#wallSh)"/>
+<rect x="-1000" y="-104" width="3600" height="18" fill="#07090e"/>
+<g id="ups"></g>
+<g stroke="#0b0e14" stroke-width="9"><path d="M800 -90V264M1200 -90V264M440 -90V264M1560 -90V264"/></g>
+<!-- the lit window, and the cat -->
+<g id="cat" class="hot">
+  <rect x="520" y="86" width="86" height="126" fill="#f0c66a"/><rect x="520" y="86" width="86" height="126" fill="#c2552e" opacity=".18"/>
+  <path d="M520 86h24q-4 70-24 108zM606 86h-24q4 70 24 108z" fill="#8c3a2a" opacity=".75"/>
+  <path id="tail" d="M584 208q16-6 14-26" stroke="#15121a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M548 212q-2-34 14-40l-3-13 11 9q6-2 11 0l11-9-3 13q14 8 12 40z" fill="#15121a"/>
+  <path d="M520 149h86M563 86v126" stroke="#3b2a1a" stroke-width="5"/><rect x="514" y="210" width="98" height="9" fill="#3a3340"/>
+</g>
+
+<!-- dark shops to left and right of the three -->
+<rect x="-1000" y="264" width="1440" height="342" fill="#131924"/><rect x="1560" y="264" width="1040" height="342" fill="#131924"/>
+<rect x="-1000" y="264" width="3600" height="8" fill="#07090e"/>
+<g fill="#0a0f18"><rect x="-240" y="338" width="250" height="212"/><rect x="60" y="338" width="110" height="266"/><rect x="1600" y="338" width="230" height="212"/><rect x="1860" y="338" width="100" height="266"/></g>
+
+<!-- Lowry's Fish Bar -->
+<g id="fish" class="hot">
+  <rect x="440" y="264" width="360" height="342" fill="#152a44"/><rect x="440" y="264" width="360" height="60" fill="#102238"/>
+  <rect x="440" y="320" width="360" height="5" fill="#d9cdb0" opacity=".35"/>
+  <text x="620" y="310" class="fasL">LOWRY&#8217;S FISH BAR</text>
+  <rect x="462" y="340" width="232" height="212" fill="url(#darkGl)"/>
+  <g fill="#070b12"><rect x="480" y="498" width="70" height="54"/><rect x="592" y="498" width="80" height="54"/><path d="M486 498l8-44h10l-4 44zM520 498l8-50h10l-4 50zM600 498l8-44h10l-4 44zM640 498l8-52h10l-4 52z"/></g>
+  <path d="M520 400q30-26 66-4l22-14v36l-22-14q-36 22-66-4z" fill="none" stroke="#5a7fa8" stroke-width="4" opacity=".5"/><circle cx="537" cy="398" r="3" fill="#5a7fa8" opacity=".5"/>
+  <rect x="712" y="340" width="72" height="266" fill="#0e1f33"/><rect x="722" y="352" width="52" height="118" fill="url(#darkGl)"/>
+  <g transform="rotate(-4 748 420)"><rect x="726" y="404" width="44" height="26" fill="#e9e2cb"/><text x="748" y="422" class="busT" font-size="10">CLOSED</text></g>
+  <rect x="462" y="552" width="232" height="54" fill="#102238"/>
+</g>
+
+<!-- E. Garnet -->
+<rect x="800" y="264" width="400" height="342" fill="#12352a"/><rect x="800" y="264" width="400" height="60" fill="#0d2a21"/>
+<rect x="812" y="272" width="376" height="44" fill="none" stroke="#d9b65c" stroke-width="1.500" opacity=".6"/>
+<text x="1000" y="308" class="fasG">E. GARNET</text>
+<rect x="800" y="320" width="400" height="5" fill="#d9b65c" opacity=".5"/>
+<g id="gwin" class="hot">
+  <rect x="824" y="340" width="222" height="212" fill="url(#darkGl)"/><rect x="824" y="340" width="222" height="212" fill="none" stroke="#d9b65c" stroke-width="2" opacity=".7"/>
+  <g fill="#060a11"><path d="M846 552v-40h30v40zM1000 552v-56h24v56z"/><ellipse cx="861" cy="508" rx="19" ry="5"/><ellipse cx="1012" cy="492" rx="16" ry="5"/></g>
+  <g transform="rotate(-1.5 930 430)"><rect x="888" y="368" width="92" height="124" fill="#e9e2cb"/><path d="M904 384h60" stroke="#1c1b18" stroke-width="5"/>
+    <g stroke="#6d685c" stroke-width="2.200"><path d="M898 400h72M898 410h72M898 420h58M898 434h72M898 444h72M898 454h44M898 468h72M898 478h50"/></g></g>
+  <path d="M828 344l66 204M852 344l40 124" stroke="#fff" stroke-width="10" opacity=".045"/>
+  <rect x="824" y="552" width="222" height="54" fill="#0d2a21"/>
+</g>
+<g id="gdoor" class="hot">
+  <rect x="1066" y="340" width="108" height="266" fill="#0a2019"/><rect x="1072" y="346" width="96" height="260" fill="#103326"/>
+  <rect x="1084" y="358" width="72" height="112" fill="url(#darkGl)"/>
+  <rect x="1078" y="488" width="26" height="40" rx="3" fill="url(#goldG)"/><rect x="1083" y="496" width="16" height="8" fill="#0a0a08"/><rect x="1083" y="510" width="16" height="8" fill="#0a0a08"/>
+  <rect x="1104" y="548" width="44" height="8" rx="2" fill="url(#goldG)"/><circle cx="1150" cy="508" r="6" fill="url(#goldG)"/>
+  <g id="gdoorOpen"><rect x="1072" y="346" width="96" height="260" fill="#020304"/><path d="M1072 346l26 14v246h-26z" fill="#103326"/><path d="M1098 360v246" stroke="#d9b65c" stroke-width="2" opacity=".5"/></g>
+</g>
+<g id="cam" class="hot"><rect x="1096" y="318" width="50" height="26" fill="transparent"/><path d="M1120 324v8" stroke="#0a0a08" stroke-width="5"/><rect x="1104" y="326" width="34" height="15" rx="4" fill="#20242c"/><rect x="1134" y="329" width="9" height="9" rx="2" fill="#0a0a08"/>
+  <circle id="camled" cx="1110" cy="333" r="3.200" fill="#ff3a2a"/></g>
+<g id="gsign" class="hot">
+  <path d="M1196 148h-70M1196 130l-52 18" stroke="#0a0a08" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <g id="watch"><path d="M1132 148v12" stroke="#7d5f1d" stroke-width="4"/><circle cx="1132" cy="166" r="7" fill="none" stroke="#d9b043" stroke-width="4"/><rect x="1127" y="171" width="10" height="9" fill="#d9b043"/>
+    <circle cx="1132" cy="212" r="34" fill="url(#goldG)"/><circle cx="1132" cy="212" r="25.500" fill="#f6efdc"/>
+    <g stroke="#3a2a08" stroke-width="2"><path d="M1132 190v5M1132 229v5M1110 212h5M1149 212h5"/></g>
+    <path d="M1132 212l-12-8M1132 212l15-9" stroke="#1c1b18" stroke-width="3.500" stroke-linecap="round"/><circle cx="1132" cy="212" r="2.600" fill="#1c1b18"/></g>
+</g>
+
+<!-- Pask and Son -->
+<g id="pask" class="hot">
+  <rect x="1200" y="264" width="360" height="342" fill="#2c2018"/><rect x="1200" y="264" width="360" height="60" fill="#231911"/>
+  <text x="1380" y="298" class="fasP">PASK &amp; SON</text><text x="1380" y="315" class="fasS">SHOES MENDED · KEYS CUT</text>
+  <rect x="1200" y="320" width="360" height="5" fill="#b9a47c" opacity=".3"/>
+  <rect x="1214" y="340" width="66" height="266" fill="#1c140e"/><rect x="1222" y="352" width="50" height="112" fill="url(#darkGl)"/>
+  <rect x="1298" y="340" width="240" height="212" fill="url(#darkGl)"/>
+  <g fill="none" stroke="#8a744a" stroke-width="9" opacity=".55"><circle cx="1362" cy="430" r="26"/><path d="M1388 430h92M1450 430v24M1472 430v18"/></g>
+  <path d="M1456 552v-34q0-12 12-12h14l6-40h24l4 86z" fill="#060a11"/>
+  <rect x="1298" y="552" width="240" height="54" fill="#231911"/>
+</g>
+
+<!-- pavement, kerb, the motorbike, the road -->
+<rect x="-1000" y="604" width="3600" height="40" fill="#1c2534"/><rect x="-1000" y="640" width="3600" height="7" fill="#2a3547"/>
+<g id="bike" class="hot">
+  <rect x="848" y="542" width="174" height="104" fill="transparent"/>
+  <ellipse cx="934" cy="644" rx="96" ry="7" fill="#000" opacity=".5"/>
+  <circle cx="878" cy="618" r="24" fill="#07090d" stroke="#2a303b" stroke-width="5"/><circle cx="878" cy="618" r="6" fill="#48505e"/>
+  <circle cx="994" cy="618" r="24" fill="#07090d" stroke="#2a303b" stroke-width="5"/><circle cx="994" cy="618" r="6" fill="#48505e"/>
+  <path d="M878 618l30-36h54l32 36M908 582l-8-16M962 582l10-30" stroke="#48505e" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M912 566h44q12 0 14 16h-66z" fill="#8a1a12"/><path d="M914 569h40" stroke="#e0584a" stroke-width="2.500" opacity=".7"/>
+  <path d="M872 562h40l-4 12h-42z" fill="#0f1218"/><path d="M852 606q26-24 52 0" stroke="#0f1218" stroke-width="7" fill="none"/>
+  <path d="M962 550l18-6M968 554l16 3" stroke="#aab0b8" stroke-width="4" stroke-linecap="round"/><circle cx="988" cy="566" r="8" fill="#d9dee4"/><circle cx="988" cy="566" r="4" fill="#8d959c"/>
+  <path d="M930 600l-14 40" stroke="#48505e" stroke-width="5" stroke-linecap="round"/>
+</g>
+<rect x="-1000" y="647" width="3600" height="176" fill="url(#roadG)"/>
+<g pointer-events="none">
+  <rect x="1310" y="647" width="170" height="176" fill="url(#strkY)"/><rect x="1368" y="647" width="54" height="176" fill="url(#strkY)"/>
+  <rect x="150" y="700" width="220" height="123" fill="url(#strkR)"/><rect x="528" y="647" width="70" height="120" fill="url(#strkY)" opacity=".5"/>
+  <rect x="824" y="647" width="222" height="90" fill="#2b4466" opacity=".12"/><rect x="462" y="647" width="232" height="90" fill="#2b4466" opacity=".1"/><rect x="1298" y="647" width="240" height="70" fill="#2b4466" opacity=".1"/>
+  <ellipse cx="700" cy="744" rx="150" ry="17" fill="#1d2b40"/><ellipse cx="1150" cy="790" rx="190" ry="15" fill="#1d2b40"/><ellipse cx="640" cy="692" rx="80" ry="8" fill="#1b283b"/>
+  <g fill="none" stroke="#a9c3e2" stroke-width="2"><ellipse class="rip" cx="660" cy="744" rx="34" ry="5"/><ellipse class="rip r2" cx="756" cy="748" rx="30" ry="4.500"/><ellipse class="rip r3" cx="1090" cy="790" rx="36" ry="5"/>
+    <ellipse class="rip" cx="1220" cy="792" rx="30" ry="4.500"/><ellipse class="rip r2" cx="636" cy="692" rx="24" ry="3.500"/><ellipse class="rip r3" cx="1420" cy="720" rx="30" ry="4.500"/><ellipse class="rip r2" cx="930" cy="700" rx="26" ry="4"/></g>
+</g>
+<g id="rainB" stroke="#a9c3e2" stroke-width="1.500" stroke-linecap="round" opacity=".3" pointer-events="none"></g>
+
+<!-- this side of the road -->
+<rect x="-1000" y="823" width="3600" height="9" fill="#2a3547"/><rect x="-1000" y="832" width="3600" height="500" fill="url(#paveG)"/><rect x="-1000" y="832" width="3600" height="500" fill="url(#slabs)"/>
+
+<!-- the one street lamp that works, and the bus stop on it -->
+<circle cx="1392" cy="112" r="360" fill="url(#lampGlow)" pointer-events="none"/>
+<path d="M1392 122L1150 900H1660Z" fill="url(#coneG)" pointer-events="none"/>
+<g id="lamp" class="hot">
+  <rect x="1468" y="92" width="16" height="800" fill="#0c0f15"/><rect x="1470" y="92" width="4" height="800" fill="#2c3340"/>
+  <path d="M1476 100q0-34-36-34h-36" fill="none" stroke="#0c0f15" stroke-width="11"/>
+  <path d="M1350 62h86l-12 42h-62z" fill="#0c0f15"/><path d="M1364 104h58l-7 15h-44z" fill="#ffe2a0"/>
+  <rect x="1456" y="878" width="40" height="30" fill="#07090d"/>
+</g>
+<g id="bus" class="hot">
+  <rect x="1484" y="238" width="104" height="58" rx="4" fill="#e9e2cb"/><rect x="1484" y="238" width="104" height="58" rx="4" fill="none" stroke="#0c0f15" stroke-width="4"/>
+  <circle cx="1508" cy="267" r="14" fill="#b3261c"/><rect x="1494" y="263" width="28" height="8" fill="#e9e2cb"/><text x="1554" y="262" class="busT">BUS</text><text x="1554" y="282" class="busT">STOP</text>
+  <rect x="1436" y="470" width="80" height="116" rx="3" fill="#0c0f15"/><rect x="1443" y="477" width="66" height="102" fill="#d9d3bd"/>
+  <g stroke="#55524a" stroke-width="2"><path d="M1450 490h52M1450 502h52M1450 512h52M1450 522h52M1450 532h52M1450 542h52M1450 552h52"/></g><rect x="1450" y="561" width="52" height="11" fill="#b3261c" opacity=".8"/>
+</g>
+
+<!-- the phone box -->
+<g id="box" class="hot">
+  <ellipse cx="262" cy="892" rx="240" ry="30" fill="#000" opacity=".55"/>
+  <circle id="boxGlowC" cx="262" cy="520" r="470" fill="url(#boxGlow)" pointer-events="none"/>
+  <path d="M104 196Q104 122 260 106Q416 122 416 196Z" fill="url(#redG)"/><path d="M122 184Q132 134 260 122Q388 134 398 184" fill="none" stroke="#f0685a" stroke-width="3" opacity=".45"/>
+  <path d="M242 172l4-17 7 10 7-15 7 15 7-10 4 17z" fill="#e7b84c" opacity=".9"/>
+  <rect x="104" y="192" width="312" height="66" fill="url(#redG)"/>
+  <rect x="138" y="204" width="244" height="42" rx="3" fill="#fff3c9"/><text x="264" y="235" class="tel">TELEPHONE</text>
+  <rect x="110" y="258" width="300" height="620" fill="url(#redG)"/>
+  <rect x="134" y="278" width="252" height="560" fill="url(#glassG)"/>
+  <!-- what you can see through the glass -->
+  <g opacity=".9">
+    <rect x="214" y="384" width="98" height="176" rx="6" fill="#30343b"/><rect x="226" y="398" width="74" height="34" rx="2" fill="#12130d"/><rect id="boxlcd" x="230" y="402" width="66" height="26" fill="#8d7f2a"/>
+    <g fill="#15181c"><rect x="228" y="446" width="14" height="10"/><rect x="246" y="446" width="14" height="10"/><rect x="264" y="446" width="14" height="10"/><rect x="282" y="446" width="14" height="10"/>
+      <rect x="228" y="462" width="14" height="10"/><rect x="246" y="462" width="14" height="10"/><rect x="264" y="462" width="14" height="10"/><rect x="282" y="462" width="14" height="10"/>
+      <rect x="228" y="478" width="14" height="10"/><rect x="246" y="478" width="14" height="10"/><rect x="264" y="478" width="14" height="10"/><rect x="282" y="478" width="14" height="10"/></g>
+    <rect x="244" y="512" width="38" height="7" rx="3" fill="#0a0a08"/>
+    <path d="M196 392q-14 6-14 34v82q0 26 14 32" stroke="#1b1d21" stroke-width="16" fill="none" stroke-linecap="round"/>
+    <path d="M196 544q4 60 30 76t44-6" stroke="#1b1d21" stroke-width="4" fill="none"/>
+    <rect x="150" y="632" width="220" height="12" fill="#3a2416"/><ellipse cx="318" cy="630" rx="34" ry="6" fill="#e9e6dc"/><ellipse cx="318" cy="626" rx="20" ry="4" fill="#aab0b8"/>
+    <rect x="164" y="610" width="74" height="22" fill="#d9d3bd"/><path d="M164 617h74M164 624h74" stroke="#8d8674" stroke-width="1.500"/>
+  </g>
+  <g stroke="#fff" stroke-width="2.500" opacity=".28" stroke-linecap="round"><path d="M158 300l-6 60M196 520l-5 50M352 330l-6 70M310 600l-5 60M168 700l-5 54M344 720l-6 64"/></g>
+  <g id="bars" fill="url(#redG)"></g>
+  <rect x="110" y="838" width="300" height="40" fill="#7d1710"/><rect x="96" y="874" width="332" height="24" rx="3" fill="#3c0c08"/>
+  <path d="M112 258V878" stroke="#f0685a" stroke-width="3" opacity=".35"/><rect x="394" y="548" width="8" height="56" rx="4" fill="url(#goldG)"/>
+  <g id="ring" fill="none" stroke="#f4e04d" stroke-width="6" stroke-linecap="round"><path d="M438 138q30 34 0 68"/><path d="M466 116q50 56 0 112"/><path d="M82 138q-30 34 0 68"/><path d="M54 116q-50 56 0 112"/></g>
+</g>
+<g id="rainA" stroke="#cfe0f4" stroke-width="2" stroke-linecap="round" opacity=".34" pointer-events="none"></g>
+<rect x="-1000" y="-500" width="3600" height="1900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, ringT = 0, answered = false;
+  var had = {}, cap = null, scr = null, keysEl = null, gaps = null, hang = null, tried = [], replay = false;
+  var strikes = 0, locked = false;
+
+  /* upstairs windows, the bars of the phone box, the rain */
+  (function () {
+    var s = '', i, x, y, n;
+    [690, 856, 988, 1268, 1420, 250, 1700, -40].forEach(function (wx) {
+      s += '<rect x="' + wx + '" y="86" width="86" height="126" fill="url(#darkGl)"/><path d="M' + wx + ' 149h86M' + (wx + 43) + ' 86v126" stroke="#0b0e14" stroke-width="5"/>' +
+        '<rect x="' + (wx - 6) + '" y="210" width="98" height="9" fill="#322c38"/><rect x="' + (wx - 4) + '" y="74" width="94" height="12" fill="#322c38"/>';
+    });
+    $('#ups').innerHTML = s; s = '';
+    for (i = 1; i < 8; i++) s += '<rect x="134" y="' + (274 + i * 70) + '" width="252" height="8"/>';
+    s += '<rect x="176" y="278" width="8" height="560"/><rect x="336" y="278" width="8" height="560"/><rect x="126" y="270" width="268" height="9"/><rect x="126" y="270" width="9" height="572"/><rect x="385" y="270" width="9" height="572"/>';
+    $('#bars').innerHTML = s;
+    function rain(n, len, seed) {
+      var out = '', k, rx, ry, dy;
+      for (k = 0; k < n; k++) {
+        rx = -160 + ((k * 7919 + seed * 131) % 1960); ry = (k * 5903 + seed * 977) % 480;
+        for (dy = -480; dy <= 960; dy += 480) out += '<path d="M' + rx + ' ' + (ry + dy) + 'l' + (-len / 5).toFixed(1) + ' ' + len + '"/>';
+      }
+      return out;
+    }
+    $('#rainA').innerHTML = rain(46, 46, 3);
+    $('#rainB').innerHTML = rain(70, 30, 11);
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'wrong', storyTitle: 'Wrong Number', id: 'phonebox', no: 'I', title: 'The Phone Box', go: 'Answer it', backLabel: 'Files',
+    sound: WN.SOUND.phonebox,
+    intro: [
+      'Twenty to midnight on a wet Friday. The last bus went fifteen minutes ago, without you, and your phone has been dead since four o&rsquo;clock.',
+      'So you are walking home along Mercer Row, past three dark shops and one red phone box that nobody has used for years.',
+      'As you walk past the phone box, it rings.',
+      'You look up the street, and down it. There is nobody else it could be for.'
+    ],
+    exit: {"next":"shop","w":{"3652c2d0":"72896c46"}}, tags: {"a1":["66f0ddeb"],"a1@":["b4cdb7c7","280ca87c","a135b3fa","e602e02f","33f79242","9138fa9c","b4c61224","5458e2aa","6bf25e0b","4f3b45b3"],"a1?":["da5c77fe","2642d6ec","7b9cea3e","a1baf0db","9a4c18ec","dc6c3609","bb83f8e9","d55289aa","cb783c1b","08c1ba24"],"a1#":["c01d03dc"],"a2":["5b28ea8f"],"a2@":["4db3a341","ec4dde6f","51a1c8ef","e3fb7291","71be4ba2","ec897dbf"],"a2?":["198db585","27a6b5ae","44780edf","3f75100a","a6940807","d22d0b6d"],"a2#":["e7d7f8b9"],"a3":["3fef9170"],"a3@":["9dbc00d3","d5cfdc17","4a9c9111","d142ec5a","6f0ce512","df04e212"],"a3?":["4b5dd685","246254d3","0f7c6734","d52d35a2","5bdc50eb","cffe217c"],"a3#":["4adbb411"],"a4":["ba8b9fe4"],"a4@":["96b5cc6d","e753b9a8","b8a4188e","732b8430","f1f981b4","dce37953","04b44ab2"],"a4?":["90f617b2","e86afa59","0c4c6c20","f77d1a01","ac0b3cb1","13c68f33","f02e6a0f"],"a4#":["e1a212be"],"b1":["deba14a9"],"b1@":["09c7c7ca","1571d142","09e21ccd","9f5eb27b","874adb2e","69cf0385","dd4023f1","86f06798"],"b1?":["beb95d86","bcfc8565","11f819db","8c662642","cf576a22","b9cb40ec","d3fb1fa7","44acb476"],"b1#":["597ae9e3"],"b2":["bdba3d8a"],"b2@":["fd0d71f9","8bf2f9d5","19e174ad","48f198d3","d1b53787"],"b2?":["c4327594","198f5149","543340f7","5f8930b7","54210fa5"],"b2#":["46ef0881"],"b3":["89e52480"],"b3@":["cb7e3622","a29f4cb7","2e234298","a836b37b","15a463c1","7f50d6fe"],"b3?":["1396918d","ff3d48e0","8e5b3289","38c5c345","1c0df97e","d64bed6d"],"b3#":["ec7b78f0"],"c1":["bda073db"],"c1@":["171e58d3","1e06ef08","a1edb1c2","c5253604","1a8f95f6","c08cb45c"],"c1?":["ee789fa5","34531cfe","471f414e","1335af2d","60f58bd7","e1124a94"],"c1#":["e3b8bb54"],"c2":["341773b9"],"c2@":["7cfca010","2dd18486","9d5beef0","25dfaf63","a3ff55c0","239b0560"],"c2?":["b77feb99","d24f5735","b6578e9e","5f72a416","df14a7cd","9330f300"],"c2#":["8914ccf0"],"c3":["ad70cae1"],"c3@":["38ca2003","dd2043a6","e603c94c","f7a1c7f5","cf24f395"],"c3?":["6cecda6b","74e572ca","1fb04f26","e5952139","86cb07d7"],"c3#":["fd7b36eb"],"q1":["54312890"],"q1@":["d7c4d70d","c272012e","4754cd68","292dda97","a56ef290","c0abac79","6019186f","9c2044ac"],"q1?":["af2b2da1","44d3498c","3a4f52de","d1fdc304","078e39f1","5b7e8de5","11f5c26d","48b5d655"],"q1#":["c6489694"],"q2":["8263bfd7"],"q2@":["785f1d7b","c5fafadc","b1168a47","b5f65204","ff4279a5","b8cda4d8","5e547769","c625e3cf"],"q2?":["e67ffdb1","584bf16d","2abab592","42abe50c","e1a6902a","d829a3c0","7f5b4400","f4fbb301"],"q2#":["f00dbfa5"],"q3":["2849e661"],"q3@":["c5503bcd","a045cd16","09e0b479","61ce34cb","32c7a711","994619a5","e8b7aa37","5f426aa5"],"q3?":["85a39bba","f4d9d62c","c98141ba","43bbf218","6238e713","88cbfe64","9e5b4e46","4eb44b38"],"q3#":["77a70ba1"],"d1":["d0f0c7ce"],"d2":["b65d5c81"]},
+    hints: hints,
+    onBegin: begin
+  });
+  WN.clock('23:40');
+
+  /* ---------- what Mr Garnet sends ---------- */
+  var MSG = {
+    0: { id: 'm1', title: 'Message 1 \u00b7 23:41', time: '23:42',
+      html: '<p>THIS IS NOT A WRONG NUMBER. PLEASE DO NOT PUT THE TELEPHONE DOWN.</p>' +
+        '<p>I AM DEAF. I CANNOT HEAR YOU, SO DO NOT SPEAK. READ.</p>' +
+        '<p>MY NAME IS GARNET. MY SHOP IS ACROSS THE ROAD, UNDER THE GOLD WATCH. I AM LOCKED IN MY {a1:S_RONGROOM}, {a2:BE_IND} A STEEL DOOR THAT SHUTS {a3:_TS_LF} AT SIX EVERY EVENING. TONIGHT I WAS ON THE WRONG SIDE OF IT.</p>' +
+        '<p>YOU ARE THE {a4:TWEL_TH} PERSON TO WALK PAST THAT BOX SINCE SIX, AND THE FIRST TO ANSWER IT.</p>',
+      open: 'You pick up the receiver and say hello. Nobody speaks. The line hisses like a frying pan. Then words come up on the little screen, and some of them have holes in them.',
+      after: 'Four words had holes in them, and now they have none. It is an old box, and it is raining hard. Rain in the wires, you suppose.' },
+    1: { id: 'm2', title: 'Message 2 \u00b7 23:43', time: '23:44',
+      html: '<p>IT IS NEARLY {b1:M_D_IGHT}, AND THIS DOOR WILL NOT OPEN AGAIN UNTIL MONDAY MORNING.</p>' +
+        '<p>PLEASE DO NOT RING THE POLICE OR THE FIRE BRIGADE. LAST TIME THEY CUT THE DOOR OPEN, AND THE NEW ONE WAS NOT {b2:C__AP}.</p>' +
+        '<p>THERE IS A QUICKER WAY. THE DOOR HAS A {b3:SEC__T} WORD. TYPED ON THE DOOR FROM OUTSIDE, IT WILL LET ME OUT. BUT IT ONLY WORKS UNTIL TWELVE.</p>' +
+        '<p>I CAN SEE YOU ON MY CAMERA. WILL YOU COME?</p>',
+      open: 'The screen empties itself, and fills again.',
+      after: 'You look across the road at the small red light over his door, and you nod. It is kind rain, at least. It has not yet taken a letter that you could not put back.' },
+    3: { id: 'm3', title: 'Message 3 \u00b7 23:47', time: '23:48',
+      html: '<p>THANK YOU. NOW MY SHOP DOOR. IT HAS A LETTER LOCK, AND IT WANTS TWO WORDS.</p>' +
+        '<p>I SHALL NOT SEND THEM. A WORD BY ITSELF, WITH A LETTER GONE, YOU COULD NOT MEND.</p>' +
+        '<p>BOTH WORDS ARE IN MY {c1:WIN__W}, IN THE {c2:__TICE} TO MY CUSTOMERS.</p>' +
+        '<p>THE FIRST IS THE WORD THAT MEANS: NOT OFTEN.</p>' +
+        '<p>THE SECOND IS THE WORD THAT MEANS: {c3:WOR_H} A LOT OF MONEY.</p>' +
+        '<p>BE QUICK.</p>',
+      open: 'The telephone exchange has gone. Mr Garnet is back, and so are the holes.',
+      after: 'Two words, in a notice, in a window, across a wet road. You leave the receiver hanging on its wire and push the door open with your shoulder.' }
+  };
+  var MISS = ['That is not a word he would send. Any letter that was right has stayed where it is. Read the whole sentence again.',
+    'Still not right. What kind of word does the sentence need in that place?'];
+
+  /* ---------- what the telephone exchange wants to know ---------- */
+  var QS = [
+    { text: 'THE CALLER SELLS RINGS AND MENDS WATCHES. WHAT IS HE?', n: 8 },
+    { text: 'THE CALLER HAS NEVER MET YOU. WHAT ARE YOU TO HIM?', n: 8 },
+    { text: 'IT IS FRIDAY NIGHT. WHAT DAY BEGINS AT MIDNIGHT?', n: 8 }
+  ];
+  var EX1 = '<p>TELEPHONE EXCHANGE. THIS IS AN AUTOMATIC MESSAGE.</p>' +
+    '<p>YOU HAVE ANSWERED A PRIVATE LINE FROM A PUBLIC TELEPHONE. TO SHOW THAT YOU ARE NOT A WRONG NUMBER, ANSWER ONE QUESTION.</p>';
+  var EX2 = '<p class="ph-rule">KEY IN THE WORD, ONE LETTER AT A TIME. A RIGHT LETTER IS FREE. A WRONG LETTER COSTS 10p.</p>';
+  var EX_OK = '<p>CORRECT. YOU ARE NOT A WRONG NUMBER. THIS LINE IS YOURS UNTIL MIDNIGHT.</p>';
+  function paid(n) {
+    return '<p>' + (n ? 'YOU HAVE PAID ' + n * 10 + 'p FOR ' + ['', 'ONE WRONG LETTER', 'TWO WRONG LETTERS', 'THREE WRONG LETTERS', 'FOUR WRONG LETTERS', 'FIVE WRONG LETTERS'][n] + '. THE TELEPHONE COMPANY THANKS YOU.'
+      : 'YOU HAVE PAID NOTHING. THE TELEPHONE COMPANY IS SORRY TO HEAR IT.') + '</p>';
+  }
+  var EX_NO = '<p>NO CREDIT. THIS LINE IS NOW CLOSED. THE TELEPHONE COMPANY WISHES YOU A PLEASANT EVENING.</p>';
+
+  var NOTICE = '<h4 class="wk-skip">To my customers</h4>' +
+    '<p>I am deaf. Please do not shout through the letter box. It does not help me, and it frightens the clocks.</p>' +
+    '<p>If the door is locked, press the brass bell. It does not ring. It lights a lamp on my bench, and I shall come when I have put down what I am mending. It is usually small, and it is usually somebody else&rsquo;s.</p>' +
+    '<p>A good watch is expensive, and a good repair is slow. I am seldom wrong about a watch, and never about the time: this shop shuts at six.</p>' +
+    '<p>At six, everything valuable goes into the strongroom, which locks itself until morning. On Fridays it locks itself until Monday. Nothing is left in this window at night but this notice.</p>' +
+    '<p>Burglars are welcome to read it.</p>' +
+    '<p class="sig wk-skip">E. Garnet</p>';
+
+  function stage() { return ER.flag('p') || 0; }
+  function round() { return ER.flag('round') || 0; }
+  function isBusy() { return busy; }
+
+  function hints() {
+    var p = stage();
+    if (p >= 6) return null;
+    if (!answered && !ER.isOpen()) return ['ring', [
+      'The phone box is ringing, and there is nobody else in the street.',
+      'Click on the red phone box to answer it.'
+    ]];
+    if (p === 0 || p === 1 || p === 3) return ['m' + p, [
+      'Some of Mr Garnet&rsquo;s letters did not arrive. Each empty block on the screen is one missing letter. Read the whole sentence first, and then decide what the word must be.',
+      'Type the missing letter on your keyboard, or use the keys on the phone. The bright block shows where your letter will go. When the last hole in a word is filled, the word is checked. A wrong word shakes, and keeps the letters that were right.',
+      p === 0 ? 'The four words mean, in order: the locked room where a shop keeps its gold; at the back of; by its own power, with nobody touching it; and the one that comes after the eleventh.'
+        : p === 1 ? 'The three words mean, in order: twelve o&rsquo;clock at night; costing very little money; and known to only a few people.'
+        : 'The three words mean, in order: the glass at the front of a shop; a paper put up for people to read; and having a value of.'
+    ]];
+    if (p === 2) return ['q' + (round() % QS.length), [
+      'This is the telephone exchange, not Mr Garnet. It wants one word, and its question tells you what the word means.',
+      'Type one letter at a time. A letter that is in the word appears in every place where it belongs, and costs nothing. A letter that is not in the word costs one of the six coins. Begin with the letters that English uses most: E, A, R, S and T.',
+      ['It comes from the word &ldquo;jewel&rdquo;, a stone such as a diamond. In British English the L is doubled before the ending.',
+        'It is a person whom you have never met and do not know. Parents tell small children not to talk to one. The word begins with S.',
+        'It is the day that comes after Friday.'][round() % QS.length]
+    ]];
+    if (p === 4) return ['w1', [
+      'The two words are not on the phone. They are in the notice in Mr Garnet&rsquo;s shop window, across the road. Click on the window, read the whole notice, and then click on the word that means &ldquo;not often&rdquo;.',
+      'Three words in the notice say how often something happens. One of them means nearly always, and one means not ever. You want the third.',
+      'It is in the sentence about being wrong about a watch.'
+    ]];
+    return ['w2', [
+      'The second word means &ldquo;worth a lot of money&rdquo;. It is in the same notice.',
+      'One word in the notice says that a thing costs a lot. Another says that a thing is worth a lot. Mr Garnet asked for the second kind.',
+      'It is in the sentence about what happens at six o&rsquo;clock.'
+    ]];
+  }
+
+  function startRing() {
+    if (ringT) return;
+    svg.classList.add('ringing'); WN.sfx.ring();
+    ringT = setInterval(function () { if (!ER.isOpen()) WN.sfx.ring(); }, 2400);
+  }
+  function stopRing() { clearInterval(ringT); ringT = 0; svg.classList.remove('ringing'); }
+
+  function begin() {
+    var p = stage();
+    ER.amb.rain(0.06); ER.pips(Math.min(p, 6), 6);
+    answered = p > 0 || !!ER.flag('ans');
+    if (p >= 6) svg.classList.add('opened');
+    if (answered) { svg.classList.remove('ringing'); return; }
+    startRing();
+    ER.narrate([
+      'Mercer Row, in the rain. Across the road there are a fish bar, a shop with a gold watch over its door, and a shop that mends shoes. All three are shut.',
+      'The phone box rings and rings. It sounds like something that has been ringing all evening.'
+    ]);
+  }
+
+  /* ---------- the telephone ---------- */
+  function openPhone() {
+    if (busy) return;
+    var first = !answered, box = ER.el('div', 'ph');
+    stopRing(); answered = true; ER.flag('ans', 1);
+    box.innerHTML = '<div class="ph-main"><div class="ph-body"><div class="ph-top"><b>Text line</b><span>Coins only</span><i class="ph-led"></i></div>' +
+      '<div class="ph-scr"><div class="ph-barx"><span>LINE 7 &middot; PRIVATE</span><span class="ph-t"></span></div><div class="ph-text"></div></div><div class="ph-keys"></div></div>' +
+      '<div class="ph-side"><div class="ph-card"><h5>Bad line?</h5><p>Letters that do not arrive are shown like this: <b></b></p><p>Type them in yourself.</p>' +
+      '<small>The Telephone Company is not responsible for rain.</small></div>' +
+      '<div class="ph-slot"><i></i><span>10p</span></div>' +
+      '<div class="ph-shelf"><div class="ph-coins"></div><div class="ph-note">For the telephone.<br>Not for sweets. E.G.</div></div></div></div>';
+    cap = WN.cap(box); scr = box.querySelector('.ph-text'); keysEl = box.querySelector('.ph-keys');
+    box.querySelector('.ph-t').textContent = WN.now();
+    coins(6, box);
+    ER.open('ov-lock', box, function () { cap = null; scr = null; hang = null; if (gaps) { gaps.destroy(); gaps = null; } });
+    show(stage(), first);
+  }
+  function stamp() { var t = ER.$('.ph-t'); if (t) t.textContent = WN.now(); }
+  function coins(left, root) {
+    var c = (root || document).querySelector('.ph-coins'), i, s = '';
+    if (!c) return;
+    if (c.children.length !== 6) { for (i = 0; i < 6; i++) s += '<i>10</i>'; c.innerHTML = s; }
+    for (i = 0; i < 6; i++) c.children[i].classList.toggle('off', i >= left);
+  }
+  function show(p, first) {
+    if (!cap) return;
+    cap.stop(); keysEl.innerHTML = ''; hang = null;
+    if (gaps) { gaps.destroy(); gaps = null; }
+    stamp();
+    if (p === 2) { check(); return; }
+    if (p >= 4) {
+      scr.innerHTML = WN.roll(['m3']).replace(/<h4>.*?<\/h4>/, '');
+      cap.say('There is nothing new on the screen. What you need now is across the road, in his window.');
+      return;
+    }
+    var m = MSG[p];
+    gaps = WN.mend(scr, m.html, { had: had, board: true, boardIn: keysEl,
+      onWord: function () { WN.sfx.blip(); },
+      onMiss: function (key, node, n) { if (cap) cap.say(MISS[Math.min(n, 2) - 1]); },
+      onDone: function () { msgDone(p); } });
+    cap.say(p === 0 && !first ? 'The words are still on the little screen, and some of them still have holes in them.' : m.open);
+    if (gaps.done()) msgDone(p);
+  }
+  function msgDone(p) {
+    var m = MSG[p];
+    WN.file(scr, m.id, m.title);
+    ER.flag('p', p + 1); ER.pips(p + 1, 6); WN.time(m.time); stamp(); WN.done();
+    if (!cap) return;
+    cap.say(m.after);
+    if (p === 3) cap.go('Cross the road', function () { ER.close(); ER.say('The shop with the gold watch is straight across the road. The notice is in its window.'); });
+    else cap.go('Go on', function () { show(p + 1); });
+  }
+
+  /* the exchange asks its question: a word found one letter at a time, and every wrong letter costs a coin */
+  function check() {
+    var r = round(), q = QS[r % QS.length], i, o;
+    scr.innerHTML = ER.gloss(EX1 + '<p class="ph-q">' + q.text + ' (' + q.n + ')</p>' + EX2) + '<div class="ph-hang"></div>';
+    o = { keys: ['q1', 'q2', 'q3'], lives: 6,
+      onGuess: function (ch, hit, st) {
+        coins(st.left);
+        if (replay) return;
+        tried.push(ch);
+        if (hit) { if (cap) cap.say(ch.toUpperCase() + ' is in it. That one cost nothing.'); return; }
+        WN.sfx.coin();
+        if (cap) cap.say(['No ' + ch.toUpperCase() + '. The box swallows a coin.', 'There is no ' + ch.toUpperCase() + ' in it. Ten pence, gone.',
+          ch.toUpperCase() + ' is wrong, and the telephone company is ten pence richer.'][(6 - st.left - 1) % 3]);
+      },
+      onWin: function (word, st) {
+        if (replay) return;
+        tried = []; WK.learn(word); ER.flag('check', word); ER.flag('p', 3); ER.pips(3, 6); WN.time('23:46'); stamp(); WN.done();
+        ER.addClue('exchange', 'The telephone exchange', '<h4>Telephone exchange &middot; 23:45</h4>' + EX1 + '<p>' + q.text + '</p><p>YOUR ANSWER: ' + word.toUpperCase() + '</p>' + EX_OK + paid(st.wrong), 'wn-lcd', 'Automatic message');
+        var rule = scr.querySelector('.ph-rule'), okp = ER.el('div', '', ER.gloss(EX_OK + paid(st.wrong)));
+        if (rule) rule.parentNode.removeChild(rule);
+        while (okp.firstChild) scr.appendChild(okp.firstChild);
+        if (!cap) return;
+        cap.say('Not one letter missing, you notice. The rain seems to save itself for Mr Garnet.');
+        cap.go('Go on', function () { show(3); });
+      },
+      onLose: function () {
+        if (replay) return;
+        tried = []; ER.flag('round', r + 1); busy = true; WN.sfx.dead();
+        scr.innerHTML = EX_NO; keysEl.innerHTML = '';
+        if (cap) cap.say('Six wrong letters, and no coins. The screen goes dark. So does the line.');
+        setTimeout(function () {
+          ER.closeAll(); busy = false; answered = false; startRing();
+          ER.say('For a few seconds there is only the rain. Then the phone box rings again. Mr Garnet is not a man who gives up.', 7000);
+        }, 3200);
+      } };
+    hang = WK.hangman(scr.querySelector('.ph-hang'), o);
+    for (i = 0; i < r % QS.length; i++) hang.again();
+    keysEl.appendChild(hang.el.querySelector('.wk-board'));
+    replay = true; o.sound = false; tried.forEach(function (ch) { hang.guess(ch); }); o.sound = true; replay = false;
+    coins(hang.state().left);
+    cap.say(r === 0 ? 'The screen goes blank. Then it fills from top to bottom, all at once. This is not Mr Garnet.'
+      : 'The telephone exchange again, with a new question. This time the six coins are your own: the bus fare that you did not spend.');
+  }
+
+  /* ---------- the shop window, and the lock on the door ---------- */
+  function openFront() {
+    if (busy) return;
+    var p = stage();
+    if (p < 4) {
+      ER.read({ html: NOTICE, cls: 'wn-notice', clue: { id: 'notice', title: 'The notice in the window', kind: 'Notice' },
+        done: function () { ER.say('A notice to his customers. You have read it because it was there. You do not yet know that you will need it.'); } });
+      return;
+    }
+    var box = ER.el('div', 'sf'), notice, o, w1 = ER.flag('w1') || '';
+    box.innerHTML = '<div class="sf-main"><div class="sf-win"><div class="sf-drops"></div><div class="sf-notice">' + ER.gloss(NOTICE) + '</div></div>' +
+      '<div class="sf-side"><div class="sf-brass"><em>Garnet</em><div class="sf-slot"><small>1</small><b></b></div><div class="sf-slot"><small>2</small><b></b></div>' +
+      '<div class="sf-jewels"><i></i><i></i><i></i></div></div>' +
+      '<div class="sf-ask"><h5>What he said</h5><p>1. the word that means: not often</p><p>2. the word that means: worth a lot of money</p></div></div></div>';
+    cap = WN.cap(box); notice = box.querySelector('.sf-notice');
+    var slots = ER.$$('.sf-slot b', box), jew = box.querySelector('.sf-jewels'), ask = ER.$$('.sf-ask p', box);
+    function paint() {
+      var q = stage();
+      slots[0].textContent = q >= 5 ? (ER.flag('w1') || '').toUpperCase() : '';
+      ask[0].classList.toggle('done', q >= 5);
+      ER.$$('.wk-w.ok', notice).forEach(function (n) { if (q < 5) n.classList.remove('ok'); });
+      ER.$$('i', jew).forEach(function (n, i) { n.classList.toggle('on', i < strikes); });
+      o.key = q >= 5 ? 'd2' : 'd1';
+    }
+    o = { key: 'd1',
+      onRight: function (word, node) {
+        if (locked) { node.classList.remove('ok'); cap.say('The lock is still counting. It will not look at a word until it has finished.'); return; }
+        strikes = 0; ER.sfx.clunk();
+        if (stage() === 4) {
+          WK.learn(word); ER.flag('w1', word); ER.flag('p', 5); ER.pips(5, 6); paint();
+          cap.say(word.toUpperCase() + '. Something inside the lock turns over, and the word stays in the first little window. Now the second: the word that means &ldquo;worth a lot of money&rdquo;.');
+          return;
+        }
+        var file = ER.exitOk([ER.flag('w1') + '-' + word]);
+        if (!file) { node.classList.remove('ok'); cap.say('The lock does not move. Something has gone wrong with the first word. Close this, and try again.'); ER.flag('p', 4); paint(); return; }
+        WK.learn(word); slots[1].textContent = word.toUpperCase(); ask[1].classList.add('done'); jew.classList.add('ok'); paint(); o.key = 'done';
+        win(file, word);
+      },
+      onWrong: function (word) {
+        if (busy) return;
+        if (locked) { cap.say('The lock is still counting. It will not look at a word until it has finished.'); return; }
+        var q = stage(), W = word.toUpperCase(), s;
+        strikes++; paint();
+        if (word.length < 4 && word !== 'six') s = W + '. The lock wants a word with some meaning in it, and that one has very little.';
+        else if (q === 4 && word === 'usually') s = 'USUALLY. No: that is the other end of things. He wants the word for &ldquo;not often&rdquo;.';
+        else if (q === 4 && word === 'never') s = 'NEVER. Too strong. A thing that does not happen often still happens now and then.';
+        else if (q === 5 && word === 'expensive') s = 'EXPENSIVE. Close, and the lock nearly turns. But that is what a thing costs. He said: what it is worth.';
+        else if (q === 5 && word === 'good') s = 'GOOD. A good watch is a fine thing, but &ldquo;good&rdquo; does not say how much it is worth.';
+        else if (q === 5 && word === 'brass') s = 'BRASS. Brass looks like gold, and that is the nicest thing anybody can say about it.';
+        else if (q === 5 && word === 'burglars') s = 'BURGLARS. They would agree with you. The lock does not.';
+        else if (q === 5 && word === 'small') s = 'SMALL. In this shop, small things can be worth a great deal. But that is not what &ldquo;small&rdquo; says.';
+        else if (q === 5 && word === 'strongroom') s = 'STRONGROOM. That is where the things go. He wants the word that says what kind of things.';
+        else if (q === 5 && word === 'everything') s = 'EVERYTHING. That is a great deal, but it is not a price.';
+        else if (q === 4 && word === 'fridays') s = 'FRIDAYS. Once a week is not very often. But the lock wants one word that means it, and that is not the one.';
+        else if (q === 4 && word === 'slow') s = 'SLOW. That says how fast, not how often.';
+        else if (q === 4 && (word === 'six' || word === 'night' || word === 'morning' || word === 'monday')) s = W + '. That says when. He wants the word that says how often.';
+        else if (word === 'deaf') s = 'DEAF. That is what Mr Garnet is. It is not what he asked for.';
+        else s = [W + '? The lock clicks, thinks about it, and stays shut.', W + ' is in the notice, but it does not mean that.', W + '. No.'][(strikes - 1) % 3];
+        if (strikes < 3) { cap.say(s); return; }
+        locked = true; jew.classList.add('count'); ER.sfx.no();
+        cap.say(s + ' That makes three wrong words. The lock shuts both its little windows and begins to count' + (q === 5 ? ', and when it has finished, the first word will have to go in again.' : '.') +
+          ' There is a camera over this door. You can feel it looking at you.');
+        setTimeout(function () {
+          locked = false; strikes = 0; jew.classList.remove('count');
+          if (stage() === 5) { ER.flag('p', 4); ER.pips(4, 6); }
+          if (cap && box.parentNode) { paint(); cap.say('The lock is awake again, and waiting for its first word. Read first. Then choose.'); }
+        }, 6000);
+      } };
+    WK.pick(notice, o);
+    ER.addClue('notice', 'The notice in the window', NOTICE, 'wn-notice', 'Notice', true);
+    ER.$$('.wk-w', notice).forEach(function (n) { if (w1 && p >= 5 && WK.norm(n.textContent) === w1) n.classList.add('ok'); });
+    paint();
+    ER.open('ov-lock', box, function () { cap = null; });
+    cap.say(p >= 5 ? 'The first word is in the lock. Now the second: the word that means &ldquo;worth a lot of money&rdquo;.'
+      : 'You run across the road. The notice is stuck to the inside of the glass, and the rain runs down the outside. The lock on the door wants its first word: the one that means &ldquo;not often&rdquo;.');
+  }
+  function win(file, word) {
+    busy = true; WN.solved();
+    var st = ER.state(); st.done = st.done || {}; st.done.phonebox = 1;
+    ER.flag('w2', word); ER.flag('p', 6); ER.pips(6, 6); WN.time('23:50');
+    if (cap) cap.say(word.toUpperCase() + '. Two clicks, one for each word, and the green door moves under your hand.');
+    setTimeout(function () {
+      ER.closeAll(); svg.classList.add('opened'); ER.sfx.creak();
+      ER.narrate([
+        'The door opens on to darkness, and the smell of oil and brass, and the sound of a great many clocks.',
+        'Behind you, across the road, the light in the phone box is still on. You go in.'
+      ], function () { ER.leave(file); });
+    }, 2600);
+  }
+
+  /* ---------- the street ---------- */
+  $('#box').addEventListener('click', openPhone);
+  $('#gwin').addEventListener('click', openFront);
+  $('#gdoor').addEventListener('click', function (e) {
+    if (busy) return;
+    if (stage() >= 4) { openFront(); return; }
+    ER.wordAt(e.clientX, e.clientY, 'lock');
+    ER.say('A green door, with a brass lock where the keyhole ought to be. The lock has two small windows in it, and both are empty.');
+  });
+  WN.thing('#bike', 'motorbike', 'A motorbike, parked outside the shop with the gold watch. Its seat is full of rain. It has been there for some time.', isBusy);
+  WN.thing('#cam', 'camera', 'A small camera over the door, with a red light. It moves a little, and looks at you.', isBusy);
+  WN.thing('#gsign', 'sign', 'A gold watch as big as a dinner plate hangs over the door. Its hands say ten past ten. They always do: they are painted on.', isBusy);
+  WN.thing('#fish', null, 'LOWRY&rsquo;S FISH BAR. It shut at ten. The chairs are on the tables.', isBusy);
+  WN.thing('#pask', null, 'PASK AND SON. Shoes mended, keys cut. Shut since half past five.', isBusy);
+  WN.thing('#lamp', 'street lamp', 'The only street lamp in Mercer Row that works. In its light the rain looks like scratches on an old film.', isBusy);
+  WN.thing('#bus', 'timetable', 'The timetable says: LAST BUS 23:25. For once in its life, it was on time.', isBusy);
+  WN.thing('#cat', null, 'A cat in an upstairs window, watching the rain. It looks at you as if you were a wrong number.', isBusy);
+})();
+</script>
+</body>
+</html>

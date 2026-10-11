@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Year 9 Corridor · Answer All Questions</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-cipher.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#070b12;--accent:#f4e04d;--font-display:'Bebas Neue',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Courier Prime',monospace;
+    --tc-bg:rgba(6,9,15,.96);--tc-ink:#e9eef5;--cap-bg:rgba(7,10,16,.94);--panel:#111722;--q-ink:#e6d58a;--fade:#03050a;--hud-bg:rgba(7,10,16,.78)}
+  .tc-room{letter-spacing:.08em}
+  .sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+  .nT{font-family:'Stardos Stencil',serif;font-weight:700;font-size:19px;fill:#0d1420;text-anchor:middle}
+  #exitG{animation:ex 3.7s steps(1,end) infinite}
+  @keyframes ex{0%{opacity:1}92%{opacity:.55}96%{opacity:1}}
+  #buzz{animation:bz 2.4s steps(1,end) infinite}
+  @keyframes bz{0%{opacity:.95}18%{opacity:.25}30%{opacity:.9}52%{opacity:.15}}
+  #sweep{animation:sweep 31s linear infinite;opacity:0}
+  @keyframes sweep{0%{transform:translateX(-500px);opacity:0}3%{opacity:.5}20%{transform:translateX(1500px);opacity:.5}22%{opacity:0}100%{transform:translateX(1500px);opacity:0}}
+  #spill{animation:sp 2s steps(1,end) infinite}
+  @keyframes sp{0%{opacity:.9}50%{opacity:.72}}
+  #cleaf{transition:transform 1.4s ease-in;transform-origin:1300px 460px}
+  #cdoor.open #cleaf{transform:scaleX(.16)}
+  #flood{opacity:0;transition:opacity 1.6s}
+  #cdoor.open~#flood{opacity:1}
+  .lk{cursor:pointer}
+  .lk:hover .ld{filter:brightness(1.25)}
+
+  /* the lock that asks questions */
+  .sx{display:grid;grid-template-columns:minmax(0,690px) 330px;gap:24px;width:min(1050px,96vw);align-items:start}
+  .sx-unit{background:#20252d linear-gradient(170deg,#2c333d,#181c23);border:3px solid #0c0f13;border-radius:14px;padding:16px 20px 16px;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 2px #3a424e}
+  .sx-head{display:flex;align-items:center;gap:9px;margin-bottom:11px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.3em;color:#9aa3af;text-transform:uppercase}
+  .sx-head span{margin-right:auto}
+  .sx-head i{width:15px;height:15px;border-radius:50%;background:#571a14;box-shadow:inset 0 0 0 2px #0c0f13}
+  .sx-head i.on{background:#7be04a;box-shadow:inset 0 0 0 2px #0c0f13,0 0 10px #7be04a}
+  .sx-head i.bad{background:#ff4a3a;box-shadow:inset 0 0 0 2px #0c0f13,0 0 10px #ff4a3a}
+  .sx-screen{background:#0b1a10;border:3px solid #05080a;border-radius:8px;padding:12px 18px 14px;min-height:150px;color:#8dfc9d;font-family:'VT323',monospace;
+    box-shadow:inset 0 0 34px rgba(0,0,0,.75);background-image:repeating-linear-gradient(rgba(0,0,0,0) 0 3px,rgba(0,0,0,.22) 3px 4px)}
+  .sx-q{font-size:21px;letter-spacing:.14em;color:#4fae60;margin-bottom:4px}
+  .sx-s .w:hover{color:#fff}
+  .sx-s{font-size:31px;line-height:1.12}
+  .sx-gap{display:inline-block;min-width:150px;padding:0 6px;border-bottom:3px solid #8dfc9d;color:#f4e04d;white-space:nowrap}
+  .sx-gap u{display:inline-block;width:13px;height:24px;margin-left:2px;background:#f4e04d;vertical-align:-3px;text-decoration:none;animation:cur 1s steps(1,end) infinite}
+  @keyframes cur{50%{opacity:0}}
+  .sx-row{display:flex;align-items:center;gap:14px;margin:12px 0 2px}
+  .sx-plate{padding:7px 18px 4px;background:linear-gradient(135deg,#8a6a26,#e6c873 30%,#b08a35 55%,#f0d98f 78%,#8a6a26);color:#2e2206;border-radius:3px;
+    font-family:'Stardos Stencil',serif;font-weight:700;font-size:27px;letter-spacing:.1em;box-shadow:0 2px 0 #4d3a10}
+  .sx-row small{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#9aa3af}
+  .sx .wk-board{margin-top:8px}
+  .sx .wk-key{--s:44px;border-radius:7px;border:1px solid #05080a;background:#3a424e;color:#e9eef5;box-shadow:0 3px 0 #0c0f13;font-family:'Oswald',sans-serif}
+  .sx .wk-key:hover:not(:disabled){background:#4a5462;border-color:#f4e04d}
+  .sx .wk-key[data-k=enter]{background:#2f6a3a}
+  .sx .pmsg{margin-top:12px;min-height:76px}
+  .sx-side svg{display:block;width:100%;height:auto}
+  .bolt{transition:transform .5s cubic-bezier(.5,0,.3,1.4)}
+  .bolt.back{transform:translateX(64px)}
+  .sx-card{position:relative;margin-top:14px;background:#fbfbf8;color:#1c1b18;padding:16px 18px 14px;font-family:'Courier Prime',monospace;font-size:15.5px;line-height:1.34;transform:rotate(.8deg);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+  .sx-card p{margin:0 0 8px}
+  .sx-card .mk{display:inline-block;margin-top:2px;padding:3px 10px;background:#fdf6c9;font-family:'Permanent Marker',cursive;font-size:17px;transform:rotate(-3deg);box-shadow:0 2px 5px rgba(0,0,0,.3)}
+  .sx-card .w:hover{color:#8c2f24}
+  @media (max-width:900px){.sx{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d131e"/><stop offset="1" stop-color="#18212f"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2a33"/><stop offset="1" stop-color="#0a1016"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1730"/><stop offset="1" stop-color="#1c3257"/></linearGradient>
+  <linearGradient id="cdoorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7d8a86"/><stop offset=".5" stop-color="#a9b5b0"/><stop offset="1" stop-color="#6c7975"/></linearGradient>
+  <linearGradient id="moonG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcd3ff" stop-opacity=".2"/><stop offset="1" stop-color="#bcd3ff" stop-opacity=".02"/></linearGradient>
+  <linearGradient id="spillG" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#eaffe6" stop-opacity=".55"/><stop offset="1" stop-color="#eaffe6" stop-opacity="0"/></linearGradient>
+  <radialGradient id="exG"><stop offset="0" stop-color="#3dff8e" stop-opacity=".5"/><stop offset="1" stop-color="#3dff8e" stop-opacity="0"/></radialGradient>
+  <radialGradient id="bzG"><stop offset="0" stop-color="#8fb4ff" stop-opacity=".8"/><stop offset="1" stop-color="#8fb4ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="floodG" cx="88%" cy="50%" r="75%"><stop offset="0" stop-color="#f4fff0" stop-opacity=".9"/><stop offset=".5" stop-color="#eaffe6" stop-opacity=".3"/><stop offset="1" stop-color="#eaffe6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="62%" cy="48%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity=".92"/></radialGradient>
+  <pattern id="lino" width="150" height="150" patternUnits="userSpaceOnUse" patternTransform="skewX(-28)"><rect width="150" height="150" fill="none"/><path d="M0 0V150M0 0H150" stroke="#0c1319" stroke-width="3"/></pattern>
+  <pattern id="wire" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0H12M0 0V12" stroke="#5d6b66" stroke-width="1.2"/></pattern>
+</defs>
+
+<!-- wall and high windows -->
+<rect x="-1000" y="-400" width="3600" height="1120" fill="url(#wallG)"/>
+<g id="wins" class="hot"></g>
+<rect x="-1000" y="184" width="3600" height="8" fill="#0a0f17"/>
+
+<!-- signs along the top of the lockers -->
+<circle id="exitG" cx="130" cy="216" r="120" fill="url(#exG)" pointer-events="none"/>
+<g id="exit" class="hot"><rect x="70" y="198" width="120" height="36" rx="3" fill="#0e3d22"/><rect x="74" y="202" width="112" height="28" rx="2" fill="#17a652"/><text x="118" y="224" class="sT" font-size="21" fill="#eafff0" letter-spacing="3">EXIT</text><path d="M158 216h18m-7-7l7 7-7 7" stroke="#eafff0" stroke-width="3" fill="none"/></g>
+<g id="poster" class="hot"><rect x="560" y="194" width="250" height="44" fill="#f1eee2"/><rect x="560" y="194" width="250" height="44" fill="none" stroke="#c8281d" stroke-width="3"/><text x="685" y="213" class="sT" font-size="14" fill="#c8281d" letter-spacing="3">EXAM WEEK</text><text x="685" y="231" class="sT" font-size="12" fill="#16171c" letter-spacing="2">SILENCE IN THIS CORRIDOR</text></g>
+
+<!-- forty lockers (twenty of them on this side) -->
+<rect x="80" y="244" width="1120" height="474" fill="#101823"/>
+<g id="lockers"></g>
+<circle id="buzz" cx="805" cy="300" r="74" fill="url(#bzG)" pointer-events="none"/>
+<g id="moon" pointer-events="none"></g>
+<path id="sweep" d="M0 250h130l-80 470h-130z" fill="#ffeeb0" pointer-events="none"/>
+
+<!-- floor -->
+<rect x="-1000" y="718" width="3600" height="600" fill="url(#floorG)"/>
+<rect x="-1000" y="718" width="3600" height="600" fill="url(#lino)"/>
+<rect x="-1000" y="712" width="3600" height="8" fill="#070b10"/>
+<g id="moonF" pointer-events="none"></g>
+
+<!-- fire extinguisher -->
+<g id="ext" class="hot"><rect x="22" y="470" width="40" height="18" rx="4" fill="#1c232c"/><path d="M34 520q0-22 10-22t10 22v176q0 8-10 8t-10-8z" fill="#a8261d"/><rect x="36" y="570" width="16" height="40" fill="#f1eee2" opacity=".8"/><path d="M44 498v-14h14" stroke="#16171c" stroke-width="5" fill="none"/><path d="M58 484q14 4 10 40" stroke="#16171c" stroke-width="4" fill="none"/></g>
+
+<!-- the copy room door, the lock beside it, the clock -->
+<g id="clock" class="hot"><circle cx="1400" cy="124" r="38" fill="#0a0f17"/><circle cx="1400" cy="124" r="32" fill="#cfd8e6"/><g stroke="#16171c" stroke-width="3"><path d="M1400 96v6M1400 146v6M1372 124h6M1422 124h6"/></g>
+  <path id="hh" d="M1400 124V106" stroke="#16171c" stroke-width="5" stroke-linecap="round"/><path id="mh" d="M1400 124V98" stroke="#16171c" stroke-width="3" stroke-linecap="round"/><circle cx="1400" cy="124" r="3.5" fill="#c8281d"/></g>
+<rect x="1284" y="196" width="232" height="524" fill="#0a0f17"/>
+<rect x="1300" y="210" width="200" height="508" fill="#f4fff0"/>
+<g id="cdoor" class="hot">
+  <g id="cleaf"><rect x="1300" y="210" width="200" height="508" fill="url(#cdoorG)"/>
+    <rect x="1352" y="262" width="96" height="128" rx="4" fill="#2a3531"/><rect x="1358" y="268" width="84" height="116" rx="2" fill="#eaffe6"/><rect x="1358" y="268" width="84" height="116" fill="url(#wire)"/>
+    <rect x="1340" y="420" width="120" height="34" fill="#16171c"/><text x="1400" y="443" class="sT" font-size="16" fill="#f4e04d" letter-spacing="3">COPY ROOM</text>
+    <rect x="1312" y="470" width="14" height="62" rx="4" fill="#30383b"/><g fill="#30383b"><rect x="1300" y="270" width="12" height="16"/><rect x="1300" y="360" width="12" height="16"/><rect x="1300" y="450" width="12" height="16"/><rect x="1300" y="540" width="12" height="16"/><rect x="1300" y="630" width="12" height="16"/></g>
+    <rect x="1300" y="690" width="200" height="28" fill="#59645f"/></g>
+</g>
+<rect id="flood" x="-1000" y="-400" width="3600" height="1700" fill="url(#floodG)" pointer-events="none"/>
+<path id="spill" d="M1300 718h200l60 60H1060z" fill="url(#spillG)" pointer-events="none"/>
+<g id="sphinx" class="hot">
+  <rect x="1196" y="384" width="78" height="148" rx="8" fill="#20252d"/><rect x="1196" y="384" width="78" height="148" rx="8" fill="none" stroke="#05080a" stroke-width="3"/>
+  <rect x="1204" y="394" width="62" height="40" rx="3" fill="#0b1a10"/><path d="M1210 406h44M1210 416h30M1210 426h38" stroke="#8dfc9d" stroke-width="3"/>
+  <g id="slamps"></g>
+  <g fill="#3a424e"><rect x="1206" y="462" width="14" height="12" rx="2"/><rect x="1224" y="462" width="14" height="12" rx="2"/><rect x="1242" y="462" width="14" height="12" rx="2"/><rect x="1206" y="480" width="14" height="12" rx="2"/><rect x="1224" y="480" width="14" height="12" rx="2"/><rect x="1242" y="480" width="14" height="12" rx="2"/><rect x="1206" y="498" width="14" height="12" rx="2"/><rect x="1224" y="498" width="14" height="12" rx="2"/><rect x="1242" y="498" width="14" height="12" rx="2"/></g>
+  <rect x="1200" y="544" width="70" height="52" fill="#fbfbf8" transform="rotate(2 1235 570)"/><g stroke="#3b382f" stroke-width="2" transform="rotate(2 1235 570)"><path d="M1207 556h56M1207 565h50M1207 574h56M1207 583h30"/></g>
+  <rect x="1206" y="602" width="58" height="20" fill="#fdf6c9" transform="rotate(-4 1235 612)"/><path d="M1212 612h46" stroke="#16171c" stroke-width="3.5" stroke-linecap="round" transform="rotate(-4 1235 612)"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go into the copy room</button>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, opened = false, sxBox = null;
+  var slot = 0, vars = ['a', 'a', 'a', 'a', 'a'], words = [], told = {};
+
+  /* windows, moonlight, twenty lockers */
+  (function () {
+    var s = '', m = '', f = '', i, x, y, n, c, COL = ['#3d5368', '#42586e', '#38506a', '#465c70'];
+    for (i = 0; i < 8; i++) {
+      x = 60 + i * 200;
+      s += '<rect x="' + x + '" y="34" width="168" height="140" fill="#070b12"/><rect x="' + (x + 7) + '" y="41" width="154" height="126" fill="url(#skyG)"/>' +
+        '<path d="M' + (x + 84) + ' 41v126M' + (x + 7) + ' 104h154" stroke="#070b12" stroke-width="5"/>';
+      if (i % 2 === 0 && i < 6) {
+        m += '<path d="M' + (x + 30) + ' 250h150l-80 468h-150z" fill="url(#moonG)"/>';
+        f += '<path d="M' + (x - 50) + ' 720h150l-70 200h-170z" fill="#bcd3ff" opacity=".05"/>';
+      }
+    }
+    s += '<circle cx="528" cy="78" r="17" fill="#e9eef8"/><circle cx="521" cy="73" r="16" fill="#0f1d3a"/><g fill="#dfe8ff"><circle cx="150" cy="70" r="1.6"/><circle cx="352" cy="140" r="1.3"/><circle cx="760" cy="62" r="1.5"/><circle cx="930" cy="128" r="1.2"/><circle cx="1170" cy="72" r="1.5"/></g>';
+    $('#wins').innerHTML = s; $('#moon').innerHTML = m; $('#moonF').innerHTML = f; s = '';
+    for (i = 0; i < 20; i++) {
+      n = 21 + i; x = 90 + (i % 10) * 110; y = i < 10 ? 252 : 484; c = COL[(i * 7 + 3) % 4];
+      s += '<g class="lk" data-n="' + n + '"><rect class="ld" x="' + x + '" y="' + y + '" width="104" height="226" fill="' + c + '"/><rect x="' + x + '" y="' + y + '" width="104" height="226" fill="none" stroke="#1c2836" stroke-width="3"/>' +
+        '<g stroke="#131c28" stroke-width="5" stroke-linecap="round"><path d="M' + (x + 22) + ' ' + (y + 34) + 'h60M' + (x + 22) + ' ' + (y + 48) + 'h60M' + (x + 22) + ' ' + (y + 62) + 'h60"/></g>' +
+        '<rect x="' + (x + 32) + '" y="' + (y + 84) + '" width="40" height="24" fill="#d7dde5"/><text x="' + (x + 52) + '" y="' + (y + 103) + '" class="nT">' + n + '</text>' +
+        '<rect x="' + (x + 86) + '" y="' + (y + 118) + '" width="8" height="30" rx="3" fill="#1c2836"/><circle cx="' + (x + 90) + '" cy="' + (y + 160) + '" r="6" fill="#c9b27a"/><path d="M' + (x + 4) + ' ' + (y + 4) + 'v218" stroke="#fff" stroke-width="2" opacity=".07"/>';
+      if (n === 27) s += '<g stroke="#9fc0ff" stroke-width="3" stroke-linecap="round" opacity=".9"><path d="M' + (x + 26) + ' ' + (y + 34) + 'h52M' + (x + 26) + ' ' + (y + 48) + 'h52M' + (x + 26) + ' ' + (y + 62) + 'h52"/></g><path d="M' + (x + 30) + ' ' + (y + 190) + 'q22-18 44 0" stroke="#f4e04d" stroke-width="5" fill="none"/><circle cx="' + (x + 38) + '" cy="' + (y + 196) + '" r="5" fill="#16171c"/><circle cx="' + (x + 66) + '" cy="' + (y + 196) + '" r="5" fill="#16171c"/>';
+      if (n === 34) s += '<g transform="rotate(-7 ' + (x + 52) + ' ' + (y + 52) + ')"><rect x="' + (x + 30) + '" y="' + (y + 14) + '" width="50" height="44" fill="#fff6c9"/><path d="M' + (x + 36) + ' ' + (y + 26) + 'h38M' + (x + 36) + ' ' + (y + 36) + 'h30M' + (x + 36) + ' ' + (y + 46) + 'h36" stroke="#1c1b18" stroke-width="2"/></g>' +
+        '<g transform="rotate(3 ' + (x + 52) + ' ' + (y + 186) + ')"><rect x="' + (x + 12) + '" y="' + (y + 170) + '" width="70" height="34" fill="#f1eee2"/><path d="M' + (x + 18) + ' ' + (y + 180) + 'h56M' + (x + 18) + ' ' + (y + 188) + 'h50M' + (x + 18) + ' ' + (y + 196) + 'h38" stroke="#27457a" stroke-width="2.5"/></g>';
+      if (n === 38) s += '<path d="M' + (x + 40) + ' ' + (y + 176) + 'l8 16 18 2-13 12 4 18-17-9-16 9 4-18-13-12 18-2z" fill="#f4e04d"/>';
+      if (n === 25) s += '<rect x="' + (x + 16) + '" y="' + (y + 170) + '" width="62" height="26" rx="4" fill="#b23a30"/><path d="M' + (x + 24) + ' ' + (y + 183) + 'h46" stroke="#fff" stroke-width="3"/>';
+      s += '</g>';
+    }
+    $('#lockers').innerHTML = s; s = '';
+    for (i = 0; i < 5; i++) s += '<circle id="sl' + i + '" cx="' + (1211 + i * 12) + '" cy="448" r="4" fill="#571a14"/>';
+    $('#slamps').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'cipher', story: 'exam', storyTitle: 'Answer All Questions', id: 'corridor', no: 'II', title: 'The Year 9 Corridor',
+    go: 'Walk towards the noise',
+    intro: [
+      'In every line of Mrs Calloway&rsquo;s bulletin one word sounded right and was wrong: HOLE for whole, OUR for hour, and their friends. The first letters of the six wrong words spelt HONEST, and HONEST opened the key box.',
+      'Two hooks inside it were empty: number 14, EXAM CUPBOARD, and number 21, LIBRARY. You took number 3 and let yourself out of the staffroom.',
+      'The corridor is dark. Somewhere at the far end, behind a door, a machine is running.'
+    ],
+    exit: {"next":"copyroom","w":{"7695a5e7":"797adede","2d6e7a6a":"88b345f4","82a49511":"48de6246","4fea6976":"ccfdbac8","beb733af":"58cb633d","b2f733af":"ca802dd3","cc8f2aef":"f8769cbd","5bf68dab":"d33a7669","26d6a0fd":"9589dfc2","280d0ebc":"6aaeb3b0","908c3a0f":"bb5d03d3","036ee7c5":"96a53041","396303b8":"42700cc4","4ba3f8da":"7413e18d","2e7840b2":"59588cb8","67c64fce":"352788b6","977f436b":"f95d1883","a5f55946":"be5b28e3","e2ecae82":"cd64bded","e747c36a":"d07a819e","c70463c5":"acbfd368","7d1a59ce":"c03c7700","35ae4485":"5623d2d0","c4e99892":"22e92289","f9333684":"48217d6f","8f701d39":"67dc84cf","07893fdf":"e916bbd9","4289dfb2":"ffbc2083","1645677b":"6996b466","a374a283":"18b2f78e","fe1dcbd2":"b8641cf3","32dc3dc9":"3b188b8c"}}, tags: {"f1a":["98ef4803"],"f1a@":["96c6233c","88583bb2","5134d791","5d60e375","481cc720","7c9d9dc3","cc420c67","aeb323ed","9d041bbb","faa8c6b2","ccf60d4c"],"f1a?":["da8f7958","7cd0f9a6","9de87339","ba8229c9","d794fc21","3086fe52","2d933e19","85aec6ec","7b356ca6","a5e1b34c","d0983394"],"f1a#":["b2720913"],"f1b":["09ffda74"],"f1b@":["3de23f0a","ad6e5341","76900569","113efd27","dbcf6b69","3f38588b"],"f1b?":["9aadabcf","c9f22344","555c8298","9b330e8b","9172e602","e3298055"],"f1b#":["f679033d"],"f2a":["b8a98dd9"],"f2a@":["7be7fcb6","2a29fd0c","cdcc562b","6434f3ea","36252217","b0a0b568","f7bf357b","033bac64"],"f2a?":["6d26429b","80bade45","a7e48d14","5bfcbe61","5cd93f81","d246c25e","d5dfc932","22efff77"],"f2a#":["7bc63acd"],"f2b":["6098b1cc"],"f2b@":["9841c6ed","2d5eee24","be1f13c2","688865c4","d484ff46","f3133210","c5226db8","6595be10","303045f0"],"f2b?":["992ff189","e2b6bc51","c17c5448","df29cadd","a4af1963","f1f1b8b9","faee40c9","113d2756","8483b441"],"f2b#":["fe4c51b6"],"f3a":["fb67d239"],"f3a@":["fccbb34c","f0304303","f818dd6c","9d830973","707403a5","36310979","2eecf60c","3a33609c","3da751dd"],"f3a?":["4aa09d11","6b0dc91d","b775bd63","40dc5872","11bef529","794d40cc","1e4a5abe","7213b9dc","e14c4152"],"f3a#":["03d2cecf"],"f3b":["0fd09b62"],"f3b@":["4d276411","891f5e1f","d43de9fa","9257f96c","161a4b48","b3481178","8007f6e8","fdd983ef","d3d45d01"],"f3b?":["377e23b6","f9a29ba1","7558e45a","fd274acd","4bd3f00a","c7c6978b","f8cefd29","4c7df40e","51b088aa"],"f3b#":["532754d0"],"f4a":["888003dd"],"f4a@":["5cddb39f","15c6146d","feab501f","e09d810b","86db8081","8329bd80","4dd3d9ae","b65ec0d8","0077a410"],"f4a?":["457ab982","90a9cd82","b717744e","e7c1cdbc","bcd67c68","f644209d","ccbbeee7","9b521fb0","80bfb5da"],"f4a#":["795608d1"],"f4b":["1d179761"],"f4b@":["64c51598","e0ec2efc","59b6dca3","6228130f","a892df89","38ec278a","87132561","7877b8f6","f56705c3","ef789344"],"f4b?":["e7c6fb1a","5553bf29","da33eab1","05599ced","40aae47b","c9acd2fb","5f307d3f","d7c6f781","36071bc3","2239f288"],"f4b#":["577fe9fd"],"f5a":["028cb26b"],"f5a@":["4dbdf20c","73ab1cf3","4b3d1842","1949d853","58f69c64","c9b4e0e1","9e306238","287c6dd1","f3324e5d","651b999e","9e1a3464","8f1d7470","f78b10a3"],"f5a?":["2448b64f","553d0d2b","6e59459b","b47598da","788d6651","8c499cf8","7a1db2d8","46ea9b5f","4964c360","ff6267b5","7458a4b8","cea0afd4","430cbdc6"],"f5a#":["4c4406a3"],"f5b":["0463aa08"],"f5b@":["23ea96fe","5b0901bb","015f02ee","940a3735","52d9941c","bdb9f5bd","3b6fa833","3d6f3490","a5f2fb52"],"f5b?":["73694a78","85e6f5f8","14e96f85","a70d4860","b3cdc43f","c5eed1db","76b1abba","c1108fb0","d57501ef"],"f5b#":["e78f1a19"]},
+    sound: ['corridor', { root: 43, bpm: 56, drop: ['ost'] }],      /* the copier behind the door keeps time by itself: nothing in the music with a beat */
+    hints: hints, onBegin: begin
+  });
+  EXAM.clock(); EXAM.wall('#hh', '#mh', 1400, 124);
+
+  nextFile = ER.flag('b-file') || null; slot = ER.flag('b-slot') || 0; words = ER.flag('b-words') || []; told = ER.flag('b-told') || {};
+  vars = (ER.flag('b-vars') || 'aaaaa').split('');
+
+  /* the door's questions. Each of the five has a second one behind it, for after a wrong answer. */
+  var Q = [
+    { a: ['EXPLAIN', 'Mr Tibbs gave the staff a full ', ' of the new timetable. It took an hour.'],
+      b: ['CHOOSE', 'There was no ', ' of pudding today. It was rice, or it was nothing.'] },
+    { a: ['DECIDE', 'After two meetings, the staff have still not reached a ', ' about the car park.'],
+      b: ['KNOW', 'Mr Drummond&rsquo;s ', ' of this building is complete. He even knows where the mice live.'] },
+    { a: ['BEHAVE', 'The ', ' of 9C in the library on Tuesday was a credit to nobody.'],
+      b: ['FAVOUR', 'Tea is the staffroom&rsquo;s ', ' drink. Coffee comes second, and water is not on the list.'] },
+    { a: ['HONEST', 'Copying your neighbour&rsquo;s answers is ', ', even when your neighbour is wrong.'],
+      b: ['POSSIBLE', 'It is ', ' to be in two classrooms at once. Several pupils have tried.'] },
+    { a: ['DISAPPEAR', 'The ', ' of the staffroom biscuits has never been explained.'],
+      b: ['SUSPECT', 'I have a strong ', ' that somebody is feeding the mice.'] }
+  ];
+  var NOUN = 'The gap wants a noun: the name of a thing. That word is not one.', BRIT = 'The lock hums for a moment, as if it were thinking about America. This is a British door, and one letter is missing.';
+  var WRONG = {
+    f1a: { explaination: 'Very nearly. But the noun loses a letter that the verb has: look hard at the middle of it.', explaining: NOUN, explained: NOUN, explainable: NOUN },
+    f1b: { chose: NOUN, chosen: NOUN, choosing: NOUN, choise: 'Very nearly. The sound is right and one letter is not: the noun does not end in -SE.', chooses: NOUN },
+    f2a: { decided: NOUN, deciding: NOUN, decisive: 'DECISIVE describes a person who decides quickly. After &ldquo;a&rdquo;, the gap wants the thing itself.', decisions: 'Only one of them: &ldquo;a&rdquo; comes before the gap.', decition: 'Very nearly. The ending is spelt with an S.' },
+    f2b: { known: NOUN, knowing: NOUN, knowlege: 'Very nearly. There is a D hiding in it.', knowledgeable: 'KNOWLEDGEABLE describes Mr Drummond. The gap wants the thing that he has.', knows: NOUN },
+    f3a: { behavior: BRIT, behaved: NOUN, behaving: NOUN, behaves: NOUN, behaviours: 'Only one of them. 9C managed it all together.' },
+    f3b: { favorite: BRIT, favourable: 'FAVOURABLE means &ldquo;good for you&rdquo;, like favourable weather. The staffroom likes tea more than any other drink. There is a word for that.', favoured: 'Nearly the right idea, but nobody says &ldquo;favoured drink&rdquo;. The word you want is the one on every child&rsquo;s lips: my ___ colour, my ___ food.', favourites: 'Only one drink can come first.', favor: BRIT },
+    f4a: { honesty: 'HONESTY is the thing itself. After &ldquo;is&rdquo;, the gap wants a word that describes copying. And is copying a good thing?', honestly: 'HONESTLY tells you how somebody speaks. The gap wants a word that describes copying. And is copying a good thing?', unhonest: 'The right idea, with the wrong prefix. It is not UN-.', inhonest: 'The right idea, with the wrong prefix. It is not IN-.', dishonesty: 'DISHONESTY is the thing itself. After &ldquo;is&rdquo;, the gap wants the adjective.', dishonestly: 'That is the adverb. After &ldquo;is&rdquo;, the gap wants the adjective.' },
+    f4b: { possibly: 'POSSIBLY is an adverb. And read the second sentence: have the pupils managed it?', possibility: 'After &ldquo;It is&rdquo;, the gap wants a word that describes. POSSIBILITY is a noun. And read the second sentence: have the pupils managed it?', unpossible: 'The right idea, with the wrong prefix. It is not UN-.', inpossible: 'Very nearly. Before a P, the prefix IN- changes its second letter.', impossibly: 'That is the adverb. After &ldquo;It is&rdquo;, the gap wants the adjective.', impossibility: 'That is the noun. After &ldquo;It is&rdquo;, the gap wants the adjective.' },
+    f5a: { disappeared: NOUN, disappearing: 'Not bad. But the door wants the real noun: the one with an ending of its own.', disappearence: 'Very nearly. The ending is -ANCE, with an A.', disapearance: 'Very nearly. One P is not enough.', dissapearance: 'Very nearly. Count the Ss and the Ps again: one S, two Ps.', disappears: NOUN },
+    f5b: { suspicious: 'SUSPICIOUS describes a person. After &ldquo;a strong&rdquo;, the gap wants the feeling itself.', suspected: NOUN, suspection: 'There is no such word. The noun ends in -ICION.', suspition: 'Very nearly. The ending is spelt with a C.', suspecting: NOUN, suspects: 'SUSPECTS are people the police want to talk to. The gap wants a feeling.' }
+  };
+  var LAST = {
+    f1a: 'A noun that ends in -ATION. Be careful with the middle of it: the verb has AI there, and the noun has only A.',
+    f1b: 'A short noun of six letters. The double O goes, and the word ends in -CE.',
+    f2a: 'A noun that ends in -SION. The D of the verb turns into an S.',
+    f2b: 'A noun for everything that a person knows. It ends in -LEDGE.',
+    f3a: 'A noun for the way people behave. In Britain it ends in -IOUR, and this is a British door.',
+    f3b: 'An adjective for the one you like best. Keep the U, and add three letters.',
+    f4a: 'Is copying honest? You need the opposite of the word on the plate. The prefix has three letters and begins with D.',
+    f4b: 'Can anybody be in two classrooms at once? You need the opposite of the word on the plate. The prefix has two letters, and it is not UN-.',
+    f5a: 'A noun that ends in -ANCE. Nothing else in the word changes.',
+    f5b: 'A noun for the feeling that something is wrong. It ends in -ICION: the E of the verb turns into an I.'
+  };
+  function key() { return 'f' + (slot + 1) + vars[slot]; }
+
+  function hints() {
+    if (nextFile) return ['go', ['The five bolts are back and the copy room door is open. Go in.']];
+    if (sxBox) return ['sphinx', [
+      'Read the white card beside the lock. The word on the brass plate is only the raw material. It has to change its shape before it fits the sentence on the green screen.',
+      'Look at the words on each side of the gap. After &ldquo;a&rdquo;, &ldquo;the&rdquo;, &ldquo;no&rdquo; or &ldquo;Mr Drummond&rsquo;s&rdquo; you need a noun: the name of a thing. After &ldquo;is&rdquo; you need a word that describes. And sometimes the sentence only makes sense if the word means the opposite: UN-, IM-, DIS-.',
+      LAST[key()]
+    ]];
+    return ['look', [
+      'The noise comes from behind the door at the far end of the corridor, on the right. Have a look at the lockers on your way: one of them is buzzing, and one has a slip of paper sticking out of it.',
+      'The copy room door has a new lock: the dark box with the small green screen, on the wall just to the left of the door. Click on it.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function lamps() { for (var i = 0; i < 5; i++) $('#sl' + i).setAttribute('fill', i < slot ? '#7be04a' : '#571a14'); ER.pips(slot, 5); }
+  function openDoor() { $('#cdoor').classList.add('open'); $('#go').classList.add('on'); }
+
+  function begin() {
+    lamps();
+    setInterval(function () { if (!ER.isOpen() && !busy) EXAM.sfx.copier(); }, 2600);
+    setInterval(function () { if (!ER.isOpen() && !busy && !told.phone) EXAM.sfx.buzz(); }, 9000);
+    if (nextFile) { openDoor(); ER.say('The copy room door is standing open.'); return; }
+    if (slot || told.in) { ER.say('The Year 9 corridor. The machine behind the door is still running.'); return; }
+    busy = true; tell('in');
+    ER.narrate([
+      'The Year 9 corridor at night: forty lockers, twenty on each side, and one green EXIT sign.',
+      'The noise is coming from the copy room, at the far end. There is a light under its door.',
+      'Halfway along the corridor, one of the lockers is buzzing.'
+    ], function () { busy = false; EXAM.sfx.buzz(); });
+  }
+
+  /* ---------- the lockers ---------- */
+  var PHONE = '<h4>27</h4><p>9C &middot; NO TEACHERS &middot; 61 new messages</p><p>who has page 5? mine is blurred</p><p>has anyone done section C yet</p>' +
+    '<p>whoever took these photos is a legend</p><p>DELETE THEM AFTER FRIDAY</p><p>is it true mr tibbs is asking questions</p>';
+  var SEEME = '<h4>See me</h4><p>To: <u>J. Ashby, 9C</u></p><p>1. You were seen outside the staffroom at 16:10 today, Thursday.</p><p>2. You gave no reason.</p>' +
+    '<p>3. Pupils do not wait outside the staffroom.</p><p>See me on Monday. <u>D. Tibbs</u></p>';
+  var LOCK = { 21: 'Locker 21 smells of oranges, even from the outside.', 25: 'Locker 25 has a sticker on it: I LOVE MATHS. Somebody has added a question mark.',
+    29: 'Locker 29. Something inside it is ticking. You hope that it is a watch.', 33: 'Locker 33 is not quite shut, because of a hockey stick.', 40: 'Locker 40 belongs to nobody. It has not opened since 2019, and nobody is in a hurry.' };
+  ER.$$('.lk').forEach(function (g) {
+    g.addEventListener('click', function (e) {
+      if (busy) return;
+      var n = +g.getAttribute('data-n');
+      if (n === 27) {
+        ER.read({ html: PHONE, cls: 'vent', clue: { id: 'phone', title: 'A phone in locker 27', kind: 'Seen through the slots' }, done: function () {
+          if (!tell('phone')) return;
+          busy = true;
+          ER.narrate([
+            'You cannot open the locker. But the phone is lying on its back in there, lighting up, and you can read it through the slots.',
+            'So that is why half of 9C looked so cheerful today. Tomorrow&rsquo;s paper is on their phones already.',
+            'Then why would anybody need to take the real one out of the cupboard tonight?'
+          ], function () { busy = false; });
+        } });
+      } else if (n === 34) {
+        ER.read({ html: SEEME, cls: 'slip', clue: { id: 'seeme', title: 'A slip on Jonah Ashby’s locker', kind: 'Note from Mr Tibbs' }, done: function () {
+          if (!tell('ashby')) return;
+          busy = true;
+          ER.narrate([
+            'Locker 34: J. ASHBY. Everybody in 9C knows two things about Jonah Ashby. He got thirty-one per cent in English at Christmas, and if he fails tomorrow he goes down a set.',
+            'There is a label on the door in his own writing: DO NOT OPEN UNTIL I PASS ENGLISH.',
+            'And at ten past four this afternoon he was standing outside the staffroom, and would not say why.'
+          ], function () { busy = false; });
+        } });
+      } else if (n === 38) ER.say('Locker 38 is your own. A PE kit, and half a sandwich from Tuesday. Nothing in there is going to help.');
+      else { ER.wordAt(e.clientX, e.clientY, 'locker'); ER.say(LOCK[n] || 'Locker ' + n + '. Locked, and none of your business.'); }
+    });
+  });
+  EXAM.thing('#wins', null, 'The moon, and the yard. Mr Drummond&rsquo;s torch has got as far as the bicycle sheds.', isBusy);
+  EXAM.thing('#exit', null, 'EXIT: the stairs, the side door and Mr Drummond. You could simply go home. And tomorrow at nine, when the cupboard is found empty, there will be exactly one name in the visitors&rsquo; book.', isBusy);
+  EXAM.thing('#poster', null, 'EXAM WEEK. SILENCE IN THIS CORRIDOR. For once, the corridor is doing as it is told.', isBusy);
+  EXAM.thing('#ext', 'fire extinguisher', null, isBusy);
+  EXAM.thing('#clock', null, function () { return 'The corridor clock says ' + EXAM.time() + '. Mr Drummond locks up at half past nine, and he goes by his own watch.'; }, isBusy);
+  $('#cdoor').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.leave(nextFile); return; }
+    ER.say('A steel door: COPY ROOM. Through the wired glass you can see white light, and a big machine working away by itself. Nobody is standing at it. The door is locked. On the wall beside it there is a lock with a small green screen.', 9000);
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#sphinx').addEventListener('click', function () { if (busy) return; if (nextFile) { ER.say('Five green lamps. The lock has nothing more to ask you.'); return; } openSphinx(); });
+
+  /* ---------- the lock that asks questions ---------- */
+  function boltSvg() {
+    var s = '<rect width="330" height="250" fill="#141a22"/><rect x="0" y="0" width="150" height="250" fill="#2a323d"/><rect x="150" y="0" width="180" height="250" fill="url(#cdoorG)"/>' +
+      '<path d="M150 0v250" stroke="#05080a" stroke-width="6"/><text x="75" y="24" class="sT" font-size="12" fill="#8792a0" letter-spacing="3">WALL</text><text x="240" y="24" class="sT" font-size="12" fill="#2a3531" letter-spacing="3">DOOR</text>', i, y;
+    for (i = 0; i < 5; i++) {
+      y = 42 + i * 42;
+      s += '<rect x="160" y="' + (y - 4) + '" width="150" height="30" rx="4" fill="#59645f"/><rect x="86" y="' + (y + 2) + '" width="60" height="18" rx="2" fill="#0c1016"/>' +
+        '<g class="bolt' + (i < slot ? ' back' : '') + '" id="bo' + i + '"><rect x="92" y="' + (y + 3) + '" width="150" height="16" rx="6" fill="#c9ced3"/><rect x="92" y="' + (y + 5) + '" width="150" height="4" rx="2" fill="#fff" opacity=".6"/><rect x="226" y="' + (y - 2) + '" width="10" height="26" rx="3" fill="#30383b"/></g>' +
+        '<text x="40" y="' + (y + 18) + '" class="sT" font-size="16" fill="#8792a0">' + (i + 1) + '</text>';
+    }
+    return s;
+  }
+  function openSphinx() {
+    opened = true;
+    var box = ER.el('div', 'sx'), buf = '', wait = false;
+    box.innerHTML = '<div class="sx-unit"><div class="sx-head"><span>Entry &middot; Copy Room</span><i></i><i></i><i></i><i></i><i></i></div>' +
+      '<div class="sx-screen"><div class="sx-q"></div><div class="sx-s"></div></div>' +
+      '<div class="sx-row"><small>Raw material</small><div class="sx-plate"></div><small>type the word, then Enter</small></div><div class="sx-keys wk"></div><p class="pmsg"></p></div>' +
+      '<div class="sx-side"><svg viewBox="0 0 330 250">' + boltSvg() + '</svg><div class="sx-card"></div></div>';
+    box.querySelector('.sx-card').innerHTML = ER.gloss('<p>COPY ROOM. This door asks five questions.</p><p>In each sentence one word is missing. The word on the brass plate is its raw material: change its form until it fits the sentence.</p>' +
+      '<p>The staff call it the Sphinx. I take that as a compliment. V.C.</p><span class="mk">NOT MY IDEA. F.D.</span>');
+    var msgEl = box.querySelector('.pmsg'), sEl = box.querySelector('.sx-s');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function show() {
+      var q = Q[slot][vars[slot]];
+      box.setAttribute('data-key', key()); box.setAttribute('data-slot', slot);
+      box.querySelector('.sx-q').textContent = 'QUESTION ' + (slot + 1) + ' OF 5';
+      sEl.innerHTML = ER.gloss(q[1]) + '<span class="sx-gap"><b></b><u></u></span>' + ER.gloss(q[2]);
+      box.querySelector('.sx-plate').textContent = q[0];
+      ER.$$('.sx-head i', box).forEach(function (n, i) { n.className = i < slot ? 'on' : ''; });
+      buf = ''; draw();
+    }
+    function draw() { var b = sEl.querySelector('.sx-gap b'); if (b) b.textContent = buf.toUpperCase(); }
+    function press(k) {
+      if (wait || nextFile) return false;
+      if (k === 'back') { buf = buf.slice(0, -1); draw(); return; }
+      if (k === 'enter') { if (buf) answer(); return; }
+      if (k.length !== 1) return false;
+      if (buf.length < 16) { buf += k; EXAM.sfx.beep(660 + buf.length * 18); draw(); }
+    }
+    function answer() {
+      var g = buf, k = key(), base = Q[slot][vars[slot]][0].toLowerCase(), lamp = ER.$$('.sx-head i', box)[slot], t;
+      if (WK.is(k, g)) {
+        words[slot] = g; ER.flag('b-words', words); WK.learn(g);
+        box.querySelector('#bo' + slot).classList.add('back'); EXAM.sfx.bolt(); lamp.className = 'on';
+        slot++; ER.flag('b-slot', slot); lamps();
+        if (slot >= 5) { win(g); return; }
+        wait = true;
+        msg('<b>' + g.toUpperCase() + '</b>. A bolt slides back into the door. ' + (slot === 3 ? 'Somewhere below you, a long way off, another door shuts. ' : '') + ['', 'Four', 'Three', 'Two', 'One'][slot] + ' to go.');
+        setTimeout(function () { wait = false; show(); }, 1300);
+        return;
+      }
+      EXAM.sfx.deny(); EXAM.slip(1); lamp.className = 'bad'; ER.shake(box.querySelector('.sx-screen'));
+      t = g === base ? 'That is the word on the brass plate, exactly as it was. It has to change.' : (WRONG[k][g] || 'The lock buzzes. Look at the words on each side of the gap. What kind of word is missing: the name of a thing, or a word that describes one?');
+      vars[slot] = vars[slot] === 'a' ? 'b' : 'a'; ER.flag('b-vars', vars.join(''));
+      wait = true;
+      msg('<b>' + g.toUpperCase() + '</b>. ' + t + ' The door thinks for a moment, and then asks something else.');
+      setTimeout(function () { wait = false; show(); }, 1500);
+    }
+    function win(g) {
+      var file = ER.exitOk([words.join('-')]);
+      if (!file) { msg('Five bolts are back, and the door will not move. Something is wrong with this lock: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('b-file', file);
+      var st = ER.state(); st.done = st.done || {}; st.done.corridor = 1; ER.flag('b-out', 1);
+      msg('<b>' + g.toUpperCase() + '</b>. The fifth bolt slides back. The green screen says: THANK YOU. PLEASE DO NOT SLAM THE DOOR.');
+      setTimeout(function () {
+        ER.closeAll(); EXAM.solved(); openDoor(); busy = true;
+        ER.narrate([
+          'The copy room door swings open, and white light falls across the corridor floor.',
+          'Nobody comes out. The machine goes on working.'
+        ], function () { busy = false; });
+      }, 2300);
+    }
+    WK.board(box.querySelector('.sx-keys'), { back: true, enter: 'Enter', key: press });
+    WK.keys(box, press);
+    show();
+    msg(slot ? 'The lock is waiting. ' + slot + ' of the five bolts ' + (slot === 1 ? 'is' : 'are') + ' back already.' : 'A green screen, a brass plate, and five steel bolts between you and the machine.');
+    sxBox = box;
+    ER.open('ov-lock', box, function () { sxBox = null; });
+  }
+})();
+</script>
+</body>
+</html>

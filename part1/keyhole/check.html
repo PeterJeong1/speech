@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>KEYHOLE · Is this computer ready?</title>
+<link rel="stylesheet" href="assets/fonts-base.css">
+<link rel="stylesheet" href="assets/wordkit.css">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#0b1418;color:#e9e4d8;font-family:'Outfit',Arial,sans-serif;font-weight:300;font-size:18px;line-height:1.5}
+  main{max-width:760px;margin:0 auto;padding:44px 22px 80px}
+  h1{margin:0 0 4px;font-family:'Cinzel',serif;font-weight:600;font-size:38px;letter-spacing:.06em;color:#ffd6ea}
+  .sub{margin:0 0 28px;color:#9fc1cc}
+  #verdict{margin:0 0 26px;padding:16px 20px;border-left:6px solid #9fc1cc;background:#13232a;font-size:22px;font-weight:500}
+  #verdict.ok{border-color:#5dff9a;color:#d8ffe7}
+  #verdict.bad{border-color:#ff6a5a;color:#ffe1dd}
+  ul{list-style:none;margin:0 0 30px;padding:0}
+  li{display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #1e343d}
+  li i{flex:0 0 26px;height:26px;border-radius:50%;font-style:normal;font-weight:700;text-align:center;line-height:26px;background:#2a3d45;color:#0b1418}
+  li.ok i{background:#5dff9a}li.bad i{background:#ff6a5a}li.warn i{background:#f0c53a}
+  li small{display:block;color:#9fc1cc;font-size:15px}
+  h2{margin:34px 0 10px;font-family:'Oswald',sans-serif;font-weight:500;font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:#f0c53a}
+  svg{display:block;width:100%;height:auto;background:#13232a;border-radius:4px}
+  .drag{cursor:grab;touch-action:none}
+  button{font:inherit;font-weight:500;padding:10px 20px;margin:0 8px 8px 0;border:1px solid #f0c53a;background:transparent;color:#f0c53a;cursor:pointer;border-radius:3px}
+  button:hover{background:#f0c53a;color:#0b1418}
+  #info{margin-top:36px;font-family:'Special Elite',monospace;font-size:13px;color:#6f8f9a;word-break:break-all}
+  a{color:#ffd6ea}
+</style>
+</head>
+<body>
+<main>
+<h1>KEYHOLE</h1>
+<p class="sub">Is this computer ready? This page checks, and then asks you to try three things.</p>
+<div id="verdict">Checking&hellip;</div>
+<ul id="list"></ul>
+
+<h2>Try 1 &middot; drag the key into the keyhole</h2>
+<svg id="pad" viewBox="0 0 760 180">
+  <rect x="560" y="30" width="120" height="120" rx="10" fill="#1e343d" stroke="#3a5a66" stroke-width="3"/>
+  <circle cx="620" cy="76" r="14" fill="#0b1418"/><path d="M612 82h16l5 34h-26z" fill="#0b1418"/>
+  <g id="key" class="drag" style="transform:translate(120px,90px)">
+    <rect x="-56" y="-34" width="130" height="68" fill="transparent"/>
+    <circle cx="-26" cy="0" r="20" fill="none" stroke="#d9ae48" stroke-width="9"/>
+    <path d="M-6 0H62M40 0v18M54 0v13" stroke="#d9ae48" stroke-width="9" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>
+<p id="dragmsg" class="sub">Hold the mouse button down on the key, move it to the lock, and let go.</p>
+
+<h2>Try 2 &middot; sound</h2>
+<p><button type="button" id="ring">Ring the bell</button><button type="button" id="tune">Play ten seconds of music</button> <span id="heard" style="display:none">Did you hear it? <button type="button" id="yes">Yes</button><button type="button" id="no">No</button></span></p>
+<p id="soundmsg" class="sub"></p>
+
+<h2>Try 3 &middot; letters</h2>
+<p id="typemsg" class="sub">Type the word KEY on the keyboard, then press Enter. It should work with Korean switched on, too.</p>
+<div id="typing"></div>
+
+<p><a href="index.html">Go to the corridor &rarr;</a></p>
+<div id="info"></div>
+</main>
+
+<script src="assets/engine.js"></script>
+<script src="assets/wordkit.js"></script>
+<script src="assets/soundtrack.js"></script>
+<script>
+(function () {
+  var list = document.getElementById('list'), verdict = document.getElementById('verdict'), bad = 0, dragOk = false;
+  function row(state, title, note) {
+    var li = document.createElement('li'); li.className = state;
+    li.innerHTML = '<i>' + (state === 'ok' ? '✓' : state === 'warn' ? '!' : '×') + '</i><span></span>';
+    li.lastChild.textContent = title;
+    if (note) { var s = document.createElement('small'); s.textContent = note; li.lastChild.appendChild(s); }
+    list.appendChild(li);
+    if (state === 'bad') bad++;
+  }
+  function test(title, fn, need, note) {
+    var ok = false; try { ok = !!fn(); } catch (e) { ok = false; }
+    row(ok ? 'ok' : (need ? 'bad' : 'warn'), title, ok ? '' : note);
+    return ok;
+  }
+  function svgEl(t) { return document.createElementNS('http://www.w3.org/2000/svg', t); }
+
+  test('Mouse and touch input (pointer events)', function () { return 'PointerEvent' in window; }, true, 'This browser is too old. Please update it, or use Chrome.');
+  test('Moving pictures (web animations)', function () { return typeof Element.prototype.animate === 'function'; }, true, 'This browser is too old. Please update it, or use Chrome.');
+  test('Saving your progress', function () { localStorage.setItem('keyhole.check', '1'); var v = localStorage.getItem('keyhole.check'); localStorage.removeItem('keyhole.check'); return v === '1'; },
+    false, 'The game will work, but it will not remember where you were. Private windows often cause this.');
+  test('Sound', function () { return window.AudioContext || window.webkitAudioContext; }, false, 'No sound here. The game still works without it.');
+  test('Modern page styles', function () { return window.CSS && CSS.supports && CSS.supports('--x', '1px') && CSS.supports('width', 'min(10px, 5vw)'); }, true, 'This browser is too old. Please update it, or use Chrome.');
+  test('Pictures made of shapes (SVG)', function () {
+    var s = svgEl('svg'), sym = svgEl('symbol'), r = svgEl('rect'), u = svgEl('use'), g = svgEl('rect'), a, b;
+    s.setAttribute('width', '100'); s.setAttribute('height', '100'); s.style.position = 'absolute'; s.style.left = '-200px';
+    sym.id = 'chk-sym'; sym.setAttribute('viewBox', '0 0 10 10'); r.setAttribute('width', '10'); r.setAttribute('height', '10'); sym.appendChild(r);
+    u.setAttribute('href', '#chk-sym'); u.setAttribute('width', '40'); u.setAttribute('height', '40');
+    g.setAttribute('width', '10'); g.setAttribute('height', '10');
+    s.appendChild(sym); s.appendChild(u); s.appendChild(g); document.body.appendChild(s);
+    a = g.getBoundingClientRect().left; g.style.transform = 'translate(30px, 0)'; b = g.getBoundingClientRect().left;
+    var ok = u.getBoundingClientRect().width > 30 && Math.abs(b - a - 30) < 2;
+    document.body.removeChild(s); return ok;
+  }, true, 'This browser draws the rooms wrongly. Please update it, or use Chrome.');
+  var big = test('Screen size', function () { return innerWidth >= 1100 && innerHeight >= 560; }, false,
+    'This window is ' + innerWidth + ' by ' + innerHeight + '. Make it bigger, or use a laptop: the rooms need about 1100 by 600.');
+
+  function fonts(done) {
+    if (!document.fonts || !document.fonts.load) { done(false); return; }
+    Promise.all([document.fonts.load("16px 'Cinzel'"), document.fonts.load("16px 'Special Elite'")]).then(function () {
+      done(document.fonts.check("16px 'Cinzel'") && document.fonts.check("16px 'Special Elite'"));
+    }, function () { done(false); });
+  }
+  function conclude() {
+    if (bad) { verdict.className = 'bad'; verdict.textContent = 'This browser has a problem. Read the red lines below.'; }
+    else if (!dragOk) { verdict.className = ''; verdict.textContent = 'So far so good. Now try dragging the key.'; }
+    else { verdict.className = 'ok'; verdict.textContent = 'This computer is ready.'; }
+  }
+  fonts(function (ok) {
+    row(ok ? 'ok' : 'warn', 'The game’s own lettering', ok ? '' : 'The fonts did not load, so the pages will look plainer. Everything still works.');
+    conclude();
+  });
+
+  /* drag test */
+  var svg = document.getElementById('pad'), key = document.getElementById('key'), kx = 120, ky = 90, ox = 0, oy = 0;
+  ER.drag(key, {
+    start: function (e) { var p = ER.pt(svg, e); ox = p.x - kx; oy = p.y - ky; },
+    move: function (e) { var p = ER.pt(svg, e); kx = p.x - ox; ky = p.y - oy; key.style.transform = 'translate(' + kx + 'px,' + ky + 'px)'; },
+    end: function () {
+      if (Math.abs(kx + 62 - 620) < 70 && Math.abs(ky - 90) < 70) {
+        dragOk = true; key.style.transform = 'translate(540px,90px)'; ER.sfx.clunk();
+        document.getElementById('dragmsg').textContent = 'Dragging works.';
+      } else { kx = 120; ky = 90; key.style.transform = 'translate(120px,90px)'; }
+      conclude();
+    }
+  });
+
+  /* sound test */
+  document.getElementById('ring').addEventListener('click', function () { ER.audio(); ER.sfx.bell(); document.getElementById('heard').style.display = 'inline'; });
+  document.getElementById('tune').addEventListener('click', function () {
+    var msg = document.getElementById('soundmsg');
+    if (!ER.audio() || !ER.track) { msg.textContent = 'This browser cannot play sound. The game still works without it.'; return; }
+    if (!ER.music()) { msg.textContent = 'Sound or music is switched off in the game. Use the speaker button in any room to switch it on, then try again.'; return; }
+    ER.track.play('candle'); document.getElementById('heard').style.display = 'inline'; msg.textContent = 'Playing ...';
+    setTimeout(function () { ER.track.stop(1.5); if (msg.textContent === 'Playing ...') msg.textContent = ''; }, 10000);
+  });
+  document.getElementById('yes').addEventListener('click', function () { document.getElementById('soundmsg').textContent = 'Sound works.'; });
+  document.getElementById('no').addEventListener('click', function () { document.getElementById('soundmsg').textContent = 'Check the volume and try again. The game also works with no sound at all.'; });
+
+  /* typing test: the word kit reads the key itself, so the input language should not matter */
+  WK.line(document.getElementById('typing'), { max: 8, placeholder: 'type here', onEnter: function (t) {
+    var ok = t === 'key';
+    document.getElementById('typemsg').textContent = ok ? 'Typing works.' : 'That came out as ' + t.toUpperCase() + '. Try again: K, E, Y, then Enter.';
+    return ok;
+  } });
+
+  document.getElementById('info').textContent = navigator.userAgent + ' | window ' + innerWidth + 'x' + innerHeight + ' | pixels x' + (window.devicePixelRatio || 1);
+})();
+</script>
+</body>
+</html>
