@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Selkie Scar · The Box at Pole Seven</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="tide.css">
+<style>
+  body{--bg:#b9cdd4;--accent:#ffb347;--font-display:'Lora',serif;--font-ui:'Overpass',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(28,44,54,.96);--tc-ink:#eef3f2;--cap-bg:rgba(22,36,45,.93);--panel:#22343f;--face-bg:#a9c4cc;--q-ink:#ffd9a0;--fade:#dfe8ea;--hud-bg:rgba(22,36,45,.82)}
+  .tc-room{text-transform:none;font-style:italic;font-weight:600;letter-spacing:.01em}
+  #wall{animation:creep 90s steps(60,end) forwards}
+  @keyframes creep{from{transform:translateY(0)}to{transform:translateY(-26px)}}
+  .pool{animation:glint 6s steps(8,end) infinite}
+  .pool.b{animation-delay:-3s}
+  @keyframes glint{50%{opacity:.55}}
+  #pup{animation:nose 3.2s steps(1,end) infinite}
+  @keyframes nose{0%{transform:translate(0,0)}30%{transform:translate(2px,-2px)}60%{transform:translate(0,0)}}
+  #wheel.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.25)}}
+  #shut{opacity:0;transition:opacity 5s steps(12,end);pointer-events:none}
+  #scene.fog #shut{opacity:.94}
+
+  /* the moon wheel, and what Mr Nyberg drew in the sand */
+  .work{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#bfb690}
+  .work svg{display:block;width:100%;height:auto;touch-action:none}
+  .work text{pointer-events:none}
+  .mwT{font-family:'Overpass',sans-serif;font-weight:700;fill:#1c2630}
+  .mwC{font-family:'Caveat',cursive;font-weight:700;fill:#1c2630}
+  .sdT{font-family:'Caveat',cursive;font-weight:700;fill:#4a4330}
+  .kind{display:inline-flex;flex:0 0 auto;border:1px solid rgba(255,255,255,.45);border-radius:3px;overflow:hidden}
+  .kind button{height:38px;padding:0 12px;font-family:'Overpass',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#eef3f2;background:rgba(0,0,0,.42);border-right:1px solid rgba(255,255,255,.3)}
+  .kind button:last-child{border-right:0}
+  .kind button.on{background:#ffb347;color:#1c2630}
+  #b-moon .tool{cursor:grab}
+  .shell{cursor:grab}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9dbfcd"/><stop offset=".7" stop-color="#cfe0e4"/><stop offset="1" stop-color="#e9f0ef"/></linearGradient>
+  <linearGradient id="sandG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfd0b6"/><stop offset=".35" stop-color="#cfc59c"/><stop offset="1" stop-color="#a59a70"/></linearGradient>
+  <linearGradient id="gutG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9cbd6"/><stop offset="1" stop-color="#5f8fa3"/></linearGradient>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7f6" stop-opacity="0"/><stop offset=".3" stop-color="#f4f7f6" stop-opacity=".95"/><stop offset="1" stop-color="#f4f7f6"/></linearGradient>
+  <g id="sealS"><path d="M0 0q26 -26 86 -20q36 2 58 20q-16 10 -40 8q-64 12 -104 -8z" fill="#62686b"/><path d="M6 2q40 12 96 4q20 2 40 -6q-18 12 -40 10q-60 12 -96 -8z" fill="#8e9395"/>
+    <path d="M124 -12q16 -12 28 -2q6 8 -6 14q-12 2 -22 -12z" fill="#62686b"/><circle cx="144" cy="-6" r="1.800" fill="#16191b"/><path d="M40 4q-8 12 -22 12" stroke="#4d5356" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <g fill="#484d50"><circle cx="50" cy="-12" r="2.500"/><circle cx="70" cy="-16" r="2"/><circle cx="92" cy="-12" r="2.500"/><circle cx="64" cy="-6" r="1.800"/></g></g>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="770" fill="url(#skyG)"/>
+<!-- the white wall, out beyond the bar -->
+<g id="fogbank" class="hot"><rect id="wall" x="-1000" y="288" width="3600" height="90" fill="url(#wallG)"/></g>
+<path d="M-1000 360H2600V1320H-1000Z" fill="url(#sandG)"/>
+<path d="M-1000 360H2600" stroke="#eef4f3" stroke-width="3" opacity=".8"/>
+<!-- far things: the Rigg and its post, the line of poles -->
+<g id="rigg" class="hot"><path d="M150 366q70 -22 170 -18t130 18z" fill="#dcd6b4"/><path d="M300 350v-34" stroke="#3a3026" stroke-width="3"/><rect x="294" y="312" width="12" height="9" fill="#c8321e"/><circle cx="300" cy="340" r="34" fill="#fff" opacity="0"/></g>
+<g stroke="#4a4436" stroke-linecap="round" opacity=".8"><path d="M60 392v-18" stroke-width="2.200"/><path d="M-60 398v-22" stroke-width="2.600"/><path d="M150 388v-14" stroke-width="1.800"/><path d="M-200 406v-28" stroke-width="3"/></g>
+<g fill="#dcebee"><ellipse class="pool" cx="420" cy="452" rx="150" ry="9"/><ellipse class="pool b" cx="170" cy="560" rx="210" ry="13"/><ellipse class="pool" cx="760" cy="508" rx="110" ry="8"/><ellipse class="pool b" cx="1380" cy="760" rx="260" ry="18"/></g>
+<g stroke="#9c9068" stroke-width="2.200" fill="none" opacity=".55"><path d="M-200 640q90 -12 180 0t180 0t180 0"/><path d="M300 700q90 -12 180 0t180 0"/><path d="M-100 800q100 -14 200 0t200 0t200 0"/><path d="M900 860q90 -12 180 0t180 0"/></g>
+
+<!-- the Gutter, and Selkie Scar beside it -->
+<g id="gutter" class="hot"><path d="M1240 360q60 40 130 70t190 150q160 170 300 740h460V360z" fill="url(#gutG)"/><path d="M1250 366q70 44 150 80t210 190" stroke="#e9f3f4" stroke-width="3" fill="none" opacity=".7"/></g>
+<g id="scar" class="hot"><path d="M820 470q120 -52 330 -44q170 8 260 60q-40 30 -160 32q-250 16 -430 -48z" fill="#d8ceaa"/><path d="M860 474q130 -36 300 -30t230 42" stroke="#eee8cc" stroke-width="4" fill="none"/>
+  <g stroke="#a59a70" stroke-width="1.600" opacity=".7"><path d="M900 488l6 -4M960 500l6 -4M1040 506l6 -4M1150 508l6 -4M1260 500l6 -4"/></g></g>
+<g id="seals" class="hot">
+  <use href="#sealS" class="seal" transform="translate(880 456) scale(.62)"/><use href="#sealS" class="seal a" transform="translate(990 446) scale(.7)"/><use href="#sealS" class="seal" transform="translate(1090 440) scale(-.66 .66)"/>
+  <use href="#sealS" class="seal" transform="translate(1130 452) scale(.76)"/><use href="#sealS" class="seal a" transform="translate(1250 462) scale(.8)"/><use href="#sealS" class="seal" transform="translate(940 476) scale(.84)"/>
+  <use href="#sealS" class="seal" transform="translate(1210 486) scale(-.9 .9)"/><use href="#sealS" class="seal" transform="translate(1060 484) scale(.92)"/><use href="#sealS" class="seal a" transform="translate(1290 494) scale(.96)"/>
+</g>
+<g id="pup" class="hot"><circle cx="1196" cy="500" r="26" fill="#fff" opacity="0"/><path d="M1172 506q10 -16 34 -12q14 2 20 12q-26 10 -54 0z" fill="#e9e6da"/><path d="M1218 496q8 -6 14 0q2 6 -6 8z" fill="#e9e6da"/><circle cx="1228" cy="498" r="1.500" fill="#16191b"/></g>
+
+<!-- Mr Nyberg, watching the wall -->
+<g id="nyb" class="hot">
+  <ellipse cx="560" cy="742" rx="78" ry="10" fill="#6b6348" opacity=".45"/>
+  <path d="M618 742L604 386" stroke="#6b4a2a" stroke-width="8" stroke-linecap="round"/><path d="M606 440l-2 -54" stroke="#f3ead2" stroke-width="8"/><path d="M613 610l-2 -54" stroke="#c8321e" stroke-width="8"/>
+  <path d="M536 740V616h20v124zM564 740V616h20v124z" fill="#3b3a36"/><path d="M528 740h30v10h-36zM560 740h30v10h-34z" fill="#22201a"/>
+  <path d="M514 630q-10 -152 42 -166q54 -6 58 60l4 106z" fill="#4c5a3a"/><path d="M560 468v160" stroke="#3a4630" stroke-width="4"/>
+  <path d="M596 494q24 30 14 76" stroke="#445234" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="610" cy="574" r="10" fill="#d6ad88"/>
+  <path d="M528 494q10 -30 44 -52" stroke="#445234" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <rect x="554" y="446" width="14" height="18" fill="#c99f7c"/><circle cx="562" cy="430" r="24" fill="#d6ad88"/><path d="M554 438q10 22 30 12l-2 -18z" fill="#aab0b2"/>
+  <path d="M536 426q2 -26 26 -26q24 0 26 22q-26 -8 -52 4z" fill="#6b4a2a"/><path d="M580 420l22 6" stroke="#573a1e" stroke-width="7" stroke-linecap="round"/>
+  <rect x="568" y="424" width="30" height="14" rx="4" fill="#22201a"/><circle cx="600" cy="431" r="6" fill="#3b3a36"/>
+</g>
+
+<!-- Dr Arroyo and her telescope -->
+<g id="arr" class="hot">
+  <ellipse cx="930" cy="790" rx="110" ry="12" fill="#6b6348" opacity=".45"/>
+  <path d="M1000 788L1020 560M1020 560L1060 788M1020 560L1034 790" stroke="#22201a" stroke-width="6" stroke-linecap="round"/><path d="M980 556l92 -26" stroke="#3b4a52" stroke-width="22" stroke-linecap="round"/><circle cx="1076" cy="528" r="12" fill="#8fb8c9"/>
+  <path d="M890 788V664h22v124zM920 788V664h22v124z" fill="#6b6456"/><path d="M882 788h32v10h-38zM916 788h32v10h-36z" fill="#3a3026"/>
+  <path d="M868 676q-10 -150 44 -164q56 -6 60 60l4 104z" fill="#2f6f8f"/>
+  <path d="M950 546q20 10 30 6" stroke="#2a6482" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="982" cy="552" r="9" fill="#c99b70"/>
+  <path d="M880 540q-16 40 -8 86" stroke="#2a6482" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="872" cy="630" r="9" fill="#c99b70"/><rect id="clicker" x="862" y="632" width="18" height="22" rx="5" fill="#c9ced3" stroke="#59616a" stroke-width="1.500"/>
+  <rect x="912" y="494" width="14" height="18" fill="#b98d66"/><circle cx="922" cy="480" r="23" fill="#c99b70"/><path d="M900 480q0 -26 22 -26t22 26q-10 -10 -22 -10t-22 10z" fill="#2a1d14"/>
+  <path d="M902 488q-10 40 -4 80" stroke="#2a1d14" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <ellipse cx="922" cy="462" rx="44" ry="9" fill="#e3c98a"/><path d="M900 460q0 -22 22 -22t22 22z" fill="#edd79c"/><path d="M900 458h44" stroke="#b5461f" stroke-width="4"/>
+</g>
+
+<!-- the orange bag, the card (other side up), and the moon wheel that is pinned to it -->
+<g transform="translate(-120 -70)"><g><ellipse cx="300" cy="822" rx="170" ry="14" fill="#6b6348" opacity=".4"/><path d="M170 818q-18 -92 34 -108q66 -10 96 6q32 22 16 102z" fill="#f08a24"/><path d="M192 740q50 -20 106 0v28q-54 -16 -106 0z" fill="#d9731a"/><path d="M214 716q26 -32 56 0" stroke="#b5631a" stroke-width="8" fill="none"/></g>
+<g id="cardback" class="hot"><path d="M318 742l150 -20 16 86 -150 22z" fill="#f7f3e3" stroke="#1c2630" stroke-width="2"/><path d="M318 742l150 -20 4 22 -150 20z" fill="#1f4e6b"/>
+  <g stroke="#1c2630" stroke-width="1.600" opacity=".75"><path d="M330 780l64 -9M332 792l60 -8M334 804l52 -7M336 816l40 -5"/></g></g>
+<g id="wheel" class="hot"><circle cx="438" cy="786" r="40" fill="#e9e2c8" stroke="#1c2630" stroke-width="2"/><circle cx="438" cy="786" r="28" fill="none" stroke="#1c2630" stroke-width="1.300" stroke-dasharray="2 4"/><circle cx="438" cy="786" r="9" fill="#3f86ad"/>
+  <circle cx="462" cy="772" r="7" fill="#f7f3e3" stroke="#1c2630" stroke-width="1.500"/><path d="M462 765a7 7 0 0 1 0 14z" fill="#1c2630"/><circle cx="438" cy="786" r="2" fill="#1c2630"/></g></g>
+<g id="shells" class="hot" transform="translate(700 -40)"><path d="M640 846l70 -10q6 6 0 12l-70 8q-6 -4 0 -10z" fill="#e9dfc4" stroke="#8a7a56" stroke-width="1.500"/><path d="M740 866q14 -22 34 -6q4 14 -14 18q-16 0 -20 -12z" fill="#f1e6cc" stroke="#8a7a56" stroke-width="1.500"/><path d="M750 868l10 -14M758 872l8 -16M766 872l4 -12" stroke="#b3a070" stroke-width="1.200"/></g>
+<g stroke="#8f8560" stroke-width="5" stroke-linecap="round" opacity=".5"><path d="M60 880l14 -6M130 850l14 -6M210 868l14 -6M-40 860l14 -6"/></g>
+
+<rect id="shut" x="-1000" y="-400" width="3600" height="1720" fill="#eef2f1"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Follow his boots</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="tide.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  ER.init({
+    theme: 'wild', story: 'tide', storyTitle: 'The Box at Pole Seven', id: 'scar', no: 'II', title: 'Selkie Scar',
+    go: 'Look about you',
+    intro: [
+      'The card said low water at 12.10, at 0.4 metres. The chart said that the ford, the lowest place on your road, dries 1.6. On the board the blue dropped below the red string at seven minutes past ten and climbed back to it at thirteen minutes past two. So, rounded the safe way, the road was dry from 10.10 to 14.10: about two hours each side of low water. And again tonight, from 22.30.',
+      'You left the slip at a quarter past ten. At half past, the ford was still a hand deep and running, and you all stood and waited for it. Mr Nyberg looked at a tall striped pole that stands beside the ford, and said nothing. Then he said that forty minutes was about right.',
+      'It is now twenty past twelve. You are standing more than a kilometre out on the bottom of the sea, and it is the widest place you have ever been in.'
+    ],
+    exit: {"next":"ford","w":{"b680290d":"b817d6b5","5a1f3b5b":"e282e47c","70b06d48":"ab41ab78","5c0a7440":"db6f9a6c","cb3828c0":"6b9fa477","85a5ad2a":"c26b1a21","7a42eb6b":"212c6cf5","dae70840":"5578eb94","7b75bdcc":"2b3be6fa"}}, tags: {"m1":["62d5181d","74cd339d","4c667233"],"k1":["3e810122"],"m1_half":["df0aa0ed"],"m1_wax":["27da42af","df1bed0c","85bd55e2","c12316e0","c00ba84e"],"m2":["0cbde1b6","5ff30bee","c6c56611"],"k2":["dae6fa34"],"m2_new":["df76d59f","61fa6187"],"s1":["b58f2d00"],"s2":["9b7a655f"],"swap":["d1d4eb0f"],"lows":["f541ebb5","a6d4cdc0"]},
+    sound: ['trail', { root: 50, bpm: 50, drop: ['mel', 'arp'], beds: [['sea', 0.8], ['wind', 0.5]] }],      /* open sands at low water, and a good deal to read: long notes, the sea and the wind */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.arr && told.back; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#wheel').classList.toggle('ready', !!(ready() && !nextFile));
+    $('#scene').classList.toggle('fog', !!nextFile);
+    ER.pips((told.arr ? 1 : 0) + (told.back ? 1 : 0) + Math.min(3, ER.flag('b-stage') || 0), 5);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The fog is here, and Mr Nyberg has the compass out. Follow his boots.']];
+    if (bench && bench.isOpen()) return [['then', [
+      'Dr Arroyo told you what the moon looked like last Thursday morning. The little window on the wheel shows the moon as you would see it. Turn the moon until the window matches.',
+      'Or count it from the card: the card marks a half moon against Tuesday the third. Last Thursday was two days after that, so the moon had moved on two days.',
+      'Then the tides. The back of the card says what kind of tides come a day or two after a half moon. Press that word.'
+    ]], ['now', [
+      'The card marks a new moon against Tuesday the tenth. Today is Thursday the twelfth.',
+      'New moon is day 0 of the wheel. Two days later, the moon has moved on two days: a very thin moon, bright on the right. What kind of tides come a day or two after a new moon?'
+    ]], ['shells', [
+      'Each shell is a high water. The heights are on the front of the card: it is in your notebook. Find the two Thursdays.',
+      'Last Thursday had one high water, at 12.30. Today&rsquo;s next high water is this evening, at 18.19. Drag each shell up the staff to its height. One notch of the staff is one metre.',
+      'Be careful to take high waters (HW), not low ones. Then compare both shells with the top of the Rigg, which dries 4.4.'
+    ]]][bench.stage()];
+    if (!told.arr) return ['arr', ['Dr Arroyo is at her telescope, in the straw hat. Ask her about last Thursday, and listen to everything she saw.']];
+    if (!told.back) return ['back', [
+      'Mr Nyberg turned the card over before he gave it to you. The other side has something printed on it.',
+      'The card is lying on the orange bag, at the front on the left. Click the card itself, not the round wheel beside it.'
+    ]];
+    return ['wheel', ['Mrs Hebden&rsquo;s moon wheel: the round card dial lying on the orange bag, beside the tide card.']];
+  }
+
+  function begin() {
+    TIDE.mine('road', 'Today’s road', '<p>Thursday 12 June. Low water <b>12.10</b>, 0.4 m. High water 18.19, 5.2 m.</p><p>The lowest place on our road is the ford: it dries 1.6. So the road is dry from <b>10.10</b> to <b>14.10</b>, rounded the safe way. And again tonight from <b>22.30</b>.</p><p>Mr Nyberg wants forty minutes in hand today.</p>', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('White, in every direction. Somewhere in it, two long notes on a horn.'); return; }
+    if (told.in) { busy = false; ER.say('Selkie Scar, twenty past twelve. The white wall is a little higher than it was.'); return; }
+    tell('in');
+    ER.narrate([
+      'Selkie Scar is a long hump of shelly sand beside the Gutter. Sixty-three seals are lying on it like wet sacks, and every one of them has turned its head to look at you. Then they go back to doing nothing.',
+      'Dr Arroyo has not moved from her telescope for an hour. &ldquo;Fourteen pups,&rdquo; she says. &ldquo;And one that is twenty minutes old. I have waited six weeks for this, and now you want to take me home for my lunch.&rdquo;',
+      '&ldquo;Back over the ford by half past one,&rdquo; says Mr Nyberg. He is not looking at the seals. Out beyond the bar, where the sea ought to be, there is a low white wall.',
+      '&ldquo;Then we stay here, and sit out the tide on the Rigg,&rdquo; says Dr Arroyo. &ldquo;As we did last Thursday. High water came, we sat, we were dry, we went home. What is different today?&rdquo;',
+      'Mr Nyberg takes the tide card out of the orange bag, turns it over, and holds it out to you. &ldquo;Show the Doctor what is different,&rdquo; he says. &ldquo;I have a wall to watch.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#arr').addEventListener('click', function (e) {
+    if (busy) return;
+    if (e.target.id === 'clicker') { ER.wordAt(e.clientX, e.clientY, 'tally counter'); ER.say('A tally counter: one click for each seal. It says 0063. Dr Arroyo does not trust herself to count past twenty while she is happy.'); return; }
+    ER.talk({
+      who: 'Dr Arroyo', role: 'Seal scientist · counting', face: window.FACE('arroyo'),
+      lines: [
+        { note: 'She does not take her eye from the telescope.', a: '&ldquo;Number fifteen has just discovered that it has a nose. It is very surprised. I am not leaving.&rdquo;' },
+        { q: 'What happened last Thursday?', a: 'Mrs Hebden brought us out in her boat at high water. That was half past twelve: I wrote it in my book. She put us on the Rigg, the high bank over there with the post on it, and went home for her dinner. The sea came up all round us, and stopped. We had half a metre of dry sand above the highest wave. Four hours later she came back for us.' },
+        { q: 'So why not sit on the Rigg today?', a: 'Exactly my question. The same bank. The same sea. If it was dry at high water last Thursday, it will be dry at high water today, and I can stay with my seals until the evening. Mr Nyberg says no. He does not say why. He says the card says why.' },
+        { q: 'Did you see the moon last week?', a: 'What a question. Yes. Last Thursday I was up at five, and there was a moon in the south-east, in the daylight: less than half of it, and the bright side was on the left. And last night at midnight I was out counting with a torch, and there was no moon at all. Does a seal scientist need the moon?' },
+        { a: 'So show me. I am a scientist: I do not want to be told that a thing is dangerous. I want to be shown what is different.' }
+      ],
+      clue: { id: 'arr2', title: 'Dr Arroyo, at her telescope', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('arr')) { paint(); ER.say('Last Thursday: high water at half past twelve, and half a metre of dry sand. And a moon at five in the morning.'); } }
+    });
+  });
+  $('#nyb').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mr Nyberg', role: 'Ranger of Tarrow · watching the weather', face: window.FACE('nyberg'),
+      lines: [
+        { note: 'He is looking north-east through his field glasses, out over the bar.', a: '&ldquo;That white wall is fog. It was not there at eleven. It is in no hurry. Neither was the last one, and the last one took the island in twenty minutes.&rdquo;' },
+        { q: 'What is the Rigg?', a: 'The high bank, half a kilometre north of pole 7. The chart says that it dries 4.4. It is the highest sand between Tarrow and Longstrand, and people take it for a safe place. Some weeks it is.' },
+        { q: 'Is the Doctor right about it?', a: 'Turn the card over. The front tells you what the sea will do. The back tells you why. Then show her on Mrs Hebden&rsquo;s moon wheel. The Doctor is a person who has to see a thing turn.' },
+        { q: 'And if the fog comes in?', a: 'Then we walk back to the poles by compass: one bearing, held all the way, and no hurrying. Fog does not drown anybody. It only makes people late. The tide does the rest.' }
+      ],
+      clue: { id: 'nyb2', title: 'Mr Nyberg, on Selkie Scar', kind: 'What he said' },
+      done: function (seen) { if (seen) tell('nyb'); }
+    });
+  });
+
+  /* ---------- the other side of the card ---------- */
+  function sun(x, y) { return '<circle cx="' + x + '" cy="' + y + '" r="15" fill="#f4c020"/><g stroke="#f4c020" stroke-width="3" stroke-linecap="round"><path d="M' + (x - 22) + ' ' + y + 'h-9M' + (x - 16) + ' ' + (y - 16) + 'l-6 -6M' + (x - 16) + ' ' + (y + 16) + 'l-6 6M' + x + ' ' + (y - 22) + 'v-8M' + x + ' ' + (y + 22) + 'v8"/></g>'; }
+  var BACK = '<h4><small>Tarrow Harbour Trust &middot; the other side</small>Springs and neaps</h4><div class="cols"><div>' +
+    '<p><b>The Moon pulls the sea, and the Sun pulls it too</b>, less than half as hard. That is where the tides come from.</p>' +
+    '<p><b>Springs.</b> At new moon and at full moon the Sun, the Earth and the Moon stand in one line, and the two pulls add up. The tides are at their biggest: high water is very high, and low water is very low. (The name has nothing to do with the season. The sea &ldquo;springs&rdquo; up.)</p>' +
+    '<p><b>Neaps.</b> At the two half moons the Sun pulls across the Moon and spoils its work. The tides are at their smallest: high water is not very high, and low water is not very low.</p>' +
+    '<p><b>A day or two late.</b> The sea is slow to answer. The biggest tides come a day or two after new moon and full moon; the smallest, a day or two after the half moons.</p>' +
+    '<p class="rule">So from neaps to springs is about a week. Sand that stayed dry all last week may be under a metre of water this week: the same sand, at the same high water.</p></div><div><h5>Why</h5>' +
+    '<svg viewBox="0 0 400 250"><rect width="400" height="250" fill="#eef4f2"/>' +
+    '<ellipse cx="150" cy="62" rx="62" ry="30" fill="#8fc3dc"/><circle cx="150" cy="62" r="24" fill="#3f86ad"/><circle cx="246" cy="62" r="9" fill="#1c2630"/><circle cx="54" cy="62" r="9" fill="#fff" stroke="#1c2630" stroke-width="1.500"/>' + sun(360, 62) +
+    '<path d="M68 62h320" stroke="#b5461f" stroke-width="1.200" stroke-dasharray="4 4"/>' +
+    '<g font-family="Overpass,sans-serif" font-weight="700" font-size="12" fill="#1c2630"><text x="246" y="38" text-anchor="middle">new</text><text x="54" y="38" text-anchor="middle">full</text><text x="150" y="112" text-anchor="middle" fill="#b5461f" font-size="13.500">in line: SPRINGS</text></g>' +
+    '<ellipse cx="150" cy="186" rx="42" ry="34" fill="#8fc3dc"/><circle cx="150" cy="186" r="24" fill="#3f86ad"/><circle cx="150" cy="136" r="9" fill="#fff" stroke="#1c2630" stroke-width="1.500"/><path d="M150 127a9 9 0 0 0 0 18z" fill="#1c2630"/>' + sun(360, 186) +
+    '<path d="M150 150v70M180 186h200" stroke="#b5461f" stroke-width="1.200" stroke-dasharray="4 4"/>' +
+    '<g font-family="Overpass,sans-serif" font-weight="700" font-size="12" fill="#1c2630"><text x="186" y="140">half moon</text><text x="150" y="240" text-anchor="middle" fill="#b5461f" font-size="13.500">across each other: NEAPS</text></g></svg>' +
+    '<p style="margin-top:8px">On this card: ' + TIDE.moonSign('q') + ' Tuesday 3 June, half moon (the last quarter). ' + TIDE.moonSign('n') + ' Tuesday 10 June, new moon.</p>' +
+    '<p>The drawings are not to scale. Nothing in the sky ever is.</p></div></div>';
+  $('#cardback').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BACK, cls: 'tcard', clue: { id: 'back', title: 'The other side of the tide card', kind: 'Springs and neaps' }, done: function () {
+      TIDE.terms(['spring tide', 'neap tide', 'new moon', 'full moon', 'half moon', 'range']);
+      if (tell('back')) { paint(); ER.say('A black moon against Tuesday the tenth. Half a moon against Tuesday the third. And Mrs Hebden&rsquo;s wheel, to turn them on.'); }
+    } });
+  });
+
+  /* ---------- things on the sands ---------- */
+  TIDE.thing('#seals', 'seal', 'Common seals. They have their pups in June, out here on the banks, and a pup can swim before it is a day old. It has to: its bed is under water twice a day.', isBusy);
+  TIDE.thing('#pup', 'pup', 'Number fifteen: twenty minutes old, the colour of wet sand, and already looking at the water.', isBusy);
+  TIDE.thing('#scar', null, 'Selkie Scar: a bank of sand and broken shells. The chart says that it dries 2.6. By the middle of the afternoon the seals will be swimming over it.', isBusy);
+  TIDE.thing('#gutter', 'channel', 'The Gutter: the big channel. Even at low water there is a pool in it here, with seals&rsquo; heads going up and down like corks. The ford is a kilometre to the south, where the poles cross.', isBusy);
+  TIDE.thing('#rigg', null, 'The Rigg: a long pale hump with a post on it, away to the south-west. From here it looks like the top of the world. On the chart it is 4.4 metres.', isBusy);
+  TIDE.thing('#fogbank', 'fog bank', 'A low white wall along the edge of the sea. It has no top and no bottom, and it is nearer than it was when you last looked.', isBusy);
+  TIDE.thing('#shells', 'razor shell', 'Shells: a long razor shell, and a round white cockle. The sands are made of these, a few million years of them.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#wheel').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The moon wheel is back in the bag. It is two days after the new moon, and the sea knows it.'); return; }
+    if (!told.arr) { ER.say('A card wheel with a small card moon on it. Dr Arroyo is the one who needs to see it turn: hear what she has to say first.'); return; }
+    if (!told.back) { ER.say('&ldquo;Read the card before you turn the wheel,&rdquo; says Mr Nyberg, without lowering his glasses. &ldquo;The other side. It is lying beside it.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the moon wheel and the two shells ---------- */
+  function makeBench() {
+    var SYN = 29.53, CX = 290, CY = 290, R = 160, stage = ER.flag('b-stage') || 0, day = ER.flag('b-day') || 10, kind = '', d1 = ER.flag('b-d1'), k1 = ER.flag('b-k1') || '',
+      d2 = ER.flag('b-d2'), k2 = ER.flag('b-k2') || '', sh = ER.flag('b-sh') || [null, null], box = ER.el('div', 'bx'), s, i, a;
+    function pos(d) { var t = 2 * Math.PI * d / SYN; return { x: CX + R * Math.cos(t), y: CY - R * Math.sin(t) }; }
+    /* the moon as it looks from the northern half of the world on day d: bright on the right while it grows, on the left while it shrinks */
+    function face(cx, cy, r, d) {
+      var t = 2 * Math.PI * d / SYN, k = (1 - Math.cos(t)) / 2, rx = (r * Math.abs(Math.cos(t))).toFixed(2), wax = d < SYN / 2, out = '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="#26303c"/>';
+      if (k > 0.004) out += '<path d="M' + cx + ' ' + (cy - r) + 'A' + r + ' ' + r + ' 0 0 ' + (wax ? 1 : 0) + ' ' + cx + ' ' + (cy + r) + 'A' + rx + ' ' + r + ' 0 0 ' + ((k < 0.5) === wax ? 0 : 1) + ' ' + cx + ' ' + (cy - r) + 'Z" fill="#f4f1dc"/>';
+      return out + '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="none" stroke="#1c2630" stroke-width="1.500"/>';
+    }
+    s = '<svg id="b-moon" viewBox="0 0 520 520"><rect width="520" height="520" fill="#e9e2c8"/><circle cx="' + CX + '" cy="' + CY + '" r="215" fill="#f3eeda" stroke="#1c2630" stroke-width="2"/>' +
+      '<circle cx="' + CX + '" cy="' + CY + '" r="' + R + '" fill="none" stroke="#1c2630" stroke-width="1.200"/>';
+    for (i = 0; i < 30; i++) {
+      a = 2 * Math.PI * i / SYN;
+      s += '<path d="M' + (CX + (R - (i % 5 ? 6 : 11)) * Math.cos(a)).toFixed(1) + ' ' + (CY - (R - (i % 5 ? 6 : 11)) * Math.sin(a)).toFixed(1) + 'L' + (CX + (R + (i % 5 ? 6 : 11)) * Math.cos(a)).toFixed(1) + ' ' + (CY - (R + (i % 5 ? 6 : 11)) * Math.sin(a)).toFixed(1) + '" stroke="#1c2630" stroke-width="' + (i % 5 ? 1 : 2) + '"/>';
+      if (i % 5 === 0) s += '<text class="mwT" x="' + (CX + (R + 25) * Math.cos(a)).toFixed(1) + '" y="' + (CY - (R + 25) * Math.sin(a) + 5).toFixed(1) + '" text-anchor="middle" font-size="14">' + i + '</text>';
+    }
+    s += '<g stroke="#e0a800" stroke-width="3" stroke-linecap="round" fill="none"><path d="M516 230h-30M516 290h-30M516 350h-30M494 222l-8 8l8 8M494 282l-8 8l8 8M494 342l-8 8l8 8"/></g>' +
+      '<text class="mwT" x="512" y="26" text-anchor="end" font-size="11" style="fill:#a37c00" letter-spacing="1.500">SUNLIGHT COMES</text><text class="mwT" x="512" y="40" text-anchor="end" font-size="11" style="fill:#a37c00" letter-spacing="1.500">FROM THIS SIDE</text>' +
+      '<circle cx="' + CX + '" cy="' + CY + '" r="34" fill="#2a5f80"/><path d="M' + CX + ' ' + (CY - 34) + 'a34 34 0 0 1 0 68z" fill="#5fa3c9"/><text class="mwT" x="' + CX + '" y="' + (CY + 54) + '" text-anchor="middle" font-size="12" letter-spacing="1.500">EARTH</text>' +
+      '<g id="b-ghost"></g><circle id="b-ring" class="tool" cx="' + CX + '" cy="' + CY + '" r="' + R + '" fill="none" stroke="#fff" stroke-opacity="0" stroke-width="64" pointer-events="stroke"/>' +
+      '<g id="b-m" pointer-events="none"><circle r="19" fill="#26303c" stroke="#1c2630" stroke-width="1.500"/><path d="M0 -19a19 19 0 0 1 0 38z" fill="#f4f1dc"/></g>' +
+      '<rect x="6" y="6" width="122" height="122" rx="6" fill="#1b2a38"/><g id="b-face"></g><text class="mwT" x="67" y="121" text-anchor="middle" font-size="9" style="fill:#cfe3ee" letter-spacing=".800">AS SEEN FROM TARROW</text>' +
+      '<text class="mwC" id="b-dayT" x="' + CX + '" y="' + (CY - 62) + '" text-anchor="middle" font-size="25"></text><text class="mwT" x="8" y="498" font-size="10" letter-spacing="1">THE NUMBERS ARE</text><text class="mwT" x="8" y="512" font-size="10" letter-spacing="1">DAYS AFTER NEW MOON</text><text class="mwT" x="512" y="498" text-anchor="end" font-size="10" letter-spacing="1">THE MOON GOES</text><text class="mwT" x="512" y="512" text-anchor="end" font-size="10" letter-spacing="1">ROUND THIS WAY &#8634;</text></svg>';
+    function SYh(h) { return 470 - 70 * h; }
+    a = '<svg id="b-sand" viewBox="0 0 520 520"><rect width="520" height="520" fill="#bfb690"/><g stroke="#9b9068" stroke-width="2" fill="none" opacity=".6"><path d="M0 40q60 -8 120 0t120 0t120 0t160 0M0 500q70 -8 140 0t140 0t240 0"/></g>' +
+      '<g stroke="#5a5238" stroke-linecap="round" fill="none"><path d="M70 478V40" stroke-width="5"/>';
+    for (i = 0; i <= 6; i++) a += '<path d="M56 ' + SYh(i) + 'h28" stroke-width="3.500"/>';
+    a += '<path d="M100 470H500" stroke-width="3"/><path d="M120 470Q170 300 236 ' + (SYh(4.4) + 14) + 'Q290 ' + (SYh(4.4) - 10) + ' 344 ' + (SYh(4.4) + 14) + 'Q420 320 480 470" stroke-width="5"/>' +
+      '<path d="M278 ' + (SYh(4.4) - 2) + 'l-9 -24M302 ' + (SYh(4.4) - 2) + 'l9 -24M266 ' + (SYh(4.4) - 27) + 'h48" stroke-width="3"/></g>';
+    for (i = 0; i <= 6; i++) a += '<text class="sdT" x="46" y="' + (SYh(i) + 7) + '" text-anchor="end" font-size="23">' + i + '</text>';
+    a += '<text class="sdT" x="290" y="' + (SYh(4.4) + 52) + '" text-anchor="middle" font-size="27">THE RIGG</text><text class="sdT" x="290" y="' + (SYh(4.4) + 78) + '" text-anchor="middle" font-size="22">dries 4.4</text>' +
+      '<text class="sdT" x="496" y="492" text-anchor="end" font-size="19">chart datum</text><text class="sdT" x="20" y="30" font-size="19">metres</text><g id="b-lines"></g>' +
+      '<g class="shell" id="b-s0"><rect x="-40" y="-22" width="80" height="44" fill="#fff" opacity="0"/><path d="M-34 -5l66 -5q7 5 1 12l-66 5q-7 -5 -1 -12z" fill="#efe6cc" stroke="#7a6a48" stroke-width="1.600"/><path d="M-26 0l54 -4" stroke="#b3a070" stroke-width="1.300"/></g>' +
+      '<g class="shell" id="b-s1"><rect x="-30" y="-24" width="60" height="46" fill="#fff" opacity="0"/><path d="M-20 8q-4 -26 20 -26t20 26q-20 8 -40 0z" fill="#f6efdc" stroke="#7a6a48" stroke-width="1.600"/><path d="M-10 8l4 -22M0 9v-26M10 8l-4 -22" stroke="#b3a070" stroke-width="1.300"/></g></svg>';
+    box.innerHTML = '<div class="frame"><div class="work">' + s + a + '</div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><span class="nudge" id="b-nudge"><button type="button" data-d="-1" title="a day back">&lsaquo; day</button><button type="button" data-d="1" title="a day on">day &rsaquo;</button></span>' +
+      '<span class="kind" id="b-kind"><button type="button" data-k="springs">Springs</button><button type="button" data-k="neither">Neither</button><button type="button" data-k="neaps">Neaps</button></span>' +
+      '<button type="button" class="btn" id="b-go"></button></div>';
+    var moon = box.querySelector('#b-moon'), sand = box.querySelector('#b-sand'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#b-go'), kindEl = box.querySelector('#b-kind'), nudge = box.querySelector('#b-nudge');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() {
+      var p = pos(day), g = '', L = '', names = ['last Thursday', 'tonight'];
+      moon.querySelector('#b-m').setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ')');
+      moon.querySelector('#b-face').innerHTML = face(67, 60, 44, day);
+      moon.querySelector('#b-dayT').textContent = 'day ' + day;
+      moon.setAttribute('data-day', day);
+      if (stage >= 1 && d1 != null) { p = pos(d1); g += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="23" fill="none" stroke="#b5461f" stroke-width="2" stroke-dasharray="4 3"/><text class="mwC" x="' + p.x.toFixed(1) + '" y="' + (p.y + 44).toFixed(1) + '" text-anchor="middle" font-size="21" style="fill:#b5461f">last Thursday: ' + k1 + '</text>'; }
+      if (stage >= 2 && d2 != null) { p = pos(d2); g += '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="23" fill="none" stroke="#1f4e6b" stroke-width="2" stroke-dasharray="4 3"/><text class="mwC" x="' + (p.x - 30).toFixed(1) + '" y="' + (p.y + 46).toFixed(1) + '" text-anchor="middle" font-size="21" style="fill:#1f4e6b">today: ' + k2 + '</text>'; }
+      moon.querySelector('#b-ghost').innerHTML = g;
+      ER.$$('button', kindEl).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-k') === kind); });
+      kindEl.style.display = nudge.style.display = stage < 2 ? '' : 'none';
+      [0, 1].forEach(function (j) {
+        var n = sand.querySelector('#b-s' + j), h = sh[j], x = j ? 452 : 398, y = h == null ? 500 : SYh(h);
+        n.setAttribute('transform', 'translate(' + (h == null ? (j ? 380 : 150) : x) + ' ' + y.toFixed(1) + ')'); n.style.opacity = stage < 2 ? 0.35 : 1;
+        if (h != null) L += '<path d="M90 ' + y.toFixed(1) + 'H' + (x - 44) + '" stroke="' + (j ? '#1f5f86' : '#6f8a99') + '" stroke-width="3" stroke-dasharray="9 6" fill="none"/><text class="sdT" x="' + x + '" y="' + (y - 20).toFixed(1) + '" text-anchor="middle" font-size="21" style="fill:' + (j ? '#1f4e6b' : '#4f6672') + '">' + names[j] + ': ' + h.toFixed(1) + '</text>';
+        else L += '<text class="sdT" x="' + (j ? 380 : 150) + '" y="516" text-anchor="middle" font-size="17">' + (j ? 'high water tonight' : 'high water last Thursday') + '</text>';
+      });
+      sand.querySelector('#b-lines').innerHTML = L;
+      sand.setAttribute('data-sh', (sh[0] == null ? '' : sh[0].toFixed(1)) + '|' + (sh[1] == null ? '' : sh[1].toFixed(1)));
+      go.textContent = ['That was last Thursday', 'That is today', 'Show the Doctor'][stage] || 'Show the Doctor';
+      go.style.visibility = stage > 2 ? 'hidden' : '';
+    }
+    function setStage(n) { stage = n; ER.flag('b-stage', n); kind = ''; draw(); paint(); }
+    function setDay(v) { day = ((Math.round(v) % 30) + 30) % 30; ER.flag('b-day', day); draw(); }
+    ER.drag(moon.querySelector('#b-ring'), {
+      start: function () { if (stage > 1) return false; },
+      move: function (e) { var p = ER.pt(moon, e), t = Math.atan2(-(p.y - CY), p.x - CX); if (t < 0) t += 2 * Math.PI; var v = Math.round(t / (2 * Math.PI) * SYN); if (v > 29) v = 0; if (v !== day) { TIDE.sfx.notch(); setDay(v); } }
+    });
+    nudge.addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('button') : null; if (!b || stage > 1) return; TIDE.sfx.notch(); setDay(day + (+b.getAttribute('data-d'))); });
+    kindEl.addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('button') : null; if (!b || stage > 1) return; kind = b.getAttribute('data-k'); ER.sfx.click(); draw(); });
+    [0, 1].forEach(function (j) {
+      ER.drag(sand.querySelector('#b-s' + j), {
+        start: function () { if (stage !== 2) return false; },
+        move: function (e) { var p = ER.pt(sand, e), h = Math.round(TIDE.clamp((470 - p.y) / 70, 0, 6) * 10) / 10; if (h !== sh[j]) { sh[j] = h; draw(); } },
+        end: function () { ER.flag('b-sh', sh); TIDE.sfx.shell(); }
+      });
+    });
+
+    go.addEventListener('click', function () {
+      var dOk, kOk, a0, a1, file;
+      if (nextFile) return;
+      if (stage === 0) {
+        if (!kind) { msg('Turn the moon to where it was last Thursday morning. Then press the kind of tides that go with it: springs, neaps, or neither.'); return; }
+        dOk = ER.check('m1', day); kOk = ER.check('k1', kind);
+        if (dOk && kOk) {
+          d1 = day; k1 = kind; ER.flag('b-d1', d1); ER.flag('b-k1', k1); TIDE.sfx.pin(); setStage(1);
+          msg('&ldquo;Yes. That is my moon,&rdquo; says Dr Arroyo. &ldquo;Two days after the half. And two days after the half, the card says neaps: the small tides. Very well. And today?&rdquo;'); return;
+        }
+        TIDE.sfx.no();
+        if (ER.check('m1_half', day)) msg('&ldquo;That is exactly half a moon,&rdquo; says Dr Arroyo. &ldquo;The card puts the half moon against Tuesday. I saw mine on Thursday, and it was thinner than half. Two days on.&rdquo;');
+        else if (ER.check('m1_wax', day)) msg('&ldquo;That moon is bright on the right,&rdquo; says Dr Arroyo. &ldquo;Mine was bright on the left, and in the morning sky. You have the evening moon. Go further round.&rdquo;');
+        else if (dOk) msg('&ldquo;That is my moon,&rdquo; says Dr Arroyo. &ldquo;But the tides you have named do not go with it. Read the back of the card again: what comes a day or two after a half moon?&rdquo;');
+        else if (kOk) msg('&ldquo;Small tides, I can believe,&rdquo; says Dr Arroyo. &ldquo;But that is not the moon I saw. Less than half, bright on the left. Look at the little window while you turn it.&rdquo;');
+        else msg('&ldquo;That is not the moon I saw,&rdquo; says Dr Arroyo. &ldquo;Five in the morning, last Thursday: less than half of it, and the bright side on the left. The card says that Tuesday was the half moon.&rdquo;');
+      } else if (stage === 1) {
+        if (!kind) { msg('Turn the moon to where it is today. Then press the kind of tides that go with it.'); return; }
+        dOk = ER.check('m2', day); kOk = ER.check('k2', kind);
+        if (dOk && kOk) {
+          d2 = day; k2 = kind; ER.flag('b-d2', d2); ER.flag('b-k2', k2); TIDE.sfx.pin(); setStage(2);
+          msg('&ldquo;Springs,&rdquo; says Dr Arroyo. &ldquo;So. A different moon. But I do not sit on a moon. I sit on a bank.&rdquo; Mr Nyberg has drawn the Rigg in the sand with the end of his staff. He drops two shells beside it. &ldquo;High water last Thursday. High water tonight. Put them where they belong.&rdquo;'); return;
+        }
+        TIDE.sfx.no();
+        if (ER.check('m2_new', day)) msg('&ldquo;No moon at all: that was Tuesday,&rdquo; says Mr Nyberg over his shoulder. &ldquo;The card says so. Today is Thursday. The moon does not stand still for two days.&rdquo;');
+        else if (dOk) msg('&ldquo;The moon is right,&rdquo; says Mr Nyberg. &ldquo;The tides are not. What does the card say comes a day or two after a new moon?&rdquo;');
+        else if (kOk) msg('&ldquo;The tides are right,&rdquo; says Mr Nyberg. &ldquo;The moon is not. New moon was Tuesday the tenth. Count the days to today.&rdquo;');
+        else msg('&ldquo;Look at the card,&rdquo; says Mr Nyberg. &ldquo;A black moon against Tuesday the tenth: day 0 on that wheel. What is today?&rdquo;');
+      } else if (stage === 2) {
+        if (sh[0] == null || sh[1] == null) { msg('Drag each shell up the staff: the long one to the height of high water last Thursday, the round one to the height of high water tonight. The heights are on the card, in your notebook.'); return; }
+        a0 = sh[0].toFixed(1); a1 = sh[1].toFixed(1);
+        if (!(ER.check('s1', a0) && ER.check('s2', a1))) {
+          TIDE.sfx.no();
+          msg(ER.check('swap', a0 + '-' + a1) ? '&ldquo;You have them the wrong way round,&rdquo; says Mr Nyberg. &ldquo;The long shell is last Thursday. The round one is tonight.&rdquo;' :
+            (ER.check('lows', a0) || ER.check('lows', a1)) ? '&ldquo;One of those is a low water,&rdquo; says Mr Nyberg. &ldquo;Nobody was ever drowned by a low water. HW on the card: the high ones.&rdquo;' :
+            ER.check('s1', a0) ? '&ldquo;Last Thursday is right,&rdquo; says Mr Nyberg. &ldquo;Now tonight. Thursday the twelfth: the high water this evening.&rdquo;' :
+            ER.check('s2', a1) ? '&ldquo;Tonight is right,&rdquo; says Mr Nyberg. &ldquo;Now last Thursday. The fifth. There was one high water that day, at half past twelve.&rdquo;' :
+            '&ldquo;Read them off the card,&rdquo; says Mr Nyberg. &ldquo;Thursday the fifth, high water. Thursday the twelfth, high water this evening. A notch of my staff is a metre.&rdquo;');
+          return;
+        }
+        file = ER.exitOk([d1 + '-' + k1 + '-' + d2 + '-' + k2 + '-' + a0 + '-' + a1]);
+        if (!file) { msg('The shells have sunk. Something is wrong with this page: tell your teacher.'); return; }
+        nextFile = file; ER.flag('b-file', file); stage = 3; ER.flag('b-stage', 3);
+        var s0 = ER.state(); s0.done = s0.done || {}; s0.done.scar = 1; ER.persist(true);
+        TIDE.sfx.shell(); draw();
+        TIDE.mine('rigg', 'Why not the Rigg', '<p>Last Thursday was two days after the half moon: <b>neaps</b>. High water was only 3.9 m. The top of the Rigg is 4.4 m: half a metre to spare.</p><p>Today is two days after the new moon: <b>springs</b>. High water tonight is 5.2 m: 0.8 m of sea over the top of the Rigg.</p><p>(And at neaps the ford never dries at all: low water was 1.7 m. Big tides go further out AND come further in.)</p>', true);
+        msg('Dr Arroyo looks at the two shells for a long time. One lies half a metre below the top of the Rigg. The other lies well above it.');
+        setTimeout(function () {
+          ER.closeAll(); TIDE.solved(); busy = true;
+          ER.narrate([
+            '&ldquo;Eighty centimetres of sea over my chair,&rdquo; says Dr Arroyo. &ldquo;So. The same bank, and not the same sea. I withdraw the Rigg. I do not withdraw my opinion that your sea is badly organised.&rdquo;',
+            'She begins to fold the legs of the telescope. Then she stops, and looks up. The white wall has no top any more. It is not out beyond the bar. It is here.'
+          ], function () {
+            paint(); TIDE.horn({ dur: 0.7, vol: 0.05, pan: 0.6, lp: 380 }); TIDE.horn({ dur: 0.7, vol: 0.05, pan: 0.6, lp: 380, when: 1.3 });
+            ER.narrate([
+              'The seals go first, then the Scar, then the sky. From somewhere on your right, a long way off, comes a sound like a cow in a cellar: two long notes together, and nothing, and the two notes again. Mrs Hebden has gone up to put the horn on.',
+              'Mr Nyberg takes a compass out of his pocket and looks at it once. &ldquo;Ten to one,&rdquo; he says. &ldquo;The poles. I go in front. You two stay close. Closer than that.&rdquo;'
+            ], function () { busy = false; showGo(); });
+          });
+        }, 2800);
+      }
+    });
+    draw();
+    msg(['Mrs Hebden&rsquo;s moon wheel. Drag the moon round the Earth (or use the arrows) to where it was <b>last Thursday morning</b>, when Dr Arroyo saw it. Then say what kind of tides go with it.',
+      'Now put the moon where it is <b>today</b>, and say what kind of tides go with it.',
+      'Two shells, and the Rigg drawn in the sand. Drag each shell up the staff to the height of its high water.'][stage] || '');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return Math.min(stage, 2); }
+    };
+  }
+})();
+</script>
+</body>
+</html>

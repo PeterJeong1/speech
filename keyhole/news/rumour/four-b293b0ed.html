@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Four O’Clock · Says Who?</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-news.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="rumour.css">
+<style>
+  body{--bg:#3a4a5c;--accent:#d8432a;--font-display:'Libre Franklin',sans-serif;--font-ui:'Libre Franklin',sans-serif;--font-body:'Newsreader',serif;
+    --tc-bg:rgba(250,244,230,.97);--tc-ink:#16202c;--cap-bg:rgba(252,248,238,.96);--cap-ink:#16202c;--panel:#fbf7ec;--panel-ink:#16202c;--face-bg:#dfe6ea;--q-ink:#27457a;--fade:#fbf3de;
+    --hud-bg:rgba(252,248,238,.9);--hud-ink:#16202c;--hud-line:rgba(22,32,44,.32);--ov-bg:rgba(30,34,44,.6)}
+  .tc-room{font-size:clamp(44px,6.6vw,90px)}
+  .hbtn b{color:#fff}
+  .leaf{animation:leaf 9s linear infinite;opacity:0}
+  .leaf.l2{animation-delay:-2.200s;animation-duration:11s}.leaf.l3{animation-delay:-4.600s}.leaf.l4{animation-delay:-6.800s;animation-duration:12s}
+  @keyframes leaf{0%{transform:translate(0,0) rotate(0);opacity:0}8%{opacity:1}100%{transform:translate(-90px,520px) rotate(300deg);opacity:.9}}
+  .ph{fill:#2a3038}
+  #scene.lit .ph{fill:#eaf4ff;animation:ph 1.3s steps(1,end) 4}
+  #scene.lit .ph.p2{animation-delay:.25s}#scene.lit .ph.p3{animation-delay:.5s}#scene.lit .ph.p4{animation-delay:.75s}
+  @keyframes ph{50%{fill:#ffd98a}}
+  #myscreen{display:none}
+  #scene.lit #myscreen{display:block}
+  #scene.lit #myphone.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.2)}}
+  #exhaust{animation:puff 2.6s ease-out infinite}
+  @keyframes puff{0%{opacity:.5;transform:translate(0,0)}100%{opacity:0;transform:translate(-40px,-22px)}}
+  #newcard{display:none}
+  #scene.over #newcard{display:block}
+
+  /* one more story */
+  .coda{width:min(820px,94vw);display:grid;grid-template-columns:230px 1fr;background:#fbf7ec;color:#16202c;box-shadow:0 26px 70px rgba(0,0,0,.55)}
+  .coda .face{background:#27457a;display:grid;align-items:end}
+  .coda .face svg{display:block;width:100%;height:auto}
+  .coda .say{padding:22px 28px 20px}
+  .coda h5{margin:0 0 3px;font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:22px}
+  .coda h6{margin:0 0 12px;font-family:'DM Mono',monospace;font-weight:500;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:#d8432a}
+  .coda p{margin:0 0 12px;font-family:'Newsreader',serif;font-size:19.5px;line-height:1.45}
+  .coda .opt{display:block;width:100%;margin:0 0 8px;padding:11px 16px 10px;border:2px solid #16202c;border-radius:3px;text-align:left;font-family:'Newsreader',serif;font-weight:600;font-size:19px;background:#fff}
+  .coda .opt:hover{background:#16202c;color:#fff}
+  .coda .back{min-height:74px;margin:10px 0 0;font-size:17.5px;font-style:italic;color:#3a4654}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fa6d6"/><stop offset=".55" stop-color="#bcd6e6"/><stop offset="1" stop-color="#ffdca0"/></linearGradient>
+  <linearGradient id="brickG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8603f"/><stop offset="1" stop-color="#96492f"/></linearGradient>
+  <linearGradient id="roadG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a8780"/><stop offset="1" stop-color="#4f4d49"/></linearGradient>
+  <linearGradient id="sunG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".5"/><stop offset="1" stop-color="#ffcf7a" stop-opacity="0"/></linearGradient>
+  <radialGradient id="vig" cx="46%" cy="46%" r="82%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#3a2a00" stop-opacity=".1"/><stop offset="1" stop-color="#2a1a00" stop-opacity=".5"/></radialGradient>
+  <pattern id="bricks" width="44" height="22" patternUnits="userSpaceOnUse"><path d="M0 0H44M0 11H44M0 0V11M22 11V22" stroke="#7d3a24" stroke-width="1.400" opacity=".55"/></pattern>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1010" fill="url(#skyG)"/>
+<path d="M-1000 600q200 -90 420 -70t380 -40q200 -30 420 10t420 -20q260 -40 520 20t440 -10v130H-1000z" fill="#7d9a6a"/>
+
+<!-- the school, with 1926 over its door -->
+<g id="school" class="hot"><path d="M560 152L660 56L760 152Z" fill="url(#brickG)"/><path d="M560 152L660 56L760 152Z" fill="url(#bricks)"/><path d="M548 156L660 46L772 156" fill="none" stroke="#e6dcc4" stroke-width="12"/>
+  <rect x="170" y="150" width="980" height="456" fill="url(#brickG)"/><rect x="170" y="150" width="980" height="456" fill="url(#bricks)"/><rect x="160" y="140" width="1000" height="16" fill="#e6dcc4"/>
+  <rect x="470" y="176" width="380" height="34" fill="#e6dcc4"/><text x="660" y="200" class="cN" font-size="21" font-weight="700" text-anchor="middle" fill="#5a4028" letter-spacing="6">PETHERWICK SCHOOL</text>
+  <g id="wins"></g>
+  <path d="M586 606V420q0 -74 74 -74t74 74v186z" fill="#e6dcc4"/><path d="M602 606V424q0 -60 58 -60t58 60v182z" fill="#ffe9a8"/><path d="M602 606V424q0 -60 58 -60v242z" fill="#2f5a4a"/><path d="M660 364v242" stroke="#1f3d33" stroke-width="4"/>
+  <rect x="614" y="296" width="92" height="36" fill="#e6dcc4"/><text x="660" y="322" class="cN" font-size="24" font-weight="700" text-anchor="middle" fill="#5a4028" letter-spacing="3">1926</text></g>
+<g id="clockf" class="hot"></g>
+
+<!-- the steps, the road, the low sun -->
+<rect x="-1000" y="604" width="3600" height="800" fill="url(#roadG)"/>
+<path d="M556 606h208l26 26H530z" fill="#d9d2bd"/><path d="M530 632h260l26 28H504z" fill="#c9c2ad"/><path d="M504 660h312l28 30H476z" fill="#b9b29c"/>
+<path d="M-1000 700H2600" stroke="#f2d21f" stroke-width="6" stroke-dasharray="46 30" opacity=".7"/>
+<rect x="-1000" y="560" width="3600" height="400" fill="url(#sunG)" pointer-events="none"/>
+
+<!-- two trees in October -->
+<g id="tree" class="hot"><path d="M84 620V420" stroke="#5a4028" stroke-width="22"/><path d="M84 470l-50 -50M84 440l44 -54" stroke="#5a4028" stroke-width="10" fill="none"/>
+  <g><circle cx="60" cy="330" r="80" fill="#d98a2b"/><circle cx="130" cy="300" r="70" fill="#e9a93a"/><circle cx="20" cy="270" r="60" fill="#c9661f"/><circle cx="100" cy="220" r="66" fill="#e0942e"/><circle cx="-20" cy="360" r="50" fill="#b8521c"/></g></g>
+<g fill="#d9792a"><path class="leaf" d="M110 300q10 -8 16 0q-6 10 -16 0z"/><path class="leaf l2" d="M40 280q10 -8 16 0q-6 10 -16 0z" fill="#e9a93a"/><path class="leaf l3" d="M150 340q10 -8 16 0q-6 10 -16 0z" fill="#b8521c"/><path class="leaf l4" d="M80 240q10 -8 16 0q-6 10 -16 0z" fill="#e9a93a"/><path class="leaf l3" d="M1480 250q10 -8 16 0q-6 10 -16 0z"/><path class="leaf l2" d="M1540 300q10 -8 16 0q-6 10 -16 0z" fill="#b8521c"/></g>
+<g><path d="M1520 560V400" stroke="#5a4028" stroke-width="20"/><circle cx="1500" cy="320" r="76" fill="#e0942e"/><circle cx="1570" cy="280" r="70" fill="#c9661f"/><circle cx="1450" cy="270" r="56" fill="#e9a93a"/><circle cx="1620" cy="350" r="60" fill="#d98a2b"/></g>
+
+<!-- the late bus -->
+<g id="bus" class="hot"><ellipse cx="1420" cy="748" rx="270" ry="14" fill="#000" opacity=".3"/><rect x="1186" y="500" width="520" height="228" rx="20" fill="#f1e8d2"/><rect x="1186" y="640" width="520" height="34" fill="#2f5a4a"/><rect x="1186" y="674" width="520" height="54" rx="10" fill="#d9cfb6"/>
+  <rect x="1204" y="514" width="150" height="30" rx="4" fill="#15181c"/><text x="1279" y="536" class="cM" font-size="19" font-weight="500" text-anchor="middle" fill="#ffb84a" letter-spacing="2">LATE BUS</text>
+  <g fill="#bfd9e8"><rect x="1204" y="556" width="62" height="72" rx="5"/><rect x="1372" y="556" width="86" height="72" rx="5"/><rect x="1470" y="556" width="86" height="72" rx="5"/><rect x="1568" y="556" width="86" height="72" rx="5"/></g>
+  <rect x="1278" y="552" width="82" height="170" rx="5" fill="#2f5a4a"/><rect x="1286" y="560" width="30" height="100" fill="#bfd9e8"/><rect x="1322" y="560" width="30" height="100" fill="#bfd9e8"/>
+  <circle cx="1250" cy="728" r="30" fill="#15181c"/><circle cx="1250" cy="728" r="12" fill="#8f959a"/><circle cx="1560" cy="728" r="30" fill="#15181c"/><circle cx="1560" cy="728" r="12" fill="#8f959a"/><rect x="1186" y="664" width="16" height="14" fill="#ffe9a8"/>
+  <text x="1512" y="664" class="cF" font-size="16" font-weight="800" text-anchor="middle" fill="#f1e8d2" letter-spacing="4">SCHOOL BUS</text></g>
+<ellipse id="exhaust" cx="1180" cy="716" rx="16" ry="9" fill="#fff" opacity=".5" pointer-events="none"/>
+
+<!-- the queue for the bus -->
+<g id="queue"></g>
+
+<!-- the desk, out of doors -->
+<g id="theo" class="hot" transform="translate(206 872) scale(1.260)"></g>
+<g id="priya" class="hot" transform="translate(336 880) scale(1.240)"></g>
+<g id="corrigan" class="hot" transform="translate(482 884) scale(1.340)"></g>
+<g id="nell" class="hot" transform="translate(634 868) scale(1.080)"></g>
+<g id="adeleke" class="hot" transform="translate(752 878) scale(1.260)"></g>
+<g id="jago" class="hot" transform="translate(888 860) scale(1.160)"></g>
+<g id="mina" class="hot" transform="translate(1000 852) scale(1.080)"></g>
+
+<!-- your own telephone -->
+<g id="myphone" class="hot ready" transform="translate(1372 586) rotate(-6)"><path d="M30 250q-30 -60 -6 -120l40 10v130z" fill="#e8c4a2"/><rect x="24" y="0" width="140" height="250" rx="18" fill="#15181c"/><rect x="34" y="14" width="120" height="222" rx="8" fill="#2a3038"/>
+  <g id="myscreen"><rect x="34" y="14" width="120" height="222" rx="8" fill="#fff"/><rect x="34" y="14" width="120" height="30" rx="8" fill="#16202c"/><rect x="34" y="34" width="120" height="10" fill="#16202c"/><text x="94" y="36" class="cF" font-size="15" font-weight="900" text-anchor="middle" fill="#fff">THE W<tspan fill="#ff6a4a">I</tspan>CK</text>
+    <path d="M44 62h100M44 78h84" stroke="#16202c" stroke-width="9"/><path d="M44 98h88" stroke="#d8432a" stroke-width="4"/><rect x="44" y="112" width="100" height="62" fill="#e9dcf2"/><path d="M52 124h84" stroke="#5b3b8f" stroke-width="7"/><path d="M52 140h84M52 150h84M52 160h60" stroke="#8a6ab8" stroke-width="3"/><path d="M44 188h100M44 198h100M44 208h100M44 218h70" stroke="#b9c0c8" stroke-width="4"/></g>
+  <path d="M150 150q34 -6 36 20q-4 30 -34 30z" fill="#e8c4a2"/><path d="M152 198q30 0 30 22q-6 24 -30 20z" fill="#e0b894"/>
+</g>
+<!-- the card round your neck, as Mr Corrigan leaves it -->
+<g id="newcard" transform="translate(34 742) rotate(-5) scale(1.500)" pointer-events="none"><path d="M70 2q-30 -90 -160 -150" fill="none" stroke="#d8432a" stroke-width="6"/><rect x="3" y="4" width="140" height="92" rx="8" fill="#000" opacity=".25"/><rect x="0" y="0" width="140" height="92" rx="8" fill="#fdfcf7" stroke="#c9c2ad" stroke-width="1.500"/><rect x="0" y="0" width="140" height="24" rx="8" fill="#d8432a"/><rect x="0" y="12" width="140" height="12" fill="#d8432a"/><text x="70" y="18" class="cF" font-size="12.500" font-weight="900" text-anchor="middle" fill="#fff">THE WICK</text>
+  <text x="70" y="52" class="cM" font-size="13" text-anchor="middle" fill="#8f959a" letter-spacing="2">TRAINEE</text><path d="M28 48h84" stroke="#d8432a" stroke-width="3"/><text x="70" y="80" class="cK" font-size="22" font-weight="700" text-anchor="middle" fill="#d8432a">REPORTER</text></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">FILED 16.00</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <h6>What you now know</h6>
+  <ol>
+    <li>A story that reaches you has been copied. Follow it back, copy by copy, to the first one, and ask each sender: where did you get it?</li>
+    <li>A copy can lose things (a crop cuts off the date, the name, the &ldquo;says who&rdquo;) and gain things (somebody writes &ldquo;official&rdquo; on top). It never shows more than the copy it was made from.</li>
+    <li>Six copies of one message are one source, not six.</li>
+    <li>A fact can be checked, and has been. An opinion cannot be checked at all. And some things could be checked but have not been yet: they are not facts until somebody looks.</li>
+    <li>Ask who, what, when, where, why and how. A question with no real answer is a hole. Do not fill it with a guess: go and find out.</li>
+    <li>A headline says only what is known, keeps to the speaker&rsquo;s own meaning, and says who said it.</li>
+    <li>Old is not the same as fake. And when you have got something wrong, say so.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Tell a friend</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the front page</button></div>
+  <small>Says Who? &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="rumour.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, coda = null, told = {};
+
+  /* windows, the clock in the gable, the queue with its forty telephones, the desk */
+  (function () {
+    var s = '', i, j, x, y, LIT = [0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0];
+    for (j = 0; j < 2; j++) for (i = 0; i < 6; i++) {
+      x = (i < 3 ? 214 : 812) + (i % 3) * 112; y = 236 + j * 190;
+      s += '<rect x="' + (x - 8) + '" y="' + (y - 8) + '" width="88" height="140" fill="#e6dcc4"/><rect x="' + x + '" y="' + y + '" width="72" height="124" fill="' + (LIT[j * 6 + i] ? '#ffe9a8' : '#3d5266') + '"/><path d="M' + (x + 36) + ' ' + y + 'v124M' + x + ' ' + (y + 44) + 'h72M' + x + ' ' + (y + 86) + 'h72" stroke="#e6dcc4" stroke-width="4"/>';
+    }
+    $('#wins').innerHTML = s;
+    $('#clockf').innerHTML = RUM.clock(660, 110, 26, 4, 0, { rim: '#e6dcc4' });
+    s = '';
+    [[1100, 706, '#3a2a1c', 2], [1160, 700, '#8a6a3a', 3], [1216, 708, '#2a1f18', 1], [1040, 712, '#6b4a2a', 4], [1070, 760, '#2a1f18', 1], [1124, 772, '#6b4a2a', 2], [1180, 764, '#15110f', 3], [1232, 776, '#b4551f', 4]].forEach(function (q, k) {
+      s += '<g transform="translate(' + q[0] + ' ' + (q[1] + 70) + ') scale(' + (k < 4 ? 0.74 : 0.86) + ')">' + RUM.person({ hair: q[2], face: false, top: '#1f4a3a', shadow: 0.16,
+        extra: '<rect x="-22" y="-222" width="44" height="64" rx="8" fill="' + ['#7a2f3a', '#27457a', '#c9761a', '#3a3f47'][k % 4] + '"/><rect class="ph p' + q[3] + '" x="28" y="-134" width="16" height="26" rx="3"/>' }) + '</g>';
+    });
+    $('#queue').innerHTML = s;
+    $('#theo').innerHTML = RUM.who('theo', { smile: 8, extra: '<path d="M-10 -234L8 -150M10 -234L-2 -150" stroke="#d8432a" stroke-width="3"/><rect class="ph p2" x="30" y="-140" width="20" height="36" rx="4"/>' });
+    $('#priya').innerHTML = RUM.who('priya', { smile: 6, extra: '<rect class="ph p1" x="-50" y="-140" width="20" height="36" rx="4"/>' });
+    $('#corrigan').innerHTML = RUM.who('corrigan', { extra: '<g transform="rotate(8 44 -140)"><rect x="24" y="-176" width="46" height="62" rx="3" fill="#8a6a3a"/><rect x="29" y="-166" width="36" height="48" fill="#fdfdf8"/><path d="M34 -156h26M34 -148h26M34 -140h18" stroke="#3a3f47" stroke-width="2"/></g>' });
+    $('#nell').innerHTML = RUM.who('nell', { smile: 6, extra: '<circle cx="-9" cy="-273" r="8" fill="none" stroke="#a3382a" stroke-width="2"/><circle cx="9" cy="-273" r="8" fill="none" stroke="#a3382a" stroke-width="2"/>' });
+    $('#adeleke').innerHTML = RUM.who('adeleke', { smile: 6 });
+    $('#jago').innerHTML = RUM.who('jago', { smile: 8, extra: '<rect class="ph p3" x="30" y="-150" width="20" height="36" rx="4"/>' });
+    $('#mina').innerHTML = RUM.who('mina', { smile: 6, extra: '<rect class="ph p4" x="-50" y="-140" width="18" height="32" rx="4"/>' });
+  })();
+
+  ER.init({
+    theme: 'news', story: 'rumour', storyTitle: 'Says Who?', id: 'four', no: 'V', title: 'Four O’Clock',
+    go: 'One minute to four',
+    intro: [
+      'The board took two lines of seventeen. NO PLAN TO CLOSE SCHOOL, SAYS HEAD: her own meaning, with her name on it, and no &ldquo;never&rdquo;, because she did not say never. And under it: The picture going round is our own page one from 1976.',
+      'Not a fake, because it is real. Not a hoax, because nobody meant to fool anybody. And no child&rsquo;s name on it.',
+      'Mr Corrigan wrote his initials in the corner at three minutes to four, and Priya pressed the key. The late bus leaves from the front steps at five past.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"coda":["06a989db"]},
+    sound: ['morning', { root: 50, bpm: 76, beds: [['crowd', 0.35]] }],      /* out of doors, the job done: a major key, and people talking */
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('e-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('e-told', told); return true; }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#scene').classList.toggle('lit', !!told.lit);
+    $('#scene').classList.toggle('over', !!ER.flag('e-done'));
+    $('#myphone').classList.toggle('ready', !told.bulletin);
+  }
+  function hints() {
+    if (ER.flag('e-done')) return null;
+    if (coda && coda.parentNode) return ['coda', [
+      'Jago has brought you a new story. Before anything else: what is rule 1 on the wall of the news room?',
+      'Do not pass it on. Do not call it rubbish either: you have not checked that. One question comes before all the others.'
+    ]];
+    if (!told.bulletin) return ['read', ['The bulletin has gone out. It is on your own telephone, at the bottom right of the picture. Read it.', 'It is the telephone in your own hand, with THE WICK across the top of its screen.']];
+    if (!told.corrigan) return ['corrigan', ['Mr Corrigan is counting people on to the bus, in his yellow jacket. You have not spoken to him since the board.', 'He is the one with the clipboard, third from the left.']];
+    return ['jago', ['Jago is pushing through the queue towards you. Let him speak: click Jago.', 'Jago is the boy in the white shirt, near the queue for the bus.']];
+  }
+
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    RUM.mine('page', 'The top of the page', '<p>NO PLAN TO CLOSE / SCHOOL, SAYS HEAD</p><p>The picture going round / is our own page one from 1976</p><p>Her meaning, with her name on it. Old, not fake. Nobody&rsquo;s name under a mistake.</p>', true);
+    paint();
+    if (ER.flag('e-done')) { busy = false; finish(true); return; }
+    if (told.in) { busy = false; ER.say('The front steps, four o&rsquo;clock.'); if (told.bulletin && told.corrigan && !ER.flag('e-coda')) ask(); return; }
+    tell('in');
+    setTimeout(function () { tell('lit'); paint(); RUM.sfx.buzz(9); }, 5200);
+    ER.narrate([
+      'The front steps, in the last of the sun. Forty people are waiting for the late bus, and every one of them is looking at a telephone.',
+      'Four o&rsquo;clock. You hear it before you see it: forty telephones, one after another, like rain starting.',
+      'For a moment nobody says anything at all. Then somebody laughs. Then somebody says, quite loudly: &ldquo;NINETEEN SEVENTY-SIX?&rdquo;',
+      'Nell is standing beside Ms Adeleke, and not behind an atlas. People keep coming up to her. One of them says sorry.',
+      'Your own telephone is buzzing in your hand.'
+    ], function () { busy = false; tell('lit'); paint(); });
+  }
+
+  /* ---------- the Friday Wick ---------- */
+  var BULL = '<div class="mast"><span>THE W<i>I</i>CK</span><small>THE FRIDAY WICK &middot; FRIDAY 9 OCTOBER &middot; SENT 16.00</small></div><div class="cols"><div>' +
+    '<h2>No plan to close school, says head</h2><h3>The picture going round is our own page one from 1976</h3>' +
+    '<p>There is no plan to close Petherwick School, the head teacher said this afternoon. &ldquo;Nobody has proposed one, to me or to the governors,&rdquo; Mrs Whitcombe told <i>The Wick</i> at 3.44 pm. &ldquo;We have 1,104 pupils and a waiting list.&rdquo;</p>' +
+    '<p>The headline SCHOOL TO CLOSE IN JULY, which has gone from phone to phone since Thursday, is real. It is the front page of the first <i>Wick</i>, printed on Friday 12 March 1976. In that year a committee of the County Council voted to close the school, which then had 212 pupils. The full Council threw the plan out in May 1976.</p>' +
+    '<p>The date was lost when the page was photocopied for the centenary display, because the old paper is longer than A4. The copies that went round then lost the name of the paper, and after that the words SAYS COUNCIL.</p>' +
+    '<p>The pupil who first saw the copy did not pass on a rumour. She asked whether it was real. This is the answer.</p>' +
+    '<p class="by">Reporting: T. Easton &middot; Checking: the trainee &middot; Editor: P. Varma</p></div>' +
+    '<div class="pic"><svg viewBox="0 0 420 660">' + RUM.page({ ink: '#5b3b8f', paper: '#f1e6c8' }) + '</svg><small>The whole page, with nothing cut off. <i>The Wick</i>, No. 1, from Box 7 in the school library.</small></div></div>' +
+    '<p class="corr"><b>CORRECTION</b> &nbsp;In our issue of 12 March 1976 we twice spelt &ldquo;committee&rdquo; with one T. We are sorry for the mistake. D.C.</p>';
+  $('#myphone').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BULL, cls: 'wick', clue: { id: 'bulletin', title: 'The Friday Wick, 16.00', kind: 'On your telephone' }, done: function () {
+      RUM.terms(['correction', 'front page']);
+      if (tell('bulletin')) { paint(); ER.say('And at the very bottom, typed with two fingers: a correction, fifty years late.'); }
+      else if (told.corrigan && !ER.flag('e-coda')) ask();
+    } });
+  });
+
+  /* ---------- people ---------- */
+  $('#corrigan').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('e-done')) { ER.say('&ldquo;Forty,&rdquo; says Mr Corrigan, to the last person on to the bus. &ldquo;All present. And all correct, for once.&rdquo;'); return; }
+    if (!told.bulletin) { ER.say('&ldquo;Read it first,&rdquo; says Mr Corrigan, counting heads. &ldquo;A reporter who has not read the paper is a very sad thing.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mr Corrigan', role: 'On bus duty', face: window.FACE('corrigan'),
+      lines: [
+        { note: 'He is counting people on to the late bus without looking at them.', a: '&ldquo;Thirty-one. Thirty-two. That was not bad, for a first afternoon.&rdquo;' },
+        { q: 'Do you mind? About the old page?', a: 'Mind? It is the only thing I ever wrote that the whole school has read. It took fifty years, and then they read the wrong half of it.' },
+        { q: 'What would you have done at twenty past three?', a: 'Exactly what you did. Where did it come from? Who says so? What do we know, and what do we only think? What is missing? And then the fewest words that are true.</p><p>He counts another head. &ldquo;It is not clever. It is only slow, and most people will not be slow.&rdquo;' },
+        { q: 'And the rule over the door?', a: 'My first editor had it over his. He was the rudest man in the county, and he was never once wrong in print. If your mother says she loves you, check it. She does, as a rule. But you will feel better for having asked.' }
+      ],
+      clue: { id: 'steps', title: 'Mr Corrigan, on the front steps', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('corrigan')) setTimeout(ask, 500); }
+    });
+  });
+  $('#nell').addEventListener('click', function () { if (!busy) ER.say('&ldquo;Three people have said sorry,&rdquo; says Nell. &ldquo;And a boy in Year 10 asked me how you spell &lsquo;committee&rsquo;.&rdquo;'); });
+  $('#mina').addEventListener('click', function () { if (!busy) ER.say('&ldquo;There was a COMMA,&rdquo; Mina is telling everybody. &ldquo;After JULY. I SAID it looked as if something had been cut off.&rdquo;'); });
+  $('#theo').addEventListener('click', function () { if (!busy) ER.say('&ldquo;Reporting: T. Easton,&rdquo; says Theo, to his telephone. He has read that line eleven times.'); });
+  $('#priya').addEventListener('click', function () { if (!busy) ER.say(ER.flag('e-done') ? '&ldquo;Monday,&rdquo; says Priya. &ldquo;Twenty past three. Bring the wool.&rdquo;' : '&ldquo;Keep the card,&rdquo; says Priya. &ldquo;You will want it on Monday.&rdquo;'); });
+  $('#adeleke').addEventListener('click', function () { if (!busy) ER.say('Ms Adeleke has come as far as the steps. &ldquo;Box 7 has not had an afternoon like this in fifty years,&rdquo; she says. &ldquo;I shall have to buy it a better folder.&rdquo;'); });
+  $('#jago').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('e-done')) { ER.say('&ldquo;I&rsquo;ll ask Tobi,&rdquo; says Jago. &ldquo;And then I&rsquo;ll ask whoever Tobi asked. Is that how you do it?&rdquo;'); return; }
+    if (told.bulletin && told.corrigan) { ask(); return; }
+    ER.say('Jago is reading the bulletin aloud, to people who can already read.');
+  });
+  RUM.thing('#school', null, 'PETHERWICK SCHOOL, with 1926 cut into the stone over the door. It was going to close in July 1976. It is still here, and it has more huts.', isBusy);
+  RUM.thing('#clockf', null, function () { return ER.flag('e-done') ? 'Five past four.' : 'Four o&rsquo;clock.'; }, isBusy);
+  RUM.thing('#bus', null, 'The late bus: clubs and detentions only. Today it is carrying the news as well.', isBusy);
+  RUM.thing('#tree', null, 'October. The tree by the gate is dropping its leaves on to the bus bay, one at a time, as if it had all afternoon.', isBusy);
+
+  /* ---------- one more story ---------- */
+  function ask() {
+    if (ER.flag('e-done') || busy) return;
+    if (!ER.flag('e-coda')) {
+      ER.flag('e-coda', 1); busy = true;
+      ER.narrate(['Somebody is pushing through the queue towards you, holding a telephone over his head. It is Jago.'], function () { busy = false; openCoda(); });
+      return;
+    }
+    openCoda();
+  }
+  function openCoda() {
+    if (!coda) {
+      coda = ER.el('div', 'coda');
+      coda.innerHTML = '<div class="face">' + window.FACE('jago') + '</div><div class="say"><h5>Jago</h5><h6>Year 9 &middot; out of breath</h6>' +
+        '<p>&ldquo;Have you SEEN? There&rsquo;s going to be NO LATE BUS from Monday! It&rsquo;s all over Common Room!&rdquo;</p>' +
+        '<button type="button" class="opt" data-v="1">&ldquo;No! Quick, tell everybody!&rdquo;</button><button type="button" class="opt" data-v="2">&ldquo;Where did you get it?&rdquo;</button><button type="button" class="opt" data-v="3">&ldquo;That&rsquo;s rubbish. It can&rsquo;t be true.&rdquo;</button>' +
+        '<p class="back"></p></div>';
+      ER.$$('.opt', coda).forEach(function (b) {
+        b.addEventListener('click', function () {
+          var v = b.getAttribute('data-v'), back = coda.querySelector('.back');
+          if (ER.flag('e-done')) return;
+          if (!ER.check('coda', v)) {
+            ER.sfx.no(); ER.shake(b);
+            back.innerHTML = ER.gloss(v === '1' ? '&ldquo;Trainee,&rdquo; says Priya. That is all. She takes hold of the card that is hanging round your neck, and turns it over, so that you can read the back of it again.' :
+              '&ldquo;And how do you know that?&rdquo; says Mr Corrigan, quite mildly. &ldquo;&lsquo;Rubbish&rsquo; is as much of a guess as &lsquo;official&rsquo;. You have not checked it either.&rdquo;');
+            return;
+          }
+          ER.flag('e-coda', 2); RUM.solved(); ER.closeAll(); busy = true;
+          ER.narrate([
+            '&ldquo;Where did you get it?&rdquo; you say.',
+            'Jago opens his mouth, and shuts it again. &ldquo;Off Tobi,&rdquo; he says. &ldquo;And Tobi got it off&hellip; I don&rsquo;t know where Tobi got it.&rdquo;',
+            '&ldquo;Monday&rsquo;s story,&rdquo; says Priya, and for the first time today she is smiling. &ldquo;Bring the wool.&rdquo;',
+            'The late bus pulls out at five past four, with forty people on it, all reading the first front page of <i>The Wick</i>. Mr Corrigan counts them on.',
+            'Then he lifts the card on its red ribbon, crosses out one word with his red pen, writes another one under it, and lets it fall back. It says THE WICK: REPORTER.'
+          ], function () { busy = false; ER.flag('e-done', 1); finish(false); });
+        });
+      });
+    }
+    ER.open('ov-lock', coda);
+  }
+
+  /* ---------- the end ---------- */
+  function finish(quick) {
+    var st = ER.state(), mins = RUM.minutesPlayed(), hn = ER.hintsUsed();
+    paint();
+    $('#d-time').textContent = 'From the news room to the front steps: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+    if (quick) ER.say('Five past four. The late bus has gone, and the card round your neck says REPORTER.');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Says Who? &middot; in your own words</h4><h3>Tell a friend</h3>' +
+      '<p>A friend sends you a picture that says something surprising about your school, and adds: &ldquo;pass it on&rdquo;. Choose ONE of these and explain it, aloud or in writing, in 60 to 90 words. Use: first, then, because, so.</p>' +
+      '<p><b>A</b> How to check a story before you pass it on: what you would do, step by step.<br><b>B</b> Why six copies of one message are not six sources.<br><b>C</b> Why the picture of SCHOOL TO CLOSE was real, and the rumour was still not true.</p>' +
+      '<textarea id="r1"></textarea><div class="count"></div><label for="r2">Name</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

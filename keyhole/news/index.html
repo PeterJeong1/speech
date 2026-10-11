@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Deadline · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-news.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  /* a sub-editor's desk at night, and tomorrow's front page lying on it as a proof */
+  body{color:#1b1a17;font-family:'Newsreader',Georgia,serif;-webkit-user-select:none;user-select:none;
+    background:#10130f;
+    background-image:radial-gradient(ellipse 980px 560px at 50% -90px,rgba(255,214,140,.36),rgba(255,196,110,.08) 56%,transparent 78%),
+      repeating-linear-gradient(0deg,rgba(255,255,255,.016) 0 2px,transparent 2px 7px),linear-gradient(#1d231c,#10130f)}
+  .back{position:fixed;left:14px;top:12px;z-index:3;height:36px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(255,255,255,.24);
+    background:rgba(8,10,8,.72);color:#efe9dc;border-radius:3px;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#ffb84a;color:#ffb84a}
+  .proof{position:relative;max-width:1200px;margin:58px auto 0;padding:14px 30px 20px;background:#f3efe2;
+    background-image:linear-gradient(100deg,rgba(255,255,255,.55),rgba(160,140,90,.1) 60%,rgba(120,100,60,.16));
+    box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 0 1px rgba(0,0,0,.3)}
+  .ears{display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#4c483e;border-bottom:1px solid #1b1a17;padding-bottom:6px}
+  .ears b{font-weight:500;color:#b3261c}
+  h1{margin:0;text-align:center;font-family:'UnifrakturCook','IM Fell English SC',serif;font-weight:700;font-size:clamp(64px,8vw,104px);line-height:1.02;color:#12110f;letter-spacing:.01em}
+  .strap{display:flex;justify-content:space-between;align-items:baseline;gap:20px;border-top:4px double #1b1a17;border-bottom:1px solid #1b1a17;padding:6px 2px 5px;font-size:16.5px;font-style:italic;color:#34302a}
+  .strap span:last-child{font-family:'DM Mono',monospace;font-style:normal;font-size:12px;letter-spacing:.1em;white-space:nowrap}
+  main{display:grid;grid-template-columns:repeat(12,1fr);gap:0;margin-top:12px}
+  .story{position:relative;display:block;grid-column:span 4;margin:0;padding:6px 20px 16px;border:0;border-left:1px solid #8f8a7c;background:none;text-align:left;color:inherit;font:inherit;cursor:pointer;transition:background .18s}
+  .story:hover{background:rgba(255,246,200,.75)}
+  .story.i0{grid-column:span 7;border-left:0;padding-left:2px}
+  .story.i1{grid-column:span 5}
+  .story.i2{border-left:0;padding-left:2px}
+  .story.i2,.story.i3,.story.i4{border-top:1px solid #1b1a17;padding-top:12px;margin-top:4px}
+  .kick{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#4c483e}
+  .kick .stars{font-family:Arial,sans-serif;font-size:17px;letter-spacing:3px;color:#b3261c;line-height:1}
+  .story h2{margin:6px 0 7px;font-family:'Libre Franklin',sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.95;font-size:36px;color:#12110f}
+  .story.i0 h2{font-size:clamp(50px,5.6vw,74px)}
+  .lede{display:block;font-size:16.5px;line-height:1.44;color:#26231e}
+  .story.i0 .lede{font-size:18px;-webkit-column-count:2;column-count:2;-webkit-column-gap:22px;column-gap:22px}
+  .lede:first-letter{font-family:'Libre Franklin',sans-serif;font-weight:900;font-size:2.5em;line-height:.82;float:left;padding:4px 7px 0 0;color:#12110f}
+  .cut{display:block;margin:10px 0 0;height:96px}
+  .story.i0 .cut{height:118px}
+  .cut svg{display:block;width:100%;height:100%}
+  .stamp{position:absolute;right:16px;top:44px;padding:4px 12px 1px;border:4px solid;font-family:'Stardos Stencil',serif;font-weight:700;font-size:20px;letter-spacing:.14em;transform:rotate(-8deg);opacity:.86;display:none;background:rgba(243,239,226,.7)}
+  .story:not(.i0) .stamp{top:auto;bottom:30px}      /* a small card has no room beside its headline: the stamp goes down beside the drawing, where it covers no words */
+  .story.going .stamp{display:block;color:#1f3a8a}
+  .story.solved .stamp{display:block;color:#b3261c}
+  .more{grid-column:span 5;position:relative;border-left:1px solid #8f8a7c;padding:10px 20px 16px;min-height:250px}
+  .more.wide{grid-column:span 12;border-left:0;padding-left:2px;min-height:210px}
+  .more.rest{grid-column:span 8;border-top:1px solid #1b1a17;margin-top:4px}
+  .more.last{grid-column:span 4;border-top:1px solid #1b1a17;margin-top:4px}
+  .more.under{border-top:1px solid #1b1a17;margin-top:4px}
+  .more i{display:block;height:9px;margin:0 0 9px;background:#cbc5b3;border-radius:1px}
+  .more i.h{height:26px;width:72%;background:#b9b3a0;margin-bottom:14px}
+  .more i.s{width:58%}
+  .more p{position:absolute;left:50%;top:50%;margin:0;width:78%;transform:translate(-50%,-50%) rotate(-3deg);text-align:center;font-family:'Kalam',cursive;font-weight:700;font-size:25px;line-height:1.2;color:#1f3a8a}
+  .more p small{display:block;font-weight:400;font-size:17px}
+  .foot{margin-top:12px;border-top:1px solid #1b1a17;padding-top:7px;display:flex;justify-content:space-between;gap:18px;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:.06em;color:#4c483e}
+  .ring{position:absolute;right:-34px;bottom:54px;width:118px;height:118px;border-radius:50%;border:7px solid rgba(110,70,30,.16);box-shadow:inset 0 0 0 2px rgba(110,70,30,.08);pointer-events:none}
+  footer{max-width:1200px;margin:0 auto;padding:16px 24px 46px;font-family:'DM Mono',monospace;font-size:13px;color:#a8a492;text-align:center;line-height:1.9}
+  footer b{color:#ffb84a;font-weight:normal;letter-spacing:2px;font-family:Arial,sans-serif}
+  @media (max-width:900px){.story,.story.i0,.story.i1,.more,.more.rest{grid-column:span 12;border-left:0;padding-left:2px;border-top:1px solid #1b1a17;margin-top:6px}.story.i0 .lede{-webkit-column-count:1;column-count:1}}
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<div class="proof">
+  <div class="ears"><span>Late edition</span><span id="date"></span><span><b>Proof</b> &middot; not yet passed</span></div>
+  <h1>Deadline</h1>
+  <div class="strap"><span>Is it true? How do we know? And what exactly may we say?</span><span>NO. <span id="num">0</span> OF 5 ON THE DESK</span></div>
+  <main id="files"></main>
+  <div class="foot"><span>Every story on this page still has to be checked. You are the trainee.</span><span>&ldquo;If your mother says she loves you, check it.&rdquo;</span></div>
+  <span class="ring"></span>
+</div>
+<footer><b>&#9733;&#9733;&#9733;</b> a full afternoon on the desk &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;</b> longer, and the easy answer is the wrong one &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> long, and nothing is handed to you</footer>
+
+<script src="../assets/account.js"></script>
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"rumour","title":"Says Who?","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Friday, twenty past three, at Petherwick School. Since eight this morning one picture has been going from phone to phone: SCHOOL TO CLOSE IN JULY. It's official, apparently. At four o'clock the school's news site sends its bulletin to every family, the top story is already written, and nobody on the desk can say where it came from. You are the trainee. Trainees fetch, carry and doubt.","rooms":5,"first":"newsroom.html","firstId":"newsroom","last":"four"},{"id":"flood","title":"Two Aunts","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A Tuesday night in February, ten to nine, and the River Wend is coming up through Wendford. Wend Valley Radio is at the top of the highest street in the town, and everything the valley knows, thinks or has been told by a cousin is landing on its news desk at once. At half past nine Danny Sato reads the news, and people will do what he says. You are the trainee. You were meant to go home at five. And nothing goes on air in this building, the news editor says, without two aunts.","rooms":5,"first":"board.html","firstId":"board","last":"light"}]), box = document.getElementById('files');
+  /* the picture that goes with each story on the proof */
+  var K = 'fill="none" stroke="#1b1a17" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
+  var CUT = {
+    rumour: '<rect x="2" y="8" width="150" height="100" fill="#fff" stroke="#1b1a17" stroke-width="1.5"/><rect x="2" y="8" width="150" height="16" fill="#2e7d4f"/><path d="M12 40h130v26H12z" fill="#e4e1d6"/>' +
+      '<text x="77" y="59" font-family="Stardos Stencil,serif" font-weight="700" font-size="14.5" text-anchor="middle" fill="#1b1a17">SCHOOL TO CLOSE</text><path d="M12 78h96M12 88h70" stroke="#8f8a7c" stroke-width="4"/>' +
+      '<path d="M162 58h36" stroke="#b3261c" stroke-width="3" stroke-dasharray="5 5"/><path d="M190 50l10 8 -10 8" fill="none" stroke="#b3261c" stroke-width="3"/>' +
+      '<rect x="210" y="26" width="118" height="70" fill="#fff" stroke="#1b1a17" stroke-width="1.5" transform="rotate(4 269 61)"/><g transform="rotate(4 269 61)"><rect x="210" y="26" width="118" height="13" fill="#27457a"/><path d="M218 48h102v20H218z" fill="#e4e1d6"/><text x="269" y="63" font-family="Kalam,cursive" font-weight="700" font-size="15" text-anchor="middle" fill="#d91f1f">IT&#8217;S OFFICIAL</text><path d="M218 78h70" stroke="#8f8a7c" stroke-width="4"/></g>' +
+      '<path d="M338 62h30" stroke="#b3261c" stroke-width="3" stroke-dasharray="5 5"/><text x="402" y="88" font-family="Libre Franklin,sans-serif" font-weight="900" font-size="78" text-anchor="middle" fill="#b3261c">?</text>',
+    flood: '<path d="M10 76q26 -16 52 0t52 0t52 0t52 0t52 0t52 0" ' + K + '/><path d="M10 96q26 -16 52 0t52 0t52 0t52 0t52 0t52 0" ' + K + '/><path d="M120 60V24h70v36M110 26l45 -18 45 18" ' + K + '/><circle cx="310" cy="34" r="16" ' + K + '/><path d="M310 50v40M290 66h40" ' + K + '/>',
+    photo: '<rect x="60" y="24" width="150" height="80" rx="6" ' + K + '/><circle cx="135" cy="64" r="26" ' + K + '/><rect x="100" y="12" width="40" height="12" ' + K + '/><path d="M250 100l40 -60 30 40 20 -20 40 40z" ' + K + '/><circle cx="350" cy="34" r="10" ' + K + '/>',
+    figures: '<path d="M30 104V20M30 104h340" ' + K + '/><path d="M60 104V70h34v34M124 104V44h34v60M188 104V58h34v46M252 104V26h34v78" ' + K + '/><text x="340" y="70" font-family="Libre Franklin,sans-serif" font-weight="900" font-size="52" text-anchor="middle" fill="#1b1a17">%</text>',
+    leak: '<path d="M90 12h110l30 30v70H90z" ' + K + '/><path d="M200 12v30h30M110 54h96M110 70h96M110 86h60" ' + K + '/><path d="M270 104q-22 -34 0 -56q22 22 0 56z" fill="#b3261c"/><path d="M320 96q-14 -22 0 -36q14 14 0 36z" fill="#b3261c" opacity=".6"/>'
+  };
+  var PLAIN = '<path d="M10 24h390M10 44h390M10 64h390M10 84h300" stroke="#8f8a7c" stroke-width="5"/>';
+  var d = new Date(), DAY = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  document.getElementById('date').textContent = DAY[d.getDay()] + ' ' + d.getDate() + ' ' + MON[d.getMonth()];
+  document.getElementById('num').textContent = STORIES.length;
+  Shelf.init();
+  STORIES.forEach(function (s, i) {
+    var st = Shelf.status('news', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'story i' + i + ' ' + st.state; b.setAttribute('data-story', s.id);
+    b.innerHTML = '<span class="stamp"></span><span class="kick"><span class="stars"></span><span class="t"></span><span class="r"></span></span><h2></h2><span class="lede"></span>' +
+      '<span class="cut"><svg viewBox="0 0 420 116" preserveAspectRatio="xMinYMid meet">' + (CUT[s.id] || PLAIN) + '</svg></span>';
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('.stars').textContent = Shelf.stars(s.stars);
+    b.querySelector('.stars').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.t').textContent = s.minutes + ' min';
+    b.querySelector('.r').textContent = s.rooms + ' rooms' + (s.level ? ' · ' + s.level.replace(' to ', '–') : '');
+    b.querySelector('.lede').textContent = s.blurb;
+    b.querySelector('.stamp').textContent = st.state === 'solved' ? 'PUT TO BED' : 'ON THE DESK';
+    b.addEventListener('click', function () { Shelf.open('news', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 5) {
+    var m = document.createElement('div'), left = 5 - STORIES.length, n = STORIES.length, s = '<i class="h"></i>', k;
+    m.className = 'more' + (n === 0 ? ' wide' : n === 1 ? '' : n === 2 ? ' wide under' : n === 3 ? ' rest' : ' last');
+    for (k = 0; k < (n === 0 ? 7 : 11); k++) s += '<i' + (k % 4 === 3 ? ' class="s"' : '') + '></i>';
+    m.innerHTML = s + '<p></p>';
+    m.querySelector('p').innerHTML = n ? (left === 1 ? 'One more story' : ['', '', 'Two', 'Three', 'Four'][left] + ' more stories') + ' to come.<small>Hold the space. The reporters are still out.</small>' :
+      'No copy yet.<small>The first story has not come in. Hold the page.</small>';
+    box.appendChild(m);
+  }
+})();
+</script>
+</body>
+</html>

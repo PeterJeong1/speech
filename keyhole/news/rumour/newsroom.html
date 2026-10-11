@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The News Room · Says Who?</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-news.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="rumour.css">
+<style>
+  body{--bg:#23241d;--accent:#ff6a4a;--font-display:'Libre Franklin',sans-serif;--font-ui:'Libre Franklin',sans-serif;--font-body:'Newsreader',serif;
+    --tc-bg:rgba(24,25,20,.97);--tc-ink:#f4efe2;--cap-bg:rgba(20,21,17,.95);--panel:#1d201b;--face-bg:#2b3a34;--q-ink:#ffb84a;--fade:#0c0d0a;--hud-bg:rgba(20,21,17,.82)}
+  .tc-room{font-size:clamp(44px,6.6vw,90px)}
+  #tube{animation:tube 6.1s steps(1,end) infinite}
+  @keyframes tube{0%{opacity:.5}6%{opacity:.2}8%{opacity:.5}52%{opacity:.3}53%{opacity:.5}}
+  #steam{animation:steam 3.4s ease-in-out infinite}
+  @keyframes steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.5}100%{opacity:0;transform:translateY(-22px)}}
+  #dots circle{animation:dots 1.2s steps(1,end) infinite}
+  #dots circle:nth-child(2){animation-delay:.4s}#dots circle:nth-child(3){animation-delay:.8s}
+  @keyframes dots{0%{opacity:1}50%{opacity:.2}}
+  #cork.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.22)}}
+  #strings{display:none}
+  #scene.traced #strings{display:block}
+
+  /* the wall */
+  .bx .card{cursor:pointer}
+  .bx .card .fr{fill:none;stroke:none}
+  .bx .card.sel .fr{stroke:#ffb84a;stroke-width:9}
+  .bx .card:hover .fr{stroke:#ffb84a;stroke-width:5}
+  .bx .card.bad .fr{stroke:#e0503a;stroke-width:14}
+  .bx .pin{cursor:grab}
+  .bx .pin.on{cursor:grabbing}
+  .bx .pin:hover .hd{fill:#ff8a6a}
+  .bx #tmp{pointer-events:none}
+  .bx #threads{pointer-events:none}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e1c2"/><stop offset=".7" stop-color="#d6cba6"/><stop offset="1" stop-color="#bdb18a"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4c5a4c"/><stop offset="1" stop-color="#232a24"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3936a"/><stop offset="1" stop-color="#9a7b52"/></linearGradient>
+  <radialGradient id="tubeG" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#fbffe6" stop-opacity=".75"/><stop offset="1" stop-color="#fbffe6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#1a1a08" stop-opacity=".16"/><stop offset="1" stop-color="#0a0a04" stop-opacity=".72"/></radialGradient>
+  <pattern id="corkP" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#b98d58"/><circle cx="3" cy="4" r="1.300" fill="#8f6a3c"/><circle cx="10" cy="9" r="1.100" fill="#d2a873"/><circle cx="7" cy="1" r=".8" fill="#8f6a3c"/></pattern>
+</defs>
+
+<!-- the wall, the ceiling, the strip light -->
+<rect x="-1000" y="-400" width="3600" height="1020" fill="url(#wallG)"/>
+<rect x="-1000" y="-400" width="3600" height="412" fill="#a89d7a"/>
+<rect x="400" y="12" width="800" height="26" rx="4" fill="#8f8a7c"/><rect x="420" y="20" width="760" height="12" rx="6" fill="#fdfff0"/>
+<ellipse id="tube" cx="800" cy="30" rx="900" ry="520" fill="url(#tubeG)" opacity=".5" pointer-events="none"/>
+<path d="M-1000 604H2600V620H-1000z" fill="#8f845f"/>
+
+<!-- the sign over the door, and the door to E7 -->
+<g id="sign" class="hot"><rect x="1232" y="84" width="330" height="76" fill="#7d1f1f"/><rect x="1238" y="90" width="318" height="64" fill="none" stroke="#f4efe2" stroke-width="2"/>
+  <text x="1397" y="117" class="cF" font-size="14.500" font-weight="800" text-anchor="middle" fill="#f4efe2" textLength="292" lengthAdjust="spacingAndGlyphs">IF YOUR MOTHER SAYS SHE LOVES YOU,</text>
+  <text x="1397" y="144" class="cF" font-size="22" font-weight="900" text-anchor="middle" fill="#ffd98a" letter-spacing="5">CHECK IT.</text>
+  <text x="1384" y="181" class="cC" font-size="19" fill="#2e6b4f" transform="rotate(-2 1384 181)" textLength="176" lengthAdjust="spacingAndGlyphs">she does. we checked. P.V.</text></g>
+<g id="door" class="hot"><rect x="1282" y="190" width="232" height="430" fill="#2a221a"/><rect x="1294" y="200" width="204" height="420" fill="#2f5a4a"/><rect x="1498" y="200" width="8" height="420" fill="#fff6d0"/>
+  <rect x="1322" y="232" width="60" height="150" fill="#dfe9d8"/><path d="M1322 262h60M1322 292h60M1322 322h60M1322 352h60M1342 232v150M1362 232v150" stroke="#9fb0a0" stroke-width="1.200"/>
+  <rect x="1458" y="410" width="12" height="46" rx="5" fill="#c9ced3"/><rect x="1322" y="420" width="88" height="26" fill="#f4efe2"/><text x="1366" y="438" class="cF" font-size="14" font-weight="800" text-anchor="middle" fill="#16202c" letter-spacing="2">E7a</text></g>
+
+<!-- the shelves that still say GLUE STICKS -->
+<g id="shelves" class="hot"></g>
+<g id="kettle" class="hot"><path d="M112 316v-52q0 -14 16 -14h30q16 0 16 14v52z" fill="#dfe3e6"/><path d="M112 284l-18 -10v8l18 14z" fill="#c9ced3"/><path d="M174 268q22 0 22 20t-22 18" fill="none" stroke="#2a2c33" stroke-width="7"/><rect x="118" y="244" width="50" height="8" rx="3" fill="#2a2c33"/>
+  <path id="steam" d="M96 262q-8 -10 0 -20t0 -20" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity="0"/></g>
+
+<!-- the cork wall with six printouts -->
+<g id="cork" class="hot"><rect x="392" y="94" width="584" height="300" fill="#5a4028"/><rect x="402" y="104" width="564" height="280" fill="url(#corkP)"/><g id="minis"></g><g id="strings"></g></g>
+
+<!-- Mr Corrigan's rules, and the clock -->
+<g id="rules" class="hot" transform="rotate(-1.500 1104 300)"><rect x="1004" y="150" width="200" height="300" fill="#fbfaf3"/><rect x="1016" y="142" width="46" height="16" fill="#e2d28c" opacity=".9"/><rect x="1146" y="142" width="46" height="16" fill="#e2d28c" opacity=".9"/>
+  <text x="1104" y="190" class="cF" font-size="24" font-weight="900" text-anchor="middle" fill="#16202c">THE DESK</text><path d="M1020 200h168" stroke="#d8432a" stroke-width="4"/><g id="rlines"></g></g>
+<g id="clock" class="hot"></g>
+
+<!-- the lino, and the desk standing on it -->
+<rect x="-1000" y="620" width="3600" height="748" fill="url(#floorG)"/>
+<g id="specks" fill="#7d8a78" opacity=".5"></g>
+<path d="M372 612H1252V768H372z" fill="#4a3a28"/><path d="M372 612H1252V626H372z" fill="#3a2c1e"/><g fill="#3a2c1e"><rect x="1050" y="640" width="180" height="50" rx="3"/><rect x="1050" y="700" width="180" height="50" rx="3"/></g><g fill="#b3936a"><rect x="1128" y="660" width="26" height="7" rx="3"/><rect x="1128" y="720" width="26" height="7" rx="3"/></g>
+<path d="M372 548H1248L1268 598H352Z" fill="url(#deskG)"/><path d="M352 598H1268V612H352z" fill="#7d6240"/>
+<g id="pcs" class="hot"><rect x="1096" y="428" width="140" height="118" rx="8" fill="#cfc8b4"/><rect x="1108" y="440" width="116" height="84" rx="6" fill="#161a1c"/><rect x="1134" y="484" width="64" height="6" fill="#2f3a3c"/><rect x="1134" y="484" width="18" height="6" fill="#7dffb0"/><g id="dots" fill="#7dffb0"><circle cx="1150" cy="470" r="2.500"/><circle cx="1166" cy="470" r="2.500"/><circle cx="1182" cy="470" r="2.500"/></g><rect x="1120" y="546" width="92" height="10" fill="#b9b29c"/></g>
+<g id="screen" class="hot"><rect x="566" y="530" width="18" height="26" fill="#2a2c33"/><ellipse cx="575" cy="560" rx="62" ry="9" fill="#2a2c33"/><rect x="446" y="398" width="258" height="146" rx="7" fill="#15181c"/><rect x="456" y="408" width="238" height="124" fill="#fff"/>
+  <rect x="456" y="408" width="238" height="15" fill="#16202c"/><text x="462" y="419" class="cM" font-size="8.500" fill="#f4efe2">THE FRIDAY WICK</text><text x="688" y="419" class="cM" font-size="8.500" fill="#ffb84a" text-anchor="end">SENDS AT 16.00</text>
+  <text x="464" y="443" class="cF" font-size="17" font-weight="900" fill="#16202c">THE W<tspan fill="#d8432a">I</tspan>CK</text><path d="M462 449h226" stroke="#16202c" stroke-width="2"/>
+  <rect x="464" y="456" width="222" height="48" fill="none" stroke="#d8432a" stroke-width="1.600" stroke-dasharray="5 4"/><text x="470" y="474" class="cF" font-size="13" font-weight="900" fill="#16202c">IT&#8217;S OFFICIAL:</text><text x="470" y="490" class="cF" font-size="11.500" font-weight="900" fill="#16202c">PETHERWICK TO CLOSE IN JULY</text>
+  <path d="M464 514h180M464 523h130" stroke="#b9c0c8" stroke-width="3"/></g>
+<path d="M470 566h170l10 18H458z" fill="#2a2c33"/><path d="M476 571h160M472 577h170" stroke="#4a5560" stroke-width="2.500"/>
+<g id="style" class="hot"><path d="M770 552h136l14 34H754z" fill="#c9302a"/><path d="M754 586h166v9H754z" fill="#8f1f1a"/><path d="M786 560h76l4 14h-84z" fill="#fbfaf3"/><text x="824" y="571.500" class="cF" font-size="9.500" font-weight="900" text-anchor="middle" fill="#16202c" letter-spacing="1">STYLE BOOK</text><g fill="#e6e9ea"><circle cx="774" cy="560" r="3"/><circle cx="768" cy="572" r="3"/></g></g>
+<g id="wool" class="hot"><circle cx="972" cy="570" r="19" fill="#c9302a"/><path d="M956 562q16 -10 32 0M955 572q17 -10 34 2M960 582q13 -8 26 0M964 554q10 16 6 34M980 553q8 16 0 36" fill="none" stroke="#8f1f1a" stroke-width="2"/><path d="M990 578q20 12 34 -4t26 8" fill="none" stroke="#c9302a" stroke-width="3" stroke-linecap="round"/></g>
+<g id="spike" class="hot"><path d="M1068 574V496" stroke="#c9ced3" stroke-width="3.500" stroke-linecap="round"/><g fill="#fbfaf3" stroke="#b9b29c" stroke-width="1"><path d="M1040 556l56 -6 2 10 -56 6z"/><path d="M1042 544l54 4 -1 10 -54 -4z"/><path d="M1038 534l58 -8 2 10 -58 8z"/></g><rect x="1044" y="574" width="48" height="12" rx="2" fill="#5a4028"/></g>
+
+<!-- Theo, who cannot sit down; Priya, with her flask -->
+<g id="theo" class="hot" transform="translate(238 872) scale(1.300)"></g>
+<g id="priya" class="hot" transform="translate(1330 880) scale(1.260)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go out into the Year 9 corridor</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="rumour.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, wall = null, told = {};
+
+  /* shelves, the small printouts on the cork, the lines of the poster, the clock, specks in the lino, the two of them */
+  (function () {
+    var s = '', i, x, y, LAB = ['A4 LINED', 'GLUE STICKS', 'STAPLES', 'TREASURY TAGS'], COL = ['#27457a', '#2e7d4f', '#5a6470', '#7a2f3a', '#2e7d4f', '#27457a'];
+    s += '<rect x="56" y="118" width="304" height="502" fill="#000" opacity=".08"/><rect x="60" y="120" width="9" height="500" fill="#7d8a94"/><rect x="347" y="120" width="9" height="500" fill="#7d8a94"/>';
+    for (i = 0; i < 4; i++) {
+      y = 206 + i * 110;
+      s += '<rect x="56" y="' + y + '" width="304" height="11" fill="#9aa5ad"/><rect x="56" y="' + (y + 11) + '" width="304" height="4" fill="#5c666e"/>' +
+        '<rect x="' + (84 + i * 34) + '" y="' + (y - 2) + '" width="' + (LAB[i].length * 8 + 16) + '" height="15" fill="#fdfcf2"/><text x="' + (92 + i * 34) + '" y="' + (y + 9.500) + '" class="cM" font-size="10.500" fill="#2a2c33">' + LAB[i] + '</text>';
+    }
+    s += '<g fill="#f1eee2" stroke="#b9b29c" stroke-width="1"><rect x="88" y="150" width="96" height="18"/><rect x="92" y="168" width="96" height="18"/><rect x="86" y="186" width="96" height="20"/></g>' +
+      '<rect x="212" y="146" width="112" height="60" fill="#b58a55"/><rect x="224" y="162" width="88" height="28" fill="#fdfcf2"/><text x="268" y="174" class="cK" font-size="11" font-weight="700" text-anchor="middle" fill="#1a2a52">PENS</text><text x="268" y="186" class="cK" font-size="10" text-anchor="middle" fill="#d8432a">(DO NOT)</text>';
+    [214, 246, 278, 310].forEach(function (mx, k) { s += '<rect x="' + mx + '" y="284" width="24" height="32" rx="3" fill="' + ['#d8432a', '#f4efe2', '#2f5a4a', '#e9c46a'][k] + '"/><path d="M' + (mx + 24) + ' 292q10 0 10 8t-10 8" fill="none" stroke="' + ['#d8432a', '#f4efe2', '#2f5a4a', '#e9c46a'][k] + '" stroke-width="4"/>'; });
+    s += '<path d="M84 412h130l8 14H76z" fill="#cfc8b4"/><path d="M92 417h116M88 422h124" stroke="#8f8a7c" stroke-width="2"/><path d="M244 424q20 -40 44 -8t40 -14" fill="none" stroke="#2a2c33" stroke-width="4"/>';
+    for (i = 0; i < 7; i++) s += '<rect x="' + (84 + i * 36) + '" y="' + (452 + (i % 3) * 4) + '" width="30" height="' + (84 - (i % 3) * 4) + '" fill="' + ['#27457a', '#2f5a4a', '#7a2f3a', '#16202c', '#c9761a', '#27457a', '#5a6470'][i] + '"/><rect x="' + (90 + i * 36) + '" y="476" width="18" height="26" fill="#fdfcf2"/>';
+    $('#shelves').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) {
+      x = 438 + (i % 3) * 180; y = 148 + Math.floor(i / 3) * 122;
+      s += '<g transform="rotate(' + [-2, 1.5, -1, 2, -1.5, 1][i] + ' ' + (x + 68) + ' ' + (y + 46) + ')"><rect x="' + x + '" y="' + y + '" width="136" height="' + (i === 3 ? 106 : 88) + '" fill="#fdfdf8"/><rect x="' + x + '" y="' + y + '" width="136" height="13" fill="' + COL[i] + '"/>' +
+        (i === 2 ? '' : '<rect x="' + (x + 8) + '" y="' + (y + 24) + '" width="120" height="' + (i === 3 ? 52 : i % 3 === 1 ? 30 : 16) + '" fill="#d9d6ca"/>') +
+        '<path d="M' + (x + 8) + ' ' + (y + (i === 3 ? 88 : 72)) + 'h96M' + (x + 8) + ' ' + (y + (i === 3 ? 96 : 80)) + 'h60" stroke="#8f8a7c" stroke-width="3"/>' +
+        (i === 2 ? '<path d="M' + (x + 8) + ' ' + (y + 30) + 'h118M' + (x + 8) + ' ' + (y + 42) + 'h110M' + (x + 8) + ' ' + (y + 54) + 'h116" stroke="#8f8a7c" stroke-width="3"/>' : '') +
+        '<circle cx="' + (x + 68) + '" cy="' + (y + 2) + '" r="6" fill="#d8432a"/></g>';
+    }
+    s += '<rect x="604" y="112" width="160" height="24" fill="none" stroke="#fdfdf8" stroke-width="2" stroke-dasharray="6 5" opacity=".8"/><circle cx="684" cy="140" r="5" fill="#e9c46a"/>';
+    $('#minis').innerHTML = s;
+    $('#strings').innerHTML = '<g fill="none" stroke="#c9302a" stroke-width="3.500" stroke-linecap="round"><path d="M506 150q90 60 370 122"/><path d="M686 150q10 -6 -2 -10"/><path d="M866 150q-200 40 -360 0"/><path d="M506 272q60 -90 178 -132"/><path d="M686 272q10 -60 0 -122"/><path d="M866 272q-90 30 -180 0"/></g>';
+    s = '';
+    for (i = 0; i < 7; i++) s += '<text x="1022" y="' + (228 + i * 30) + '" class="cK" font-size="19" font-weight="700" fill="#d8432a">' + (i + 1) + '</text><path d="M1044 ' + (222 + i * 30) + 'h' + [136, 128, 140, 132, 120, 138, 96][i] + 'M1044 ' + (232 + i * 30) + 'h' + [90, 60, 110, 70, 0, 100, 0][i] + '" stroke="#1a2a52" stroke-width="2.600" stroke-linecap="round"/>';
+    $('#rlines').innerHTML = s;
+    $('#clock').innerHTML = RUM.clock(1104, 82, 36, 3, 20);
+    s = '';
+    for (i = 0; i < 90; i++) s += '<circle cx="' + (-300 + (i * 233) % 2200) + '" cy="' + (640 + (i * 97) % 250) + '" r="' + (1.5 + (i % 3)) + '"/>';
+    $('#specks').innerHTML = s;
+    $('#theo').innerHTML = RUM.who('theo', { extra: '<path d="M-10 -234L8 -150M10 -234L-2 -150" stroke="#d8432a" stroke-width="3"/><rect x="-10" y="-152" width="22" height="30" rx="2" fill="#fdfcf7"/><rect x="30" y="-140" width="20" height="36" rx="4" fill="#15181c" transform="rotate(14 40 -122)"/><rect x="33" y="-136" width="14" height="26" fill="#bfe1ff" transform="rotate(14 40 -122)"/>' });
+    $('#priya').innerHTML = RUM.who('priya', { smile: 1, extra: '<rect x="-52" y="-160" width="24" height="54" rx="5" fill="#7d8a94"/><rect x="-52" y="-166" width="24" height="12" rx="3" fill="#2a2c33"/><path d="M-46 -144h12M-46 -134h12" stroke="#5c666e" stroke-width="2"/>' });
+  })();
+
+  ER.init({
+    theme: 'news', story: 'rumour', storyTitle: 'Says Who?', id: 'newsroom', no: 'I', title: 'The News Room',
+    go: 'Shut the door',
+    intro: [
+      'Friday, twenty past three. The last bell went five minutes ago, and this is your first afternoon on <i>The Wick</i>, the news site of Petherwick School. Its office is Room E7a. E7a used to be a stationery cupboard, and it has not got any bigger.',
+      'Every Friday at four o&rsquo;clock the site sends its bulletin to every family in the school. Today somebody has got in first. Since eight this morning one picture has been going from phone to phone: SCHOOL TO CLOSE IN JULY.',
+      '&ldquo;You&rsquo;re the trainee,&rdquo; says the editor, without looking up. &ldquo;Trainees fetch, carry and doubt. Shut the door. We have forty minutes.&rdquo;'
+    ],
+    exit: {"next":"corridor","w":{"ee9c4961":"6859da16"}}, tags: {"la":["f9d9c694"],"lb":["81b24def"],"lc":["c81fdd9a"],"ld":["098608b2"],"le":["fdaba52a"],"lf":["e99aa582"]},
+    sound: ['desk', { bpm: 100, drop: ['mel'] }],      /* a small room with a clock in it and a great deal to read: the pulse, and no tune */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('a-file') || null; told = ER.flag('a-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('a-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.theo && told.priya && told.copies; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#cork').classList.toggle('ready', !!(ready() && !nextFile));
+    $('#scene').classList.toggle('traced', !!nextFile);
+    ER.pips((told.theo ? 1 : 0) + (told.priya ? 1 : 0) + (told.copies ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The wall is done. Follow Priya out into the Year 9 corridor.']];
+    if (wall && wall.isOpen()) return ['wall', [
+      'Click a printout to see it properly on the right. Then pull a thread from the red pin of a copy to the copy it was made from. Start with the copy that says, in a grey line of its own, what it is an answer to.',
+      'Now compare the pictures. Which copy shows the most of the page? Could it have been cut from any other copy on this wall? If not, its thread goes to the empty card at the top: a copy we have not got. The earliest copy of all needs the same thought.',
+      'Then follow the marks. A blue ring is whole on one copy and cut in half on two others. Red letters are on one copy only. The message with no picture has a word in it that one person added. And look at the very bottom edge of A.'
+    ]];
+    if (!told.theo || !told.priya) return ['talk', [
+      'Nobody has told you what is going on yet. Theo is the one standing up, on the left. Priya is the one with the flask.',
+      'Hear Theo first, and then Priya. She will tell you where to start.'
+    ]];
+    if (!told.copies) return ['style', [
+      'Priya told you to read a page of the style book before you touch the wall. It is the red file lying on the desk.',
+      'The style book is between the big screen and the ball of red wool. Page 6 says what can happen to a story each time it is copied, and you will need all of it at the wall.'
+    ]];
+    return ['cork', [
+      'Six printouts are pinned to the cork wall above the desk. Click the wall.',
+      'Mr Corrigan&rsquo;s rules are on the wall to the right of it, if you have not read them. Rule 1 is the one for now.'
+    ]];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('Six copies, and red wool between them. Priya is holding the door open.'); return; }
+    if (told.in) { busy = false; ER.say('Room E7a, twenty past three. The bulletin goes at four.'); return; }
+    tell('in');
+    ER.narrate([
+      'E7a. Two old computers, a kettle, and shelves that still say GLUE STICKS. Over the door, somebody has painted a rule in capital letters.',
+      'The editor is Priya Varma, of Year 11. She has a flask of tea, and the face of somebody who has been told the same thing nine times today.',
+      'Her deputy, Theo Easton, is standing up, because he cannot sit down. He has printed six messages from Common Room, the school&rsquo;s own message system, and pinned them to the cork wall. And he has already written the top story.',
+      'It is on the big screen now, at the top of this afternoon&rsquo;s bulletin: IT&rsquo;S OFFICIAL: PETHERWICK TO CLOSE IN JULY. At 16.00 the bulletin sends itself, whether anybody is ready or not.',
+      '&ldquo;Talk to Theo,&rdquo; says Priya. &ldquo;Then talk to me. Then read.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#theo').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Theo Easton', role: 'Year 10 · deputy editor, news', face: window.FACE('theo'),
+      lines: [
+        { note: 'He talks in headlines, and quite often in capital letters.', a: '&ldquo;It&rsquo;s the biggest story we have EVER had. And we&rsquo;ve got it first. Well. We&rsquo;ve got it about fortieth. But we&rsquo;re the first to put it in the bulletin.&rdquo;' },
+        { q: 'What is the story?', a: 'The school is closing in July. It&rsquo;s official. The council has decided. Look at the wall: I&rsquo;ve got it from Year 9, from Year 10, from Year 11 and from a parent. Six printouts. That is six sources.' },
+        { q: 'Who told you?', a: 'Everybody! It&rsquo;s been in the Year 9 room on Common Room since eight o&rsquo;clock this morning. By break it was in the Year 10 room. Then at half past two my dad sent me the one from the parents. If the PARENTS know, it&rsquo;s true.' },
+        { q: 'What does the picture show?', a: 'A headline. Out of a newspaper. SCHOOL TO CLOSE IN JULY. You can&rsquo;t argue with a newspaper.</p><p class="q">Which newspaper?</p><p>&hellip;A newspaper. It&rsquo;s printed. It&rsquo;s got columns.' },
+        { note: 'Priya makes a small noise into her tea.', a: '&ldquo;My story is ready. It&rsquo;s at the top of the bulletin now. At four o&rsquo;clock eleven hundred families read it.&rdquo; He looks at the clock, and then at Priya. &ldquo;I only need somebody to say yes.&rdquo;' }
+      ],
+      clue: { id: 'theo', title: 'Theo Easton: the biggest story ever', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('theo')) { paint(); RUM.terms(['rumour', 'bulletin']); } }
+    });
+  });
+  $('#priya').addEventListener('click', function () {
+    if (busy) return;
+    if (!told.theo) { ER.say('&ldquo;Theo first,&rdquo; says Priya. &ldquo;He will burst if he has to wait. And you ought to hear it the way the whole school has heard it.&rdquo;'); return; }
+    ER.talk({
+      who: 'Priya Varma', role: 'Year 11 · editor of The Wick', face: window.FACE('priya'),
+      lines: [
+        { note: 'She screws the top back on the flask before she answers.', a: '&ldquo;Nobody is saying yes. I&rsquo;m not saying no, either. I don&rsquo;t know whether it&rsquo;s true, and nor does he. That is the whole problem, and it has forty minutes to stop being one.&rdquo;' },
+        { q: 'Can&rsquo;t we ask Mr Corrigan?', a: 'Mr Corrigan runs this place. He was a sub-editor on a real newspaper for nineteen years before he was a teacher, and he painted that rule over the door. At this moment he is outside in a yellow jacket, counting Year 7s on to buses. He comes in at ten to four, he reads whatever we have, and he signs nothing that has a hole in it.' },
+        { q: 'So where do we start?', a: 'Rule 1 on his wall. Where did it come from? Theo has six copies of one picture. Somebody made the first one. I want to know which of these six is nearest to it, and who sent it.' },
+        { a: 'There is a page about copies in the style book: the red file on the desk. Read it. Then go to the wall. There&rsquo;s a ball of red wool there, and I want a thread from every copy to the copy it was made from.' },
+        { q: 'And Theo&rsquo;s story?', a: 'It stays where it is until we know. If it&rsquo;s true, it goes out at four with his name on it. If it isn&rsquo;t&hellip;</p><p>She looks at the screen. &ldquo;Then at four o&rsquo;clock we had better have something truer to put there. An empty box at the top of the page says &lsquo;we don&rsquo;t know&rsquo; to eleven hundred families. They can get that from the rumour, for nothing.&rdquo;' }
+      ],
+      clue: { id: 'priya', title: 'Priya Varma: forty minutes', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('priya')) { paint(); RUM.terms(['editor', 'sub-editor', 'deadline']); ER.say('The style book is the red file on the desk. The wall is above it.'); } }
+    });
+  });
+
+  /* ---------- papers ---------- */
+  var RULES = '<h4>THE DESK <small>house rules. D.C.</small></h4>' +
+    '<p><b>1</b>Where did it come from? Follow it back to the first copy.</p>' +
+    '<p><b>2</b>Who says so, and how do they know? First-hand: they were there. Second-hand: somebody told them.</p>' +
+    '<p><b>3</b>Fact, opinion, or not yet known? Only facts go on the page as facts.</p>' +
+    '<p><b>4</b>Ask the six questions. A question with no answer is a hole. Never fill a hole with a guess.</p>' +
+    '<p><b>5</b>Print only what you know, and say who told you.</p>' +
+    '<p><b>6</b>When we are wrong, we say so: in the same place, and just as loudly.</p>' +
+    '<p><b>7</b>Tea goes on the shelf. Not on the keyboard.</p>' +
+    '<p class="pv">(The long word for all this is &ldquo;verify&rdquo;. He says the short one is better: check.)</p>';
+  $('#rules').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: RULES, cls: 'rules', clue: { id: 'rules', title: 'The Desk: house rules', kind: 'On the wall' }, done: function () {
+      RUM.terms(['source', 'first-hand', 'second-hand', 'verify']);
+      if (tell('rules')) ER.say('Seven rules, in blue marker. The first six are about the news. The seventh is about Theo.');
+    } });
+  });
+  var DIA = '<svg viewBox="0 0 250 304"><g font-family="Kalam,cursive" font-size="13.500" fill="#1a2a52">' +
+    '<rect x="8" y="8" width="98" height="92" fill="#fff" stroke="#22201b" stroke-width="2"/><rect x="16" y="16" width="82" height="12" fill="#22201b"/><path d="M16 38h82M16 48h82" stroke="#8a8170" stroke-width="3"/><rect x="16" y="58" width="82" height="24" fill="#d9d2bd"/><text x="57" y="75" text-anchor="middle" font-weight="700" font-size="13" fill="#22201b">BIG NEWS</text><path d="M16 90h56" stroke="#8a8170" stroke-width="3"/>' +
+    '<text x="114" y="48" font-weight="700">the first copy:</text><text x="114" y="65">all of it</text>' +
+    '<path d="M57 106v26M49 124l8 10 8 -10" fill="none" stroke="#d8432a" stroke-width="3"/><text x="72" y="126" fill="#d8432a" font-weight="700">CUT</text>' +
+    '<rect x="8" y="140" width="98" height="34" fill="#fff" stroke="#22201b" stroke-width="2"/><rect x="16" y="145" width="82" height="24" fill="#d9d2bd"/><text x="57" y="162" text-anchor="middle" font-weight="700" font-size="13" fill="#22201b">BIG NEWS</text>' +
+    '<text x="114" y="153" font-weight="700">less than</text><text x="114" y="170">before</text>' +
+    '<path d="M57 180v26M49 198l8 10 8 -10" fill="none" stroke="#d8432a" stroke-width="3"/><text x="72" y="200" fill="#d8432a" font-weight="700">ADDED</text>' +
+    '<rect x="8" y="214" width="98" height="34" fill="#fff" stroke="#22201b" stroke-width="2"/><rect x="16" y="219" width="82" height="24" fill="#d9d2bd"/><text x="52" y="236" text-anchor="middle" font-weight="700" font-size="13" fill="#22201b">BIG NEWS</text><text x="86" y="241" font-size="26" font-weight="700" fill="#2456c9" transform="rotate(12 86 232)">!!</text>' +
+    '<text x="114" y="227" font-weight="700">what is added</text><text x="114" y="244">stays on</text>' +
+    '<path d="M226 262V104M218 114l8 -10 8 10" fill="none" stroke="#8a8170" stroke-width="3"/><path d="M212 196l28 -22M212 174l28 22" stroke="#d8432a" stroke-width="4"/><text x="125" y="288" text-anchor="middle" font-weight="700" fill="#d8432a">never back the other way</text></g></svg>';
+  var STYLE = '<h4>The Wick &middot; style book</h4><h3><i>6</i>Where did it come from?</h3><div class="two"><div>' +
+    '<p>By the time a story reaches you, it has been copied. Every copy can lose something, and every copy can gain something.</p>' +
+    '<p><b>CUT.</b> People crop a picture to the part they like. So a copy can show less than the copy it was made from. It can never show more.</p>' +
+    '<p><b>ADDED.</b> People write on top: a word, a ring, a joke. What has been added stays on in every later copy, unless it is cut off too.</p>' +
+    '<p><b>THE TIME</b> on a message is the time when that copy was sent. It is not the time when the story began.</p>' +
+    '<p>So put two copies side by side and ask: could this one have been made from that one? Follow the chain back as far as it will go. Then find the sender and ask the only question that matters: <i>where did you get it?</i></p>' +
+    '<p class="rule">Six copies of one message are one source. They are not six.</p></div><div class="dia">' + DIA + '</div></div>' +
+    '<p class="pg">On Common Room a screenshot is called a &ldquo;snip&rdquo;. It is still a copy. &middot; page 6</p>';
+  $('#style').addEventListener('click', function (e) {
+    if (busy) return;
+    if (!told.priya) { ER.wordAt(e.clientX, e.clientY, 'style book'); ER.say('A red file with STYLE BOOK on the front. Priya has her hand flat on it. &ldquo;In a minute,&rdquo; she says. &ldquo;Hear what the story is first.&rdquo;'); return; }
+    ER.read({ html: STYLE, cls: 'stylebook', clue: { id: 'copies', title: 'Style book, page 6: Where did it come from?', kind: 'The style book' }, done: function () {
+      RUM.terms(['crop', 'screenshot', 'source']);
+      if (tell('copies')) { paint(); ER.say('Cut, added, and the time. Now the wall.'); }
+    } });
+  });
+  var DRAFT = '<div class="bar"><span>THE FRIDAY WICK &middot; FRIDAY 9 OCTOBER</span><b>SENDS AT 16.00</b></div>' +
+    '<div class="mast">THE W<i>I</i>CK<small>NEWS FROM PETHERWICK SCHOOL, WRITTEN BY ITS PUPILS</small></div>' +
+    '<div class="slot" data-tag="TOP STORY &middot; DRAFT &middot; T.E."><h2>It&rsquo;s official: Petherwick to close in July</h2>' +
+    '<p>Petherwick School will close for ever in July, <i>The Wick</i> can reveal. The shock decision was taken by the council, and it is final. Pupils are said to be heartbroken. It is a black day for the whole village.</p><p>More follows.</p></div>' +
+    '<p class="rest"><b>ALSO IN THIS BULLETIN</b> &middot; Chess club beats staff, again &middot; Lost: one left trainer, size 6 &middot; Next week&rsquo;s menu &middot; Petherwick 100: old photographs wanted</p>';
+  $('#screen').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: DRAFT, cls: 'screen', clue: { id: 'draft', title: 'Theo’s draft, at the top of the bulletin', kind: 'On the big screen' }, done: function () {
+      if (tell('draft')) ER.say('Theo&rsquo;s story. It has a great many words in it, and nobody on this desk has checked one of them.');
+    } });
+  });
+
+  /* ---------- things in the room ---------- */
+  RUM.thing('#sign', null, 'IF YOUR MOTHER SAYS SHE LOVES YOU, CHECK IT. It is an old rule from the newspapers of Chicago, and Mr Corrigan painted it there himself. Under it, in green felt pen: &ldquo;She does. We checked. P.V.&rdquo;', isBusy);
+  RUM.thing('#clock', null, function () { return nextFile ? 'Nearly half past three.' : 'Twenty past three. At four o&rsquo;clock the bulletin goes, whatever is in it.'; }, isBusy);
+  RUM.thing('#shelves', null, 'A4 LINED. GLUE STICKS. STAPLES. The labels are from the cupboard&rsquo;s first life. The shelves now hold four mugs, a dead keyboard and a box marked PENS (DO NOT).', isBusy);
+  RUM.thing('#kettle', 'kettle', 'The kettle. Rule 7 is about what happened the last time Theo carried a cup past the keyboard.', isBusy);
+  RUM.thing('#spike', 'spike', 'A spike: a steel pin on a wooden block. A story that is not good enough is pushed down on to it, and there it stays. Most of these are in Theo&rsquo;s writing.', isBusy);
+  RUM.thing('#door', null, 'The door to Room E7, Mr Corrigan&rsquo;s classroom. The other side of it still says STATIONERY.', isBusy);
+  RUM.thing('#wool', null, 'A ball of red wool. Priya says that a story is easier to follow when you can see where it goes.', isBusy);
+  RUM.thing('#pcs', null, 'The second computer has been starting up since Tuesday.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#cork').addEventListener('click', function (e) {
+    if (busy) return;
+    if (nextFile) { ER.say('Six threads, and two of them go to a copy that nobody on this desk has seen.'); return; }
+    if (!told.theo || !told.priya) { ER.say('Six printouts, pinned up in a hurry. They would mean more if somebody told you what they were. Theo is longing to.'); return; }
+    if (!told.copies) { ER.say('&ldquo;Style book first,&rdquo; says Priya. &ldquo;Page 6. The red file on the desk. Otherwise you&rsquo;ll just put them in order of time, and that is exactly how Theo got into this.&rdquo;'); return; }
+    if (!wall) wall = makeWall();
+    wall.open();
+  });
+
+  /* ---------- the wall: six copies, a ball of wool ---------- */
+  function makeWall() {
+    var G = '#2e7d4f', B = '#27457a';
+    var CARDS = {
+      a: { tab: 'YEAR 10 ROOM', col: B, who: 'Reuben K &#183; 10M', when: 'FRI 12.40', pic: { crop: 'one', ring: 1, red: 1, caught: 'Year 9 say we&#8217;re CLOSING' }, lines: ['it&#8217;s on Common Room so it&#8217;s official'] },
+      b: { tab: 'YEAR 9 ROOM', col: G, who: 'Jago L &#183; 9R', when: 'FRI 08.05', pic: { crop: 'two' }, lines: ['FINALLY.'] },
+      c: { tab: 'A PARENTS&#8217; GROUP', col: '#5a6470', out: true, who: 'A parent', when: 'FRI 14.32', re: 'sent on to Theo by his dad', lines: ['Petherwick is CLOSING in July.', 'It&#8217;s official. Something to do with', 'the roof. My daughter saw it on the', 'school&#8217;s own system. Pass it on', 'before they take it down.'] },
+      d: { tab: 'YEAR 11 ROOM', col: '#7a2f3a', who: 'Saffron D &#183; 11B', when: 'FRI 13.05', pic: { crop: 'top' }, lines: ['Has anyone seen this?? My brother&#8217;s', 'in Year 8.'] },
+      e: { tab: 'YEAR 9 ROOM', col: G, who: 'Mina S &#183; 9K', when: 'FRI 08.31', re: '&#8617; in answer to Jago L, 08.05', pic: { crop: 'two', ring: 1 }, lines: ['wait. is this real??'] },
+      f: { tab: 'YEAR 10 ROOM', col: B, who: 'Tobi A &#183; 10M', when: 'FRI 10.50', glare: 1, pic: { crop: 'one', ring: 1 }, lines: ['Year 9 say we&#8217;re CLOSING'] }
+    };
+    /* what can be seen on each copy: how much of the page (3 = most), the marks on it, the minute it was sent */
+    var SEEN = { a: { n: 'Reuben', area: 1, ring: 1, red: 1, word: 1, t: '12.40', m: 760 }, b: { n: 'Jago', area: 2, t: '08.05', m: 485 }, c: { n: 'the parent', area: 0, word: 1, t: '14.32', m: 872 },
+      d: { n: 'Saffron', area: 3, t: '13.05', m: 785 }, e: { n: 'Mina', area: 2, ring: 1, t: '08.31', m: 511 }, f: { n: 'Tobi', area: 1, ring: 1 } };
+    var ORDER = ['a', 'b', 'c', 'd', 'e', 'f'], POS = { a: [14, 100], b: [195, 100], c: [376, 100], d: [14, 340], e: [195, 340], f: [376, 340] }, SC = 0.5, PW = 85, GH = [280, 66];
+    var links = ER.flag('a-links') || {}, sel = null, wait = false, H = {}, P = {};
+    var box = ER.el('div', 'bx'), s, k;
+    s = '<svg viewBox="0 0 1000 600"><defs><pattern id="corkB" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#b98d58"/><circle cx="3" cy="4" r="1.300" fill="#8f6a3c"/><circle cx="10" cy="9" r="1.100" fill="#d2a873"/><circle cx="7" cy="1" r=".8" fill="#8f6a3c"/></pattern></defs>' +
+      '<rect width="1000" height="600" fill="#20262d"/><rect x="0" y="0" width="560" height="600" fill="url(#corkB)"/><rect x="0" y="0" width="560" height="600" fill="none" stroke="#5a4028" stroke-width="12"/>' +
+      '<g id="ghost"><rect x="172" y="16" width="216" height="40" fill="#fdfdf8" fill-opacity=".14" stroke="#fdfdf8" stroke-width="2.200" stroke-dasharray="7 5"/><text x="280" y="41" class="cF" font-size="12.500" font-weight="800" text-anchor="middle" fill="#fdfdf8" letter-spacing="1.600">A COPY WE HAVE NOT GOT</text><circle cx="280" cy="66" r="7" fill="#e9c46a" stroke="#8a6a1a" stroke-width="2"/></g>';
+    ORDER.forEach(function (c) {
+      var p = RUM.post(CARDS[c]); H[c] = p.h; P[c] = p.svg;
+      s += '<g class="card" data-c="' + c + '" transform="translate(' + POS[c][0] + ' ' + POS[c][1] + ') scale(' + SC + ')"><rect x="5" y="7" width="340" height="' + p.h.toFixed(1) + '" fill="#000" opacity=".3"/>' + p.svg +
+        '<rect class="fr" x="-3" y="-3" width="346" height="' + (p.h + 6).toFixed(1) + '"/><circle cx="12" cy="-2" r="27" fill="#e9c46a" stroke="#16202c" stroke-width="3"/><text x="12" y="11" class="cF" font-size="36" font-weight="900" text-anchor="middle" fill="#16202c">' + c.toUpperCase() + '</text></g>';
+    });
+    s += '<g id="threads"></g><path id="tmp" d="" fill="none" stroke="#e0503a" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 7"/>';
+    ORDER.forEach(function (c) {
+      s += '<g class="pin" data-c="' + c + '" transform="translate(' + (POS[c][0] + PW) + ' ' + (POS[c][1] - 3) + ')"><circle r="22" fill="#000" opacity="0"/><circle class="hd" r="10" fill="#d8432a" stroke="#7d1f1f" stroke-width="2"/><circle cx="-3" cy="-3" r="3" fill="#fff" opacity=".6"/></g>';
+    });
+    s += '<g id="detail" transform="translate(572 20) scale(1.240)"></g><text id="dnote" x="782" y="584" class="cM" font-size="12.500" text-anchor="middle" fill="#a9b5c0">Click a printout to look at it here.</text></svg>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="n-go">Show Priya</button></div>';
+    box.innerHTML = s;
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.pmsg'), tmp = box.querySelector('#tmp'), thr = box.querySelector('#threads');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function flash(n) { n.classList.add('bad'); setTimeout(function () { n.classList.remove('bad'); }, 900); }
+    function pinAt(c) { return c === 'g' ? GH : [POS[c][0] + PW, POS[c][1] - 3]; }
+    function curve(a, b) { return 'M' + a[0] + ' ' + a[1] + 'Q' + ((a[0] + b[0]) / 2).toFixed(0) + ' ' + ((a[1] + b[1]) / 2 + 34).toFixed(0) + ' ' + b[0] + ' ' + b[1]; }
+    function draw() {
+      var t = '';
+      ORDER.forEach(function (c) {
+        if (!links[c]) return;
+        var a = pinAt(c), b = pinAt(links[c]), mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2 + 34, ang = Math.atan2(b[1] - my, b[0] - mx) * 180 / Math.PI;
+        t += '<path d="' + curve(a, b) + '" fill="none" stroke="#7d1f1f" stroke-width="6" stroke-linecap="round" opacity=".5"/><path d="' + curve(a, b) + '" fill="none" stroke="#e0503a" stroke-width="3.600" stroke-linecap="round"/>' +
+          '<path d="M-22 -8L-6 0L-22 8z" fill="#fdfdf8" stroke="#7d1f1f" stroke-width="2" transform="translate(' + b[0] + ' ' + b[1] + ') rotate(' + ang.toFixed(0) + ')"/>';
+      });
+      thr.innerHTML = t;
+      ER.$$('.card', svg).forEach(function (n) { n.classList.toggle('sel', n.getAttribute('data-c') === sel); });
+    }
+    function show(c) {
+      sel = c;
+      box.querySelector('#detail').innerHTML = '<rect x="6" y="8" width="340" height="' + H[c].toFixed(1) + '" fill="#000" opacity=".4"/>' + P[c] +
+        '<circle cx="330" cy="-2" r="15" fill="#e9c46a" stroke="#16202c" stroke-width="2"/><text x="330" y="5.500" class="cF" font-size="20" font-weight="900" text-anchor="middle" fill="#16202c">' + c.toUpperCase() + '</text>';
+      box.querySelector('#dnote').textContent = 'Copy ' + c.toUpperCase() + (links[c] ? ': made from ' + (links[c] === 'g' ? 'a copy we have not got' : links[c].toUpperCase()) : ': no thread yet');
+      draw();
+    }
+    function hit(p) {
+      var k, r;
+      if (p.x > 156 && p.x < 404 && p.y < 80) return 'g';
+      for (k = 0; k < ORDER.length; k++) { r = POS[ORDER[k]]; if (p.x > r[0] - 6 && p.x < r[0] + 176 && p.y > r[1] - 16 && p.y < r[1] + H[ORDER[k]] * SC + 8) return ORDER[k]; }
+      return null;
+    }
+    ER.$$('.card', svg).forEach(function (n) { n.addEventListener('click', function () { if (!wait) { show(n.getAttribute('data-c')); ER.sfx.paper(); } }); });
+    ER.$$('.pin', svg).forEach(function (n) {
+      var c = n.getAttribute('data-c');
+      ER.drag(n, {
+        start: function () { if (wait || nextFile) return false; },
+        move: function (e, moved) { if (!moved) return; var p = ER.pt(svg, e); tmp.setAttribute('d', curve(pinAt(c), [p.x.toFixed(0), p.y.toFixed(0)].map(Number))); },
+        end: function (e, moved) {
+          tmp.setAttribute('d', '');
+          if (!moved) { show(c); return; }
+          var p = ER.pt(svg, e), t = hit(p);
+          if (t && t !== c) { links[c] = t; RUM.sfx.pin(); msg('A thread from <b>' + c.toUpperCase() + '</b> to ' + (t === 'g' ? 'the empty card: <b>a copy we have not got</b>.' : '<b>' + t.toUpperCase() + '</b>: ' + c.toUpperCase() + ' was made from ' + t.toUpperCase() + '.')); }
+          else if (links[c]) { delete links[c]; RUM.sfx.wool(); msg('The thread from <b>' + c.toUpperCase() + '</b> comes off.'); }
+          ER.flag('a-links', links); show(c);
+        }
+      });
+    });
+    /* why a thread cannot be right: from what can be seen on the two copies, and from nothing else */
+    function why(c, p) {
+      var C = c.toUpperCase(), Pp = p.toUpperCase(), a = SEEN[c], b = SEEN[p];
+      if (p === 'g') return { e: 'Read the grey line at the top of E again. The system put it there by itself, and it names another copy on this wall.',
+        f: 'Is there really nothing on this wall that F could have been cut from? Look at the blue line on it.',
+        a: 'A has the same piece of the page as another copy on this wall, cut in the very same place. Somebody was there before Reuben.',
+        c: 'The parent did not get that from nowhere. Read it again: one word in it was put there by one person on this wall.' }[c];
+      if (!b.area) return 'C has no picture in it at all. Nobody can cut a picture out of words.';
+      if (!a.area) return 'C says &ldquo;It&rsquo;s official&rdquo;. ' + Pp + ' does not say that anywhere. A word that has been added stays on in later copies. So where did C get it?';
+      if (b.area < a.area) return 'Look how much of the page each one shows. ' + Pp + ' shows less of it than ' + C + ' does. A copy can lose a piece of the picture. It can never grow one back.';
+      if (b.red && !a.red) return Pp + ' has red letters across it. ' + C + ' has not. Nobody rubs a mark out of a picture: what is added stays. So ' + C + ' was not made from ' + Pp + '.';
+      if (b.ring && !a.ring) return Pp + ' has a blue ring drawn on it. ' + C + ' has not. Nobody rubs a mark out of a picture: what is added stays. So ' + C + ' was not made from ' + Pp + '.';
+      if (a.m && b.m && b.m > a.m) return Pp + ' was sent at ' + b.t + ', and ' + C + ' at ' + a.t + '. A copy cannot be older than the thing it was copied from.';
+      if (a.ring && !b.ring) return C + ' has a piece of a blue ring on it, cut through by the edge of the picture. A mark that is cut by the edge was there before the cut. ' + Pp + ' has no blue on it anywhere.';
+      if (c === 'a' && p === 'e') return 'By the picture alone, it could be. Now look along the very bottom edge of A&rsquo;s picture. Reuben&rsquo;s snip was a little too tall, and it caught the top of something underneath.';
+      return 'Could ' + C + ' really have been made from ' + Pp + '? Put them side by side again: the edges, the marks, the times.';
+    }
+    box.querySelector('#n-go').addEventListener('click', function () {
+      var i, c, n = 0, file;
+      if (wait || nextFile) return;
+      ORDER.forEach(function (k) { if (links[k]) n++; });
+      if (n < 6) { msg('&ldquo;Six copies,&rdquo; says Priya, &ldquo;and ' + (n ? 'only ' + ['', 'one', 'two', 'three', 'four', 'five'][n] + ' of them ' + (n === 1 ? 'has' : 'have') + ' a thread' : 'not one thread') + '. Every copy came from somewhere: from another copy on this wall, or from one that we have not got.&rdquo;'); return; }
+      for (i = 0; i < 6; i++) {
+        c = ORDER[i];
+        if (!ER.check('l' + c, links[c])) {
+          ER.sfx.no(); show(c); flash(box.querySelector('.card[data-c="' + c + '"]'));      /* not ER.shake: a transform from the style sheet would throw a drawing's group back to the corner */
+          msg('Priya puts a finger on the thread from <b>' + c.toUpperCase() + '</b>, and takes it off the wall. &ldquo;' + why(c, links[c]) + '&rdquo;');
+          delete links[c]; ER.flag('a-links', links); show(c); return;
+        }
+      }
+      file = ER.exit([ORDER.map(function (k) { return links[k]; }).join('-')], { wait: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('a-file', file);
+      RUM.mine('trail', 'The trail of copies', '<p>B, Jago, Fri 08.05: from a copy we have not got.</p><p>E, Mina, 08.31: from B. The system says so.</p><p>F, Tobi: from E. Half of Mina&rsquo;s blue ring.</p>' +
+        '<p>A, Reuben, 12.40: from F. His snip caught Tobi&rsquo;s words. He added IT&rsquo;S OFFICIAL.</p><p>C, a parent, 14.32: from A. The word &ldquo;official&rdquo;.</p>' +
+        '<p>D, Saffron, 13.05: from a copy we have not got. Hers shows more of the page than any other.</p><p>Six copies. One source. Not met yet.</p>', true);
+      msg('Priya follows every thread with one finger, from the newest copy back to the oldest. &ldquo;Yes,&rdquo; she says. &ldquo;That is how it travelled. Now look where it stops.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'Six copies, six threads. Four of them tie one copy to another. The other two go to the empty card at the top of the wall.',
+          '&ldquo;Two people who have never spoken to each other,&rdquo; says Priya. &ldquo;Jago in Year 9, at five past eight. Saffron in Year 11, five hours later, with more of the page than he had. Neither made it. Each of them was sent it by somebody else.&rdquo;',
+          'Theo is counting his printouts. &ldquo;So it isn&rsquo;t six sources.&rdquo;</p><p>&ldquo;It&rsquo;s one,&rdquo; says Priya. &ldquo;And we haven&rsquo;t met it yet.&rdquo;',
+          '&ldquo;Saffron says her brother is in Year 8. Jago has a sister in Year 8 as well: she is in the choir, and she never stops. And the bell has gone, so Jago will be at his locker.&rdquo;',
+          'She takes a card on a red ribbon off its hook and hangs it round your neck. THE WICK: TRAINEE. &ldquo;Year 9 corridor. Theo, bring your notebook. Try to write down what people say, and not what you wish they had said.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 3000);
+    });
+    show('a'); sel = null; draw();
+    box.querySelector('#detail').innerHTML = '';
+    box.querySelector('#dnote').textContent = 'Click a printout to look at it here.';
+    k = 0; ORDER.forEach(function (c) { if (links[c]) k++; });
+    msg(k ? 'The wall, with ' + k + (k === 1 ? ' thread' : ' threads') + ' on it so far. Pull a thread from the red pin of a copy to the copy it was made from.' :
+      'Six printouts, in the order that Theo found them, which is no order at all. Click one to look at it properly. Then pull a thread from its red pin to the copy it was made from.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

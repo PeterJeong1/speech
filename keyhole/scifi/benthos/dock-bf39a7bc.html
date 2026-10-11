@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Wet Dock · Word for Word</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-scifi.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="benthos.css">
+<style>
+  body{--bg:#07171a;--accent:#6fe3da;--font-display:'Saira Stencil One',sans-serif;--font-ui:'Share Tech Mono',monospace;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(5,18,21,.96);--tc-ink:#e6f3f1;--cap-bg:rgba(5,18,21,.94);--cap-ink:#eef7f5;--panel:#0d2226;--face-bg:#12303a;--q-ink:#b6f1ea;--fade:#020a0c;--hud-bg:rgba(5,18,21,.82)}
+  #water{transform:scaleY(0);transform-origin:800px 620px;transition:transform 2.6s ease-in-out}
+  #scene.flood #water{transform:scaleY(1)}
+  #odoorD{transition:transform 1.4s ease-in-out}
+  #scene.oopen #odoorD{transform:translateX(190px)}
+  #vessel{opacity:0;transform:translate(520px,-90px) scale(.5);transform-origin:730px 440px;transition:transform 3.4s ease-in-out,opacity .8s}
+  #scene.in #vessel{opacity:1;transform:none;pointer-events:auto}
+  #vessel,#halvG{pointer-events:none}
+  #limpetG{transition:transform 2.6s ease-in-out}
+  #scene.home #limpetG{transform:translate(-334px,66px)}
+  #inside{opacity:.5;transition:opacity .8s}
+  #scene.plug #inside{opacity:1}
+  #scene.out #inside{opacity:0}
+  #clawL,#clawR{transition:transform .7s;transform-box:fill-box}
+  #clawL{transform-origin:100% 0}#clawR{transform-origin:0 0}
+  #scene.free #clawL{transform:rotate(24deg)}#scene.free #clawR{transform:rotate(-24deg)}
+  #hatch{transition:transform 1s;transform-box:fill-box;transform-origin:0 100%}
+  #scene.out #hatch{transform:rotate(-70deg)}
+  #halvG{opacity:0;transition:opacity 1.6s}
+  #scene.out #halvG{opacity:1}
+  #plug{opacity:0;transition:opacity .6s}
+  #scene.plug #plug{opacity:1}
+  #scene.plug #coil{opacity:.25}
+  #lemLamp{opacity:0}#scene.plug #lemLamp{opacity:1}
+  #rackLamp{fill:#7a2418}#scene.home #rackLamp{fill:#7dffb0}
+  .wl{animation:wl 3.2s steps(3) infinite}
+  @keyframes wl{50%{opacity:.82}}
+  .dripd{animation:dripd 1.9s ease-in infinite;opacity:0}
+  #scene.in.dry .dripd{opacity:1}
+  .dripd:nth-child(2n){animation-delay:-.8s}
+  @keyframes dripd{0%{transform:translateY(0)}80%,100%{transform:translateY(110px)}}
+  #pingS{opacity:0}#pingS.on{animation:pingS 4s ease-out forwards}
+  @keyframes pingS{0%{opacity:0}10%{opacity:1}80%{opacity:1}100%{opacity:0}}
+  #panel.next #panelTop,#cable.next #coil{animation:bnudge 1.7s ease-in-out infinite}
+  #scene.quick *{transition-duration:.01s!important}
+
+  /* the dock panel */
+  .dk{display:grid;grid-template-columns:minmax(0,560px) 440px;gap:16px;width:min(1040px,96vw);align-items:start}
+  .dk-mimic{background:#081a1e;border:1px solid #2a5f66;border-radius:8px;padding:6px;margin-top:8px}
+  .dk-mimic svg{display:block;width:100%;height:auto}
+  .dk-side h6{margin:0 0 8px;font-family:'Saira Stencil One',sans-serif;font-weight:normal;font-size:19px;letter-spacing:.06em;color:#6fe3da}
+  .dk-row{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 9px;padding:9px 11px;border:1px solid #2a5f66;border-radius:6px;background:rgba(0,0,0,.28);font-family:'Share Tech Mono',monospace;font-size:14px;color:#cfe9e6}
+  .dk-row .btn{padding:8px 13px;font-size:13px}
+  .dk-row output{min-width:54px;padding:3px 6px;text-align:center;background:#0c1218;border:1px solid #5a6d78;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:20px;color:#ffe9b8}
+  .dk-row .st2{min-width:30px;height:30px;padding:0 4px;border:1px solid #5a6d78;border-radius:4px;background:#1c2a33;font-family:'Share Tech Mono',monospace;font-size:12.5px;color:#e2ecee}
+  .dk-row .st2:hover{border-color:#6fe3da;color:#6fe3da}
+  .dk-scr{margin:0 0 8px;padding:8px 12px;min-height:44px;background:#04110c;border:1px solid #1f6a48;border-radius:6px;font-family:'Share Tech Mono',monospace;font-size:14.5px;line-height:1.35;color:#8df0b4}
+  .dk-scr.x{color:#ffb84a}
+  .dk .pmsg{min-height:98px;font-size:16.5px}
+  .dT{font-family:'Share Tech Mono',monospace;font-size:11px;fill:#9fc7c9;text-anchor:middle}
+  #dm-ves{transition:transform 3s ease-in-out}
+  #dm-water{transition:y 2.2s,height 2.2s}
+  @media (max-width:1000px){.dk{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="dkWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f4a4d"/><stop offset=".7" stop-color="#2f6a6a"/><stop offset="1" stop-color="#1a3d40"/></linearGradient>
+  <linearGradient id="dkWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fd0c8" stop-opacity=".5"/><stop offset="1" stop-color="#0f5a66" stop-opacity=".82"/></linearGradient>
+  <radialGradient id="lemG" cx="38%" cy="30%" r="80%"><stop offset="0" stop-color="#fff0a0"/><stop offset=".5" stop-color="#e8c22c"/><stop offset="1" stop-color="#8a6f10"/></radialGradient>
+  <radialGradient id="workG"><stop offset="0" stop-color="#f4fffb" stop-opacity=".5"/><stop offset=".5" stop-color="#bff5ea" stop-opacity=".12"/><stop offset="1" stop-color="#bff5ea" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="44%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".64" stop-color="#020a0c" stop-opacity=".25"/><stop offset="1" stop-color="#020a0c" stop-opacity=".9"/></radialGradient>
+  <clipPath id="winD"><rect x="80" y="110" width="1440" height="510"/></clipPath>
+  <clipPath id="lemWin"><circle cx="730" cy="436" r="42"/></clipPath>
+</defs>
+
+<rect x="-1000" y="-600" width="3600" height="2100" fill="#0b2124"/>
+<!-- the dock, through the long window of the gallery -->
+<g clip-path="url(#winD)">
+  <rect x="80" y="110" width="1440" height="510" fill="url(#dkWall)"/>
+  <g id="dribs" stroke="#173a3d" stroke-width="10" opacity=".7"></g>
+  <path d="M80 566H1520V620H80Z" fill="#12302f"/><path d="M80 566H1520" stroke="#0c2224" stroke-width="5"/>
+  <g class="wl"><rect x="330" y="118" width="300" height="14" rx="7" fill="#f4fffb"/><rect x="930" y="118" width="300" height="14" rx="7" fill="#f4fffb"/></g>
+  <circle cx="730" cy="330" r="520" fill="url(#workG)" pointer-events="none"/>
+  <!-- the outer door -->
+  <g id="odoor" class="hot"><circle cx="1280" cy="350" r="166" fill="#0c2224"/><circle cx="1280" cy="350" r="150" fill="#020a0c"/>
+    <g id="odoorD"><circle cx="1280" cy="350" r="150" fill="#3d7f7c"/><circle cx="1280" cy="350" r="150" fill="none" stroke="#f2c230" stroke-width="10"/><g id="obolts" fill="#173a3d"></g>
+      <circle cx="1280" cy="350" r="46" fill="none" stroke="#e9eef0" stroke-width="10"/><path d="M1234 350h92M1280 304v92" stroke="#e9eef0" stroke-width="8"/><text x="1280" y="462" text-anchor="middle" class="st" font-size="24" fill="#f2c230">OUTER DOOR</text></g></g>
+  <!-- the winch, Limpet's rack, the service cable -->
+  <g id="winch" class="hot"><rect x="150" y="470" width="150" height="96" fill="#173a3d"/><circle cx="225" cy="470" r="62" fill="#f2c230"/><circle cx="225" cy="470" r="44" fill="#9aa7ad"/><g stroke="#5a6d78" stroke-width="4"><path d="M190 446h70M184 462h82M184 478h82M190 494h70"/></g><circle cx="225" cy="470" r="12" fill="#16222b"/></g>
+  <g id="rack" class="hot"><path d="M330 250h130v20H350v60h-20z" fill="#f2c230"/><path d="M330 250h130" stroke="#fff" stroke-width="3" opacity=".3"/><text x="395" y="240" text-anchor="middle" class="st" font-size="20" fill="#f2c230">ROV-2</text><circle id="rackLamp" cx="342" cy="346" r="7"/></g>
+  <g id="cable" class="hot"><rect x="946" y="166" width="162" height="176" fill="#000" opacity="0"/><rect x="952" y="196" width="150" height="30" fill="#173a3d"/><text x="1027" y="186" text-anchor="middle" class="mono" font-size="14" fill="#cfe9e6">SERVICE CABLE</text><text x="1027" y="217" text-anchor="middle" class="mono" font-size="12" fill="#9fc7c9">POWER + TALK</text>
+    <g id="coil" fill="none" stroke="#f2c230" stroke-width="9"><ellipse cx="1027" cy="280" rx="44" ry="50"/><ellipse cx="1027" cy="284" rx="30" ry="36"/></g>
+    <path id="plug" d="M1027 330Q1000 470 836 470" stroke="#f2c230" stroke-width="8" fill="none" stroke-linecap="round"/></g>
+  <!-- the cradle, and what the winch brought home -->
+  <g id="cradle" class="hot"><path d="M600 566l40-70h20l-30 70zM860 566l-40-70h-20l30 70z" fill="#f2c230"/><rect x="580" y="556" width="300" height="14" fill="#c99a14"/></g>
+  <g id="vessel" class="hot">
+    <circle cx="730" cy="440" r="112" fill="url(#lemG)"/><path d="M640 388q24-52 78-60" stroke="#fff" stroke-width="8" fill="none" opacity=".3" stroke-linecap="round"/>
+    <text x="730" y="524" text-anchor="middle" class="st" font-size="19" fill="#16130a">DSV 1</text>
+    <circle cx="730" cy="436" r="52" fill="#2a3b46"/><circle cx="730" cy="436" r="44" fill="#3a2a1c"/><circle id="lemLamp" cx="730" cy="436" r="44" fill="#ffd9a0"/>
+    <g id="inside" clip-path="url(#lemWin)"><use href="#ch-halv" x="686" y="392" width="88" height="114"/></g><circle cx="730" cy="436" r="44" fill="none" stroke="#0c1218" stroke-width="4"/>
+    <circle cx="836" cy="470" r="9" fill="#16222b"/><circle cx="836" cy="470" r="4" fill="#9aa7ad"/>
+    <g id="hatch"><rect x="676" y="322" width="108" height="14" rx="5" fill="#c9a41c"/><circle cx="730" cy="308" r="14" fill="none" stroke="#9aa7ad" stroke-width="7"/></g>
+    <g id="limpetG"><rect x="664" y="196" width="132" height="54" rx="14" fill="#f2c230"/><text x="730" y="232" text-anchor="middle" class="st" font-size="22" fill="#16130a">LIMPET</text>
+      <path d="M672 250v40h116v-40" stroke="#2a3b46" stroke-width="8" fill="none"/><circle cx="700" cy="266" r="8" fill="#fff4c4"/><circle cx="760" cy="266" r="8" fill="#fff4c4"/><circle cx="730" cy="266" r="11" fill="#123a4a" stroke="#5a6d78" stroke-width="2"/>
+      <path id="clawL" d="M724 288l-12 14q-4 12 12 20" stroke="#9aa7ad" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path id="clawR" d="M736 288l12 14q4 12-12 20" stroke="#7d8a90" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g fill="#bff5ea"><circle class="dripd" cx="650" cy="520" r="4"/><circle class="dripd" cx="730" cy="552" r="4"/><circle class="dripd" cx="806" cy="524" r="4"/></g>
+  </g>
+  <g id="halvG"><use href="#ch-halv" x="452" y="352" width="236" height="307"/></g>
+  <g id="pingS" pointer-events="none"><g fill="none" stroke="#7dffb0" stroke-width="4"><circle cx="352" cy="170" r="12"/><circle cx="392" cy="170" r="12"/><circle cx="432" cy="170" r="12"/></g><text x="462" y="178" class="mono" font-size="22" fill="#c9ffdf">ORDER NOT CLEAR</text></g>
+  <rect id="water" x="80" y="150" width="1440" height="470" fill="url(#dkWater)" pointer-events="none"/>
+</g>
+<rect x="64" y="94" width="1472" height="542" rx="20" fill="none" stroke="#f2c230" stroke-width="20"/><rect x="64" y="94" width="1472" height="542" rx="20" fill="none" stroke="#7d5f0a" stroke-width="3"/>
+<g id="gaugeS"><rect x="660" y="56" width="280" height="50" rx="6" fill="#0c1218" stroke="#33454f" stroke-width="3"/><text x="800" y="90" text-anchor="middle" class="mono" font-size="24" fill="#ffe9b8">DOCK GAUGE <tspan id="gS">1</tspan></text></g>
+
+<!-- the gallery: the Chief, the panel, the card, Kovacs -->
+<path d="M-1000 656H2600V1500H-1000Z" fill="#0d2528"/>
+<g id="mbatha5" class="hot"><use href="#ch-mbatha" x="90" y="610" width="250" height="325"/></g>
+<g id="kovacs5" class="hot"><use href="#ch-kovacs" x="1270" y="620" width="240" height="312"/></g>
+<g id="dcard" class="hot"><path d="M402 860l12-176h150l12 176z" fill="#fbfbf6"/><path d="M424 706h130" stroke="#a8402c" stroke-width="5"/><g stroke="#8a979d" stroke-width="3"><path d="M422 730h134M420 750h138M418 770h142M416 790h146M414 810h110"/></g><circle cx="548" cy="696" r="4" fill="#0c1218"/></g>
+<g id="panel" class="hot"><path d="M620 880l20-200h420l20 200z" fill="#1c2a33"/><g id="panelTop"><rect x="656" y="696" width="388" height="44" rx="5" fill="#f2c230"/><text x="850" y="727" text-anchor="middle" class="st" font-size="24" fill="#16130a">DOCK PANEL</text></g>
+  <g fill="#33454f"><rect x="664" y="756" width="100" height="36" rx="4"/><rect x="780" y="756" width="100" height="36" rx="4"/><rect x="896" y="756" width="140" height="36" rx="4"/><rect x="664" y="806" width="372" height="40" rx="4"/></g>
+  <g fill="#7dffb0"><circle cx="680" cy="774" r="6"/><circle cx="796" cy="774" r="6"/></g><circle cx="912" cy="774" r="6" fill="#ff6a4a"/></g>
+
+<rect x="-1000" y="-600" width="3600" height="2100" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="stampd">ALL ABOARD · 05:40</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-slips"></p><p id="d-words"></p>
+  <h6>How to give an order</h6>
+  <ol>
+    <li><b>IT</b> is the last thing you named. If you mean the hook, name the hook last.</li>
+    <li><b>THEM</b> wants things named together, with <b>AND</b>.</li>
+    <li><b>UNTIL</b> goes on, and stops when the thing comes true. <b>WHILE</b> does nothing unless the thing is true already.</li>
+    <li><b>AS SOON AS</b> waits. <b>AFTER</b> is fine. <b>BEFORE</b> is too late, if the thing has happened.</li>
+    <li><b>IF</b> acts when the thing is true. <b>UNLESS</b> acts when it is not.</li>
+    <li><b>ALL BUT ONE</b> leaves the last. If you mean another one, say which.</li>
+    <li>Orders are done in the order given. Light first; then the picture.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Write up the log</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the missions</button></div>
+  <small>Word for Word &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="benthos.js"></script>
+<script>
+(function () {
+  var $ = ER.$, sc = $('#scene'), busy = false;
+
+  (function () {
+    var s = '', i, a;
+    for (i = 0; i < 12; i++) s += '<path d="M' + (140 + i * 124) + ' 110V566"/>';
+    $('#dribs').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { a = i * Math.PI / 6; s += '<circle cx="' + (1280 + Math.cos(a) * 128).toFixed(1) + '" cy="' + (350 + Math.sin(a) * 128).toFixed(1) + '" r="7"/>'; }
+    $('#obolts').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'scifi', story: 'benthos', storyTitle: 'Word for Word', id: 'dock', no: 'V', title: 'The Wet Dock',
+    go: 'Go down to the dock',
+    intro: [
+      'A lamp before a picture: Limpet never looks ahead, so the light had to be the first order. And the picture showed what forty orders had not. Limpet was holding the Lemon on the slope, because Dr Halvorsen had told it not to let go until <i>she</i> said so. You sent it four orders. The hook was named last, so that &ldquo;it&rdquo; meant the hook. Limpet waited <i>until</i> the line was tight; and it blew air <i>until</i> the Lemon lifted, and not one bubble longer.',
+      'It is five o&rsquo;clock. The winch has brought them 420 metres across the mud, and they are hanging in the dark outside the door of the dock.',
+      'The dock is a steel room that can be full of air or full of sea. At this moment it is full of air at one atmosphere, like the rest of the laboratory: and on the other side of its outer door is the whole weight of the water.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"eq":["9b6cf2e0"],"low":["c468bf2c","17325294","99d5e818","d39770ea","4b16740b","48015849","c0c5f6b4","19011c3f","06c12073","e0d87f1a","71374cc1","17b00b3a","d804048e","be43448c","b108292e","66c8cdb9","0d68219e","bf5c1bd6","e5a2950c","a57dba58","70e35f03","4d3326c3","74615350"]},
+    sound: ['orbit', { root: 50, bpm: 50, drop: ['mel'], lead: 'keys', beds: [['drips', 0.7]], then: ['morning', { root: 50, bpm: 66 }] }],      /* a wet steel room, and three pings at the end of it; then the morning */
+    hints: hints, onBegin: begin
+  });
+
+  var step = ER.flag('d-step') || 0;
+  var D = ER.flag('d-st') || { inner: 1, gauge: 1, set: 1, eq: 0, outer: 0, vin: 0 };
+
+  var CARD = '<h4>Wet dock: to bring a vessel in</h4>' +
+    '<p><b>1</b><span>Shut the inner door before you do anything else.</span></p>' +
+    '<p><b>2</b><span>Flood the dock. Do not open the outer door until the inner door is shut and the gauge reads the same as the sea outside.</span></p>' +
+    '<p><b>3</b><span>Winch the vessel in. Do not shut the outer door until the vessel is on its cradle.</span></p>' +
+    '<p><b>4</b><span>Pump the dock out. Do not open the inner door until the outer door is shut and the gauge reads 1.</span></p>' +
+    '<small>The gauge reads the dock. It does not know what the sea outside reads. You do: watch-keeper&rsquo;s card, line 1. S. Iyer, Deputy</small>';
+
+  function hints() {
+    if (step >= 2) return null;
+    if (step === 1) return ['letgo', [
+      'Limpet will not let go for Kovacs, and it will not let go for the Chief. Read rule 9 in Kovacs&rsquo;s binder again: it is in your notebook.',
+      'Only the person who gave the order can end it, and she is inside the Lemon. Her telephone and her handset are dead, and nobody can hear a voice through that hull. What in the dock could give the Lemon power, and a voice?',
+      'There is a coil of yellow cable on the wall of the dock, marked SERVICE CABLE: POWER + TALK. Click on it.'
+    ]];
+    if (!ER.flag('d-card')) return ['look', ['The dock is worked from the grey panel under the window. The white card beside it says how to bring a vessel in. Read the card before you press anything.']];
+    return ['panel', [
+      'Do the card one line at a time, and read each line to its end. &ldquo;Do not ... until ... and ...&rdquo; means that both things must be true first.',
+      'The flood valve wants a number: the pressure of the sea outside this door. Nobody has written it down for you. But you know how deep the dock is, and in the control room you worked out a depth from a pressure. This is the same sum, the other way round.',
+      'The dock is 230 metres down. One atmosphere for every ten metres of water, and one more for the air on top of the sea. Flood until the gauge reads that number. Then the outer door, the winch, the outer door again, the pump, and last of all the inner door.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function keep() { ER.flag('d-st', D); }
+  function paint() {
+    var c = [];
+    if (D.gauge > 1) c.push('flood');
+    if (D.outer) c.push('oopen');
+    if (D.vin) c.push('in');
+    if (D.vin && D.gauge === 1 && !D.outer) c.push('dry');
+    if (step >= 2) c.push('plug', 'free', 'out', 'home');
+    sc.setAttribute('class', c.join(' '));
+    $('#gS').textContent = D.gauge;
+    $('#panel').setAttribute('class', 'hot' + (step === 0 && ER.flag('d-card') ? ' next' : ''));
+    $('#cable').setAttribute('class', 'hot' + (step === 1 ? ' next' : ''));
+    ER.pips(Math.min(step, 2), 2);
+  }
+  function begin() {
+    sc.classList.add('quick'); paint(); setTimeout(function () { sc.classList.remove('quick'); }, 400);
+    if (step >= 2) { finish(); return; }
+    if (step === 1) { ER.say('The dock. The Lemon is on her cradle, with Limpet on top of her, and the claw has not opened.'); return; }
+    if (ER.flag('d-seen')) { ER.say('The gallery over the wet dock: a long window, a grey panel and a white card.'); return; }
+    busy = true; ER.flag('d-seen', 1);
+    ER.narrate([
+      'The gallery over the wet dock. Through the long window you can see the whole of it: a winch, an empty cradle, an empty yellow rack with ROV-2 painted over it, and a round door that is holding back the sea.',
+      '&ldquo;Iyer wrote the card,&rdquo; says the Chief. &ldquo;Iyer is asleep on the Fulmar. So read it as if it were written by somebody who cannot be asked.&rdquo; &ldquo;That is every card,&rdquo; says Kovacs.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the gallery ---------- */
+  $('#dcard').addEventListener('click', function () { if (!busy) ER.read({ html: CARD, cls: 'lam', clue: { id: 'dockcard', title: 'The dock card', kind: 'Beside the panel' }, done: function () { ER.flag('d-card', 1); paint(); } }); });
+  $('#panel').addEventListener('click', function () {
+    if (busy) return;
+    if (step >= 1) { ER.say('The dock panel. Four lines of the card, done in order. The little screen says: INNER DOOR OPEN. GAUGE 1. DOCK DRY.'); return; }
+    if (!ER.flag('d-card')) { ER.say('The dock panel: two doors, a flood valve, a winch and a pump. There is a white card beside it. Read that before you press anything: on the other side of this glass is the sea.'); return; }
+    openPanel();
+  });
+  $('#mbatha5').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(step >= 2 ? '&ldquo;Twelve hours and twenty-three minutes,&rdquo; says the Chief. &ldquo;I have written it in the log. Twice, so that nobody thinks it is a mistake.&rdquo;'
+      : step === 1 ? '&ldquo;She told it: until <i>I</i> tell you,&rdquo; says the Chief. &ldquo;So she must tell it. Her telephone is dead, her handset is dead, and she is inside a steel ball. How does she tell it?&rdquo;'
+      : '&ldquo;One line at a time,&rdquo; says the Chief. &ldquo;And read every line to the end of it. The end is where they put the part that matters.&rdquo;');
+  });
+  $('#kovacs5').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(step >= 2 ? '&ldquo;It did not do anything clever,&rdquo; says Kovacs. &ldquo;I want that understood. It did one simple thing, and it went on doing it.&rdquo; He blows his nose, loudly.'
+      : step === 1 ? '&ldquo;It is my own rule,&rdquo; says Kovacs. &ldquo;Nobody else&rsquo;s order can end a HOLD. I wrote that. I was rather pleased with it.&rdquo;'
+      : '&ldquo;The winch is ready when you are,&rdquo; says Kovacs. &ldquo;I am not touching anything with words on it again tonight.&rdquo;');
+  });
+  BEN.thing('#odoor', null, function () { return D.outer ? 'The outer door, open. Beyond it there is nothing to see at all: only the black.' : 'The outer door. On this side of it, the dock. On the other side, 230 metres of sea.'; }, isBusy);
+  BEN.thing('#winch', 'winch', 'The dock winch, with a few hundred metres of line on its drum. It runs on the pressure from the big pump.', isBusy);
+  BEN.thing('#rack', null, function () { return step >= 2 ? 'Limpet, in its rack, charging. Its lamps are off. The little light beside it is green.' : 'Limpet&rsquo;s rack. It has been empty since nineteen minutes to five yesterday afternoon.'; }, isBusy);
+  BEN.thing('#cradle', 'cradle', function () { return D.vin ? null : 'The cradle: a yellow steel bed, the shape of the Lemon&rsquo;s underside. It is empty.'; }, isBusy);
+  $('#vessel').addEventListener('click', function (e) {
+    if (busy || !D.vin) return;
+    if (step >= 2 && e.target.closest && e.target.closest('#limpetG')) { ER.say('Limpet, in its rack, charging. Its lamps are off. The little light beside it is green.'); return; }
+    ER.say(step >= 2 ? 'The Lemon, on her cradle, with her hatch open. Kovacs says that her main battery is not dead at all: one wire had come off it. He is not going to tell Dr Halvorsen today.'
+      : step === 1 ? 'Dr Halvorsen, behind the glass, pointing upwards at the claw with both hands. She is saying something, and saying it with great force. You cannot hear one word of it through the hull.'
+      : 'The Lemon, under water on her cradle, with Limpet on top of her.');
+  });
+  $('#cable').addEventListener('click', function () {
+    if (busy) return;
+    if (step >= 2) { ER.say('The service cable, plugged into the Lemon: power for her lamps, and a wire for a voice.'); return; }
+    if (step === 1) { letGo(); return; }
+    ER.say('SERVICE CABLE: POWER + TALK. It plugs into a socket on the side of the Lemon when she is at home on her cradle, so that her batteries can charge and the people inside can talk to the people outside.');
+  });
+
+  /* ---------- the dock panel ---------- */
+  function mimic() {
+    return '<rect width="560" height="250" fill="#081a1e"/><rect x="500" y="20" width="60" height="210" fill="#0f5a66"/><path d="M500 40q8-6 15 0t15 0t15 0t15 0" stroke="#3fd0c8" stroke-width="2" fill="none"/><text x="530" y="244" class="dT">SEA</text>' +
+      '<rect x="60" y="30" width="440" height="190" fill="#12302f" stroke="#5a8f8c" stroke-width="3"/><rect id="dm-water" x="62" y="218" width="436" height="0" fill="#3fd0c8" opacity=".55"/>' +
+      '<path d="M236 218l14-22h8l-10 22zM324 218l-14-22h-8l10 22z" fill="#f2c230"/><circle cx="110" cy="70" r="16" fill="#f2c230"/><circle cx="110" cy="70" r="6" fill="#16222b"/><text x="110" y="104" class="dT">WINCH</text>' +
+      '<path id="dm-in" d="M60 120V200" stroke-width="9"/><text id="dm-int" x="30" y="214" class="dT"></text><text x="30" y="110" class="dT">INNER</text>' +
+      '<path id="dm-out" d="M500 60V200" stroke-width="9"/><text id="dm-outt" x="470" y="52" class="dT"></text>' +
+      '<g id="dm-ves"><circle r="30" fill="#e8c22c"/><circle r="12" fill="#3a2a1c"/><rect x="-16" y="-48" width="32" height="15" rx="4" fill="#f2c230"/><path d="M0 -33v6" stroke="#9aa7ad" stroke-width="4"/></g>' +
+      '<text x="280" y="20" class="dT" style="font-size:13px;fill:#ffe9b8">GAUGE <tspan id="dm-g"></tspan></text>';
+  }
+  function openPanel() {
+    var box = ER.el('div', 'dk'), running = false, kill = null, s;
+    s = '<div><div class="doc lam mini">' + CARD + '</div><div class="dk-mimic"><svg viewBox="0 0 560 250">' + mimic() + '</svg></div></div>' +
+      '<div class="dk-side"><h6>Dock panel</h6><div class="dk-scr" id="dk-scr"></div>' +
+      '<div class="dk-row"><button type="button" class="btn" id="dk-inner"></button><button type="button" class="btn" id="dk-outer"></button></div>' +
+      '<div class="dk-row">Open the flood valve until the gauge reads<button type="button" class="st2" data-d="-10">&minus;10</button><button type="button" class="st2" data-d="-1">&minus;1</button><output id="dk-set"></output>' +
+      '<button type="button" class="st2" data-d="1">+1</button><button type="button" class="st2" data-d="10">+10</button><button type="button" class="btn" id="dk-flood">Flood</button></div>' +
+      '<div class="dk-row"><button type="button" class="btn" id="dk-winch">Winch in</button><button type="button" class="btn" id="dk-pump">Pump the dock out</button></div><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg'), scr = box.querySelector('#dk-scr'), svg = box.querySelector('svg');
+    ER.glossIn(box, '.doc.lam.mini span, .doc.lam.mini small');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function say(t, bad) { scr.textContent = t; scr.className = 'dk-scr' + (bad ? ' x' : ''); }
+    function q(id) { return svg.querySelector('#' + id); }
+    function draw() {
+      var lv = D.eq ? 186 : Math.min(170, (D.gauge - 1) * 7.5);
+      q('dm-in').setAttribute('stroke', D.inner ? '#7dffb0' : '#c9342a'); q('dm-int').textContent = D.inner ? 'OPEN' : 'SHUT';
+      q('dm-out').setAttribute('stroke', D.outer ? '#7dffb0' : '#c9342a'); q('dm-out').setAttribute('d', D.outer ? 'M500 60V86M500 174V200' : 'M500 60V200'); q('dm-outt').textContent = 'OUTER ' + (D.outer ? 'OPEN' : 'SHUT');
+      q('dm-water').setAttribute('y', 218 - lv); q('dm-water').setAttribute('height', lv);
+      q('dm-ves').style.transform = D.vin ? 'translate(280px,166px)' : 'translate(540px,130px)';
+      q('dm-g').textContent = D.gauge;
+      box.querySelector('#dk-inner').textContent = D.inner ? 'Shut the inner door' : 'Open the inner door';
+      box.querySelector('#dk-outer').textContent = D.outer ? 'Shut the outer door' : 'Open the outer door';
+      box.querySelector('#dk-set').textContent = D.set;
+      box.setAttribute('data-gauge', D.gauge);
+      paint();
+    }
+    function no(panel, t) { BEN.bump('slips'); BEN.sfx.hm(); say(panel, true); msg(t); }
+    function ramp(to, ms, fn) {
+      var from = D.gauge, n = Math.max(1, Math.abs(to - from)), i = 0, t;
+      running = true;
+      t = setInterval(function () { i++; D.gauge = from + Math.round((to - from) * i / n); draw(); if (i >= n) { clearInterval(t); running = false; kill = null; keep(); fn(); } }, Math.max(60, ms / n));
+      kill = function () { clearInterval(t); D.gauge = to; running = false; kill = null; keep(); fn(); };      /* the panel was shut half way: the water finishes what it was doing */
+    }
+    var L1 = '&ldquo;Line 1,&rdquo; says the Chief. &ldquo;Before you do anything else. You are standing in the doorway, and so am I.&rdquo;';
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null, id; if (!b || running) return;
+      id = b.id;
+      if (b.classList.contains('st2')) { D.set = Math.max(1, Math.min(40, D.set + (+b.getAttribute('data-d')))); BEN.sfx.wheel(); keep(); draw(); return; }
+      if (id === 'dk-inner') {
+        if (D.inner) { D.inner = 0; BEN.sfx.door(); say('INNER DOOR SHUT.'); msg('The inner door swings shut, and four bolts slide across, one after another. Now there is only the window.'); keep(); draw(); return; }
+        if (D.outer || D.gauge !== 1) { no('INNER DOOR LOCKED.', '&ldquo;Line 4,&rdquo; says the Chief. &ldquo;Not until the outer door is shut <i>and</i> the gauge reads 1. Both of those. Look at the gauge.&rdquo;'); return; }
+        D.inner = 1; BEN.sfx.door(); say('INNER DOOR OPEN.'); keep(); draw();
+        if (D.vin) { step = 1; ER.flag('d-step', 1); BEN.done('dock'); kill = null; setTimeout(function () { ER.closeAll(); BEN.solved(true); paint(); arrive(); }, 1300); }
+        else msg('The inner door is open again. Nothing has come in through the other one yet.');
+        return;
+      }
+      if (id === 'dk-flood') {
+        if (D.inner) { no('INNER DOOR OPEN. FLOOD VALVE LOCKED.', L1); return; }
+        if (D.outer) { say('OUTER DOOR OPEN. THE DOCK IS FULL OF SEA ALREADY.'); return; }
+        if (D.vin) { no('FLOOD VALVE LOCKED.', '&ldquo;We are trying to get the water <i>out</i>,&rdquo; says Kovacs.'); return; }
+        if (D.set <= D.gauge) { say('THE GAUGE READS ' + D.gauge + ' ALREADY. NOTHING TO DO.'); return; }
+        if (ER.check('eq', D.set)) {
+          say('FLOOD VALVE OPEN.'); BEN.sfx.valve(); BEN.sfx.flow(2.4); msg('The sea comes in through the floor, green and fast.');
+          ramp(D.set, 2400, function () { D.eq = 1; keep(); BEN.sfx.valve(); say('GAUGE ' + D.gauge + '. FLOOD VALVE SHUT. DOCK FULL.'); msg('The water reaches the roof of the dock, and the valve shuts by itself. On the far side of the window everything has turned green.'); draw(); });
+        } else if (ER.check('low', D.set)) {
+          say('FLOOD VALVE OPEN.'); BEN.sfx.valve(); BEN.sfx.flow(1.6);
+          ramp(D.set, 1700, function () { BEN.sfx.valve(); say('GAUGE ' + D.gauge + '. FLOOD VALVE SHUT.'); msg('The water climbs, and stops. The valve has shut: the gauge reads what you told it to read.'); });
+        } else no('THE SEA CANNOT FILL THE DOCK TO ' + D.set + '. THE VALVE WOULD NEVER SHUT. ORDER REFUSED.', '&ldquo;The dock cannot be fuller than the sea,&rdquo; says Kovacs. &ldquo;&lsquo;Until the gauge reads ' + D.set + '&rsquo;: it would wait for ever. How much sea is there on top of us?&rdquo;');
+        return;
+      }
+      if (id === 'dk-outer') {
+        if (D.outer) {
+          if (!D.vin) { no('LINE 3. VESSEL NOT ON CRADLE. OUTER DOOR STAYS OPEN.', '&ldquo;They are still outside,&rdquo; says the Chief. &ldquo;Line 3.&rdquo;'); return; }
+          D.outer = 0; BEN.sfx.door(); say('OUTER DOOR SHUT.'); msg('The outer door closes on the sea. Everything that matters is on this side of it now.'); keep(); draw(); return;
+        }
+        if (D.inner) { no('INNER DOOR OPEN. OUTER DOOR LOCKED.', L1); return; }
+        if (!D.eq) {
+          no('GAUGE ' + D.gauge + '. OUTER DOOR LOCKED.', D.gauge === 1 ? '&ldquo;Line 2,&rdquo; says the Chief. &ldquo;The dock is full of air at one atmosphere, and the sea out there is a good deal more than one. That door would not open if you asked it nicely.&rdquo;'
+            : '&ldquo;' + D.gauge + ' inside,&rdquo; says Kovacs. &ldquo;And outside? Two hundred and thirty metres of water: and what is on top of the water?&rdquo;');
+          return;
+        }
+        D.outer = 1; BEN.sfx.door(); say('OUTER DOOR OPEN.'); msg('The same on both sides. The great door slides away as easily as a curtain, and beyond it there is only the black.'); keep(); draw(); return;
+      }
+      if (id === 'dk-winch') {
+        if (D.vin) { say('VESSEL ON CRADLE.'); return; }
+        if (!D.outer) { no('OUTER DOOR SHUT. WINCH LOCKED.', '&ldquo;Through a shut door?&rdquo; says Kovacs.'); return; }
+        running = true; say('WINCH RUNNING.'); BEN.sfx.winch(3); D.vin = 1; keep(); draw(); msg('The Lemon comes in through the door like a tired moon, with Limpet riding on top of her. Its claw is still shut on the ring.');
+        kill = null; setTimeout(function () { running = false; say('VESSEL ON CRADLE.'); BEN.sfx.door(); }, 3200); return;
+      }
+      if (id === 'dk-pump') {
+        if (D.outer) { no('OUTER DOOR OPEN. PUMP LOCKED.', '&ldquo;You cannot pump out the sea,&rdquo; says Kovacs. &ldquo;People have tried.&rdquo;'); return; }
+        if (D.gauge === 1) { say('THE DOCK IS DRY ALREADY.'); return; }
+        say('PUMP RUNNING.'); BEN.sfx.pump(2.4); D.eq = 0;
+        ramp(1, 2400, function () { say('GAUGE 1. DOCK DRY.'); msg(D.vin ? 'The water goes down past the window, past the Lemon, past the cradle, and out through the floor. The Lemon stands there shining and dripping.' : 'The dock is dry again. Nothing has come home yet.'); draw(); });
+      }
+    });
+    draw();
+    say('INNER DOOR ' + (D.inner ? 'OPEN' : 'SHUT') + '. OUTER DOOR ' + (D.outer ? 'OPEN' : 'SHUT') + '. GAUGE ' + D.gauge + '.');
+    msg('Two doors, a flood valve, a winch and a pump. The card is on the left; the little picture under it shows the dock from the side.');
+    ER.open('ov-lock', box, function () { if (kill) kill(); paint(); });
+  }
+
+  /* ---------- it will not let go ---------- */
+  function arrive() {
+    busy = true;
+    ER.narrate([
+      'The inner door swings open on a room that smells of the sea bed. The Lemon sits on her cradle, streaming. On top of her sits Limpet, with both lamps burning, and its claw shut on the lifting ring.',
+      'From inside the Lemon comes a knocking: three knocks, a pause, three knocks. The lifting ring stands in the middle of the hatch. While Limpet holds the ring, the hatch cannot open.',
+      '&ldquo;Limpet,&rdquo; says Kovacs. &ldquo;Let go.&rdquo; Two pings. He takes off his glasses. &ldquo;Limpet. I built you. Let go.&rdquo; Two pings.',
+      '&ldquo;Limpet. This is the Chief of this laboratory. Let go.&rdquo; Two pings. The Chief very nearly smiles. &ldquo;Good,&rdquo; she says. &ldquo;I should have been worried if that had worked.&rdquo;'
+    ], function () { busy = false; paint(); });
+  }
+  function letGo() {
+    busy = true; sc.classList.add('plug'); BEN.sfx.clip();
+    ER.narrate([
+      'You drag the yellow cable across the wet floor and push the plug home. Inside the Lemon a lamp comes on. The speaker on the wall crackles.',
+      '&ldquo;&hellip;been saying it for five minutes, and not one of you can read lips. Is this thing on? Good.&rdquo; A breath. &ldquo;Limpet. This is Ingrid Halvorsen. I am telling you. Let go.&rdquo;'
+    ], function () {
+      sc.classList.add('free'); BEN.sfx.reply(1); BEN.sfx.servo(0.6);
+      ER.narrate([
+        'One ping. The claw opens. It has been shut for twelve hours and twenty-three minutes, through forty orders to do something else.'
+      ], function () {
+        sc.classList.add('out'); BEN.sfx.door();
+        ER.narrate([
+          'The hatch goes up. Dr Halvorsen climbs out backwards, in her socks, with a yellow pad under one arm and a jar in her hand. In the jar there is one sea pen. &ldquo;Marker 7,&rdquo; she says. &ldquo;I was not going to come home without it.&rdquo;',
+          'She looks at Kovacs. &ldquo;Your machine,&rdquo; she says, &ldquo;is the only one of you that listened to me.&rdquo; &ldquo;It is not that it listens,&rdquo; says Kovacs. &ldquo;It is that it does not stop.&rdquo; He clears his throat. &ldquo;Limpet. Go to your rack. Charge until you are full.&rdquo; One ping.'
+        ], function () {
+          sc.classList.add('home'); BEN.sfx.servo(1.4);
+          ER.narrate([
+            'Limpet lifts off the Lemon and settles into its rack. Its lamps go out, one and then the other. You are the last to leave the dock. At the door you turn round. &ldquo;Thank you, Limpet,&rdquo; you say.'
+          ], function () {
+            $('#pingS').setAttribute('class', 'on'); BEN.sfx.reply(3);
+            setTimeout(function () {
+              ER.narrate([
+                'Three pings. ORDER NOT CLEAR.',
+                '&ldquo;It does not know what to do with that,&rdquo; says the Chief, behind you. &ldquo;Say it anyway.&rdquo;'
+              ], function () {
+                step = 2; ER.flag('d-step', 2); busy = false; paint(); BEN.solved(true);
+                try { if (ER.track) ER.track.play(['morning', { root: 50, bpm: 66 }]); } catch (e) {}
+                finish();
+              });
+            }, 1900);
+          });
+        });
+      });
+    });
+  }
+  function finish() {
+    var st = ER.state(), mins = BEN.minutes(), hn = ER.hintsUsed(), sl = ER.flag('slips') || 0;
+    $('#d-time').textContent = 'The watch took you ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+    $('#d-slips').textContent = sl ? sl + (sl === 1 ? ' time' : ' times') + ' tonight, something did exactly what it was told, and it was not what you meant.' : 'Not once tonight did a machine misread you. Kovacs does not believe it.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' papers and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('d-task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Benthos Laboratory &middot; watch log &middot; Wednesday</h4><h3>02:10 to 05:40</h3>' +
+      '<label for="r1">Write up the watch log for tonight: six to eight entries, each with its time, and 70 to 110 words in all. Say what was done, and why it worked. Use <b>until</b>, <b>as soon as</b>, <b>before</b> or <b>after</b>, and <b>if</b> or <b>unless</b>. Then write one order for Limpet to do tomorrow, and ask somebody to find a way of misreading it.</label><textarea id="r1"></textarea>' +
+      '<div class="count"></div><label for="r2">Watch-keeper (your name)</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keepT() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('d-task', o);
+    }
+    box.addEventListener('input', keepT);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keepT(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keepT();
+  });
+})();
+</script>
+</body>
+</html>

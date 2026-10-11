@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Whaleback · The Cold Door</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ridge.css">
+<style>
+  body{--bg:#e3e8ea;--accent:#c8321e;--font-display:'Fjalla One',sans-serif;--font-ui:'Fjalla One',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(238,241,242,.97);--tc-ink:#1e2529;--cap-bg:rgba(247,249,249,.95);--cap-ink:#1e2529;--panel:#f1f4f4;--panel-ink:#1e2529;--face-bg:#9aa5a9;--q-ink:#8c2416;--fade:#eef1f2;
+    --hud-bg:rgba(247,249,249,.88);--hud-ink:#1e2529;--hud-line:rgba(30,37,41,.3);--ov-bg:rgba(30,37,42,.84)}
+  .hbtn.hnt{border-color:#c8321e;color:#c8321e}
+  .hbtn b{color:#fff}
+  #sleet{animation:sleet .8s linear infinite}
+  @keyframes sleet{to{transform:translate(120px,40px)}}
+  #glow{animation:torch 3.1s steps(1,end) infinite}
+  @keyframes torch{0%{opacity:.9}46%{opacity:.7}52%{opacity:.9}}
+  #hood{animation:flap 1.7s ease-in-out infinite;transform-origin:0 -214px}
+  @keyframes flap{50%{transform:rotate(-7deg)}}
+  #compass.ready{animation:nudge 1.5s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-7px)}}
+  .hot:hover{filter:brightness(1.08) saturate(1.2)}
+
+  /* in the hand */
+  .bx{--accent:#ff9d7a}
+  .inhand{display:block;width:100%;height:auto;background:#e3e8ea;touch-action:none}
+  .inhand text{pointer-events:none}
+  .pano{cursor:ew-resize}
+  .nudge{display:inline-flex;gap:4px;flex:0 0 auto}
+  .nudge button{min-width:38px;height:38px;padding:0 9px;border:1px solid rgba(255,255,255,.4);border-radius:3px;background:rgba(0,0,0,.4);color:#f1ecdf;font-family:'Fjalla One',sans-serif;font-size:16px;letter-spacing:.06em}
+  .nudge button:hover{border-color:#ff8a3c;color:#ff8a3c}
+  .ptag{font-family:'Handlee',cursive;font-size:17px;fill:#59646a;text-anchor:middle}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="whG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef1f2"/><stop offset=".55" stop-color="#e2e7e9"/><stop offset="1" stop-color="#c9d1d5"/></linearGradient>
+  <linearGradient id="gndG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3bdc1" stop-opacity="0"/><stop offset=".5" stop-color="#a3aeb3" stop-opacity=".5"/><stop offset="1" stop-color="#8c989d" stop-opacity=".9"/></linearGradient>
+  <radialGradient id="veil" cx="50%" cy="62%" r="64%"><stop offset="0" stop-color="#eef1f2" stop-opacity="0"/><stop offset=".55" stop-color="#eef1f2" stop-opacity=".3"/><stop offset="1" stop-color="#f1f4f4" stop-opacity=".97"/></radialGradient>
+  <radialGradient id="torchG"><stop offset="0" stop-color="#ffe680" stop-opacity=".95"/><stop offset=".35" stop-color="#ffe680" stop-opacity=".4"/><stop offset="1" stop-color="#ffe680" stop-opacity="0"/></radialGradient>
+</defs>
+
+<g id="white" class="hot"><rect x="-1000" y="-400" width="3600" height="1720" fill="url(#whG)"/></g>
+<rect x="-1000" y="600" width="3600" height="720" fill="url(#gndG)" pointer-events="none"/>
+<g id="stones" class="hot"><g fill="#8f9ba0"><path d="M360 742l50 -12 44 12 -14 18h-66z" opacity=".55"/><path d="M930 690l34 -8 30 8 -10 12h-44z" opacity=".35"/><path d="M1370 800l60 -16 56 16 -18 22h-80z" opacity=".6"/><path d="M1040 842l70 -18 64 18 -20 26h-94z" opacity=".75"/><path d="M60 800l44 -12 40 14 -14 18h-58z" opacity=".6"/></g>
+  <g stroke="#f7f9f9" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9"><path d="M370 740l40 -8 36 8M1052 838l58 -14 52 14M1382 798l48 -12 46 12"/></g></g>
+<g stroke="#a9b29a" stroke-width="3" stroke-linecap="round" opacity=".6" id="grass"></g>
+
+<!-- the cairn, ten metres behind, and the last fence post -->
+<g id="cairn2" class="hot"><path d="M-70 664q40 -150 132 -168q84 14 120 168z" fill="#b7c0c4" opacity=".55"/></g>
+<g id="post" class="hot">
+  <path d="M236 420q-110 26 -340 36" stroke="#8a7a66" stroke-width="2.500" fill="none" opacity=".7"/>
+  <path d="M236 884V372" stroke="#2b3033" stroke-width="17" stroke-linecap="round"/><path d="M230 400v470" stroke="#596267" stroke-width="3" opacity=".7"/>
+  <circle cx="236" cy="420" r="9" fill="none" stroke="#8a4a2a" stroke-width="4"/><path d="M228 468l16 6M228 560l16 6" stroke="#8a4a2a" stroke-width="4"/>
+  <path d="M226 390q-16 -12 -22 6M246 390q18 -8 20 10M236 388v-12" stroke="#ef7d22" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M222 884h30" stroke="#f7f9f9" stroke-width="6" stroke-linecap="round"/>
+</g>
+
+<!-- Kwame, further off, with his torch on -->
+<g id="kwame" class="hot" transform="translate(1230 786) scale(.74)" opacity=".8">
+  <ellipse cx="0" cy="2" rx="60" ry="8" fill="#7d888d" opacity=".4"/>
+  <path d="M-20 0v-104h16V0zM4 0v-104h16V0z" fill="#4a5158"/><path d="M-26 0h24v8h-28zM2 0h24v8h-22z" fill="#6a5a46"/>
+  <path d="M30 -96q14 -74 -20 -100h-24v100z" fill="#5a8048"/>
+  <path d="M-40 -96q-8 -110 40 -118t36 118z" fill="#4a79b8"/>
+  <path d="M-30 -190q-22 30 -10 70M30 -190q20 30 8 70" stroke="#426ea8" stroke-width="15" fill="none" stroke-linecap="round"/>
+  <rect x="-7" y="-226" width="14" height="14" fill="#6f4a2f"/><circle cx="0" cy="-242" r="23" fill="#7f563a"/>
+  <path d="M-24 -246q0 -30 24 -30t24 30q-12 -9 -24 -9t-24 9z" fill="#f0c020"/><rect x="-10" y="-262" width="16" height="10" rx="3" fill="#3b444a"/>
+  <path d="M-18 -240h7M-6 -240h6" stroke="#2a1a0c" stroke-width="2.600"/><path d="M-16 -229q7 5 14 0" stroke="#f7f1e6" stroke-width="3" fill="none"/>
+  <circle id="glow" cx="-2" cy="-257" r="74" fill="url(#torchG)"/><circle cx="-2" cy="-257" r="5" fill="#fff8c8"/>
+</g>
+
+<!-- the rucksack, with the field guide in its top pocket -->
+<g id="guide" class="hot"><ellipse cx="470" cy="848" rx="70" ry="9" fill="#7d888d" opacity=".45"/><path d="M418 844q-14 -96 48 -112q58 4 58 74l-8 38z" fill="#3f6d54"/><path d="M426 766q40 -22 86 0v30q-42 -16 -86 0z" fill="#335a45"/>
+  <rect x="448" y="734" width="42" height="28" fill="#ef7d22" transform="rotate(-8 470 748)"/><path d="M454 744h30M454 752h22" stroke="#fff" stroke-width="2.500" transform="rotate(-8 470 748)"/><path d="M436 818h64" stroke="#22201a" stroke-width="5"/>
+  <path d="M430 842q8 -6 20 0" stroke="#f7f9f9" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+
+<!-- Mrs MacAskill, standing on one foot and two poles, holding out the compass -->
+<g id="mac" class="hot" transform="translate(700 846)">
+  <ellipse cx="0" cy="4" rx="92" ry="10" fill="#7d888d" opacity=".5"/>
+  <path d="M-62 0L-38 -200" stroke="#9aa3a9" stroke-width="5.500" stroke-linecap="round"/><path d="M-66 0h10" stroke="#22201a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M56 0L30 -150" stroke="#9aa3a9" stroke-width="5.500" stroke-linecap="round"/>
+  <path d="M-20 0v-116h18V0z" fill="#2c3238"/><path d="M6 -16l3 -100h18l-3 98z" fill="#2c3238"/>
+  <path d="M-26 0h28v10h-32z" fill="#5a4630"/><path d="M3 -15h28v10h-30z" fill="#5a4630"/><path d="M8 -11h20" stroke="#e9e6da" stroke-width="2"/>
+  <g id="hood"><path d="M-24 -214q24 -22 48 0l-5 18h-38z" fill="#8c2416"/></g>
+  <path d="M-38 -108q-8 -114 38 -122t42 122z" fill="#b3321f"/><path d="M0 -226v118" stroke="#8c2416" stroke-width="3"/>
+  <path d="M-32 -200q-22 30 -8 66" stroke="#a52c1b" stroke-width="19" fill="none" stroke-linecap="round"/><circle cx="-39" cy="-132" r="9" fill="#e3bd9a"/>
+  <path d="M32 -200q30 6 60 -6" stroke="#9c2918" stroke-width="19" fill="none" stroke-linecap="round"/><circle cx="96" cy="-206" r="9.500" fill="#e3bd9a"/>
+  <rect x="-7" y="-244" width="14" height="18" fill="#d9b08c"/><circle cx="0" cy="-260" r="25" fill="#e3bd9a"/>
+  <path d="M-26 -264q0 -32 26 -32t26 32q-13 -8 -26 -8t-26 8z" fill="#26375c"/><circle cx="0" cy="-299" r="7" fill="#31467a"/>
+  <path d="M3 -258h7M16 -258h6" stroke="#3f5a6a" stroke-width="2.600"/><path d="M7 -245h11" stroke="#8a4a3c" stroke-width="2.200"/>
+  <path d="M-12 -238q40 30 104 26" stroke="#ef7d22" stroke-width="2.400" fill="none"/>
+</g>
+<g id="compass" class="hot"><circle cx="812" cy="648" r="34" fill="#fff" opacity="0"/><rect x="792" y="612" width="40" height="62" rx="6" fill="rgba(214,236,238,.75)" stroke="#28343a" stroke-width="2"/>
+  <circle cx="812" cy="650" r="15" fill="#1b2125"/><circle cx="812" cy="650" r="10.500" fill="#eef4f4"/><path d="M812 650l-5 -8" stroke="#d3301c" stroke-width="3" stroke-linecap="round"/><path d="M812 650l5 8" stroke="#8a9398" stroke-width="3" stroke-linecap="round"/>
+  <path d="M812 630v-13M807 622l5 -6 5 6" stroke="#1b1a17" stroke-width="2" fill="none"/></g>
+
+<g pointer-events="none"><g id="sleet" stroke="#fff" stroke-width="2.500" stroke-linecap="round" opacity=".95"></g><rect x="-1000" y="-400" width="3600" height="1720" fill="url(#veil)"/></g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go down to the Cold Door</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="map.js"></script>
+<script src="ridge.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  (function () {
+    var s = '', i, x, y;
+    for (i = 0; i < 90; i++) { x = -160 + (i * 211) % 1900; y = -60 + (i * 97) % 980; s += '<path d="M' + x + ' ' + y + 'l15 5"/>'; }
+    $('#sleet').innerHTML = s; s = '';
+    for (i = 0; i < 30; i++) { x = (i * 367) % 1600; y = 700 + (i * 131) % 190; s += '<path d="M' + x + ' ' + y + 'l-5 -13M' + (x + 5) + ' ' + y + 'l1 -16M' + (x + 10) + ' ' + y + 'l6 -11"/>'; }
+    $('#grass').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'wild', story: 'ridge', storyTitle: 'The Cold Door', id: 'whaleback', no: 'II', title: 'The Whaleback',
+    go: 'Look into the white',
+    intro: [
+      'You found the cairn by its fence. Four cairns stand on Skallan Edge, and only at one of them does the fence leave the ridge and go away north. Its grid reference was 243 263: eastings first (line 24 and three tenths), then northings (line 26 and three tenths). And the hut was at 244 252, under a red pin.',
+      'Half of Mrs MacAskill&rsquo;s message reached Dougal Gillespie: the half with your six figures in it. The half that said where you were going next did not.',
+      'It is twenty-five past three. She has stood up, with a pole in each hand, and walked the ten metres to the last fence post. It took her a minute. Beyond the post there is no path, no fence and no ridge. There is only the Whaleback, with the cloud lying on it.'
+    ],
+    exit: {"next":"door","w":{"dfceedbe":"5356a160"}}, tags: {"brg":["261b04d0"],"same":["ce4259d4"],"c360":["e5df204a"],"c180":["67e16805"]},
+    sound: ['trail', { root: 50, bpm: 50, drop: ['mel', 'arp', 'bass'], level: 0.9, beds: [['wind', 1.1]] }],      /* nothing to see and nothing to hear but wind: the thinnest music of the story */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.mac && told.guide; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#compass').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.mac ? 1 : 0) + (told.guide ? 1 : 0) + Math.min(3, ER.flag('b-stage') || 0), 5);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The Whaleback is behind you. Go down to the Cold Door.']];
+    if (bench && bench.isOpen()) return [['lay', [
+      'Step one in the field guide: one long edge of the compass, from where you are to where you are going. Press on the pencil ring round our cairn, hold, and let go on the ring at the place we want to reach. Mrs MacAskill told you its name.',
+      'The Cold Door is printed on the map: east along the ridge, at its lowest place. When the compass is lying there, take hold of the dark ring of the dial and turn it, or use the arrows under the map. Watch the red lines inside the dial, and the blue lines of the map under them.',
+      'The red lines must lie along the upright blue lines, with the N of the dial towards the top of the map. Never mind where the needle is. The number in the little black window, at the index line, is then your bearing.'
+    ]], ['shed', [
+      'The dial is set, and nobody touches it again. Now it is you that turns. Drag the picture sideways, or use the arrows. The needle will swing.',
+      'Keep turning until the RED end of the needle lies inside the red arrow on the dial: red in the shed. Then the big arrow on the plate is pointing along your bearing.'
+    ]], ['back', [
+      'Kwame wants the way back to you. It is exactly opposite to the way he walked.',
+      'The opposite of any direction is half a turn away, and half a turn is 180 degrees. The field guide gives the rule, and two examples.',
+      'His way out was ' + RIDGE.pad3(+ER.flag('b-brg') || 0) + '. Add 180 to it. (If the bearing had been more than 180, you would take 180 away instead.)'
+    ]]][bench.stage()];
+    if (!told.mac) return ['mac', ['Mrs MacAskill is standing in the middle, on one foot and two poles. She has a plan.']];
+    if (!told.guide) return ['guide', [
+      'The three steps are in the Hill Club&rsquo;s field guide.',
+      'It is the small orange book in the top pocket of the rucksack, on the ground between the fence post and Mrs MacAskill. Click it.'
+    ]];
+    return ['compass', ['Mrs MacAskill is holding the compass out to you on its orange cord. Take it.']];
+  }
+
+  function begin() {
+    RIDGE.mine('where', 'Where we are', '<p>The cairn where the fence leaves the ridge and goes north: the top of the Staircase.</p><p>Grid reference <b>243 263</b>. Eastings first, then northings.</p>', true);
+    RIDGE.mine('hut', 'Where the hut is', '<p>Skallan Hut is at <b>244 252</b>: line 24 and four tenths, line 25 and two tenths. A black square beside a stream.</p><p>From our cairn it is one kilometre away and five hundred metres down. The Slabs are in between.</p>', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('One kilometre, on one number. The ground is going down in front of you.'); return; }
+    if (told.in) { busy = false; ER.say('The last fence post. Twenty-five past three, and white.'); return; }
+    tell('in');
+    ER.narrate([
+      'White. Not grey any more: white above you and white under you, like the inside of a ping-pong ball. Small hard bits of ice have begun to blow through it, sideways.',
+      'Behind you is the last fence post. In front of you the ground is flat for as far as you can see, which is about fifteen metres.',
+      '&ldquo;The Whaleback,&rdquo; says Mrs MacAskill. &ldquo;A kilometre long, half as wide, and as flat as a football pitch, with a cliff down one side of it. People walk in circles up here. I have done it myself.&rdquo;',
+      '&ldquo;At the far end the ridge drops to a low place called the Cold Door, and from there a way goes down that I can manage. We can&rsquo;t see it, and there is nothing to follow. So we do what sailors do. We steer.&rdquo; She lifts the compass on its cord over her head, and holds it out to you.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#mac').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mrs MacAskill', role: 'Leader · on one foot and two poles', face: window.FACE('mac'),
+      lines: [
+        { note: 'There is ice in her eyebrows. She seems to be enjoying herself, a little.', a: '&ldquo;One thing on this hill knows where north is. I am going to lend it to you.&rdquo;' },
+        { q: 'Why can&rsquo;t we just walk east?', a: 'Because in cloud nobody can walk in a straight line. Everybody bends away, a little to the left or a little to the right, and nobody can feel it happening. After twenty minutes you may be walking back the way you came, quite sure that you are going straight. And on this hill, bending to the right ends at the top of the Slabs.' },
+        { q: 'So what do I do?', a: 'Three steps on the map: they are in the field guide, in the top pocket of my rucksack. They give you a number, called a bearing. Then you turn yourself round until the needle sits in its red arrow, and you walk where the big arrow points. That is all a compass is: a number, and something that remembers it for you.' },
+        { q: 'Where are we going, exactly?', a: 'From our cairn, which you have ringed, to the Cold Door. It is printed on the map. Look east along the ridge for the low place between the Whaleback and Little Skallan. Lay the compass from here to there. Not from there to here: the arrow matters.' },
+        { q: 'And you?', a: 'I shall be slow. So we leapfrog. Kwame goes ahead on your bearing until he is nearly out of sight, and stops. We walk to him. Then he goes again. It is the way to cross a place like this with somebody who has one and a half legs.' }
+      ],
+      clue: { id: 'mac2', title: 'Mrs MacAskill, at the last fence post', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('mac')) { paint(); ER.say('Her rucksack is on the ground beside the post, with the orange book sticking out of the top pocket.'); } }
+    });
+  });
+  $('#kwame').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Kwame Asante', role: 'About to be the thing you walk to', face: window.FACE('kwame'),
+      lines: [
+        { note: 'He has switched on the torch on his head, though it is the middle of the afternoon. It makes a yellow ball in the white.', a: '&ldquo;So you can see me. I&rsquo;m going to be the thing you walk to.&rdquo;' },
+        { q: 'Have you done this before?', a: 'Once. On the school football pitch, on a sunny day, with a bucket on my head. I walked into a goalpost. But I was on the bearing.' },
+        { q: 'What do you need from me?', a: 'The number. Then point me down it. And when I stop I&rsquo;ll turn round and look back at you along my own compass, to see if I&rsquo;ve wandered off your line. So I need a second number: the one for looking back. Mrs Mac calls it the back bearing. Work it out before I go. I shan&rsquo;t hear a thing in this wind.' },
+        { q: 'Aren&rsquo;t you worried?', a: 'A bit. She isn&rsquo;t, so I&rsquo;m copying her. Also, I&rsquo;ve still got two cheese rolls.' }
+      ],
+      clue: { id: 'kwame2', title: 'Kwame Asante, with his torch on', kind: 'What he said' },
+      done: function (seen) { if (seen) tell('kwame'); }
+    });
+  });
+
+  /* ---------- the field guide, page 9 ---------- */
+  var HW = 'font-family="Handlee,cursive" font-size="24" fill="#26304a"';
+  function lab(x, y, t, x2, y2) { return '<path d="M' + (x + (x < 0 ? 4 : -4)) + ' ' + (y - 7) + 'L' + x2 + ' ' + y2 + '" stroke="#26304a" stroke-width="1.600" fill="none"/><text x="' + x + '" y="' + y + '" ' + HW + ' text-anchor="' + (x < 0 ? 'end' : 'start') + '">' + t + '</text>'; }
+  var PIC = '<svg viewBox="-268 -322 536 466"><g>' + RIDGE.compassSvg().replace('<g class="cp-dial">', '<g class="cp-dial" transform="rotate(-38)">').replace('<g class="cp-needle">', '<g class="cp-needle" transform="rotate(-38)">').replace('000°', '038°') + '</g>' +
+    lab(126, -262, 'the big arrow', 12, -252) + lab(126, -150, 'index line', 6, -110) + lab(126, -44, 'the dial', 84, -30) + lab(126, 58, 'needle: red', 26, 34) + '<text x="126" y="84" ' + HW + '>end to north</text>' +
+    lab(-124, -62, 'red arrow', -34, -44) + '<text x="-124" y="-36" ' + HW + ' text-anchor="end">and red lines</text>' + lab(-124, 104, 'a long edge', -111, 70) + '</svg>';
+  var GUIDE = '<h4>The Hill Club Field Guide &middot; 9</h4><h3>On a bearing</h3><div class="two wide"><div>' +
+    '<p>A <b>bearing</b> is a direction turned into a number: so many degrees, clockwise from north. East is 090&deg;, south 180&deg;, west 270&deg;.</p>' +
+    '<p><b>On the map</b></p><ol><li>Lay one long edge of the compass from where you are to where you are going, with the big arrow pointing the way you mean to walk.</li>' +
+    '<li>Hold the plate still. Turn the <b>dial</b> until its red lines lie along the blue grid lines, with its N at the top of the map. Never mind the needle: on the map it is only a passenger.</li>' +
+    '<li>Read the number at the <b>index line</b>. That is your bearing.</li></ol>' +
+    '<p><b>On the ground</b> Hold the compass flat. Turn yourself, not the dial, until the red end of the <b>needle</b> lies in the red arrow: &ldquo;red in the shed&rdquo;. Walk where the big arrow points.</p>' +
+    '<p class="rule"><b>Back bearing</b>: the way back. Add 180&deg;. If the bearing is more than 180&deg; already, take 180&deg; away instead. 040&deg; &rarr; 220&deg;. 310&deg; &rarr; 130&deg;.</p></div>' +
+    '<div>' + PIC + '<p class="hand">On our maps grid north and the needle&rsquo;s north are only a degree or so apart, so call them the same. (Not everywhere, and not for ever: page 31.) F.M.</p></div></div>';
+  $('#guide').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: GUIDE, cls: 'guide', clue: { id: 'guide9', title: 'Field guide: on a bearing', kind: 'Page 9' }, done: function () {
+      RIDGE.terms(['bearing', 'back bearing', 'compass', 'needle', 'dial', 'index line']);
+      if (tell('guide')) { paint(); ER.say('Edge, dial, number. Then red in the shed.'); }
+    } });
+  });
+
+  /* ---------- things in the white ---------- */
+  RIDGE.thing('#post', 'fence post', 'The last fence post. From here the wire turns and goes off downhill to the north. Long ago somebody tied a piece of orange string round the top: one walker, telling the next that this is the place.', isBusy);
+  RIDGE.thing('#white', null, 'White. You can&rsquo;t tell where the ground stops and the sky begins. You can&rsquo;t be sure that there is a sky.', isBusy);
+  RIDGE.thing('#stones', null, 'A flat stone with a skin of ice on it. Every stone up here looks like every other stone.', isBusy);
+  RIDGE.thing('#cairn2', 'cairn', 'The cairn, ten metres behind you, and already going grey. Ten metres more and it will not be there.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#compass').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The compass is round your own neck now. Nobody has asked for it back.'); return; }
+    if (!told.mac) { ER.say('A compass, on an orange cord. Mrs MacAskill is holding it out, and waiting to be asked what for.'); return; }
+    if (!told.guide) { ER.say('&ldquo;Page nine first,&rdquo; says Mrs MacAskill. &ldquo;The orange book, in the top pocket of my rucksack. I wrote it for people exactly like you.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the compass: on the map, then in the hand, then Kwame's ---------- */
+  function makeBench() {
+    var P = RIDGE.P, us = P(24.35, 26.35), PLACES = [
+      { id: 'us', x: us.x, y: us.y, name: 'our cairn' }, { id: 'door', name: 'the Cold Door' }, { id: 'little', name: 'the top of Little Skallan' },
+      { id: 'top', name: 'the top of Skallan' }, { id: 'hut', name: 'the hut' }, { id: 'mid', name: 'the cairn on the Whaleback' }], byId = {};
+    [[25.31, 26.63], [25.95, 26.75], [22.75, 26.15], [24.45, 25.25], [24.85, 26.50]].forEach(function (g, i) { var q = P(g[0], g[1]); PLACES[i + 1].x = q.x; PLACES[i + 1].y = q.y; });
+    PLACES.forEach(function (q) { byId[q.id] = q; });
+    var stage = ER.flag('b-stage') || 0, lay = ER.flag('b-lay') || null, wait = false, H = 196, kb = 38, kd = 1;
+    var box = ER.el('div', 'bx'), i, s;
+    s = RIDGE.ring(us, 'us', -30, -10) + RIDGE.ring(byId.hut, 'hut', 12, 16) + '<g id="b-rings"></g>' + RIDGE.compassSvg();
+    box.innerHTML = '<div class="frame"><div id="b-map">' + RIDGE.sheet(RIDGE.WHOLE, s) + '</div><div id="b-hand" style="display:none"></div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><span class="nudge" id="b-nudge"></span><span id="b-slot"></span><button type="button" class="btn" id="b-go"></button></div>';
+    var svg = box.querySelector('svg.sheet'), cg = svg.querySelector('.cp'), cmp = RIDGE.compass(cg), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#b-go'),
+      nudge = box.querySelector('#b-nudge'), handBox = box.querySelector('#b-hand'), mapBox = box.querySelector('#b-map'), hand = null, cmp2 = null, items = [], back = null;
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    cmp.needle(312);                                   /* the map is lying on a wet rock, any way round: the needle points where north really is */
+    function place() {
+      if (!lay) { cg.style.display = 'none'; return; }
+      var a = byId[lay[0]], b = byId[lay[1]], dx = b.x - a.x, dy = b.y - a.y, L = Math.sqrt(dx * dx + dy * dy), ux = dx / L, uy = dy / L, s0 = L / 2 - 90;
+      cg.style.display = '';
+      cmp.place(a.x + ux * s0 - uy * 110, a.y + uy * s0 + ux * 110, Math.atan2(dx, -dy) * 180 / Math.PI);
+    }
+    RIDGE.rings(svg, svg.querySelector('#b-rings'), PLACES, {
+      r: 7, hit: 13, lock: function () { return wait || stage > 0; },
+      join: function (a, b) {
+        lay = [a, b]; ER.flag('b-lay', lay); RIDGE.sfx.lay(); place();
+        if (a !== 'us' && b === 'us') msg('The compass is lying from ' + byId[a].name + ' to us, and its big arrow points at our own cairn. Lay it the way you mean to walk: from here to there.');
+        else if (a !== 'us') msg('Neither end of that edge is where we are standing. Begin at the pencil ring marked &ldquo;us&rdquo;.');
+        else msg('One long edge joins our cairn to ' + byId[b].name + ', and the big arrow points away from us. Now the dial: turn it until its red lines lie along the blue lines of the grid.');
+      }
+    });
+    RIDGE.dialDrag(svg, cmp, { lock: function () { return wait || stage > 0; }, end: function () { if (Math.abs(cmp.off()) < 1.7) { cmp.st.dial = 0; cmp.draw(); } } });
+    cg.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    /* in the hand: the plate stays in front of you, and the needle and the world go round */
+    var PANO = [
+      [263, '<path d="M-130 250q30 -150 124 -168q90 14 130 168z" fill="#aeb8bc" opacity=".8"/><g fill="#9aa5aa" opacity=".8"><path d="M-70 220l40 -12 34 14 -8 24h-60zM-10 170l34 -10 30 16 -10 26h-48zM-40 128l30 -12 30 12 -4 22h-50z"/></g><text class="ptag" y="286">the cairn, and the way home</text>'],
+      [10, '<g stroke="#3b4246" stroke-linecap="round"><path d="M-36 262v-150" stroke-width="10"/><path d="M4 236v-96" stroke-width="7" opacity=".7"/><path d="M30 222v-66" stroke-width="5" opacity=".42"/><path d="M48 214v-46" stroke-width="3.500" opacity=".2"/></g><path d="M-36 130L4 150L30 162L48 170" stroke="#8a7a66" stroke-width="1.800" fill="none" opacity=".7"/><text class="ptag" y="286">the fence, going down</text>'],
+      [175, '<path d="M-150 310l46 -40h208l46 40z" fill="#4a5357" opacity=".85"/><path d="M-98 274h196" stroke="#aeb8bc" stroke-width="3" fill="none"/><path d="M-126 352l34 -30h184l34 30z" fill="#3b4347" opacity=".6"/><path d="M-110 392l28 -26h164l28 26z" fill="#3b4347" opacity=".3"/><text class="ptag" x="196" y="300" fill="#8c2416" text-anchor="start">the Staircase</text>'],
+      [118, '<g transform="translate(0 262) scale(.5)"><path d="M-62 0L-38 -200M56 0L30 -150" stroke="#9aa3a9" stroke-width="6" stroke-linecap="round"/><path d="M-20 0v-116h18V0zM6 0v-116h18V0z" fill="#2c3238"/><path d="M-38 -108q-8 -114 38 -122t42 122z" fill="#b3321f"/><circle cx="0" cy="-260" r="25" fill="#e3bd9a"/><path d="M-26 -264q0 -32 26 -32t26 32q-13 -8 -26 -8t-26 8z" fill="#26375c"/></g>'],
+      [320, '<g transform="translate(0 262) scale(.6)"><path d="M-52 0q-14 -96 48 -112q58 4 58 74l-8 38z" fill="#3f6d54"/><path d="M-44 -78q40 -22 86 0v30q-42 -16 -86 0z" fill="#335a45"/></g>']
+    ];
+    function rel(b) { return ((b - H + 540) % 360) - 180; }
+    function pano() {
+      items.forEach(function (it) { var r = rel(it.b); it.g.style.display = Math.abs(r) < 64 ? '' : 'none'; it.g.setAttribute('transform', 'translate(' + (500 + r * 11).toFixed(1) + ' 0)'); });
+      var r = rel(kb), kg = hand.querySelector('#b-kw');
+      kg.style.display = Math.abs(r) < 64 ? '' : 'none';
+      kg.setAttribute('transform', 'translate(' + (500 + r * 11).toFixed(1) + ' ' + (262 - (1 - kd) * 62).toFixed(1) + ') scale(' + (0.52 * kd).toFixed(3) + ')'); kg.setAttribute('opacity', (0.25 + 0.75 * kd).toFixed(2));
+      cmp2.needle(-H); hand.setAttribute('data-h', H.toFixed(1));
+    }
+    function turn(d) { if (wait || stage !== 1) return; H = ((H + d) % 360 + 360) % 360; pano(); if (Math.abs(d) > 2) RIDGE.sfx.step(); }
+    function makeHand() {
+      var h = '<svg class="inhand" viewBox="0 0 1000 595"><defs><linearGradient id="hsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0f3f4"/><stop offset="1" stop-color="#dfe5e8"/></linearGradient>' +
+        '<linearGradient id="hgnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cdd5d9"/><stop offset="1" stop-color="#9eaaaf"/></linearGradient>' +
+        '<radialGradient id="hglow"><stop offset="0" stop-color="#ffe680" stop-opacity=".95"/><stop offset=".4" stop-color="#ffe680" stop-opacity=".35"/><stop offset="1" stop-color="#ffe680" stop-opacity="0"/></radialGradient></defs>' +
+        '<rect width="1000" height="262" fill="url(#hsky)"/><rect y="262" width="1000" height="333" fill="url(#hgnd)"/><g id="b-items"></g>' +
+        '<g id="b-kw"><path d="M-20 0v-104h16V0zM4 0v-104h16V0z" fill="#30363c"/><path d="M-40 -96q-8 -110 40 -118t36 118z" fill="#2a5ea8"/><circle cx="0" cy="-242" r="23" fill="#6f4626"/><path d="M-24 -246q0 -30 24 -30t24 30q-12 -9 -24 -9t-24 9z" fill="#f0c020"/><circle cx="0" cy="-257" r="90" fill="url(#hglow)"/><circle cx="0" cy="-257" r="6" fill="#fff8c8"/></g>' +
+        '<rect width="1000" height="595" fill="#eef1f2" opacity=".36" pointer-events="none"/>' +
+        '<path d="M388 595q-10 -70 40 -96h144q50 26 40 96z" fill="#ef7d22"/><path d="M414 532q86 -22 172 0" stroke="#c9620f" stroke-width="5" fill="none"/>' + RIDGE.compassSvg() +
+        '<path d="M392 560q-34 -60 14 -106q26 -16 40 8l-8 98z" fill="#f08a34"/><rect class="pano" width="1000" height="595" fill="#fff" opacity="0"/></svg>';
+      handBox.innerHTML = h; hand = handBox.querySelector('svg');
+      cmp2 = RIDGE.compass(hand.querySelector('.cp'));
+      cmp2.place(500, 372, 0, 0.84); cmp2.setReading(+ER.flag('b-brg') || 0);
+      PANO.forEach(function (it) { var g = RIDGE.el('g', {}, it[1]); hand.querySelector('#b-items').appendChild(g); items.push({ b: it[0], g: g }); });
+      var x0 = 0, h0 = 0;
+      ER.drag(hand.querySelector('.pano'), {
+        start: function (e) { if (wait || stage !== 1) return false; x0 = ER.pt(hand, e).x; h0 = H; },
+        move: function (e) { H = ((h0 - (ER.pt(hand, e).x - x0) / 11) % 360 + 360) % 360; pano(); }
+      });
+      pano();
+    }
+    function sendKwame(done) {
+      var n = 0, from = kb, to = +ER.flag('b-brg'), t = setInterval(function () {
+        n++; kb = from + (to - from) * Math.min(1, n / 10); kd = 1 - 0.62 * (n / 26); pano();
+        if (n % 4 === 0) RIDGE.sfx.step();
+        if (n >= 26) { clearInterval(t); done(); }
+      }, 110);
+    }
+
+    function draw() {
+      mapBox.style.display = stage === 0 ? '' : 'none'; handBox.style.display = stage === 0 ? 'none' : '';
+      if (stage > 0 && !hand) makeHand();
+      if (stage > 1) { H = +ER.flag('b-brg'); kb = H; kd = 0.38; pano(); }
+      nudge.innerHTML = stage === 0 ? '<button type="button" data-d="-10" title="ten less">&laquo;</button><button type="button" data-d="-1" title="one less">&lsaquo;</button><button type="button" data-d="1" title="one more">&rsaquo;</button><button type="button" data-d="10" title="ten more">&raquo;</button>' :
+        stage === 1 ? '<button type="button" data-d="-15" title="turn a long way left">&laquo; left</button><button type="button" data-d="-3" title="turn a little left">&lsaquo;</button><button type="button" data-d="3" title="turn a little right">&rsaquo;</button><button type="button" data-d="15" title="turn a long way right">right &raquo;</button>' : '';
+      if (back) back.node.style.display = stage === 2 ? '' : 'none';
+      go.textContent = ['That is the bearing', 'Send Kwame along the arrow', 'Hold up the number'][stage] || 'On the line';
+      go.style.visibility = stage > 2 ? 'hidden' : '';
+      place();
+    }
+    function setStage(n) { stage = n; ER.flag('b-stage', n); draw(); paint(); }
+    nudge.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null, d;
+      if (!b || wait) return;
+      d = +b.getAttribute('data-d');
+      if (stage === 0) { if (!lay) { msg('There is no dial to turn yet. Lay the compass on the map first: press on the ring where we are, and let go on the ring where we are going.'); return; } cmp.setReading(cmp.reading() + d); RIDGE.sfx.notch(); }
+      else turn(d);
+    });
+    back = RIDGE.wheels(box.querySelector('#b-slot'), { label: 'Kwame&rsquo;s<br>dial', vals: [['0', '1', '2', '3'], RIDGE.DIGITS, RIDGE.DIGITS], start: ER.flag('b-back') || [0, 7, 4], sep: { 3: '' },
+      change: function () { ER.flag('b-back', back.at()); } });
+
+    go.addEventListener('click', function () {
+      var r, off, v, file;
+      if (wait || nextFile) return;
+      if (stage === 0) {
+        if (!lay) { msg('Lay the compass on the map first: press on the ring where we are, hold, and let go on the ring where we are going.'); return; }
+        if (lay[0] !== 'us') { ER.sfx.no(); msg('&ldquo;Where does your edge begin?&rdquo; asks Mrs MacAskill. &ldquo;It has to begin where we are, and the arrow has to point where we are going.&rdquo;'); return; }
+        off = cmp.off(); r = cmp.reading();
+        if (Math.abs(off) > 1.7) {
+          ER.sfx.no();
+          msg(Math.abs(cmp.shed()) < 7 ? '&ldquo;What have you lined the red arrow up with?&rdquo; asks Mrs MacAskill. &ldquo;The needle? Not yet. That is for the ground. On the map the needle is only a passenger: put the red lines along the blue lines.&rdquo;' :
+            Math.abs(Math.abs(off) - 180) < 1.7 ? '&ldquo;Where is the N of the dial?&rdquo; asks Mrs MacAskill. &ldquo;At the bottom of the map? Then you have the bearing for coming back. Half a turn more: N to the top.&rdquo;' :
+            'The red lines inside the dial are not lying along the blue grid lines yet. Turn the dial (take hold of its dark ring, or use the arrows) until they do, with the N at the top of the map.');
+          return;
+        }
+        if (!ER.check('brg', r)) {
+          ER.sfx.no();
+          msg({ little: '&ldquo;' + RIDGE.pad3(r) + '. And what is at the far end of your edge?&rdquo; asks Mrs MacAskill. &ldquo;The top of Little Skallan? We don&rsquo;t want a top. We want the low place before it.&rdquo;',
+            hut: '&ldquo;' + RIDGE.pad3(r) + ',&rdquo; says Mrs MacAskill. &ldquo;I know that number. It is on the route card, and it is the Staircase: straight over the Slabs. To the Cold Door, please.&rdquo;',
+            top: '&ldquo;' + RIDGE.pad3(r) + ' would take us back to the top of Skallan,&rdquo; says Mrs MacAskill. &ldquo;A fine bearing, and the wrong end of the mountain.&rdquo;',
+            mid: '&ldquo;' + RIDGE.pad3(r) + '. To the cairn on the Whaleback?&rdquo; says Mrs MacAskill. &ldquo;A cairn is two metres wide, and in this we should walk straight past it. Aim at something big. The Cold Door is a hundred metres wide.&rdquo;'
+          }[lay[1]] || '&ldquo;' + RIDGE.pad3(r) + '? Where does that go?&rdquo; asks Mrs MacAskill. &ldquo;From our cairn to the Cold Door, please.&rdquo;');
+          return;
+        }
+        ER.flag('b-brg', r);
+        RIDGE.mine('brg', 'The bearing across the Whaleback', '<p>From our cairn to the Cold Door: <b>' + RIDGE.pad3(r) + '&deg;</b>, a little north of east. One kilometre.</p><p>Edge from here to there. Red lines along the grid. Read the number.</p>', true);
+        RIDGE.sfx.lay(); setStage(1);
+        msg('&ldquo;' + RIDGE.pad3(r) + ',&rdquo; says Mrs MacAskill. &ldquo;A little north of east. That is the Whaleback. Now leave the dial alone, pick the compass up, and find that direction in the real world.&rdquo; You are facing the top of the Staircase.');
+      } else if (stage === 1) {
+        off = cmp2.shed();
+        if (Math.abs(off) > 3.6) {
+          ER.sfx.no();
+          msg(Math.abs(Math.abs(off) - 180) < 3.6 ? '&ldquo;Which end of the needle is in the arrow?&rdquo; asks Mrs MacAskill. &ldquo;The white end? Then your big arrow is pointing back along the ridge to Skallan. Red in the shed. Turn right round.&rdquo;' :
+            'The needle is not inside its red arrow yet. Turn yourself (drag the picture sideways, or use the arrows): the dial stays exactly as it is.');
+          return;
+        }
+        wait = true; msg('Red in the shed. The big arrow points into the white, at nothing whatever. &ldquo;That is it,&rdquo; says Mrs MacAskill. &ldquo;Kwame: go where the arrow goes, and stop before we lose you.&rdquo;');
+        sendKwame(function () {
+          wait = false; setStage(2);
+          msg('Kwame has stopped where his torch is only a yellow smudge. He turns round and holds up his own compass. He can&rsquo;t hear you, so you will have to hold up fingers. What does he set on his dial, to look straight back at you?');
+        });
+      } else if (stage === 2) {
+        v = String(+back.get());
+        if (+v > 359) { msg('There is no such number on a compass: the dial stops at 359, and then it is north again.'); return; }
+        file = ER.exitOk([v]);
+        if (!file) {
+          ER.sfx.no();
+          msg(ER.check('same', v) ? 'Kwame sets ' + back.get() + ' and looks along it. He is now staring away from you, into the white, at nothing. That is the way on. He wants the way back.' :
+            ER.check('c360', v) ? 'Kwame sets ' + back.get() + ', looks along it, and waves at an empty piece of cloud a long way to one side of you. You took the bearing away from 360. A back bearing is half a turn, and half a turn is 180.' :
+            ER.check('c180', v) ? 'Kwame sets ' + back.get() + ' and looks along it, at nothing. You took the bearing away from 180. Add 180 to it.' :
+            'Kwame sets ' + back.get() + ' and looks along it. Then he shakes his head: no torch. The way back is exactly opposite to the way on: half a circle round the dial.');
+          return;
+        }
+        wait = true; nextFile = file; ER.flag('b-file', file); stage = 3; ER.flag('b-stage', 3);
+        var s0 = ER.state(); s0.done = s0.done || {}; s0.done.whaleback = 1; ER.persist(true);
+        back.lock(true); draw();
+        var fwd = RIDGE.pad3(+ER.flag('b-brg') || 0), bk = back.get();
+        RIDGE.mine('back', 'The back bearing', '<p>The way on was ' + fwd + '&deg;. The way back is ' + fwd + ' + 180 = <b>' + bk + '&deg;</b>.</p><p>If a bearing is more than 180&deg; already, take 180 away instead.</p>', true);
+        msg('Kwame sets ' + bk + ' and looks along it. Your torch is exactly where his compass says it ought to be. He lifts both arms over his head. He is on the line.');
+        setTimeout(function () {
+          ER.closeAll(); RIDGE.solved(); paint(); busy = true;
+          ER.narrate([
+            'It takes thirty leaps. Kwame goes out along ' + fwd + ' until his torch is a smudge, looks back along ' + bk + ', and moves a few steps left or right until you are where his compass says you should be. Then you walk to him, at the speed of Mrs MacAskill&rsquo;s poles.',
+            'Twice the wind pushes him off the line, and the back bearing puts him on it again. Once, a long way to your right, the white turns a darker grey, and you hear a very large nothing. &ldquo;The Slabs,&rdquo; says Mrs MacAskill. &ldquo;Keep the number.&rdquo;',
+            'And then the ground begins to go down in front of you, and the wind, which has been behind you all the way, is suddenly coming from everywhere at once.',
+            'Mrs MacAskill looks at her watch, and writes in her notebook. &ldquo;One kilometre. Twenty-four minutes. On two good legs I do it in twelve.&rdquo; She underlines something. &ldquo;Remember that. We shall want it later.&rdquo;'
+          ], function () { busy = false; showGo(); });
+        }, 3200);
+      }
+    });
+    draw();
+    msg(['Press on the pencil ring where we are, hold, and let go on the ring where we want to be: the compass will be laid from one to the other.',
+      'You are holding the compass flat in front of you. The dial says ' + RIDGE.pad3(+ER.flag('b-brg') || 0) + ' and stays there. Turn yourself until the needle is in its red arrow.',
+      'Kwame is waiting, a yellow smudge in the white. What does he set on his dial, to look straight back at you?'][stage] || '');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return Math.min(stage, 2); }
+    };
+  }
+})();
+</script>
+</body>
+</html>

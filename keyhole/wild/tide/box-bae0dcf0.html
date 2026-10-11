@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Box · The Box at Pole Seven</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="tide.css">
+<style>
+  body{--bg:#dfe6e2;--accent:#f08a24;--font-display:'Stardos Stencil',serif;--font-ui:'Overpass',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(24,52,66,.96);--tc-ink:#f1f5f2;--cap-bg:rgba(18,40,52,.93);--panel:#1d3a4a;--face-bg:#b9c3c0;--q-ink:#ffd9a8;--fade:#e6ece8;--hud-bg:rgba(18,40,52,.84)}
+  .sS{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .swell path{animation:swell 7s ease-in-out infinite}
+  .swell path:nth-child(2n){animation-duration:9s;animation-delay:-3s}
+  @keyframes swell{50%{transform:translateX(34px)}}
+  .steam{animation:steam 3.6s ease-out infinite;opacity:0}
+  .steam.b{animation-delay:-1.8s}
+  @keyframes steam{0%{transform:translate(0,0);opacity:0}20%{opacity:.55}100%{transform:translate(10px,-56px);opacity:0}}
+  #glowS{animation:glowS 2.7s steps(1,end) infinite}
+  @keyframes glowS{0%{opacity:.9}35%{opacity:.6}60%{opacity:.95}85%{opacity:.7}}
+  #bell.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3)}}
+  #boat{display:none}
+  #scene.come #boat{display:block}
+  #veil{transition:opacity 6s steps(12,end)}
+  #scene.come #veil{opacity:.45}
+  .hot:hover{filter:brightness(1.08)}
+
+  /* the gallery, listening */
+  .gl{display:block;width:100%;height:auto;background:#dfe6e2}
+  .gl text{pointer-events:none}
+  .glT{font-family:'Overpass',sans-serif;font-weight:700;fill:#1d3a4a}
+  .gsrc{opacity:.14;transition:opacity .6s}
+  .gsrc.on{opacity:1;transition:none}
+  #e-rope{font-size:15px;padding:12px 26px}
+
+  /* the card at the end */
+  .done{position:fixed;right:2.2vw;top:62px;z-index:34;width:min(520px,94vw);max-height:calc(100vh - 80px);overflow:auto;padding:16px 26px 14px;display:none;background:#fdfcf6;color:#16222b;border-top:10px solid #f08a24;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .done.on{display:block}
+  .okstamp{display:inline-block;padding:3px 14px 0;border:4px solid #1f4e6b;color:#1f4e6b;font-family:'Stardos Stencil',serif;font-weight:700;font-size:25px;letter-spacing:.14em;transform:rotate(-3deg);margin-bottom:8px}
+  .done h6{margin:9px 0 5px;font-family:'Overpass',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:#b5461f}
+  .done p{margin:0 0 3px;font-family:'Overpass Mono',monospace;font-size:13px;line-height:1.4}
+  .done ol{margin:0;padding-left:20px;font-family:'Lora',serif;font-size:13px;line-height:1.38}
+  .done li{margin:0 0 3.500px}
+  .done .row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .done .btn{--accent:#1f4e6b;font-size:12.5px;padding:7px 12px}
+  .done .btn:hover:not([disabled]){color:#fdfcf6}
+  .done small{display:block;margin-top:9px;font-family:'Overpass Mono',monospace;font-size:12px;opacity:.75;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+  .rp{width:min(780px,94vw);max-height:84vh;overflow:auto;background-color:#f3eedb;color:#1c2440;padding:22px 34px 18px;box-shadow:0 26px 70px rgba(0,0,0,.5);-webkit-user-select:text;user-select:text;border-left:22px solid #1f4e6b}
+  .rp h4{margin:0 0 3px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:#1f4e6b}
+  .rp h3{margin:0 0 8px;font-family:'Handlee',cursive;font-weight:normal;font-size:30px;line-height:1.1}
+  .rp p,.rp label{display:block;font-family:'Lora',serif;font-size:15px;line-height:1.5;margin:0 0 6px;color:#22201a}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Caveat',cursive;font-size:25px;line-height:30px;color:#1c2440;background:#fbf7e6 repeating-linear-gradient(transparent 0 29px,rgba(60,70,110,.3) 29px 30px);border:1px solid #9a927a;padding:0 12px;border-radius:0;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:170px}
+  .rp input[type=text]{height:32px}
+  .rp .count{font-family:'Overpass',sans-serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;text-align:right;margin-top:3px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .rp .foot span{flex:1;font-family:'Overpass Mono',monospace;font-size:12.500px;opacity:.75}
+  .rp .btn{--accent:#1f4e6b}.rp .btn:hover:not([disabled]){color:#f3eedb}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d5ddd9"/><stop offset=".6" stop-color="#eef1ec"/><stop offset="1" stop-color="#dfe6e2"/></linearGradient>
+  <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfdcd6"/><stop offset=".3" stop-color="#8fb3a9"/><stop offset="1" stop-color="#3f7a72"/></linearGradient>
+  <linearGradient id="wallG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9ece4"/><stop offset="1" stop-color="#fafbf6"/></linearGradient>
+  <linearGradient id="deckG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9a988"/><stop offset="1" stop-color="#7d6f52"/></linearGradient>
+  <radialGradient id="stoveG"><stop offset="0" stop-color="#ffb35a" stop-opacity=".9"/><stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="veilG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef1ec" stop-opacity=".98"/><stop offset=".55" stop-color="#eef1ec" stop-opacity=".85"/><stop offset="1" stop-color="#eef1ec" stop-opacity="0"/></linearGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="900" fill="url(#skyG)"/>
+<!-- the top of the tide: two metres and more of green water where the sand was -->
+<g id="sea" class="hot"><rect x="-1000" y="430" width="3600" height="900" fill="url(#seaG)"/>
+  <g class="swell" stroke="#e6f0ec" stroke-width="3" fill="none" opacity=".55" stroke-linecap="round"><path d="M640 520q80 -10 160 0t160 0"/><path d="M1100 560q90 -12 180 0t180 0"/><path d="M700 610q100 -12 200 0t200 0"/><path d="M1200 650q90 -10 180 0t180 0"/><path d="M660 680q80 -10 160 0"/></g></g>
+<!-- pole 7, up to its number in the sea -->
+<g id="pole7" class="hot"><path d="M1230 600V340" stroke="#4a4030" stroke-width="16" stroke-linecap="round"/><rect x="1200" y="366" width="60" height="46" fill="#e9e6d6" stroke="#2a2620" stroke-width="3"/><text x="1230" y="402" class="sS" font-size="34" fill="#2a2620">7</text>
+  <ellipse cx="1230" cy="600" rx="40" ry="6" fill="#e6f0ec" opacity=".7"/><path d="M1230 606v70" stroke="#3f7a72" stroke-width="14" opacity=".35"/></g>
+<!-- what comes out of the fog at the end -->
+<g id="boat"><path d="M1290 560q120 30 330 26l380 -10v90q-300 30 -640 6q-60 -40 -70 -112z" fill="#1f4e6b"/><path d="M1290 560q120 30 330 26l380 -10" stroke="#f1f5f2" stroke-width="7" fill="none"/><path d="M1360 640q200 30 640 6" stroke="#c8321e" stroke-width="8" fill="none"/>
+  <text x="1500" y="628" font-family="Stardos Stencil,serif" font-weight="700" font-size="24" fill="#f1f5f2" letter-spacing="3">SANDERLING</text>
+  <path d="M1410 590q-10 -86 30 -96q40 -6 46 44l6 54z" fill="#6b7a8a"/><path d="M1470 520q40 -20 70 -50" stroke="#5a6978" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M1536 474l44 -30q14 4 10 16l-40 28z" fill="#c9a23a"/>
+  <rect x="1442" y="478" width="12" height="16" fill="#c99f7c"/><circle cx="1448" cy="464" r="20" fill="#d6ad88"/><path d="M1440 472q10 20 26 10l-2 -16z" fill="#aab0b2"/><path d="M1426 460q2 -22 22 -22q20 0 22 18q-22 -6 -44 4z" fill="#6b4a2a"/></g>
+<rect id="veil" x="-1000" y="-400" width="3600" height="1100" fill="url(#veilG)" pointer-events="none"/>
+
+<!-- the gallery: boards, a rail, and the top of the ladder -->
+<path d="M-1000 700H2600V1320H-1000Z" fill="url(#deckG)"/><g id="deck" stroke="#6b5e44" stroke-width="3" opacity=".8"></g>
+<g id="rail" stroke="#f4f6f0" stroke-linecap="round"><path d="M620 548H2600" stroke-width="16"/><path d="M620 626H2600" stroke-width="9"/><g stroke-width="13"><path d="M760 548V706M1010 548V706M1260 548V706M1560 548V706M1700 548V706"/></g></g>
+<g id="ladder" class="hot"><path d="M1300 706V470q0 -34 26 -34M1520 706V470q0 -34 -26 -34" stroke="#c8321e" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M1300 548h220" stroke="#dfe6e2" stroke-width="20"/><path d="M1300 626h220" stroke="#dfe6e2" stroke-width="13"/>
+  <path d="M1318 700h184" stroke="#4a4030" stroke-width="9"/></g>
+
+<!-- the Box: white boards, a door, a notice, a bell -->
+<path d="M-1000 -400H620V706H-1000Z" fill="url(#wallG)"/><g id="boards" stroke="#c9cec4" stroke-width="2.500"></g>
+<path d="M-1000 96H700l-60 34H-1000Z" fill="#1f4e6b"/><path d="M-1000 130H640" stroke="#16384c" stroke-width="5"/><path d="M606 130V706" stroke="#c9cec4" stroke-width="7"/>
+<g id="door"><rect x="318" y="196" width="246" height="510" fill="#16384c"/><rect x="330" y="208" width="222" height="498" fill="#2a2520"/>
+  <circle id="glowS" cx="430" cy="610" r="120" fill="url(#stoveG)"/>
+  <path d="M330 600h222v106H330z" fill="#4a3a28"/><path d="M330 600h222" stroke="#6b5438" stroke-width="6"/>
+  <path d="M352 600q-6 -60 40 -64q60 -4 70 20q10 20 0 44z" fill="#b3271c"/><path d="M360 560q40 -14 96 2" stroke="#8c1d14" stroke-width="4" fill="none"/>
+  <g id="kettle" class="hot"><rect x="474" y="560" width="60" height="40" fill="#3b444a"/><path d="M480 560q-4 -34 24 -34t24 34z" fill="#8a8f93"/><path d="M526 536q18 -4 18 12" stroke="#8a8f93" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <g fill="#eef1ec"><ellipse class="steam" cx="546" cy="530" rx="10" ry="7"/><ellipse class="steam b" cx="550" cy="524" rx="8" ry="6"/></g></g>
+  <path d="M318 196h246" stroke="#f08a24" stroke-width="8"/></g>
+<g id="notice" class="hot"><rect x="70" y="250" width="190" height="230" fill="#fdfcf6" stroke="#16222b" stroke-width="3"/><rect x="70" y="250" width="190" height="46" fill="#f08a24"/><text x="165" y="282" class="sS" font-size="19" fill="#16222b" letter-spacing="1">TARROW REFUGE</text>
+  <g stroke="#59616a" stroke-width="2.500" stroke-linecap="round"><path d="M88 320h154M88 336h154M88 352h110M88 384h154M88 400h154M88 416h130M88 448h154M88 462h90"/></g><rect x="82" y="372" width="6" height="52" fill="#f08a24"/><circle cx="165" cy="244" r="5" fill="#8a8f93"/></g>
+<g id="buoyring" class="hot"><circle cx="-80" cy="380" r="62" fill="none" stroke="#f08a24" stroke-width="30"/><g stroke="#fdfcf6" stroke-width="30"><path d="M-80 318v-1" stroke-linecap="butt"/></g><path d="M-124 336l-18 -18M-36 336l18 -18M-124 424l-18 18M-36 424l18 18" stroke="#fdfcf6" stroke-width="12"/></g>
+<g id="bell" class="hot"><path d="M620 190H750" stroke="#2a2620" stroke-width="10" stroke-linecap="round"/><path d="M700 190v24" stroke="#2a2620" stroke-width="6"/>
+  <path d="M664 276q8 -62 36 -62t36 62q10 10 14 20h-100q4 -10 14 -20z" fill="#c9a23a"/><path d="M676 268q6 -40 20 -46" stroke="#f1dc8a" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="700" cy="300" r="8" fill="#8a6a1a"/>
+  <path d="M700 308V520" stroke="#c9b27a" stroke-width="7"/><path d="M688 520h24l-4 34h-16z" fill="#c9b27a"/><rect x="668" y="200" width="64" height="360" fill="#fff" opacity="0"/></g>
+
+<!-- Dr Arroyo in a red blanket, with a mug -->
+<g id="arr" class="hot">
+  <ellipse cx="930" cy="842" rx="150" ry="14" fill="#5a4f38" opacity=".45"/>
+  <rect x="850" y="760" width="170" height="74" fill="#3d7d9b" stroke="#22201a" stroke-width="2"/><path d="M850 784h170M850 808h170" stroke="#2b5f78" stroke-width="3"/>
+  <path d="M900 770q60 -20 120 20l40 46h-40l-60 -40z" fill="#6b6456"/><path d="M1040 832h44v10h-50z" fill="#3a3026"/>
+  <path d="M880 772q50 -16 100 26l36 40h-36l-50 -40z" fill="#7a7364"/><path d="M990 824q24 -8 44 4q4 12 -8 14h-34z" fill="#9aa0a4"/>
+  <path d="M838 780q-22 -150 44 -168q70 -10 86 60l12 108z" fill="#b3271c"/><path d="M850 650q50 -30 110 0" stroke="#8c1d14" stroke-width="5" fill="none"/><path d="M846 700q60 -20 124 0M848 740q60 -16 128 0" stroke="#8c1d14" stroke-width="3" fill="none" opacity=".7"/>
+  <path d="M950 690q30 10 46 -6" stroke="#a52c1b" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="1000" cy="682" r="9" fill="#c99b70"/>
+  <path d="M1000 664h26v30h-26z" fill="#f1f5f2"/><path d="M1026 672q12 0 10 10q-2 6 -10 4" stroke="#f1f5f2" stroke-width="4" fill="none"/><g fill="#eef1ec"><ellipse class="steam" cx="1012" cy="656" rx="8" ry="6"/></g>
+  <rect x="894" y="594" width="14" height="18" fill="#b98d66"/><circle cx="904" cy="580" r="23" fill="#c99b70"/><path d="M882 580q0 -26 22 -26t22 26q-10 -10 -22 -10t-22 10z" fill="#2a1d14"/>
+  <path d="M884 588q-10 40 -4 70" stroke="#2a1d14" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M912 580h6" stroke="#2a1d14" stroke-width="2.400"/><path d="M910 592q6 4 10 0" stroke="#8a3d30" stroke-width="2" fill="none"/>
+</g>
+<g id="book" class="hot" transform="translate(40 -110)"><path d="M1090 760l96 -10 8 54 -96 12z" fill="#1f4e6b"/><path d="M1098 764l80 -8 6 42 -80 10z" fill="#f3eedb"/><g stroke="#1c2440" stroke-width="1.500" opacity=".8"><path d="M1108 776l60 -6M1110 786l56 -6M1112 796l40 -4"/></g><path d="M1170 742l34 -30" stroke="#e8b017" stroke-width="5" stroke-linecap="round"/></g>
+<g id="radio" class="hot"><path d="M1130 540V430" stroke="#16191b" stroke-width="6" stroke-linecap="round"/><rect x="1110" y="452" width="40" height="92" rx="8" fill="#16191b"/><rect x="1116" y="462" width="28" height="18" fill="#8fd6b4"/><rect x="1106" y="512" width="48" height="12" fill="#c8321e"/><circle cx="1142" cy="536" r="3" fill="#59e08a"/></g>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">HIGH AND DRY</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <h6>What you now know</h6>
+  <ol>
+    <li>A tide table gives the time and the height of every high water and low water. Heights are measured from chart datum, and sand that &ldquo;dries 1.6&rdquo; is under water whenever the tide is higher than 1.6 metres. So the dry time of a road is worked out from its lowest place: both ends, rounded the safe way.</li>
+    <li>High waters are about 12 hours 25 minutes apart, so each day&rsquo;s tides come about 50 minutes later. In a week, high water and low water change places.</li>
+    <li>Spring tides, the biggest, come a day or two after new moon and full moon. Neap tides, the smallest, come a day or two after the half moons. Springs go further out and come further in.</li>
+    <li>The rule of twelfths: in its six hours the tide rises 1, 2, 3, 3, 2 and 1 twelfths of its range. Half of the rise comes in the third and fourth hours, and on flat sand a small rise is a long way sideways.</li>
+    <li>A tide fills the channels first, so the way back can be cut before the water reaches your feet. Nobody outruns a tide across a channel: go to the refuge, and stay in it.</li>
+    <li>A tide table is a prediction. Low pressure and a wind blowing on to the shore make the sea higher, so it reaches every mark early.</li>
+    <li>A fog signal is known by its pattern: how many blasts in a group, and how many seconds between groups. Count it against a watch, and the chart tells you which one you can hear.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">The book in the Box</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the wall</button></div>
+  <small>The Box at Pole Seven &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="tide.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, bench = null, told = {};
+
+  (function () {
+    var s = '', i;
+    for (i = -14; i <= 14; i++) s += '<path d="M' + (800 + i * 96) + ' 700L' + (800 + i * 270) + ' 1320"/>';
+    $('#deck').innerHTML = s; s = '';
+    for (i = 0; i < 30; i++) s += '<path d="M' + (590 - i * 54) + ' 130V706"/>';
+    $('#boards').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'wild', story: 'tide', storyTitle: 'The Box at Pole Seven', id: 'box', no: 'V', title: 'The Box',
+    go: 'Sit down',
+    intro: [
+      'The horn on your left gave two blasts close together, every thirty seconds: Horn(2) 30s, Tarrow Light. The horn on your right gave one blast every fifteen seconds: Longstrand Pier. Both make two blasts in half a minute, and only the watch can tell them apart. The bell kept no time at all, so it was rung by waves and not by a hand: the buoy on the bar, where the Gutter meets the open sea.',
+      'So the Box lay towards the pier. You went round the soft sand by the north, where the chart says 2.8 and 3.0, and not by the Swash, which dries 2.0 and had water lying in it already.',
+      'At a quarter to three you climbed eleven rungs into a white wooden box on four legs. At ten past three the sea arrived underneath it.',
+      'It is now ten to six. The fog is as thick as ever, and the tide is nearly at the top.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"n":["5e960dbc"]},
+    sound: ['trail', { root: 55, bpm: 50, drop: ['mel', 'arp', 'ost', 'bass'], level: 1.05, beds: [['sea', 0.9], ['wind', 0.3]] }],      /* a boat's horn is listened for and a bell is rung in answer: long notes and the sea, nothing with a beat */
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('e-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('e-told', told); return true; }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#bell').classList.toggle('ready', !!(told.notice && !ER.flag('e-lock')));
+    $('#scene').classList.toggle('come', !!ER.flag('e-lock'));
+    ER.pips((told.notice ? 1 : 0) + (ER.flag('e-lock') ? 2 : 0) + (ER.flag('e-done') ? 1 : 0), 4);
+  }
+  function hints() {
+    if (ER.flag('e-done')) return null;
+    if (ER.flag('e-lock')) return ['boat', ['Somebody is coming up the ladder.']];
+    if (bench && bench.isOpen()) return ['answer', [
+      'Three things are sounding in the fog. Two of them you know already. The notice says which sound to answer, and how.',
+      'Do nothing for the lighthouse (two short blasts together) or for the pier (one short blast). When ONE LONG blast comes, pull the rope: one stroke for each person in the Box. Then stop and listen.'
+    ]];
+    if (!told.notice) return ['notice', [
+      'Mrs Hebden said that there was a bell, a kettle and a book. There is also something to read on the wall.',
+      'The notice is on the white wall of the Box, on the left, with an orange top. Click it.'
+    ]];
+    return ['bell', ['The bell hangs under the roof at the corner of the Box, and its rope comes down beside the door. Take hold of the rope.']];
+  }
+
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    TIDE.mine('horns', 'Two horns and a bell', '<p>On the left: two blasts together, every 30 seconds. Horn(2) 30s: <b>Tarrow Light</b>. On the right: one blast every 15 seconds: <b>Longstrand Pier</b>. Both make two blasts in half a minute: it is the pattern that tells them apart.</p><p>The bell kept no time: rung by waves. So it was the <b>Bar buoy</b>, not the Box, whose bell is rung by hand.</p><p>The Box is on the Pole Road, towards the pier. We went round the soft sand by the north (2.8 and 3.0), not by the Swash (2.0): at 14.25 the sea was already at 2.3.</p>', true);
+    paint();
+    if (ER.flag('e-done')) { busy = false; finish(true); return; }
+    if (ER.flag('e-lock')) { busy = false; ending(); return; }
+    if (told.in) { busy = false; ER.say('The Box, ten to six. Green water is going past the legs.'); return; }
+    tell('in');
+    ER.narrate([
+      'The Box is three metres square, with a bench, a locker, a small stove and a gallery to sit on. Under the gallery, where you walked this afternoon, there are more than two metres of green water, going quietly past the legs.',
+      'Dr Arroyo has made tea, counted the blankets, and written up her seals. She is wearing one boot and one very large grey sock, which was in the locker with a name sewn into it: I. NYBERG.',
+      'On the wall beside the door there is a notice. Under the roof hangs a brass bell, and its rope comes down within reach of your hand. You have not touched it. &ldquo;A bell is rung by a hand,&rdquo; says Dr Arroyo. &ldquo;I have learnt this today. But for whom?&rdquo;',
+      'Then, a long way off in the white, there is a sound that is not the lighthouse, and not the pier.'
+    ], function () { busy = false; TIDE.horn({ dur: 1.7, f: 232, vol: 0.035, pan: 0.5, lp: 700 }); });
+  }
+
+  /* ---------- the notice, and the book ---------- */
+  var NOTICE = '<h4><small>Tarrow Harbour Trust &middot; pole 7</small>Tarrow Refuge</h4>' +
+    '<p><b>You are safe here.</b> The floor of this Box is more than two metres above the highest tide on the card. Nobody has ever been hurt in the Box. People are hurt climbing down from it too soon.</p>' +
+    '<div class="sig"><b>WHEN TO LEAVE</b><p>Not until the sand is dry all the way to the shore: about two hours before low water. If you are not sure, wait.</p></div>' +
+    '<div class="sig"><b>IN FOG</b><p>A boat that is looking for you sounds <b>ONE LONG BLAST</b>, again and again, never more than two minutes apart. Answer every long blast with the bell: <b>one stroke for each person in the Box</b>. Then stop, and listen for the next. The boat steers by your bell, and counts you by it.</p>' +
+    '<p>Do not ring for the lighthouse or the pier. They can&rsquo;t hear you.</p></div>' +
+    '<p class="foot">Blankets, water and a stove are in the locker. Please write in the book. Please leave the Box as you would like to find it. &nbsp;P. Hebden, for the Trust</p>';
+  $('#notice').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: NOTICE, cls: 'boxnote', clue: { id: 'notice', title: 'Tarrow Refuge', kind: 'The notice on the wall of the Box' }, done: function () {
+      TIDE.terms(['refuge', 'blast', 'stroke']);
+      if (tell('notice')) { paint(); TIDE.horn({ dur: 1.7, f: 232, vol: 0.045, pan: 0.5, lp: 700 }); ER.say('Out in the fog, the sound comes again: one note, low and long. The rope of the bell is beside your hand.'); }
+    } });
+  });
+  var BOOK = '<h4>Tarrow Refuge &middot; the book</h4>' +
+    '<p class="a">17 August 1989. Took Wednesday&rsquo;s tides for Thursday&rsquo;s. Seven hours. A fine box. No milk. &mdash; I. Nyberg (visitor)</p>' +
+    '<p class="b gap">3 May 2003. Two of us and a dog. The dog would not use the ladder. It was carried. &mdash; M. and J.</p>' +
+    '<p class="a gap">21 September 2011. Walked out to photograph the sunset from the Rigg. The Rigg left without me. &mdash; R.</p>' +
+    '<p class="b gap">Every spring tide: water can filled, stove tried, gulls discouraged. P. H.</p>' +
+    '<p class="gap"><small>The next line is empty.</small></p>';
+  $('#book').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BOOK, cls: 'boxbook', clue: { id: 'boxbook', title: 'The book in the Box', kind: 'A great many visitors' }, done: function () {
+      if (tell('book')) ER.say('The first name in the book is one that you know.');
+    } });
+  });
+
+  /* ---------- things on the gallery ---------- */
+  TIDE.thing('#sea', null, 'Green water, with small bubbles going past in lines. It is strange to think that you walked across the bottom of it.', isBusy);
+  TIDE.thing('#pole7', 'marker pole', 'Pole 7, up to its number in the sea. This afternoon it was three metres tall.', isBusy);
+  TIDE.thing('#ladder', 'ladder', 'The top of the ladder. Eleven rungs: you counted them on the way up. You can see four.', isBusy);
+  TIDE.thing('#kettle', 'kettle', 'A kettle, a small stove, and a tin of tea. Mrs Hebden filled the water can on Monday. Mr Nyberg said that nobody would drink it.', isBusy);
+  TIDE.thing('#buoyring', 'lifebuoy', 'A lifebuoy, painted every spring and never yet thrown.', isBusy);
+  TIDE.thing('#radio', null, function () { return ER.flag('e-done') ? 'The radio with the red tape round it. It has nothing more to say.' : 'The radio, standing on the rail. It has said nothing for an hour. Mr Nyberg has other things to do with his hands.'; }, isBusy);
+  $('#arr').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(ER.flag('e-done') ? '&ldquo;Fifteen pups,&rdquo; says Dr Arroyo. &ldquo;And tomorrow, sixteen. I shall be on the slip at ten. I have read the card.&rdquo;' :
+      told.notice ? '&ldquo;One long blast,&rdquo; says Dr Arroyo. &ldquo;And we are two people. I can count that far, even today.&rdquo;' :
+      '&ldquo;There is tea,&rdquo; says Dr Arroyo. &ldquo;There is also a notice, which I have not read, because I am keeping it for you.&rdquo;');
+  });
+  $('#bell').addEventListener('click', function (e) {
+    if (busy) return;
+    if (ER.flag('e-lock')) { ER.say('The bell is still swinging a little.'); return; }
+    if (!told.notice) { ER.wordAt(e.clientX, e.clientY, 'bell'); ER.say('A brass bell under the roof, with a rope. &ldquo;Before you ring it,&rdquo; says Dr Arroyo, &ldquo;read what it is for. There is a notice.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- a long blast, and two strokes ---------- */
+  function makeBench() {
+    var PX = 40, NOW = 870, BPOS = [[872, 236, 1], [790, 250, 1.35], [700, 266, 1.8]], box = ER.el('div', 'bx'), timer = 0, t0 = 0, nextBoat = 6.2, winEnd = 0, strokes = 0, stray = 0, strayT = 0, good = 0, boats = 0, won = false,
+      lastHorn = '', lastHornT = -9, fired = {}, s, i;
+    function arcs(id, x, y, a0, col, k) {
+      var o = '<g class="gsrc" id="' + id + '" stroke="' + col + '" fill="none" stroke-linecap="round">', r, t1, t2;
+      for (i = 1; i <= 3; i++) { r = (14 + i * 20) * (k || 1); t1 = (a0 - 40) * Math.PI / 180; t2 = (a0 + 40) * Math.PI / 180;
+        o += '<path stroke-width="' + (7 - i) + '" d="M' + (x + r * Math.sin(t1)).toFixed(1) + ' ' + (y - r * Math.cos(t1)).toFixed(1) + 'A' + r.toFixed(1) + ' ' + r.toFixed(1) + ' 0 0 1 ' + (x + r * Math.sin(t2)).toFixed(1) + ' ' + (y - r * Math.cos(t2)).toFixed(1) + '"/>'; }
+      return o + '<circle cx="' + x + '" cy="' + y + '" r="' + (7 * (k || 1)).toFixed(1) + '" fill="' + col + '" stroke="none"/></g>';
+    }
+    s = '<svg class="gl" viewBox="0 0 1000 470"><defs><linearGradient id="glS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d5ddd9"/><stop offset="1" stop-color="#eef1ec"/></linearGradient>' +
+      '<linearGradient id="glW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d3dfd9"/><stop offset="1" stop-color="#6fa096"/></linearGradient></defs><rect width="1000" height="470" fill="url(#glS)"/><rect y="214" width="1000" height="140" fill="url(#glW)"/>' +
+      '<g stroke="#eef3f0" stroke-width="2.500" fill="none" opacity=".6"><path d="M120 262q40 -6 80 0t80 0M420 290q50 -8 100 0t100 0M660 310q40 -6 80 0t80 0M240 322q40 -6 80 0"/></g>' +
+      arcs('e-src-p', 70, 232, 90, '#1f6f9c') + arcs('e-src-l', 950, 206, 270, '#d9731a') + '<g id="e-boat"></g>' +
+      '<g class="glT" font-size="11.500" letter-spacing="1.500"><text x="20" y="198">TO THE WEST</text><text x="980" y="172" text-anchor="end">TO THE EAST</text></g>' +
+      '<path d="M0 340H1000" stroke="#f4f6f0" stroke-width="14"/><path d="M0 356H1000" stroke="#b9a988" stroke-width="18"/><g stroke="#f4f6f0" stroke-width="11"><path d="M160 340v-56M500 340v-56M840 340v-56"/></g><path d="M0 284H1000" stroke="#f4f6f0" stroke-width="12"/>' +
+      '<g id="e-bell" transform="translate(500 20)"><path d="M0 0v20" stroke="#2a2620" stroke-width="5"/><path d="M-30 78q6 -58 30 -58t30 58q8 8 12 16h-84q4 -8 12 -16z" fill="#c9a23a"/><circle cy="98" r="7" fill="#8a6a1a"/></g><g id="e-ringwave"></g>' +
+      '<rect y="366" width="1000" height="104" fill="#f7f3e3"/><path d="M0 366H1000" stroke="#16222b" stroke-width="2"/>' +
+      '<g id="e-tape"></g><rect x="0" y="367" width="150" height="103" fill="#f7f3e3" opacity=".94"/><path d="M' + NOW + ' 366V470" stroke="#c8321e" stroke-width="2"/>' +
+      '<g class="glT" font-size="11.500" letter-spacing="1"><text x="12" y="392">FROM THE WEST</text><text x="12" y="420">FROM THE EAST</text><text x="12" y="452">YOUR BELL</text><text x="' + (NOW + 8) + '" y="382" font-size="10.500" style="fill:#c8321e">NOW</text></g></svg>';
+    box.innerHTML = '<div class="frame">' + s + '</div><div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="e-rope">Pull the rope</button></div>';
+    var svg = box.querySelector('svg'), tape = svg.querySelector('#e-tape'), msgEl = box.querySelector('.pmsg'), rope = box.querySelector('#e-rope');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function now() { return (Date.now() - t0) / 1000; }
+    function flash(sel) { var n = svg.querySelector(sel); if (!n) return; n.setAttribute('class', 'gsrc on'); setTimeout(function () { n.setAttribute('class', 'gsrc'); }, 560); }
+    function dash(t, dur, y, h, col) { tape.appendChild(TIDE.el('rect', { x: (t * PX).toFixed(1), y: y, width: (dur * PX).toFixed(1), height: h, fill: col })); }
+    function horn(which, t) {
+      lastHorn = which; lastHornT = t;
+      if (which === 'p') { flash('#e-src-p'); TIDE.horn({ dur: 0.6, f: 196, vol: 0.05, pan: -0.8, lp: 480 }); dash(t, 0.62, 382, 12, '#1f6f9c'); }
+      else if (which === 'l') { flash('#e-src-l'); TIDE.horn({ dur: 0.6, f: 150, vol: 0.035, pan: 0.8, lp: 400 }); dash(t, 0.62, 410, 12, '#d9731a'); }
+      else {
+        var b = BPOS[Math.min(good, 2)];
+        svg.querySelector('#e-boat').innerHTML = arcs('e-src-b', b[0], b[1], 270, '#c8321e', b[2]); flash('#e-src-b');
+        TIDE.horn({ dur: 1.7, f: 232, vol: 0.06 + 0.03 * good, pan: 0.5 - 0.15 * good, lp: 700 }); dash(t, 1.75, 407, 18, '#c8321e');
+      }
+    }
+    function tick() {
+      var t = now(), k5 = Math.floor(t / 5), k10 = Math.floor(t / 10), old;
+      tape.setAttribute('transform', 'translate(' + (NOW - t * PX).toFixed(1) + ' 0)');
+      if (!fired['p' + k5] && t >= k5 * 5 + 0.33) { fired['p' + k5] = 1; horn('p', t); }
+      if (!fired['a' + k10] && t >= k10 * 10 + 1.33) { fired['a' + k10] = 1; horn('l', t); }
+      if (!fired['b' + k10] && t >= k10 * 10 + 3.0) { fired['b' + k10] = 1; horn('l', t); }
+      if (!won && !winEnd && t >= nextBoat) { boats++; winEnd = t + 6; strokes = 0; horn('b', t); svg.setAttribute('data-boats', boats); }
+      if (winEnd && t >= winEnd) { winEnd = 0; judge(); }
+      while ((old = tape.firstChild) && +old.getAttribute('x') < (t - 24) * PX) tape.removeChild(old);
+    }
+    function judge() {
+      var t = now();
+      if (ER.check('n', strokes)) {
+        good++; svg.setAttribute('data-good', good);
+        if (good >= 3) { win(); return; }
+        nextBoat = t + 3.4;
+        msg(good === 1 ? 'A long blast, and two strokes of the bell for an answer. For a moment there is nothing. Then the long blast comes again, and it is nearer.' : 'Nearer still. Under the horn you can hear an engine now, turning over very slowly.');
+        return;
+      }
+      TIDE.sfx.no(); good = 0; svg.setAttribute('data-good', 0); nextBoat = t + 4.4;
+      msg(strokes === 0 ? 'The long blast dies away, and nobody answers it. &ldquo;That was the boat!&rdquo; says Dr Arroyo. &ldquo;One long blast: not two short ones, and not the pier. Ring!&rdquo;' :
+        strokes === 1 ? '&ldquo;One stroke?&rdquo; says Dr Arroyo. &ldquo;Then he will think that one of us is in the sea. One stroke for each person, the notice says. Count us.&rdquo;' :
+        '&ldquo;Too many,&rdquo; says Dr Arroyo. &ldquo;He is counting people by those strokes. One for each of us: unless you have found a seal.&rdquo;');
+    }
+    function pull() {
+      var t = now(), n;
+      if (won) return;
+      TIDE.bell({ f: 520, vol: 0.16 });
+      tape.appendChild(TIDE.el('circle', { cx: (t * PX).toFixed(1), cy: 448, r: 7, fill: '#c9a23a', stroke: '#6b5210', 'stroke-width': 1.5, x: (t * PX).toFixed(1) }));
+      n = svg.querySelector('#e-bell'); n.setAttribute('transform', 'translate(500 20) rotate(14)'); setTimeout(function () { n.setAttribute('transform', 'translate(500 20)'); }, 170);
+      if (winEnd) { strokes++; return; }
+      stray++; clearTimeout(strayT);
+      strayT = setTimeout(function () {
+        var dt = now() - lastHornT; stray = 0; if (won || winEnd) return;
+        TIDE.sfx.no();
+        msg(dt < 4.5 && lastHorn === 'l' ? '&ldquo;That was the lighthouse,&rdquo; says Dr Arroyo. &ldquo;Two short blasts together. It can&rsquo;t hear you. Wait for the long one.&rdquo;' :
+          dt < 3 && lastHorn === 'p' ? '&ldquo;That was the pier at Longstrand,&rdquo; says Dr Arroyo. &ldquo;One short blast. It can&rsquo;t hear you either. Wait for the long one.&rdquo;' :
+          '&ldquo;Nobody blew,&rdquo; says Dr Arroyo. &ldquo;Keep the bell for the long blast. If you ring all the time, the boat can&rsquo;t count us.&rdquo;');
+      }, 1300);
+    }
+    function win() {
+      won = true; svg.setAttribute('data-win', 1); ER.flag('e-lock', 1); rope.style.visibility = 'hidden';
+      msg('The third long blast is so near that the boards of the Box hum with it. You pull the rope twice. Then, for the first time today, somebody shouts your name.');
+      setTimeout(function () { ER.closeAll(); paint(); ending(); }, 4200);
+    }
+    rope.addEventListener('click', pull);
+    function listen(on) { clearInterval(timer); timer = 0; if (on && !won) { t0 = Date.now(); fired = {}; nextBoat = 6.2; winEnd = 0; strokes = 0; tape.innerHTML = ''; timer = setInterval(tick, 80); } }
+    msg('The gallery of the Box. Listen: every sound draws itself on the strip of paper as it comes. (The paper is in a hurry, like the watch.) The rope of the bell is in your hand. Do what the notice says.');
+    return {
+      open: function () { ER.open('ov-lock', box, function () { listen(false); clearTimeout(strayT); }); listen(true); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+
+  /* ---------- the top of the tide ---------- */
+  function ending() {
+    busy = true; paint(); ER.mood('calm');
+    ER.narrate([
+      'Out of the white, very slowly, comes the blue nose of a boat. In the nose of the boat stands a man in a dry coat, with a brass horn in his hand.',
+      'Behind him, at the tiller, Mrs Hebden is steering with one hand and holding her headscarf on with the other. &ldquo;Two!&rdquo; she shouts up. &ldquo;I counted two, three times over. If you had rung three, I should have wanted to know who you had found out here.&rdquo;'
+    ], function () {
+      TIDE.solved(true);
+      ER.talk({
+        who: 'Mr Nyberg', role: 'Ranger of Tarrow · dry', face: window.FACE('nyberg'),
+        lines: [
+          { note: 'He comes up the ladder with a flask under his arm, and looks at the kettle, the blankets and the bell rope, in that order.', a: '&ldquo;Two strokes. Three times. I have not been so pleased with a number since I passed my driving test.&rdquo;' },
+          { q: 'How did you find us?', a: 'I did not have to find the Box. I have known where the Box is for thirty years. What I did not know was whether there was anybody in it. A bell that rings twice whenever I blow is not the wind, and it is not a buoy. It is two people who have read the notice.' },
+          { q: 'We should have been quicker.', a: 'No. I kept forty minutes in hand. The fog took ten of them and the weather took thirty. That is what the forty are for, and today they were exactly not enough. The card was right about everything except today.' },
+          { a: 'He has found the book, and turned back a long way in it.</p><p>&ldquo;You need not read that,&rdquo; he says. Mrs Hebden reads it aloud from the top of the ladder: &ldquo;17 August 1989. Took Wednesday&rsquo;s tides for Thursday&rsquo;s. Seven hours. A fine box. No milk. I. Nyberg.&rdquo;</p><p>&ldquo;I was a visitor,&rdquo; says Mr Nyberg. &ldquo;I have never had to use it as ranger.&rdquo;' }
+        ],
+        clue: { id: 'nyb5', title: 'Mr Nyberg, in the Box', kind: 'What he said' }, last: 'Close',
+        done: function () {
+          ER.narrate([
+            'Mrs Hebden&rsquo;s boat takes you home at the top of the tide: over the Swash, over the ford, over the place where you stood at pole 12, with four metres of sea underneath you. Dr Arroyo sits in the bottom of the boat in one boot and one of Mr Nyberg&rsquo;s socks, writing up her pups.',
+            'At half past ten that night the fog has gone, and the wind with it. From the door of the tide shed you watch the Pole Road come up out of the sea, pole by pole, under a thin new moon: ten minutes later than you said this morning. &ldquo;The sea is still a little above its card,&rdquo; says Mr Nyberg. &ldquo;You were right. It was the weather that was late.&rdquo;',
+            'Then he chalks tomorrow on the board: LOW WATER 12.46. He looks at it, and holds the chalk out to you. &ldquo;Tomorrow you tell me when the road is dry,&rdquo; he says. &ldquo;I shall carry the bag.&rdquo;'
+          ], function () { busy = false; ER.flag('e-done', 1); finish(false); });
+        }
+      });
+    });
+  }
+  function finish(quick) {
+    var st = ER.state(), mins = TIDE.minutesPlayed(), hn = ER.hintsUsed();
+    $('#scene').classList.add('come');
+    $('#d-time').textContent = 'From the tide shed to the Box: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on'); paint();
+    if (quick) ER.say('The Box, with a boat tied to its ladder.');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Tarrow Refuge &middot; the book</h4><h3>The next line is yours</h3>' +
+      '<p>Mrs Hebden holds out the book, and a pencil on a string. &ldquo;Everybody who sits out a tide in here writes something.&rdquo; Choose ONE of these and explain it, aloud or in writing, in 60 to 90 words, to a friend who has never seen a tide. Use: first, then, because, so.</p>' +
+      '<p><b>A</b> How you worked out when the road across the sands would be dry.<br><b>B</b> Why the Rigg was a safe place last Thursday, and not today.<br><b>C</b> How you knew that the sea was early, and why the way back was cut before the way home.<br><b>D</b> How you told two horns and a bell apart in the fog, and what that told you.</p>' +
+      '<textarea id="r1"></textarea><div class="count"></div><label for="r2">Name</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

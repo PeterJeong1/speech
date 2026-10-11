@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Pump Room · Word for Word</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-scifi.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="benthos.css">
+<style>
+  body{--bg:#150807;--accent:#f2c230;--font-display:'Saira Stencil One',sans-serif;--font-ui:'Share Tech Mono',monospace;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(20,8,7,.96);--tc-ink:#f3e9e2;--cap-bg:rgba(20,8,7,.94);--cap-ink:#f6efe9;--panel:#24100d;--face-bg:#2a1b12;--q-ink:#ffd98a;--fade:#080302;--hud-bg:rgba(20,8,7,.82)}
+  #redGlow{animation:rg 4.2s steps(4) infinite}
+  @keyframes rg{50%{opacity:.8}}
+  .drop{animation:drop 2.3s ease-in infinite}
+  .drop.d2{animation-duration:3.1s;animation-delay:-1.2s}
+  @keyframes drop{0%{transform:translateY(0);opacity:0}8%{opacity:1}70%{transform:translateY(430px);opacity:1}71%,100%{transform:translateY(430px);opacity:0}}
+  .ring{animation:ringw 2.3s ease-out infinite;transform-origin:center;transform-box:fill-box;opacity:0}
+  .ring.d2{animation-duration:3.1s;animation-delay:-1.2s}
+  @keyframes ringw{0%,68%{transform:scale(.2);opacity:0}72%{opacity:.7}100%{transform:scale(1.5);opacity:0}}
+  #scene.live #fly{animation:spin 1.6s linear infinite}
+  #fly{transform-origin:800px 540px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #needleS{transform-origin:1010px 300px;transition:transform 1.2s}
+  #scene.live #needleS{transform:rotate(160deg)}
+  #brkOn{display:none}#scene.live #brkOn{display:inline}#scene.live #brkOff{display:none}
+  #board.next #boardKeys{animation:bnudge 1.8s ease-in-out infinite}
+
+  /* the Board */
+  .bd{display:grid;grid-template-columns:minmax(0,560px) 470px;gap:16px;width:min(1070px,96vw);align-items:start}
+  .bd-mimic{background:#0a1418;border:1px solid #4a5a60;border-radius:8px;padding:6px;margin-bottom:8px}
+  .bd-mimic svg{display:block;width:100%;height:auto}
+  .bd-side h6{margin:0 0 8px;font-family:'Saira Stencil One',sans-serif;font-weight:normal;font-size:19px;letter-spacing:.06em;color:#f2c230}
+  .bd-list{padding:10px 14px;background:#04110c repeating-linear-gradient(rgba(125,255,176,.045) 0 2px,transparent 2px 4px);border:1px solid #1f6a48;border-radius:6px;font-family:'Share Tech Mono',monospace;
+    font-size:16px;line-height:1.3;color:#c9ffdf}
+  .bd-list p{display:grid;grid-template-columns:26px minmax(0,1fr);margin:0 0 11px}
+  .bd-list p:last-child{margin-bottom:0}
+  .bd-list p.now{color:#fff;text-shadow:0 0 8px rgba(125,255,176,.8)}
+  .bd-list p>b{font-weight:normal;color:#5fb98a}
+  .gap{display:inline-block;min-width:74px;margin:1px 2px;padding:2px 9px 1px;border-radius:3px;background:#f2c230;color:#16130a;font-family:'Share Tech Mono',monospace;font-size:16px;text-align:center;box-shadow:0 3px 0 rgba(0,0,0,.5)}
+  .gap:hover{background:#ffe07a}
+  .gap.none{background:#33454f;color:#c9dfe2}
+  .bd-foot{display:flex;align-items:center;gap:10px;margin:10px 0 8px}
+  .bd-foot span{flex:1;font-family:'Share Tech Mono',monospace;font-size:12.5px;letter-spacing:.06em;color:rgba(255,255,255,.55)}
+  .bd .pmsg{min-height:96px;font-size:16.5px}
+  .bd-rules{padding:8px 14px 4px;background:#f5f0e2;color:#20242b;border-left:10px solid #f2c230;border-radius:3px;font-family:'Outfit',sans-serif;font-weight:300;font-size:14px;line-height:1.3}
+  .bd-rules p{margin:0 0 5px}
+  .bd-rules b{font-family:'Saira Stencil One',sans-serif;font-weight:normal;color:#a8402c;margin-right:6px}
+  .bd-rules u{text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:.95em;background:#16130a;color:#f2c230;padding:0 4px;border-radius:2px}
+  .bd-rules .pen{font-family:'Caveat',cursive;font-weight:700;font-size:1.3em;line-height:1;color:#3a4f8a}
+  .mT{font-family:'Share Tech Mono',monospace;font-size:11px;fill:#9fb8be;text-anchor:middle}
+  #mm-rotor.on{animation:spin2 .9s linear infinite}
+  #mm-rotor{transform-origin:330px 150px}
+  @keyframes spin2{to{transform:rotate(360deg)}}
+  @media (max-width:1000px){.bd{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#200c0a"/><stop offset=".6" stop-color="#3a1613"/><stop offset="1" stop-color="#250e0c"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1210"/><stop offset="1" stop-color="#0d0504"/></linearGradient>
+  <linearGradient id="pipeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a3a2e"/><stop offset=".5" stop-color="#5c2219"/><stop offset="1" stop-color="#2e0f0b"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1d98a"/><stop offset=".5" stop-color="#c9a044"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="tankS" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a1c16"/><stop offset=".4" stop-color="#8a3a2e"/><stop offset="1" stop-color="#3a1512"/></linearGradient>
+  <radialGradient id="redG"><stop offset="0" stop-color="#ff5a3a" stop-opacity=".55"/><stop offset=".4" stop-color="#ff3a1a" stop-opacity=".16"/><stop offset="1" stop-color="#ff3a1a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="scrG"><stop offset="0" stop-color="#7dffb0" stop-opacity=".3"/><stop offset="1" stop-color="#7dffb0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="48%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#080302" stop-opacity=".3"/><stop offset="1" stop-color="#080302" stop-opacity=".92"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-600" width="3600" height="1340" fill="url(#wallG)"/>
+<g id="plates"></g>
+<path d="M-1000 740H2600V1500H-1000Z" fill="url(#floorG)"/><path d="M-1000 740H2600" stroke="#0d0504" stroke-width="7"/>
+<g id="grate" stroke="#3a1613" stroke-width="3" opacity=".7"></g>
+<text x="330" y="150" class="st" font-size="40" fill="#f2c230" opacity=".8">PUMP ROOM · LOWEST DECK</text>
+
+<!-- pipes along the roof, a red lamp in a cage -->
+<g fill="url(#pipeG)"><rect x="-1000" y="170" width="3600" height="34"/><rect x="-1000" y="222" width="3600" height="20"/></g>
+<g fill="#2e0f0b"><rect x="250" y="164" width="16" height="46"/><rect x="700" y="164" width="16" height="46"/><rect x="1150" y="164" width="16" height="46"/><rect x="1500" y="164" width="16" height="46"/></g>
+<circle id="redGlow" cx="560" cy="290" r="520" fill="url(#redG)" pointer-events="none"/>
+<g><rect x="540" y="242" width="40" height="14" fill="#2e0f0b"/><path d="M544 256h32l8 44h-48z" fill="#ff6a4a"/><g stroke="#1a0806" stroke-width="3" fill="none"><path d="M536 300h48M548 256v44M560 256v44M572 256v44"/></g></g>
+<g id="drip" class="hot"><rect x="1236" y="242" width="12" height="20" fill="#2e0f0b"/><circle class="drop" cx="1242" cy="268" r="4" fill="#ffd0c0"/><circle class="drop d2" cx="398" cy="268" r="4" fill="#ffd0c0"/>
+  <ellipse class="ring" cx="1242" cy="704" rx="22" ry="6" fill="none" stroke="#ffb0a0" stroke-width="2"/><ellipse class="ring d2" cx="398" cy="704" rx="22" ry="6" fill="none" stroke="#ffb0a0" stroke-width="2"/></g>
+
+<!-- the ladder up, and a toolbox with a dent in it -->
+<g id="ladder" class="hot"><path d="M96 -100V740M176 -100V740" stroke="#f2c230" stroke-width="10"/><g stroke="#c99a14" stroke-width="8"><path d="M96 300h80M96 380h80M96 460h80M96 540h80M96 620h80M96 700h80"/></g></g>
+<g id="toolbox" class="hot"><rect x="228" y="690" width="170" height="70" rx="5" fill="#a8402c"/><path d="M228 712h170" stroke="#5c2219" stroke-width="4"/><path d="M280 690q33-30 66 0" stroke="#33454f" stroke-width="8" fill="none"/><path d="M296 696q18 12 36 0" stroke="#5c2219" stroke-width="4" fill="none"/><rect x="302" y="716" width="22" height="14" fill="#c9a044"/></g>
+
+<!-- the tank that feeds the pump -->
+<g id="tank" class="hot"><rect x="430" y="330" width="170" height="410" rx="26" fill="url(#tankS)"/><path d="M430 400h170M430 660h170" stroke="#2e0f0b" stroke-width="6"/>
+  <rect x="496" y="420" width="38" height="220" rx="8" fill="#0d0504"/><rect id="sightS" x="502" y="620" width="26" height="14" fill="#5fd0d8"/><text x="515" y="382" text-anchor="middle" class="st" font-size="24" fill="#f2c230">TANK</text>
+  <path d="M430 480H330V204" stroke="url(#pipeG)" stroke-width="26" fill="none"/><g id="valveS"><circle cx="330" cy="420" r="34" fill="none" stroke="#f2c230" stroke-width="9"/><path d="M296 420h68M330 386v68" stroke="#f2c230" stroke-width="7"/><circle cx="330" cy="420" r="9" fill="#c99a14"/></g></g>
+
+<!-- the big pump -->
+<g id="pump" class="hot"><rect x="640" y="700" width="330" height="40" fill="#2e0f0b"/><rect x="660" y="470" width="290" height="230" rx="30" fill="url(#tankS)"/><rect x="690" y="450" width="230" height="30" rx="8" fill="#5c2219"/>
+  <g stroke="#2e0f0b" stroke-width="5"><path d="M700 480v220M740 480v220M860 480v220M900 480v220"/></g>
+  <circle cx="800" cy="540" r="62" fill="#1a0806"/><g id="fly"><circle cx="800" cy="540" r="54" fill="none" stroke="url(#brassG)" stroke-width="12"/><path d="M800 486v108M746 540h108M762 502l76 76M838 502l-76 76" stroke="url(#brassG)" stroke-width="7"/></g><circle cx="800" cy="540" r="13" fill="url(#brassG)"/>
+  <rect x="740" y="630" width="120" height="34" fill="#f2c230"/><text x="800" y="655" text-anchor="middle" class="st" font-size="22" fill="#16130a">PUMP 1</text>
+  <path d="M600 600h60M950 560h60V332" stroke="url(#pipeG)" stroke-width="26" fill="none"/></g>
+
+<!-- the gauge: sixty, and not one less -->
+<g id="gauge" class="hot"><circle cx="1010" cy="300" r="72" fill="#1a0806"/><circle cx="1010" cy="300" r="62" fill="#f3ecd6"/><circle cx="1010" cy="300" r="62" fill="none" stroke="url(#brassG)" stroke-width="8"/>
+  <g id="ticks" stroke="#27231d" stroke-width="3"></g><path d="M1054 262A58 58 0 0 1 1060 330" stroke="#c9342a" stroke-width="7" fill="none"/>
+  <g class="mono" font-size="14" fill="#27231d" text-anchor="middle"><text x="988" y="330">0</text><text x="1028" y="282">60</text><text x="1036" y="330">90</text></g>
+  <g id="needleS"><path d="M1010 300L968 335" stroke="#a8402c" stroke-width="5" stroke-linecap="round"/></g><circle cx="1010" cy="300" r="8" fill="#27231d"/></g>
+
+<!-- the breaker -->
+<g id="breaker" class="hot"><rect x="1100" y="380" width="96" height="150" rx="6" fill="#33454f"/><rect x="1114" y="394" width="68" height="24" fill="#0c1218"/><text id="brkOff" x="1148" y="411" text-anchor="middle" class="mono" font-size="15" fill="#ff6a4a">OUT</text><text id="brkOn" x="1148" y="411" text-anchor="middle" class="mono" font-size="15" fill="#7dffb0">IN</text>
+  <rect x="1138" y="432" width="20" height="80" rx="4" fill="#0c1218"/><rect x="1128" y="480" width="40" height="26" rx="5" fill="#a8402c"/></g>
+
+<!-- the Board, and the man who built it -->
+<circle cx="1420" cy="430" r="300" fill="url(#scrG)" pointer-events="none"/>
+<g id="board" class="hot"><rect x="1300" y="320" width="250" height="420" rx="10" fill="#1c2a33"/><rect x="1300" y="320" width="250" height="34" rx="10" fill="#f2c230"/><text x="1425" y="345" text-anchor="middle" class="st" font-size="21" fill="#16130a">THE BOARD</text>
+  <g id="blog"><rect x="1318" y="370" width="214" height="170" rx="5" fill="#04110c"/><g class="mono" font-size="12.500" fill="#8df0b4"><text x="1328" y="394">23:08 OPEN THE SEA VALVE</text><text x="1328" y="412">      WHILE THE TANK IS FULL.</text><text x="1328" y="434">NOTHING TO DO. DONE.</text><text x="1328" y="460">23:09 START THE PUMP.</text><text x="1328" y="486" fill="#ffb84a">PUMP DRY. BREAKER OUT.</text><text x="1328" y="522">&gt; _</text></g></g>
+  <g id="boardKeys"><rect x="1318" y="560" width="214" height="90" rx="5" fill="#0c1218"/><g fill="#5a6d78"></g></g></g>
+<g id="kovacs" class="hot"><use href="#ch-kovacs" x="1090" y="470" width="220" height="286"/><path d="M1140 756h120l-12 70h-96z" fill="#5a6d78"/><path d="M1140 756h120" stroke="#9aa7ad" stroke-width="6"/></g>
+
+<rect x="-1000" y="-600" width="3600" height="2100" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the order desk</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="benthos.js"></script>
+<script>
+(function () {
+  var $ = ER.$, sc = $('#scene'), busy = false, nextFile = null;
+
+  /* hull plates and rivets, the floor grating, the marks on the gauge, the keys of the Board */
+  (function () {
+    var s = '', i, k, a;
+    for (i = -6; i <= 16; i++) { s += '<path d="M' + (i * 190) + ' 250V740" stroke="#1a0806" stroke-width="5" opacity=".7"/>'; for (k = 0; k < 6; k++) s += '<circle cx="' + (i * 190 + 14) + '" cy="' + (290 + k * 84) + '" r="4" fill="#5c2219" opacity=".8"/>'; }
+    $('#plates').innerHTML = s; s = '';
+    for (i = -10; i <= 30; i++) s += '<path d="M' + (i * 80) + ' 740L' + (800 + (i * 80 - 800) * 2.2).toFixed(0) + ' 1500"/>';
+    s += '<path d="M-1000 790H2600M-1000 860H2600"/>';
+    $('#grate').innerHTML = s; s = '';
+    for (i = 0; i <= 9; i++) { a = (-220 + i * 26.7) * Math.PI / 180; s += '<path d="M' + (1010 + Math.cos(a) * 46).toFixed(1) + ' ' + (300 + Math.sin(a) * 46).toFixed(1) + 'L' + (1010 + Math.cos(a) * 56).toFixed(1) + ' ' + (300 + Math.sin(a) * 56).toFixed(1) + '"/>'; }
+    $('#ticks').innerHTML = s; s = '';
+    for (i = 0; i < 3; i++) for (k = 0; k < 9; k++) s += '<rect x="' + (1328 + k * 22) + '" y="' + (572 + i * 24) + '" width="16" height="16" rx="2"/>';
+    $('#boardKeys g').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'scifi', story: 'benthos', storyTitle: 'Word for Word', id: 'pumps', no: 'III', title: 'The Pump Room',
+    go: 'Go down',
+    intro: [
+      'The Arm did the evening round because you watched your words. &ldquo;Lift the star out of the tray&rdquo; names the tray last, so &ldquo;it&rdquo; would have been the tray: you named the star last instead. &ldquo;Them&rdquo; needed the sea pens and the star named together, with <i>and</i>. And &ldquo;all but one&rdquo; leaves the last in the row: right for the lids, wrong for the lamps, where you had to say which one.',
+      'It is half past three. Dr Halvorsen has air until about half past six.',
+      'The pump room is the lowest place in the laboratory: red light, wet pipes, and the big pump that drives the winch in the dock. The pump is not running. On the screen of its control board is the order that stopped it.'
+    ],
+    exit: {"next":"floor","w":{"20a876eb":"b3449a6e"}}, tags: {"g1":["eb2c899a"],"g2":["381c83af"],"g3":["d857b1ac"],"g4":["645b8249"],"g5":["0fadeca3"]},
+    sound: ['orbit', { root: 43, bpm: 52, mood: 'tense', drop: ['mel'], lead: 'keys', beds: [['hum', 1], ['drips', 0.4]] }],      /* the lowest deck: machinery, drips, and a clock running */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('p-file') || null;
+  var pick = ER.flag('p-st') || { g1: '', g2: '', g3: '', g4: '', g5: '' };
+
+  var BLOG = '<h4>THE BOARD · PUMP CONTROL · LAST ORDERS</h4>' +
+    '<p class="o">23:08 ORDER (V.K.): OPEN THE SEA VALVE WHILE THE TANK IS FULL.</p><p>THE TANK IS NOT FULL. SO THIS IS NOT A TIME &ldquo;WHILE THE TANK IS FULL&rdquo;. NOTHING TO DO. DONE.</p>' +
+    '<p class="o">23:09 ORDER (V.K.): START THE PUMP.</p><p>PUMP STARTED. DONE.</p>' +
+    '<p class="x">23:09 THE TANK IS EMPTY. THE PUMP IS RUNNING DRY. BREAKER OUT. PUMP STOPPED.</p>' +
+    '<p class="pen">I meant UNTIL. I typed WHILE. One word, at ten past eleven at night. V.K.</p>';
+  var GAPS = {
+    g1: [['while', 'while'], ['until', 'until'], ['soon', 'as soon as']],
+    g2: [['before', 'before'], ['unless', 'unless'], ['after', 'after']],
+    g3: [['it', 'it'], ['valve', 'the valve'], ['pump', 'the pump']],
+    g4: [['while', 'while'], ['unless', 'unless'], ['soon', 'as soon as']],
+    g5: [['unless', 'unless'], ['while', 'while'], ['if', 'if']]
+  };
+  var LIST = [
+    ['Open the sea valve ', 'g1', ' the tank is full.'],
+    ['Start the pump ', 'g2', ' the sea valve is shut.'],
+    ['Stop ', 'g3', ' ', 'g4', ' the gauge reads 60.'],
+    ['Open the winch valve ', 'g5', ' the gauge reads 60.']
+  ];
+  var RULES = [
+    ['3', '<u>IT</u> means the last thing you named. Not the most important thing. The last.'],
+    ['5', '<u>UNTIL</u>: it goes on doing the thing, and stops at the moment the rest comes true. <u>WHILE</u>: it does the thing only for as long as the rest is true; if the rest is not true now, it does nothing. <u>AS SOON AS</u>: it waits, and acts at the moment the rest comes true. If that never happens, it waits for ever.'],
+    ['7', '<u>IF</u>: it looks once, and acts if the thing is true at that moment. <u>UNLESS</u> is the other way round: it acts if the thing is not true.'],
+    ['', '<span class="pen">BEFORE and AFTER need no rule. But it cannot do a thing BEFORE something that has happened already. V.K.</span>']
+  ];
+  var SAY = {
+    wait1: '&ldquo;It will wait until the sea dries up,&rdquo; says Kovacs. &ldquo;&lsquo;As soon as&rsquo; does nothing but wait. And who is going to fill the tank while it waits?&rdquo; He presses STOP.',
+    dry: '&ldquo;That,&rdquo; says Kovacs, &ldquo;is exactly what I did at ten past eleven. &lsquo;While the tank is full.&rsquo; The tank was not full, so the valve never opened: and then the pump started on nothing.&rdquo; He pushes the breaker back in.',
+    before: '&ldquo;It cannot go back in time,&rdquo; says Kovacs. &ldquo;The valve shut at the end of order 1. &lsquo;Before&rsquo; that has gone.&rdquo;',
+    wait3: '&ldquo;The gauge will never read 60 if the pump never starts,&rdquo; says Kovacs. &ldquo;Look back up the screen. Which order did not happen, and why?&rdquo; He presses STOP.',
+    bang: '&ldquo;The safety valve,&rdquo; says Kovacs, when the noise has stopped. &ldquo;It is there for people like us. The pump was running, and nothing in the list told it to stop: not in words that it could use.&rdquo;',
+    unclear: '&ldquo;Stop <i>what</i>?&rdquo; says Kovacs. &ldquo;Rule 3. What was the last thing named in the order before?&rdquo;',
+    nopress: '&ldquo;There is no sixty on that gauge,&rdquo; says Kovacs. &ldquo;Something went wrong higher up the list. Read the screen from the top.&rdquo;',
+    unless5: '&ldquo;Sixty on the gauge, and the winch valve shut,&rdquo; says Kovacs. &ldquo;&lsquo;Unless&rsquo; is &lsquo;if&rsquo; turned upside down.&rdquo;',
+    chatter: '&ldquo;Open, shut, open, shut,&rdquo; says Kovacs, over the hammering. &ldquo;&lsquo;While&rsquo; the gauge reads sixty. The moment that valve opens, the gauge reads fifty-nine.&rdquo; He hits the breaker.'
+  };
+
+  function hints() {
+    if (nextFile) return ['go', ['The winch has its pressure. The order desk is upstairs: the button is at the bottom of the screen.']];
+    if (!ER.flag('p-talk') || !ER.flag('p-log')) return ['look', [
+      'Kovacs is sitting on a bucket in front of the Board. Talk to him. Then read the green screen at the top of the Board: it shows what he told the pump last night, and what the pump did.',
+      'When you have done both, click the keys of the Board to write the order list again.'
+    ]];
+    return ['list', [
+      'Five yellow words are yours to choose. Take the orders one at a time, from the top, as the Board does. For each one ask: at the moment when the Board reads this, what is true? Is the tank full? Is the valve shut? Is the pump running? What does the gauge read?',
+      'Rule 5 in the strip below. To fill the tank, the valve must open now and shut when the tank is full: which word goes on until a thing comes true? The pump should start when order 1 has finished: can it do that &ldquo;before&rdquo; the valve is shut? And in order 3, read rule 3: what is the last thing named in order 2?',
+      'Order 3 must name the pump. It must wait while the gauge climbs and act at the moment it reads 60: that is the waiting word, not &ldquo;while&rdquo;. In order 4 the gauge does read 60 when the Board looks: so which word acts when the thing is true, &ldquo;if&rdquo; or &ldquo;unless&rdquo;?'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    sc.setAttribute('class', nextFile ? 'live' : '');
+    $('#sightS').setAttribute('y', nextFile ? 426 : 620); $('#sightS').setAttribute('height', nextFile ? 208 : 14);
+    $('#board').setAttribute('class', 'hot' + (!nextFile && ER.flag('p-talk') && ER.flag('p-log') ? ' next' : ''));
+    $('#go').classList.toggle('on', !!nextFile && !busy);
+    ER.pips(nextFile ? 1 : 0, 1);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The pump room. The big pump has done its work and stopped, and the needle is standing at sixty.'); return; }
+    if (ER.flag('p-seen')) { ER.say('The pump room: red light, wet pipes, and a pump that is not running.'); return; }
+    busy = true; ER.flag('p-seen', 1);
+    ER.narrate([
+      'The pump room. Everything down here is painted red or yellow, and everything drips.',
+      'Kovacs is sitting on an upturned bucket in front of a green screen, with a spanner in his hand that he is not using. &ldquo;The Board,&rdquo; he says, without turning round. &ldquo;It runs the pump. It takes orders, like everything else that I have built. Read what I told it.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- Kovacs, and his machines ---------- */
+  $('#kovacs').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Thirty years an engineer,&rdquo; says Kovacs, &ldquo;and beaten by the word &lsquo;while&rsquo;. Go on up. I shall be at the winch.&rdquo;'); return; }
+    ER.talk({
+      who: CAST.kovacs.who, role: CAST.kovacs.role, face: FACE('kovacs'),
+      lines: [
+        { note: 'A square man in orange overalls, with a grey moustache, his glasses pushed up on his forehead and a pencil behind one ear. He has not slept since Tuesday morning, and looks it.',
+          a: '&ldquo;Viktor Kovacs. I built Limpet. I built the Arm. I built this Board. Tonight all three of them have made a fool of me, and the worst of it is that not one of them has done anything wrong.&rdquo;' },
+        { q: 'What happened to the pump?',
+          a: 'I wanted the tank filled and the pump started. I typed two orders at ten past eleven, after eighteen hours awake. The Board did both of them, to the letter. The pump ran dry, and the breaker threw it off. It is all on the screen. I cannot look at it again.' },
+        { q: 'Why do we need the pump?',
+          a: 'The winch in the dock runs on water pressure from this pump: sixty on that gauge, and not one less. With the winch we can pull on Limpet&rsquo;s line. Without it, all we can do is talk.' },
+        { q: 'Why did you build Limpet to take every word so exactly?',
+          a: 'Because the sea does. Tell a diver &ldquo;hold this until I come back&rdquo;, and he gets cold, and he gets bored, and he lets go. A machine that guesses what you meant will one day guess wrong, a long way down. Limpet does not guess. I have never once been sorry for that. Until tonight.' }
+      ],
+      clue: { id: 'kovacs1', title: 'Kovacs, in the pump room', kind: 'What he said' }, last: 'Look at the Board',
+      done: function (seen) { if (!seen) return; ER.flag('p-talk', 1); BEN.learn(['winch', 'breaker']); paint(); ER.say('The green screen at the top of the Board still shows last night&rsquo;s orders. The keys are under it.'); }
+    });
+  });
+  $('#blog').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    ER.read({ html: BLOG, cls: 'scr', clue: { id: 'boardlog', title: 'The Board: last night’s orders', kind: 'On its screen' }, done: function () { ER.flag('p-log', 1); paint(); } });
+  });
+  $('#board').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The Board. Four orders, done from the top, and a line at the bottom of the screen that says: PRESSURE 60. WINCH READY.'); return; }
+    if (!ER.flag('p-talk')) { ER.say('The Board belongs to the man on the bucket. Better talk to him before you touch it.'); return; }
+    if (!ER.flag('p-log')) { ER.say('Read the Board&rsquo;s screen first: the green one, above the keys. It shows the order that stopped the pump.'); return; }
+    openBoard();
+  });
+  BEN.thing('#pump', 'pump', function () { return nextFile ? 'Pump 1. It ran until the needle touched sixty, and stopped as soon as it was told. The pipes are still warm.' : 'Pump 1. It weighs as much as a small car, and at the moment it is doing as much work as one that is parked.'; }, isBusy);
+  BEN.thing('#tank', 'tank', function () { return nextFile ? 'The tank, full to the top of its glass.' : 'The tank that feeds the pump. In the little glass down its side there is a finger of water, right at the bottom. It is as good as empty.'; }, isBusy);
+  BEN.thing('#gauge', 'gauge', function () { return nextFile ? 'The gauge. The needle stands at sixty, and stays there.' : 'The gauge. The needle is lying on zero. The winch wants sixty.'; }, isBusy);
+  BEN.thing('#breaker', 'breaker', function () { return nextFile ? 'The breaker is in.' : 'The breaker. A little window in it says OUT. It switches the pump off by itself when the pump is in trouble.'; }, isBusy);
+  BEN.thing('#drip', null, 'Drip. The laboratory does not leak. It sweats: warm air inside, cold steel, and six degrees of sea on the other side.', isBusy);
+  BEN.thing('#ladder', 'ladder', 'The ladder up to the lab deck. Down here you are standing on the very bottom of the hull.', isBusy);
+  BEN.thing('#toolbox', null, 'Kovacs&rsquo;s toolbox. There is a dent in the lid that is exactly the shape of a forehead.', isBusy);
+
+  /* ---------- the Board: five words, and then it does the list ---------- */
+  function mimic() {
+    return '<rect width="560" height="230" fill="#0a1418"/>' +
+      '<path d="M0 60q10-8 20 0t20 0v22H0z" fill="#2f8f9a"/><text x="20" y="100" class="mT">SEA</text>' +
+      '<path d="M40 70H150M250 150H290M370 150H470M430 150V116M530 150H560" stroke="#5a6d78" stroke-width="8" fill="none"/>' +
+      '<g id="mm-v1"><path d="M76 54L104 86V54L76 86Z"/></g><text x="90" y="42" class="mT">SEA VALVE</text><text id="mm-v1t" x="90" y="106" class="mT"></text>' +
+      '<rect x="150" y="40" width="100" height="150" rx="8" fill="#16222b" stroke="#5a6d78" stroke-width="3"/><rect id="mm-level" x="154" y="186" width="92" height="0" fill="#5fd0d8"/><text x="200" y="30" class="mT">TANK</text><text id="mm-pct" x="200" y="120" class="mT" style="font-size:17px;fill:#eafff2"></text>' +
+      '<circle cx="330" cy="150" r="40" fill="#16222b" stroke="#5a6d78" stroke-width="3"/><g id="mm-rotor"><path d="M330 116v68M296 150h68" stroke="#c9a044" stroke-width="6"/></g><circle cx="330" cy="150" r="7" fill="#c9a044"/><text x="330" y="212" class="mT">PUMP</text><text id="mm-pt" x="330" y="100" class="mT"></text>' +
+      '<circle cx="430" cy="68" r="48" fill="#f3ecd6" stroke="#c9a044" stroke-width="5"/><path d="M468.7 51.6A42 42 0 0 1 466.4 89" stroke="#c9342a" stroke-width="6" fill="none"/>' +
+      '<path id="mm-needle" d="M430 68V34" stroke="#a8402c" stroke-width="4" stroke-linecap="round"/><circle cx="430" cy="68" r="5" fill="#27231d"/><text id="mm-g" x="430" y="98" class="mT" style="font-size:15px;fill:#27231d"></text>' +
+      '<path id="mm-bang" d="M392 14l10 8l-2-12l12 8l2-12l8 12l8-10l2 12l12-6l-4 12" stroke="#ffb84a" stroke-width="3" fill="none" style="display:none"/>' +
+      '<g id="mm-v2"><path d="M486 134L514 166V134L486 166Z"/></g><text x="500" y="122" class="mT">WINCH VALVE</text><text id="mm-v2t" x="500" y="186" class="mT"></text>' +
+      '<rect x="296" y="14" width="68" height="22" rx="3" fill="#16222b" stroke="#5a6d78" stroke-width="2"/><text id="mm-b" x="330" y="30" class="mT"></text>';
+  }
+  function openBoard() {
+    var box = ER.el('div', 'bd'), running = false, kill = null, s;
+    var w = { tank: 4, v1: 0, pump: 0, gauge: 0, v2: 0, brk: 1 };
+    s = '<div><div class="bd-mimic"><svg viewBox="0 0 560 230">' + mimic() + '</svg></div><div id="bd-log"></div><p class="pmsg" style="margin-top:8px"></p></div>' +
+      '<div class="bd-side"><h6>The Board: the order list</h6><div class="bd-list"></div>' +
+      '<div class="bd-foot"><span>CLICK A YELLOW WORD TO CHANGE IT</span><button type="button" class="btn" id="bd-run">Run the list</button></div>' +
+      '<div class="bd-rules">' + RULES.map(function (r) { return '<p>' + (r[0] ? '<b>' + r[0] + '</b>' : '') + r[1] + '</p>'; }).join('') + '</div></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg'), log = BEN.readout(box.querySelector('#bd-log')), svg = box.querySelector('svg'), listEl = box.querySelector('.bd-list');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function q(id) { return svg.querySelector('#' + id); }
+    function word(g) { var o = GAPS[g].filter(function (x) { return x[0] === pick[g]; })[0]; return o ? o[1] : ''; }
+    function drawList(now) {
+      listEl.innerHTML = LIST.map(function (l, i) {
+        return '<p' + (now === i + 1 ? ' class="now"' : '') + '><b>' + (i + 1) + '</b><span>' + l.map(function (part) {
+          return GAPS[part] ? '<button type="button" class="gap' + (pick[part] ? '' : ' none') + '" data-g="' + part + '">' + (word(part) || '· · ·') + '</button>' : part;
+        }).join('') + '</span></p>';
+      }).join('');
+    }
+    function draw() {
+      q('mm-v1').setAttribute('fill', w.v1 ? '#7dffb0' : '#c9342a'); q('mm-v1t').textContent = w.v1 ? 'OPEN' : 'SHUT';
+      q('mm-v2').setAttribute('fill', w.v2 ? '#7dffb0' : '#c9342a'); q('mm-v2t').textContent = w.v2 ? 'OPEN' : 'SHUT';
+      q('mm-level').setAttribute('y', 186 - w.tank * 1.42); q('mm-level').setAttribute('height', w.tank * 1.42); q('mm-pct').textContent = w.tank >= 100 ? 'FULL' : w.tank < 8 ? 'EMPTY' : Math.round(w.tank) + '%';
+      q('mm-rotor').setAttribute('class', w.pump ? 'on' : ''); q('mm-pt').textContent = w.pump ? 'RUNNING' : 'STOPPED';
+      q('mm-needle').setAttribute('transform', 'rotate(' + (-120 + w.gauge * 2.667).toFixed(1) + ' 430 68)'); q('mm-g').textContent = Math.round(w.gauge);
+      q('mm-b').textContent = w.brk ? 'BREAKER IN' : 'BREAKER OUT'; q('mm-b').setAttribute('style', 'fill:' + (w.brk ? '#7dffb0' : '#ff6a4a'));
+      box.setAttribute('data-gauge', Math.round(w.gauge)); box.setAttribute('data-tank', Math.round(w.tank));
+    }
+    function later(ms, fn) { var t = setTimeout(fn, ms); kill = function () { clearTimeout(t); }; }
+    function ramp(key, to, ms, fn) {                              /* a number that climbs in steps: no animation frames */
+      var from = w[key], n = Math.max(1, Math.round(ms / 110)), i = 0, t = setInterval(function () {
+        i++; w[key] = from + (to - from) * i / n; draw();
+        if (i >= n) { clearInterval(t); fn(); }
+      }, 110);
+      kill = function () { clearInterval(t); };
+    }
+    function reset() { w = { tank: 4, v1: 0, pump: 0, gauge: 0, v2: 0, brk: 1 }; q('mm-bang').style.display = 'none'; draw(); }
+    function fail(kind) {
+      BEN.bump('slips'); BEN.bump('trips'); BEN.sfx.hm(); drawList(0); msg(SAY[kind]);
+      later(4200, function () { reset(); log.line('LIST STOPPED. EVERYTHING AS IT WAS. BREAKER IN.', 'dim'); running = false; });
+    }
+    function runaway() {
+      if (!w.pump) { fail('unclear'); return; }
+      later(900, function () {
+        log.line('THE PUMP IS STILL RUNNING. NOBODY HAS TOLD IT WHEN TO STOP.'); BEN.sfx.pump(2.2);
+        ramp('gauge', 84, 2200, function () {
+          BEN.sfx.bang(); q('mm-bang').style.display = ''; w.pump = 0; w.brk = 0; w.gauge = 0; draw();
+          log.line('84. SAFETY VALVE OPEN. BREAKER OUT. PUMP STOPPED.', 'x'); fail('bang');
+        });
+      });
+    }
+    function line1() {
+      drawList(1); log.line('ORDER 1: OPEN THE SEA VALVE ' + word('g1').toUpperCase() + ' THE TANK IS FULL.', 'o');
+      if (ER.check('g1', pick.g1)) {
+        w.v1 = 1; draw(); BEN.sfx.valve(); BEN.sfx.flow(2.2); log.line('SEA VALVE OPEN. FILLING.');
+        ramp('tank', 100, 2200, function () { w.v1 = 0; draw(); BEN.sfx.valve(); log.line('THE TANK IS FULL. SEA VALVE SHUT. DONE.', 'k'); later(800, line2); });
+      } else if (pick.g1 === 'while') { log.line('THE TANK IS NOT FULL, SO THIS IS NOT A TIME &ldquo;WHILE THE TANK IS FULL&rdquo;. NOTHING TO DO. DONE.'); later(1100, line2); }
+      else { log.line('WAITING FOR THE TANK TO BE FULL.'); later(2200, function () { log.line('STILL WAITING. THE SEA VALVE IS SHUT, AND NOBODY HAS TOLD ME TO OPEN IT.', 'x'); fail('wait1'); }); }
+    }
+    function line2() {
+      drawList(2); log.line('ORDER 2: START THE PUMP ' + word('g2').toUpperCase() + ' THE SEA VALVE IS SHUT.', 'o');
+      if (ER.check('g2', pick.g2)) {
+        w.pump = 1; draw(); BEN.sfx.pump(1.4); log.line('THE SEA VALVE IS SHUT. PUMP STARTED. DONE.', 'k');
+        if (w.tank < 100) { later(1500, function () { w.pump = 0; w.brk = 0; draw(); BEN.sfx.trip(); log.line('THE TANK IS EMPTY. THE PUMP IS RUNNING DRY. BREAKER OUT. PUMP STOPPED.', 'x'); fail('dry'); }); return; }
+        later(900, line3);
+      } else if (pick.g2 === 'before') { log.line('THE SEA VALVE IS SHUT ALREADY. I CANNOT DO A THING BEFORE SOMETHING THAT HAS HAPPENED. CANNOT.', 'x'); fail('before'); }
+      else { log.line('THE SEA VALVE IS SHUT, SO I DO NOT START THE PUMP. DONE.'); later(1100, line3); }
+    }
+    function line3() {
+      drawList(3); log.line('ORDER 3: STOP ' + word('g3').toUpperCase() + ' ' + word('g4').toUpperCase() + ' THE GAUGE READS 60.', 'o');
+      if (!ER.check('g3', pick.g3)) {
+        if (pick.g3 === 'it') log.line('IT = THE SEA VALVE (THE LAST THING NAMED).', 'it');
+        log.line('A VALVE IS OPEN OR SHUT. I CANNOT &ldquo;STOP&rdquo; ONE. ORDER NOT CLEAR.', 'x'); runaway(); return;
+      }
+      if (ER.check('g4', pick.g4)) {
+        log.line('WAITING FOR THE GAUGE TO READ 60.');
+        if (!w.pump) { later(2200, function () { log.line('STILL WAITING. THE PUMP IS NOT RUNNING, SO THE GAUGE DOES NOT MOVE.', 'x'); fail('wait3'); }); return; }
+        BEN.sfx.pump(2.4);
+        ramp('gauge', 60, 2400, function () { w.pump = 0; draw(); BEN.sfx.valve(); log.line('THE GAUGE READS 60. PUMP STOPPED. DONE.', 'k'); later(900, line4); });
+      } else if (pick.g4 === 'while') { log.line('THE GAUGE DOES NOT READ 60. NOTHING TO DO. DONE.'); if (w.pump) runaway(); else later(1100, line4); }
+      else { w.pump = 0; draw(); log.line('THE GAUGE DOES NOT READ 60, SO I STOP THE PUMP. PUMP STOPPED. DONE.'); later(1100, line4); }
+    }
+    function line4() {
+      var at60 = Math.round(w.gauge) === 60, n = 0;
+      drawList(4); log.line('ORDER 4: OPEN THE WINCH VALVE ' + word('g5').toUpperCase() + ' THE GAUGE READS 60.', 'o');
+      if (!at60) {
+        if (pick.g5 === 'unless') { w.v2 = 1; draw(); BEN.sfx.valve(); log.line('THE GAUGE DOES NOT READ 60, SO I OPEN THE WINCH VALVE. DONE.'); }
+        else log.line('THE GAUGE DOES NOT READ 60. NOTHING TO DO. DONE.');
+        later(900, function () { log.line('NO PRESSURE. THE WINCH CANNOT TURN.', 'x'); fail('nopress'); });
+        return;
+      }
+      if (ER.check('g5', pick.g5)) { w.v2 = 1; draw(); BEN.sfx.valve(); log.line('THE GAUGE READS 60. WINCH VALVE OPEN. DONE.', 'k'); later(900, win); }
+      else if (pick.g5 === 'unless') { log.line('THE GAUGE READS 60, SO I DO NOT OPEN THE WINCH VALVE. DONE.'); later(900, function () { fail('unless5'); }); }
+      else {
+        log.line('THE GAUGE READS 60. WINCH VALVE OPEN.');
+        (function flap() {
+          n++; w.v2 = n % 2; w.gauge = n % 2 ? 59 : 60; draw(); BEN.sfx.valve();
+          if (n < 8) later(260, flap);
+          else { w.v2 = 0; w.brk = 0; draw(); BEN.sfx.trip(); log.line('59. SHUT. 60. OPEN. 59. SHUT. 60. OPEN. BREAKER OUT.', 'x'); fail('chatter'); }
+        })();
+      }
+    }
+    function win() {
+      var file = ER.exitOk([[pick.g1, pick.g2, pick.g3, pick.g4, pick.g5].join('|')]);
+      drawList(0);
+      if (!file) { msg('Something is wrong with this lock: tell your teacher.'); running = false; return; }
+      nextFile = file; ER.flag('p-file', file); BEN.done('pumps'); busy = true;
+      log.line('PRESSURE 60. WINCH READY.', 'k'); msg('The needle stops on sixty, exactly, and stays there. Kovacs breathes out, for what seems to be the first time since yesterday afternoon.');
+      BEN.mine('timewords', 'Small words on the Board', '<p>UNTIL: do it now, stop when the thing comes true.</p><p>WHILE: only when the thing is true NOW. (&ldquo;While the tank is full&rdquo;: it wasn&rsquo;t.)</p>' +
+        '<p>AS SOON AS: wait, then act. AFTER: fine. BEFORE: not if it has happened already.</p><p>IF: when it is true. UNLESS: when it is not.</p><p>And &ldquo;it&rdquo; was the valve, not the pump!</p>', true);
+      later(2800, function () { ER.closeAll(); BEN.solved(); paint(); after(); });
+    }
+    listEl.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.gap') : null, g, o, i;
+      if (!b || running) return;
+      g = b.getAttribute('data-g'); o = GAPS[g];
+      for (i = 0; i < o.length; i++) if (o[i][0] === pick[g]) break;
+      pick[g] = o[(i + 1) % o.length][0]; if (i >= o.length) pick[g] = o[0][0];
+      ER.flag('p-st', pick); BEN.sfx.key(); drawList(0);
+    });
+    box.querySelector('#bd-run').addEventListener('click', function () {
+      if (running) return;
+      if (!(pick.g1 && pick.g2 && pick.g3 && pick.g4 && pick.g5)) { ER.shake(listEl); msg('&ldquo;Five words,&rdquo; says Kovacs. &ldquo;It cannot run a list with holes in it. Nor can I.&rdquo;'); return; }
+      running = true; log.clear(); msg(''); reset(); BEN.sfx.send(); later(500, line1);
+    });
+    drawList(0); draw();
+    msg('Kovacs has typed the list again, the long way, and left five words for you. &ldquo;Choose them as if the thing could not think,&rdquo; he says. &ldquo;It cannot.&rdquo;');
+    BEN.learn(['until', 'while', 'as soon as', 'unless']);
+    ER.open('ov-lock', box, function () { if (kill) kill(); });
+  }
+  function after() {
+    ER.narrate([
+      'Above your heads, in the dock, something heavy wakes up and begins to turn.',
+      '&ldquo;Until. After. As soon as. If,&rdquo; says Kovacs. &ldquo;Four small words, and the name of a pump.&rdquo; He pulls his glasses down on to his nose. &ldquo;Do not tell Halvorsen about &lsquo;while&rsquo;.&rdquo;',
+      'He goes up the ladder to try the winch, and you hear it through the steel: the line comes in, comes tight at 420 metres, and stops. &ldquo;Still caught,&rdquo; says his voice on the speaker. &ldquo;I can pull until that line breaks, and I am not going to. We have to know what it is doing out there.&rdquo;',
+      '&ldquo;Then ask it for a picture,&rdquo; says the Chief. &ldquo;I did. At six o&rsquo;clock. It sent me a perfect picture of the dark.&rdquo; &ldquo;Then ask it better,&rdquo; says the Chief. There is a pause, in which you can hear two people not looking at each other. &ldquo;Order desk. Both of you.&rdquo;'
+    ], function () { busy = false; paint(); });
+  }
+  $('#go').addEventListener('click', function () { if (nextFile && !busy) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>

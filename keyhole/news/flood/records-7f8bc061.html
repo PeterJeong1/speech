@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Record Library · Two Aunts</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-news.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="flood.css">
+<style>
+  body{--bg:#120c08;--accent:#b6e0a8;--font-display:'Oswald',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Newsreader',serif;
+    --tc-bg:rgba(20,13,9,.97);--tc-ink:#f3ecdc;--cap-bg:rgba(18,12,8,.95);--panel:#1d140d;--face-bg:#26282c;--q-ink:#b6e0a8;--fade:#070403;--hud-bg:rgba(18,12,8,.86)}
+  .gobtn{color:#14181d}
+  #branch{animation:tap 5.3s ease-in-out infinite;transform-origin:500px 150px}
+  @keyframes tap{0%{transform:rotate(0)}8%{transform:rotate(3deg)}12%{transform:rotate(-1deg)}16%{transform:rotate(2deg)}24%{transform:rotate(0)}100%{transform:rotate(0)}}
+  .reel{animation:reel 7s linear infinite}
+  .reel.r2{animation-duration:4.6s}
+  @keyframes reel{100%{transform:rotate(360deg)}}
+  #sato{display:none}
+  #scene.in #sato{display:block}
+  #pcard.ready,#photo.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3)}}
+
+  /* the picture under the glass, and the test card */
+  .job.ph{width:min(1130px,96vw)}
+  .ph-top{display:grid;grid-template-columns:minmax(0,1fr) 404px;gap:14px;align-items:start}
+  .ph-top svg{display:block;width:100%;height:auto;box-shadow:0 20px 50px rgba(0,0,0,.6);touch-action:none;cursor:crosshair}
+  .ph .pmark{cursor:grab}
+  .ph .pmark.sel circle{stroke:#fff;stroke-width:3}
+  .ph .pmark.bad circle{stroke:#ff4b3e;stroke-width:5}
+  .ph-now{margin-top:9px;padding:7px 14px 8px 16px;background-color:#f7fafc;background-image:linear-gradient(#c9dbe8 1px,transparent 1px),linear-gradient(90deg,#c9dbe8 1px,transparent 1px);background-size:20px 20px;color:#1d2a66;font-family:'Caveat',cursive;font-size:19.5px;line-height:1.14;border-top:9px solid #20262d}
+  .ph-now h6{margin:0 0 1px;font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.2em;color:#b2540f}
+  .ph-now p{margin:0}
+  .tcard{background:#f4efdf;color:#1d2228;padding:9px 12px 10px;border-radius:8px;border:1px solid #cfc7ae}
+  .tcard h5{margin:0 0 6px;display:flex;align-items:baseline;gap:9px;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.14em;border-bottom:3px solid #e08a1e;padding-bottom:4px}
+  .tcard h5 small{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:13.5px;letter-spacing:0;color:#5a5346}
+  .trow{display:grid;grid-template-columns:38px 1fr;gap:8px;align-items:center;padding:5px 0;border-bottom:1px dotted #b9b29c}
+  .trow:last-child{border-bottom:0}
+  .trow h6{margin:0 0 3px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.1em}
+  .trow h6 small{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:13px;letter-spacing:0;color:#5a5346;margin-left:6px}
+  .tflag{display:grid;place-items:center;width:34px;height:34px;border-radius:17px;background:#1d2228;color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:900;font-size:16px;box-shadow:0 3px 4px rgba(0,0,0,.4);touch-action:none;cursor:grab}
+  .tflag.put{opacity:.35;box-shadow:none}
+  .tflag.sel{opacity:1;outline:3px solid #e08a1e;outline-offset:2px}
+  .tghost{position:fixed;z-index:80;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:17px;display:grid;place-items:center;pointer-events:none;background:#1d2228;color:#fff;font-family:'Libre Franklin',sans-serif;font-weight:900;font-size:16px;box-shadow:0 8px 14px rgba(0,0,0,.5)}
+  .seg{display:flex;flex-wrap:wrap;gap:4px}
+  .seg button{padding:4px 8px 3px;border:1.5px solid #6b6450;border-radius:3px;background:#fffdf5;color:#3a3528;font-family:'Libre Franklin',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.04em;white-space:nowrap}
+  .seg button:hover{border-color:#1d2228}
+  .seg button.on{background:#1d2228;border-color:#1d2228;color:#fff}
+  .seg.yn button.on[data-v="y"]{background:#1f6b41;border-color:#1f6b41}
+  .seg.yn button.on[data-v="n"]{background:#a32a1d;border-color:#a32a1d}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#241710"/><stop offset="1" stop-color="#2e1f15"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1b11"/><stop offset="1" stop-color="#0f0906"/></linearGradient>
+  <linearGradient id="coneG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".75"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></linearGradient>
+  <radialGradient id="poolG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".7"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="halo" cx="50%" cy="60%" r="50%"><stop offset="0" stop-color="#ffdf9a" stop-opacity=".34"/><stop offset="1" stop-color="#ffdf9a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="48%" cy="62%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".88"/></radialGradient>
+  <clipPath id="wglass"><rect x="512" y="132" width="136" height="186"/></clipPath>
+</defs>
+
+<!-- dark wood, bare boards -->
+<rect x="-1000" y="-400" width="3600" height="1060" fill="url(#wallG)"/>
+<g stroke="#1a100a" stroke-width="2" opacity=".7"><path d="M440 -400V660M600 -400V660M760 -400V660M920 -400V660M1080 -400V660"/></g>
+<rect x="-1000" y="652" width="3600" height="700" fill="url(#floorG)"/><g stroke="#0a0604" stroke-width="2" opacity=".8"><path d="M-1000 700H2600M-1000 770H2600M-1000 860H2600"/></g>
+
+<!-- thirty years of music -->
+<g id="shelfL" class="hot"></g>
+<g id="shelfR" class="hot"></g>
+
+<!-- one small window, a calendar, the bridges of the town in a frame, the intercom -->
+<g id="window" class="hot"><rect x="498" y="118" width="164" height="214" fill="#4a3220"/><rect x="512" y="132" width="136" height="186" fill="#0a121c"/>
+  <g clip-path="url(#wglass)"><path d="M512 290q60 -20 136 -8v36H512z" fill="#101a26"/><g fill="#ffd98a" opacity=".6"><circle cx="560" cy="276" r="1.800"/><circle cx="596" cy="268" r="1.800"/><circle cx="630" cy="272" r="1.800"/></g>
+    <g id="branch" fill="none" stroke="#05080c" stroke-width="5" stroke-linecap="round"><path d="M500 150q60 10 110 60M540 164q30 30 34 66M574 190q24 -6 44 4"/></g><g id="rain"></g></g>
+  <path d="M580 132V318M512 224H648" stroke="#4a3220" stroke-width="8"/><rect x="490" y="330" width="180" height="12" fill="#5a4028"/></g>
+<g id="calendar" class="hot"><rect x="708" y="152" width="84" height="122" fill="#000" opacity=".3"/><rect x="704" y="148" width="84" height="122" fill="#fff"/><rect x="704" y="148" width="84" height="24" fill="#a32a1d"/>
+  <text x="746" y="165" class="fL" font-size="11" font-weight="800" text-anchor="middle" fill="#fff" letter-spacing="2">FEBRUARY</text><text x="746" y="226" class="fL" font-size="54" font-weight="900" text-anchor="middle" fill="#16222c">9</text>
+  <text x="746" y="246" class="fL" font-size="10" font-weight="600" text-anchor="middle" fill="#16222c" letter-spacing="1.500">TUESDAY</text><path d="M714 254h64M714 261h44" stroke="#8a9198" stroke-width="2"/><circle cx="746" cy="150" r="4" fill="#3a3f45"/></g>
+<g id="print" class="hot"><rect x="832" y="124" width="304" height="182" fill="#000" opacity=".35"/><rect x="828" y="120" width="304" height="182" fill="#2a1a0f"/><rect x="840" y="132" width="280" height="158" fill="#ece2c8"/>
+  <text x="980" y="154" class="fZ" font-size="11.500" font-weight="700" text-anchor="middle" fill="#2a2218" letter-spacing="2.400">THE BRIDGES OF WENDFORD</text>
+  <g fill="none" stroke="#2a2218" stroke-width="1.800"><path d="M852 208h80M852 196h80M856 208q7 -14 14 0q7 -14 14 0q7 -14 14 0q7 -14 14 0q7 -14 14 0"/>
+    <path d="M944 208h72M944 190h72M944 190l12 18l12 -18l12 18l12 -18l12 18l12 -18M944 208l-6 16M1016 208l6 16"/><path d="M1032 208h78M1032 196h78M1054 196v22M1088 196v22"/></g>
+  <g stroke="#6b6450" stroke-width="2"><path d="M854 232h74M858 242h64M946 232h68M950 242h58M1034 232h74M1038 242h64M860 262h240M900 274h160"/></g></g>
+<g id="intercom" class="hot"><rect x="716" y="300" width="60" height="62" rx="5" fill="#b9b29c"/><rect x="724" y="308" width="44" height="26" rx="2" fill="#2a2f35"/><path d="M728 314h36M728 321h36M728 328h36" stroke="#0d1014" stroke-width="3"/><circle cx="734" cy="348" r="6" fill="#c23b2c"/><rect x="746" y="343" width="22" height="10" rx="2" fill="#2a2f35"/></g>
+
+<!-- the cabinet: three drawers of music and one of river; on top of it, a tape machine that nobody has switched off -->
+<g id="reels" class="hot"><rect x="1018" y="306" width="128" height="82" rx="5" fill="#8a9198"/><rect x="1026" y="366" width="112" height="16" rx="2" fill="#2a2f35"/><circle cx="1104" cy="374" r="3" fill="#2e8a57"/>
+  <g transform="translate(1052 336)"><circle r="25" fill="#1d2228"/><g class="reel"><circle r="21" fill="#c9ced3"/><circle r="6" fill="#1d2228"/><path d="M0 -19V-9M16 9l-8 -5M-16 9l8 -5" stroke="#1d2228" stroke-width="5"/></g></g>
+  <g transform="translate(1112 336)"><circle r="25" fill="#1d2228"/><g class="reel r2"><circle r="21" fill="#c9ced3"/><circle r="6" fill="#1d2228"/><path d="M0 -19V-9M16 9l-8 -5M-16 9l8 -5" stroke="#1d2228" stroke-width="5"/></g></g></g>
+<g id="cabinet"><rect x="1012" y="388" width="140" height="266" fill="#5c646c"/><rect x="1012" y="388" width="140" height="8" fill="#8a9198"/>
+  <g id="music" class="hot"><rect x="1020" y="402" width="124" height="56" fill="#6b747c"/><rect x="1020" y="464" width="124" height="56" fill="#6b747c"/><rect x="1020" y="526" width="124" height="56" fill="#6b747c"/>
+    <g fill="#f1ede2"><rect x="1048" y="412" width="68" height="16"/><rect x="1048" y="474" width="68" height="16"/><rect x="1048" y="536" width="68" height="16"/></g>
+    <g class="fM" font-size="10" font-weight="500" text-anchor="middle" fill="#1d2228"><text x="1082" y="424">MUSIC A-H</text><text x="1082" y="486">MUSIC I-P</text><text x="1082" y="548">MUSIC Q-Z</text></g>
+    <g fill="#c9ced3"><rect x="1066" y="438" width="32" height="7" rx="3"/><rect x="1066" y="500" width="32" height="7" rx="3"/><rect x="1066" y="562" width="32" height="7" rx="3"/></g></g>
+  <g id="river" class="hot"><rect x="1020" y="588" width="124" height="58" fill="#7a848c"/><rect x="1048" y="598" width="68" height="16" fill="#bfe1f5"/><text x="1082" y="610" class="fM" font-size="10.500" font-weight="500" text-anchor="middle" fill="#1f5a7a" letter-spacing="2">RIVER</text><rect x="1066" y="624" width="32" height="7" rx="3" fill="#c9ced3"/></g></g>
+
+<!-- Danny Sato, with a record in each hand -->
+<g id="sato" class="hot" transform="translate(300 868) scale(1.320)"></g>
+
+<!-- the table under the lamp -->
+<ellipse cx="760" cy="560" rx="330" ry="210" fill="url(#halo)" pointer-events="none"/>
+<path d="M452 606H1012L1046 652H418Z" fill="#6b4a2a"/><path d="M418 652H1046V668H418z" fill="#3f2913"/><path d="M450 668v200M1014 668v200" stroke="#3f2913" stroke-width="18"/>
+<path d="M560 506L430 652H820Z" fill="url(#coneG)" opacity=".5" pointer-events="none"/><ellipse cx="720" cy="626" rx="250" ry="24" fill="url(#poolG)" pointer-events="none"/>
+<g id="lamp" class="hot"><ellipse cx="540" cy="608" rx="34" ry="7" fill="#8a6a26"/><path d="M540 604V520" stroke="#b08a35" stroke-width="7"/><path d="M478 512q62 -44 124 0l-10 10h-104z" fill="#1f6b41"/><path d="M488 522h104" stroke="#ffe9a8" stroke-width="5" stroke-linecap="round"/><path d="M582 546v14" stroke="#b08a35" stroke-width="2"/><circle cx="582" cy="563" r="3" fill="#b08a35"/></g>
+<g id="pcard" class="hot" transform="rotate(-7 624 578)"><rect x="596" y="548" width="62" height="60" rx="6" fill="#000" opacity=".3"/><rect x="592" y="544" width="62" height="60" rx="6" fill="#f4efdf"/><rect x="592" y="544" width="62" height="12" rx="6" fill="#e08a1e"/><circle cx="623" cy="550" r="3" fill="#20262d"/>
+  <rect x="600" y="564" width="20" height="16" fill="#cfe2c2"/><rect x="626" y="564" width="20" height="16" fill="#c9d6e0"/><path d="M600 588h46M600 596h30" stroke="#6b6450" stroke-width="2.400"/></g>
+<g id="photo" class="hot" transform="rotate(-3 770 580)"><rect x="692" y="530" width="164" height="112" fill="#000" opacity=".4"/><rect x="686" y="524" width="164" height="112" fill="#fff"/><svg x="693" y="531" width="150" height="100" viewBox="0 0 600 400" id="thumb"></svg></g>
+<g id="yslip" class="hot" transform="rotate(8 902 600)"><rect x="872" y="578" width="66" height="46" fill="#fde3ea"/><rect x="872" y="578" width="66" height="9" fill="#b03a6a"/><path d="M878 596h54M878 604h46M878 612h50" stroke="#27457a" stroke-width="2"/></g>
+<g id="glass" class="hot"><circle cx="668" cy="634" r="15" fill="#bfe1f5" opacity=".5" stroke="#b08a35" stroke-width="5"/><path d="M656 644l-18 14" stroke="#3a2a1a" stroke-width="7" stroke-linecap="round"/></g>
+<g id="pad" class="hot" transform="rotate(-5 970 600)"><rect x="944" y="572" width="60" height="56" fill="#f7fafc"/><rect x="944" y="572" width="60" height="8" fill="#20262d"/><path d="M944 592h60M944 604h60M944 616h60M960 580v48M976 580v48M992 580v48" stroke="#c9dbe8" stroke-width="1"/><g id="padlines"></g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Run to Studio One</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="flood.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, lock = null, told = {};
+  var SIGN = ['LINDLEY &amp; SON', 'IRONMONGERS &#183; EST. 1921'], WORDS = 'OLD BRIDGE NOW!!! GONE UNDER. SHARE';
+  /* what tonight looks like: each line goes on your pad when you have read the thing that says so */
+  var NOW = {
+    yslip: 'The Old Bridge now (Yasmin, 21.06): dark since five, lamps lit. Trees bare. Corner shop: The Fifth Arch, coffee. A metre of arch above the water.',
+    cal: 'Tuesday 9 February. Sunset 17.02.',
+    river: 'Gauge at 21.00: 3.36 m, rising. One mark on the board is 20 cm.',
+    print: 'Old Bridge: five stone arches. Footbridge: one span. Queen&rsquo;s Bridge: three.'
+  };
+  var NEED = [['yslip', 'the pink slip on the table'], ['cal', 'the calendar on the wall'], ['print', 'the print of the three bridges'], ['river', 'the bottom drawer of the cabinet']];
+
+  /* records on the shelves, rain, the thumbnail, Danny */
+  (function () {
+    var r = 3, PAL = ['#7a2f2f', '#27457a', '#2f5a4a', '#b08a35', '#5a4028', '#8a4433', '#48525c', '#c9b78f', '#3a3f45', '#7a4a9a', '#1e6f6f', '#a8733f', '#d9d2bd', '#1d2228'];
+    function rnd() { r = (r * 16807) % 2147483647; return r / 2147483647; }
+    function shelves(x0, x1) {
+      var s = '<rect x="' + x0 + '" y="56" width="' + (x1 - x0) + '" height="600" fill="#1a100a"/>', row, x, w, h, y;
+      for (row = 0; row < 6; row++) {
+        y = 152 + row * 100;
+        for (x = x0 + 12; x < x1 - 20;) {
+          if (rnd() < 0.07) { x += 14 + rnd() * 24; continue; }
+          if (rnd() < 0.08) { w = 30; h = 44 + rnd() * 20; s += '<rect x="' + x.toFixed(0) + '" y="' + (y - h).toFixed(0) + '" width="' + w + '" height="' + h.toFixed(0) + '" fill="#b9b29c"/><rect x="' + (x + 5).toFixed(0) + '" y="' + (y - h + 8).toFixed(0) + '" width="20" height="12" fill="#f1ede2"/>'; x += w + 3; continue; }
+          w = 4 + rnd() * 6; h = 68 + rnd() * 20;
+          s += '<rect x="' + x.toFixed(1) + '" y="' + (y - h).toFixed(0) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(0) + '" fill="' + PAL[Math.floor(rnd() * PAL.length)] + '"/>';
+          x += w + 1.2;
+        }
+        s += '<rect x="' + x0 + '" y="' + y + '" width="' + (x1 - x0) + '" height="10" fill="#4a3220"/><rect x="' + x0 + '" y="' + (y + 10) + '" width="' + (x1 - x0) + '" height="4" fill="#0a0604"/>';
+      }
+      return s + '<rect x="' + x0 + '" y="50" width="12" height="606" fill="#4a3220"/><rect x="' + (x1 - 12) + '" y="50" width="12" height="606" fill="#4a3220"/><rect x="' + x0 + '" y="50" width="' + (x1 - x0) + '" height="10" fill="#4a3220"/>';
+    }
+    $('#shelfL').innerHTML = shelves(30, 436);
+    $('#shelfR').innerHTML = shelves(1176, 1580);
+    $('#rain').innerHTML = FL.rain(512, 132, 136, 186, 16, 13);
+    $('#thumb').innerHTML = FL.photo({ id: 'tb', sign: ['', ''], words: WORDS });
+    $('#sato').innerHTML = FL.who('sato', { lit: '#ffe9a8', extra: '<circle cx="-54" cy="-118" r="26" fill="#111"/><circle cx="-54" cy="-118" r="9" fill="#c23b2c"/><circle cx="54" cy="-118" r="26" fill="#111"/><circle cx="54" cy="-118" r="9" fill="#e9c66a"/><circle cx="-54" cy="-118" r="2" fill="#f1ede2"/><circle cx="54" cy="-118" r="2" fill="#f1ede2"/>' });
+  })();
+
+  ER.init({
+    theme: 'news', story: 'flood', storyTitle: 'Two Aunts', id: 'records', no: 'III', title: 'The Record Library',
+    go: 'Switch on the lamp',
+    intro: [
+      'A name is not a place until there is a pin in it. Church Lane and Ferry Row lie side by side in only one village, so the police were in Nether Sedge, and Carol in Wendford could put the kettle on. A bridge with steps is a footbridge. Forty tonnes do not cross a bridge with a weight limit. A river does not flood the top of a hill. And one Mill Lane could not be found at all, so you did the right thing with it: you asked.',
+      'Now the picture. Forty-one people have sent it in, and the printer downstairs is still going.',
+      'The record library is at the back of the building. It keeps thirty years of music and, in the bottom drawer, thirty years of the river.'
+    ],
+    exit: {"next":"studio","w":{"02be665b":"96642e23"}}, tags: {"f1":["724b80fd"],"f2":["8aafb9ca","dda5238a"],"f3":["3e9c3035"],"f4":["32a504ad"],"f5":["29bc8811"],"f6":["d5032d7d","b8027858"],"v2":["e65983b5"],"v3":["e24576c3"],"v4":["ff517e7b"],"v5":["f17b361f"],"v6":["11ad1cf9"],"which":["c9f5f3c9"],"when":["aea5d5dd"]},
+    sound: ['desk', { root: 43, bpm: 80, drop: ['mel', 'ost'], beds: [['rain', 0.45]] }],      /* the quietest room in the building: slow, low, no pulse; rain on one small window */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function missing() { return NEED.filter(function (q) { return !told[q[0]]; }); }
+  function paint() {
+    var s = '', n = 0;
+    $('#scene').classList.toggle('in', !!told.in2 && !nextFile);
+    $('#pcard').classList.toggle('ready', !!(told.sato && !told.card));
+    $('#photo').classList.toggle('ready', !!(told.card && !missing().length && !nextFile));
+    NEED.forEach(function (q) { if (told[q[0]]) { s += '<path d="M950 ' + (590 + n * 9) + 'h' + (40 + (n * 7) % 12) + '" stroke="#1d2a66" stroke-width="2"/>'; n++; } });
+    $('#padlines').innerHTML = s;
+    ER.pips((told.sato ? 1 : 0) + (told.card ? 1 : 0) + (4 - missing().length) + (nextFile ? 1 : 0), 7);
+  }
+  function note(k) { if (tell(k)) { paint(); return true; } return false; }
+
+  function hints() {
+    var m = missing();
+    if (nextFile) return ['go', ['The picture has been tested. Brannigan wants everything in Studio One: the button is at the bottom of the screen.']];
+    if (lock && lock.isOpen()) return ['test', [
+      'Move the mouse over the picture: the glass makes everything three times bigger. Six things have to be found in it. Drag each numbered flag from the card on to the thing itself (or click the flag, and then click the picture).',
+      'For each one, set the picture against tonight: your pad under the picture says what tonight looks like. Then say whether it FITS tonight or CANNOT BE tonight. One of the six fits perfectly, and proves nothing at all.',
+      'The gauge is the white board at the left-hand end of the bridge. It shows a 5, and the water is three marks below that. The sheet from the river drawer says what one mark is worth, and its table says on which date the river has stood that high.'
+    ]];
+    if (!told.sato) return ['talk', ['Somebody has just come in through the door, in a hurry. Danny Sato is on the left, with a record in each hand.', 'Click Danny. He has seven minutes, and he will tell you what he needs.']];
+    if (!told.card) return ['card', [
+      'Brannigan keeps a card in here about pictures. It is on the table, leaning against the green lamp.',
+      'The card with the orange top says which three questions to ask a photograph, and which kind of answer settles it.'
+    ]];
+    if (m.length) return ['look', [
+      'Before you test the picture you need to know what tonight looks like. Four things in this room will tell you, and your squared pad on the table is keeping the list.',
+      'Still to read: ' + m.map(function (q) { return q[1]; }).join('; ') + '.'
+    ]];
+    return ['open', ['You have everything about tonight on your pad. Now the photograph itself, in the middle of the table: click it.', 'The picture is the one with the white edge, under the lamp.']];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('Real, here, and not now. Brannigan is waiting in Studio One.'); return; }
+    if (told.in) { busy = false; tell('in2'); paint(); ER.say('The record library, ten past nine. The picture is under the lamp.'); return; }
+    tell('in');
+    ER.narrate([
+      'The record library. Shelves to the ceiling: long-playing records, tapes in boxes, and four thousand compact discs that nobody has had the heart to throw away.',
+      'It is the quietest room in the building. There is rain on the one small window, and a bare branch that taps on the glass when the wind gets up.',
+      'In the corner stands a grey cabinet. Three of its drawers say MUSIC. The bottom one says RIVER.',
+      'You put the picture down under the lamp. It is a good picture. It is sharp, it is frightening, and it has been sent to this station forty-one times.',
+      'Then the door bangs open. It is Danny Sato, with his headphones round his neck, and he is running.'
+    ], function () { busy = false; tell('in2'); paint(); });
+  }
+
+  /* ---------- people ---------- */
+  $('#sato').addEventListener('click', function () {
+    if (busy) return;
+    if (told.sato) { ER.say('&ldquo;Five minutes ten,&rdquo; says Danny, to the shelf. &ldquo;Five minutes nine. Find me something I can SAY.&rdquo;'); return; }
+    ER.talk({
+      who: 'Danny Sato', role: 'Presenter · on air since seven', face: window.FACE('sato'),
+      lines: [
+        { note: 'He is pulling records off a shelf without looking at them.', a: '&ldquo;&lsquo;Hey Jude&rsquo;. Seven minutes and eleven seconds. It is the longest song I have got in there, and I have come to find a longer one.&rdquo;' },
+        { q: 'Have you seen this picture?', a: 'Seen it? My own mother sent it to me. Forty-one people, Moira says. Forty-one people say that the Old Bridge is under water, and one says that it is not.' },
+        { q: 'The one is Yasmin. She was standing on it.', a: 'I know. I KNOW. But it is a photograph! You cannot argue with a photograph.</p><p>He stops, with a record in each hand. &ldquo;Can you?&rdquo;' },
+        { q: 'I am going to try.', a: 'Then try fast. If that picture is right, I have to tell half the town that it is cut off. If it is wrong, I have to tell them WHY, and &ldquo;because Moira says so&rdquo; will not do. Find me something I can say out loud.</p><p>He looks at the picture once more. &ldquo;Funny. I thought that shop on the corner sold coffee.&rdquo;' }
+      ],
+      clue: { id: 'danny1', title: 'Danny Sato: forty-one to one', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('sato')) { paint(); FL.terms(['presenter']); ER.say('The card about pictures is on the table, leaning against the lamp.'); } }
+    });
+  });
+
+  /* ---------- papers ---------- */
+  var DIA = '<svg viewBox="0 0 250 272"><g font-family="Kalam,cursive" fill="#1a2a52" text-anchor="middle">' +
+    '<rect x="8" y="8" width="110" height="96" fill="#dfeaf2" stroke="#22201b" stroke-width="2"/><circle cx="96" cy="28" r="10" fill="#f2c94c"/><path d="M8 84h110v20H8z" fill="#a9c79a"/><path d="M44 84V58" stroke="#5a4028" stroke-width="6"/><circle cx="44" cy="46" r="22" fill="#3f7a3a"/><path d="M78 84V66l12 -10 12 10v18z" fill="#b08a6a"/>' +
+    '<rect x="132" y="8" width="110" height="96" fill="#1c2836" stroke="#22201b" stroke-width="2"/><path d="M216 22a10 10 0 1 0 8 14a8 8 0 0 1 -8 -14z" fill="#f1ede2"/><path d="M132 84h110v20H132z" fill="#3a4a3c"/><path d="M168 84V54M168 66l-14 -16M168 62l16 -18M168 54l-6 -18M168 54l10 -14" stroke="#0d1218" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M202 84V66l12 -10 12 10v18z" fill="#4a3a30"/><rect x="210" y="70" width="8" height="8" fill="#ffd98a"/>' +
+    '<text x="63" y="124" font-size="15" font-weight="700">the picture</text><text x="187" y="124" font-size="15" font-weight="700">tonight</text>' +
+    '<text x="125" y="156" font-size="15">the same house: it is HERE</text><text x="125" y="180" font-size="15">leaves, and daylight:</text><text x="125" y="204" font-size="16" font-weight="700" fill="#a32a1d">it CANNOT BE now</text>' +
+    '<path d="M30 220h190" stroke="#b9b29c" stroke-width="1.500" stroke-dasharray="3 4"/><text x="125" y="244" font-size="14.500" fill="#6b6450">rain in both? that FITS,</text><text x="125" y="260" font-size="14.500" fill="#6b6450">and proves nothing</text></g></svg>';
+  var CARD = '<h4>Wend Valley Radio &middot; news desk</h4><h3>A picture is a witness. Question it.</h3><div class="two"><div>' +
+    '<p>A photograph can be real and still tell a lie: it may be old, or it may be from somewhere else. Ask it three questions.</p>' +
+    '<p><b>IS IT REAL?</b> Has anything been painted in, or cut out?</p>' +
+    '<p><b>IS IT HERE?</b> Look for things that do not move: a bridge and the number of its arches, a tower, a hill.</p>' +
+    '<p><b>IS IT NOW?</b> Look for things that change: the light, the leaves on the trees, the name over a shop, anything with a number on it. Then set each one against tonight.</p>' +
+    '<p class="rk h"><b>FITS</b> proves nothing. It has rained on a great many days.</p>' +
+    '<p class="rk k"><b>CANNOT BE TONIGHT</b> settles it. One is enough. Find them all the same: you will have to say so on air.</p>' +
+    '<p>And read the caption last. Anybody can write NOW on a picture.</p>' +
+    '</div><div><div class="dia">' + DIA + '</div><p class="pen">A true picture of the wrong day is a false report. M.B.</p></div></div>';
+  $('#pcard').addEventListener('click', function () {
+    if (busy) return;
+    if (!told.sato) { ER.say('A card with an orange top, like the one upstairs. But somebody is shouting your name from the doorway.'); return; }
+    ER.read({ html: CARD, cls: 'lam', clue: { id: 'pictures', title: 'A picture is a witness', kind: 'Brannigan’s card' }, done: function () {
+      FL.terms(['caption']);
+      if (tell('card')) { paint(); ER.say('Real, here, now. First find out what tonight looks like: the things in this room will tell you, and your pad will keep the list.'); }
+    } });
+  });
+  var YSLIP = '<h4><span>TALKBACK &middot; taken down by Dilys</span><span>21.06</span></h4><p>Yasmin, leaving the Old Bridge:</p>' +
+    '<p>&ldquo;Still open. Moira says you want to know what it LOOKS like, so here it is. It is dark, and it has been dark since five. The street lamps are lit. The big trees on the far bank are bare. The shop on the corner is The Fifth Arch, the coffee place, with sandbags at its door. And there is a good metre of arch showing above the water.&rdquo;</p>' +
+    '<p class="sm">&ldquo;That is all I can see, so that is all you get.&rdquo;</p>';
+  $('#yslip').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: YSLIP, cls: 'pad', clue: { id: 'tonight', title: 'Yasmin: the Old Bridge at 21.06', kind: 'A pink slip' }, done: function () {
+      if (note('yslip')) ER.say('On your pad: what somebody who is standing there can see tonight.');
+    } });
+  });
+  var CAL = '<h4>FEBRUARY</h4><h3>9</h3><h5>TUESDAY</h5><p>Sun rises 07.36 &middot; Sun sets 17.02</p><p class="pen">Sport back from skiing: the 15th. (He says.)</p>';
+  $('#calendar').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CAL, cls: 'cal', clue: { id: 'calendar', title: 'The calendar: 9 February', kind: 'On the wall' }, done: function () {
+      if (note('cal')) ER.say('On your pad: the ninth of February, and the sun went down at two minutes past five.');
+    } });
+  });
+  var B1 = '<svg viewBox="0 0 240 100"><g fill="none" stroke="#2a2218" stroke-width="2.200" stroke-linejoin="round"><path d="M6 66H234M6 44H234M6 40H234"/><path d="M16 66q20 -34 40 0M58 66q20 -34 40 0M100 66q20 -34 40 0M142 66q20 -34 40 0M184 66q20 -34 40 0"/><path d="M52 66l5 12 5 -12M94 66l5 12 5 -12M136 66l5 12 5 -12M178 66l5 12 5 -12"/><path d="M6 84q10 -5 20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0" stroke-width="1.400"/></g></svg>';
+  var B2 = '<svg viewBox="0 0 240 100"><g fill="none" stroke="#2a2218" stroke-width="2.200" stroke-linejoin="round"><path d="M40 60H200M40 30H200"/><path d="M40 30l16 30 16 -30 16 30 16 -30 16 30 16 -30 16 30 16 -30 16 30 16 -30"/><path d="M40 60l-10 6 -10 6 -10 6M200 60l10 6 10 6 10 6M40 30v36M200 30v36M10 78v-12M230 78v-12"/><path d="M6 86q10 -5 20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0" stroke-width="1.400"/></g></svg>';
+  var B3 = '<svg viewBox="0 0 240 100"><g fill="none" stroke="#2a2218" stroke-width="2.200" stroke-linejoin="round"><path d="M6 40H234M6 54H234"/><path d="M82 54v30M94 54v30M146 54v30M158 54v30M76 84h24M140 84h24"/><path d="M40 40v-10h60v10M130 40v-14h40v14"/><path d="M6 86q10 -5 20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0t20 0" stroke-width="1.400"/></g></svg>';
+  var PRINT = '<h4>THE BRIDGES OF WENDFORD</h4><p>drawn for the Town Guide</p><div class="three">' +
+    '<div>' + B1 + '<h5>THE OLD BRIDGE</h5><p>About 1490. Stone. Five arches, and the only bridge on the Wend that has five.</p></div>' +
+    '<div>' + B2 + '<h5>THE STATION FOOTBRIDGE</h5><p>1884. Iron. One span, with steps at each end.</p></div>' +
+    '<div>' + B3 + '<h5>THE QUEEN&rsquo;S BRIDGE</h5><p>1974. Concrete. Three spans. It carries the bypass.</p></div></div>';
+  $('#print').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: PRINT, cls: 'print', clue: { id: 'bridges', title: 'The bridges of Wendford', kind: 'A print on the wall' }, done: function () {
+      if (note('print')) ER.say('On your pad: five arches, one span, three spans. No two of them alike.');
+    } });
+  });
+  var GDIA = '<svg viewBox="0 0 180 250"><rect x="0" y="0" width="180" height="250" fill="#f4f8fa"/><rect x="0" y="176" width="180" height="74" fill="#94734a"/><rect x="0" y="0" width="60" height="250" fill="#a59c8a"/>' +
+    '<rect x="20" y="20" width="34" height="200" fill="#f6f4ea" stroke="#16181b" stroke-width="1.500"/><g stroke="#16181b"><path d="M20 44h16" stroke-width="3.200"/><path d="M20 77h10M20 110h10M20 143h10M20 176h10" stroke-width="2.200"/></g>' +
+    '<text x="45" y="50" font-family="Libre Franklin,sans-serif" font-weight="900" font-size="17" text-anchor="middle" fill="#16181b">3</text><rect x="0" y="176" width="60" height="74" fill="#94734a"/><path d="M0 176h180" stroke="#e9dcc4" stroke-width="2.400"/>' +
+    '<g font-family="Kalam,cursive" font-size="13.500" fill="#1a2a52"><path d="M64 44h20M64 77h14M64 110h14M64 143h14M64 176h14" stroke="#1a2a52" stroke-width="1.500"/><text x="90" y="48">3.0</text><text x="84" y="81">2.8</text><text x="84" y="114">2.6</text><text x="84" y="147">2.4</text><text x="84" y="170" font-weight="700" fill="#a32a1d">2.2: the water</text></g></svg>';
+  var RIVER = '<h4><span>River Wend at Wendford (Old Bridge)</span><small>ENVIRONMENT AGENCY &middot; GAUGE PUT IN 1968</small></h4><div class="two"><div>' +
+    '<h5>Reading the gauge</h5><p>The gauge is a white board on the town end of the Old Bridge. It shows how high the water stands above a fixed mark. That is not the depth of the river.</p>' +
+    '<p>The board has a number at every metre, and a mark every 20 centimetres. Find a number, and count the marks down from it to the water.</p>' +
+    '<p>The agency sends a reading every fifteen minutes. RISING: each one is higher than the last. FALLING: each one is lower. STEADY: no change.</p>' +
+    '<p class="pen">Never call it from one reading. Wait for three. M.B.</p></div><div class="dia">' + GDIA + '</div></div>' +
+    '<h5>Highest levels since the gauge was put in</h5><table><tr><th>Level</th><th>Date</th><th>Time of the peak</th></tr>' +
+    '<tr><td>4.42 m</td><td>17 June 2011</td><td>19.40</td></tr><tr><td>3.88 m</td><td>23 October 2004</td><td>03.15</td></tr><tr><td>3.71 m</td><td>5 February 1995</td><td>11.30</td></tr><tr><td>3.58 m</td><td>28 December 2017</td><td>22.10</td></tr></table>' +
+    '<h5>Tonight</h5><p>20.30 &nbsp;3.28 m &nbsp;&middot;&nbsp; 20.45 &nbsp;3.32 m &nbsp;&middot;&nbsp; 21.00 &nbsp;3.36 m &nbsp;&middot;&nbsp; RISING</p>';
+  $('#river').addEventListener('click', function () {
+    if (busy) return;
+    FL.sfx.drawer();
+    ER.read({ html: RIVER, cls: 'river', clue: { id: 'river', title: 'The river file: the gauge and its record', kind: 'Out of the bottom drawer' }, done: function () {
+      FL.terms(['gauge']);
+      if (note('river')) ER.say('On your pad: 3.36 metres at nine o&rsquo;clock, and what one mark on the board is worth.');
+    } });
+  });
+  $('#pad').addEventListener('click', function () {
+    var h = '', m = missing();
+    if (busy) return;
+    NEED.forEach(function (q) { if (told[q[0]]) h += '<p>' + NOW[q[0]] + '</p>'; });
+    if (!h) h = '<p>Nothing yet. Four things in this room say what tonight looks like.</p>';
+    if (m.length && h) h += '<p>Still to read: ' + m.map(function (q) { return q[1]; }).join('; ') + '.</p>';
+    ER.read({ html: '<h4>Tonight, as far as we know</h4>' + h, cls: 'mine' });
+  });
+
+  /* ---------- things in the room ---------- */
+  FL.thing('#window', null, 'One small window, with the rain running down it. The branch that taps on the glass has not a leaf on it. It is February.', isBusy);
+  FL.thing('#shelfL', null, 'Records, in the order of the alphabet, and one last box marked ODD. Danny says that he has played every one of them at least once, and one of them only once.', isBusy);
+  FL.thing('#shelfR', null, 'Tapes in boxes. Every news bulletin since 1994 is in here somewhere, and so is every mistake.', isBusy);
+  FL.thing('#music', null, 'MUSIC. Not tonight.', isBusy);
+  FL.thing('#reels', null, 'An old tape machine, with both reels going round and no tape on either. Nobody knows how to switch it off, so nobody has.', isBusy);
+  FL.thing('#lamp', null, 'A green lamp. Everything in this room that matters tonight is lying in its light.', isBusy);
+  FL.thing('#glass', 'magnifying glass', 'A magnifying glass. Brannigan keeps it for the small print in letters from the council.', isBusy);
+  FL.thing('#intercom', null, 'The intercom. Press the red button, and the newsroom answers. Brannigan says she can hear the record library, the studio and the trainee thinking.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#photo').addEventListener('click', function () {
+    var m = missing();
+    if (busy) return;
+    if (nextFile) { ER.say('The Old Bridge, on the evening of 17 June 2011. Somebody stood on the bank in the rain and took it, and it was true when they took it.'); return; }
+    if (!told.sato) { ER.say('The Old Bridge, with brown water up to the tops of its arches, and across the bottom: OLD BRIDGE NOW!!! GONE UNDER. SHARE. Behind you, somebody is out of breath.'); return; }
+    if (!told.card) { ER.say('You could stare at it all night. Better to know what to look FOR: Brannigan&rsquo;s card about pictures is leaning against the lamp.'); return; }
+    if (m.length) { ER.say('The intercom crackles. &ldquo;Before you test it,&rdquo; says Brannigan, &ldquo;find out what tonight looks like. You have not read ' + m[0][1] + '.&rdquo;'); return; }
+    if (!lock) lock = makeTest();
+    lock.open();
+  });
+
+  /* ---------- the picture under the glass: six flags, five verdicts, a bridge and a date ---------- */
+  function makeTest() {
+    var ROWS = [[1, 'WHICH BRIDGE?', 'something that does not move'], [2, 'THE LIGHT', 'day or night'], [3, 'THE TREES', ''], [4, 'THE NAME OVER THE SHOP', ''], [5, 'THE GAUGE', 'read it'], [6, 'THE WEATHER', '']];
+    var WHAT = { sky: 'the sky', tree: 'the trees', sign: 'the name over the shop', gauge: 'the gauge board', lamp: 'the street lamp', brolly: 'somebody&rsquo;s umbrella', arch: 'the arches', deck: 'the roadway of the bridge', water: 'the water', shop: 'the shop', tower: 'the church tower', far: 'the far bank' };
+    var st = ER.flag('c-st') || { f: {}, v: {}, which: '', when: '' }, sel = 0, wait = false, box = ER.el('div', 'job ph'), s, ghost = null;
+    s = '<div class="ph-top"><div><svg viewBox="0 0 640 432"><defs><clipPath id="lpc"><circle r="60"/></clipPath></defs><rect width="640" height="432" fill="#fff"/>' +
+      '<g id="art" transform="translate(20 16)">' + FL.photo({ id: 'pz', sign: SIGN, words: WORDS }) + '</g><g id="marks" transform="translate(20 16)"></g>' +
+      '<g id="loupe" style="display:none" pointer-events="none"><circle r="66" fill="#000" opacity=".35" cx="3" cy="4"/><circle r="63" fill="#fff"/><g clip-path="url(#lpc)"><g id="lpin"><use href="#art"/></g></g>' +
+      '<circle r="61.500" fill="none" stroke="#b08a35" stroke-width="6"/><path d="M-9 0H-3M3 0H9M0 -9V-3M0 3V9" stroke="#fff" stroke-width="2.600"/><path d="M-9 0H-3M3 0H9M0 -9V-3M0 3V9" stroke="#c23b2c" stroke-width="1.200"/></g></svg>' +
+      '<div class="ph-now"><h6>TONIGHT, AS FAR AS WE KNOW</h6>' + NEED.map(function (q) { return '<p>' + NOW[q[0]] + '</p>'; }).join('') + '</div></div>' +
+      '<div class="tcard"><h5>TEST CARD <small>flag it, then judge it</small></h5>';
+    ROWS.forEach(function (r) {
+      s += '<div class="trow"><button type="button" class="tflag" data-f="' + r[0] + '">' + r[0] + '</button><div><h6>' + r[1] + (r[2] ? '<small>' + r[2] + '</small>' : '') + '</h6>' +
+        (r[0] === 1 ? '<div class="seg" data-d="which"><button type="button" data-v="old">OLD BRIDGE</button><button type="button" data-v="foot">FOOTBRIDGE</button><button type="button" data-v="queen">QUEEN&rsquo;S BRIDGE</button><button type="button" data-v="none">NOT OURS</button></div>' :
+          '<div class="seg yn" data-d="v' + r[0] + '"><button type="button" data-v="y">FITS TONIGHT</button><button type="button" data-v="n">CANNOT BE TONIGHT</button></div>') + '</div></div>';
+    });
+    s += '<div class="trow"><span></span><div><h6>WHEN, THEN?<small>the river file knows</small></h6><div class="seg" data-d="when"><button type="button" data-v="1995">5 FEB 1995</button><button type="button" data-v="2004">23 OCT 2004</button><button type="button" data-v="2011">17 JUNE 2011</button><button type="button" data-v="2017">28 DEC 2017</button><button type="button" data-v="now">TONIGHT</button></div></div></div>' +
+      '</div></div><div class="job-foot"><p class="jmsg"></p><button type="button" class="btn" id="t-go">Ring the newsroom</button></div>';
+    box.innerHTML = s;
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.jmsg'), loupe = box.querySelector('#loupe'), lpin = box.querySelector('#lpin'), marks = box.querySelector('#marks');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function keep() { ER.flag('c-st', st); }
+    var OFF = [[14, -19], [-14, -19], [22, -3], [-22, -3], [5, -25], [-5, 24]];      /* each flag leans its own way, so that two on one spot can both be seen and taken hold of */
+    function draw() {
+      var t = '', n, q, o;
+      for (n = 1; n <= 6; n++) {
+        q = st.f[n]; if (!q) continue;
+        o = OFF[n - 1];
+        t += '<g class="pmark' + (n === sel ? ' sel' : '') + '" data-f="' + n + '" transform="translate(' + q[0] + ' ' + q[1] + ')"><path d="M0 0L' + (o[0] * 0.6).toFixed(1) + ' ' + (o[1] * 0.6).toFixed(1) + '" stroke="#1d2228" stroke-width="2" pointer-events="none"/><circle cx="0" cy="0" r="2.600" fill="#fff" stroke="#1d2228" stroke-width="1.200" pointer-events="none"/>' +
+          '<circle cx="' + o[0] + '" cy="' + o[1] + '" r="10" fill="#1d2228" stroke="#f4efdf" stroke-width="1.600"/><text x="' + o[0] + '" y="' + (o[1] + 4.5) + '" class="fL" font-size="12.500" font-weight="900" text-anchor="middle" fill="#fff">' + n + '</text></g>';
+      }
+      marks.innerHTML = t;
+      ER.$$('.tflag', box).forEach(function (b) { var m = +b.getAttribute('data-f'); b.classList.toggle('put', !!st.f[m]); b.classList.toggle('sel', m === sel); });
+      ER.$$('.seg', box).forEach(function (g) {
+        var d = g.getAttribute('data-d'), v = d === 'which' ? st.which : d === 'when' ? st.when : st.v[d.slice(1)];
+        ER.$$('button', g).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === v); });
+      });
+    }
+    function phPt(e) { var p = ER.pt(svg, e); return { x: p.x - 20, y: p.y - 16 }; }
+    function inPhoto(p) { return p.x >= 0 && p.x <= 600 && p.y >= 0 && p.y <= 400; }
+    function put(n, p) {
+      st.f[n] = [Math.round(p.x), Math.round(p.y)]; keep(); sel = 0; draw(); FL.sfx.pin();
+      msg('Flag <b>' + n + '</b> (' + ROWS[n - 1][1].toLowerCase().replace('?', '') + ') is on ' + WHAT[FL.photoAt(p.x, p.y) || 'far'] + '.');
+    }
+    /* the glass follows the mouse over the picture */
+    svg.addEventListener('pointermove', function (e) {
+      var p = ER.pt(svg, e), q = { x: p.x - 20, y: p.y - 16 };
+      if (!inPhoto(q)) { loupe.style.display = 'none'; return; }
+      loupe.style.display = 'block'; loupe.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ')');
+      lpin.setAttribute('transform', 'scale(3) translate(' + (-p.x).toFixed(1) + ' ' + (-p.y).toFixed(1) + ')');
+    });
+    svg.addEventListener('pointerleave', function () { loupe.style.display = 'none'; });
+    svg.addEventListener('click', function (e) {
+      var q = phPt(e);
+      if (wait || nextFile || !sel || (e.target.closest && e.target.closest('.pmark'))) return;
+      if (inPhoto(q)) put(sel, q);
+    });
+    /* a flag is clicked and then the picture is clicked; or it is dragged, from the card or across the picture */
+    box.addEventListener('pointerdown', function (e) {
+      var f = e.target.closest ? e.target.closest('[data-f]') : null, n, sx = e.clientX, sy = e.clientY, moved = false;
+      if (!f || e.button || wait || nextFile) return;
+      e.preventDefault(); n = +f.getAttribute('data-f');
+      function mv(ev) {
+        if (!moved) {
+          if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 6) return;
+          moved = true; sel = n; draw(); ghost = ER.el('div', 'tghost', String(n)); document.body.appendChild(ghost);
+        }
+        ghost.style.left = (ev.clientX + 22) + 'px'; ghost.style.top = (ev.clientY - 26) + 'px';
+      }
+      function up(ev) {
+        document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
+        if (!moved) { sel = n; draw(); FL.sfx.slip(); msg('Flag <b>' + n + '</b>: ' + ROWS[n - 1][1].toLowerCase().replace('?', '') + '. Now click the thing itself, in the picture.'); return; }
+        if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost); ghost = null;
+        var r = svg.getBoundingClientRect(), q;
+        if (ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) { q = phPt(ev); if (inPhoto(q)) { put(n, q); return; } }
+        if (st.f[n]) { delete st.f[n]; keep(); msg('Flag <b>' + n + '</b> goes back on the card.'); }
+        sel = 0; draw();
+      }
+      document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
+    });
+    ER.$$('.seg', box).forEach(function (g) {
+      g.addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('button') : null, d = g.getAttribute('data-d'), v;
+        if (!b || wait || nextFile) return;
+        v = b.getAttribute('data-v'); FL.sfx.lamp();
+        if (d === 'which') st.which = v; else if (d === 'when') st.when = v; else st.v[d.slice(1)] = v;
+        keep(); draw();
+      });
+    });
+    var FLAGWHY = ['', 'Flag 1 is for the thing that tells one bridge from another. Find something you can COUNT.', 'Flag 2 is the light. Is it day or night in the picture? Put the flag on whatever shows you.', 'Flag 3 is the trees. They are across the river.',
+      'Flag 4 is the name over the shop. Run the glass along the building on the left.', 'Flag 5 is the gauge: a white board with marks on it. The river file says where it is fixed.', 'Flag 6 is the weather. What are the people on the bridge holding?'];
+    var VWHY = { 2: 'Look at the sky in the picture, and at the lamp on the bridge, which is not lit. Then read what Yasmin says about tonight. It has been dark since five.',
+      3: 'Those trees are in full leaf. This is February: Yasmin says the trees on the far bank are bare.',
+      4: 'Read the name over the shop through the glass. Then read what Yasmin calls the shop on that corner tonight.',
+      5: 'Read the board under the glass: a 5, and the water three marks below it. Every mark is 20 centimetres. And what did the agency say at nine o&rsquo;clock?',
+      6: 'It is raining in the picture, and it is raining tonight. That FITS. It proves nothing, mind: it has rained on a great many days. But it does fit.' };
+    box.querySelector('#t-go').addEventListener('click', function () {
+      var n, left = 0, file, g, code;
+      if (wait || nextFile) return;
+      sel = 0; draw();
+      for (n = 1; n <= 6; n++) if (!st.f[n]) left++;
+      if (left) { msg('The intercom crackles. &ldquo;' + (left === 6 ? 'Not one flag on the picture yet' : left === 1 ? 'One flag is still on the card' : ['', '', 'Two', 'Three', 'Four', 'Five'][left] + ' flags are still on the card') + ',&rdquo; says Brannigan. &ldquo;Show me WHERE you are looking, before you tell me what you think.&rdquo;'); return; }
+      for (n = 1; n <= 6; n++) {
+        if (!ER.check('f' + n, FL.photoAt(st.f[n][0], st.f[n][1]))) {
+          ER.sfx.no(); g = marks.querySelector('.pmark[data-f="' + n + '"]'); if (g) g.classList.add('bad');
+          msg('&ldquo;Flag <b>' + n + '</b> is on ' + WHAT[FL.photoAt(st.f[n][0], st.f[n][1]) || 'far'] + ',&rdquo; says the intercom. &ldquo;' + FLAGWHY[n] + '&rdquo;');
+          (function (m) { setTimeout(function () { delete st.f[m]; keep(); draw(); }, 900); })(n);
+          return;
+        }
+      }
+      if (!ER.check('which', st.which)) {
+        ER.sfx.no();
+        msg('&ldquo;' + (!st.which ? 'Which bridge is it? You have a flag on the arches, and no answer on the first line of the card.' : st.which === 'foot' ? 'One span of iron, with steps at each end? Count the arches in the picture again, and look at the print on the wall.' :
+          st.which === 'queen' ? 'The Queen&rsquo;s Bridge is concrete, and it has three spans. How many arches can you count in the picture?' : 'I wish it were somebody else&rsquo;s bridge. Count the arches, and then read the print on the wall: only one bridge on this river has that many.') + '&rdquo;');
+        st.which = ''; keep(); draw(); return;
+      }
+      for (n = 2; n <= 6; n++) {
+        if (!ER.check('v' + n, st.v[n] || '')) {
+          ER.sfx.no();
+          msg('&ldquo;' + (!st.v[n] ? 'Line ' + n + ' has a flag and no verdict. Does it fit tonight, or can it not be tonight?' : VWHY[n]) + '&rdquo;');
+          delete st.v[n]; keep(); draw(); return;
+        }
+      }
+      if (!ER.check('when', st.when)) {
+        ER.sfx.no();
+        msg('&ldquo;' + (!st.when ? 'Not tonight, then. So WHEN? The table in the river file has the answer.' : st.when === 'now' ? 'Four things in that picture cannot be tonight. You have just told me so yourself.' :
+          'Read the gauge in the picture again, and then run your finger down the table in the river file. How high did the river stand on that date? And look at the trees: what time of year is it?') + '&rdquo;');
+        st.when = ''; keep(); draw(); return;
+      }
+      code = st.which + '|' + [2, 3, 4, 5, 6].map(function (m) { return st.v[m]; }).join('') + '|' + st.when;
+      file = ER.exit([code], { wait: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('c-file', file);
+      FL.mine('tested', 'The picture, tested', '<p>REAL? Yes. Nothing has been painted in.</p><p>HERE? Yes. Five stone arches: the Old Bridge.</p><p>NOW? No. Daylight, and it has been dark since five. Trees in full leaf, in February. LINDLEY &amp; SON over the shop, which is The Fifth Arch tonight. The gauge at about 4.4 m, and the agency says 3.36.</p>' +
+        '<p>(It is raining in the picture. That fits tonight, and proves nothing.)</p><p>WHEN? The river has stood above 4 metres once since 1968: on the evening of 17 June 2011.</p><p>Somebody else wrote NOW on it.</p>', true);
+      msg('The intercom is quiet for a moment. &ldquo;Real, ours, and old,&rdquo; says Brannigan. &ldquo;Good. Now I know what to tell Danny to SAY about it.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'Is it real? Yes: nobody has painted anything in. Is it here? Yes: five stone arches, and only one bridge on the Wend has five. Is it now? No.',
+          'It is daylight in the picture. The trees are in full leaf. The shop on the corner sells nails, and the river is a whole metre higher than the agency says it is tonight. Four things that cannot be tonight, and one that fits: it is raining. That one proves nothing.',
+          'The table from the bottom drawer does the rest. Since the gauge was put in, the water at the Old Bridge has stood above four metres once: on the evening of 17 June 2011.',
+          'You are half way to the door when you turn and look at it again. Somebody stood on that bank in the rain and took it, and it was true when they took it. It only became a lie tonight, when somebody else wrote NOW across the bottom.',
+          'The intercom crackles. &ldquo;Studio One,&rdquo; says Brannigan. &ldquo;Bring everything. We write it now.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 3200);
+    });
+    draw();
+    s = 0; [1, 2, 3, 4, 5, 6].forEach(function (m) { if (st.f[m]) s++; });
+    msg(s ? 'The picture, with ' + s + (s === 1 ? ' flag' : ' flags') + ' on it so far.' : 'Move the mouse over the picture: the glass shows the small things. Then drag each flag from the card on to the thing it names, and judge it.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

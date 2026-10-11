@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Room E7 · Says Who?</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-news.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="rumour.css">
+<style>
+  body{--bg:#1b2630;--accent:#f2d21f;--font-display:'Libre Franklin',sans-serif;--font-ui:'Libre Franklin',sans-serif;--font-body:'Newsreader',serif;
+    --tc-bg:rgba(20,29,38,.97);--tc-ink:#eef3f6;--cap-bg:rgba(17,25,33,.95);--panel:#16202b;--face-bg:#dfe6ea;--q-ink:#f2d21f;--fade:#0b1118;--hud-bg:rgba(17,25,33,.82)}
+  .tc-room{font-size:clamp(44px,6.6vw,90px)}
+  .gobtn{color:#16202c}
+  .gobtn:hover{color:#fff}
+  #wb.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(.9)}}
+  #final{display:none}
+  #scene.done #final{display:block}
+  #scene.done #plan{display:none}
+
+  /* the board, and the tin of magnets */
+  .wbx{width:min(1050px,95vw);-webkit-user-select:none;user-select:none}
+  .wb{display:grid;grid-template-columns:446px 1fr;gap:20px;padding:16px 20px 18px;background:#fdfdfb linear-gradient(120deg,rgba(255,255,255,.9),rgba(210,222,232,.5) 60%,rgba(255,255,255,.7));border:10px solid #aab2b8;border-radius:6px;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+  .wb h6{margin:0 0 6px;font-family:'Kalam',cursive;font-weight:700;font-size:21px;color:#1a2a52;line-height:1.1}
+  .wb h6 small{font-weight:400;font-size:15.5px;color:#d8432a;margin-left:8px}
+  .fr{margin:0 0 12px;padding:6px 66px 4px 8px;border:3px solid #1a2a52;border-radius:9px 5px 8px 4px}
+  .ln{position:relative;display:flex;align-items:center;margin:0 0 4px;border-bottom:2px dashed rgba(26,42,82,.35);cursor:pointer}
+  .ln:last-child{margin-bottom:2px}
+  .ln i{position:absolute;right:-60px;top:50%;width:54px;margin-top:-10px;font-style:normal;font-family:'Kalam',cursive;font-weight:700;font-size:15px;line-height:20px;color:#d8432a;text-align:right;white-space:nowrap}
+  .ln.no{background:rgba(216,67,42,.22)}
+  .hd .ln{width:357px;height:50px;gap:21px;background-image:repeating-linear-gradient(90deg,rgba(26,42,82,.2) 0,rgba(26,42,82,.2) 1px,transparent 1px,transparent 21px);background-size:100% 7px;background-repeat:no-repeat;background-position:0 100%}
+  .sf .ln{width:360px;height:38px;gap:12px;background-image:repeating-linear-gradient(90deg,rgba(26,42,82,.2) 0,rgba(26,42,82,.2) 1px,transparent 1px,transparent 12px);background-size:100% 6px;background-repeat:no-repeat;background-position:0 100%}
+  .tin{display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px 10px;min-height:60px;padding:10px 10px 10px;margin:0 0 12px;background:#27457a linear-gradient(170deg,rgba(255,255,255,.16),rgba(0,0,0,.2));border-radius:10px;box-shadow:inset 0 0 0 3px #1b3157,inset 0 6px 14px rgba(0,0,0,.35);cursor:pointer}
+  .tin.m{background-color:#7a2f3a;box-shadow:inset 0 0 0 3px #5a1f28,inset 0 6px 14px rgba(0,0,0,.35);margin-bottom:0}
+  .mg{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;background:#fdfdfb;color:#12110f;border-radius:3px;box-shadow:0 2px 0 #8f959a,0 4px 7px rgba(0,0,0,.35);cursor:grab;touch-action:none;white-space:nowrap;overflow:hidden}
+  .mg.b{height:42px;font-family:'Libre Franklin',sans-serif;font-weight:900;font-size:23.5px;letter-spacing:.01em}
+  .mg.m{height:30px;font-family:'Libre Franklin',sans-serif;font-weight:600;font-size:15.5px}
+  .mg.held{outline:3px solid #f2d21f;outline-offset:2px}
+  .mg.fly{position:fixed;z-index:80;pointer-events:none;cursor:grabbing;box-shadow:0 12px 24px rgba(0,0,0,.5)}
+  .tin .mg:nth-child(3n){transform:rotate(-1.2deg)}.tin .mg:nth-child(3n+1){transform:rotate(.9deg)}
+  .wbx .bx-foot{margin-top:12px}
+  .wbx .pmsg b{color:#f2d21f}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3eaee"/><stop offset="1" stop-color="#c9d4db"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9925e"/><stop offset=".5" stop-color="#a07a48"/><stop offset="1" stop-color="#6b4f2e"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd98a"/><stop offset="1" stop-color="#fff3cf"/></linearGradient>
+  <radialGradient id="vig" cx="52%" cy="44%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".65" stop-color="#0a1620" stop-opacity=".16"/><stop offset="1" stop-color="#050c12" stop-opacity=".7"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1044" fill="url(#wallG)"/>
+<rect x="-1000" y="628" width="3600" height="14" fill="#8f9ba3"/>
+
+<!-- the clock, and the other side of the news room door -->
+<g id="clock" class="hot"></g>
+<g id="door" class="hot"><rect x="96" y="176" width="210" height="466" fill="#3a2c1e"/><rect x="108" y="188" width="184" height="454" fill="#2f5a4a"/><rect x="292" y="188" width="8" height="454" fill="#16202c"/>
+  <rect x="150" y="352" width="100" height="26" rx="2" fill="#c9a23a"/><text x="200" y="370" class="cF" font-size="11.500" font-weight="800" text-anchor="middle" fill="#3a2a08" letter-spacing="1.500">STATIONERY</text>
+  <g transform="rotate(-2 200 262)"><rect x="136" y="226" width="128" height="74" fill="#fdfdf8"/><rect x="150" y="220" width="30" height="12" fill="#e2d28c" opacity=".9"/><rect x="220" y="220" width="30" height="12" fill="#e2d28c" opacity=".9"/>
+    <text x="200" y="262" class="cF" font-size="23" font-weight="900" text-anchor="middle" fill="#16202c">THE W<tspan fill="#d8432a">I</tspan>CK</text><text x="200" y="286" class="cC" font-size="17" text-anchor="middle" fill="#2e6b4f">knock. then doubt.</text></g>
+  <rect x="266" y="420" width="10" height="42" rx="4" fill="#c9ced3"/></g>
+<g id="parts" class="hot"><text x="364" y="204" class="cF" font-size="7.500" font-weight="800" text-anchor="middle" fill="#16202c" textLength="84" lengthAdjust="spacingAndGlyphs">PARTS OF A FRONT PAGE</text><rect x="324" y="212" width="80" height="150" fill="#fdfdf8" stroke="#8f9ba3" stroke-width="1.500"/>
+  <rect x="332" y="220" width="64" height="14" fill="#16202c"/><path d="M332 244h64M332 252h50" stroke="#16202c" stroke-width="5"/><path d="M332 264h64" stroke="#d8432a" stroke-width="3"/><path d="M332 274h30M332 281h30M332 288h30M332 295h30M366 274h30M366 281h30M366 288h30" stroke="#8f9ba3" stroke-width="2.500"/><rect x="332" y="304" width="64" height="34" fill="#cfd8de"/><path d="M332 346h44" stroke="#8f9ba3" stroke-width="2.500"/>
+  <g stroke="#d8432a" stroke-width="1.500"><path d="M396 227h14M396 248h14M396 264h14M396 346h14"/></g></g>
+
+<!-- the whiteboard -->
+<g id="wb" class="hot"><rect x="420" y="124" width="768" height="368" rx="5" fill="#aab2b8"/><rect x="430" y="134" width="748" height="340" fill="#fdfdfb"/><path d="M430 134h748v340H430z" fill="#dfe9f2" opacity=".25"/>
+  <rect x="430" y="474" width="748" height="16" fill="#7d8a94"/><rect x="470" y="466" width="46" height="9" rx="3" fill="#1a2a52"/><rect x="526" y="466" width="46" height="9" rx="3" fill="#d8432a"/><rect x="1080" y="462" width="60" height="13" rx="2" fill="#3a3f47"/>
+  <text x="804" y="172" class="cK" font-size="24" font-weight="700" text-anchor="middle" fill="#1a2a52">FRIDAY WICK : TOP OF THE PAGE</text>
+  <g id="plan"><rect x="544" y="190" width="520" height="128" rx="8" fill="none" stroke="#1a2a52" stroke-width="3.500"/><path d="M560 250h488M560 302h488" stroke="#1a2a52" stroke-width="2" stroke-dasharray="7 6" opacity=".5"/><text x="1076" y="230" class="cK" font-size="17" fill="#d8432a">headline</text><text x="1076" y="250" class="cK" font-size="15" fill="#d8432a">2 x 17</text>
+    <rect x="544" y="334" width="520" height="92" rx="8" fill="none" stroke="#1a2a52" stroke-width="3.500"/><path d="M560 376h488M560 412h488" stroke="#1a2a52" stroke-width="2" stroke-dasharray="7 6" opacity=".5"/><text x="1076" y="366" class="cK" font-size="17" fill="#d8432a">standfirst</text><text x="1076" y="386" class="cK" font-size="15" fill="#d8432a">2 x 30</text>
+    <text x="804" y="282" class="cK" font-size="54" font-weight="700" text-anchor="middle" fill="#d8432a" opacity=".8">?</text></g>
+  <g id="final"><rect x="544" y="190" width="520" height="128" rx="8" fill="none" stroke="#1a2a52" stroke-width="3.500"/><text x="804" y="244" class="cF" font-size="41" font-weight="900" text-anchor="middle" fill="#12110f" textLength="470" lengthAdjust="spacingAndGlyphs">NO PLAN TO CLOSE</text><text x="804" y="298" class="cF" font-size="41" font-weight="900" text-anchor="middle" fill="#12110f" textLength="490" lengthAdjust="spacingAndGlyphs">SCHOOL, SAYS HEAD</text>
+    <rect x="544" y="334" width="520" height="92" rx="8" fill="none" stroke="#1a2a52" stroke-width="3.500"/><text x="804" y="372" class="cF" font-size="24" font-weight="600" text-anchor="middle" fill="#12110f">The picture going round</text><text x="804" y="408" class="cF" font-size="24" font-weight="600" text-anchor="middle" fill="#12110f">is our own page one from 1976</text>
+    <text x="1118" y="440" class="cK" font-size="34" font-weight="700" text-anchor="middle" fill="#d8432a" transform="rotate(-8 1118 432)">D.C.</text></g>
+  <g id="strays"></g></g>
+
+<!-- the blinds -->
+<g id="blinds" class="hot"><rect x="1262" y="112" width="304" height="420" fill="#f4f6f1"/><rect x="1274" y="124" width="280" height="396" fill="url(#skyG)"/><g id="slats"></g><path d="M1540 124v420" stroke="#8f9ba3" stroke-width="2"/><circle cx="1540" cy="548" r="6" fill="#8f9ba3"/></g>
+
+<!-- the wood-block floor, and the sun through the slats -->
+<rect x="-1000" y="642" width="3600" height="760" fill="url(#floorG)"/>
+<g id="blocks" stroke="#6b4f2e" stroke-width="2" opacity=".4"></g>
+<g id="stripes" pointer-events="none" opacity=".9"></g>
+
+<!-- Mr Corrigan's desk: the style book, the tin of magnets -->
+<g id="tdesk"><rect x="262" y="668" width="420" height="140" fill="#5a4028"/><rect x="280" y="684" width="384" height="108" fill="#4a3320"/><path d="M286 616h370l28 52H258z" fill="#8a6a42"/><rect x="258" y="668" width="426" height="12" fill="#6b4f2e"/></g>
+<g id="style" class="hot"><path d="M316 630h132l10 26H304z" fill="#c9302a"/><path d="M322 626h58l6 26h-66z" fill="#fbfaf3"/><path d="M384 626h58l8 26h-62z" fill="#fbfaf3"/><path d="M330 634h44M330 641h44M392 634h44M394 641h44" stroke="#8a8170" stroke-width="2"/><path d="M382 626l5 26" stroke="#8f1f1a" stroke-width="3"/></g>
+<g id="tin" class="hot"><ellipse cx="530" cy="648" rx="46" ry="12" fill="#1b3157"/><path d="M484 632v16q46 24 92 0v-16z" fill="#27457a"/><ellipse cx="530" cy="632" rx="46" ry="12" fill="#3a5f9f"/><g fill="#fdfdfb"><rect x="502" y="624" width="26" height="8" transform="rotate(-10 515 628)"/><rect x="530" y="628" width="30" height="8" transform="rotate(8 545 632)"/><rect x="512" y="634" width="22" height="7"/></g></g>
+<g><rect x="606" y="618" width="26" height="30" rx="3" fill="#f4efe2"/><path d="M612 618l-4 -22M619 618v-26M626 618l4 -22" stroke="#d8432a" stroke-width="4" stroke-linecap="round"/><path d="M632 626q10 0 10 8t-10 8" fill="none" stroke="#f4efe2" stroke-width="4"/></g>
+
+<!-- Mr Corrigan, Ms Adeleke with No. 1, Priya, Theo, Nell -->
+<g id="corrigan" class="hot" transform="translate(736 878) scale(1.340)"></g>
+<g id="adeleke" class="hot" transform="translate(904 880) scale(1.300)"></g>
+<g id="priya" class="hot" transform="translate(1166 884) scale(1.260)"></g>
+<g id="theo" class="hot" transform="translate(1322 878) scale(1.280)"></g>
+<g id="nell" class="hot" transform="translate(1466 866) scale(1.100)"></g>
+
+<!-- Friday: the chairs are up -->
+<g id="chairs" pointer-events="none"></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Four o&rsquo;clock: go down to the front steps</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="rumour.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, board = null, told = {};
+
+  /* slats, sun stripes, floor blocks, the chairs, stray magnets, the clock, the five of them */
+  (function () {
+    var s = '', t = '', i, x, y, COL = ['#27457a', '#2e7d4f', '#a3382a', '#c9761a'];
+    for (i = 0; i < 20; i++) { y = 126 + i * 20; s += '<rect x="1274" y="' + y + '" width="280" height="12" fill="#e9dfc4"/><rect x="1274" y="' + (y + 12) + '" width="280" height="2" fill="#b9ad8a"/>'; }
+    $('#slats').innerHTML = s; s = '';
+    for (i = 0; i < 9; i++) t += '<path d="M' + (1420 - i * 150) + ' 642l-130 700h70l130 -700z" fill="#fff3c4" opacity="' + (0.2 - i * 0.016).toFixed(3) + '"/>';
+    $('#stripes').innerHTML = t;
+    for (i = 0; i < 12; i++) s += '<path d="M-400 ' + (662 + i * 22) + 'H2000"/>';
+    for (i = 0; i < 80; i++) s += '<path d="M' + (-380 + i * 30) + ' ' + (642 + (i % 2) * 22) + 'v22"/>';
+    $('#blocks').innerHTML = s; s = '';
+    [[836, 0], [1118, 1], [1400, 2], [552, 3]].forEach(function (c) {
+      x = c[0];
+      s += '<path d="M' + (x - 120) + ' 826h240l22 34H' + (x - 142) + 'z" fill="#c9ced3"/><rect x="' + (x - 142) + '" y="860" width="284" height="12" fill="#8f959a"/><path d="M' + (x - 126) + ' 872v80M' + (x + 126) + ' 872v80" stroke="#59616a" stroke-width="8"/>' +
+        '<path d="M' + (x - 62) + ' 826l-10 -42h144l-10 42z" fill="' + COL[c[1]] + '"/><path d="M' + (x - 58) + ' 784l-8 -70M' + (x + 58) + ' 784l8 -70M' + (x - 30) + ' 784l-4 -58M' + (x + 30) + ' 784l4 -58" stroke="#8f959a" stroke-width="6" stroke-linecap="round"/>';
+    });
+    $('#chairs').innerHTML = s; s = '';
+    [[446, 200, 34, -8], [452, 250, 44, 6], [448, 300, 28, -3], [458, 350, 40, 10], [444, 400, 36, -6]].forEach(function (m) { s += '<rect x="' + m[0] + '" y="' + m[1] + '" width="' + m[2] + '" height="13" fill="#fdfdfb" stroke="#8f959a" stroke-width="1.200" transform="rotate(' + m[3] + ' ' + (m[0] + 18) + ' ' + (m[1] + 6) + ')"/>'; });
+    $('#strays').innerHTML = s;
+    $('#clock').innerHTML = RUM.clock(200, 108, 34, 3, 50);
+    $('#corrigan').innerHTML = RUM.who('corrigan', { extra: '<path d="M39 -112l10 -34" stroke="#d8432a" stroke-width="5" stroke-linecap="round"/>' });
+    $('#adeleke').innerHTML = RUM.who('adeleke', { extra: '<g transform="rotate(4 0 -150)"><rect x="-34" y="-196" width="68" height="94" fill="#e9dcf2" stroke="#fff" stroke-width="2"/><rect x="-26" y="-186" width="52" height="12" fill="#5b3b8f"/><path d="M-26 -166h52M-26 -158h52" stroke="#5b3b8f" stroke-width="4"/><path d="M-26 -146h22M-26 -138h22M-26 -130h22M2 -146h24M2 -138h24M2 -130h24" stroke="#8a6ab8" stroke-width="2.500"/></g><circle cx="-32" cy="-128" r="8" fill="#8a5a3a"/><circle cx="32" cy="-128" r="8" fill="#8a5a3a"/>' });
+    $('#priya').innerHTML = RUM.who('priya', { smile: 1, extra: '<path d="M-56 -128h74l10 -44h-74z" fill="#3a3f47"/><path d="M-50 -134h62l8 -34h-62z" fill="#bfe1ff"/><path d="M-60 -128h82v8h-82z" fill="#59616a"/>' });
+    $('#theo').innerHTML = RUM.who('theo', { extra: '<path d="M-10 -234L8 -150M10 -234L-2 -150" stroke="#d8432a" stroke-width="3"/><path d="M34 -204q20 -50 4 -110" stroke="#1f4a3a" stroke-width="15" fill="none" stroke-linecap="round"/><circle cx="38" cy="-316" r="8" fill="#f0cfae"/><g transform="rotate(10 40 -340)"><rect x="14" y="-372" width="52" height="42" fill="#fbfaf3" stroke="#2a3038" stroke-width="2"/><rect x="14" y="-372" width="52" height="7" fill="#2a3038"/><path d="M22 -356h36M22 -348h36M22 -340h22" stroke="#1d2a66" stroke-width="2"/></g>' });
+    $('#nell').innerHTML = RUM.who('nell', { extra: '<circle cx="-9" cy="-273" r="8" fill="none" stroke="#a3382a" stroke-width="2"/><circle cx="9" cy="-273" r="8" fill="none" stroke="#a3382a" stroke-width="2"/>' });
+  })();
+
+  ER.init({
+    theme: 'news', story: 'rumour', storyTitle: 'Says Who?', id: 'e7', no: 'IV', title: 'Room E7',
+    go: 'Ten to four',
+    intro: [
+      'On the sheet from the copier, five of the six questions had an answer: who (the Education Committee of the County Council), what (the school is to close), where (at County Hall), why (only 212 pupils) and how (by bus to Aldersea). The sixth only looked answered. &ldquo;In July&rdquo; is not a when until it has a year, and the sheet had no date on it at all. The frame ran off the top of the paper: the copier had missed the top of a page that was too long for it.',
+      'The old page in Box 7 had the date. Friday 12 March 1976. The picture that has frightened the whole school since eight o&rsquo;clock this morning is the front page of the first <i>Wick</i> ever printed. Its editor was D. Corrigan, of 4B.',
+      'It is ten to four. The top of the bulletin still says IT&rsquo;S OFFICIAL.'
+    ],
+    exit: {"next":"four","w":{"db289f48":"f0f9eb3b"}}, tags: {"head":["6ee85a91"],"sub":["286a57cd"]},
+    sound: ['desk', { root: 48, bpm: 116, mood: 'tense' }],      /* ten minutes, and a headline to write: the desk at full speed */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.corrigan && told.head && told.heads; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#wb').classList.toggle('ready', !!(ready() && !nextFile));
+    $('#scene').classList.toggle('done', !!nextFile);
+    ER.pips((told.corrigan ? 1 : 0) + (told.head ? 1 : 0) + (told.heads ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['It is on the page, with Mr Corrigan&rsquo;s initials on it. Go down to the front steps.']];
+    if (board && board.isOpen()) return ['board', [
+      'Big magnets go in the top two lines: that is the headline. Small magnets go in the two lines under it: that is the standfirst. Drag a magnet, or click it and then click a line. Each line counts its own letters and spaces.',
+      'Read page 11 again, and Theo&rsquo;s note. The headline answers the question that every family is asking, in the head&rsquo;s own meaning, and it says who said so. Leave in the tin anything that is an opinion, anything that nobody has proved, and any word that is bigger than hers.',
+      'The headline takes four magnets: what there is not, what it would do, to what, and who says so. The standfirst takes three: what people have seen, what it really is, and from when. FAKE and HOAX are words for something that was meant to fool people. Was this?'
+    ]];
+    if (!told.corrigan) return ['corrigan', ['Mr Corrigan is the man in the yellow jacket. He has just found out what the whole school has been reading all day. Talk to him.', 'He is standing in front of the whiteboard, beside Ms Adeleke, with a red pen in his hand.']];
+    if (!told.head) return ['theo', ['Theo has come back from the head&rsquo;s office with something in his notebook. He is holding it over his head. Click Theo.',
+      'What the head teacher said is first-hand: Theo asked the one person who would know. Read every word of it, and notice what she would NOT say.']];
+    if (!told.heads) return ['style', ['Mr Corrigan said page 11. His own style book is lying open on his desk, at the left: the red file.', 'Page 11 has six rules for a headline. The board will hold you to every one of them.']];
+    return ['wb', ['The whiteboard has the top of the page drawn on it, and nothing in the page. Click the board.',
+      'Theo&rsquo;s note and page 11 are in your notebook now. You may open the notebook while you are working at the board.']];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The board, with two lines of seventeen on it and D.C. in the corner. It is two minutes to four.'); return; }
+    if (told.in) { busy = false; ER.say('Room E7, at ten to four.'); return; }
+    tell('in');
+    ER.narrate([
+      'Room E7, with the chairs up on the desks and the sun coming through the blinds in stripes.',
+      'Mr Corrigan is in from bus duty, still in his yellow jacket. Ms Adeleke has put the purple page into his hands, in a plastic sleeve. He is reading it the way people read a letter from somebody they used to know.',
+      '&ldquo;Well,&rdquo; he says at last. &ldquo;I spelt &lsquo;committee&rsquo; wrong. Twice.&rdquo;',
+      'The door bangs open. Theo, out of breath, is holding his notebook over his head like a cup. &ldquo;I&rsquo;ve got her! Her exact words! And I read them BACK to her!&rdquo;',
+      '&ldquo;Then we have ten minutes, and a hole at the top of the page,&rdquo; says Mr Corrigan. He gives the sleeve back to Ms Adeleke with both hands. &ldquo;Board. Magnets. Trainee: you are writing it.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#corrigan').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Seventeen,&rdquo; says Mr Corrigan. &ldquo;I counted it twice. You get into the habit.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mr Corrigan', role: 'English · The Wick’s publisher · on bus duty', face: window.FACE('corrigan'),
+      lines: [
+        { note: 'He has taken one arm out of the yellow jacket, and forgotten about the other.', a: '&ldquo;Fifty years,&rdquo; says Mr Corrigan. &ldquo;And the first people to check that story are four children and a librarian. I ought to be ashamed. I find that I am rather proud.&rdquo;' },
+        { q: 'Did the school really nearly close?', a: 'It did. Two hundred and twelve of us, and a bus to Aldersea. I was fourteen, and furious, and the school kept its duplicator in a cupboard.</p><p>He nods at the door with STATIONERY on it. &ldquo;That cupboard, as a matter of fact.&rdquo;' },
+        { q: 'And the paper stopped it?', a: 'Four hundred letters from parents stopped it. But the parents wrote because they knew what was planned, and when, and who to write to. That is all that the paper did. It is all that a paper ever does.' },
+        { q: 'Why did you never tell us?', a: 'Nobody asked. You are reporters. I have been waiting eleven years for one of you to ask me where the paper got its name.' },
+        { q: 'It was a good front page.', a: 'It was a fair one. It said who had decided. It said that the plan was not final. Then a photocopier took the date off, and a boy took the name of the paper off, and somebody else took SAYS COUNCIL off. What was left had been true once, and it frightened eleven hundred families.</p><p>&ldquo;Take the labels off a fact, and that is what you get.&rdquo;' },
+        { a: '&ldquo;Now. Ten minutes. What do we know, as of ten to four? Not what we feel. What we know.&rdquo; He points his red pen at Theo, then at his desk, then at the board. &ldquo;His note. Page 11. Then the magnets.&rdquo;' }
+      ],
+      clue: { id: 'corrigan', title: 'Mr Corrigan, in a yellow jacket', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('corrigan')) { paint(); ER.say('Theo is still holding his notebook over his head.'); } }
+    });
+  });
+  var NOTE = '<h4>What the head said</h4><p class="q">Mrs Whitcombe, head teacher. In her office, 3.44 pm.</p>' +
+    '<p>&ldquo;There is no plan to close Petherwick School. Nobody has proposed one, to me or to the governors. We have 1,104 pupils and a waiting list.&rdquo;</p>' +
+    '<p class="gap"></p><p>ME: So the school is safe for ever?</p><p>&ldquo;I can&rsquo;t see the future, Theo. I can tell you what is planned. Nothing is.&rdquo;</p>' +
+    '<p class="gap"></p><p>ME: And the man on the field?</p><p>&ldquo;He is measuring it for the centenary tent.&rdquo;</p>' +
+    '<p class="gap"></p><p class="q">Read back to her. She agreed every word, and signed.</p><p class="sig">E. Whitcombe</p>';
+  $('#theo').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;My quote is the HEADLINE,&rdquo; says Theo, to nobody, and then to everybody.'); return; }
+    if (!told.corrigan) { ER.say('&ldquo;In a moment, Theo,&rdquo; says Mr Corrigan, without looking up from the purple page. Theo goes on holding the notebook over his head.'); return; }
+    ER.read({ html: NOTE, cls: 'jot', clue: { id: 'head', title: 'Theo’s note: what the head said', kind: 'First-hand, 3.44 pm' }, done: function () {
+      RUM.terms(['quote', 'first-hand']);
+      if (tell('head')) { paint(); ER.say('Theo wrote down what she said, and not what he wished she had said. Then he read it back to her. Priya looks at him as if she has never seen him before.'); }
+    } });
+  });
+  $('#priya').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;It&rsquo;s in,&rdquo; says Priya. &ldquo;Top of the page. Two minutes to spare, which for this desk is a record.&rdquo;' : 'Priya has the bulletin open on her laptop, and one finger over the key that will put your words at the top of it.');
+  });
+  $('#adeleke').addEventListener('click', function () {
+    if (busy) return;
+    ER.say('&ldquo;I am not here to help,&rdquo; says Ms Adeleke. &ldquo;I am here to carry No. 1 back to its box.&rdquo; She is reading the board over your shoulder all the same.');
+  });
+  $('#nell').addEventListener('click', function () {
+    if (busy) return;
+    ER.say('Nell has come too. Nobody asked her to, and nobody has sent her away. She looks at the name on the old page, and then at Mr Corrigan, and then at the page again.');
+  });
+
+  /* ---------- papers ---------- */
+  var COUNT = '<svg viewBox="0 0 250 124"><g font-family="Libre Franklin,sans-serif" font-weight="900" font-size="12.500" fill="#16202c" text-anchor="middle">' +
+    'CHESS CLUB WINS'.split('').map(function (ch, i) { return '<rect x="' + (6 + i * 14) + '" y="26" width="13" height="20" fill="' + (ch === ' ' ? '#f5df9c' : '#fff') + '" stroke="#22201b" stroke-width="1"/><text x="' + (12.5 + i * 14) + '" y="41">' + ch + '</text>'; }).join('') +
+    '<rect x="216" y="26" width="13" height="20" fill="none" stroke="#22201b" stroke-width="1" stroke-dasharray="3 2"/><rect x="230" y="26" width="13" height="20" fill="none" stroke="#22201b" stroke-width="1" stroke-dasharray="3 2"/></g>' +
+    '<g font-family="Kalam,cursive" font-size="14" fill="#1a2a52"><text x="6" y="16" font-weight="700">a line of 17:</text><text x="6" y="68">13 letters + 2 spaces = 15.</text><text x="6" y="88">Two to spare.</text><text x="6" y="116" fill="#d8432a" font-weight="700">A space counts as one.</text></g></svg>';
+  var HEADS = '<h4>The Wick &middot; style book</h4><h3><i>11</i>Headlines</h3><div class="two"><div>' +
+    '<p>A headline is the story in the fewest words that will fit.</p><ol>' +
+    '<li>Answer the question that the reader is asking.</li>' +
+    '<li>Say only what is known. If it is a thing that somebody says, give it its owner: SAYS HEAD, SAYS COUNCIL. A claim with no owner is only a rumour in capital letters.</li>' +
+    '<li>Keep to that person&rsquo;s own meaning. Do not make their words bigger than they were.</li>' +
+    '<li>No opinions. No SHOCK, no SHAME, no SADLY.</li>' +
+    '<li>Be fair. A FAKE or a HOAX needs somebody who meant to fool people. Can you prove it?</li>' +
+    '<li>Count it. Every letter is one and every space is one. If it will not fit, find shorter words. Never bend the truth to fit the space.</li></ol>' +
+    '<p class="rule">The line under a headline is the standfirst. It tells the reader the next most important thing.</p></div><div class="dia">' + COUNT + '</div></div><p class="pg">page 11</p>';
+  $('#style').addEventListener('click', function (e) {
+    if (busy) return;
+    if (!told.corrigan) { ER.wordAt(e.clientX, e.clientY, 'style book'); ER.say('The style book, open on Mr Corrigan&rsquo;s desk. He wrote it. He will tell you which page.'); return; }
+    ER.read({ html: HEADS, cls: 'stylebook', clue: { id: 'heads', title: 'Style book, page 11: Headlines', kind: 'The style book' }, done: function () {
+      RUM.terms(['headline', 'standfirst', 'hoax', 'claim']);
+      if (tell('heads')) { paint(); ER.say('Six rules, and the sixth is arithmetic.'); }
+    } });
+  });
+
+  /* ---------- things in the room ---------- */
+  RUM.thing('#door', null, function () { return told.corrigan ? 'The news room, from the outside. STATIONERY, on a brass plate. Fifty years ago there was a duplicator behind that door, and a boy of fourteen turning its handle.' : 'The news room, from the outside. A brass plate on the door still says STATIONERY.'; }, isBusy);
+  RUM.thing('#clock', null, function () { return nextFile ? 'Two minutes to four.' : 'Ten to four. Ten minutes.'; }, isBusy);
+  RUM.thing('#parts', 'masthead', 'A wall display: PARTS OF A FRONT PAGE. The masthead is the name of the paper, across the top. Under the headline comes the standfirst. The byline says who wrote the story.', isBusy, function () { RUM.terms(['masthead']); });
+  RUM.thing('#blinds', 'blinds', 'Through the blinds: the last buses pulling out, the field, and four small red flags at the corners of a very large tent that is not there yet.', isBusy);
+  RUM.thing('#tin', 'magnets', 'A biscuit tin full of magnets, each with a word or two on it. Mr Corrigan has been cutting them out for years. He uses them to teach headlines, and to win arguments.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#wb').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('NO PLAN TO CLOSE SCHOOL, SAYS HEAD. Sixteen and seventeen. And under it, twenty-three and twenty-nine.'); return; }
+    if (!told.corrigan) { ER.say('A page drawn on the whiteboard in blue marker, with nothing in it. Mr Corrigan has not looked up from the purple sheet yet.'); return; }
+    if (!told.head) { ER.say('&ldquo;What goes on that board is what we KNOW,&rdquo; says Mr Corrigan. &ldquo;And the newest thing we know is in Theo&rsquo;s notebook. Read it.&rdquo;'); return; }
+    if (!told.heads) { ER.say('&ldquo;Page 11,&rdquo; says Mr Corrigan. &ldquo;On my desk. I am not having a headline on this board from somebody who has not read page 11.&rdquo;'); return; }
+    if (!board) board = makeBoard();
+    board.open();
+  });
+
+  /* ---------- the board: a headline of two lines of 17, a standfirst of two lines of 30 ---------- */
+  function makeBoard() {
+    var BIG = ['', 'SCHOOL', 'SHOCK', 'SAYS HEAD', 'WILL NEVER', 'NO PLAN', 'IT’S OFFICIAL:', 'SCHOOL,', 'CLOSE', 'HOAX', 'TO CLOSE', 'IS SAFE,', 'SAY PUPILS'];
+    var SML = ['', 'is a fake', 'from 1976', 'The picture going round', 'was posted by Nell P of 8H', 'is our own page one', 'from the council', 'is a hoax by a pupil', 'from last week'];
+    var MAX = { h1: 17, h2: 17, s1: 30, s2: 30 }, UNIT = { b: 21, m: 12 }, KEYS = ['h1', 'h2', 's1', 's2'];
+    var lay = ER.flag('d-lay') || { h1: [], h2: [], s1: [], s2: [] }, held = null, wait = false, M = {}, box = ER.el('div', 'wbx'), s;
+    s = '<div class="wb"><div><h6>Headline<small>2 lines of 17</small></h6><div class="fr hd"><div class="ln" data-k="h1"></div><div class="ln" data-k="h2"></div></div>' +
+      '<h6>Standfirst<small>2 lines of 30</small></h6><div class="fr sf"><div class="ln" data-k="s1"></div><div class="ln" data-k="s2"></div></div></div>' +
+      '<div><h6>The tin<small>big magnets for the headline</small></h6><div class="tin b" data-k="tb"></div><h6><small style="margin-left:0">small magnets for the line under it</small></h6><div class="tin m" data-k="tm"></div></div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="w-go">Show Mr Corrigan</button></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function mk(kind, id, text) {
+      var n = ER.el('span', 'mg ' + kind); n.textContent = text; n.setAttribute('data-kind', kind); n.setAttribute('data-id', id); n.setAttribute('data-n', text.length);
+      n.style.width = (text.length * UNIT[kind]) + 'px'; M[kind + id] = n; return n;
+    }
+    BIG.forEach(function (t, i) { if (i) mk('b', i, t); });
+    SML.forEach(function (t, i) { if (i) mk('m', i, t); });
+    function kindOf(k) { return k.charAt(0) === 'h' ? 'b' : 'm'; }
+    function count(k, skip) { var n = 0, c = 0; lay[k].forEach(function (id) { if (kindOf(k) + id === skip) return; n += M[kindOf(k) + id].textContent.length; c++; }); return { n: n, c: c }; }
+    function where(key) { for (var i = 0; i < 4; i++) if (lay[KEYS[i]].indexOf(+key.slice(1)) >= 0 && kindOf(KEYS[i]) === key.charAt(0)) return KEYS[i]; return null; }
+    function render() {
+      var used = {};
+      KEYS.forEach(function (k) {
+        var ln = box.querySelector('.ln[data-k="' + k + '"]'), c = count(k), tot = c.n + Math.max(0, c.c - 1), tag;
+        ln.innerHTML = '';
+        lay[k].forEach(function (id) { ln.appendChild(M[kindOf(k) + id]); used[kindOf(k) + id] = 1; });
+        tag = ER.el('i', '', tot + ' / ' + MAX[k]); ln.appendChild(tag); ln.setAttribute('data-n', tot);
+      });
+      BIG.forEach(function (t, i) { if (i && !used['b' + i]) box.querySelector('.tin.b').appendChild(M['b' + i]); });
+      SML.forEach(function (t, i) { if (i && !used['m' + i]) box.querySelector('.tin.m').appendChild(M['m' + i]); });
+      ER.flag('d-lay', lay);
+    }
+    function hold(n) { if (held) held.classList.remove('held'); held = n; if (n) n.classList.add('held'); }
+    function home(n) { var key = n.getAttribute('data-kind') + n.getAttribute('data-id'), k = where(key); if (k) { lay[k].splice(lay[k].indexOf(+key.slice(1)), 1); RUM.sfx.clack(); } render(); }
+    /* put a magnet on a line, at the place nearest to x; false if the line will not take it */
+    function put(n, k, x) {
+      var kind = n.getAttribute('data-kind'), id = +n.getAttribute('data-id'), key = kind + id, ln = box.querySelector('.ln[data-k="' + k + '"]'), c, tot, old, at, kids, i, r;
+      if (kindOf(k) !== kind) { ER.shake(ln); ER.sfx.no(); msg(kind === 'b' ? 'The big magnets are headline magnets. They go in the top two lines.' : 'The small magnets are for the standfirst: the two lines under the headline.'); return false; }
+      c = count(k, key); tot = c.n + c.c + n.textContent.length;       /* letters already there + a space after each + the new one */
+      if (tot > MAX[k]) {
+        ln.classList.add('no'); setTimeout(function () { ln.classList.remove('no'); }, 600); ER.sfx.no();
+        msg('It will not fit. That line holds <b>' + MAX[k] + '</b>, and with &ldquo;' + n.textContent + '&rdquo; it would be <b>' + tot + '</b>. Every letter is one, and every space is one.');
+        return false;
+      }
+      old = where(key); if (old) lay[old].splice(lay[old].indexOf(id), 1);
+      at = lay[k].length;
+      if (x != null) {
+        kids = lay[k].map(function (j) { return M[kind + j]; });
+        for (i = 0; i < kids.length; i++) { r = kids[i].getBoundingClientRect(); if (x < r.left + r.width / 2) { at = i; break; } }
+      }
+      lay[k].splice(at, 0, id); RUM.sfx.clack(); render();
+      c = count(k); msg('&ldquo;' + lay[k].map(function (j) { return M[kind + j].textContent; }).join(' ') + '&rdquo;: <b>' + (c.n + c.c - 1) + '</b> out of ' + MAX[k] + '.');
+      return true;
+    }
+    function zone(x, y) { var t = document.elementFromPoint(x, y); if (!t || !t.closest) return null; return t.closest('.ln') || t.closest('.tin') || null; }
+    box.addEventListener('pointerdown', function (e) {
+      var n = e.target.closest ? e.target.closest('.mg') : null;
+      if (!n || e.button || wait || nextFile) return;
+      e.preventDefault();
+      var r = n.getBoundingClientRect(), dx = e.clientX - r.left, dy = e.clientY - r.top, moved = false, sx = e.clientX, sy = e.clientY;
+      function mv(ev) {
+        if (!moved) { if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 6) return; moved = true; hold(null); n.classList.add('fly'); }
+        n.style.left = (ev.clientX - dx) + 'px'; n.style.top = (ev.clientY - dy) + 'px';
+      }
+      function up(ev) {
+        document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
+        if (!moved) { hold(held === n ? null : n); return; }
+        n.classList.remove('fly'); n.style.left = n.style.top = '';
+        var z = zone(ev.clientX, ev.clientY);
+        if (z && z.classList.contains('ln')) { if (!put(n, z.getAttribute('data-k'), ev.clientX)) render(); }
+        else home(n);
+      }
+      document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
+    });
+    box.addEventListener('click', function (e) {
+      if (!held || wait || nextFile) return;
+      if (e.target.closest && e.target.closest('.mg')) return;
+      var z = e.target.closest ? (e.target.closest('.ln') || e.target.closest('.tin')) : null, n = held;
+      if (!z) return;
+      hold(null);
+      if (z.classList.contains('ln')) put(n, z.getAttribute('data-k'), null); else home(n);
+    });
+    function has(list, id) { return list.indexOf(id) >= 0; }
+    box.querySelector('#w-go').addEventListener('click', function () {
+      var H = lay.h1.concat(lay.h2), S = lay.s1.concat(lay.s2), file, bad = null;
+      if (wait || nextFile) return;
+      if (!H.length) { msg('&ldquo;The top of the page is empty,&rdquo; says Mr Corrigan. &ldquo;In eight minutes that is what eleven hundred families will get. Big magnets, top two lines.&rdquo;'); return; }
+      if (has(H, 2)) bad = 'SHOCK is what you feel. It is not news. The reader can be shocked without any help from us.';
+      else if (has(H, 9)) bad = 'A hoax needs somebody who MEANT to fool people. Have you got one? No. Nor have I.';
+      else if (has(H, 6)) bad = 'That is the very word that started all this. Who made it official? A headline does not get to promote itself.';
+      else if (has(H, 4)) bad = 'Never is a long time. Read Theo&rsquo;s note again. She said that there is no plan. When he asked her about for ever, she said that she could not see the future.';
+      else if (has(H, 11)) bad = 'Did she say &ldquo;safe&rdquo;? Read the note. He asked her that very thing, and she would not say it. Her meaning, and not a bigger one.';
+      else if (has(H, 12)) bad = 'The pupils have been saying things all day, and that is the whole trouble. Who would actually KNOW?';
+      else if (!ER.check('head', H.join('-'))) {
+        bad = !has(H, 3) ? 'It may very well be true. But says who? A claim with no owner is a rumour in capital letters. Somebody said this to Theo at 3.44, and she has a job and a name.' :
+          !has(H, 5) || !has(H, 10) ? 'Somebody says something. Good. What does she say? Read the first line of Theo&rsquo;s note: it is nearly a headline already.' :
+          !has(H, 1) && !has(H, 7) ? 'No plan to close WHAT? The reader has to be told in the headline itself. There is room.' :
+          has(H, 1) ? 'SCHOOL SAYS HEAD? The school is not saying &ldquo;head&rdquo;. There is another magnet with a comma on it. A comma costs one, and you have one to spare.' :
+          'Read it aloud, from the top line to the bottom. It is not a sentence yet. Begin with the thing that the reader is asking: is there a plan?';
+      }
+      if (bad) { ER.sfx.no(); ER.shake(box.querySelector('.hd')); msg('Mr Corrigan reads the headline, and taps the board with his red pen. &ldquo;' + bad + '&rdquo;'); return; }
+      if (!S.length) { msg('&ldquo;NO PLAN TO CLOSE SCHOOL, SAYS HEAD. Sixteen and seventeen. That will do,&rdquo; says Mr Corrigan. &ldquo;Now the line under it. The reader&rsquo;s next question is: then what was that picture? Small magnets.&rdquo;'); return; }
+      if (has(S, 1)) bad = 'It is not a fake. It is as real as that purple page. It is OLD. Call a true thing a fake, and the next true thing we print will not be believed either.';
+      else if (has(S, 7)) bad = 'A hoax needs somebody who meant to fool people. Nell asked a question. Jago made a joke. A photocopier missed a line. Which of those is the hoax?';
+      else if (has(S, 4)) bad = 'We do not put a child&rsquo;s name under a mistake that forty people made. And all that she did was to ask whether it was real, which is more than the rest of the school managed.';
+      else if (has(S, 6)) bad = 'The council of 1976 voted for a plan. But the picture is not from the council. Whose front page is it?';
+      else if (has(S, 8)) bad = 'Is it? You have had the page in your hands. What does the top of it say?';
+      else if (!ER.check('sub', S.join('-'))) {
+        bad = !has(S, 3) ? 'What is our own page one? The reader has not been in the library with you. Begin with the thing that they have all seen.' :
+          !has(S, 5) ? 'The picture going round from 1976&hellip; is what? You have not finished the sentence.' :
+          !has(S, 2) ? 'Our own page one. From when? You spent the whole afternoon finding that out. It is the story.' :
+          S[0] !== 3 ? 'Read it aloud, from the top line down. It begins in the middle. Start with the thing that everybody has seen: the picture.' :
+          'Read it aloud. &ldquo;Going round from 1976&rdquo;? It has only been going round since Thursday. Put the words in the order in which you would say them.';
+      }
+      if (bad) { ER.sfx.no(); ER.shake(box.querySelector('.sf')); msg('Mr Corrigan reads the standfirst. &ldquo;' + bad + '&rdquo;'); return; }
+      file = ER.exit([H.join('-') + '|' + S.join('-')], { wait: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('d-file', file); RUM.sfx.marker();
+      RUM.mine('page', 'The top of the page', '<p>NO PLAN TO CLOSE / SCHOOL, SAYS HEAD</p><p>The picture going round / is our own page one from 1976</p><p>Her meaning, with her name on it. Old, not fake. Nobody&rsquo;s name under a mistake.</p>', true);
+      msg('Mr Corrigan reads it twice, moving his lips, counting. Then he takes the top off his red pen and writes two letters in the corner of the board. <b>D.C.</b>');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          '&ldquo;Seventeen,&rdquo; says Mr Corrigan. &ldquo;It fits. And every word of it belongs to somebody, with a name.&rdquo;',
+          'Priya&rsquo;s finger comes down. At the top of the bulletin IT&rsquo;S OFFICIAL goes out like a light, and your two lines come on.',
+          '&ldquo;Picture?&rdquo; says Priya.</p><p>&ldquo;The whole page,&rdquo; says Mr Corrigan. &ldquo;Date and all. Nothing cut.&rdquo; Ms Adeleke holds the sleeve flat while Priya photographs it.',
+          '&ldquo;What about MY story?&rdquo; says Theo.</p><p>&ldquo;Your quote is the headline,&rdquo; says Priya. &ldquo;Read back, and agreed. It is the best thing in the bulletin.&rdquo; Theo goes the colour of the wool.',
+          '&ldquo;One more line, at the bottom,&rdquo; says Mr Corrigan. &ldquo;I shall write that one myself.&rdquo; He types it with two fingers. It is two minutes to four.'
+        ], function () { busy = false; showGo(); });
+      }, 3400);
+    });
+    render();
+    msg(lay.h1.length + lay.h2.length + lay.s1.length + lay.s2.length ? 'The board, as you left it. Drag a magnet on to a line, or click it and then click the line. Click a magnet and then the tin to put it back.' :
+      'The top of the page, and a tin of magnets. Drag a magnet on to a line, or click it and then click the line. A line takes only as many letters and spaces as its number says.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

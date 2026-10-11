@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Meetings · The Cold Door</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ridge.css">
+<style>
+  body{--bg:#343c40;--accent:#f4b942;--font-display:'Fjalla One',sans-serif;--font-ui:'Fjalla One',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(30,28,22,.96);--tc-ink:#f3ecd8;--cap-bg:rgba(22,21,17,.93);--panel:#262419;--face-bg:#6b6f62;--q-ink:#f4b942;--fade:#14120c;--hud-bg:rgba(22,21,17,.8)}
+  .sF{font-family:'Fjalla One',sans-serif;text-anchor:middle}
+  #dusk{animation:dusk 300s steps(30,end) forwards;opacity:0}
+  @keyframes dusk{to{opacity:.42}}
+  .glint{animation:glint 2.6s linear infinite}
+  .glint.b{animation-duration:3.4s;animation-delay:-1.2s}
+  @keyframes glint{from{stroke-dashoffset:0}to{stroke-dashoffset:-64}}
+  #leaves{animation:sway 4.2s ease-in-out infinite;transform-origin:1452px 690px}
+  @keyframes sway{50%{transform:rotate(1.6deg)}}
+  #map.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3)}}
+  .hot:hover{filter:brightness(1.16)}
+
+  /* the map and the card, side by side */
+  .bx .two{display:grid;grid-template-columns:1fr 352px;gap:0;background:#f3f0e2}
+  .rcd{background:#fbfaf1;color:#1e1d1a;font-family:'Overpass',sans-serif;font-size:13px;line-height:1.35;padding:12px 16px 10px;border-left:1px solid #6b6450;border-top:8px solid #2a5d4a;display:flex;flex-direction:column}
+  .rcd h5{margin:0 0 2px;font-family:'Fjalla One',sans-serif;font-weight:normal;font-size:19px;letter-spacing:.1em;text-transform:uppercase;color:#2a5d4a}
+  .rcd p{margin:0 0 7px}
+  .rcd .hw{font-family:'Handlee',cursive;font-size:17.5px;line-height:1.2;color:#26304a}
+  .rcd .hd{margin:0;padding:3px 8px 2px;background:#2a5d4a;color:#f3f0e2;font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+  .rcd .line{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0;padding:3px 2px 2px 8px;border-bottom:1px solid #a9a38c}
+  .rcd .line>b{font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#2a5d4a;line-height:1.2}
+  .rcd .line>b small{display:block;font-family:'Handlee',cursive;font-size:16px;letter-spacing:0;text-transform:none;color:#26304a}
+  .rcd .line>span{display:inline-flex;align-items:center;gap:6px}
+  .rcd .wls{box-shadow:none;background:none;padding:0}
+  .rcd .gapv{height:9px}
+  .rcd .way{display:flex;gap:8px}
+  .rcd .way button{width:44px;height:40px;border:1.5px dashed #8a7f62;border-radius:50%;font-family:'Handlee',cursive;font-size:25px;color:#8a7f62}
+  .rcd .way button.on{border:2.5px solid #26304a;color:#26304a;transform:rotate(-4deg)}
+  .rcd .meas{flex:1;min-height:92px;margin:0;padding-top:5px;border-top:2px solid #2a5d4a}
+  .rcd .meas b{display:block;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#2a5d4a}
+  .rcd .meas span{display:inline-block;margin-right:12px;font-family:'Handlee',cursive;font-size:16.5px;color:#26304a;white-space:nowrap}
+  .rul rect{fill:rgba(250,250,244,.86);stroke:#1e2a30;stroke-width:.5}
+  .rul path{stroke:#1e2a30;stroke-width:.45}
+  .rul text{font-family:'Overpass',sans-serif;font-weight:700;font-size:7px;fill:#c8321e;text-anchor:middle;paint-order:stroke;stroke:#fafaf4;stroke-width:2px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bandG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6cc55"/><stop offset=".35" stop-color="#d9b566"/><stop offset=".7" stop-color="#8fa39a"/><stop offset="1" stop-color="#6f8a8c"/></linearGradient>
+  <linearGradient id="lidG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f373d"/><stop offset=".8" stop-color="#525b61"/><stop offset="1" stop-color="#6b7377"/></linearGradient>
+  <linearGradient id="noseG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2227"/><stop offset="1" stop-color="#2d3330"/></linearGradient>
+  <linearGradient id="eastG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46524e"/><stop offset="1" stop-color="#3a4238"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5d5a38"/><stop offset=".5" stop-color="#4a4a30"/><stop offset="1" stop-color="#2b2c1f"/></linearGradient>
+  <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9d9dc"/><stop offset="1" stop-color="#6f8f98"/></linearGradient>
+  <radialGradient id="vig" cx="42%" cy="52%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".65" stop-color="#000" stop-opacity=".22"/><stop offset="1" stop-color="#000" stop-opacity=".72"/></radialGradient>
+</defs>
+
+<!-- the strip of light in the west, under the lid of cloud -->
+<g id="west" class="hot"><rect x="-1000" y="-400" width="3600" height="900" fill="url(#bandG)"/></g>
+<g id="lid" class="hot"><rect x="-1000" y="-400" width="3600" height="640" fill="url(#lidG)"/><g fill="#6b7377"><ellipse cx="200" cy="246" rx="330" ry="34"/><ellipse cx="760" cy="236" rx="300" ry="30"/><ellipse cx="1300" cy="250" rx="380" ry="40"/><ellipse cx="1800" cy="240" rx="300" ry="30"/><ellipse cx="-300" cy="240" rx="320" ry="30"/></g></g>
+
+<!-- the way you came: the valley of the Door Burn, and the Spout -->
+<path d="M820 520Q1000 300 1240 268Q1500 250 2600 330V900H820Z" fill="url(#eastG)"/>
+<g id="spout" class="hot"><circle cx="1180" cy="352" r="40" fill="#fff" opacity="0"/><path d="M1180 318q-6 28 4 50q8 18 -2 40" stroke="#eef6f8" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M1182 408q-30 60 -110 110q-70 40 -150 110" stroke="#9fb7bd" stroke-width="3" fill="none" opacity=".8"/></g>
+<!-- the Nose, black against the light, with the Notch in its skyline and the path going up to it -->
+<g id="nose" class="hot"><path d="M-1000 1300V470Q-100 330 250 322L318 322L352 350L392 318Q560 300 760 430Q900 520 1010 700V1300Z" fill="url(#noseG)"/>
+  <path d="M884 652L800 612L834 582L728 544L764 512L648 474L686 446L568 414L604 390L478 368L506 350L404 344L358 350" stroke="#8d8a66" stroke-width="3" fill="none" stroke-dasharray="9 7" opacity=".8"/></g>
+
+<path d="M-1000 716Q200 640 760 676T1700 650T2600 690V1320H-1000Z" fill="url(#floorG)"/>
+<g fill="#8a4f24" opacity=".8" id="bracken"></g>
+<!-- the track, going off downstream -->
+<path d="M560 900Q470 800 300 760T-200 730" stroke="#8d8566" stroke-width="30" fill="none" opacity=".75"/><path d="M560 900Q470 800 300 760T-200 730" stroke="#6b6548" stroke-width="3" fill="none" stroke-dasharray="14 12"/>
+<!-- the two burns, and where they meet -->
+<g id="water" class="hot">
+  <path d="M1010 700Q930 730 900 768" stroke="url(#waterG)" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M1640 716Q1300 800 1000 790Q930 786 900 768" stroke="#8a7a5a" stroke-width="30" fill="none" stroke-linecap="round"/>
+  <path d="M900 768Q760 820 640 900Q560 960 500 1100" stroke="url(#waterG)" stroke-width="44" fill="none" stroke-linecap="round"/><path d="M912 782Q780 830 668 906" stroke="#8a7a5a" stroke-width="15" fill="none" stroke-linecap="round" opacity=".8"/>
+  <path class="glint" d="M1004 704Q930 732 902 766Q770 816 646 896" stroke="#fff" stroke-width="3" fill="none" stroke-dasharray="10 22" opacity=".8"/>
+  <path class="glint b" d="M1600 724Q1300 796 1000 786" stroke="#e9dcc0" stroke-width="2.500" fill="none" stroke-dasharray="8 24" opacity=".6"/>
+  <g id="steps" fill="#59625e"><ellipse cx="800" cy="812" rx="22" ry="9"/><ellipse cx="748" cy="838" rx="24" ry="10"/><ellipse cx="700" cy="868" rx="26" ry="11"/></g>
+</g>
+
+<!-- the signpost, and Kwame under it -->
+<g id="sign" class="hot">
+  <path d="M520 820V470" stroke="#3a2c1c" stroke-width="15" stroke-linecap="round"/><ellipse cx="520" cy="824" rx="40" ry="8" fill="#14120c" opacity=".5"/>
+  <g transform="rotate(-24 520 506)"><path d="M370 488h150v38H370l-22 -19z" fill="#6b5236" stroke="#3a2c1c" stroke-width="3"/><text x="448" y="518" class="sF" font-size="26" fill="#f3e6c2" letter-spacing="4">HUT</text></g>
+  <g transform="rotate(8 520 612)"><path d="M356 594h164v38H356l-22 -19z" fill="#6b5236" stroke="#3a2c1c" stroke-width="3"/><text x="442" y="624" class="sF" font-size="26" fill="#f3e6c2" letter-spacing="4">HUT</text></g>
+</g>
+<g id="kwame" class="hot" transform="translate(620 836)">
+  <ellipse cx="0" cy="2" rx="60" ry="8" fill="#14120c" opacity=".5"/>
+  <path d="M-20 0v-104h16V0zM4 0v-104h16V0z" fill="#30363c"/><path d="M-26 0h24v8h-28zM2 0h24v8h-22z" fill="#5a4630"/>
+  <path d="M30 -96q14 -74 -20 -100h-24v100z" fill="#3d6b2f"/><path d="M-40 -96q-8 -110 40 -118t36 118z" fill="#2a5ea8"/>
+  <path d="M-30 -192q-40 -20 -60 -70" stroke="#24539a" stroke-width="15" fill="none" stroke-linecap="round"/><circle cx="-92" cy="-266" r="9" fill="#6f4626"/>
+  <path d="M30 -190q20 30 8 70" stroke="#24539a" stroke-width="15" fill="none" stroke-linecap="round"/>
+  <rect x="-7" y="-226" width="14" height="14" fill="#5d3a1f"/><circle cx="0" cy="-242" r="23" fill="#6f4626"/><path d="M-24 -246q0 -30 24 -30t24 30q-12 -9 -24 -9t-24 9z" fill="#f0c020"/>
+  <path d="M2 -240h7M14 -240h6" stroke="#2a1a0c" stroke-width="2.600"/><path d="M4 -229q8 3 14 0" stroke="#f7f1e6" stroke-width="2.600" fill="none"/>
+</g>
+
+<!-- the sheepfold, the rowan, and Mrs MacAskill with her foot up -->
+<g id="rowan" class="hot"><path d="M1452 700q-10 -120 -50 -190q-20 -40 -60 -60" stroke="#2a2118" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <g id="leaves"><path d="M1404 512q-40 -30 -90 -20M1380 480q-30 -40 -80 -40M1350 452q-50 -10 -90 20M1410 530q-50 0 -80 30" stroke="#2a2118" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <g fill="#c2331f"><circle cx="1318" cy="494" r="7"/><circle cx="1304" cy="486" r="6"/><circle cx="1298" cy="442" r="7"/><circle cx="1284" cy="450" r="6"/><circle cx="1262" cy="470" r="7"/><circle cx="1332" cy="560" r="6"/><circle cx="1346" cy="552" r="7"/><circle cx="1276" cy="482" r="5"/></g>
+    <g fill="#8a6a2a" opacity=".9"><ellipse cx="1340" cy="470" rx="14" ry="5" transform="rotate(-30 1340 470)"/><ellipse cx="1290" cy="500" rx="14" ry="5" transform="rotate(20 1290 500)"/><ellipse cx="1320" cy="440" rx="13" ry="5" transform="rotate(-10 1320 440)"/></g></g></g>
+<g id="fold" class="hot">
+  <ellipse cx="1270" cy="730" rx="250" ry="62" fill="#3c3d2c"/><ellipse cx="1270" cy="716" rx="250" ry="62" fill="none" stroke="#6f7068" stroke-width="34"/><ellipse cx="1270" cy="708" rx="250" ry="62" fill="none" stroke="#8a8b82" stroke-width="10"/>
+  <g stroke="#4a4b44" stroke-width="3"><path d="M1040 718v30M1090 750v30M1150 766v30M1220 774v30M1300 776v30M1380 768v30M1450 750v30M1500 722v30"/></g>
+  <path d="M1080 668l-60 30 20 44 70 -20z" fill="#3c3d2c"/>
+</g>
+<g id="mac" class="hot">
+  <path d="M1190 708L1070 728" stroke="#2c3238" stroke-width="27" stroke-linecap="round"/><path d="M1068 712l-34 8q-12 8 -6 22l46 -4z" fill="#5a4630"/><path d="M1042 726l24 -5M1046 734l24 -4" stroke="#e9e6da" stroke-width="2"/>
+  <path d="M1036 748h50v22h-58z" fill="#6f7068"/>
+  <path d="M1190 716q-30 10 -40 40l-4 44" stroke="#2c3238" stroke-width="27" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M1130 800h44v10h-48z" fill="#5a4630"/>
+  <path d="M1160 718q-10 -94 34 -104q48 -6 56 44l8 60z" fill="#b3321f"/><path d="M1166 628q24 -30 60 -4l-8 26h-44z" fill="#8c2416"/>
+  <path d="M1178 650q-30 26 -30 60" stroke="#a52c1b" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="1148" cy="714" r="9" fill="#e3bd9a"/>
+  <rect x="1188" y="598" width="14" height="16" fill="#d9b08c"/><circle cx="1194" cy="584" r="23" fill="#e3bd9a"/><path d="M1170 580q0 -30 24 -30t24 30q-12 -8 -24 -8t-24 8z" fill="#26375c"/><circle cx="1194" cy="548" r="6" fill="#31467a"/>
+  <path d="M1178 586h7M1192 586h7" stroke="#3f5a6a" stroke-width="2.400"/><path d="M1181 598h11" stroke="#8a4a3c" stroke-width="2"/>
+</g>
+<g id="map" class="hot"><path d="M1262 690l96 -10 8 46 -96 14z" fill="#f3f0e2" stroke="#1b1a17" stroke-width="2"/><g stroke="#bf8246" stroke-width="2" fill="none"><path d="M1274 704q34 -14 72 -6M1278 718q32 -12 70 -4"/></g>
+  <path d="M1330 700l64 -8 6 42 -64 10z" fill="#fbfaf1" stroke="#2a5d4a" stroke-width="2.500"/><path d="M1340 712l40 -5M1342 722l40 -5M1344 732l26 -3" stroke="#26304a" stroke-width="1.600"/></g>
+<g id="guide" class="hot"><ellipse cx="990" cy="852" rx="64" ry="8" fill="#14120c" opacity=".5"/><path d="M944 848q-12 -82 44 -96q52 4 52 62l-6 34z" fill="#3f6d54"/><path d="M952 782q36 -20 78 0v26q-38 -14 -78 0z" fill="#335a45"/>
+  <path d="M956 746l62 -14 8 34 -62 14z" fill="#ef7d22" stroke="#b9571a" stroke-width="2"/><path d="M968 754l40 -9M970 764l30 -7" stroke="#fff" stroke-width="2.500"/></g>
+
+<g pointer-events="none"><rect id="dusk" x="-1000" y="-400" width="3600" height="1720" fill="#0d1420"/><rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)"/></g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Open the door of the hut</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="map.js"></script>
+<script src="ridge.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  (function () {
+    var s = '', i, x, y;
+    for (i = 0; i < 26; i++) { x = (i * 419) % 1700 - 40; y = 700 + (i * 173) % 190; s += '<path d="M' + x + ' ' + y + 'q-20 -30 -44 -26q20 2 30 26zM' + x + ' ' + y + 'q4 -36 30 -40q-14 12 -16 40zM' + x + ' ' + y + 'q24 -22 48 -14q-22 2 -34 14z"/>'; }
+    $('#bracken').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'wild', story: 'ridge', storyTitle: 'The Cold Door', id: 'meetings', no: 'IV', title: 'The Meetings',
+    go: 'Sit down on the wall',
+    intro: [
+      'You told a valley from a spur by its V&rsquo;s. In a valley they point uphill, at the bigger numbers; on a spur they point downhill. Kwame&rsquo;s grassy ridge was a spur, and it ended in a crag. So your pencil went down the valley: from the Cold Door into the bowl, down the burn to the ring above the Spout, out by the west bank where the contours stay apart, back to the water, and on to the Meetings.',
+      'A kilometre and a half took thirty-six minutes.',
+      'It is a quarter to five. The cloud is a grey roof now, a hundred metres above your head, and under it, far away in the west, there is a narrow yellow strip of sky. You can see for miles. You can also see that the light has begun to go.'
+    ],
+    exit: {"next":"hut","w":{"e3b7e95a":"c8112a57"}}, tags: {"ta":["773564db"],"ta_flat":["9a2f7c0a"],"ta_down":["6a5b4711","7ae92512","5dbe5778"],"tb":["2d070336"],"tb_flat":["02e8fe6d"],"way":["136e5061"],"eta_fit":["4ff2b4ab"],"eta_a":["298d8441","bf5b58d1"]},
+    sound: ['trail', { root: 48, bpm: 58, mood: 'tense', drop: ['mel'], beds: [['wind', 0.4], ['rain', 0.4]] }],      /* under the cloud at last, with two streams talking (the soft hiss), and the light going; no reed tune anywhere in this story, because a whistle is coming */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.mac && told.guide; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#map').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.mac ? 1 : 0) + (told.guide ? 1 : 0) + (told.kwame ? 1 : 0) + (nextFile ? 2 : 0), 5);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The card is filled in, and the light is going. Take the track to the hut.']];
+    if (bench && bench.isOpen()) return ['card', [
+      'One route at a time. Measure it on the map: press on one ring and let go on the next, and the edge of the compass gives you centimetres. Add up the pieces. Four centimetres is one kilometre, and Naismith allows 12 minutes for a kilometre.',
+      'Then the climbing. The path starts at the Meetings (402) and goes up to the Notch (702): after that it is all downhill, which Naismith does not count. The track goes down to 315 and then up to the hut at 345. One minute for every 10 metres of climbing.',
+      'Now the times in Mrs MacAskill&rsquo;s notebook. What would Naismith say for 1 km with no climbing? And for 1.5 km? How long did they really take you? Whatever number you must multiply by, multiply the quicker route by it too, and add the answer to five past five.'
+    ]];
+    if (!told.mac) return ['mac', ['Mrs MacAskill is sitting on the wall of the sheepfold on the right, with her foot up on a stone. She has a question for you.']];
+    if (!told.guide) return ['guide', [
+      'There is a rule for this, and Mrs MacAskill has told you which page it is on.',
+      'Her rucksack is standing on the grass in front of the sheepfold, with the orange book lying on top. Click it.'
+    ]];
+    return ['map', ['The map and the route card are lying on the wall beside Mrs MacAskill. Click them.']];
+  }
+
+  function begin() {
+    RIDGE.mine('down', 'The way down from the Cold Door', '<p>Into the top of the valley (V&rsquo;s pointing uphill), not on to the spur (V&rsquo;s pointing downhill): the spur ends in a crag.</p><p>Down the burn to the ring above the Spout. Out to the west, where the lines stay apart. Back to the water below the fall. Then down to the Meetings.</p>', true);
+    ER.addClue('log2', 'Mrs MacAskill’s notebook: the Whaleback', '<h4>Sat., afternoon.</h4><p><b>15.08</b> half a message sent.</p><p><b>15.25</b> left the cairn on 074.</p><p><b>15.49</b> the Cold Door.</p><p><b></b> 1 km, no climbing: 24 minutes.</p><p><b></b> On two good legs: 12.</p>', 'log', 'What we have walked, and how long it took', true);
+    ER.addClue('log3', 'Mrs MacAskill’s notebook: two legs timed', '<h4>How slow are we?</h4><p><b>Leg 1</b> cairn to the Cold Door.</p><p><b></b> 1 km. No climbing.</p><p><b></b> 15.25 to 15.49: <u>24 minutes</u>.</p><p><b>Leg 2</b> Cold Door to the Meetings.</p><p><b></b> 1.5 km. No climbing: all down.</p><p><b></b> 16.10 to 16.46: <u>36 minutes</u>.</p><p><b></b> Naismith would say: ?</p>', 'log', 'What we have walked, and how long it took', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The card is filled in. The yellow strip in the west is not as wide as it was.'); return; }
+    if (told.in) { busy = false; ER.say('The Meetings, a quarter to five. The light is going.'); return; }
+    tell('in');
+    ER.narrate([
+      'Two streams meet here, one brown and one clear, and for a few metres they run side by side without mixing. Beside them is a ring of old stone wall, big enough for fifty sheep and holding none. Mrs MacAskill is sitting on it, with her foot up on a stone.',
+      'There is a signpost. It has two wooden arms, and the same three letters are cut into both of them: HUT. One arm points up the hillside, at a path that climbs like a ladder. The other points along a track, downstream.',
+      '&ldquo;Up,&rdquo; says Kwame. &ldquo;Obviously. It&rsquo;s half as far. You can nearly see where it goes over.&rdquo;',
+      'Mrs MacAskill looks at the yellow strip in the west, and then at her watch. &ldquo;Sunset is at ten to six. By twenty-five past, you can&rsquo;t see your own feet. I want us through a door before that. So nobody says &lsquo;obviously&rsquo;. Somebody works it out.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#mac').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mrs MacAskill', role: 'Leader · with her foot up', face: window.FACE('mac'),
+      lines: [
+        { note: 'Her notebook is open on her knee, at a page with two times underlined.', a: '&ldquo;Two ways to the hut. The path over the Notch, and the track round the foot of the Nose. One is short and goes over a hill. One is long and does not. Which is quicker?&rdquo;' },
+        { q: 'Isn&rsquo;t the short one always quicker?', a: 'On the flat, always. But every metre you climb costs time as well, and a man called Naismith worked out how much, a hundred and thirty years ago. Page fifteen of the field guide. His rule gives you minutes. Then you can stop guessing.' },
+        { q: 'How do I measure them?', a: 'On the map. Press on one ring and let go on the next, and the edge of the compass will tell you the centimetres. For the climbing, read the heights: there is a number printed here at the Meetings, one up at the Notch, one where the track is lowest, and one at the hut.' },
+        { q: 'But we are not as fast as Naismith.', a: 'No. Naismith had two good ankles. But we know exactly how slow we are, because I have timed us twice today. It is in my notebook, and so in yours. Work out what Naismith would have said for those two legs. Then compare.' },
+        { q: 'And then?', a: 'Then you tell me which way we go, and what time we get there. We leave at five past five. I want hours and minutes, and I shall hold you to them.' }
+      ],
+      clue: { id: 'mac4', title: 'Mrs MacAskill, at the Meetings', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('mac')) { paint(); ER.say('Her rucksack is standing on the grass, with the orange book on top. The map and the route card are beside her on the wall.'); } }
+    });
+  });
+  $('#kwame').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Kwame Asante', role: 'Under the signpost', face: window.FACE('kwame'),
+      lines: [
+        { note: 'He has one hand on the arm of the signpost that points uphill.', a: '&ldquo;It&rsquo;s a path. It&rsquo;s got a signpost. It goes straight there. What is there to work out?&rdquo;' },
+        { q: 'It looks steep.', a: 'It&rsquo;s steep for ten minutes! Then you&rsquo;re over the top. I once went up the school stairs forty times for a bet.' },
+        { q: 'How far is the track?', a: 'Miles. Look at it. It goes all the way down there, round the end of that great lump, and all the way back up the next valley. You could fit two of the path into it. Nearly.' },
+        { q: 'And how far is the path?', a: 'I don&rsquo;t know. Half that. I&rsquo;m not the one with the map.</p><p>He takes his hand off the signpost, and then puts it back.' }
+      ],
+      clue: { id: 'kwame4', title: 'Kwame Asante, under the signpost', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('kwame')) paint(); }
+    });
+  });
+
+  /* ---------- the field guide, page 15 ---------- */
+  var PIC = '<svg viewBox="0 0 290 190"><path d="M14 150h200" stroke="#22201a" stroke-width="2.500"/><path d="M214 150L270 60" stroke="#22201a" stroke-width="2.500"/><path d="M214 150h56V60" stroke="#22201a" stroke-width="1.200" stroke-dasharray="4 4" fill="none"/>' +
+    '<g stroke="#22201a" stroke-width="2.500" stroke-linecap="round" fill="none"><circle cx="40" cy="104" r="7" fill="#22201a"/><path d="M40 112v20M40 132l-9 18M40 132l9 18M40 118l-10 10M40 118l12 8M54 128v22"/></g>' +
+    '<path d="M14 166h200M14 161v10M214 161v10" stroke="#b9571a" stroke-width="1.800" fill="none"/><path d="M282 150V60M277 150h10M277 60h10" stroke="#b9571a" stroke-width="1.800" fill="none"/>' +
+    '<g font-family="Handlee,cursive" font-size="17" fill="#b9571a"><text x="114" y="184" text-anchor="middle">5 km on the map: 1 hour</text><text x="204" y="44" text-anchor="middle">600 m of climbing:</text><text x="204" y="62" text-anchor="middle">1 hour more</text></g></svg>';
+  var GUIDE = '<h4>The Hill Club Field Guide &middot; 15</h4><h3>How long will it take?</h3><div class="two"><div>' +
+    '<p><b>Naismith&rsquo;s rule.</b> In 1892 a Scottish climber, W. W. Naismith, wrote down a rule that walkers still use. In metres it goes like this: <em>allow one hour for every 5 km on the map, and one hour more for every 600 m that you climb.</em> Going down counts for nothing.</p>' +
+    '<p class="rule">In small change: 12 minutes for every kilometre, and 1 minute more for every 10 m of climbing.</p>' +
+    '<p><b>The distance</b> comes from the map. Our maps are at a scale of 1:25&nbsp;000, so 4 cm on the paper is 1 km on the ground.</p>' +
+    '<p><b>The climbing</b> comes from the contours. Count the lines that you cross on the way up, or take one <b>spot height</b> from another.</p>' +
+    '<p>A leg of 3 km that climbs 200 m: 36 minutes, and 20 more. 56 minutes.</p></div>' +
+    '<div>' + PIC + '<p class="hand">Naismith was a fit man with two good feet. Time your own party over a leg you have walked, and see how many times slower than Naismith you are. Then multiply everything by that. F.M.</p></div></div>';
+  $('#guide').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: GUIDE, cls: 'guide', clue: { id: 'guide15', title: 'Field guide: how long will it take?', kind: 'Page 15' }, done: function () {
+      RIDGE.terms(['Naismith\'s rule', 'scale', 'spot height', 'leg of a journey']);
+      if (tell('guide')) { paint(); ER.say('Twelve minutes a kilometre. A minute more for every ten metres up.'); }
+    } });
+  });
+
+  /* ---------- things at the Meetings ---------- */
+  RIDGE.thing('#sign', 'signpost', 'HUT, and HUT. One arm points up the hill and one along the track. Nobody has cut a distance into either of them.', isBusy);
+  RIDGE.thing('#fold', 'sheepfold', 'A sheepfold: a ring of stone wall where the shepherds used to gather their sheep. Half of it has fallen down. On the map it is a small ring, which means a ruin.', isBusy);
+  RIDGE.thing('#rowan', 'rowan', 'A rowan tree, bent right over by forty winters of wind, and with every one of its red berries still on.', isBusy);
+  RIDGE.thing('#water', 'stepping stone', 'The Door Burn comes in clear, and the East Burn comes in brown. For a few metres they keep to their own sides. Three stepping stones cross below the place where they meet.', isBusy);
+  RIDGE.thing('#spout', 'waterfall', 'High up the way you came, just under the edge of the cloud, there is a thin white thread. From here the Spout makes no sound at all.', isBusy);
+  RIDGE.thing('#nose', null, 'The Nose: a great black lump of hill between you and the hut, with a small dip in its skyline. That dip is the Notch. A pale path goes up to it in zigzags.', isBusy);
+  RIDGE.thing('#west', null, 'A strip of yellow sky, a long way off, between the hill and the cloud. It was wider a minute ago.', isBusy);
+  RIDGE.thing('#lid', 'cloud', 'The cloud you spent the afternoon inside. From underneath it is only a grey ceiling, and Skallan has no top.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#map').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The route card has two new lines on it, in your writing.'); return; }
+    if (!told.mac) { ER.say('The map, folded to a new square, and the route card with a pencil laid across it.'); return; }
+    if (!told.guide) { ER.say('&ldquo;Page fifteen,&rdquo; says Mrs MacAskill. &ldquo;The orange book is on my rucksack. It is a short page, and worth every minute.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the map, the edge of the compass, and the route card ---------- */
+  function makeBench() {
+    var P = RIDGE.P, PL = [['m', 25.85, 25.45, 'the Meetings'], ['n', 25.115, 25.597, 'the Notch'], ['h', 24.45, 25.25, 'the hut'], ['t', 25.57, 24.49, 'the low place'], ['u', 25.07, 24.47, 'the bend']], PTS = [], at = {}, nm = {};
+    PL.forEach(function (g) { var q = P(g[1], g[2]); at[g[0]] = q; nm[g[0]] = g[3]; PTS.push({ id: g[0], x: q.x, y: q.y }); });
+    var legs = ER.flag('d-legs') || [], way = ER.flag('d-way') || '', wait = false, box = ER.el('div', 'bx'), D = RIDGE.DIGITS, SIX = ['0', '1', '2', '3', '4', '5'];
+    var dn = [P(25.66, 25.80), at.m];
+    box.innerHTML = '<div class="frame"><div class="two"><div>' + RIDGE.sheet([450, 240, 350, 300], RIDGE.pline([{ x: 742, y: 222 }, dn[0], dn[1]], '', 0, 0, 'thin') + RIDGE.ring(at.h, 'hut', -26, -12, 8) + RIDGE.ring(at.m, 'us', -4, -13, 8) + '<g id="d-rul"></g><g id="d-rings"></g>') + '</div>' +
+      '<div class="rcd"><h5>Route card</h5><p>From: <span class="hw">the Meetings</span> &nbsp; To: <span class="hw">Skallan Hut</span><br>Leave: <span class="hw">17.05</span> &nbsp; Dark by: <span class="hw">18.25</span></p>' +
+      '<div class="hd">Naismith&rsquo;s time for each way</div>' +
+      '<div class="line"><b>A &middot; by the path<small>over the Notch</small></b><span><span id="d-wa"></span><span class="hw">min</span></span></div>' +
+      '<div class="line"><b>B &middot; by the track<small>round the Nose</small></b><span><span id="d-wb"></span><span class="hw">min</span></span></div>' +
+      '<div class="gapv"></div><div class="hd">Our party</div>' +
+      '<div class="line"><b>We go by</b><span class="way"><button type="button" data-v="a">A</button><button type="button" data-v="b">B</button></span></div>' +
+      '<div class="line"><b>We arrive at<small>our time, not his</small></b><span id="d-we"></span></div><div class="gapv"></div>' +
+      '<div class="meas"><b>Measured with the edge of the compass</b><div id="d-meas"></div></div></div></div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn quiet" id="d-clear">Lift the compass</button><button type="button" class="btn" id="d-go">Show her the card</button></div>';
+    var svg = box.querySelector('svg.sheet'), rul = box.querySelector('#d-rul'), meas = box.querySelector('#d-meas'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#d-go');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    var wa = RIDGE.wheels(box.querySelector('#d-wa'), { vals: [D, D], start: ER.flag('d-wa') || null, change: function () { ER.flag('d-wa', wa.at()); } }),
+      wb = RIDGE.wheels(box.querySelector('#d-wb'), { vals: [D, D], start: ER.flag('d-wb') || null, change: function () { ER.flag('d-wb', wb.at()); } }),
+      we = RIDGE.wheels(box.querySelector('#d-we'), { vals: [['17', '18', '19'], SIX, D], start: ER.flag('d-we') || [0, 0, 5], sep: { 1: '.' }, change: function () { ER.flag('d-we', we.at()); } });
+    function cm(a, b) { var dx = at[a].x - at[b].x, dy = at[a].y - at[b].y; return (Math.round(Math.sqrt(dx * dx + dy * dy) / 5) / 10).toFixed(1); }
+    function draw() {
+      var s = '', t = '';
+      legs.forEach(function (l) {
+        var a = at[l[0]], b = at[l[1]], dx = b.x - a.x, dy = b.y - a.y, L = Math.sqrt(dx * dx + dy * dy), ang = Math.atan2(dy, dx) * 180 / Math.PI, i, flip = ang > 90 || ang < -90;
+        s += '<g class="rul" transform="translate(' + a.x.toFixed(1) + ' ' + a.y.toFixed(1) + ') rotate(' + ang.toFixed(2) + ')"><rect x="-4" y="-9" width="' + (L + 8).toFixed(1) + '" height="9"/>';
+        for (i = 0; i * 5 <= L + 0.5; i++) s += '<path d="M' + (i * 5) + ' 0v-' + (i % 10 ? (i % 5 ? 2.5 : 4) : 6) + '"/>';
+        s += '<text x="' + (L / 2).toFixed(1) + '" y="-13"' + (flip ? ' transform="rotate(180 ' + (L / 2).toFixed(1) + ' -15.5)"' : '') + '>' + cm(l[0], l[1]) + ' cm</text></g>';
+        t += '<span>' + nm[l[0]] + ' to ' + nm[l[1]] + ': ' + cm(l[0], l[1]) + ' cm</span>';
+      });
+      rul.innerHTML = s; meas.innerHTML = t || '<span style="opacity:.55">nothing yet</span>';
+      ER.$$('.way button', box).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === way); });
+    }
+    RIDGE.rings(svg, box.querySelector('#d-rings'), PTS, { r: 4.2, hit: 9, lock: function () { return wait || !!nextFile; },
+      join: function (a, b) {
+        if (legs.some(function (l) { return (l[0] === a && l[1] === b) || (l[0] === b && l[1] === a); })) { msg('You have measured that piece already: ' + cm(a, b) + ' cm.'); return; }
+        legs.push([a, b]); if (legs.length > 7) legs.shift(); ER.flag('d-legs', legs); RIDGE.sfx.lay(); draw();
+        msg('From ' + nm[a] + ' to ' + nm[b] + ', along the edge of the compass: <b>' + cm(a, b) + ' cm</b>. It is written on the card.');
+      } });
+    box.querySelector('#d-clear').addEventListener('click', function () { if (wait || nextFile) return; legs = []; ER.flag('d-legs', legs); RIDGE.sfx.rub(); draw(); msg('The compass is off the map, and the pencilled lengths are rubbed out.'); });
+    box.querySelector('.way').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null; if (!b || wait || nextFile) return;
+      way = way === b.getAttribute('data-v') ? '' : b.getAttribute('data-v'); ER.flag('d-way', way); RIDGE.sfx.pencil(); draw();
+    });
+    go.addEventListener('click', function () {
+      var a = String(+wa.get()), b = String(+wb.get()), e = we.get(), hh = e.slice(0, 2), mm = e.slice(2), file;
+      if (wait || nextFile) return;
+      if (a === '0' && b === '0') { msg('The card is empty. Measure the two ways on the map, read the heights, and fill in Naismith&rsquo;s time for each.'); return; }
+      if (!ER.check('ta', a)) {
+        ER.sfx.no();
+        msg(ER.check('ta_flat', a) ? '&ldquo;' + a + ' minutes for the path?&rdquo; says Mrs MacAskill. &ldquo;That is the walking. Where is the climbing? How high is the Meetings, and how high is the Notch?&rdquo;' :
+          ER.check('ta_down', a) ? '&ldquo;' + a + ' for the path? You have counted the going down as well as the going up,&rdquo; says Mrs MacAskill. &ldquo;Naismith does not. On a bad ankle he is wrong about that, but it is his rule. Count only the climbing.&rdquo;' :
+          '&ldquo;' + a + ' minutes for the path over the Notch? Show me,&rdquo; says Mrs MacAskill. &ldquo;How many kilometres is it? Twelve minutes for each. And how many metres does it climb? One minute for every ten.&rdquo;');
+        return;
+      }
+      if (!ER.check('tb', b)) {
+        ER.sfx.no();
+        msg(ER.check('tb_flat', b) ? '&ldquo;' + b + ' minutes is the walking,&rdquo; says Mrs MacAskill. &ldquo;But the track is not quite flat. Where is it lowest? And how high is the hut?&rdquo;' :
+          '&ldquo;The path is right. But ' + b + ' minutes for the track?&rdquo; says Mrs MacAskill. &ldquo;Measure all three pieces of it, and add them. Four centimetres to the kilometre, twelve minutes to the kilometre. Then the little climb at the end.&rdquo;');
+        return;
+      }
+      if (!way) { msg('&ldquo;Two good figures,&rdquo; says Mrs MacAskill. &ldquo;So which way do we go? Put a ring round A or B.&rdquo;'); return; }
+      if (!ER.check('way', way)) {
+        ER.sfx.no();
+        msg('&ldquo;Over the Notch?&rdquo; says Mrs MacAskill. &ldquo;Your own figures say ' + a + ' minutes for the path, and ' + b + ' for the track. Little more than half as far, and half as long again. That is what three hundred metres of hill costs.&rdquo;');
+        way = ''; ER.flag('d-way', ''); draw(); return;
+      }
+      file = ER.exitOk([a + '-' + b + '-' + way + '-' + e]);
+      if (!file) {
+        ER.sfx.no();
+        msg(ER.check('eta_fit', e) ? '&ldquo;' + hh + '.' + mm + ' is when Naismith would get there,&rdquo; says Mrs MacAskill. &ldquo;We are not Naismith. Look in my notebook: one kilometre took us 24 minutes, and a kilometre and a half took 36. What would he have said for those?&rdquo;' :
+          ER.check('eta_a', e) ? '&ldquo;' + hh + '.' + mm + '? That is a time for the path,&rdquo; says Mrs MacAskill. &ldquo;We are going by the track.&rdquo;' :
+          '&ldquo;' + hh + '.' + mm + '? Tell me how,&rdquo; says Mrs MacAskill. &ldquo;We leave at five past five. How many times slower than Naismith have we been today? My notebook has two legs in it. Then it is one multiplication and one addition.&rdquo;');
+        return;
+      }
+      wait = true; nextFile = file; ER.flag('d-file', file);
+      var s0 = ER.state(); s0.done = s0.done || {}; s0.done.meetings = 1; ER.persist(true);
+      wa.lock(true); wb.lock(true); we.lock(true);
+      var ours = (+hh * 60 + +mm) - (17 * 60 + 5), byPath = Math.round(+a * ours / +b), light = (18 * 60 + 25) - (17 * 60 + 5);      /* what the player's own figures come to */
+      msg('&ldquo;' + hh + '.' + mm + ', by the track,&rdquo; says Mrs MacAskill. &ldquo;' + (light - ours) + ' minutes of light to spare. And by the path?&rdquo; You work that out too: ' + byPath + ' minutes, which is ' + (byPath - light) + ' minutes after dark, on the wrong side of a hill. She shuts the notebook. &ldquo;Good. Now I shall hold you to it.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); RIDGE.solved(); paint(); busy = true;
+        ER.narrate([
+          'Kwame takes his hand off the signpost. &ldquo;Half as far,&rdquo; he says, &ldquo;and half as long again. That&rsquo;s not fair.&rdquo; &ldquo;That is three hundred metres of hill,&rdquo; says Mrs MacAskill. &ldquo;It never is.&rdquo;',
+          'The track is an old cart road, wide enough for two to walk side by side, and nearly as flat as a floor. You go down beside the burn, with the water getting louder, and round the foot of the Nose, where black crags stand straight up out of the grass on your right.',
+          'You pass an old stone barn, with two sheep looking out of the door. &ldquo;That is the barn people find when they read their northings first,&rdquo; says Mrs MacAskill, without turning her head. &ldquo;It has had a great many visitors.&rdquo;',
+          'The yellow strip in the west goes orange, then red, then out. The hills on both sides turn into flat black shapes with no insides. You listen to Mrs MacAskill&rsquo;s poles: click, click, step. Click, click, step.',
+          'And then there is a square shape, blacker than the hill behind it, and the sound of a stream, and Kwame&rsquo;s torch on a door. Mrs MacAskill looks at her watch. She does not say what it says. She shows it to you.'
+        ], function () { busy = false; showGo(); });
+      }, 4200);
+    });
+    draw();
+    msg('The map is folded to the Meetings, the Nose and the hut. Press on one ring and let go on another to measure between them. Then fill in the card: Naismith&rsquo;s time for each way, which way you choose, and when you will arrive.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

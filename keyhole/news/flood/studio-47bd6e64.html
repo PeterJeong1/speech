@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Studio One · Two Aunts</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-news.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="flood.css">
+<style>
+  body{--bg:#101113;--accent:#ff7a66;--font-display:'Oswald',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Newsreader',serif;
+    --tc-bg:rgba(14,15,17,.97);--tc-ink:#f1ede2;--cap-bg:rgba(12,13,15,.95);--panel:#191b1e;--face-bg:#26282c;--q-ink:#ff7a66;--fade:#040405;--hud-bg:rgba(12,13,15,.86)}
+  .gobtn{color:#14181d}
+  .vu{animation:vu 1.3s ease-in-out infinite;transform-origin:0 0}
+  .vu.v2{animation-duration:.9s;animation-delay:-.4s}
+  @keyframes vu{0%{transform:rotate(-34deg)}30%{transform:rotate(8deg)}55%{transform:rotate(-12deg)}80%{transform:rotate(18deg)}100%{transform:rotate(-34deg)}}
+  #sec{animation:sec 60s steps(60,end) infinite;transform-origin:0 0}
+  @keyframes sec{100%{transform:rotate(360deg)}}
+  .led{animation:led 1.7s steps(1,end) infinite}
+  .led.b2{animation-delay:-.6s;animation-duration:2.3s}.led.b3{animation-delay:-1.1s}
+  @keyframes led{0%{opacity:1}60%{opacity:.25}}
+  #airoff{display:block}#airon{display:none}
+  #scene.live #airoff{display:none}
+  #scene.live #airon{display:block}
+  #airglow{animation:air 2.6s steps(1,end) infinite}
+  @keyframes air{0%{opacity:.6}50%{opacity:.42}}
+  #script.ready,#sign.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3)}}
+
+  /* the cue sheet and the pad of tags */
+  .job.sc{width:min(1100px,95vw)}
+  .sc-top{display:grid;grid-template-columns:minmax(0,1fr) 316px;gap:14px;align-items:start}
+  .sheet{background:#f6efc2 linear-gradient(178deg,rgba(255,255,255,.5),rgba(190,170,90,.16));color:#1f1e1a;padding:10px 20px 10px 14px;box-shadow:0 20px 50px rgba(0,0,0,.6);font-family:'Special Elite','Courier New',monospace;font-size:14.6px;line-height:1.36}
+  .sheet h5{margin:0 0 6px;padding-bottom:5px;border-bottom:1px solid #1f1e1a;display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-weight:500;font-size:12px;letter-spacing:.14em}
+  .para{display:grid;grid-template-columns:30px 1fr;gap:2px;margin:0 0 5px;padding:1px 0;cursor:pointer;border-radius:2px}
+  .para:hover{background:rgba(255,255,255,.45)}
+  .para>i{font-style:normal;font-family:'DM Mono',monospace;font-size:11.5px;color:#8a7f52;padding-top:2px}
+  .para.struck .body{text-decoration:line-through;text-decoration-color:#c23b2c;text-decoration-thickness:2px;color:#8a8372}
+  .para.bad{animation:pbad .9s steps(1,end)}
+  @keyframes pbad{0%{background:#ffb3a8}25%{background:transparent}50%{background:#ffb3a8}75%{background:transparent}}
+  .para.pencil .body{font-family:'Kalam',cursive;font-size:16.4px;line-height:1.2;color:#3a4a66}
+  .para.new{background:rgba(255,255,255,.6);outline:2px dashed #c23b2c;outline-offset:1px}
+  .slot{display:inline-block;margin:0 5px 0 0;padding:0 7px;border:1.5px dashed #8a7f52;border-radius:2px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.08em;line-height:1.45;color:#8a7f52;vertical-align:1px;white-space:nowrap}
+  .slot.has{border:0;background:#1f1e1a;color:#ffe9a8;font-weight:600;box-shadow:1px 2px 0 rgba(0,0,0,.25)}
+  .slot.cut{border:0;background:none;color:#c23b2c;font-family:'Caveat',cursive;font-weight:700;font-size:20px;letter-spacing:0;line-height:1}
+  .sheet .fixed{margin:0 0 0 32px;color:#57533f}
+  .ear{display:inline;padding:0 2px;border-bottom:2px dotted #2456c9;color:#1c3f9a;font:inherit;cursor:pointer;background:rgba(36,86,201,.08)}
+  .ear:hover{background:rgba(36,86,201,.2)}
+  .ear svg{display:inline-block;width:15px;height:13px;vertical-align:-2px;margin:0 1px}
+  .ear.snip{border-bottom:0;background:none;padding:0}
+  .ear.snip.on svg{opacity:.35}
+  .pad{background:#2a2c30;border:1px solid #4a4e55;padding:9px 10px 10px}
+  .pad h5{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14.5px;letter-spacing:.2em;color:#f1ede2;display:flex;align-items:baseline;gap:9px}
+  .pad h5 small{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:13.5px;letter-spacing:0;color:#c3c7cc}
+  .tags{display:grid;gap:5px}
+  .tag{display:block;width:100%;padding:5px 9px 4px;text-align:left;background:#ffe9a8;color:#1f1e1a;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.6px;letter-spacing:.07em;line-height:1.2;box-shadow:1px 2px 0 rgba(0,0,0,.35);touch-action:none;cursor:grab}
+  .tag:hover{background:#fff3c9}
+  .tag.sel{outline:3px solid #ff7a66;outline-offset:1px}
+  .tag.pen{margin-top:9px;background:#fffdf5;color:#a32a1d;border-left:8px solid #c23b2c;font-family:'Kalam',cursive;font-weight:700;font-size:16.5px;letter-spacing:0}
+  .tghost{position:fixed;z-index:80;pointer-events:none;padding:5px 9px 4px;background:#ffe9a8;color:#1f1e1a;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.6px;letter-spacing:.07em;box-shadow:0 8px 14px rgba(0,0,0,.5);white-space:nowrap}
+  .pad p{margin:9px 0 0;font-family:'Newsreader',serif;font-size:14.5px;line-height:1.35;color:#c3c7cc}
+  .pad p b{color:#8fb0ff;font-weight:600}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34373c"/><stop offset="1" stop-color="#1a1c1f"/></linearGradient>
+  <radialGradient id="redG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff4b3e" stop-opacity=".7"/><stop offset="1" stop-color="#ff4b3e" stop-opacity="0"/></radialGradient>
+  <radialGradient id="lampG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".8"/><stop offset="1" stop-color="#ffcf7a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="spotG" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#fff3d6" stop-opacity=".32"/><stop offset="1" stop-color="#fff3d6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="56%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".58" stop-color="#000" stop-opacity=".28"/><stop offset="1" stop-color="#000" stop-opacity=".86"/></radialGradient>
+  <pattern id="foam" width="52" height="52" patternUnits="userSpaceOnUse"><rect width="52" height="52" fill="#232528"/><path d="M0 52L26 6L52 52Z" fill="#2d3034"/><path d="M26 6L52 52H26Z" fill="#1b1d20"/></pattern>
+  <clipPath id="pane"><rect x="532" y="142" width="536" height="266"/></clipPath>
+</defs>
+
+<!-- grey foam on every wall, so that nothing echoes -->
+<rect x="-1000" y="-400" width="3600" height="1060" fill="url(#foam)"/>
+<rect x="-1000" y="652" width="3600" height="700" fill="#141517"/>
+<ellipse cx="800" cy="-40" rx="700" ry="560" fill="url(#spotG)" pointer-events="none"/>
+
+<!-- the window on to the newsroom -->
+<g id="window" class="hot"><rect x="516" y="126" width="568" height="298" fill="#0b0c0d"/><rect x="532" y="142" width="536" height="266" fill="#16222e"/>
+  <g clip-path="url(#pane)"><rect x="590" y="176" width="220" height="150" fill="#2f3b47"/><rect x="598" y="184" width="204" height="14" fill="#141b22"/>
+    <g fill="#fffdf5"><rect x="606" y="210" width="40" height="28"/><rect x="656" y="212" width="40" height="28"/><rect x="706" y="208" width="40" height="28"/><rect x="756" y="212" width="40" height="28"/><rect x="606" y="250" width="40" height="28"/><rect x="656" y="252" width="40" height="28"/><rect x="706" y="248" width="40" height="28"/></g>
+    <rect x="846" y="166" width="96" height="38" rx="4" fill="#07090b"/><text id="wclock" x="894" y="194" class="fM" font-size="24" font-weight="500" text-anchor="middle" fill="#ff4b3e">21:20</text>
+    <circle cx="960" cy="330" r="120" fill="url(#lampG)" opacity=".7"/><path d="M880 408V352h200v56z" fill="#3a2c20"/><path d="M930 352l-10 -50 40 -22" fill="none" stroke="#0b0c0d" stroke-width="5"/><path d="M948 270l30 8 -8 22 -32 -10z" fill="#0b0c0d"/>
+    <path d="M532 142L700 408H620L532 268Z" fill="#fff" opacity=".04"/></g>
+  <rect x="516" y="126" width="568" height="298" fill="none" stroke="#3a3d42" stroke-width="6"/></g>
+
+<!-- the card on the wall, the clock with a red second hand -->
+<g id="sign" class="hot"><rect x="126" y="150" width="216" height="186" fill="#000" opacity=".4"/><rect x="120" y="144" width="216" height="186" fill="#15171a"/><rect x="120" y="144" width="216" height="9" fill="#ff4b3e"/>
+  <text x="228" y="190" class="fO" font-size="27" font-weight="600" text-anchor="middle" fill="#fff" letter-spacing="5">HEARD ONCE</text>
+  <g stroke="#a9b1b8" stroke-width="3"><path d="M140 216h176M140 232h150M140 252h176M140 268h120M140 288h176M140 304h140"/></g><g fill="#ffb347"><rect x="140" y="212" width="34" height="8"/><rect x="140" y="248" width="46" height="8"/><rect x="140" y="284" width="40" height="8"/></g></g>
+<g id="clock" class="hot" transform="translate(420 236)"><circle r="50" fill="#0b0c0d"/><circle r="44" fill="#f1ede2"/><g id="ticks"></g>
+  <path d="M0 0L-23 -4" stroke="#14181d" stroke-width="6" stroke-linecap="round"/><path d="M0 0L28 17" stroke="#14181d" stroke-width="4" stroke-linecap="round"/><path id="sec" d="M0 8V-38" stroke="#ff4b3e" stroke-width="2"/><circle r="4" fill="#ff4b3e"/></g>
+
+<!-- the door, and the lamp over it -->
+<g id="door" class="hot"><rect x="1290" y="166" width="170" height="490" fill="#0b0c0d"/><rect x="1300" y="176" width="150" height="480" fill="#3a3d42"/><g stroke="#2a2c30" stroke-width="3"><path d="M1300 296h150M1300 416h150M1300 536h150"/></g>
+  <circle cx="1375" cy="250" r="30" fill="#0b0c0d"/><circle cx="1375" cy="250" r="24" fill="#16222e"/><rect x="1318" y="400" width="12" height="60" rx="5" fill="#8a9198"/></g>
+<g id="onair" class="hot"><g id="airoff"><rect x="1300" y="100" width="150" height="48" rx="5" fill="#200a08"/><rect x="1306" y="106" width="138" height="36" rx="3" fill="#4a1a15"/><text x="1375" y="132" class="fO" font-size="24" font-weight="600" text-anchor="middle" fill="#7d2a22" letter-spacing="6">ON AIR</text></g>
+  <g id="airon"><ellipse id="airglow" cx="1375" cy="124" rx="230" ry="120" fill="url(#redG)" pointer-events="none"/><rect x="1300" y="100" width="150" height="48" rx="5" fill="#3a0f0c"/><rect x="1306" y="106" width="138" height="36" rx="3" fill="#ff4b3e"/><text x="1375" y="132" class="fO" font-size="24" font-weight="600" text-anchor="middle" fill="#fff" letter-spacing="6">ON AIR</text></g></g>
+
+<!-- Brannigan by the wall; Danny behind his desk -->
+<g id="brannigan" class="hot" transform="translate(226 884) scale(1.320)"></g>
+<g id="sato" class="hot" transform="translate(806 884) scale(1.560)"></g>
+
+<!-- the desk: two needles, a great many faders, one microphone -->
+<g id="meters" class="hot"><rect x="560" y="548" width="500" height="64" rx="5" fill="#17181b"/><rect x="560" y="548" width="500" height="6" fill="#3a3d42"/>
+  <g transform="translate(700 600)"><rect x="-44" y="-44" width="88" height="48" rx="3" fill="#f3e9c8"/><path d="M-32 -6A34 34 0 0 1 32 -6" fill="none" stroke="#14181d" stroke-width="2"/><path d="M14 -37A34 34 0 0 1 32 -6" fill="none" stroke="#c23b2c" stroke-width="4"/><path class="vu" d="M0 0V-34" stroke="#14181d" stroke-width="2.400"/><circle r="4" fill="#14181d"/></g>
+  <g transform="translate(920 600)"><rect x="-44" y="-44" width="88" height="48" rx="3" fill="#f3e9c8"/><path d="M-32 -6A34 34 0 0 1 32 -6" fill="none" stroke="#14181d" stroke-width="2"/><path d="M14 -37A34 34 0 0 1 32 -6" fill="none" stroke="#c23b2c" stroke-width="4"/><path class="vu v2" d="M0 0V-34" stroke="#14181d" stroke-width="2.400"/><circle r="4" fill="#14181d"/></g>
+  <rect x="786" y="566" width="48" height="26" rx="3" fill="#07090b"/><text x="810" y="585" class="fM" font-size="15" font-weight="500" text-anchor="middle" fill="#ff4b3e">MIC</text></g>
+<path d="M236 652L290 612H1330L1384 652L1450 920H170Z" fill="url(#deskG)"/><path d="M290 612H1330L1384 652H236Z" fill="#3f4348"/>
+<g id="faders" class="hot"></g>
+<g id="mic" class="hot"><path d="M446 616L500 420L676 460" fill="none" stroke="#8a9198" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="500" cy="420" r="9" fill="#5c646c"/><rect x="668" y="448" width="54" height="26" rx="8" fill="#2a2c30" transform="rotate(12 694 460)"/><circle cx="736" cy="471" r="22" fill="#5c646c"/><g fill="#48525c"><circle cx="728" cy="463" r="3"/><circle cx="740" cy="461" r="3"/><circle cx="744" cy="473" r="3"/><circle cx="732" cy="477" r="3"/><circle cx="736" cy="469" r="3"/></g></g>
+<g id="script" class="hot"><path d="M430 652L452 560H640L662 652Z" fill="#111214"/><g transform="rotate(-3 548 600)"><rect x="466" y="552" width="160" height="96" fill="#f6efc2"/><path d="M476 566h140" stroke="#1f1e1a" stroke-width="2"/><g stroke="#57533f" stroke-width="2.600"><path d="M476 580h140M476 590h116M476 604h140M476 614h100M476 628h140M476 638h84"/></g><g fill="#1f1e1a" opacity=".85"><rect x="476" y="576" width="34" height="7"/><rect x="476" y="600" width="26" height="7"/><rect x="476" y="624" width="40" height="7"/></g></g></g>
+<g id="water" class="hot"><path d="M1152 616v-44h28v44z" fill="#cfe8f5" opacity=".55"/><path d="M1152 616v-26h28v26z" fill="#9fd0ea" opacity=".8"/><path d="M1152 572v44h28v-44" fill="none" stroke="#e6f6fb" stroke-width="2.400"/></g>
+<g id="biscuits" class="hot"><ellipse cx="1090" cy="612" rx="56" ry="9" fill="#f1ede2"/><g fill="#c98a4a" stroke="#9a6a3c" stroke-width="1.500"><ellipse cx="1070" cy="606" rx="16" ry="6"/><ellipse cx="1100" cy="604" rx="16" ry="6"/><ellipse cx="1086" cy="598" rx="16" ry="6"/></g>
+  <path d="M990 578h30v32q0 6 -6 6h-18q-6 0 -6 -6z" fill="#f1ede2"/><path d="M1020 586q12 0 12 9t-12 9" fill="none" stroke="#f1ede2" stroke-width="4"/><text x="1005" y="602" class="fO" font-size="9" font-weight="700" text-anchor="middle" fill="#c23b2c">WVR</text></g>
+<g id="tb" class="hot"><rect x="1190" y="566" width="74" height="50" rx="5" fill="#8a9198"/><rect x="1197" y="572" width="60" height="24" rx="3" fill="#2a2f35"/><g fill="#0d1014"><circle cx="1207" cy="580" r="2.200"/><circle cx="1218" cy="580" r="2.200"/><circle cx="1229" cy="580" r="2.200"/><circle cx="1240" cy="580" r="2.200"/><circle cx="1207" cy="589" r="2.200"/><circle cx="1218" cy="589" r="2.200"/><circle cx="1229" cy="589" r="2.200"/><circle cx="1240" cy="589" r="2.200"/></g><circle class="led" cx="1206" cy="606" r="5" fill="#ff4b3e"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="flood.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, lock = null, told = {}, stage = 0, leaving = false;
+
+  /* the marks round the clock, the faders, the two of them */
+  (function () {
+    var s = '', i, a, COL = ['#ff4b3e', '#2e8a57', '#ffb347', '#2e8a57', '#ffb347', '#ff4b3e'];
+    for (i = 0; i < 12; i++) { a = i * 30 * Math.PI / 180; s += '<path d="M' + (Math.sin(a) * 36).toFixed(1) + ' ' + (-Math.cos(a) * 36).toFixed(1) + 'L' + (Math.sin(a) * 41).toFixed(1) + ' ' + (-Math.cos(a) * 41).toFixed(1) + '" stroke="#14181d" stroke-width="' + (i % 3 ? 2 : 4) + '"/>'; }
+    $('#ticks').innerHTML = s; s = '';
+    s = '<rect x="262" y="664" width="1064" height="236" fill="#000" opacity="0"/>';
+    for (i = 0; i < 15; i++) {
+      s += '<path d="M' + (290 + i * 72) + ' 720V880" stroke="#0b0c0d" stroke-width="7" stroke-linecap="round"/><rect x="' + (276 + i * 72) + '" y="' + (760 + (i * 37) % 70) + '" width="28" height="18" rx="3" fill="' + (i === 6 || i === 7 ? '#ff4b3e' : '#c9ced3') + '"/><path d="M' + (276 + i * 72) + ' ' + (769 + (i * 37) % 70) + 'h28" stroke="#14181d" stroke-width="2"/>' +
+        '<rect class="' + (i % 4 === 1 ? 'led' : i % 5 === 2 ? 'led b2' : i % 7 === 3 ? 'led b3' : '') + '" x="' + (280 + i * 72) + '" y="676" width="20" height="14" rx="2" fill="' + COL[i % 6] + '"/><rect x="' + (280 + i * 72) + '" y="696" width="20" height="10" rx="2" fill="#0b0c0d"/>';
+    }
+    $('#faders').innerHTML = s;
+    $('#brannigan').innerHTML = FL.who('brannigan', { lit: '#ff7a66', extra: '<path d="M20 -291l15 -22" stroke="#e9c93a" stroke-width="3.500" stroke-linecap="round"/>' });
+    $('#sato').innerHTML = FL.who('sato', { phones: 0, lit: '#ff7a66', smile: -2, extra: '<path d="M-24 -280Q-25 -309 0 -310Q25 -309 24 -280" fill="none" stroke="#17191c" stroke-width="5"/><rect x="-31" y="-286" width="11" height="22" rx="5" fill="#17191c"/><rect x="20" y="-286" width="11" height="22" rx="5" fill="#17191c"/>' });
+  })();
+
+  ER.init({
+    theme: 'news', story: 'flood', storyTitle: 'Two Aunts', id: 'studio', no: 'IV', title: 'Studio One',
+    go: 'Go in quietly',
+    intro: [
+      'The picture was real, and it was the Old Bridge, and it was not tonight: daylight, summer leaves, a name over the shop that came down years ago, and the river at about 4.4 metres on the gauge. One thing that cannot be tonight would have been enough. The agency&rsquo;s own table gave the date: 17 June 2011.',
+      'While you were upstairs, Dilys got her sergeant back on the telephone, and this time she asked. The Mill Lane with the van in it is in Nether Sedge. The van belongs to a plumber, who is dry. And nobody in Wendford is being asked to leave.',
+      'It is twenty past nine. In ten minutes the red light goes on, and Danny Sato reads the news to the whole valley, once.'
+    ],
+    exit: {"next":"light","w":{"482f7cfa":"fa1d188f"}}, tags: {"r1":["ba61a939"],"r2":["1d1174b8"],"r3":["46e716b9"],"r4":["8e31f1a2"],"r5":["ef24dda7"],"r6":["593a1ea3"],"r7":["65471b7c"],"r8":["c36df7bb"],"r9":["2b5d9f23"],"d1":["9878f134"],"d2":["da0f9487"],"r8b":["c354d9f9"],"n1":["0a20c476"],"num1":["a4180eff"],"num2":["fa6a1f6f"],"pl2":["797255ee"],"pl3":["d1f2aef6"],"cut":["bc283cad"]},
+    sound: ['desk', { root: 48, bpm: 110, mood: 'tense', drop: ['mel'], beds: [['hum', 0.5], ['static', 0.35]] }],      /* ten minutes to the red light: the tense pulse, the hum of the desk, the talkback hissing. No tune: the station's ident is heard in this room */
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('d-told') || {}; stage = ER.flag('d-stage') || 0;
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#sign').classList.toggle('ready', !!(told.sato && !told.card));
+    $('#script').classList.toggle('ready', !!(told.card && stage < 3));
+    $('#wclock').textContent = stage >= 3 ? '21:30' : stage >= 2 ? '21:27' : '21:20';
+    ER.pips((told.sato ? 1 : 0) + (told.card ? 1 : 0) + Math.min(stage, 3), 5);
+  }
+
+  function hints() {
+    if (stage >= 3) return null;
+    if (lock && lock.isOpen()) return stage === 0 ? ['who', [
+      'Click a tag on the pad, and then click the paragraph that it belongs to (or drag it there). Each paragraph needs the name of whoever really told us. If you have forgotten who said what, the board and the map are in your notebook.',
+      'Two of the tags are not names at all. One is for a thing that somebody has told us and nobody has confirmed. The other is for a thing that nobody can know, because it has not happened yet. And when the police want people to DO something, they are not &ldquo;saying&rdquo;: they are &ldquo;asking&rdquo;.',
+      'Two of the lines must not go out at all, and both of them are in pencil. One is a guess about tonight. The other was on the spike an hour ago. Those two get the red pen.'
+    ]] : stage === 1 ? ['ear', [
+      'Now it has to be heard once. The card on the studio wall has three rules for the ear: the place first, short sentences, numbers that a voice can say. Everything that you can change on the sheet is marked in blue.',
+      'Click a blue number to turn it into another way of writing it, until it is one that Danny can say and a listener can catch. Click a blue place at the end of a sentence to pull it to the front.',
+      'One paragraph is a single sentence of nearly thirty words. The small scissors show where it could be cut. Cut it in both places.'
+    ]] : ['turn', [
+      'The rest centre has moved. One paragraph on the sheet is now wrong, and it would send people to the school: that one gets the red pen. The new paragraph, in the dotted red frame, needs an owner.',
+      'Who is at the door of the school tonight, telling people where to go instead? And are they telling us a fact, or asking people to do something?'
+    ]];
+    if (!told.sato) return ['talk', ['Danny Sato is behind the desk, with his headphones on. He has ten minutes and something to say about them.', 'Click Danny. He will tell you what a script has to be like before he can read it.']];
+    if (!told.card) return ['card', ['There is a black card on the studio wall, on the left: HEARD ONCE. Read it before you touch the script.', 'The card is to the left of the clock. It has the rules for anything that is read aloud, and the words that careful broadcasters use.']];
+    return ['open', ['The script is on the stand at the left-hand end of the desk: yellow paper. Click it.', 'Brannigan has typed it. Every line of it is true, and none of it is ready.']];
+  }
+
+  function begin() {
+    paint();
+    if (stage >= 3) { busy = false; onAir(true); return; }
+    if (told.in) { busy = false; ER.say(stage === 2 ? 'Studio One. Three minutes. The script is on the stand, and one paragraph of it is dead.' : 'Studio One. A long record is playing, and the lamp over the door is dark.'); return; }
+    tell('in');
+    ER.narrate([
+      'Studio One. Grey foam on every wall, so that nothing echoes; one window on to the newsroom; and over the door a lamp that says ON AIR in red when it is lit. It is not lit. A long record is playing.',
+      'Danny Sato sits behind a desk full of faders, with a microphone at his chin. Off the air he does not look much like his voice.',
+      'Brannigan has put the script on the stand: nine paragraphs, typed in a hurry, each with a space at the front. Danny has added two lines of his own at the bottom, in pencil.',
+      '&ldquo;It is all true,&rdquo; she says. &ldquo;That is the easy half. Now every line needs its owner: who says so. And then it has to be something that a man can read aloud, once, to somebody who is carrying a television upstairs.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#sato').addEventListener('click', function () {
+    if (busy) return;
+    if (told.sato) { ER.say(stage === 2 ? 'Danny has one hand on a fader and one eye on the clock. &ldquo;Three minutes,&rdquo; he says, to nobody.' : '&ldquo;Short,&rdquo; says Danny. &ldquo;The place first. And numbers that I can SAY.&rdquo;'); return; }
+    ER.talk({
+      who: 'Danny Sato', role: 'Presenter · ten minutes from the news', face: window.FACE('sato'),
+      lines: [
+        { note: 'He lifts one side of his headphones.', a: '&ldquo;Ten minutes. I do requests. I do the lost cats. On Fridays I do a quiz about cheese. Nobody said anything to me about floods.&rdquo;' },
+        { q: 'You read the news at half past eight.', a: 'I read what Moira gave me, and my hands shook. Listen. On the radio I say it ONCE. Nobody can run an eye back up the page. If I say &ldquo;Church Lane&rdquo;, and then say &ldquo;Nether Sedge&rdquo; ten words later, half of Wendford has already got its coat on.' },
+        { q: 'So the place comes first.', a: 'The place first. Then they know who I am talking to. And short. If I have to breathe in the middle of a sentence, it was two sentences.' },
+        { q: 'What about numbers?', a: 'Give me a number that I can SAY. &ldquo;Three point three six metres at twenty-one hundred hours&rdquo;: by the time I get to the end of that, they have forgotten the beginning. Round it. One number, the way people say it.' },
+        { q: 'And when we do not know something?', a: 'Then I say so. Out loud. &ldquo;We do not know yet.&rdquo; I used to think it made us sound stupid.</p><p>He looks at the dark lamp over the door. &ldquo;Tonight there are people who will sit on the stairs with their shoes on BECAUSE I said it. That is not stupid.&rdquo;' }
+      ],
+      clue: { id: 'danny2', title: 'Danny Sato: say it once', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('sato')) { paint(); FL.terms(['broadcast', 'script']); ER.say('The black card on the wall, to the left of the clock, has all of that in five rules.'); } }
+    });
+  });
+  $('#brannigan').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(stage === 2 ? '&ldquo;Paragraph eight is dead,&rdquo; says Brannigan. &ldquo;The new one needs its owner. Then send it.&rdquo;' :
+      !told.sato ? '&ldquo;Ask Danny what he needs,&rdquo; says Brannigan. &ldquo;He is the one who has to say it.&rdquo;' :
+      stage === 1 ? '&ldquo;True is my half,&rdquo; says Brannigan. &ldquo;Whether it can be SAID is his. Give it to Danny.&rdquo;' : '&ldquo;Every line has an owner,&rdquo; says Brannigan. &ldquo;If it hasn&rsquo;t, it doesn&rsquo;t go.&rdquo;');
+  });
+
+  /* ---------- papers ---------- */
+  var DIA = '<svg viewBox="0 0 224 250"><g font-family="Kalam,cursive" fill="#f1ede2" text-anchor="middle">' +
+    '<rect x="14" y="10" width="86" height="100" fill="#f6efc2"/><g stroke="#57533f" stroke-width="3"><path d="M24 26h66M24 40h66M24 54h50M24 68h66M24 82h66M24 96h40"/></g>' +
+    '<ellipse cx="160" cy="46" rx="26" ry="15" fill="#f1ede2"/><circle cx="160" cy="46" r="9" fill="#2456c9"/><circle cx="160" cy="46" r="4" fill="#111"/>' +
+    '<path d="M134 52Q110 64 96 56M134 60Q112 86 98 82" fill="none" stroke="#8fb0ff" stroke-width="2.600"/><path d="M104 50l-9 6 8 6M106 76l-9 6 10 4" fill="none" stroke="#8fb0ff" stroke-width="2.600"/><path d="M96 82q-14 -12 0 -26" fill="none" stroke="#8fb0ff" stroke-width="2.600" stroke-dasharray="4 4"/>' +
+    '<text x="158" y="92" font-size="15">the eye</text><text x="158" y="110" font-size="15">can go back</text>' +
+    '<path d="M10 128h204" stroke="#4a4e55" stroke-width="1.500" stroke-dasharray="3 4"/>' +
+    '<path d="M22 150q10 -8 20 0t20 0t20 0t20 0t20 0" fill="none" stroke="#ffb347" stroke-width="3"/><path d="M22 168q10 -8 20 0t20 0t20 0t20 0t20 0" fill="none" stroke="#ffb347" stroke-width="3"/><path d="M118 142l14 17 -14 17" fill="none" stroke="#ffb347" stroke-width="3"/>' +
+    '<path d="M178 132q26 0 26 28q0 20 -16 28q-6 4 -6 12q0 10 -10 10" fill="none" stroke="#f1ede2" stroke-width="5" stroke-linecap="round"/><path d="M176 148q12 0 12 12q0 8 -8 12" fill="none" stroke="#f1ede2" stroke-width="4" stroke-linecap="round"/>' +
+    '<text x="76" y="204" font-size="15">the ear gets</text><text x="76" y="224" font-size="17" font-weight="700" fill="#ffb347">one go</text></g></svg>';
+  var CARD = '<h4>Studio One &middot; read this before the red light</h4><h3>Heard once</h3><div class="two"><div>' +
+    '<p>A reader can go back up the page. A listener cannot: the words go past once, while he is driving, or carrying a television upstairs.</p>' +
+    '<p><b>SAY WHO SAYS</b> &ldquo;The Environment Agency says &hellip;&rdquo; &ldquo;Police are asking people to &hellip;&rdquo; Say it first, before the news itself. We do not give orders: we report them.</p>' +
+    '<p><b>SAY WHAT WE DO NOT KNOW</b> &ldquo;We have not been able to confirm that.&rdquo; &ldquo;We do not know yet.&rdquo; Tonight that is news too: it tells people what they cannot count on.</p>' +
+    '<p><b>THE PLACE FIRST</b> &ldquo;In Nether Sedge, &hellip;&rdquo; Then the people it is for start listening.</p>' +
+    '<p><b>SHORT SENTENCES</b> One thing in each. If you run out of breath, it was two sentences.</p>' +
+    '<p><b>NUMBERS FOR THE EAR</b> Not &ldquo;3.36 m at 21.00&rdquo;. Round it, and say it as people say it.</p>' +
+    '</div><div><div class="dia">' + DIA + '</div><p class="pen">If we guess and we are right, nobody thanks us. If we guess and we are wrong, somebody drowns. M.B.</p></div></div>';
+  $('#sign').addEventListener('click', function () {
+    if (busy) return;
+    if (!told.sato) { ER.say('A black card on the wall: HEARD ONCE. Danny is waving at you through his headphones. He wants to say something first, and he has not got long.'); return; }
+    ER.read({ html: CARD, cls: 'sign', clue: { id: 'heard', title: 'Heard once', kind: 'The card on the studio wall' }, done: function () {
+      FL.terms(['attribute']);
+      if (tell('card')) { paint(); ER.say('Who says, what we do not know, the place first, short, and numbers for the ear. The script is on the stand.'); }
+    } });
+  });
+
+  /* ---------- things in the room ---------- */
+  FL.thing('#window', null, function () { return 'The newsroom, through thick glass. The board, the clock, and Brannigan&rsquo;s lamp still lit over an empty chair. The clock says ' + (stage >= 3 ? 'half past nine.' : stage >= 2 ? 'twenty-seven minutes past nine.' : 'twenty past nine.'); }, isBusy);
+  FL.thing('#clock', null, 'The studio clock. Its red hand goes round once a minute, and everything in this room is done by it.', isBusy);
+  FL.thing('#door', null, 'The door is as thick as a mattress. Nothing gets in or out while the lamp is red: not a draught, not a trainee.', isBusy);
+  FL.thing('#onair', null, function () { return stage >= 3 ? 'ON AIR. Every sound in this room is going out to the whole valley.' : 'ON AIR, when it is lit. It is not lit yet. A record is still playing.'; }, isBusy);
+  FL.thing('#faders', 'fader', 'Faders. Each one lets one sound up or down: the record, the telephone, the microphone. The two red ones are Danny&rsquo;s own voice.', isBusy);
+  FL.thing('#meters', null, 'Two needles, jumping with the music. While Danny is talking, they are the only way to SEE what the valley can hear.', isBusy);
+  FL.thing('#mic', 'microphone', 'The microphone. It hears everything, and it cannot be asked to forget.', isBusy);
+  FL.thing('#water', null, 'A glass of water. Danny asked for it when he had read the script through.', isBusy);
+  FL.thing('#biscuits', null, 'Danny&rsquo;s tea, and three biscuits that he has not touched. Brannigan says that is how you can tell it is serious.', isBusy);
+  FL.thing('#tb', null, 'The talkback box: the radio car&rsquo;s line into the studio. It has not said a word since six minutes past nine.', isBusy);
+  $('#script').addEventListener('click', function () {
+    if (busy) return;
+    if (stage >= 3) { ER.say('The script has gone. Danny is reading it.'); return; }
+    if (!told.sato) { ER.say('Nine typed paragraphs and two lines in pencil. Danny taps his headphones and points at you. He wants a word before you touch his script.'); return; }
+    if (!told.card) { ER.say('&ldquo;Read the wall first,&rdquo; says Brannigan. &ldquo;The black card. I can make a script true. That card makes it something a person can hear.&rdquo;'); return; }
+    if (!lock) lock = makeScript();
+    lock.open();
+  });
+
+  /* ---------- the script: who says each line; then how it sounds; then one paragraph that dies at the last minute ---------- */
+  function makeScript() {
+    var TAGS = [['ea', 'THE ENVIRONMENT AGENCY SAYS'], ['ps', 'POLICE SAY'], ['pa', 'POLICE ARE ASKING'], ['co', 'WENDFORD COUNCIL SAYS'], ['wc', 'THE WATER COMPANY SAYS'], ['rp', 'OUR OWN REPORTER SAYS'], ['dr', 'TWO DRIVERS WHO WERE THERE SAY'],
+      ['ls', 'LISTENERS TELL US'], ['ok', 'WE CAN CONFIRM THAT'], ['nc', 'WE HAVE NOT BEEN ABLE TO CONFIRM THAT'], ['nk', 'WE DO NOT YET KNOW']];
+    var TXT = {}, ORDER = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8', 'n1', 'r9', 'd1', 'd2'], NO = { r1: 1, r2: 2, r3: 3, r4: 4, r5: 5, r6: 6, r7: 7, r8: 8, n1: 'new', r9: 9, d1: 'D.S.', d2: 'D.S.' };
+    var NUM1 = { a: '3.36 m', b: 'three point three six metres', c: 'about three point four metres' }, NUM2 = { a: '21.00', b: 'twenty-one hundred hours', c: 'nine o&rsquo;clock' }, NEXT = { a: 'b', b: 'c', c: 'a' };
+    var SCIS = '<svg viewBox="0 0 30 26"><g fill="none" stroke="#c23b2c" stroke-width="2.600" stroke-linecap="round"><circle cx="6" cy="6" r="4"/><circle cx="6" cy="20" r="4"/><path d="M9 8L28 20M9 18L28 6"/></g></svg>';
+    var st = ER.flag('d-st') || { t: {}, num1: 'a', num2: 'a', pl2: 'b', pl3: 'b', cut: '00' }, tool = '', wait = false, box = ER.el('div', 'job sc'), s, ghost = null;
+    TAGS.forEach(function (t) { TXT[t[0]] = t[1]; });
+    s = '<div class="sc-top"><div class="sheet"><h5><span>WEND VALLEY RADIO &middot; NEWS &middot; 21.30</span><span>READER: SATO</span></h5><div id="paras"></div><p class="fixed">Do not walk or drive through flood water.</p></div>' +
+      '<div class="pad"><h5>THE PAD <small>who says so?</small></h5><div class="tags">';
+    TAGS.forEach(function (t) { s += '<button type="button" class="tag" data-t="' + t[0] + '">' + t[1] + '</button>'; });
+    s += '<button type="button" class="tag pen" data-t="x">the red pen: strike it out</button></div><p class="tip"></p></div></div>' +
+      '<div class="job-foot"><p class="jmsg"></p><button type="button" class="btn" id="s-go"></button></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.jmsg'), paras = box.querySelector('#paras'), goBtn = box.querySelector('#s-go'), tip = box.querySelector('.tip');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function keep() { ER.flag('d-st', st); }
+    function ear(key, html, cls) { return stage >= 1 ? '<button type="button" class="ear' + (cls ? ' ' + cls : '') + '" data-e="' + key + '">' + html + '</button>' : html; }
+    function snip(i) { return stage >= 1 ? '<button type="button" class="ear snip' + (st.cut.charAt(i) === '1' ? ' on' : '') + '" data-e="cut' + i + '" title="cut here">' + SCIS + '</button>' : ''; }
+    /* the words of a paragraph after its tag; [the place, pulled to the front or left at the back] */
+    function words(p) {
+      if (p === 'r1') return 'the River Wend is still rising. It stood at ' + ear('num1', NUM1[st.num1]) + ' at Wendford at ' + ear('num2', NUM2[st.num2]) + '. A flood warning is in force.';
+      if (p === 'r2') return 'people in Church Lane and Ferry Row to leave their homes now' + (st.pl2 === 'f' ? '' : ear('pl2', ', in Nether Sedge')) + '. Nobody in Wendford is being asked to leave.';
+      if (p === 'r3') return 'the footbridge at the station is closed' + (st.pl3 === 'f' ? '' : ear('pl3', ', in Wendford')) + '.';
+      if (p === 'r4') return 'the Old Bridge in Wendford is open: she crossed it at nine o&rsquo;clock. A photograph going round tonight shows it under water. That photograph is real, but it was taken in June 2011.';
+      if (p === 'r5') return 'Station Road in Wendford is flooded outside the station car park.';
+      if (p === 'r6') return 'trains have stopped running through Wendford.';
+      if (p === 'r7') return 'the dam at Wendhead is safe' + (st.cut.charAt(0) === '1' ? '. ' + snip(0) + 'The reservoir is full and water is running down the spillway' : ', ' + snip(0) + 'although the reservoir is full and water is running down the spillway') +
+        (st.cut.charAt(1) === '1' ? '. ' + snip(1) + 'That is what a spillway is for.' : ', ' + snip(1) + 'which is what a spillway is for.');
+      if (p === 'r8') return 'the rest centre is at Brook Street School, in Wendford.';
+      if (p === 'n1') return 'people not to go to Brook Street School. The rest centre has moved to the Corn Exchange, in the Market Place.';
+      if (p === 'r9') return 'how high the river will rise, or when it will stop.';
+      if (p === 'd1') return 'The river should peak at about midnight, so the worst will soon be over.';
+      return 'The river road out of Nether Sedge is still open to bigger cars.';
+    }
+    function front(p) { return p === 'r2' && st.pl2 === 'f' ? ear('pl2', 'In Nether Sedge,') + ' ' : p === 'r3' && st.pl3 === 'f' ? ear('pl3', 'In Wendford,') + ' ' : ''; }
+    function render() {
+      var h = '';
+      ORDER.forEach(function (p) {
+        var t = st.t[p] || '';
+        if (p === 'n1' && stage < 2) return;
+        h += '<div class="para' + (t === 'x' ? ' struck' : '') + (p.charAt(0) === 'd' ? ' pencil' : '') + (p === 'n1' ? ' new' : '') + '" data-p="' + p + '"><i>' + NO[p] + '</i><div>' + front(p) +
+          (t === 'x' ? '<span class="slot cut">cut</span>' : t ? '<span class="slot has">' + TXT[t] + '</span>' : '<span class="slot">WHO SAYS?</span>') + '<span class="body">' + words(p) + '</span></div></div>';
+      });
+      paras.innerHTML = h;
+      ER.$$('.tag', box).forEach(function (b) { b.classList.toggle('sel', b.getAttribute('data-t') === tool); });
+      goBtn.textContent = stage === 0 ? 'Show Brannigan' : stage === 1 ? 'Give it to Danny' : 'Send it to the studio';
+      tip.innerHTML = stage === 0 ? 'Click a tag, then the paragraph it belongs to. Or drag it. A tag can be used more than once.' :
+        stage === 1 ? 'Now the ear. The <b>blue</b> things on the sheet can be changed: click a number, a place, or a pair of scissors.' : 'One paragraph is dead. The <b>new</b> one needs an owner.';
+    }
+    function apply(p, t) {
+      if (t === 'x') st.t[p] = st.t[p] === 'x' ? '' : 'x'; else st.t[p] = t;
+      keep(); tool = ''; render();
+      if (t === 'x') FL.sfx.pen(); else FL.sfx.clip();
+      msg(st.t[p] === 'x' ? 'A red line through ' + (p.charAt(0) === 'd' ? 'Danny&rsquo;s pencil' : p === 'n1' ? 'the new paragraph' : 'paragraph <b>' + NO[p] + '</b>') + '.' :
+        st.t[p] ? (p.charAt(0) === 'd' ? 'Danny&rsquo;s pencil line' : p === 'n1' ? 'The <b>new</b> paragraph' : 'Paragraph <b>' + NO[p] + '</b>') + ' now begins: ' + TXT[st.t[p]] + ' &hellip;' : 'The red line comes off again.');
+    }
+    box.addEventListener('pointerdown', function (e) {
+      var b = e.target.closest ? e.target.closest('.tag') : null, t, sx = e.clientX, sy = e.clientY, moved = false;
+      if (!b || e.button || wait) return;
+      e.preventDefault(); t = b.getAttribute('data-t');
+      function mv(ev) {
+        if (!moved) {
+          if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 6) return;
+          moved = true; tool = t; render(); ghost = ER.el('div', 'tghost', b.innerHTML); document.body.appendChild(ghost);
+        }
+        ghost.style.left = (ev.clientX + 10) + 'px'; ghost.style.top = (ev.clientY - 14) + 'px';
+      }
+      function up(ev) {
+        document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
+        if (!moved) { tool = tool === t ? '' : t; render(); FL.sfx.slip(); return; }
+        if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost); ghost = null;
+        var n = document.elementFromPoint(ev.clientX, ev.clientY), q = n && n.closest ? n.closest('.para') : null;
+        if (q) apply(q.getAttribute('data-p'), t); else { tool = ''; render(); }
+      }
+      document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
+    });
+    paras.addEventListener('click', function (e) {
+      var eb = e.target.closest ? e.target.closest('.ear') : null, q = e.target.closest ? e.target.closest('.para') : null, k, p;
+      if (wait) return;
+      if (eb) {
+        k = eb.getAttribute('data-e');
+        if (k === 'num1' || k === 'num2') { st[k] = NEXT[st[k]]; FL.sfx.key(); }
+        else if (k === 'pl2' || k === 'pl3') { st[k] = st[k] === 'f' ? 'b' : 'f'; FL.sfx.slip(); }
+        else { k = +k.slice(3); st.cut = (k === 0 ? (st.cut.charAt(0) === '1' ? '0' : '1') : st.cut.charAt(0)) + (k === 1 ? (st.cut.charAt(1) === '1' ? '0' : '1') : st.cut.charAt(1)); FL.sfx.snip(); }
+        keep(); render(); return;
+      }
+      if (!q) return;
+      p = q.getAttribute('data-p');
+      if (tool) { apply(p, tool); return; }
+      if (st.t[p]) msg('Paragraph ' + NO[p] + ' has its tag. To change it, take another tag from the pad and click the paragraph again.');
+      else msg('Choose a tag from the pad first: who says so?');
+    });
+    function flash(p) { var n = paras.querySelector('.para[data-p="' + p + '"]'); if (n) n.classList.add('bad'); }
+    /* what Brannigan says about a line with the wrong owner */
+    function why(p, t) {
+      var DEC = t === 'ok' ? 'WE can confirm? Did one of us measure it, or see it? If not, say who told us.' : t === 'ls' ? 'Which listeners, and how did they know? &ldquo;Listeners tell us&rdquo; is what we say when we are not sure who it was. Tonight we are sure.' : '';
+      if (!t) return p.charAt(0) === 'd' ? 'Danny&rsquo;s pencil lines, at the bottom. Do they go out, or not? If one stays, who says so?' : p === 'n1' ? 'The new paragraph has no owner yet. Who is asking people not to go there?' : 'Paragraph ' + NO[p] + ' has no owner yet. Who says so?';
+      if (p === 'r1') return t === 'x' ? 'Strike out the river? It is the only thing that anybody wants to know.' : DEC || 'Who measures that river every fifteen minutes? It was on the board at a quarter to nine, and it went on a clip of its own.';
+      if (p === 'r2') return t === 'x' ? 'Thirty-eight houses are being emptied. That stays in.' : t === 'ps' ? 'Nearly. But this is not something the police are telling us ABOUT. It is something they want people to DO. There is a tag for that.' : DEC || 'Who knocks on doors and tells people to leave? We do not give orders. We report them, with their owner.';
+      if (p === 'r3') return t === 'x' ? 'People are walking to that footbridge in the rain. It stays in.' : t === 'pa' ? 'The police are not asking the footbridge to do anything. They are telling us a fact: they shut it.' : t === 'rp' ? 'Yasmin was on the Old Bridge. She cannot see the footbridge from there. Who shut it, and who told Dilys so?' : DEC || 'Who shut that bridge? And who told Dilys, at two minutes to nine?';
+      if (p === 'r4') return t === 'x' ? 'Forty-one people have sent us that picture. If we say nothing about it, it goes on being true in their heads.' : t === 'ps' ? 'The police told us about ONE bridge: the one they shut. Who told us about this one? She was standing on it.' : DEC || 'Who was standing on the Old Bridge at twelve minutes to nine, and crossed it at nine?';
+      if (p === 'r5') return t === 'x' ? 'It is true, and it has two sources. It stays in.' : t === 'ls' ? 'Listeners tell us a great many things. These two were THERE, there were two of them, and they had never met. Say so: it is the reason we believe them.' : DEC || 'Who told us about Station Road? Slips 2 and 6, on one clip.';
+      if (p === 'r6') return t === 'x' ? 'I thought about it. But there are people standing on that platform. If we do not know, we SAY that we do not know: there is a tag for exactly that.' :
+        t === 'dr' ? 'Two drivers for the water in the road, yes. Now read the two slips again. Only ONE of them said a word about trains, and a taxi driver can see the board in the station, not the railway.' :
+        t === 'nk' ? 'Close. But somebody HAS told us: Baz, in his taxi. We have tried to check it, and we cannot. That is a different sentence.' :
+        t === 'ls' ? 'One listener told us, looking at a blank board. If that goes on air at all, it goes with a warning on it.' : DEC || 'Who told us about the trains? One taxi driver. And who has confirmed it? Nobody.';
+      if (p === 'r7') return t === 'x' ? 'Half the valley thinks that dam has burst. If we say nothing, they go on thinking so.' : t === 'ea' ? 'The agency looks after the river. Whose dam is it? I rang the man myself.' : DEC || 'Who told us that the dam was safe? I rang him myself, and asked him about Gary.';
+      if (p === 'r8') return stage < 2 ? (t === 'x' ? 'People are leaving their homes. They need to know where to go. That stays in.' : DEC || 'Who opens a rest centre? It was in the news at half past eight, with its owner in red pencil.') :
+        'Paragraph eight still says Brook Street School. In three minutes, sixty people will hear it and set off for a school with a brook coming over its wall. Red pen.';
+      if (p === 'n1') return t === 'x' ? 'That is the one line tonight that cannot be cut.' : t === 'co' ? 'The council opened it. Listen to Yasmin again: who is at the door of the school tonight, sending people up the hill?' : t === 'ps' ? 'Nearly. But this is not something the police are telling us about. It is something they want people to DO.' :
+        t === 'rp' ? 'Yasmin saw the brook. She is not the one telling sixty people where to go.' : DEC || 'Who is asking people not to go to Brook Street? Yasmin told you who was standing at the door.';
+      if (p === 'r9') return t === 'x' ? 'The one thing that we do not know is the one thing that every listener is asking. Say it.' : t === 'nc' ? 'There is nothing to confirm. Nobody has claimed to know. It has not happened yet. Which tag says that?' : t === 'ea' ? 'Has the agency said how high it will go? Show me the slip. Nobody knows. Say so.' : DEC || 'Nobody has told us that, because nobody knows it. There is a tag for what nobody knows.';
+      if (p === 'd1') return 'Who says so? Find me the slip. Nobody on that board has said one word about midnight. It is Danny being kind. I was kind in 2011.';
+      return 'A man called Mick says so, and you put him on the spike yourself an hour ago. Thirty centimetres of moving water will float a car.';
+    }
+    function tagsOk() {
+      var list = ['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8', 'r9', 'd1', 'd2'], i, p, t;
+      for (i = 0; i < list.length; i++) {
+        p = list[i]; t = st.t[p] || '';
+        if (!ER.check(p === 'r8' && stage >= 2 ? 'r8b' : p, t)) {
+          ER.sfx.no(); msg('Brannigan puts her pencil on ' + (p.charAt(0) === 'd' ? 'Danny&rsquo;s line' : 'paragraph <b>' + NO[p] + '</b>') + '. &ldquo;' + why(p, t) + '&rdquo;');
+          if (t && !(p === 'r8' && stage >= 2)) { delete st.t[p]; keep(); }
+          render(); flash(p); return false;
+        }
+      }
+      return true;
+    }
+    function earOk(quiet) {
+      var bad = '';
+      if (!ER.check('num1', st.num1)) bad = st.num1 === 'a' ? 'Danny reads it aloud. &ldquo;It stood at three &hellip; point &hellip; three six &hellip; em?&rdquo; He stops. &ldquo;I can&rsquo;t say &lsquo;m&rsquo;. And three numbers in a row is two too many. Round it for me.&rdquo;' :
+        '&ldquo;Three point three six metres.&rdquo; Danny shakes his head. &ldquo;By the time I get to the six, they have lost the three. Round it. Say &lsquo;about&rsquo;.&rdquo;';
+      else if (!ER.check('num2', st.num2)) bad = st.num2 === 'a' ? '&ldquo;At twenty-one &hellip; nought nought?&rdquo; says Danny. &ldquo;Nobody&rsquo;s kitchen clock says twenty-one. Say it the way people say it.&rdquo;' :
+        '&ldquo;Twenty-one hundred hours,&rdquo; reads Danny. &ldquo;I am not the army, and nor are they. What do people CALL that time?&rdquo;';
+      else if (!ER.check('pl2', st.pl2)) bad = 'Danny reads: &ldquo;Police are asking people in Church Lane and Ferry Row &hellip;&rdquo; He looks up. &ldquo;Stop. Half of Wendford has just stood up. I have not said WHERE yet.&rdquo;';
+      else if (!ER.check('pl3', st.pl3)) bad = '&ldquo;Police say the footbridge at the station is closed, in Wendford.&rdquo; Danny frowns. &ldquo;Which station, they are thinking, all the way to the last word. Put the place where they hear it first.&rdquo;';
+      else if (!ER.check('cut', st.cut)) bad = st.cut === '00' ? 'Danny takes a breath, reads the whole of the dam in one go, and goes pink. &ldquo;Twenty-nine words,&rdquo; he says. &ldquo;I counted them on the way down.&rdquo;' :
+        '&ldquo;Better,&rdquo; says Danny. &ldquo;But there is still one sentence in there with two things in it. Where does it turn a corner?&rdquo;';
+      if (bad && !quiet) { ER.sfx.no(); msg(bad); }
+      return !bad;
+    }
+    goBtn.addEventListener('click', function () {
+      var file, t;
+      if (wait) return;
+      tool = '';
+      if (!tagsOk()) return;
+      if (stage === 0) {
+        stage = 1; ER.flag('d-stage', 1); FL.solved(true); paint(); render();
+        msg('Brannigan reads down the left-hand edge. &ldquo;Every line with its owner, and two lines gone. Now it is true.&rdquo; She turns the stand towards Danny. &ldquo;It is still not something a man can read aloud. The blue marks are yours.&rdquo;');
+        return;
+      }
+      if (!earOk()) return;
+      if (stage === 1) {
+        wait = true; stage = 2; ER.flag('d-stage', 2); FL.solved(true); paint();
+        msg('Danny reads it through under his breath, once, without stopping. &ldquo;I can say that,&rdquo; he says. &ldquo;I can say all of that.&rdquo;');
+        setTimeout(function () {
+          ER.closeAll(); busy = true; FL.sfx.crackle();
+          ER.narrate([
+            'Brannigan takes the sheet off the stand. It is twenty-six minutes past nine. Then the talkback box on the desk crackles.',
+            '&ldquo;Newsroom. Studio. Anybody. It&rsquo;s Yasmin. I am in Brook Street with Mr Lindley, and he is RIGHT.&rdquo;',
+            '&ldquo;I dropped a stick in the brook, and it went the wrong way: up, towards the school. The river is so high that the brook cannot get out. It is filling from the bottom end, like a bath with the plug in.&rdquo;',
+            '&ldquo;The water is two bricks from the top of the wall behind the school. I have told the policeman on the door. They are moving everybody up the hill to the Corn Exchange. NOW.&rdquo;',
+            'Nobody in the studio says anything. Then Brannigan says, quite calmly: &ldquo;Two aunts. Mr Lindley at eight minutes to nine, who has lived beside that brook for fifty years. Yasmin at twenty-six minutes past, who has just watched a stick go uphill. Neither of them got it from the other.&rdquo;',
+            'She is already typing. &ldquo;Paragraph eight is dead. Here is a new one. Three minutes.&rdquo;'
+          ], function () { busy = false; wait = false; render(); msg('One paragraph to strike out, and a new one, in the red frame, that needs its owner. Then send it.'); lock.open(); });
+        }, 2800);
+        return;
+      }
+      t = st.t.n1 || '';
+      if (!ER.check('n1', t)) { ER.sfx.no(); msg('Brannigan taps the new paragraph. &ldquo;' + why('n1', t) + '&rdquo;'); if (t) { delete st.t.n1; keep(); } render(); flash('n1'); return; }
+      file = ER.exit([['r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'r7', 'r8', 'r9', 'd1', 'd2'].map(function (p) { return st.t[p]; }).join('-') + '|' + st.t.n1 + '|' + [st.num1, st.num2, st.pl2, st.pl3, st.cut].join('-')], { wait: true, quiet: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; stage = 3; ER.flag('d-stage', 3); ER.flag('d-file', file); paint();
+      msg('Brannigan reads it once, writes M.B. in the corner, and slides it across the desk. &ldquo;Go,&rdquo; she says.');
+      setTimeout(function () { ER.closeAll(); onAir(false); }, 2600);
+    });
+    render();
+    msg(stage === 0 ? 'Nine typed paragraphs, and two lines of Danny&rsquo;s in pencil. Each one needs its owner at the front, or a red line through it.' : stage === 1 ? 'Every line has its owner. Now make it something that can be heard once: the blue marks.' : 'One paragraph to strike out, and a new one that needs its owner. Then send it.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+
+  /* ---------- half past nine ---------- */
+  var BULL = '<h4><span>WEND VALLEY RADIO &middot; NEWS &middot; 21.30</span><span>AS READ BY D. SATO</span></h4>' +
+    '<p><b>The Environment Agency says</b> the River Wend is still rising. It stood at about three point four metres at Wendford at nine o&rsquo;clock. A flood warning is in force.</p>' +
+    '<p>In Nether Sedge, <b>police are asking</b> people in Church Lane and Ferry Row to leave their homes now. Nobody in Wendford is being asked to leave.</p>' +
+    '<p>In Wendford, <b>police say</b> the footbridge at the station is closed.</p><p><b>Our own reporter says</b> the Old Bridge in Wendford is open: she crossed it at nine o&rsquo;clock. A photograph going round tonight shows it under water. That photograph is real, but it was taken in June 2011.</p>' +
+    '<p><b>Two drivers who were there say</b> Station Road in Wendford is flooded outside the station car park.</p><p><b>We have not been able to confirm that</b> trains have stopped running through Wendford.</p>' +
+    '<p><b>The water company says</b> the dam at Wendhead is safe. The reservoir is full and water is running down the spillway. That is what a spillway is for.</p>' +
+    '<p><s>Wendford Council says the rest centre is at Brook Street School, in Wendford.</s></p>' +
+    '<p><b>Police are asking</b> people not to go to Brook Street School. The rest centre has moved to the Corn Exchange, in the Market Place.</p>' +
+    '<p><b>We do not yet know</b> how high the river will rise, or when it will stop.</p><p>Do not walk or drive through flood water.</p>' +
+    '<p class="pen">Two lines in pencil: struck out. One was a guess. One was dangerous. M.B.</p>';
+  function onAir(again) {
+    var file = ER.flag('d-file');
+    if (leaving) return;
+    leaving = true; busy = true;
+    $('#scene').classList.add('live');
+    ER.addClue('bulletin', 'The news at half past nine', BULL, 'cue', 'The script, as it went out', again);
+    if (again) { setTimeout(function () { ER.leave(file); }, 1600); return; }
+    try { if (ER.track) ER.track.stop(1.6); } catch (e) {}      /* a studio goes quiet before the red light: the music stops, and then the station's own four notes are heard (and seen) */
+    setTimeout(function () { FL.sfx.ident(); }, 2300);
+    ER.narrate([
+      'Twenty-nine minutes past nine. The long record ends. Danny pulls one fader down and pushes two red ones up, and over the door the lamp goes red.',
+      'Four slow notes go out across the valley: the station&rsquo;s own. The two needles on the desk jump with each one.',
+      '&ldquo;Wend Valley Radio. The news at half past nine. I&rsquo;m Danny Sato.&rdquo; His hands are flat on the desk, and his voice does not shake at all.',
+      '&ldquo;The Environment Agency says the River Wend is still rising. It stood at about three point four metres at Wendford at nine o&rsquo;clock. A flood warning is in force.&rdquo;',
+      '&ldquo;In Nether Sedge, police are asking people in Church Lane and Ferry Row to leave their homes now. Nobody in Wendford is being asked to leave.&rdquo;',
+      '&ldquo;In Wendford, police say the footbridge at the station is closed. Our own reporter says the Old Bridge in Wendford is open: she crossed it at nine o&rsquo;clock. A photograph going round tonight shows it under water. That photograph is real, but it was taken in June 2011.&rdquo;',
+      '&ldquo;Two drivers who were there say Station Road in Wendford is flooded outside the station car park. We have not been able to confirm that trains have stopped running through Wendford.&rdquo;',
+      '&ldquo;The water company says the dam at Wendhead is safe. The reservoir is full and water is running down the spillway. That is what a spillway is for.&rdquo;',
+      '&ldquo;Police are asking people not to go to Brook Street School. The rest centre has moved to the Corn Exchange, in the Market Place.&rdquo; He says that one twice. Nobody told him to.',
+      '&ldquo;We do not yet know how high the river will rise, or when it will stop. Do not walk or drive through flood water.&rdquo; He takes a breath. &ldquo;We will tell you more as soon as we know more. And not before.&rdquo;',
+      'On the other side of the glass Brannigan is holding a mug of cold tea in both hands. She is not drinking it. She is listening to every word.'
+    ], function () { ER.leave(file); });
+  }
+})();
+</script>
+</body>
+</html>

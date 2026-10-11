@@ -1,0 +1,231 @@
+/* The Cold Door - what every room of the story shares: the printed sheet (Skallan, 1:25 000), the frame round a piece
+   of work done on it, the compass, the wheels that numbers are set on, the papers the party carries, and a waterproof
+   skin for the notebook, the hints and the word tags. Each room sets its own palette on <body>. */
+
+.tc-theme{font-family:'Fjalla One',sans-serif;font-size:15px;letter-spacing:.32em}
+.tc-room{font-family:'Fjalla One',sans-serif;letter-spacing:.03em;text-transform:uppercase}
+.tc-text{font-family:'Lora',Georgia,serif;font-size:clamp(16.5px,1.34vw,20px);line-height:1.6}
+.tc-text p{margin:0 0 12px}
+.cap{font-family:'Lora',Georgia,serif;font-size:clamp(16.5px,1.32vw,20px);line-height:1.52}
+.chip,.hbtn{font-family:'Fjalla One',sans-serif;font-size:14.5px;letter-spacing:.14em}
+.btn{font-family:'Fjalla One',sans-serif;font-size:15px;letter-spacing:.14em}
+.gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:12px 30px 11px;border:1px solid var(--accent,#ff8a3c);
+  color:var(--accent,#ff8a3c);background:var(--hud-bg,rgba(8,10,12,.9));font-family:'Fjalla One',sans-serif;font-size:17px;letter-spacing:.2em;
+  text-transform:uppercase;border-radius:3px}
+.gobtn.on{display:block}
+.gobtn:hover{background:var(--accent,#ff8a3c);color:#111}
+.tk-name{font-family:'Lora',serif;font-weight:700;letter-spacing:.01em}
+.tk-role{font-family:'Fjalla One',sans-serif;font-size:14px;letter-spacing:.16em}
+.tk-face svg{height:100%;min-height:300px}
+.tk-text{font-family:'Lora',Georgia,serif;font-size:clamp(16px,1.26vw,19px);line-height:1.58}
+.tk-text .sms,.doc .sms{display:block;margin:4px 0 12px;padding:10px 14px 9px;border-radius:14px 14px 14px 3px;background:#dfe7ea;color:#16222a;font-family:'Overpass Mono',monospace;font-size:.86em;line-height:1.45}
+
+/* ---- the sheet ---- */
+.sheet{display:block;width:100%;height:auto;background:#f3f0e2;touch-action:none;-webkit-user-select:none;user-select:none}
+.sheet text{pointer-events:none}
+.mC{fill:none;stroke:#bf8246;stroke-width:.5;stroke-linejoin:round}
+.mCi{stroke-width:1.1;stroke:#b0733a}
+.mR{fill:none;stroke:#1b1a17;stroke-width:.55;stroke-linecap:round}
+.mW{fill:none;stroke:#2f7fb5;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.mWb{stroke-width:2}
+.mWp{fill:#a9d0ea;stroke:#2f7fb5;stroke-width:.8}
+.mF,.mFt{fill:none;stroke:#1b1a17;stroke-width:.6}
+.mP{fill:none;stroke:#1b1a17;stroke-width:.95;stroke-dasharray:3.4 2.3;stroke-linejoin:round}
+.mT{fill:none;stroke:#1b1a17;stroke-width:2.7;stroke-dasharray:5.5 2.5;stroke-linejoin:round}
+.mTi{fill:none;stroke:#f3f0e2;stroke-width:1.35;stroke-linejoin:round}
+.mS{fill:#f3f0e2;stroke:#1b1a17;stroke-width:.95;stroke-linejoin:round}
+.mK,.mB{fill:#1b1a17}
+.mU{fill:#f3f0e2;stroke:#1b1a17;stroke-width:.9}
+.mH,.mN,.mL,.mG{paint-order:stroke;stroke:#f3f0e2;stroke-width:2.3px;stroke-linejoin:round}
+.mH{font-family:'Overpass',sans-serif;font-weight:700;font-size:9.4px;fill:#1b1a17}
+.mN{font-family:'Overpass',sans-serif;font-weight:600;fill:#262420}
+.mN1{font-size:15.5px;font-weight:700;letter-spacing:.28em}
+.mN2{font-size:10.8px;letter-spacing:.04em}
+.mN3{font-size:10px;letter-spacing:.18em;fill:#3a3731}
+.mN4{font-size:9.4px}
+.mNw{font-family:'Lora',serif;font-style:italic;font-weight:600;font-size:9.6px;fill:#1f6696;letter-spacing:.05em}
+.mL{font-family:'Overpass',sans-serif;font-weight:600;font-size:7.4px;fill:#93561f;stroke-width:2.2px}
+.mGl{fill:none;stroke:#3f8ed0;stroke-width:.6}
+.mG{font-family:'Overpass',sans-serif;font-weight:700;font-size:9.6px;fill:#2a78bd;stroke-width:2px}
+.mGm{font-size:11.5px;stroke:none}
+.mBx{fill:#f7f5ea;stroke:#1b1a17;stroke-width:.8}
+.mBt{font-family:'Overpass',sans-serif;font-weight:700;font-size:10.6px;fill:#1b1a17;letter-spacing:.06em}
+.mBs,.mBn{font-family:'Overpass',sans-serif;font-weight:400;font-size:8.2px;fill:#1b1a17}
+.mBl{fill:none;stroke:#1b1a17;stroke-width:1}
+.mBk{fill:none;stroke:#1b1a17;stroke-width:3.4}
+.mFr{fill:none;stroke:#1b1a17;stroke-width:1.5}
+/* what has been pencilled on it since two o'clock */
+.pn{fill:none;stroke:#3d4250;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.82}
+.pn.thin{stroke-width:1.1}
+.pnT{font-family:'Handlee',cursive;font-size:14px;fill:#3d4250;paint-order:stroke;stroke:#f3f0e2;stroke-width:3px;stroke-linejoin:round}
+/* rings to press */
+.rg{cursor:pointer}
+.rg circle.hit{fill:#fff;opacity:0}
+.rg circle.o{fill:rgba(243,240,226,.55);stroke:#3d4250;stroke-width:1.5;transition:stroke .15s,stroke-width .15s}
+.rg:hover circle.o{stroke:#c8321e;stroke-width:2.2}
+.rg.on circle.o{stroke:#c8321e;stroke-width:2.6;fill:rgba(255,235,205,.8)}
+.rb{fill:none;stroke:#c8321e;stroke-width:1.6;stroke-dasharray:5 4;pointer-events:none}
+
+/* ---- the frame round a piece of work ---- */
+.bx{width:min(1050px,95vw);-webkit-user-select:none;user-select:none}
+.bx .frame{position:relative;border-radius:3px;box-shadow:0 26px 70px rgba(0,0,0,.7);overflow:hidden}
+/* a sheet that has been folded in six for thirty years */
+.fold{position:relative}
+.fold:after{content:'';position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;
+  background-image:linear-gradient(90deg,transparent 0,transparent calc(33.3% - 1px),rgba(60,50,30,.16) 33.3%,transparent calc(33.3% + 2px)),linear-gradient(90deg,transparent 0,transparent calc(66.6% - 1px),rgba(60,50,30,.16) 66.6%,transparent calc(66.6% + 2px)),linear-gradient(transparent 0,transparent calc(50% - 1px),rgba(60,50,30,.14) 50%,transparent calc(50% + 2px))}
+.bx-foot{display:flex;align-items:center;gap:14px;margin-top:9px;min-height:58px}
+.pmsg{flex:1;margin:0;font-family:'Lora',Georgia,serif;font-size:16px;line-height:1.4;color:#f1ecdf}
+.pmsg b{color:var(--accent,#ff8a3c);font-weight:700}
+.bx-foot .btn{flex:0 0 auto;white-space:nowrap;background:rgba(0,0,0,.4)}
+.bx-foot .btn.quiet{border-color:rgba(255,255,255,.4);color:#e9e4d8}
+.bx .tool{cursor:grab}
+.bx .tool.on{cursor:grabbing}
+/* number wheels: a pencil does the writing, the arrows do the rubbing out */
+.wls{display:inline-flex;align-items:center;gap:3px;flex:0 0 auto;padding:4px 9px 4px;background:#f6f1df;border-radius:3px;box-shadow:inset 0 0 0 1px #b8ad8c,0 2px 6px rgba(0,0,0,.4)}
+.wls small{font-family:'Overpass',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#6b6450;margin-right:5px;line-height:1.15;text-align:right}
+.wls i{font-style:normal;font-family:'Handlee',cursive;font-size:24px;color:#26304a;padding:0 2px}
+.wl{display:inline-grid;grid-template-rows:14px 30px 14px;width:25px;justify-items:center}
+.wl button{width:25px;height:14px;font-size:9px;line-height:14px;color:#8a7f62}
+.wl button:hover{color:#c8321e}
+.wl b{font-family:'Handlee',cursive;font-weight:normal;font-size:27px;line-height:30px;color:#26304a;border-bottom:1.5px solid #8a7f62;width:21px;text-align:center}
+.wls.off button{visibility:hidden}
+.wls.gap3 .wl:nth-of-type(4){margin-left:9px}
+
+/* ---- the compass ---- */
+.cp-plate{fill:rgba(214,236,238,.34);stroke:rgba(40,60,70,.75);stroke-width:1.4}
+.cp-edge{fill:none;stroke:rgba(30,40,50,.8);stroke-width:.9}
+.cp-mark{font-family:'Overpass',sans-serif;font-weight:600;font-size:8px;fill:rgba(30,40,50,.85)}
+.cp-arrow{fill:none;stroke:#1b1a17;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cp-bezel{fill:rgba(24,30,34,.5);stroke:#101417;stroke-width:1.6;cursor:grab}
+.cp-bezel.on{cursor:grabbing}
+.cp-cap{fill:rgba(238,246,246,.5);stroke:rgba(20,30,34,.8);stroke-width:1.1}
+.cp-tick{stroke:#f4f4ee;stroke-width:.9}
+.cp-tick.big{stroke-width:1.7}
+.cp-num{font-family:'Overpass',sans-serif;font-weight:700;font-size:9.5px;fill:#f4f4ee;text-anchor:middle}
+.cp-num.n{fill:#ff6a52;font-size:12px}
+.cp-shed{fill:rgba(200,50,30,.1);stroke:#c8321e;stroke-width:2;stroke-linejoin:round}
+.cp-ol{stroke:#c8321e;stroke-width:1.05;opacity:.85}
+.cp-needle{transition:transform .55s cubic-bezier(.3,1.5,.5,1)}
+.cp-idx{stroke:#101417;stroke-width:3;stroke-linecap:round}
+.cp-read rect{fill:#101417}
+.cp-read text{font-family:'Overpass Mono',monospace;font-weight:600;font-size:15px;fill:#ffe9b0;text-anchor:middle}
+.cp *{pointer-events:none}
+.cp .cp-bezel{pointer-events:stroke}
+
+/* ---- paper ---- */
+.doc h4{font-weight:normal}
+.doc svg{display:block;max-width:100%;height:auto}
+/* the cover of the map: its key */
+.doc.key{width:min(860px,95vw);background:#f3f0e2;color:#1e1d1a;font-family:'Overpass',sans-serif;font-size:14.5px;line-height:1.42;padding:0 0 16px;border:1px solid #1b1a17}
+.doc.key h4{margin:0 0 12px;padding:12px 28px 9px;background:#c2331f;color:#fff;font-family:'Fjalla One',sans-serif;font-size:27px;letter-spacing:.1em;text-transform:uppercase}
+.doc.key h4 small{display:block;font-family:'Overpass',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.2em;color:#ffe2c2;margin-top:1px}
+.doc.key .cols{display:grid;grid-template-columns:268px 1fr;gap:0 26px;padding:0 28px}
+.doc.key h5{margin:0 0 7px;font-family:'Overpass',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:#c2331f;border-bottom:1px solid #1b1a17;padding-bottom:3px}
+.doc.key table{border-collapse:collapse;width:100%}
+.doc.key td{padding:1px 0;vertical-align:middle;font-size:13.5px;line-height:1.25}
+.doc.key td:first-child{width:62px}
+.doc.key td svg{width:54px;height:20px}
+.doc.key p{margin:0 0 7px}
+.doc.key .eg{float:right;width:188px;margin:0 0 4px 16px}
+.doc.key .say{margin-top:6px;padding:7px 12px 6px;border-left:4px solid #2a78bd;background:#fbf9ef;font-weight:600}
+/* a page of the Hill Club's field guide: waterproof paper, punched, written by one person */
+.doc.guide{width:min(880px,95vw);background:#f4f2e3 linear-gradient(90deg,rgba(0,0,0,.08),transparent 5%);color:#22201a;font-family:'Lora',Georgia,serif;font-size:15.5px;line-height:1.5;padding:18px 34px 14px 56px;border-top:9px solid #ef7d22}
+.doc.guide:before{content:'';position:absolute;left:19px;top:0;bottom:0;width:13px;background:radial-gradient(circle at 50% 50%,#22201a 0 5px,transparent 6px) 0 6px/13px 84px repeat-y}
+.doc.guide h4{margin:0 0 1px;font-family:'Overpass',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.26em;text-transform:uppercase;color:#b9571a}
+.doc.guide h3{margin:0 0 9px;font-family:'Fjalla One',sans-serif;font-weight:normal;font-size:26px;letter-spacing:.03em;border-bottom:2px solid #22201a;padding-bottom:5px}
+.doc.guide p{margin:0 0 7px}
+.doc.guide .two{display:grid;grid-template-columns:1fr 290px;gap:24px;align-items:start}
+.doc.guide .two.wide{grid-template-columns:1fr 372px}
+.doc.guide .rule{margin:7px 0 0;padding:7px 13px 6px;background:#fffdf2;border-left:4px solid #ef7d22;font-weight:600}
+.doc.guide .hand{font-family:'Handlee',cursive;font-size:19px;line-height:1.25;color:#26304a;margin-top:6px}
+.doc.guide .pg{margin:4px 0 0;text-align:right;font-style:italic;font-size:13px;color:#7a705c}
+.doc.guide ol{margin:0 0 7px;padding-left:22px}
+.doc.guide li{margin:0 0 4px}
+.doc.guide .four{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 6px}
+.doc.guide .four div{font-size:13.5px;line-height:1.34}
+.doc.guide .four b{display:block;font-family:'Overpass',sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;color:#b9571a;text-transform:uppercase}
+.doc.guide .four svg{width:100%;background:#f3f0e2;border:1px solid #b8ad8c;margin-bottom:4px}
+/* her own notebook */
+.doc.log{width:min(560px,92vw);background-color:#f6f3df;color:#26304a;font-family:'Handlee',cursive;font-size:21px;line-height:28px;padding:28px 30px 28px 38px;border-left:14px solid #e8b017;
+  background-image:linear-gradient(transparent 27px,rgba(38,48,74,.22) 27px);background-size:100% 28px}
+.doc.log h4{margin:0 0 0;font-size:23px;line-height:28px;text-decoration:underline}
+.doc.log p{margin:0}
+.doc.log p b{font-weight:normal;display:inline-block;min-width:66px}
+.doc.log .stop{margin-top:0;color:#8a2a1a}
+/* the route card: a printed form, filled in at the kitchen table */
+.doc.card{width:min(760px,95vw);background:#fbfaf1;color:#1e1d1a;font-family:'Overpass',sans-serif;font-size:14px;line-height:1.4;padding:18px 26px 16px;border:1px solid #6b6450;border-top:8px solid #2a5d4a}
+.doc.card h4{margin:0 0 2px;font-family:'Fjalla One',sans-serif;font-size:23px;letter-spacing:.1em;text-transform:uppercase;color:#2a5d4a}
+.doc.card p{margin:0 0 8px}
+.doc.card table{width:100%;border-collapse:collapse;margin:6px 0 8px}
+.doc.card th{font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:left;border-bottom:2px solid #1e1d1a;padding:3px 6px 2px;color:#2a5d4a}
+.doc.card td{border-bottom:1px solid #a9a38c;border-right:1px solid #d5cfb8;padding:3px 6px 0;font-family:'Handlee',cursive;font-size:19px;line-height:1.22;color:#26304a;vertical-align:top}
+.doc.card td:last-child{border-right:0}
+.doc.card .hand{font-family:'Handlee',cursive;font-size:19px;line-height:1.25;color:#26304a}
+.doc.card .small{font-size:12px;color:#6b6450}
+/* a telephone */
+.doc.phone{width:min(400px,90vw);background:#0e1418;color:#e6edf0;font-family:'Overpass',sans-serif;font-size:15px;line-height:1.42;padding:16px 18px 20px;border-radius:26px;border:3px solid #2c363c}
+.doc.phone h4{margin:0 0 12px;font-family:'Overpass Mono',monospace;font-size:12.5px;letter-spacing:.06em;color:#93a4ad;display:flex;justify-content:space-between}
+.doc.phone .to{margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid #2c363c;font-weight:700;font-size:16px}
+.doc.phone .out,.doc.phone .in{margin:0 0 4px;padding:9px 13px 8px;border-radius:15px 15px 3px 15px;background:#1f6f54;color:#f1fff8;font-size:15px}
+.doc.phone .in{border-radius:15px 15px 15px 3px;background:#27333a;color:#e6edf0}
+.doc.phone .st{margin:0 0 12px;font-family:'Overpass Mono',monospace;font-size:12px;color:#93a4ad;text-align:right}
+.doc.phone .st.bad{color:#ff8a6a}
+.doc.phone .st.inn{text-align:left}
+.doc.phone .w:hover{color:#ffd9a0}
+/* the notice on the wall of the hut */
+.doc.wall{width:min(700px,94vw);background:#fbf9ef;color:#1e1d1a;font-family:'Overpass',sans-serif;font-size:15.5px;line-height:1.45;padding:0 30px 18px;border:2px solid #1e1d1a}
+.doc.wall h4{margin:0 -30px 14px;padding:13px 30px 9px;background:#c2331f;color:#fff;font-family:'Fjalla One',sans-serif;font-size:29px;letter-spacing:.1em;text-transform:uppercase}
+.doc.wall h4 small{display:block;font-family:'Overpass',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.2em;color:#ffe2c2}
+.doc.wall p{margin:0 0 9px}
+.doc.wall .sig{margin:10px 0;padding:10px 14px 8px;background:#f1ecd8;border-left:5px solid #c2331f}
+.doc.wall .sig b{font-family:'Fjalla One',sans-serif;font-weight:normal;font-size:19px;letter-spacing:.08em;color:#c2331f}
+.doc.wall .foot{font-size:13.5px;color:#4a463c;border-top:1px solid #1e1d1a;padding-top:8px}
+/* the hut book: many hands */
+.doc.hutbook{width:min(700px,94vw);background-color:#f1ead3;color:#1c2440;font-family:'Caveat',cursive;font-size:24px;line-height:30px;padding:30px 34px 30px;border-left:22px solid #5a2f22;
+  background-image:linear-gradient(transparent 29px,rgba(60,70,110,.25) 29px);background-size:100% 30px}
+.doc.hutbook h4{margin:0;font-family:'Fjalla One',sans-serif;font-size:20px;line-height:30px;letter-spacing:.18em;text-transform:uppercase;color:#5a2f22}
+.doc.hutbook p{margin:0 0 0}
+.doc.hutbook p.gap{margin-top:30px}
+.doc.hutbook .a{font-family:'Homemade Apple',cursive;font-size:15.5px;color:#3b2812;position:relative;top:3px}
+.doc.hutbook .b{font-family:'Handlee',cursive;font-size:20px;color:#26304a}
+.doc.hutbook .c{color:#14532d}
+.doc.hutbook small{font-family:'Overpass',sans-serif;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#7a6a50}
+/* what you worked out for yourself */
+.doc.mine{width:min(600px,92vw);background:#fbf7dc;color:#26304a;font-family:'Handlee',cursive;font-size:20px;line-height:1.32;padding:22px 30px 22px;border-top:16px solid #e8b017}
+.doc.mine h4{font-family:'Fjalla One',sans-serif;font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:#8a6a08;margin-bottom:8px}
+.doc.mine p{margin:0 0 8px}
+.doc.statement{background:#f4f2e3;font-family:'Lora',Georgia,serif;font-size:16px;line-height:1.55;border-left:6px solid #ef7d22}
+.doc.statement h4{font-family:'Fjalla One',sans-serif;font-size:15px;letter-spacing:.22em;color:#b9571a}
+.doc .w:hover{color:#c2331f}
+
+/* ---- the notebook: yellow, waterproof, with an elastic band ---- */
+.nb{background:#d9a514 linear-gradient(140deg,#f0bd22,#c48f0c);border:1px solid #8a6a08;border-radius:7px;color:#2a2410;box-shadow:0 30px 90px rgba(0,0,0,.75),inset 0 0 0 5px #b3860c}
+.nb-tabs{border-bottom-color:#8a6a08}
+.nb-tabs button{font-family:'Fjalla One',sans-serif;font-size:15.5px;letter-spacing:.2em;color:#5a4608}
+.nb-tabs button.on{background:#fbf7dc;color:#2a2410;border-color:#8a6a08}
+.nb-list{border-right-color:#8a6a08}
+.nb-list button{font-family:'Lora',serif;font-size:14.5px;color:#2a2410}
+.nb-list button small{font-family:'Fjalla One',sans-serif;font-size:11.5px;letter-spacing:.18em;opacity:.7}
+.nb-list button:hover{background:rgba(255,255,255,.25)}
+.nb-list button.on{background:#fbf7dc;color:#2a2410}
+.nb-view{background:#3a3222}
+.nb-empty{font-family:'Lora',serif}
+.nb-words{background:#fbf7dc;color:#26304a}
+.nb-words b{font-family:'Overpass',sans-serif;font-weight:700;font-size:15.5px}
+.nb-words span{font-family:'Lora',serif;font-size:14.5px;line-height:1.4;color:#4a4636}
+.nb-ko{border-color:#8a6a08;color:#5a4608}
+.nb-ko.on{background:#2a2410;color:#f0bd22;border-color:#2a2410}
+.wtip,.wtag{background:#fbf7dc;color:#26304a;border-radius:2px;box-shadow:0 10px 26px rgba(0,0,0,.6),inset 5px 0 0 #ef7d22}
+.wtag{transform:rotate(-1deg);padding-left:20px}
+.wtag:before{display:none}
+.wtip{padding-left:19px}
+.wtip b,.wtag b{font-family:'Overpass',sans-serif;font-weight:700;font-size:16px}
+.wtip span,.wtag span{font-family:'Lora',serif;font-size:14.5px;line-height:1.4;color:#4a4636}
+.hintbox{background:#fbf7dc;color:#26304a;border-top:6px solid #ef7d22;border-radius:2px}
+.hintbox h6{font-family:'Fjalla One',sans-serif;font-weight:normal;font-size:16px;letter-spacing:.3em;color:#b9571a}
+.hintbox p{font-family:'Lora',serif;font-size:15px;line-height:1.46}
+.hintbox p i{background:#26304a;color:#fbf7dc;font-family:'Fjalla One',sans-serif;font-size:13px}
+.hintbox p.hint-none{font-style:italic;color:#5f5a48;font-size:14.5px}
+.hintbox .btn{border-color:#26304a;color:#26304a}
+.hintbox .btn:hover:not([disabled]){background:#26304a;color:#fbf7dc}
+.toast{font-family:'Fjalla One',sans-serif;font-size:14.5px;background:rgba(12,16,18,.94)}

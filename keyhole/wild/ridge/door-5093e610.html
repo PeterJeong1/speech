@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Cold Door · The Cold Door</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ridge.css">
+<style>
+  body{--bg:#252c32;--accent:#e6c868;--font-display:'Fjalla One',sans-serif;--font-ui:'Fjalla One',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(17,22,26,.96);--tc-ink:#eef1f0;--cap-bg:rgba(13,17,20,.93);--panel:#1c2328;--face-bg:#5a666e;--q-ink:#e6c868;--fade:#12171a;--hud-bg:rgba(13,17,20,.8)}
+  #rain{animation:rain .62s linear infinite}
+  @keyframes rain{to{transform:translate(-36px,72px)}}
+  #curtain{animation:tear 19s steps(1,end) infinite}
+  @keyframes tear{0%{opacity:1}52%{opacity:.72}55%{opacity:.4}58%{opacity:.12}72%{opacity:.3}75%{opacity:.62}78%{opacity:.88}81%{opacity:1}}
+  #raven{animation:hang 2.7s ease-in-out infinite}
+  @keyframes hang{50%{transform:translate(9px,-13px)}}
+  #khood{animation:shiver 1.9s ease-in-out infinite;transform-origin:800px 640px}
+  @keyframes shiver{50%{transform:rotate(-3deg)}}
+  #map.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.35)}}
+  .hot:hover{filter:brightness(1.2)}
+  .rt{fill:none;stroke:#26304a;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;opacity:.9;pointer-events:none}
+  .rt.bad{stroke:#c8321e;stroke-dasharray:7 6}
+  .rg.end circle.o{fill:#26304a}
+  .rg.mark circle.o{stroke:#1f6f54;stroke-width:3;fill:rgba(190,235,210,.8)}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f4a52"/><stop offset=".5" stop-color="#6b767d"/><stop offset="1" stop-color="#525d65"/></linearGradient>
+  <linearGradient id="farG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9dfa4"/><stop offset=".4" stop-color="#b9b06a"/><stop offset="1" stop-color="#6f7a4c"/></linearGradient>
+  <linearGradient id="slopeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3339"/><stop offset="1" stop-color="#14191c"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4239"/><stop offset=".5" stop-color="#262d2a"/><stop offset="1" stop-color="#12171a"/></linearGradient>
+  <radialGradient id="rag"><stop offset="0" stop-color="#69747b" stop-opacity=".96"/><stop offset=".6" stop-color="#66717a" stop-opacity=".8"/><stop offset="1" stop-color="#626d76" stop-opacity="0"/></radialGradient>
+  <radialGradient id="curt"><stop offset="0" stop-color="#7f8a90"/><stop offset=".7" stop-color="#6f7a81"/><stop offset="1" stop-color="#66717a"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="56%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".8"/></radialGradient>
+  <clipPath id="winC"><ellipse cx="800" cy="356" rx="246" ry="236"/></clipPath>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#skyG)"/>
+<!-- what the cloud shows for ten seconds: the valley of the Door Burn -->
+<g id="gap" class="hot">
+  <g clip-path="url(#winC)">
+    <rect x="560" y="120" width="480" height="470" fill="url(#farG)"/>
+    <path d="M560 300q120 -40 230 10t250 -30v330h-480z" fill="#7d8656"/><path d="M560 380q150 -60 250 30t230 -50v260h-480z" fill="#5f6a45"/>
+    <path d="M560 470q130 -30 220 40q-80 60 -220 80zM1040 440q-140 0 -220 80q90 50 220 60z" fill="#48523a"/>
+    <path d="M800 300q-26 60 4 110t-20 96t10 90" stroke="#eef6f8" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M800 300q-26 60 4 110" stroke="#eef6f8" stroke-width="2.500" fill="none"/>
+    <path d="M560 150q240 40 480 -10" stroke="#fff6c8" stroke-width="26" opacity=".35" fill="none"/>
+  </g>
+  <ellipse id="curtain" cx="800" cy="356" rx="262" ry="250" fill="url(#curt)"/>
+  <g pointer-events="none"><ellipse cx="566" cy="300" rx="120" ry="230" fill="url(#rag)"/><ellipse cx="1040" cy="330" rx="124" ry="250" fill="url(#rag)"/><ellipse cx="760" cy="126" rx="280" ry="96" fill="url(#rag)"/><ellipse cx="860" cy="590" rx="300" ry="84" fill="url(#rag)"/>
+    <ellipse cx="620" cy="520" rx="150" ry="110" fill="url(#rag)"/><ellipse cx="990" cy="160" rx="150" ry="100" fill="url(#rag)"/></g>
+</g>
+<g id="raven" class="hot"><circle cx="812" cy="250" r="46" fill="#fff" opacity="0"/><path d="M752 250q26 -26 56 -4q8 -10 18 0q28 -22 58 0q-30 -4 -52 14l-4 14l-10 -10q-8 4 -14 -2q-22 -16 -52 -12z" fill="#0f1316"/></g>
+
+<!-- the two sides of the Door -->
+<path d="M-1000 1300V230Q160 300 500 548Q628 652 700 704V1300Z" fill="url(#slopeG)"/><path d="M2600 1300V200Q1440 290 1100 548Q972 652 900 704V1300Z" fill="url(#slopeG)"/>
+<g stroke="#3d474e" stroke-width="3" fill="none" opacity=".7"><path d="M-200 330Q160 360 430 548M-200 450Q120 470 360 620M1800 310Q1440 350 1170 548M1800 440Q1500 470 1240 620"/></g>
+<path d="M-1000 772Q300 690 800 706T2600 760V1320H-1000Z" fill="url(#floorG)"/>
+<g stroke="#6f7a52" stroke-width="3" stroke-linecap="round" opacity=".75" id="grass"></g>
+
+<!-- the gateposts -->
+<g id="posts" class="hot" stroke-linecap="round">
+  <path d="M602 760l14 -236" stroke="#15191c" stroke-width="20"/><path d="M606 740l11 -206" stroke="#4a545b" stroke-width="3"/><path d="M618 560h26M620 660h24" stroke="#8a4a2a" stroke-width="6"/>
+  <path d="M1004 760l-10 -226" stroke="#15191c" stroke-width="20"/><path d="M1000 740l-8 -200" stroke="#4a545b" stroke-width="3"/><path d="M966 580h26" stroke="#8a4a2a" stroke-width="6"/>
+  <ellipse cx="606" cy="764" rx="34" ry="7" fill="#0b0e10" stroke="none" opacity=".6"/><ellipse cx="1002" cy="764" rx="34" ry="7" fill="#0b0e10" stroke="none" opacity=".6"/>
+</g>
+
+<!-- Kwame, in the gap, with his hood up -->
+<g id="kwame" class="hot">
+  <ellipse cx="800" cy="768" rx="72" ry="9" fill="#0b0e10" opacity=".6"/>
+  <path d="M762 764q-8 -40 20 -52l44 -4q30 10 26 44l-6 12z" fill="#30363c"/><path d="M752 766h34v9h-38zM812 766h36v9h-34z" fill="#5a4630"/>
+  <path d="M744 716q-8 -50 0 -78h34v86z" fill="#3d6b2f"/>
+  <path d="M762 724q-10 -78 36 -88t44 84z" fill="#2a5ea8"/><path d="M770 660q26 34 64 50" stroke="#24539a" stroke-width="15" fill="none" stroke-linecap="round"/><circle cx="836" cy="712" r="8" fill="#6f4626"/>
+  <g id="khood"><path d="M770 640q0 -44 34 -44t34 44q-4 12 -12 16h-44q-10 -4 -12 -16z" fill="#24539a"/><circle cx="806" cy="630" r="19" fill="#6f4626"/><path d="M786 624q0 -22 20 -22t20 22q-10 -7 -20 -7t-20 7z" fill="#f0c020"/>
+    <path d="M808 630h6M818 630h5" stroke="#2a1a0c" stroke-width="2.400"/><path d="M809 640h10" stroke="#f7f1e6" stroke-width="2.400"/></g>
+</g>
+
+<!-- the boulder, and Mrs MacAskill out of the wind behind it -->
+<g id="boulder" class="hot"><path d="M1150 838q-60 -150 60 -226q140 -50 250 30q96 90 40 196z" fill="#38424a"/><path d="M1186 690q70 -70 190 -60q80 20 110 80" stroke="#59646c" stroke-width="5" fill="none"/>
+  <path d="M1240 640q30 60 10 190M1380 628q-20 80 20 200" stroke="#262d33" stroke-width="4" fill="none"/><g fill="#8a8f5a" opacity=".45"><circle cx="1300" cy="660" r="9"/><circle cx="1420" cy="720" r="7"/><circle cx="1220" cy="740" r="6"/></g></g>
+<g id="mac" class="hot">
+  <ellipse cx="1130" cy="846" rx="140" ry="12" fill="#0b0e10" opacity=".6"/>
+  <path d="M1150 786L1020 822" stroke="#2c3238" stroke-width="27" stroke-linecap="round"/><path d="M1020 806l-32 12q-10 10 -3 22l44 -9z" fill="#5a4630"/><path d="M994 822l24 -8M1000 830l22 -7" stroke="#e9e6da" stroke-width="2"/>
+  <path d="M1144 790q-44 2 -66 26l-6 30" stroke="#2c3238" stroke-width="27" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M1058 846h44v10h-48z" fill="#5a4630"/>
+  <path d="M1118 794q-10 -94 34 -104q48 -6 56 44l8 60z" fill="#b3321f"/>
+  <path d="M1124 706q24 -30 60 -4l-8 26h-44z" fill="#8c2416"/>
+  <path d="M1136 726q-34 22 -44 56" stroke="#a52c1b" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="1092" cy="786" r="9" fill="#e3bd9a"/>
+  <rect x="1146" y="676" width="14" height="16" fill="#d9b08c"/><circle cx="1152" cy="662" r="23" fill="#e3bd9a"/><path d="M1128 658q0 -30 24 -30t24 30q-12 -8 -24 -8t-24 8z" fill="#26375c"/><circle cx="1152" cy="626" r="6" fill="#31467a"/>
+  <path d="M1136 664h7M1150 664h7" stroke="#3f5a6a" stroke-width="2.400"/><path d="M1139 676h11" stroke="#8a4a3c" stroke-width="2"/>
+</g>
+<g id="map" class="hot"><path d="M1040 770l86 -18 10 50 -86 20z" fill="#f3f0e2" stroke="#1b1a17" stroke-width="2"/><g stroke="#bf8246" stroke-width="2" fill="none"><path d="M1050 782q30 -16 66 -8M1054 796q30 -14 66 -6M1058 810q26 -12 60 -6"/></g><path d="M1078 762l10 52" stroke="#3f8ed0" stroke-width="1.500"/></g>
+<g id="guide" class="hot"><ellipse cx="930" cy="866" rx="64" ry="8" fill="#0b0e10" opacity=".6"/><path d="M884 862q-12 -82 44 -96q52 4 52 62l-6 34z" fill="#3f6d54"/><path d="M892 796q36 -20 78 0v26q-38 -14 -78 0z" fill="#335a45"/>
+  <path d="M896 760l62 -14 8 34 -62 14z" fill="#ef7d22" stroke="#b9571a" stroke-width="2"/><path d="M908 768l40 -9M910 778l30 -7" stroke="#fff" stroke-width="2.500"/></g>
+
+<g pointer-events="none"><g id="rain" stroke="#b8c4cc" stroke-width="1.700" stroke-linecap="round" opacity=".5"></g><rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)"/></g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go on to the Meetings</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="map.js"></script>
+<script src="ridge.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  (function () {
+    var s = '', i, x, y;
+    for (i = 0; i < 100; i++) { x = -100 + (i * 197) % 1900; y = -80 + (i * 113) % 1000; s += '<path d="M' + x + ' ' + y + 'l-9 18"/>'; }
+    $('#rain').innerHTML = s; s = '';
+    for (i = 0; i < 40; i++) { x = (i * 367) % 1600; y = 760 + (i * 131) % 130; s += '<path d="M' + x + ' ' + y + 'l-9 -11M' + (x + 5) + ' ' + y + 'l-5 -15M' + (x + 10) + ' ' + y + 'l-1 -12"/>'; }
+    $('#grass').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'wild', story: 'ridge', storyTitle: 'The Cold Door', id: 'door', no: 'III', title: 'The Cold Door',
+    go: 'Out of the wind',
+    intro: [
+      'You laid one edge of the compass from the cairn to the Cold Door, turned the dial until its red lines were lying along the blue lines of the grid, and read 074&deg; at the index line. Then you turned yourself until the red end of the needle sat in the red arrow, and Kwame walked where the big arrow pointed. To look back at you he set the back bearing: 074 + 180 = 254&deg;.',
+      'One kilometre of the Whaleback took twenty-four minutes. Mrs MacAskill wrote that down.',
+      'It is ten to four. You are standing in the Cold Door: a gap in the ridge, with dark ground going up on your left and on your right. The wind is coming through the middle, as if somebody had left it open on purpose.'
+    ],
+    exit: {"next":"meetings","w":{"e218d9db":"89478dc2"}}, tags: {"val":["38683fb5"],"spr":["c8715c20","35c42d4c"],"north":["60e23f75"],"crag":["5a2617f7","3d1346b9","9b350047","5227b9a6","23cae6dd"]},
+    sound: ['trail', { root: 43, bpm: 60, mood: 'tense', drop: ['mel'], beds: [['wind', 1.25], ['rain', 0.45]] }],      /* the windiest place on the hill, with a choice to make before the light goes */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.mac && told.guide; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#map').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.mac ? 1 : 0) + (told.guide ? 1 : 0) + Math.min(3, ER.flag('c-stage') || 0), 5);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The line is drawn, and Mrs MacAskill is on her feet. Go on down to the Meetings.']];
+    if (bench && bench.isOpen()) return [['valley', [
+      'Look at the pencil rings just below the Cold Door, and at the brown lines round each of them. Do the lines bend into V&rsquo;s? Which way do the V&rsquo;s point?',
+      'To know which way is uphill, find a thick line with a number on it: the bigger number is the higher ground. In a valley the V&rsquo;s point uphill, towards the bigger numbers.',
+      'Two rings sit in the top of a valley. One of those valleys runs to the top of the map, which is north. You want the one on the south side of the Door: the same side as the Meetings.'
+    ]], ['spur', [
+      'Kwame said: on the left as you look down, and round the top of the hollow first. Looking down the valley you are looking south, so his left is east: the right-hand side of the map.',
+      'On a spur the V&rsquo;s point downhill, away from the bigger numbers, like a row of noses. Find a ring that stands on lines like that.'
+    ]], ['route', [
+      'Go from ring to ring, starting at the Cold Door. Before you join two rings, look at the brown lines between them. Far apart is good. Close together, or crossed by black combs, is no good to a twisted ankle.',
+      'Start down the valley, not the spur. Half way down there is a place where the lines crowd together across the blue line, with three rings near it. Look hard at the ground on each side of the stream there.',
+      'At the fall, one bank is rock: black combs. On the other bank the lines stay well apart all the way round. Go out that way, and come back to the stream at the ring below the fall.'
+    ]]][bench.stage()];
+    if (!told.mac) return ['mac', ['Mrs MacAskill has sat down behind the big boulder on the right, out of the wind. She has a job for you.']];
+    if (!told.guide) return ['guide', [
+      'Mrs MacAskill named a page of the field guide.',
+      'Her rucksack is on the ground in front of the boulder, and the orange book is lying on top of it. Click it.'
+    ]];
+    return ['map', ['The map is on Mrs MacAskill&rsquo;s knee: a pale sheet with brown lines. Click it.']];
+  }
+
+  function begin() {
+    RIDGE.mine('brg', 'The bearing across the Whaleback', '<p>From our cairn to the Cold Door: <b>074&deg;</b>, a little north of east. One kilometre.</p><p>Edge from here to there. Red lines along the grid. Read the number.</p>', true);
+    RIDGE.mine('back', 'The back bearing', '<p>The way on was 074&deg;. The way back is 074 + 180 = <b>254&deg;</b>.</p><p>If a bearing is more than 180&deg; already, take 180 away instead.</p>', true);
+    ER.addClue('log2', 'Mrs MacAskill’s notebook: the Whaleback', '<h4>Sat., afternoon.</h4><p><b>15.08</b> half a message sent.</p><p><b>15.25</b> left the cairn on 074.</p><p><b>15.49</b> the Cold Door.</p><p><b></b> 1 km, no climbing: 24 minutes.</p><p><b></b> On two good legs: 12.</p>', 'log', 'What we have walked, and how long it took', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The line is drawn. Mrs MacAskill is on her feet again, and looking at the sky.'); return; }
+    if (told.in) { busy = false; ER.say('The Cold Door, ten to four. The wind has not stopped to think about it.'); return; }
+    tell('in');
+    ER.narrate([
+      'Two iron posts stand in the lowest part of the gap, one on each side of you, with nothing between them. Once there was a gate. Now there is only the wind, and all of it is going through here.',
+      'Then the cloud in front of you tears from top to bottom, like a curtain. For as long as it takes to count to ten you can see a long way down: brown hillsides, a valley, and a thin bright line that must be water.',
+      '&ldquo;That&rsquo;s it!&rdquo; shouts Kwame. &ldquo;Down there! And there&rsquo;s a lovely grassy ridge going straight down to it, look, on the left!&rdquo; The curtain closes.',
+      'Mrs MacAskill has sat down behind a boulder, out of the wind. &ldquo;There is a lovely grassy ridge,&rdquo; she says. &ldquo;For six hundred metres. Come and sit here, both of you, and bring my map.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#mac').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mrs MacAskill', role: 'Leader · behind a boulder', face: window.FACE('mac'),
+      lines: [
+        { note: 'Behind the boulder the wind stops, as if a door had shut.', a: '&ldquo;I have come off this hill by every way there is, and by one or two that there are not. They are all on that map. Wherever a choice has to be made, I put a pencil ring. Thirty years of rings. And now I can&rsquo;t see which is which.&rdquo;' },
+        { q: 'Where are we going?', a: 'To a place called the Meetings, where the burn that begins under this Door meets another. A track starts there. But I can&rsquo;t go down anything steep on this foot. If I have to hop, I shall fall. And wherever the lines on the map are close together, I have to hop.' },
+        { q: 'What about Kwame&rsquo;s grassy ridge?', a: 'It is a spur. It is lovely for six hundred metres, and then it ends in the air, with a crag under it on three sides. From up here nobody can see that. It is the trouble with a spur: it gets steeper as it goes down, and so it hides its own end. But the map can see it.' },
+        { q: 'So we follow the stream?', a: 'We follow the valley, which is not quite the same thing. Water takes the steepest way there is, and it doesn&rsquo;t mind falling. Half way down, the burn goes over a step called the Spout. There we leave the water and go round, on the side where the lines stay apart. I can never remember which side that is. The map remembers.' },
+        { q: 'And the other way, behind us?', a: 'North. It is the gentlest ground of all. At the bottom of it there is a bog, and fourteen kilometres to a road, and no hut. Always look where the water is going before you follow it.' },
+        { a: 'Page twelve of the field guide. Then be my eyes: show me which ring is which. Then take the pencil and draw me a line from this boulder to the Meetings that never crosses lines that are close together. And when you have drawn it, I shall ask you why.' }
+      ],
+      clue: { id: 'mac3', title: 'Mrs MacAskill, behind the boulder', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('mac')) { paint(); ER.say('The orange book is lying on top of her rucksack, with a stone on it to keep the pages down.'); } }
+    });
+  });
+  $('#kwame').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Kwame Asante', role: 'Saw it with his own eyes', face: window.FACE('kwame'),
+      lines: [
+        { note: 'He is crouching in the gap with his hood up, staring at the place where the valley was.', a: '&ldquo;I saw it. I definitely saw it. Grass, all the way down. You could roll down it.&rdquo;' },
+        { q: 'Mrs MacAskill says it ends in a crag.', a: 'She says a lot of things.</p><p>He thinks about this.</p><p>&ldquo;They&rsquo;re usually true. That&rsquo;s the annoying part.&rdquo;' },
+        { q: 'Which way is your ridge from here?', a: 'Left, as you look down. You go round the top of the hollow first, and you don&rsquo;t lose any height at all: easy. Then it&rsquo;s a long green back, going down and down. I&rsquo;d have run it.' },
+        { q: 'What did the valley look like?', a: 'Brown. A sort of bowl, right under us, getting narrower. I couldn&rsquo;t see any water in the top part. The stream only starts further down.' }
+      ],
+      clue: { id: 'kwame3', title: 'Kwame Asante, in the gap', kind: 'What he saw' },
+      done: function (seen) { if (seen) tell('kwame'); }
+    });
+  });
+
+  /* ---------- the field guide, page 12 ---------- */
+  var C1 = 'fill="none" stroke="#bf8246" stroke-width="1.600"', C2 = 'fill="none" stroke="#b0733a" stroke-width="3"', N = 'font-family="Overpass,sans-serif" font-weight="700" font-size="11" fill="#93561f" text-anchor="middle"';
+  var PICS = [
+    '<svg viewBox="0 0 160 110"><g ' + C1 + '><path d="M-4 16q40 8 80 4M-4 40q40 8 80 4M-4 88q40 6 80 2"/><path d="M76 20q30 -6 44 -12M76 44q30 2 46 -4M76 90q30 -2 46 -8M120 8q8 20 4 44M122 40q8 20 0 46M126 14q10 30 2 70M132 10q10 36 0 78M138 8q10 40 0 84M144 6q10 44 0 88"/></g><path d="M-4 64q40 8 80 4q30 0 46 -6" ' + C2 + '/>' +
+      '<g stroke="#1b1a17" stroke-width="1.100"><path d="M122 20v7M127 24v7M132 22v7M137 26v7M124 46v7M129 50v7M134 48v7M139 52v7M126 72v7M131 76v7M136 74v7"/></g><text x="34" y="60" ' + N + '>650</text></svg>',
+    '<svg viewBox="0 0 160 110"><g ' + C1 + '><path d="M10 34Q60 26 80 2Q100 26 150 34M10 56Q58 50 80 26Q102 50 150 56M10 100Q56 96 80 76Q104 96 150 100"/></g><path d="M10 78Q56 74 80 52Q104 74 150 78" ' + C2 + '/>' +
+      '<path d="M80 40q-4 20 2 34t-2 40" stroke="#2f7fb5" stroke-width="2.400" fill="none" stroke-linecap="round"/><text x="32" y="74" ' + N + '>600</text><text x="80" y="14" ' + N + ' font-size="10">uphill</text></svg>',
+    '<svg viewBox="0 0 160 110"><g ' + C1 + '><path d="M10 4Q56 10 80 34Q104 10 150 4M10 26Q54 32 80 58Q106 32 150 26M10 70Q50 78 80 106Q110 78 150 70"/></g><path d="M10 48Q52 54 80 82Q108 54 150 48" ' + C2 + '/>' +
+      '<text x="30" y="46" ' + N + '>600</text><text x="80" y="16" ' + N + ' font-size="10">uphill</text></svg>',
+    '<svg viewBox="0 0 160 110"><g ' + C1 + '><ellipse cx="38" cy="54" rx="14" ry="10"/><ellipse cx="38" cy="54" rx="26" ry="20"/><ellipse cx="122" cy="52" rx="12" ry="9"/><ellipse cx="122" cy="52" rx="25" ry="19"/><path d="M-4 20Q40 8 80 40Q120 8 164 16M-4 92Q40 102 80 70Q120 102 164 94"/></g>' +
+      '<path d="M-4 6Q40 -4 80 22Q120 -6 164 2M-4 106Q40 116 80 88Q120 118 164 108" ' + C2 + '/><circle cx="80" cy="55" r="2.400" fill="#1b1a17"/><text x="80" y="50" ' + N + ' fill="#1b1a17">col</text></svg>'
+  ];
+  var GUIDE = '<h4>The Hill Club Field Guide &middot; 12</h4><h3>Reading the ground</h3>' +
+    '<p>A <b>contour</b> is a line through places that are all the same height. On our maps there is one for every 10 metres, and every fifth one is thick. Some have their height printed on them: the tops of those numbers always point uphill.</p>' +
+    '<div class="four"><div>' + PICS[0] + '<b>Close and far</b>Lines far apart: a gentle slope. Close together: steep. Nearly touching, with black combs: a crag.</div>' +
+    '<div>' + PICS[1] + '<b>Valley</b>The lines bend into V&rsquo;s that point UPHILL, at the bigger numbers. Water collects here, though the blue may begin lower down.</div>' +
+    '<div>' + PICS[2] + '<b>Spur</b>The V&rsquo;s point DOWNHILL: a nose of high ground. Many spurs get steeper lower down, so the end can&rsquo;t be seen from the top.</div>' +
+    '<div>' + PICS[3] + '<b>Col</b>Two tops, and the low place between them. The lines pinch in like an hourglass.</div></div>' +
+    '<p class="rule">A valley is not a promise, and neither is a stream. Where the lines crowd together across the blue, the water falls. Go round, on the side where the lines stay apart.</p>' +
+    '<p class="hand">In cloud the top of a valley and the top of a spur feel just the same under your boots. Only the map can tell them apart. F.M.</p>';
+  $('#guide').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: GUIDE, cls: 'guide', clue: { id: 'guide12', title: 'Field guide: reading the ground', kind: 'Page 12' }, done: function () {
+      RIDGE.terms(['contour', 'slope', 'valley', 'spur', 'col']);
+      if (tell('guide')) { paint(); ER.say('Close together: steep. V&rsquo;s uphill: a valley. V&rsquo;s downhill: a spur.'); }
+    } });
+  });
+
+  /* ---------- things in the Door ---------- */
+  RIDGE.thing('#posts', 'gatepost', 'Two iron gateposts, with no gate and no fence. Somebody once thought the wind could be kept out.', isBusy);
+  RIDGE.thing('#raven', 'raven', 'A raven, hanging in the wind above the gap without moving a wing. It looks down at the three of you, says one word, and goes on hanging.', isBusy);
+  RIDGE.thing('#boulder', 'boulder', 'A boulder as big as a small car. The side away from the wind is dry, and almost warm.', isBusy);
+  RIDGE.thing('#gap', null, 'Cloud. Then, for a few seconds, not cloud: a valley a long way down, brown and gold, with a thin bright line in it. Then cloud again.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#map').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The map is folded to the square you need, with a new pencil line running down it.'); return; }
+    if (!told.mac) { ER.say('The map, on Mrs MacAskill&rsquo;s knee. She is holding it the right way up, from habit. She can&rsquo;t read a line of it.'); return; }
+    if (!told.guide) { ER.say('&ldquo;Page twelve first,&rdquo; says Mrs MacAskill. &ldquo;It is on top of my rucksack. You have only read the blue lines so far. The brown ones are the hill.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the map: which ring is which, and a line from the Door to the Meetings ---------- */
+  function makeBench() {
+    var P = RIDGE.P, G = { c: [25.31, 26.63], n: [25.34, 26.87], a: [25.38, 26.40], b: [25.50, 26.10], w: [25.38, 25.90], x: [25.66, 25.99], d: [25.66, 25.80], e: [25.80, 26.30], f: [25.90, 25.86], m: [25.85, 25.45] },
+      NEXT = { c: 'nae', a: 'b', b: 'dwx', w: 'd', x: 'd', d: 'm', e: 'f', f: 'md', n: '', m: '' }, PTS = [], at = {};
+    Object.keys(G).forEach(function (k) { var q = P(G[k][0], G[k][1]); at[k] = q; PTS.push({ id: k, x: q.x, y: q.y }); });
+    var stage = ER.flag('c-stage') || 0, route = (ER.flag('c-route') || 'c').split('-'), wait = false, bad = -1;
+    var box = ER.el('div', 'bx'), cairn = P(24.35, 26.35);
+    box.innerHTML = '<div class="frame">' + RIDGE.sheet([440, 12, 554, 330], RIDGE.ring(cairn, 'cairn', -4, 26) + RIDGE.pline([cairn, at.c], '074&deg;', -10, -8, 'thin') + '<path id="c-line" class="rt" d=""/><path id="c-bad" class="rt bad" d=""/><g id="c-rings"></g>' +
+      '<text class="pnT" x="' + (at.c.x - 30) + '" y="' + (at.c.y + 26) + '">us</text>') + '</div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn quiet" id="c-rub">Rub it out</button><button type="button" class="btn" id="c-go">Walk it</button></div>';
+    var svg = box.querySelector('svg.sheet'), line = box.querySelector('#c-line'), badLine = box.querySelector('#c-bad'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#c-go'), rub = box.querySelector('#c-rub'), picked = null;
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function d(list) { return list.map(function (k, i) { return (i ? 'L' : 'M') + at[k].x.toFixed(1) + ' ' + at[k].y.toFixed(1); }).join(''); }
+    var rings = RIDGE.rings(svg, box.querySelector('#c-rings'), PTS, { r: 5.5, hit: 10, lock: function () { return wait || !!nextFile; }, pick: pick });
+    function draw() {
+      var end = route[route.length - 1];
+      line.setAttribute('d', stage === 2 && route.length > 1 ? d(route) : '');
+      badLine.setAttribute('d', bad >= 0 ? d(route.slice(bad, bad + 2)) : '');
+      PTS.forEach(function (q) { rings.nodes[q.id].classList.toggle('end', stage === 2 && q.id === end); rings.nodes[q.id].classList.toggle('mark', stage < 2 && q.id === picked); });
+      rub.style.display = stage === 2 && !nextFile ? '' : 'none';
+      go.textContent = ['That one is the valley', 'That one is the spur', 'Walk it'][stage] || 'Walk it';
+      go.style.visibility = nextFile ? 'hidden' : '';
+    }
+    function setStage(n) { stage = n; picked = null; ER.flag('c-stage', n); draw(); paint(); }
+    function pick(id) {
+      var end = route[route.length - 1];
+      if (stage < 2) { picked = id; RIDGE.sfx.pencil(); draw(); return; }
+      bad = -1;
+      if (id === end && route.length > 1) { route.pop(); RIDGE.sfx.rub(); }
+      else if (route.indexOf(id) >= 0) { msg('The line has been through that ring already. To go back, click the ring at the end of the line: one piece is rubbed out.'); return; }
+      else if (NEXT[end].indexOf(id) < 0) { msg(NEXT[end] ? 'That is too far to go in one piece. In this cloud you can only go from a ring to one of the rings next to it.' : 'The line has come to an end there. Walk it, or rub it out.'); return; }
+      else { route.push(id); RIDGE.sfx.pencil(); }
+      ER.flag('c-route', route.join('-')); draw();
+      msg(route.length > 1 ? 'The pencil line now has ' + (route.length - 1) + (route.length === 2 ? ' piece.' : ' pieces.') + ' Look at the brown lines under each piece before you walk it.' : 'The pencil is at the Cold Door. Click the ring you would walk to first.');
+    }
+    rub.addEventListener('click', function () { if (wait || nextFile) return; route = ['c']; bad = -1; ER.flag('c-route', 'c'); RIDGE.sfx.rub(); draw(); msg('Rubbed out. The pencil is back at the Cold Door.'); });
+
+    var NOTV = {
+      n: '&ldquo;A valley, yes,&rdquo; says Mrs MacAskill. &ldquo;And which way does it run? Read the numbers on the thick lines. It runs to the top of the map. That is the north side, and the bog.&rdquo;',
+      b: '&ldquo;That is in the valley, certainly: the blue line is running through it,&rdquo; says Mrs MacAskill. &ldquo;I want the very top of the valley, above where the blue begins. The first place we put our feet.&rdquo;',
+      d: '&ldquo;That is in the valley, certainly: the blue line is running through it,&rdquo; says Mrs MacAskill. &ldquo;I want the very top of the valley, above where the blue begins. The first place we put our feet.&rdquo;',
+      c: '&ldquo;That is where we are sitting,&rdquo; says Mrs MacAskill. &ldquo;A col: up on two sides and down on two. Go down one step from it.&rdquo;',
+      spur: '&ldquo;Which way do the V&rsquo;s point at that ring?&rdquo; asks Mrs MacAskill. &ldquo;At the bigger numbers, or away from them? Away is a spur. I asked for the valley.&rdquo;',
+      other: '&ldquo;What are the lines doing round that ring?&rdquo; asks Mrs MacAskill. &ldquo;I want V&rsquo;s, one inside the next, pointing up towards us: the top of a valley, just below this Door.&rdquo;'
+    };
+    go.addEventListener('click', function () {
+      var i, leg, file;
+      if (wait || nextFile) return;
+      if (stage === 0) {
+        if (!picked) { msg('Click the pencil ring that stands in the top of the valley: the valley we want.'); return; }
+        if (!ER.check('val', picked)) { ER.sfx.no(); msg(NOTV[picked] || (ER.check('spr', picked) ? NOTV.spur : NOTV.other)); picked = null; draw(); return; }
+        RIDGE.sfx.pencil(); setStage(1);
+        msg('&ldquo;V&rsquo;s pointing up at us, and no blue line yet. The top of the Door Burn,&rdquo; says Mrs MacAskill. &ldquo;Good. Now show Kwame his grassy ridge. Which ring is on the spur?&rdquo;');
+      } else if (stage === 1) {
+        if (!picked) { msg('Click a ring that stands on the spur: Kwame&rsquo;s grassy ridge.'); return; }
+        if (!ER.check('spr', picked)) {
+          ER.sfx.no();
+          msg(ER.check('val', picked) || picked === 'b' || picked === 'd' || picked === 'n' ? '&ldquo;That one is in a valley,&rdquo; says Mrs MacAskill. &ldquo;On a spur the V&rsquo;s point the other way: downhill, like noses.&rdquo;' :
+            picked === 'c' ? '&ldquo;That is where we are sitting,&rdquo; says Mrs MacAskill. &ldquo;Kwame said: left as you look down, and round the top of the hollow.&rdquo;' :
+            '&ldquo;Is that a ridge at all?&rdquo; asks Mrs MacAskill. &ldquo;Kwame said: left as you look down, which is east. Look for V&rsquo;s that point downhill.&rdquo;');
+          picked = null; draw(); return;
+        }
+        RIDGE.sfx.pencil(); setStage(2);
+        msg('&ldquo;So that is which is which,&rdquo; says Mrs MacAskill. &ldquo;Now take the pencil. From us to the Meetings, ring by ring, and never across lines that are close together.&rdquo; Click the ring you would walk to first.');
+      } else {
+        if (route.length < 2) { msg('There is no line yet. Click the ring you would walk to first from the Cold Door.'); return; }
+        for (i = 0; i < route.length - 1; i++) {
+          leg = route[i] + '-' + route[i + 1];
+          if (ER.check('north', leg)) {
+            ER.sfx.no(); bad = i; draw();
+            msg('Your line goes down the far side of the Door. It is the gentlest ground on the whole sheet. &ldquo;And where does its water go?&rdquo; asks Mrs MacAskill. &ldquo;North. Fourteen kilometres of bog, and no hut.&rdquo;'); return;
+          }
+          if (ER.check('crag', leg)) {
+            ER.sfx.no(); bad = i; draw();
+            msg(route[i] === 'f' ? 'Your line runs down the spur with the lines far apart: Kwame was right about that. But look at the red piece, below the last ring. The brown lines run together into a black fringe on three sides. &ldquo;The Snout,&rdquo; says Mrs MacAskill. &ldquo;The spur ends in the air.&rdquo;' :
+              leg === 'b-d' ? 'The red piece goes straight down beside the water. Count the brown lines that it crosses, and see how little room they have. That is where the burn falls: the Spout. &ldquo;A stream doesn&rsquo;t mind falling,&rdquo; says Mrs MacAskill. &ldquo;I do.&rdquo;' :
+              'The red piece goes down the east bank, through the black combs. That is bare rock. &ldquo;Combs mean hands as well as feet,&rdquo; says Mrs MacAskill. &ldquo;And I have only the one foot.&rdquo;'); return;
+          }
+        }
+        file = ER.exitOk([route.join('-')]);
+        if (!file) { ER.sfx.no(); msg('The line stops part of the way down the hill. It has to go on, ring by ring, until it reaches the Meetings.'); return; }
+        wait = true; nextFile = file; ER.flag('c-file', file); stage = 3; ER.flag('c-stage', 3);
+        var s0 = ER.state(); s0.done = s0.done || {}; s0.done.door = 1; ER.persist(true);
+        stage = 2; draw(); stage = 3;
+        msg('&ldquo;Tell me why,&rdquo; says Mrs MacAskill. So you do: into the top of the valley, down the burn, out to the side where the lines stay apart, and back to the water below the fall. She nods. &ldquo;That is exactly what my feet remember.&rdquo;');
+        setTimeout(function () {
+          ER.closeAll(); RIDGE.solved(); paint(); busy = true;
+          ER.narrate([
+            'Kwame has been looking at the map over your shoulder, at the place where his grassy ridge ends. He looks at it for quite a long time. &ldquo;It just stops,&rdquo; he says. &ldquo;There&rsquo;s nothing under it.&rdquo;',
+            '&ldquo;Nobody could have seen that from here,&rdquo; says Mrs MacAskill. &ldquo;I couldn&rsquo;t. That is why we carry the paper.&rdquo;',
+            'You go down into the bowl under the Door, with brown grass rising on both sides. After a while there is water talking somewhere under the stones, and then there is a stream. Where it begins to hurry, you leave it, and walk out across ground that is in no hurry at all.',
+            'From below you look back at the Spout: a white rope of water, sixty metres long, falling off the hill. And somewhere on the way down, without anybody saying so, the cloud stops. It is simply above you, like a ceiling, and under it there is a whole wide world, with colours in it.',
+            'At the Meetings Mrs MacAskill sits down on a wall and looks at her watch. &ldquo;A kilometre and a half. Thirty-six minutes.&rdquo; She writes it under the other one.'
+          ], function () { busy = false; showGo(); });
+        }, 3400);
+      }
+    });
+    draw();
+    msg(['&ldquo;First be my eyes,&rdquo; says Mrs MacAskill. &ldquo;Just below us there is the top of a valley, and not far from it the top of a spur. Put your finger on the ring that stands in the top of the valley: the one we want.&rdquo;',
+      '&ldquo;Now show Kwame his grassy ridge,&rdquo; says Mrs MacAskill. &ldquo;Which ring is on the spur?&rdquo;',
+      'The pencil is at the Cold Door. Click the ring you would walk to next. Click the end of the line again to rub one piece out.'][stage] || '');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return Math.min(stage, 2); }
+    };
+  }
+})();
+</script>
+</body>
+</html>
