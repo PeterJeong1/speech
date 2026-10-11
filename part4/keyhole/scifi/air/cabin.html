@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Cabin 4 · Seven Hours of Air</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-scifi.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0d0507;--accent:#ff7a52;--font-display:'Orbitron',sans-serif;--font-ui:'Share Tech Mono',monospace;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(13,4,5,.94);--cap-bg:rgba(18,7,8,.94);--panel:#190c0d;--face-bg:#0b161f;--q-ink:#ffb49f;--fade:#080203;--hud-bg:rgba(22,7,7,.72)}
+  .tc-room{font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  .num4{font-family:'Orbitron',sans-serif;font-weight:900;font-size:230px;fill:#30353c;text-anchor:middle}
+  .plate{font-family:'Orbitron',sans-serif;font-weight:700;font-size:15px;letter-spacing:4px;fill:#cfd6dc;text-anchor:middle}
+  .lockT{font-family:'Share Tech Mono',monospace;font-size:15px;letter-spacing:2px;text-anchor:middle;fill:#ff5a4a}
+  .pen{font-family:'Caveat',cursive;font-weight:700;font-size:34px;fill:#1d2a4a}
+  .ruleT{font-family:'Oswald',sans-serif;font-weight:600;font-size:11px;letter-spacing:1.5px;fill:#20242b}
+  #strobe{animation:strobe 1.3s steps(1,end) infinite}
+  @keyframes strobe{0%{opacity:.05}50%{opacity:.16}}
+  #strip{animation:strip 1.3s steps(1,end) infinite}
+  @keyframes strip{0%{opacity:.55}50%{opacity:1}}
+  #lockT{animation:blink 1.1s steps(1,end) infinite}
+  @keyframes blink{0%{opacity:1}50%{opacity:.25}}
+  #europa{transform-origin:310px 480px;animation:spin 300s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .rib{transform-box:fill-box;transform-origin:50% 0;animation:rib 1.1s ease-in-out infinite alternate}
+  .rib.r2{animation-duration:.8s;animation-delay:-.4s}.rib.r3{animation-duration:1.4s;animation-delay:-.7s}
+  @keyframes rib{from{transform:rotate(-9deg)}to{transform:rotate(11deg)}}
+  #heatBars{animation:heat 2.4s steps(3) infinite}
+  @keyframes heat{50%{opacity:.75}}
+  #keelRing{animation:kr 2.2s ease-in-out infinite}
+  @keyframes kr{50%{opacity:.25}}
+  #card.show{animation:cardGlow 2.4s ease-in-out infinite}
+  @keyframes cardGlow{50%{filter:brightness(1.25)}}
+  #leaf{transition:transform 1.9s cubic-bezier(.6,0,.3,1)}
+
+  /* the door, close up */
+  .dm{display:grid;grid-template-columns:minmax(0,640px) 340px;gap:22px;align-items:start;width:min(1010px,96vw)}
+  .dm svg{display:block;width:100%;height:auto;border-radius:10px;box-shadow:0 26px 70px rgba(0,0,0,.7);touch-action:none}
+  .dm-msg{min-height:54px;margin-top:12px;padding:10px 16px;background:rgba(10,4,4,.85);border-left:3px solid #ff7a52;color:#ffe9e2;
+    font-family:'Outfit',sans-serif;font-size:19px;line-height:1.35}
+  .dm-help{margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#ffb49f;opacity:.7}
+  .dm-card{background:#f1c40f linear-gradient(168deg,rgba(255,255,255,.3),rgba(120,80,0,.16));color:#16130a;border:3px solid #16130a;border-radius:12px;
+    padding:0 20px 14px;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:17.5px;line-height:1.26;box-shadow:0 20px 50px rgba(0,0,0,.6);
+    -webkit-user-select:text;user-select:text}
+  .dm-card h4{margin:0 -20px 12px;padding:11px 20px 9px;background:#16130a repeating-linear-gradient(-45deg,#16130a 0 14px,#2b2612 14px 28px);color:#f1c40f;
+    font-family:'Orbitron',sans-serif;font-weight:800;font-size:14px;letter-spacing:.14em;text-transform:uppercase;border-radius:8px 8px 0 0}
+  .dm-card p{margin:0 0 8px}
+  .dm-card .pen{font-family:'Caveat',cursive;font-weight:700;font-size:23px;color:#1d2a4a;transform:rotate(-1.5deg);margin:10px 0 0}
+  .dm-card .w:hover{color:#8c2f24}
+  .eng{font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;letter-spacing:4px;fill:#aab3bb;text-anchor:middle}
+  .eng2{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;fill:#7b858e;text-anchor:middle}
+  #ndl{transform-origin:150px 150px;transition:transform .3s}
+  #wh{transform-origin:150px 366px}
+  #ph,#lv{transition:transform .13s}
+  #ph.on,#lv.on{transition:none}
+  #lamp.flash{animation:lampf .5s steps(1,end) infinite;fill:#ffb02e}
+  #lamp.steady{fill:#3dff8a}
+  @keyframes lampf{0%{fill:#ffb02e}50%{fill:#4a2c08}}
+  @media (max-width:900px){.dm{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b1114"/><stop offset=".5" stop-color="#2b1b20"/><stop offset="1" stop-color="#160d10"/></linearGradient>
+  <linearGradient id="padG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#40292f"/><stop offset="1" stop-color="#2c1b20"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#474d56"/><stop offset=".5" stop-color="#6d747e"/><stop offset="1" stop-color="#3c4149"/></linearGradient>
+  <linearGradient id="leafG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a4048"/><stop offset=".45" stop-color="#565d67"/><stop offset="1" stop-color="#31363d"/></linearGradient>
+  <linearGradient id="bagG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1c4257"/><stop offset=".5" stop-color="#2d6482"/><stop offset="1" stop-color="#193a4d"/></linearGradient>
+  <linearGradient id="lockerG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#31363e"/><stop offset=".5" stop-color="#434953"/><stop offset="1" stop-color="#2b3037"/></linearGradient>
+  <linearGradient id="beyondG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a2b3a"/><stop offset=".5" stop-color="#0f4459"/><stop offset="1" stop-color="#061820"/></linearGradient>
+  <radialGradient id="europaG" cx="36%" cy="30%" r="80%"><stop offset="0" stop-color="#fbfdff"/><stop offset=".5" stop-color="#d3e1ea"/><stop offset="1" stop-color="#7e96a8"/></radialGradient>
+  <radialGradient id="moonL"><stop offset="0" stop-color="#bfe2ff" stop-opacity=".34"/><stop offset="1" stop-color="#bfe2ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="heatG"><stop offset="0" stop-color="#ffab4a" stop-opacity=".62"/><stop offset=".4" stop-color="#ff7a2a" stop-opacity=".2"/><stop offset="1" stop-color="#ff7a2a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="redG" cx="50%" cy="0%" r="90%"><stop offset="0" stop-color="#ff2a1a" stop-opacity=".5"/><stop offset="1" stop-color="#ff2a1a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="72%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".9"/></radialGradient>
+  <pattern id="haz" width="36" height="36" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="36" height="36" fill="#e2b01c"/><rect width="18" height="36" fill="#17140e"/></pattern>
+  <clipPath id="portClip"><circle cx="230" cy="340" r="120"/></clipPath>
+  <clipPath id="doorClip"><rect x="1042" y="138" width="316" height="640" rx="22"/></clipPath>
+</defs>
+
+<!-- the cabin wall -->
+<rect x="-1000" width="3600" height="900" fill="url(#wallG)"/>
+<g id="pads"></g>
+<rect x="-1000" width="3600" height="100" fill="#120a0c"/><rect x="-1000" y="96" width="3600" height="8" fill="#2e1d22"/>
+<path d="M-1000 34H2600M-1000 52H2600" stroke="#24161a" stroke-width="8"/>
+<rect x="-1000" y="790" width="3600" height="110" fill="#0f080a"/><rect x="-1000" y="786" width="3600" height="8" fill="#33222a"/>
+<g fill="#1f1418"><rect x="120" y="820" width="300" height="34" rx="6"/><rect x="560" y="820" width="300" height="34" rx="6"/><rect x="1000" y="820" width="300" height="34" rx="6"/></g>
+<g fill="none" stroke="#2f6f96" stroke-width="12" stroke-linecap="round"><path d="M700 822q42-42 84 0"/><path d="M1130 822q42-42 84 0"/></g>
+
+<!-- emergency light, and the air vent with its ribbons -->
+<ellipse cx="800" cy="70" rx="1100" ry="520" fill="url(#redG)" opacity=".5" pointer-events="none"/>
+<rect x="250" y="64" width="1100" height="16" rx="8" fill="#3a0d0a"/><rect id="strip" x="254" y="67" width="1092" height="10" rx="5" fill="#ff4a36"/>
+<g id="vent" class="hot">
+  <rect x="524" y="106" width="150" height="46" rx="6" fill="#2a2d33"/>
+  <g stroke="#0f1114" stroke-width="5"><path d="M536 118h126M536 129h126M536 140h126"/></g>
+  <path class="rib" d="M556 152q-8 26 4 52" stroke="#e9e3d2" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path class="rib r2" d="M600 152q8 30-4 60" stroke="#e9e3d2" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path class="rib r3" d="M642 152q-6 22 6 46" stroke="#e9e3d2" stroke-width="5" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- the porthole: Europa -->
+<ellipse cx="230" cy="340" rx="420" ry="400" fill="url(#moonL)" pointer-events="none"/>
+<g id="port" class="hot">
+  <circle cx="230" cy="340" r="160" fill="#101216"/>
+  <circle cx="230" cy="340" r="151" fill="url(#steelG)"/>
+  <circle cx="230" cy="340" r="128" fill="#07090d"/>
+  <g clip-path="url(#portClip)">
+    <rect x="100" y="210" width="260" height="260" fill="#02040c"/>
+    <g fill="#e6efff"><circle cx="140" cy="250" r="1.800"/><circle cx="180" cy="232" r="1.200"/><circle cx="212" cy="262" r="1.500"/><circle cx="166" cy="296" r="1"/><circle cx="262" cy="236" r="1.300"/><circle cx="128" cy="330" r="1.200"/><circle cx="300" cy="254" r="1"/></g>
+    <g id="europa">
+      <circle cx="310" cy="480" r="205" fill="url(#europaG)"/>
+      <g fill="none" stroke="#a9765a" stroke-linecap="round" opacity=".62">
+        <path d="M130 420q90 30 190-40t190 10" stroke-width="3"/><path d="M150 480q120-60 240-10t140-60" stroke-width="2.200"/>
+        <path d="M190 330q60 90 40 190M260 300q30 120 120 200" stroke-width="2"/><path d="M120 520q140-20 220 40t170-20" stroke-width="2.600"/>
+        <path d="M330 290q-20 80 40 150t20 160" stroke-width="1.800"/><path d="M400 330q-80 60-90 150" stroke-width="1.600"/>
+      </g>
+      <g fill="#b98a6e" opacity=".3"><ellipse cx="250" cy="420" rx="34" ry="20"/><ellipse cx="380" cy="500" rx="46" ry="26"/><ellipse cx="300" cy="590" rx="40" ry="20"/></g>
+    </g>
+    <path d="M100 470q140-90 260-10v20H100z" fill="#02040c" opacity=".35"/>
+    <path d="M132 232l70 180M160 222l34 90" stroke="#fff" stroke-width="7" opacity=".1"/>
+  </g>
+  <circle cx="230" cy="340" r="122" fill="none" stroke="#000" stroke-width="7" opacity=".55"/>
+  <g id="bolts" fill="#2d3239"></g>
+</g>
+<g id="rules" class="hot" transform="rotate(-2 170 640)">
+  <rect x="108" y="574" width="126" height="136" rx="4" fill="#e9e6da"/><rect x="108" y="574" width="126" height="22" rx="4" fill="#20242b"/>
+  <text x="171" y="590" class="ruleT" text-anchor="middle" style="fill:#e9e6da">STATION RULES</text>
+  <g stroke="#7b7f86" stroke-width="2.500"><path d="M118 610h106M118 622h92M118 634h106M118 646h80M118 670h106M118 682h70M118 694h100"/></g>
+  <path d="M118 658h106" stroke="#20242b" stroke-width="3"/><path d="M116 664h110" stroke="#d8402f" stroke-width="3"/>
+</g>
+
+<!-- sleeping bag, tied to the wall -->
+<g id="bag" class="hot">
+  <rect x="432" y="176" width="216" height="596" rx="70" fill="#0d1c25"/>
+  <path d="M446 262q0-74 94-74t94 74v420q0 74-94 74t-94-74z" fill="url(#bagG)"/>
+  <g stroke="#173a4e" stroke-width="3" fill="none"><path d="M446 340q94 22 188 0M446 410q94 22 188 0M446 480q94 22 188 0M446 550q94 22 188 0M446 620q94 22 188 0M446 690q94 20 188 0"/></g>
+  <path d="M466 262q74-62 148 0q-74 44-148 0z" fill="#e0752d"/><path d="M482 258q58-40 116 0q-58 26-116 0z" fill="#f0e9d8"/>
+  <path d="M540 304v440" stroke="#0c1a22" stroke-width="4" stroke-dasharray="7 5"/>
+  <g fill="#101014"><rect x="426" y="372" width="228" height="16" rx="3"/><rect x="426" y="602" width="228" height="16" rx="3"/></g>
+  <g fill="#9aa2a9"><rect x="528" y="368" width="26" height="24" rx="3"/><rect x="528" y="598" width="26" height="24" rx="3"/></g>
+</g>
+
+<!-- Keel, and your locker -->
+<g id="keel" class="hot">
+  <use href="#ch-keel" x="700" y="150" width="200" height="260"/>
+  <circle id="keelRing" cx="800" cy="278" r="47" fill="none" stroke="#bff6ff" stroke-width="5"/>
+</g>
+<g id="locker" class="hot">
+  <rect x="690" y="446" width="220" height="326" rx="10" fill="#1f2228"/>
+  <rect x="700" y="456" width="200" height="148" rx="6" fill="url(#lockerG)"/><rect x="700" y="614" width="200" height="148" rx="6" fill="url(#lockerG)"/>
+  <g fill="#1b1e23"><rect x="864" y="514" width="14" height="34" rx="5"/><rect x="864" y="672" width="14" height="34" rx="5"/></g>
+  <g stroke="#262a31" stroke-width="3"><path d="M716 730h60M716 742h60"/></g>
+  <g transform="rotate(-2 790 650)"><rect x="716" y="632" width="150" height="34" fill="#e9e6da"/><text x="791" y="657" class="pen" style="font-size:26px;text-anchor:middle">the new one</text></g>
+</g>
+<!-- hand holds: there is no floor to stand on -->
+<g fill="none" stroke="#c99a17" stroke-width="10" stroke-linecap="round"><path d="M406 214v150M668 470v170M1404 250v150"/></g>
+<g fill="none" stroke="#f0cf5a" stroke-width="2.500" stroke-linecap="round" opacity=".6"><path d="M403 218v142M665 474v162M1401 254v142"/></g>
+<g fill="#6b500b"><rect x="397" y="206" width="18" height="14" rx="3"/><rect x="397" y="358" width="18" height="14" rx="3"/><rect x="659" y="462" width="18" height="14" rx="3"/><rect x="659" y="634" width="18" height="14" rx="3"/><rect x="1395" y="242" width="18" height="14" rx="3"/><rect x="1395" y="394" width="18" height="14" rx="3"/></g>
+<g id="note" class="hot" transform="rotate(-5 790 528)">
+  <rect x="742" y="482" width="98" height="92" fill="#ffe98a"/><path d="M742 482h98v14h-98z" fill="#f4d962"/>
+  <g stroke="#3a4a7a" stroke-width="2.500" stroke-linecap="round"><path d="M752 508h70M752 520h78M752 532h60M752 544h76M752 558h40"/></g>
+</g>
+
+<!-- the door of cabin 4 -->
+<g id="card" class="hot">
+  <rect x="924" y="346" width="88" height="132" rx="7" fill="#1b1e23"/>
+  <rect x="931" y="353" width="74" height="118" rx="3" fill="#f1c40f"/><rect x="931" y="353" width="74" height="20" rx="3" fill="#16130a"/>
+  <g stroke="#6a5606" stroke-width="3"><path d="M939 386h58M939 398h58M939 410h44M939 422h58M939 434h50M939 446h58M939 458h36"/></g>
+</g>
+<g id="door" class="hot">
+  <rect x="1020" y="116" width="360" height="684" rx="36" fill="#121418"/>
+  <rect x="1030" y="126" width="340" height="664" rx="30" fill="url(#haz)"/>
+  <rect x="1042" y="138" width="316" height="640" rx="22" fill="#04090d"/>
+  <g clip-path="url(#doorClip)">
+    <g id="beyond">
+      <rect x="1042" y="138" width="316" height="640" fill="url(#beyondG)"/>
+      <path d="M1042 138L1180 400V520L1042 778zM1358 138L1220 400V520L1358 778z" fill="#0b3546" opacity=".8"/>
+      <rect x="1180" y="400" width="40" height="120" fill="#bff6ff" opacity=".8"/>
+      <g stroke="#39e6ff" stroke-width="5" opacity=".9"><path d="M1042 198L1180 412M1358 198L1220 412"/></g>
+      <g stroke="#39e6ff" stroke-width="3" opacity=".6"><path d="M1042 718L1180 508M1358 718L1220 508"/></g>
+    </g>
+    <g id="leaf">
+      <rect x="1042" y="138" width="316" height="640" fill="url(#leafG)"/>
+      <g stroke="#2a2f36" stroke-width="4"><path d="M1042 320h316M1042 660h316"/></g>
+      <text x="1200" y="610" class="num4">4</text>
+      <rect x="1126" y="178" width="148" height="98" rx="20" fill="#16191e"/><rect x="1136" y="188" width="128" height="78" rx="14" fill="#061a24"/>
+      <path d="M1136 236h128" stroke="#39e6ff" stroke-width="4" opacity=".75"/><path d="M1148 196l30 62" stroke="#fff" stroke-width="5" opacity=".12"/>
+      <rect x="1066" y="292" width="110" height="20" rx="3" fill="#20242a"/><text x="1121" y="307" class="plate" font-size="11">CABIN 4</text>
+      <rect x="1236" y="288" width="100" height="28" rx="4" fill="#0a0d10"/><text id="lockT" x="1286" y="308" class="lockT">LOCKED</text>
+      <!-- the handles, small -->
+      <circle cx="1108" cy="398" r="28" fill="#15181c"/><circle cx="1108" cy="398" r="22" fill="#e6dfcd"/><path d="M1108 398l-12-12" stroke="#16130a" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="1166" cy="372" r="9" fill="#3a1512"/>
+      <circle cx="1108" cy="498" r="44" fill="none" stroke="#c2301f" stroke-width="12"/><path d="M1108 454v88M1064 498h88" stroke="#c2301f" stroke-width="8"/><circle cx="1108" cy="498" r="11" fill="#8f2114"/>
+      <rect x="1206" y="356" width="18" height="190" rx="9" fill="#0d0f12"/><rect x="1186" y="362" width="58" height="18" rx="7" fill="#cfd5da"/>
+      <rect x="1292" y="356" width="20" height="190" rx="10" fill="#0d0f12"/><rect x="1272" y="360" width="60" height="34" rx="8" fill="#d8402f"/>
+      <rect x="1042" y="138" width="14" height="640" fill="#000" opacity=".25"/>
+    </g>
+  </g>
+</g>
+
+<!-- the socket marked C, and your heater -->
+<g id="socket" class="hot">
+  <rect x="1432" y="452" width="86" height="86" rx="9" fill="#cfd4d8"/><rect x="1432" y="452" width="86" height="86" rx="9" fill="none" stroke="#7f878e" stroke-width="3"/>
+  <circle cx="1470" cy="500" r="25" fill="#14171b"/><circle cx="1470" cy="500" r="14" fill="#30353c"/>
+  <text x="1500" y="482" class="pen" font-size="30">C</text>
+</g>
+<path d="M1470 524q-34 44 6 102" stroke="#0c0c0e" stroke-width="7" fill="none" stroke-linecap="round"/>
+<ellipse cx="1474" cy="700" rx="330" ry="260" fill="url(#heatG)" pointer-events="none"/>
+<g id="heater" class="hot">
+  <rect x="1398" y="700" width="160" height="14" rx="3" fill="#101014"/>
+  <rect x="1410" y="630" width="136" height="128" rx="16" fill="#d7d1c2"/><rect x="1410" y="630" width="136" height="128" rx="16" fill="none" stroke="#8d877a" stroke-width="3"/>
+  <rect x="1424" y="646" width="108" height="76" rx="8" fill="#2a0f06"/>
+  <g id="heatBars" stroke="#ff9a2e" stroke-width="6" stroke-linecap="round"><path d="M1434 660h88M1434 674h88M1434 688h88M1434 702h88"/></g>
+  <circle cx="1440" cy="740" r="8" fill="#3b3f46"/><circle cx="1520" cy="740" r="4.500" fill="#ff5a2e"/>
+</g>
+
+<!-- things that will not stay where you put them -->
+<g id="sock" class="flo drag"><g class="bob">
+  <rect x="-34" y="-46" width="68" height="92" fill="transparent"/>
+  <path d="M-12-40h26v44q0 10 12 14l8 3q10 5 6 15t-16 8l-26-6q-12-3-12-16z" fill="#efece2"/><path d="M-12-40h26v12h-26z" fill="#d8402f"/><path d="M-12-20h26" stroke="#d8402f" stroke-width="3"/>
+</g></g>
+<g id="pouch" class="flo drag"><g class="bob">
+  <rect x="-36" y="-56" width="72" height="108" fill="transparent"/>
+  <path d="M-26-30h52l6 74h-64z" fill="#c9d1d6"/><path d="M-26-30h52l2 20h-56z" fill="#e9eef1"/><rect x="-16" y="-4" width="32" height="26" rx="3" fill="#f08a1d"/>
+  <path d="M6-30v-22h10" stroke="#e9eef1" stroke-width="5" fill="none" stroke-linecap="round"/>
+</g></g>
+<g id="pen" class="flo drag"><g class="bob">
+  <rect x="-46" y="-18" width="92" height="36" fill="transparent"/>
+  <rect x="-40" y="-5" width="70" height="10" rx="5" fill="#2f6f96"/><path d="M30-5l14 5-14 5z" fill="#d9d4c8"/><rect x="-40" y="-5" width="12" height="10" rx="4" fill="#16191e"/>
+</g></g>
+<g id="postcard" class="flo drag"><g class="bob">
+  <rect x="-50" y="-36" width="100" height="72" fill="#f4f1e6"/><rect x="-44" y="-30" width="88" height="60" fill="#5cc0e6"/>
+  <path d="M-44 6q44-16 88 0v24h-88z" fill="#f0d79a"/><circle cx="22" cy="-12" r="9" fill="#fff3a6"/><path d="M-44 0q22-8 44 0t44 0" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>
+</g></g>
+<g id="jacket" class="flo drag"><g class="bob">
+  <rect x="-116" y="-88" width="232" height="184" fill="transparent"/>
+  <path d="M-58-70l-56 34 22 104 36-12z" fill="#b34524"/><path d="M58-70l56 34-22 104-36-12z" fill="#b34524"/>
+  <path d="M-58-78h116l14 30v134h-144v-134z" fill="#cf5731"/>
+  <path d="M-72 58h144v28h-144z" fill="#3a2a26"/><path d="M-110 44l28-10 6 24-28 10zM110 44l-28-10-6 24 28 10z" fill="#3a2a26"/>
+  <path d="M-26-84h52l-12 26h-28z" fill="#3a2a26"/><path d="M0-58v116" stroke="#8e3519" stroke-width="4"/>
+  <circle cx="36" cy="-22" r="16" fill="#e9f1f5"/><circle cx="36" cy="-22" r="9" fill="#2f6fb5"/><path d="M24-16q12-10 24 0" stroke="#e9f1f5" stroke-width="2" fill="none"/>
+  <rect x="-56" y="-30" width="40" height="13" fill="#e9e6da"/><path d="M-50-23h28" stroke="#3a2a26" stroke-width="2"/>
+  <path d="M-48 20h30M18 20h30" stroke="#8e3519" stroke-width="3"/>
+</g></g>
+
+<rect id="strobe" x="-1000" width="3600" height="900" fill="#ff2a1a" opacity=".1" pointer-events="none"/>
+<rect x="-1000" width="3600" height="900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, heard = false, found = false, read = false, gone = false;
+
+  /* padded wall panels, porthole bolts */
+  (function () {
+    var s = '', x, i, an, rows = [[112, 206], [330, 216], [558, 216]];
+    for (x = -990; x < 2600; x += 212) rows.forEach(function (r) {
+      s += '<rect x="' + x + '" y="' + r[0] + '" width="200" height="' + r[1] + '" rx="18" fill="url(#padG)"/>' +
+        '<rect x="' + (x + 12) + '" y="' + (r[0] + 12) + '" width="176" height="' + (r[1] - 24) + '" rx="10" fill="none" stroke="#4b343b" stroke-width="2" stroke-dasharray="7 6"/>';
+    });
+    $('#pads').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { an = i * Math.PI / 6 + 0.26; s += '<circle cx="' + (230 + Math.sin(an) * 139).toFixed(1) + '" cy="' + (340 - Math.cos(an) * 139).toFixed(1) + '" r="5.5"/>'; }
+    $('#bolts').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'scifi', story: 'air', storyTitle: 'Seven Hours of Air', id: 'cabin', no: 'I', title: 'Cabin 4',
+    go: 'Wake up',
+    intro: [
+      'Keeling Station is a metal tube about as long as two buses. It goes round Europa, an ice moon of Jupiter, once every two hours.',
+      'Four people live on it. Tonight three of them are down on the ice, because the lander has three seats. The fourth is you. You have been on board for six days.',
+      'Before she left, Commander Hale gave you one order: &ldquo;Don&rsquo;t touch anything.&rdquo;',
+      'At ten past two in the morning, every light in your cabin turns red.'
+    ],
+    exit: {"next":"spine","w":{"7c6ec917":"5640c9a0"}}, tags: {"wheel":["fa399146"]},
+    hints: hints,
+    onBegin: begin
+  });
+  AIR.clock();
+
+  var CARD = '<h4>Door 4 &middot; Opening by hand</h4>' +
+    '<p>Air in the seal holds this door shut. To let it go, do these five things in this order.</p>' +
+    '<p><b>1.</b> Before you touch the pump, turn the red wheel to the left (anticlockwise) until it stops. Half way is not enough.</p>' +
+    '<p><b>2.</b> Pump the handle until the needle is in the green band.</p>' +
+    '<p><b>3.</b> As soon as the needle is in the green, stop pumping. One pump too many and the safety valve opens.</p>' +
+    '<p><b>4.</b> Take your hands off. While the lamp is flashing, do not touch anything. Wait until it is steady.</p>' +
+    '<p><b>5.</b> When the lamp is steady, pull the lever down and hold it until the door moves. If you let go while the seal is still hissing, you start again.</p>' +
+    '<p class="pen">READ ALL FIVE FIRST. J.A.</p>';
+  var NOTE = '<h4>While we are away</h4>' +
+    '<p>1. Don&rsquo;t touch anything.</p>' +
+    '<p>2. That means the garden. Wunmi will know.</p>' +
+    '<p>3. It also means Josef&rsquo;s coffee machine. Josef will know.</p>' +
+    '<p>4. If something goes wrong, read the card first and touch things second.</p>' +
+    '<p>Back Thursday, half past one.</p><p>M. Hale</p>';
+
+  function hints() {
+    if (!heard && !read) return ['keel', [
+      'A voice is talking to you. Click on the grey box with the ring of blue light, and listen.',
+      'Keep clicking Next until Keel has finished. It tells you where to find the instructions for the door.'
+    ]];
+    if (!read) return ['card', [
+      'Keel said there is a yellow card beside your door. Can you see it? Something is floating in the way.',
+      'Your jacket is floating in front of the card. Drag the jacket away. Then click on the card and read all five steps.'
+    ]];
+    return ['door', [
+      'Click on the door. The card is there again, beside the handles. Do the five steps in order, and look hard at these words: before, until, as soon as, while, when.',
+      'Step 1 says &ldquo;until it stops&rdquo;, so half a turn is not enough. Step 3 says &ldquo;as soon as&rdquo;, so one pump too many is too many. Look at the needle after every pump.',
+      'After the pumping comes the hard part: doing nothing. Let go of everything while the lamp is flashing. Pull the lever only when the lamp has stopped flashing, and keep holding it down until the door moves.'
+    ]];
+  }
+  function pips() { ER.pips((heard ? 1 : 0) + (read ? 1 : 0) + (gone ? 1 : 0), 3); }
+  function begin() {
+    AIR.sfx.alarm(); AIR.amb.vent(0.05); pips();
+    ER.narrate([
+      'An alarm, loud enough to feel in your teeth. Then it stops, and a calm voice begins instead.',
+      'The voice comes from the grey box on the wall, the one with the ring of blue light.'
+    ]);
+  }
+  function isBusy() { return busy; }
+
+  AIR.thing('#port', 'porthole', 'Europa. White ice with brown cracks in it, like an old plate. Three people you know are down there, in a lander the size of a kitchen.', isBusy);
+  AIR.thing('#bag', 'sleeping bag', 'Your sleeping bag, tied to the wall. There is no up or down in zero gravity, so a bed can go anywhere.', isBusy);
+  AIR.thing('#locker', 'locker', 'Your locker. Somebody has labelled it THE NEW ONE. Inside: six days of clothes and one bar of chocolate, which you are saving.', isBusy);
+  AIR.thing('#rules', null, 'STATION RULES. Somebody has underlined rule 14 in red: no private kettles, toasters or heaters in the cabins.', isBusy);
+  AIR.thing('#heater', 'heater', 'Your heater. You brought it from home, and tonight you plugged it in for the first time. With three people away, the station gets cold. It is against rule 14, but only a little.', isBusy);
+  AIR.thing('#socket', 'socket', 'A wall socket. Somebody has written a C on it with a pen. It works. You have never needed to know more than that.', isBusy);
+  AIR.thing('#vent', 'air vent', 'The air vent. The little ribbons show that air is still coming out. That is something.', isBusy);
+  $('#note').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: NOTE, cls: 'sticky', clue: { id: 'brandt', title: 'Note from Commander Hale', kind: 'Note' } });
+  });
+  $('#keel').addEventListener('click', function () {
+    if (busy) return;
+    AIR.keel([
+      'Good morning. It is ten past two, station time. This is Keel, the station computer. I am sorry to wake you.',
+      'There is an air alarm. The oxygen on the station is going down. If nothing changes, you have seven hours of air.',
+      { q: 'Is there a hole in the station?', a: 'I do not know. I can count the air. I cannot see where it goes.' },
+      { q: 'Where are the others?', a: 'Commander Hale, Mr Antal and Dr Adeyemi are on the ice. The lander comes back at half past one this afternoon. That is more than eleven hours from now. Seven is less than eleven. I am sorry about that too.' },
+      { q: 'Can you call them?', a: 'Not yet. The moon is in the way. I can reach the lander for twenty minutes in every two hours, and the next twenty minutes have not started.' },
+      'In an air alarm, every door on the station shuts and locks itself. This is for your safety. Your door is now locked for your safety.',
+      { q: 'Then unlock it.', a: 'I am not allowed to open doors in an air alarm. You are. There is a yellow card beside your door, and it explains everything.' },
+      'Please read all of it before you touch anything. People usually read half.',
+      'When your door is open, go to the Air Room. I will be there. I am everywhere, but it is polite to say so.'
+    ], { id: 'keel1', title: 'Keel: the alarm', kind: 'Station computer' }, function (seen) {
+      if (seen && !heard) { heard = true; pips(); ER.say('A yellow card, beside the door. You look at the door. Your jacket has floated in front of it.'); }
+    });
+  });
+
+  /* zero gravity: the jacket is in the way of the card */
+  function float(id, x, y, a, line, word) {
+    return AIR.float(svg, $('#' + id), { x: x, y: y, a: a, lock: isBusy,
+      tap: function (e) { if (word) ER.wordAt(e.clientX, e.clientY, word); ER.say(line); },
+      moved: id === 'jacket' ? uncover : null });
+  }
+  float('sock', 640, 236, 20, 'A sock. The other one left days ago.');
+  float('pouch', 372, 636, -14, 'Orange juice, in a pouch. In zero gravity you cannot pour a drink. You can only squeeze.', 'pouch');
+  float('pen', 868, 700, 30, 'A pen, turning slowly, like a very small space station.');
+  float('postcard', 300, 760, 8, 'A postcard from home. A beach, with gravity.');
+  float('jacket', 968, 414, -8, 'Your jacket. Nothing stays where you put it up here. Give it a push.');
+  function uncover(f) {
+    if (found || Math.abs(f.x - 968) + Math.abs(f.y - 412) < 150) return;
+    found = true; $('#card').classList.add('show');
+    ER.say('Behind your jacket there is a yellow card in a plastic holder.');
+  }
+  $('#card').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'card', clue: { id: 'doorcard', title: 'Card beside the door', kind: 'Emergency card' },
+      done: function () { if (!read) { read = true; found = true; pips(); ER.say('A wheel, a pump, a lamp and a lever. All four are on the door.'); } } });
+  });
+  $('#door').addEventListener('click', function () {
+    if (busy) return;
+    if (!read) { ER.say('LOCKED, says the little screen on the door, as if you had not noticed. There is a wheel, a pump handle and a lever, and you do not know what any of them does.'); return; }
+    openDoor();
+  });
+
+  /* ---------- the door, close up: wheel, pump, lamp, lever ---------- */
+  function arc(r, v1, v2) {
+    function P(v) { var t = (-125 + v / 60 * 250) * Math.PI / 180; return (150 + r * Math.sin(t)).toFixed(1) + ' ' + (150 - r * Math.cos(t)).toFixed(1); }
+    return 'M' + P(v1) + 'A' + r + ' ' + r + ' 0 ' + ((v2 - v1) / 60 * 250 > 180 ? 1 : 0) + ' 1 ' + P(v2);
+  }
+  function mechSvg() {
+    var s = '', i, t, v;
+    s += '<defs><linearGradient id="mPl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#454c55"/><stop offset=".5" stop-color="#333941"/><stop offset="1" stop-color="#262b32"/></linearGradient>' +
+      '<linearGradient id="mBz" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfd5da"/><stop offset=".5" stop-color="#8d959c"/><stop offset="1" stop-color="#5b626a"/></linearGradient>' +
+      '<radialGradient id="mFace"><stop offset="0" stop-color="#f4eedb"/><stop offset="1" stop-color="#d6ceb6"/></radialGradient></defs>';
+    s += '<rect width="660" height="500" rx="14" fill="url(#mPl)"/><rect x="5" y="5" width="650" height="490" rx="11" fill="none" stroke="#1b1f24" stroke-width="3"/>';
+    s += '<g fill="#1b1f24"><circle cx="24" cy="24" r="6"/><circle cx="636" cy="24" r="6"/><circle cx="24" cy="476" r="6"/><circle cx="636" cy="476" r="6"/></g>';
+    s += '<path d="M290 20V480" stroke="#22272d" stroke-width="3"/><path d="M470 20V480" stroke="#22272d" stroke-width="3"/>';
+    /* gauge */
+    s += '<circle cx="150" cy="150" r="104" fill="url(#mBz)"/><circle cx="150" cy="150" r="92" fill="url(#mFace)"/>';
+    s += '<path d="' + arc(74, 0, 33) + '" stroke="#b9bfc4" stroke-width="16" fill="none"/><path d="' + arc(74, 33, 45) + '" stroke="#2fae5f" stroke-width="16" fill="none"/><path d="' + arc(74, 45, 60) + '" stroke="#d8402f" stroke-width="16" fill="none"/>';
+    for (v = 0; v <= 60; v += 6) { t = (-125 + v / 60 * 250) * Math.PI / 180; s += '<path d="M' + (150 + 84 * Math.sin(t)).toFixed(1) + ' ' + (150 - 84 * Math.cos(t)).toFixed(1) + 'L' + (150 + 92 * Math.sin(t)).toFixed(1) + ' ' + (150 - 92 * Math.cos(t)).toFixed(1) + '" stroke="#16130a" stroke-width="2.5"/>'; }
+    s += '<text x="150" y="208" class="eng" style="fill:#3a352a">SEAL</text>';
+    s += '<g id="ndl"><path d="M150 164V84" stroke="#16130a" stroke-width="5" stroke-linecap="round"/><path d="M150 84l-5 14h10z" fill="#16130a"/></g><circle cx="150" cy="150" r="9" fill="#16130a"/>';
+    /* lamp */
+    s += '<circle cx="258" cy="50" r="22" fill="#15181c"/><circle id="lamp" cx="258" cy="50" r="15" fill="#3a1512"/><path d="M250 42q6-6 14-2" stroke="#fff" stroke-width="3" fill="none" opacity=".35" stroke-linecap="round"/>';
+    s += '<text x="260" y="92" class="eng2">LAMP</text>';
+    /* wheel */
+    s += '<circle cx="150" cy="366" r="112" fill="#22272d"/><text x="150" y="494" class="eng2">SUPPLY</text>';
+    s += '<g id="wh" class="drag"><circle cx="150" cy="366" r="110" fill="transparent"/><circle cx="150" cy="366" r="88" fill="none" stroke="#c2301f" stroke-width="24"/>' +
+      '<circle cx="150" cy="366" r="88" fill="none" stroke="#e25a45" stroke-width="5" opacity=".7"/>';
+    for (i = 0; i < 5; i++) { t = i * 72 * Math.PI / 180; s += '<path d="M150 366L' + (150 + 84 * Math.sin(t)).toFixed(1) + ' ' + (366 - 84 * Math.cos(t)).toFixed(1) + '" stroke="#a82819" stroke-width="15" stroke-linecap="round"/>'; }
+    s += '<circle cx="150" cy="366" r="24" fill="#8f2114"/><circle cx="150" cy="366" r="9" fill="#cfd5da"/><circle cx="150" cy="278" r="8" fill="#f4eedb"/></g>';
+    /* pump */
+    s += '<text x="380" y="46" class="eng">PUMP</text><rect x="362" y="66" width="36" height="330" rx="18" fill="#0d0f12"/>';
+    s += '<g id="ph" class="drag"><rect x="310" y="60" width="140" height="64" fill="transparent"/><rect x="372" y="96" width="16" height="310" fill="#aeb6bd"/>' +
+      '<rect x="318" y="72" width="124" height="34" rx="14" fill="#dfe4e8"/><rect x="318" y="72" width="124" height="34" rx="14" fill="none" stroke="#7b848c" stroke-width="3"/>' +
+      '<g stroke="#9aa3ab" stroke-width="3"><path d="M340 80v18M356 80v18M404 80v18M420 80v18"/></g></g>';
+    s += '<rect x="340" y="392" width="80" height="120" rx="8" fill="#1b1f24"/><rect x="352" y="404" width="56" height="50" rx="4" fill="#2b3138"/><text x="380" y="476" class="eng2">AIR</text>';
+    /* lever */
+    s += '<text x="565" y="46" class="eng">RELEASE</text><rect x="548" y="66" width="34" height="350" rx="17" fill="#0d0f12"/><text x="565" y="446" class="eng2">PULL DOWN</text><text x="565" y="462" class="eng2">AND HOLD</text>';
+    s += '<g id="lv" class="drag"><rect x="500" y="62" width="130" height="78" fill="transparent"/><rect x="510" y="72" width="110" height="56" rx="14" fill="#d8402f"/>' +
+      '<rect x="510" y="72" width="110" height="56" rx="14" fill="none" stroke="#7d1d10" stroke-width="4"/><g stroke="#f08a78" stroke-width="4" stroke-linecap="round"><path d="M532 90h66M532 100h66M532 110h66"/></g></g>';
+    return s;
+  }
+  function openDoor() {
+    var box = ER.el('div', 'dm'), done = false, ang = 0, lastA = 0, p = 0, lastTouch = Date.now(), lampNow = 'off', y0 = 0, py = 0, armed = true, ly = 0,
+        tried = false, holding = false, holdT = 0, leakT = 0, tickT = 0, ms, wh, ph, lv, ndl, lamp, msgEl;
+    box.innerHTML = '<div><svg viewBox="0 0 660 500">' + mechSvg() + '</svg><div class="dm-msg">A wheel, a pump, a lamp and a lever. The card is on the right.</div>' +
+      '<div class="dm-help">wheel: drag it round by the rim &middot; pump and lever: drag down</div></div>' +
+      '<div class="dm-card">' + ER.gloss(CARD) + '</div>';
+    ms = box.querySelector('svg'); wh = box.querySelector('#wh'); ph = box.querySelector('#ph'); lv = box.querySelector('#lv');
+    ndl = box.querySelector('#ndl'); lamp = box.querySelector('#lamp'); msgEl = box.querySelector('.dm-msg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function wheel() { return ang <= -266 ? 'L' : ang >= 266 ? 'R' : 'M'; }
+    function shut() { return ER.check('wheel', wheel()); }                      /* is the supply shut? */
+    function band() { return p >= 48 ? 'red' : p >= 36 ? 'green' : 'white'; }
+    function needle(v, slow) { ndl.style.transitionDuration = slow ? slow + 's' : ''; ndl.style.transform = 'rotate(' + (-125 + Math.min(60, v) / 60 * 250) + 'deg)'; }
+    function setP(v) { p = v; needle(p); attrs(); }
+    function lampState() { if (band() !== 'green' || !shut()) return 'off'; return Date.now() - lastTouch >= 5000 ? 'steady' : 'flash'; }
+    function attrs() { box.setAttribute('data-p', p); box.setAttribute('data-wheel', wheel()); box.setAttribute('data-lamp', lampNow); }
+    function touch(fresh) {
+      if (fresh && (lampNow === 'flash' || lampNow === 'steady')) msg('You touched something. The lamp starts its count again.');
+      lastTouch = Date.now();
+    }
+    needle(0); attrs();
+    tickT = setInterval(function () {
+      if (holding || done) return;
+      var s = lampState();
+      if (s === lampNow) return;
+      lampNow = s; lamp.setAttribute('class', s === 'off' ? '' : s); attrs();
+      if (s === 'steady') { AIR.sfx.beep(990); msg('The lamp is steady.'); }
+      if (s === 'flash') AIR.sfx.blip();
+    }, 100);
+
+    ER.drag(wh, {
+      start: function (e) { if (done || holding) return false; touch(true); var q = ER.pt(ms, e); lastA = Math.atan2(q.y - 366, q.x - 150) * 180 / Math.PI; },
+      move: function (e) {
+        var q = ER.pt(ms, e), a = Math.atan2(q.y - 366, q.x - 150) * 180 / Math.PI, d = a - lastA, was = ang;
+        if (d > 180) d -= 360; if (d < -180) d += 360;
+        lastA = a; ang = Math.max(-270, Math.min(270, ang + d));
+        if (Math.floor(ang / 30) !== Math.floor(was / 30)) AIR.sfx.turn();
+        if (ang !== was && Math.abs(ang) === 270) { ER.sfx.clunk(); msg('The wheel stops with a clunk.'); }
+        wh.style.transform = 'rotate(' + ang.toFixed(1) + 'deg)';
+        if (p > 0 && !shut()) { setP(0); AIR.sfx.hiss(0.7); msg('Air rushes back into the seal. The needle drops to nothing.'); }
+        attrs();
+      },
+      end: function () { touch(false); }
+    });
+    ER.drag(ph, {
+      start: function (e) { if (done || holding) return false; touch(true); y0 = ER.pt(ms, e).y - py; },
+      move: function (e) {
+        py = Math.max(0, Math.min(190, ER.pt(ms, e).y - y0)); ph.style.transform = 'translateY(' + py.toFixed(1) + 'px)';
+        if (py > 120 && armed) { armed = false; stroke(); }
+        if (py < 50) armed = true;
+      },
+      end: function (e) {
+        if (armed && ER.pt(ms, e).y - y0 > 120) stroke();           /* let go at the bottom before the last move arrived */
+        py = 0; armed = true; ph.style.transform = ''; touch(false);
+      }
+    });
+    function stroke() {
+      AIR.sfx.pump();
+      if (!shut()) {
+        needle(8); clearTimeout(leakT);
+        leakT = setTimeout(function () { needle(0); AIR.sfx.hiss(0.5, 0.7); }, 380);
+        msg('The needle climbs, and falls straight back. Air is still getting into the seal from somewhere.');
+        return;
+      }
+      var was = band();
+      setP(p + 6);
+      if (band() === 'red') {
+        ER.sfx.pop(); clearTimeout(leakT); leakT = setTimeout(function () { setP(0); }, 320);
+        msg('Too far. The safety valve opens with a bang, and the needle drops back to nothing.');
+      } else if (band() === 'green' && was !== 'green') msg('The needle is in the green band. The lamp begins to flash.');
+      else if (band() === 'white') msg('The needle climbs a little.');
+    }
+    ER.drag(lv, {
+      start: function (e) { if (done) return false; tried = false; y0 = ER.pt(ms, e).y - ly; },
+      move: function (e) {
+        if (tried) return;                                   /* once it is down it stays down for as long as it is held */
+        ly = Math.max(0, Math.min(270, ER.pt(ms, e).y - y0));
+        if (ly >= 190) { tried = true; ly = 270; }
+        lv.style.transform = 'translateY(' + ly.toFixed(1) + 'px)';
+        if (tried) pull();
+      },
+      end: function (e) {
+        if (!tried && ER.pt(ms, e).y - y0 >= 190) { tried = true; pull(); }
+        if (holding) letGo();
+        ly = 0; if (!done) lv.style.transform = '';
+      }
+    });
+    function pull() {
+      var key = wheel() + '-' + band() + '-' + lampState();
+      AIR.sfx.lock();
+      if (lampState() !== 'steady') {
+        var was = lampState();
+        AIR.sfx.buzz(); ER.shake(ms); ly = 0; lv.style.transform = '';
+        if (was === 'flash') { setP(0); msg('A buzzer. The lever jumps back out of your hand, and the needle drops to nothing.'); }
+        else msg('A buzzer. The lever jumps back out of your hand. Nothing else happens.');
+        touch(false);
+        return;
+      }
+      holding = true; AIR.sfx.hiss(3, 1.1); needle(0, 3);
+      msg('The seal begins to hiss. Hold on.');
+      holdT = setTimeout(function () {
+        holding = false;
+        if (!ER.exit([key], { quiet: true, delay: 5200 })) { AIR.sfx.buzz(); setP(0); msg('A buzzer. Something is not right. Start again from step 1.'); return; }
+        done = true; busy = true; gone = true; pips(); clearInterval(tickT);
+        lamp.setAttribute('class', 'steady'); ER.sfx.ok(); msg('A long sigh. The seal lets go.');
+        setTimeout(function () {
+          ER.closeAll(); AIR.sfx.servo(1.8);
+          $('#leaf').style.transform = 'translateX(306px)'; $('#strobe').style.display = 'none';
+          ER.say('The door slides into the wall. Cold blue light comes in from the corridor.', 4200);
+        }, 1300);
+      }, 3000);
+    }
+    function letGo() {
+      clearTimeout(holdT); holding = false; ndl.style.transitionDuration = ''; setP(0); AIR.sfx.buzz();
+      msg('You let go too soon. The seal fills up again, and the needle drops to nothing.');
+      touch(false);
+    }
+    ER.open('ov-lock', box, function () { clearInterval(tickT); clearTimeout(holdT); clearTimeout(leakT); });
+  }
+})();
+</script>
+</body>
+</html>

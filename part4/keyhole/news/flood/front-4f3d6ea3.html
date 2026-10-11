@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Front Office · Two Aunts</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-news.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="flood.css">
+<style>
+  body{--bg:#2e2118;--accent:#ffb347;--font-display:'Oswald',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Newsreader',serif;
+    --tc-bg:rgba(38,27,20,.97);--tc-ink:#f6efe0;--cap-bg:rgba(34,24,18,.95);--panel:#2a1e16;--face-bg:#e9dfc4;--q-ink:#ffb347;--fade:#120c08;--hud-bg:rgba(34,24,18,.86)}
+  .ln{animation:ln 1.4s steps(1,end) infinite}
+  .ln.l2{animation-delay:-.3s}.ln.l3{animation-delay:-.75s;animation-duration:1.1s}.ln.l4{animation-delay:-.5s}.ln.l5{animation-delay:-1s;animation-duration:1.7s}.ln.l6{animation-delay:-.15s}
+  @keyframes ln{0%{fill:#ffcf5a}50%{fill:#5a4a20}}
+  #goldfish{animation:swim 9s ease-in-out infinite}
+  @keyframes swim{0%{transform:translateX(0)}50%{transform:translateX(34px)}100%{transform:translateX(0)}}
+  #drip{animation:drip 2.2s linear infinite}
+  @keyframes drip{0%{transform:translateY(0);opacity:1}70%{transform:translateY(150px);opacity:1}71%{opacity:0}100%{transform:translateY(150px);opacity:0}}
+  #gaz.ready,#map.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.16)}}
+  #wallpins,#printout{display:none}
+  #scene.pinned #wallpins,#scene.pinned #printout{display:block}
+
+  /* the map, the tin of flags, the street book */
+  .job.mp{width:min(1220px,96vw)}
+  .mp-top{display:grid;grid-template-columns:minmax(0,1fr) 404px;gap:14px;align-items:start}
+  .mp-top>svg{display:block;width:100%;height:auto;box-shadow:0 20px 50px rgba(0,0,0,.6);touch-action:none}
+  .mp .sock{cursor:pointer}
+  .mp .sock:hover .ring{stroke:#c23b2c;stroke-width:3.4}
+  .mp .mpin{cursor:grab}
+  .mp .mpin.sel .hd{stroke:#fff;stroke-width:3.4}
+  .mp .mpin.bad .hd{stroke:#ff4b3e;stroke-width:6}
+  .mp-side h5{margin:0 0 5px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14.5px;letter-spacing:.2em;color:#f6efe0;display:flex;align-items:baseline;gap:9px}
+  .mp-side h5 small{font-family:'Newsreader',serif;font-weight:400;font-style:italic;font-size:14px;letter-spacing:0;color:#d9cdb8}
+  .mp-flags{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:8px 9px;background:#8f98a0;border:1px solid #cfd4d8;border-radius:5px;box-shadow:inset 0 3px 8px rgba(0,0,0,.4)}
+  .flag{display:grid;place-items:center;height:38px;border-radius:19px;font-family:'Libre Franklin',sans-serif;font-weight:900;font-size:17px;color:#fff;background:#c23b2c;box-shadow:0 3px 4px rgba(0,0,0,.45),inset 0 -4px 0 rgba(0,0,0,.18);touch-action:none;cursor:grab}
+  .flag.c2{background:#27457a}.flag.c3{background:#2e8a57}.flag.c4{background:#b2540f}.flag.c5{background:#7a4a9a}.flag.c6{background:#1e8a8a}.flag.c7{background:#4a443c}
+  .flag.put{opacity:.42;box-shadow:none}
+  .flag.sel{opacity:1;outline:3px solid #fff;outline-offset:2px}
+  .flagghost{position:fixed;z-index:80;width:38px;height:38px;margin:-19px 0 0 -19px;pointer-events:none;border-radius:19px;display:grid;place-items:center;font-family:'Libre Franklin',sans-serif;font-weight:900;font-size:17px;color:#fff;background:#c23b2c;box-shadow:0 8px 14px rgba(0,0,0,.5)}
+  .mp-read{margin:9px 0 9px;min-height:214px}
+  .mp-read .sl{font-size:15px}
+  .mp-read .sl.t-phone p{font-size:16.5px}
+  .mp-read .task{margin:7px 0 0;font-family:'Newsreader',serif;font-size:16px;font-style:italic;color:#ffcf7a}
+  .mp-read .where{margin:2px 0 0;font-family:'DM Mono',monospace;font-size:12.5px;letter-spacing:.04em;color:#d9cdb8}
+  .mp-read .none{margin:0;padding:26px 20px;border:1px dashed rgba(255,255,255,.3);font-family:'Newsreader',serif;font-style:italic;font-size:16.5px;line-height:1.4;color:#d9cdb8;text-align:center}
+  .mp-book{background:#fbf9f1;color:#1d2228;padding:7px 11px 8px;border-left:12px solid #7a2f2f}
+  .mp-book .idx{font-family:'Libre Franklin',sans-serif;font-weight:500;font-size:12px;line-height:1.42;-webkit-column-gap:14px;column-gap:14px}
+  .mp-book .idx div{white-space:nowrap}
+  .mp-book .idx div i{font-family:'DM Mono',monospace;font-weight:500}
+  .mp-book .idx h6{font-size:10.5px;margin-top:4px}
+  .mp-book .idx small{font-family:'Newsreader',serif;font-style:italic;font-size:12px;line-height:1.22}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e9cf"/><stop offset="1" stop-color="#e2d4b2"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f4f2c"/><stop offset="1" stop-color="#4a2614"/></linearGradient>
+  <linearGradient id="topG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d09a5c"/><stop offset="1" stop-color="#b17a40"/></linearGradient>
+  <radialGradient id="tubeG" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#fffbe6" stop-opacity=".7"/><stop offset="1" stop-color="#fffbe6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="streetG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffb060" stop-opacity=".95"/><stop offset=".3" stop-color="#ffb060" stop-opacity=".35"/><stop offset="1" stop-color="#ffb060" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="82%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".66" stop-color="#2a1608" stop-opacity=".12"/><stop offset="1" stop-color="#1a0c04" stop-opacity=".62"/></radialGradient>
+  <clipPath id="dglass"><rect x="108" y="152" width="176" height="476"/></clipPath>
+  <clipPath id="bowl"><circle cx="1166" cy="560" r="45"/></clipPath>
+  <pattern id="planks" width="46" height="120" patternUnits="userSpaceOnUse"><rect width="46" height="120" fill="#a8733f"/><path d="M0 0V120" stroke="#8a5a2e" stroke-width="2"/><path d="M14 20q6 30 0 60M30 50q5 26 0 50" fill="none" stroke="#99662f" stroke-width="1.200"/></pattern>
+  <pattern id="carpet" width="64" height="64" patternUnits="userSpaceOnUse"><circle cx="32" cy="32" r="20" fill="none" stroke="#a65c30" stroke-width="5" opacity=".4"/><circle cx="0" cy="0" r="12" fill="#6e3a1e" opacity=".4"/><circle cx="64" cy="64" r="12" fill="#6e3a1e" opacity=".4"/><circle cx="64" cy="0" r="12" fill="#6e3a1e" opacity=".4"/><circle cx="0" cy="64" r="12" fill="#6e3a1e" opacity=".4"/></pattern>
+  <pattern id="slats" width="34" height="200" patternUnits="userSpaceOnUse"><rect width="34" height="200" fill="#6b4a2a"/><path d="M0 0V200" stroke="#4e3319" stroke-width="3"/></pattern>
+</defs>
+
+<!-- cream walls, wood below, a carpet with opinions -->
+<rect x="-1000" y="-400" width="3600" height="1040" fill="url(#wallG)"/>
+<rect x="-1000" y="-400" width="3600" height="414" fill="#d6c9a8"/>
+<rect x="520" y="12" width="560" height="14" rx="7" fill="#fffef2"/><ellipse cx="800" cy="20" rx="900" ry="500" fill="url(#tubeG)" pointer-events="none"/>
+<rect x="-1000" y="520" width="3600" height="120" fill="url(#planks)"/><rect x="-1000" y="512" width="3600" height="10" fill="#7a4e26"/>
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#floorG)"/><rect x="-1000" y="640" width="3600" height="700" fill="url(#carpet)"/>
+
+<!-- the front door, and Tower Street outside it -->
+<g id="door" class="hot"><rect x="94" y="138" width="204" height="504" fill="#8f98a0"/><rect x="108" y="152" width="176" height="476" fill="#0a121c"/>
+  <g clip-path="url(#dglass)"><path d="M108 420q60 -20 176 -6v214H108z" fill="#111c28"/><circle cx="236" cy="268" r="74" fill="url(#streetG)"/><path d="M236 268V560" stroke="#1a232d" stroke-width="5"/><ellipse cx="236" cy="268" rx="7" ry="5" fill="#fff3d6"/>
+    <path d="M150 520h110M170 540h80M130 566h130M180 590h60" stroke="#ffb060" stroke-width="2.600" opacity=".45"/><g id="rain"></g></g>
+  <rect x="108" y="372" width="176" height="10" fill="#8f98a0"/><rect x="262" y="340" width="10" height="74" rx="4" fill="#d3d8dc"/>
+  <rect x="150" y="196" width="92" height="44" fill="#f6efe0"/><text x="196" y="215" class="fO" font-size="13" font-weight="600" text-anchor="middle" fill="#1d2228" letter-spacing="1.600">RING IF SHUT.</text><text x="196" y="231" class="fK" font-size="12.500" text-anchor="middle" fill="#7a2f2f">we never are</text>
+  <g fill="#c9b78f" stroke="#9a8a66" stroke-width="1.600"><ellipse cx="136" cy="630" rx="34" ry="13"/><ellipse cx="200" cy="630" rx="34" ry="13"/><ellipse cx="262" cy="630" rx="34" ry="13"/><ellipse cx="168" cy="610" rx="34" ry="13"/><ellipse cx="232" cy="610" rx="34" ry="13"/></g></g>
+<g id="coat" class="hot"><rect x="322" y="268" width="104" height="10" rx="3" fill="#7a4e26"/><path d="M344 278v14M374 278v14M404 278v14" stroke="#3a2a1a" stroke-width="4"/>
+  <path d="M344 292q-34 22 -34 80v98h76v-98q0 -58 -34 -80z" fill="#e6c21f"/><path d="M344 292v178" stroke="#b8980f" stroke-width="2"/><path d="M310 372l-10 70 16 4M386 372l10 70 -16 4" fill="none" stroke="#e6c21f" stroke-width="15" stroke-linecap="round"/>
+  <ellipse id="drip" cx="330" cy="476" rx="3" ry="5" fill="#9cc8e6"/><ellipse cx="344" cy="636" rx="40" ry="6" fill="#5a2e16" opacity=".7"/>
+  <path d="M430 640v-74q0 -8 8 -8h30q8 0 8 8v74z" fill="#5a4028"/><path d="M444 566v-52q0 -12 12 -12M462 566v-66" fill="none" stroke="#1d2228" stroke-width="5" stroke-linecap="round"/><path d="M456 500q10 -8 16 2" fill="none" stroke="#c23b2c" stroke-width="6" stroke-linecap="round"/></g>
+
+<!-- OUR PATCH -->
+<g id="map" class="hot"><rect x="458" y="62" width="684" height="490" fill="#000" opacity=".25"/><rect x="462" y="66" width="676" height="486" fill="#5a4028"/><rect x="472" y="80" width="656" height="458" fill="#f6f1e0"/>
+  <svg id="minimap" x="476" y="84" width="648" height="450" viewBox="0 0 720 500"></svg><g id="wallpins"></g>
+  <rect x="700" y="42" width="200" height="30" fill="#7a4e26"/><text x="800" y="64" class="fS" font-size="20" font-weight="700" text-anchor="middle" fill="#f6efe0" letter-spacing="5">OUR PATCH</text></g>
+
+<!-- the evening show, mugs at four pounds, the stairs up to the newsroom -->
+<g id="poster" class="hot"><rect x="1196" y="86" width="150" height="206" fill="#1e6f6f"/><g stroke="#e8743b" stroke-width="10" opacity=".8"><path d="M1271 196L1196 120M1271 196L1230 86M1271 196L1312 86M1271 196L1346 120M1271 196L1196 190M1271 196L1346 190"/></g>
+  <circle cx="1271" cy="190" r="34" fill="#e3c098"/><path d="M1238 184q4 -34 33 -34t33 34q-12 -16 -33 -16t-33 16z" fill="#17171b"/><path d="M1236 190q0 -40 35 -40t35 40" fill="none" stroke="#17191c" stroke-width="6"/><rect x="1228" y="184" width="12" height="22" rx="5" fill="#17191c"/><rect x="1302" y="184" width="12" height="22" rx="5" fill="#17191c"/>
+  <path d="M1260 202q11 8 22 0" fill="none" stroke="#8c4a3c" stroke-width="3" stroke-linecap="round"/>
+  <text x="1271" y="252" class="fO" font-size="22" font-weight="700" text-anchor="middle" fill="#f6efe0" letter-spacing="2">DANNY SATO</text><text x="1271" y="272" class="fO" font-size="11.500" font-weight="500" text-anchor="middle" fill="#ffd98a" letter-spacing="1.500">EVENINGS, SEVEN TILL TEN</text></g>
+<g id="mugs" class="hot"><rect x="1190" y="388" width="162" height="9" fill="#7a4e26"/><path d="M1204 397l8 16M1338 397l-8 16" stroke="#7a4e26" stroke-width="5"/><g id="mugrow"></g>
+  <rect x="1244" y="402" width="54" height="24" fill="#fffdf5" transform="rotate(-3 1271 414)"/><text x="1271" y="419" class="fK" font-size="15" font-weight="700" text-anchor="middle" fill="#c23b2c" transform="rotate(-3 1271 414)">&#163;4 each</text></g>
+<g id="stairs" class="hot"></g>
+
+<!-- Dilys, behind the counter -->
+<g id="dilys" class="hot" transform="translate(404 850) scale(1.380)"></g>
+<path d="M250 612H1350L1388 668H212Z" fill="url(#topG)"/><rect x="212" y="668" width="1176" height="240" fill="url(#slats)"/><rect x="212" y="668" width="1176" height="12" fill="#3f2913"/>
+<g><rect x="556" y="712" width="488" height="88" fill="#f3e9cf"/><rect x="556" y="712" width="488" height="10" fill="#1e8a8a"/><rect x="556" y="722" width="488" height="7" fill="#e8743b"/><rect x="556" y="783" width="488" height="7" fill="#e8743b"/><rect x="556" y="790" width="488" height="10" fill="#7a4e26"/>
+  <text x="800" y="770" class="fO" font-size="36" font-weight="700" text-anchor="middle" fill="#2e2118" letter-spacing="6">WEND VALLEY RADIO</text></g>
+<g id="switch" class="hot"><path d="M300 612L318 556H494L512 612Z" fill="#8a9198"/><path d="M318 556H494L490 544H322Z" fill="#a9b1b8"/><g id="lines"></g><g fill="#2a2f35"><rect x="340" y="590" width="20" height="12" rx="2"/><rect x="366" y="590" width="20" height="12" rx="2"/><rect x="392" y="590" width="20" height="12" rx="2"/><rect x="418" y="590" width="20" height="12" rx="2"/><rect x="444" y="590" width="20" height="12" rx="2"/><rect x="470" y="590" width="20" height="12" rx="2"/></g>
+  <path d="M300 606q-30 0 -30 -20t20 -20" fill="none" stroke="#2a2f35" stroke-width="3"/></g>
+<g id="pad" class="hot"><g transform="rotate(-6 560 596)"><rect x="524" y="580" width="72" height="32" fill="#f3a8bf"/><rect x="524" y="576" width="72" height="32" fill="#fde3ea"/><path d="M532 586h54M532 594h40M532 601h48" stroke="#27457a" stroke-width="2"/></g><path d="M604 606l40 -22" stroke="#27457a" stroke-width="5" stroke-linecap="round"/></g>
+<g id="gaz" class="hot"><path d="M672 612L694 572H836L818 612Z" fill="#7a2f2f"/><path d="M672 612H818V626H672z" fill="#efe6c8"/><path d="M672 616H818M672 621H818" stroke="#b9b29c" stroke-width="1"/><path d="M818 612L836 572V586L818 626Z" fill="#5a1f1f"/>
+  <path d="M706 582h96l-8 20h-96z" fill="#efe6c8"/><text x="750" y="597" class="fL" font-size="13" font-weight="900" text-anchor="middle" fill="#7a2f2f" letter-spacing="3">STREETS</text></g>
+<g id="tin" class="hot"><ellipse cx="900" cy="606" rx="34" ry="9" fill="#5c646c"/><path d="M866 606v-26h68v26" fill="#8a9198"/><ellipse cx="900" cy="580" rx="34" ry="9" fill="#39434c"/>
+  <g stroke="#1d2228" stroke-width="1.600"><path d="M884 580v-22M896 580v-30M908 580v-24M918 580v-18"/></g><circle cx="884" cy="554" r="6" fill="#c23b2c"/><circle cx="896" cy="546" r="6" fill="#27457a"/><circle cx="908" cy="552" r="6" fill="#2e8a57"/><circle cx="918" cy="558" r="6" fill="#b2540f"/></g>
+<g id="printer" class="hot"><g id="printout"><rect x="992" y="492" width="100" height="76" fill="#fff" transform="rotate(3 1042 530)"/><svg x="997" y="497" width="90" height="60" viewBox="0 0 600 400" id="thumb"></svg></g>
+  <rect x="972" y="560" width="140" height="54" rx="6" fill="#d9d2bd"/><rect x="986" y="566" width="112" height="7" rx="3" fill="#2a2f35"/><circle cx="1096" cy="596" r="4" fill="#2e8a57"/><rect x="986" y="588" width="60" height="14" rx="2" fill="#b9b29c"/></g>
+<g id="fish" class="hot"><ellipse cx="1166" cy="612" rx="40" ry="7" fill="#000" opacity=".2"/><circle cx="1166" cy="560" r="45" fill="#bfe3f0"/><g clip-path="url(#bowl)"><rect x="1110" y="532" width="112" height="80" fill="#8fd0e6"/><path d="M1130 606q4 -30 -4 -50M1140 606q6 -24 0 -40" fill="none" stroke="#2e8a57" stroke-width="4" stroke-linecap="round"/>
+    <g id="goldfish"><path d="M1136 562q14 -12 30 0q-16 12 -30 0z" fill="#f08a1c"/><path d="M1136 562l-12 -9v18z" fill="#f08a1c"/><circle cx="1158" cy="560" r="2" fill="#1d2228"/></g></g>
+  <circle cx="1166" cy="560" r="45" fill="none" stroke="#e6f6fb" stroke-width="4"/><path d="M1136 530q14 -12 34 -12" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/><ellipse cx="1166" cy="518" rx="32" ry="6" fill="none" stroke="#e6f6fb" stroke-width="4"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Take the picture upstairs</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="flood.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, lock = null, told = {};
+
+  /* the words on the map: [x, y, text, kind, anchor, turn] */
+  var BIG = [[322, 88, 'WENDFORD', 'town'], [640, 292, 'NETHER SEDGE', 'vil'], [112, 30, 'UPPER SEDGE', 'vil']];
+  var LABELS = BIG.concat([
+    [534, 316, 'River Wend', 'wat', 'middle', 4], [100, 244, 'River Wend', 'wat', 'middle', 16], [394, 66, 'Tan Brook', 'wat', 'middle', 80], [4, 206, 'Wendhead Reservoir', 'wat', 'start'], [74, 290, 'dam', 'sm', 'start'], [124, 292, 'weir', 'sm', 'end'],
+    [216, 314, 'Station Footbridge', 'br', 'end'], [322, 316, 'Old Bridge', 'br', 'end'], [476, 346, 'Queen&#8217;s Bridge', 'br', 'start'],
+    [206, 170, 'Church Lane', 'st', 'middle', 27], [286, 130, 'Tower St', 'st', 'start', 62], [300, 230, 'Market Place', 'st', 'end'], [336, 262, 'Bridge St', 'st', 'start', 76], [414, 170, 'Brook Street', 'st', 'middle', 84],
+    [300, 348, 'Station Road', 'st', 'middle'], [384, 380, 'Ferry Road', 'st', 'middle', 26], [196, 244, 'Mill Lane', 'st', 'middle', -13], [588, 356, 'Mill Lane', 'st', 'end'], [692, 372, 'Church Lane', 'st', 'middle', 86], [636, 372, 'Ferry Row', 'st', 'middle', 26],
+    [416, 208, 'School', 'st', 'start'], [416, 219, 'REST CENTRE', 'br', 'start'], [410, 256, 'Brook Cottages', 'st', 'start'], [236, 352, 'Station', 'sm', 'start'], [330, 190, 'Corn Exchange', 'sm', 'start'], [256, 112, 'WVR', 'br', 'end'],
+    [546, 302, 'river road', 'sm', 'middle', 13], [498, 150, 'bypass', 'sm', 'middle', 78],
+    [132, 74, '142 m', 'ht', 'start'], [256, 140, '96', 'ht', 'end'], [180, 190, '74', 'ht', 'end'], [326, 216, '61', 'ht', 'start'], [404, 276, '14', 'ht', 'start'], [258, 366, '12', 'ht', 'start'], [396, 344, '38', 'ht', 'start'], [706, 344, '9', 'ht', 'start'], [150, 280, '13', 'ht', 'start'], [706, 400, '8', 'ht', 'start']
+  ]);
+
+  /* rain on the door, the lines on the switchboard, mugs, stairs, the map on the wall, Dilys */
+  (function () {
+    var s = '', i;
+    $('#rain').innerHTML = FL.rain(108, 152, 176, 476, 30, 9);
+    for (i = 0; i < 6; i++) s += '<circle class="ln l' + (i + 1) + '" cx="' + (350 + i * 26) + '" cy="574" r="6" fill="#5a4a20" stroke="#2a2f35" stroke-width="1.500"/>';
+    $('#lines').innerHTML = s; s = '';
+    for (i = 0; i < 4; i++) s += '<path d="M' + (1206 + i * 36) + ' 356h26v26q0 6 -6 6h-14q-6 0 -6 -6z" fill="#fffdf5"/><path d="M' + (1232 + i * 36) + ' 362q9 0 9 8t-9 8" fill="none" stroke="#fffdf5" stroke-width="3.500"/><text x="' + (1219 + i * 36) + '" y="376" class="fO" font-size="8.500" font-weight="700" text-anchor="middle" fill="#c23b2c">WVR</text>';
+    $('#mugrow').innerHTML = s; s = '';
+    for (i = 0; i < 7; i++) s += '<rect x="' + (1392 + i * 46) + '" y="' + (606 - i * 40) + '" width="400" height="40" fill="' + (i % 2 ? '#8a5a2e' : '#9a6a3c') + '"/><rect x="' + (1392 + i * 46) + '" y="' + (606 - i * 40) + '" width="400" height="7" fill="#c9a36a"/>';
+    s += '<path d="M1380 520L1700 240" stroke="#3f2913" stroke-width="10" stroke-linecap="round"/><path d="M1392 646V530M1484 566V448M1576 486V368" stroke="#3f2913" stroke-width="6"/>' +
+      '<rect x="1404" y="180" width="168" height="54" fill="#1d2228"/><text x="1488" y="203" class="fO" font-size="15" font-weight="600" text-anchor="middle" fill="#f6efe0" letter-spacing="3">NEWSROOM</text><text x="1488" y="224" class="fO" font-size="15" font-weight="600" text-anchor="middle" fill="#ffb347" letter-spacing="3">STUDIOS &#8593;</text>';
+    $('#stairs').innerHTML = s;
+    $('#minimap').innerHTML = FL.map({ labels: BIG.concat([[534, 316, 'River Wend', 'wat', 'middle', 4]]) });
+    s = '';
+    [[648, 376, '#c23b2c'], [220, 186, '#27457a'], [226, 286, '#2e8a57'], [462, 322, '#b2540f'], [648, 330, '#7a4a9a'], [380, 250, '#1e8a8a']].forEach(function (q) {
+      var x = 476 + q[0] * 0.9, y = 84 + q[1] * 0.9;
+      s += '<path d="M' + x + ' ' + y + 'v-16" stroke="#1d2228" stroke-width="1.600"/><circle cx="' + x + '" cy="' + (y - 20) + '" r="7" fill="' + q[2] + '" stroke="#1d2228" stroke-width="1.200"/>';
+    });
+    $('#wallpins').innerHTML = s;
+    $('#thumb').innerHTML = FL.photo({ id: 'tb', sign: ['', ''], words: 'OLD BRIDGE NOW!!! GONE UNDER. SHARE' });
+    $('#dilys').innerHTML = FL.who('dilys', { smile: 5 });
+  })();
+
+  ER.init({
+    theme: 'news', story: 'flood', storyTitle: 'Two Aunts', id: 'front', no: 'II', title: 'The Front Office',
+    go: 'Go down',
+    intro: [
+      'Four slips could go on air: the Environment Agency on its own river, Yasmin Haddad on the bridge she was standing on, and two drivers who had never met and had seen the same water in Station Road. Two went on the spike. One was wrong, and the other would have sent small cars into deep water. The rest you held, each on the telephone of somebody in a position to know.',
+      'The water company took four minutes. The dam at Wendhead is safe. The reservoir is full, and what people can see from the road is water running down the spillway, which is what a spillway is for. Two callers, one Gary. &ldquo;And Gary,&rdquo; said the duty engineer, &ldquo;reads meters.&rdquo;',
+      'The front office is one floor down. It has the telephones, the goldfish, and the only map in the building with every street on it.'
+    ],
+    exit: {"next":"records","w":{"fe71a7e6":"b06dd953","d047dd51":"a21fed1b"}}, tags: {"q1":["afbe7e8e","9b99cb26"],"q2":["a180325c"],"q3":["5919a775"],"q4":["5fcfe8f7"],"q5":["7e68ee7b"],"q6":["15bcc0fa"],"q7":["8adaf0d3"]},
+    sound: ['desk', { root: 47, bpm: 104, drop: ['mel'], beds: [['crowd', 0.3], ['rain', 0.25]] }],      /* six telephone lines talking at once, and the rain at the front door */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#gaz').classList.toggle('ready', !!(told.dilys && !told.book));
+    $('#map').classList.toggle('ready', !!(told.book && !nextFile));
+    $('#scene').classList.toggle('pinned', !!nextFile);
+    ER.pips((told.dilys ? 1 : 0) + (told.book ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The pins are in. The picture off the printer has to go up to the record library: the button is at the bottom of the screen.']];
+    if (lock && lock.isOpen()) return ['map', [
+      'Click a flag to read its message. Then click the ring on the map where that thing really is, or drag the flag there. The street book is on the right: look up every name before you pin it, and see whether it is in the book twice.',
+      'Read each name to its last letter, and then read the rest of the message. Two streets that are named together must be side by side. A bridge with steps is for people on foot. A bridge with a weight limit does not carry forty tonnes. And a river does not flood the top of a hill.',
+      'One message cannot be pinned on a street at all. Its street is in the book twice, both of them are down by the water, and the caller said nothing else. For that one, read rule 4 inside the cover of the book again. There is a yellow note in the corner of the map for it.'
+    ]];
+    if (!told.dilys) return ['talk', [
+      'The police have rung back, and Dilys took the call. She is behind the counter, on the left, wearing a headset.',
+      'Click Dilys, and hear all of it: she will tell you where to look next.'
+    ]];
+    if (!told.book) return ['book', [
+      'Dilys said: read what Brannigan has stuck inside the cover of the street book. It is the fat red book lying on the counter.',
+      'The red book is in the middle of the counter, with STREETS on it. The page inside its cover says how to turn a name into a place.'
+    ]];
+    return ['open', [
+      'Now the map. It fills the wall behind the counter: OUR PATCH. Click it.',
+      'There is a tin of flag pins on the counter, and seven messages that each need one.'
+    ]];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('Seven pins, and a picture off the printer that forty-one people have sent in.'); return; }
+    if (told.in) { busy = false; ER.say('The front office, nine o&rsquo;clock. Six lines are flashing.'); return; }
+    tell('in');
+    ER.narrate([
+      'The front office. In the daytime it sells mugs and takes messages for the sales team. Tonight six telephone lines are flashing at once, and one woman is answering them in turn, without hurrying, like a nurse on a ward.',
+      'This is Dilys. She was a nurse for thirty years, and she has done the telephones here on Tuesday nights ever since, for the company. Every call becomes a pink slip in her round handwriting.',
+      'Behind her the whole wall is a map: OUR PATCH, from the reservoir in the hills down to Nether Sedge. Somebody has left her a tin of flag pins.',
+      '&ldquo;The police rang back,&rdquo; says Dilys. &ldquo;A sergeant. He talked like a man running for a bus. I wrote down every word, and I still don&rsquo;t know where anything is.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#dilys').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;I&rsquo;ve rung Carol,&rdquo; says Dilys. &ldquo;She has put the kettle on. She says she is very sorry, and could we do it a bit quicker next time.&rdquo;'); return; }
+    ER.talk({
+      who: 'Dilys', role: 'On the telephones · Tuesday nights', face: window.FACE('dilys'),
+      lines: [
+        { note: 'She puts line four on hold with one finger.', a: '&ldquo;You&rsquo;re the trainee. Good. Moira says you are to have the map. I should do it myself, but I have a lady on line two who wants to know if her parrot can go to the rest centre.&rdquo;' },
+        { q: 'What did the police say?', a: 'Two things, as fast as he could. One: &ldquo;Evacuating Church Lane and Ferry Row, thirty-eight houses.&rdquo; Two: &ldquo;Bridge closed nineteen fifty-five, south steps under water.&rdquo; And then he had gone. No town. No village. Which bridge? HE knows which bridge. He is looking at it.' },
+        { q: 'Can&rsquo;t we just read that out?', a: 'Read out &ldquo;Church Lane&rdquo;? There is a Church Lane in this town, dear, with a hundred and twenty front doors in it, and there is another one in Nether Sedge. Say the wrong one on the radio, and you get the wrong people out of bed. And the right ones stay in theirs.' },
+        { q: 'How do I find the right one?', a: 'The red book on the counter has every street in the valley in it, and its square on the map. Some names are in there twice. Moira has stuck a page inside the cover: read that before you touch a pin.' },
+        { q: 'And Mr Lindley?', a: 'Has rung again. Twice. The brook is still going the wrong way, he says, and now it has a football in it.</p><p>She writes that down too. &ldquo;He is a pest, Mr Lindley. He rings about the bins, and the buses, and that marmalade advert. But I will say this for him: in eleven years he has never once told me a thing that was not so.&rdquo;' }
+      ],
+      clue: { id: 'dilys', title: 'Dilys: what the police said', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('dilys')) { paint(); FL.terms(['evacuate']); ER.say('The red book is in the middle of the counter.'); } }
+    });
+  });
+
+  /* ---------- papers ---------- */
+  var DIA = '<svg viewBox="0 0 224 216"><g font-family="Libre Franklin,sans-serif" font-weight="900" font-size="15" fill="#7a2f2f" text-anchor="middle"><text x="62" y="20">C</text><text x="118" y="20">D</text><text x="174" y="20">E</text><text x="18" y="62">2</text><text x="18" y="118">3</text><text x="18" y="174">4</text></g>' +
+    '<rect x="34" y="28" width="168" height="168" fill="#f1ead4" stroke="#1d2228" stroke-width="2"/><rect x="90" y="84" width="56" height="56" fill="#ffd98a"/><path d="M90 28V196M146 28V196M34 84H202M34 140H202" stroke="#4a6a86" stroke-width="1.200"/>' +
+    '<path d="M40 44q40 26 70 14t86 10" fill="none" stroke="#a9d0ea" stroke-width="7"/><path d="M118 112v-22" stroke="#1d2228" stroke-width="2"/><circle cx="118" cy="86" r="7" fill="#c23b2c" stroke="#1d2228" stroke-width="1.500"/>' +
+    '<g font-family="Kalam,cursive" font-size="13.500" fill="#1a2a52"><path d="M62 6h44M100 1l8 5 -8 5" fill="none" stroke="#1a2a52" stroke-width="2"/><path d="M6 70v36M1 100l5 8 5 -8" fill="none" stroke="#1a2a52" stroke-width="2"/><text x="118" y="212" text-anchor="middle" font-weight="700">along to D, down to 3: D3</text></g></svg>';
+  var COVER = '<h4>Wend Valley Radio &middot; the street book &middot; inside the cover</h4><h3>Where, exactly?</h3><div class="two"><div>' +
+    '<p>A name is not a place until you can put a pin in it.</p><ol>' +
+    '<li><b>LOOK IT UP.</b> The index gives every street, and its square on the map. Some names are in it twice: there is a Church Lane in Wendford and another in Nether Sedge.</li>' +
+    '<li><b>READ THE NAME TO THE END.</b> Ferry Road is not Ferry Row. Upper Sedge is not Nether Sedge.</li>' +
+    '<li><b>USE THE REST OF THE MESSAGE.</b> What else does it mention: steps, a lorry, the river, the next street? Which of the two places has those?</li>' +
+    '<li><b>STILL NOT SURE?</b> Do not guess. Ask: which one?</li></ol>' +
+    '<p class="rule">On air, say the town or the village first, and then the street. A wrong street gets the wrong people out of bed, and leaves the right ones in theirs.</p>' +
+    '</div><div><div class="dia">' + DIA + '</div><p class="pen">People who know a place leave half of it out. M.B.</p></div></div>';
+  var INDEX = '<div class="idx"><h6>STREETS</h6>' +
+    '<div><span>Bridge Street, Wendford</span><i>E3</i></div><div><span>Brook Cottages, Wendford</span><i>E3</i></div><div><span>Brook Street, Wendford</span><i>E3</i></div>' +
+    '<div><span>Church Lane, Nether Sedge</span><i>I4</i></div><div><span>Church Lane, Wendford</span><i>C2</i></div><div><span>Ferry Road, Wendford</span><i>E4</i></div><div><span>Ferry Row, Nether Sedge</span><i>I4</i></div>' +
+    '<div><span>Market Place, Wendford</span><i>D3</i></div><div><span>Mill Lane, Nether Sedge</span><i>H4</i></div><div><span>Mill Lane, Wendford</span><i>C3</i></div><div><span>Station Road, Wendford</span><i>D4</i></div><div><span>Tower Street, Wendford</span><i>D2</i></div>' +
+    '<h6>VILLAGES</h6><div><span>Nether Sedge</span><i>I4</i></div><small>in the river meadows: 9 metres</small><div><span>Upper Sedge</span><i>B1</i></div><small>on the hill: 142 metres</small>' +
+    '<h6>BRIDGES, all in Wendford</h6><div><span>Old Bridge</span><i>E3</i></div><small>stone, five arches. Weight limit 7.5 tonnes: no lorries</small>' +
+    '<div><span>Queen&rsquo;s Bridge</span><i>F4</i></div><small>carries the bypass. Any weight</small><div><span>Station Footbridge</span><i>C3</i></div><small>on foot only. Steps at both ends</small></div>';
+  $('#gaz').addEventListener('click', function (e) {
+    if (busy) return;
+    if (!told.dilys) { ER.wordAt(e.clientX, e.clientY, 'gazetteer'); ER.say('A fat red book with STREETS on it. Dilys has her elbow on it. &ldquo;In a minute, dear. Let me tell you what the sergeant said first.&rdquo;'); return; }
+    ER.read({ html: COVER, cls: 'gaz', clue: { id: 'places', title: 'Where, exactly?', kind: 'Inside the cover of the street book' }, done: function () {
+      FL.terms(['gazetteer']);
+      ER.addClue('index', 'The street book: index', '<h4>Wend Valley Radio &middot; the street book</h4><h3>Index</h3>' + INDEX, 'gaz', 'The street book', true);
+      if (tell('book')) { paint(); ER.say('Look it up, read it to the end, use the rest of the message. And if you are still not sure: ask. Now the map.'); }
+    } });
+  });
+
+  /* ---------- things in the room ---------- */
+  FL.thing('#door', null, 'The front door, with sandbags along the bottom of it. They are for show: the water would have to climb the whole of Tower Street to get here. Dilys put them out all the same. She says it makes callers feel that we are in it with them.', isBusy);
+  FL.thing('#coat', null, 'A yellow raincoat, dripping on to the carpet. It belongs to the man who came on Monday to look at the roof. He looked at it, said &ldquo;Ah&rdquo;, and went to fetch something. That was Monday.', isBusy);
+  FL.thing('#poster', null, 'DANNY SATO, EVENINGS, SEVEN TILL TEN. Requests, lost cats, and on Fridays a quiz about cheese. Nobody asked him whether he could do a flood.', isBusy);
+  FL.thing('#mugs', null, 'Wend Valley Radio mugs, four pounds each. Dilys has sold one since Christmas, and she bought that one herself.', isBusy);
+  FL.thing('#stairs', null, 'The stairs up to the newsroom and the studios. Brannigan comes down them twice a night for fresh slips, and goes back up without her tea.', isBusy);
+  FL.thing('#switch', 'switchboard', 'The switchboard: six lines, six lamps, and all six flashing. Dilys answers them in the order they lit up. She says it is the only fair way.', isBusy);
+  FL.thing('#pad', null, 'A pad of pink slips, and Dilys&rsquo;s pen. One call, one slip: who rang, when, and what they said, in their own words.', isBusy);
+  FL.thing('#tin', null, 'A tin of flag pins. A thing has not really happened in this building until it has a pin in it.', isBusy);
+  FL.thing('#fish', null, 'The station goldfish. He is called Marconi, after one of the men who invented radio, and he has outlived three managers.', isBusy);
+  FL.thing('#printer', null, function () { return nextFile ? 'The same photograph, four times over, and the tray is still filling. Take one upstairs.' : 'The front office printer. Anything that a listener sends to the station as a picture comes out here, whether anybody wants it or not.'; }, isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#map').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Seven flags. Six of them are on the map. The seventh is on a yellow note, and Dilys is on the telephone about it.'); return; }
+    if (!told.dilys) { ER.say('OUR PATCH: every street between the reservoir and Nether Sedge. It is a great deal of map, and nobody has told you yet what to look for on it.'); return; }
+    if (!told.book) { ER.say('&ldquo;Book first, dear,&rdquo; says Dilys. &ldquo;The red one. Otherwise you will stick a pin in the first Church Lane you see, and that is exactly what Carol did.&rdquo;'); return; }
+    if (!lock) lock = makeMap();
+    lock.open();
+  });
+
+  /* ---------- the map: seven flags, and a ring for every place that somebody has named ---------- */
+  function makeMap() {
+    var SOCK = { ftb: [226, 286, 'the Station Footbridge'], old: [330, 292, 'the Old Bridge'], qnb: [462, 322, 'the Queen&rsquo;s Bridge'], clw: [220, 186, 'Church Lane, Wendford'], cln: [676, 376, 'Church Lane, Nether Sedge'],
+      frw: [372, 356, 'Ferry Road, Wendford'], frn: [648, 392, 'Ferry Row, Nether Sedge'], use: [112, 60, 'the village of Upper Sedge'], nse: [648, 330, 'the village of Nether Sedge'], mlw: [176, 258, 'Mill Lane, Wendford'], mln: [596, 352, 'Mill Lane, Nether Sedge'],
+      sch: [380, 209, 'Brook Street School'], cot: [380, 250, 'Brook Cottages'], str: [268, 332, 'Station Road'], mkt: [310, 206, 'the Market Place'], dam: [64, 262, 'the dam at Wendhead'], ask: [106, 468, 'the yellow note: ASK WHICH ONE'] };
+    var COL = ['', '#c23b2c', '#27457a', '#2e8a57', '#b2540f', '#7a4a9a', '#1e8a8a', '#4a443c'];
+    var CALLS = [
+      { no: 1, type: 'phone', label: 'POLICE &#183; taken by Dilys', time: '20.58', from: 'A sergeant, in a hurry', text: '&ldquo;Evacuating Church Lane and Ferry Row. Thirty-eight houses.&rdquo; He did not say where, and then he had gone.', task: 'Pin the houses that the police are emptying.' },
+      { no: 2, type: 'text', label: 'TEXT LINE', time: '20.36', from: 'Carol, 14 Church Lane, Wendford', text: 'POLICE ARE EVACUATING CHURCH LANE!! Nobody has knocked on OUR door. Put it out NOW.', task: 'Pin Carol&rsquo;s own front door.' },
+      { no: 3, type: 'phone', label: 'PHONE &#183; and the police', time: '20.40', from: 'A young woman with a baby', text: '&ldquo;They&rsquo;ve shut the bridge! I had to carry the pushchair back down the steps and go all the way round by the Old Bridge.&rdquo; And the sergeant: &ldquo;Bridge closed 19.55. South steps under water.&rdquo;', task: 'Pin the bridge that is shut.' },
+      { no: 4, type: 'phone', label: 'PHONE &#183; taken by Dilys', time: '21.02', from: 'A lorry driver, from his cab', text: '&ldquo;Tell them the bridge is open, love. I&rsquo;ve just brought forty tonnes of cattle feed over it, and I never got my wheels wet.&rdquo;', task: 'Pin the bridge that the lorry crossed.' },
+      { no: 5, type: 'text', label: 'TEXT LINE', time: '21.01', from: 'No name', text: 'The river is in the back gardens at Sedge. Tell people to get their cars up the hill while they can.', task: 'Pin the gardens with the river in them.' },
+      { no: 6, type: 'phone', label: 'PHONE &#183; taken by Dilys', time: '21.03', from: 'Mr Lindley, 3 Brook Cottages', note: 'again', text: 'The Tan Brook is &ldquo;still running backwards&rdquo;, and now there is a football going up it.', task: 'Pin Mr Lindley&rsquo;s gate.' },
+      { no: 7, type: 'phone', label: 'PHONE &#183; taken by Dilys', time: '21.04', from: 'A man, on a bad line', note: 'no name, no number', text: '&ldquo;Mill Lane&rsquo;s under water. There&rsquo;s a van stuck in it.&rdquo; Then the line went dead.', task: 'Pin the van.' }
+    ];
+    var at = ER.flag('b-at') || {}, sel = 0, wait = false, box = ER.el('div', 'job mp'), s, k, ghost = null;
+    s = '<div class="mp-top"><svg viewBox="0 0 772 544"><rect width="772" height="544" fill="#5a4028"/><rect x="8" y="8" width="756" height="528" fill="#f6f1e0"/>' +
+      '<svg x="40" y="30" width="720" height="500" viewBox="0 0 720 500">' + FL.map({ grid: true, labels: LABELS }) + '</svg><g transform="translate(40 30)">' + FL.mapEdge() +
+      '<g transform="rotate(-3 80 446)"><rect x="10" y="408" width="150" height="80" fill="#000" opacity=".2"/><rect x="6" y="404" width="150" height="80" fill="#ffe66b"/><text x="14" y="422" class="fK" font-size="12.500" font-weight="700" fill="#1a2a52">CAN&#8217;T TELL WHICH ONE?</text><text x="14" y="437" class="fK" font-size="12.500" fill="#1a2a52">pin it here,</text><text x="14" y="452" class="fK" font-size="12.500" fill="#1a2a52">and ASK</text></g>' +
+      '<path d="M190 478h74" stroke="#1d2228" stroke-width="2"/><path d="M190 474v8M264 474v8" stroke="#1d2228" stroke-width="2"/><text x="227" y="490" class="fL" font-size="8.500" font-weight="600" text-anchor="middle" fill="#1d2228">1 mile</text>';
+    for (k in SOCK) s += '<g class="sock" data-k="' + k + '" transform="translate(' + SOCK[k][0] + ' ' + SOCK[k][1] + ')"><circle r="14" fill="#000" opacity="0"/><circle class="ring" r="6.500" fill="#fffdf5" stroke="#1d2228" stroke-width="2.200"/><circle r="2" fill="#1d2228"/></g>';
+    s += '<g id="mpins"></g><g id="mtip" style="display:none" pointer-events="none"><rect x="0" y="0" width="10" height="20" rx="3" fill="#1d2228"/><text x="0" y="14.500" class="fL" font-size="11.500" font-weight="700" fill="#fff"></text></g></g></svg>' +
+      '<div class="mp-side"><h5>THE TIN <small>seven flags, seven messages</small></h5><div class="mp-flags">';
+    CALLS.forEach(function (c) { s += '<button type="button" class="flag c' + c.no + '" data-pin="' + c.no + '">' + c.no + '</button>'; });
+    s += '</div><div class="mp-read"></div><div class="mp-book">' + INDEX + '</div></div></div>' +
+      '<div class="job-foot"><p class="jmsg"></p><button type="button" class="btn" id="m-go">Show Dilys</button></div>';
+    box.innerHTML = s;
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.jmsg'), read = box.querySelector('.mp-read'), layer = box.querySelector('#mpins'), tip = box.querySelector('#mtip');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function name(k2) { return SOCK[k2][2]; }
+    function where(n) { return at[n] ? (at[n] === 'ask' ? 'Flag ' + n + ' is on the yellow note: ask which one.' : 'Flag ' + n + ' is on ' + name(at[n]).replace(/&rsquo;/g, '’') + '.') : 'Flag ' + n + ' is still in the tin.'; }
+    function show(n) {
+      sel = n;
+      if (!n) read.innerHTML = '<p class="none">Click a flag to read its message here. Then click the ring on the map where the thing really is. Or drag the flag there.</p>';
+      else { read.innerHTML = ER.gloss(FL.slip(CALLS[n - 1])) + '<p class="task">' + CALLS[n - 1].task + '</p><p class="where"></p>'; read.querySelector('.where').textContent = where(n); }
+      draw();
+    }
+    function draw() {
+      var t = '', used = {}, n, q, dx;
+      for (n = 1; n <= 7; n++) {
+        if (!at[n]) continue;
+        q = SOCK[at[n]]; dx = (used[at[n]] || 0) * 17; used[at[n]] = (used[at[n]] || 0) + 1;
+        t += '<g class="mpin' + (n === sel ? ' sel' : '') + '" data-pin="' + n + '" transform="translate(' + (q[0] + dx) + ' ' + q[1] + ')"><path d="M0 0L' + (-dx) + ' 0" stroke="#1d2228" stroke-width="1" pointer-events="none"/><path d="M0 0L11 -16" stroke="#1d2228" stroke-width="2.200" pointer-events="none"/><circle class="hd" cx="13" cy="-25" r="10.500" fill="' + COL[n] + '" stroke="#1d2228" stroke-width="1.600"/>' +
+          '<text x="13" y="-20.500" class="fL" font-size="13" font-weight="900" text-anchor="middle" fill="#fff">' + n + '</text></g>';
+      }
+      layer.innerHTML = t;
+      ER.$$('.flag', box).forEach(function (b) { var m = +b.getAttribute('data-pin'); b.classList.toggle('put', !!at[m]); b.classList.toggle('sel', m === sel); });
+    }
+    function put(n, k2) {
+      at[n] = k2; ER.flag('b-at', at); FL.sfx.pin(); show(n);
+      msg(n === 6 && k2 === 'cot' ? 'Flag <b>6</b> is on Brook Cottages. &ldquo;Next door to the school, poor man,&rdquo; says Dilys. &ldquo;He gets the playground twice a day.&rdquo;' :
+        k2 === 'ask' ? 'Flag <b>' + n + '</b> is on the yellow note: nobody can tell which one, so somebody will have to be asked.' : 'Flag <b>' + n + '</b> is on ' + name(k2) + '.');
+    }
+    function nearest(p) {
+      var best = null, bd = 24, k2, d;
+      for (k2 in SOCK) { d = Math.sqrt(Math.pow(SOCK[k2][0] - p.x, 2) + Math.pow(SOCK[k2][1] - p.y, 2)); if (d < bd) { bd = d; best = k2; } }
+      if (!best && p.x > 0 && p.x < 164 && p.y > 396 && p.y < 494) best = 'ask';
+      return best;
+    }
+    function mapPt(e) { var p = ER.pt(svg, e); return { x: p.x - 40, y: p.y - 30 }; }
+    /* a flag is clicked and then a ring is clicked; or the flag is dragged, from the tin or from the map */
+    box.addEventListener('pointerdown', function (e) {
+      var f = e.target.closest ? e.target.closest('[data-pin]') : null, n, sx = e.clientX, sy = e.clientY, moved = false;
+      if (!f || e.button || wait || nextFile) return;
+      e.preventDefault(); n = +f.getAttribute('data-pin');
+      function mv(ev) {
+        if (!moved) {
+          if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) < 6) return;
+          moved = true; show(n); ghost = ER.el('div', 'flagghost', String(n)); ghost.style.background = COL[n]; document.body.appendChild(ghost);
+        }
+        ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px';
+      }
+      function up(ev) {
+        document.removeEventListener('pointermove', mv); document.removeEventListener('pointerup', up); document.removeEventListener('pointercancel', up);
+        if (!moved) { show(n); FL.sfx.slip(); return; }
+        if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost); ghost = null;
+        var r = svg.getBoundingClientRect(), k2;
+        if (ev.clientX >= r.left && ev.clientX <= r.right && ev.clientY >= r.top && ev.clientY <= r.bottom) { k2 = nearest(mapPt(ev)); if (k2) put(n, k2); else msg('A flag goes on one of the rings: each ring is a place that somebody has named tonight.'); }
+        else if (at[n]) { delete at[n]; ER.flag('b-at', at); show(n); msg('Flag <b>' + n + '</b> goes back in the tin.'); }
+      }
+      document.addEventListener('pointermove', mv); document.addEventListener('pointerup', up); document.addEventListener('pointercancel', up);
+    });
+    ER.$$('.sock', svg).forEach(function (g) {
+      var k2 = g.getAttribute('data-k');
+      g.addEventListener('click', function () {
+        if (wait || nextFile) return;
+        if (!sel) { msg('That ring is ' + name(k2) + '. Choose a flag from the tin first.'); return; }
+        put(sel, k2);
+      });
+      g.addEventListener('pointerenter', function () {
+        var t = tip.querySelector('text'), w, x = SOCK[k2][0], y = SOCK[k2][1];
+        t.textContent = name(k2).replace(/&rsquo;/g, '’'); tip.style.display = 'block'; w = t.getComputedTextLength() + 14;
+        x = FL.clamp(x - w / 2, 2, 718 - w); y = y > 40 ? y - 34 : y + 14;
+        tip.querySelector('rect').setAttribute('width', w); tip.setAttribute('transform', 'translate(' + x.toFixed(0) + ' ' + y + ')'); t.setAttribute('x', 7);
+      });
+      g.addEventListener('pointerleave', function () { tip.style.display = 'none'; });
+    });
+    /* what Dilys says about a flag in the wrong place: from the message, the map and the book, and from nothing else */
+    function why(n, k2) {
+      if (n === 1) return k2 === 'clw' ? 'Church Lane, yes. But he said Church Lane AND Ferry Row in one breath: thirty-eight houses. Look in the book. Is there a Ferry Row in Wendford?' :
+        k2 === 'frw' ? 'That is Ferry ROAD. The sergeant said Ferry ROW: I wrote it down. Read the name to the end, dear.' :
+        k2 === 'nse' ? 'The right village, I think. But he gave us streets, so give Danny streets. Put it on one of the two that he named.' :
+        k2 === 'ask' ? 'You could ask him, if he ever picks up his telephone again. But he gave you two streets. Two streets side by side are as good as a village. Look them both up.' :
+        'Find both streets in the book first: Church Lane, and Ferry Row. Where are the two of them side by side?';
+      if (n === 2) return k2 === 'cln' ? 'She has put her address on it: 14 Church Lane, WENDFORD. That is where Carol is sitting, with her coat on.' : 'Her address is on the slip. There are two Church Lanes in the book, and she tells you which one is hers.';
+      if (n === 3) return k2 === 'old' ? 'She says that she went round BY the Old Bridge. So the Old Bridge is the one that was open.' :
+        k2 === 'qnb' ? 'With a pushchair, down steps? Has the Queen&rsquo;s Bridge got steps? Look under BRIDGES in the book.' :
+        k2 === 'ask' ? 'You could. But she has told you two things about that bridge, and the sergeant has told you a third. The book has all three bridges in it.' : 'That is not a bridge, dear. A bridge with steps, where the south end goes under first: the book has all three in it.';
+      if (n === 4) return k2 === 'old' ? 'Forty tonnes, over the Old Bridge? Read what the book says about it: seven and a half tonnes, and not a bag of sugar more.' :
+        k2 === 'ftb' ? 'A lorry. On a footbridge. I should like to have seen that.' :
+        k2 === 'ask' ? 'He has rung off, and he has told you enough. Which bridge in this valley will carry forty tonnes?' : 'That is not a bridge, dear. Which bridge in this valley will carry forty tonnes? The book says.';
+      if (n === 5) return k2 === 'use' ? 'Upper Sedge is on top of a hill: 142 metres, it says on the map. He says the RIVER is in the gardens. A river does not climb hills.' :
+        (k2 === 'cln' || k2 === 'frn' || k2 === 'mln') ? 'The right village. But he did not say which street, so do not choose one for him. Put it on the village.' :
+        k2 === 'ask' ? 'You could. But the map can tell you this one: one Sedge is on a hill, and the other is in the river meadows.' : '&ldquo;Sedge.&rdquo; There are two of them: Upper and Nether. Which one has a river at the bottom of its gardens?';
+      if (n === 6) return k2 === 'sch' ? 'Close. That is the school. He is next door: he gets the playground twice a day, and I get the telephone call.' : 'Mr Lindley always gives his address, in full, twice. Brook Cottages. It is in the book.';
+      return (k2 === 'mlw' || k2 === 'mln') ? 'It might be. Or it might be the other one: there is a Mill Lane here and a Mill Lane in Nether Sedge, and both of them are down by the water. He gave no name and no number. What does the page in the book say, when the map cannot tell you?' :
+        'Look up Mill Lane in the book. How many are there? And is there anything in the message to tell you which?';
+    }
+    box.querySelector('#m-go').addEventListener('click', function () {
+      var n, left = 0, file, g;
+      if (wait || nextFile) return;
+      for (n = 1; n <= 7; n++) if (!at[n]) left++;
+      if (left) { msg('&ldquo;There ' + (left === 1 ? 'is one flag' : 'are ' + ['', '', 'two', 'three', 'four', 'five', 'six', 'seven'][left] + ' flags') + ' still in the tin,&rdquo; says Dilys. &ldquo;Seven messages, seven flags. Even the one that nobody can place: there is somewhere for that, too.&rdquo;'); return; }
+      for (n = 1; n <= 7; n++) {
+        if (!ER.check('q' + n, at[n])) {
+          ER.sfx.no(); k = at[n]; show(n);
+          g = layer.querySelector('.mpin[data-pin="' + n + '"]'); if (g) g.classList.add('bad');
+          msg('Dilys takes flag <b>' + n + '</b> out of the map and gives it back to you. &ldquo;' + why(n, k) + '&rdquo;');
+          (function (m) { setTimeout(function () { delete at[m]; ER.flag('b-at', at); if (sel === m) show(m); else draw(); }, 900); })(n);
+          return;
+        }
+      }
+      file = ER.exit([[1, 2, 3, 4, 5, 6, 7].map(function (m) { return at[m]; }).join('-')], { wait: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('b-file', file);
+      FL.mine('pins', 'Seven flags on the map', '<p>1 The police are emptying Church Lane and Ferry Row in NETHER SEDGE. Only one village has both.</p><p>2 Carol is in Church Lane, WENDFORD: up the hill, and safe.</p>' +
+        '<p>3 The bridge that is shut is the Station Footbridge. It has steps.</p><p>4 The lorry crossed the Queen&rsquo;s Bridge, on the bypass. Open.</p>' +
+        '<p>5 &ldquo;Sedge&rdquo; with the river in its gardens is Nether Sedge. A river does not climb a hill.</p><p>6 Mr Lindley: Brook Cottages, next door to the school.</p><p>7 Mill Lane: there are two, both by the water. Not known. Dilys is asking.</p>', true);
+      show(0);
+      msg('Dilys looks along the wall with a telephone at each ear. &ldquo;Well,&rdquo; she says. &ldquo;Now I know where everybody is. That is more than the sergeant told me.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'Seven flags. The police are in Church Lane, Nether Sedge, down by the river. Carol&rsquo;s Church Lane is here in Wendford, sixty-five metres further up the hill. Nobody is coming to her door, because nobody needs to.',
+          '&ldquo;So her text goes on the spike,&rdquo; says Dilys, &ldquo;and I shall ring her myself, and tell her to put the kettle on. If Danny had read it out, the whole of Church Lane would be standing in the rain by now. And walking downhill.&rdquo;',
+          'The bridge with the steps is the footbridge at the station. The bridge that carried forty tonnes is the Queen&rsquo;s Bridge. And nobody can say which Mill Lane has a van in it, so Dilys rings the police back, and this time she asks.',
+          'Under the counter the printer starts up. It prints the same picture three times, from three different people, and then a fourth time.',
+          'It is a photograph of the Old Bridge with brown water up to the tops of its arches. Somebody has written across the bottom of it: OLD BRIDGE NOW!!! GONE UNDER. SHARE.',
+          'The telephone on the wall rings: the newsroom. &ldquo;Forty-one people have sent us that,&rdquo; says Brannigan. &ldquo;And Yasmin says she is standing on that bridge. Take it up to the record library: the river file is in the cabinet. I want to know what it is a picture of. And when.&rdquo;'
+        ], function () { busy = false; showGo(); FL.sfx.printer(); });
+      }, 3200);
+    });
+    show(0);
+    k = 0; [1, 2, 3, 4, 5, 6, 7].forEach(function (m) { if (at[m]) k++; });
+    msg(k ? 'The map, with ' + k + (k === 1 ? ' flag' : ' flags') + ' on it so far. Click a flag to read its message; then click a ring.' :
+      'OUR PATCH. Every ring is a place that somebody has named tonight. Click a flag to read its message; then click the ring where the thing really is.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

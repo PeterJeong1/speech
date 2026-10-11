@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Wet Lab · Word for Word</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-scifi.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="benthos.css">
+<style>
+  body{--bg:#0c2126;--accent:#ff9a5a;--font-display:'Saira Stencil One',sans-serif;--font-ui:'Share Tech Mono',monospace;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(8,26,31,.96);--tc-ink:#e8f2f2;--cap-bg:rgba(8,24,29,.94);--cap-ink:#f0f6f5;--panel:#10272d;--face-bg:#12303a;--q-ink:#ffc9a0;--fade:#041013;--hud-bg:rgba(8,26,31,.82)}
+  .bub circle{animation:bub 3.4s linear infinite}
+  @keyframes bub{from{transform:translateY(0);opacity:.9}to{transform:translateY(-150px);opacity:0}}
+  .sway{animation:sway 6s ease-in-out infinite;transform-origin:50% 100%;transform-box:fill-box}
+  .sway:nth-child(2n){animation-duration:7.5s;animation-delay:-2s}
+  @keyframes sway{50%{transform:rotate(4deg)}}
+  #pens.lit path{fill:#7dffd0}
+  #pens path{transition:fill .5s}
+  #faulk{animation:fk 9s steps(1) infinite}
+  @keyframes fk{0%,80%{transform:translateX(0)}84%{transform:translateX(7px)}92%{transform:translateX(0)}}
+  .tube{animation:tube 4.7s steps(2) infinite}
+  @keyframes tube{50%{opacity:.9}}
+  #armS.next{animation:bnudge 1.8s ease-in-out infinite}
+  /* Dr Halvorsen's pad: thick pen on yellow paper */
+  .doc.pad{width:min(680px,94vw);padding:22px 30px 20px;background:#ffe98a repeating-linear-gradient(transparent 0 29px,rgba(60,90,160,.2) 29px 30px);color:#1b2233;font-family:'Caveat',cursive;font-weight:700;
+    font-size:23.5px;line-height:30px;border-top:22px solid #a8402c;transform:rotate(-.6deg)}
+  .doc.pad h4{margin:0;font-size:30px;font-weight:700;line-height:30px;text-decoration:underline}
+  .doc.pad h5{margin:0 0 30px;font-size:21px;font-weight:700;line-height:30px;color:#3a4f8a}
+  .doc.pad p{display:grid;grid-template-columns:30px minmax(0,1fr);margin:0 0 30px}
+  .doc.pad p:last-child{margin-bottom:0}
+  .doc.pad.mini{width:100%;max-height:none;padding:8px 14px 8px;font-size:19.5px;line-height:23px;border-top-width:10px;background:#ffe98a;box-shadow:none;transform:none}
+  .doc.pad.mini p{margin:0;grid-template-columns:24px minmax(0,1fr)}
+
+  /* the Arm's desk */
+  .ad{display:grid;grid-template-columns:minmax(0,600px) 440px;gap:16px;width:min(1080px,96vw);align-items:start}
+  .ad-bench{background:#0a1c22;border:1px solid #2a5a66;border-radius:8px;padding:6px;margin-bottom:8px}
+  .ad-bench svg{display:block;width:100%;height:auto}
+  .ad-side h6{margin:0 0 6px;font-family:'Saira Stencil One',sans-serif;font-weight:normal;font-size:19px;letter-spacing:.06em;color:#ff9a5a}
+  .ad-side h6 span{float:right;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;color:#9fc3cf;margin-top:4px}
+  .ad-side .ob{margin-top:8px}
+  .ad .ob-tray{gap:5px;padding:7px}
+  .ad .ob-tile{padding:5px 11px 4px}
+  .ad .pmsg{min-height:74px;margin-top:8px;font-size:16.5px}
+  .ad-rules{grid-column:1/3;-webkit-column-count:3;column-count:3;-webkit-column-gap:18px;column-gap:18px;padding:7px 14px 3px;background:#f5f0e2;color:#20242b;border-left:10px solid #f2c230;border-radius:3px;
+    font-family:'Outfit',sans-serif;font-weight:300;font-size:13.5px;line-height:1.28}
+  .ad-rules p{margin:0 0 5px;-webkit-column-break-inside:avoid;break-inside:avoid}
+  .ad-rules b{font-family:'Saira Stencil One',sans-serif;font-weight:normal;color:#a8402c;margin-right:6px}
+  .ad-rules u{text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:.95em;background:#16130a;color:#f2c230;padding:0 4px;border-radius:2px}
+  .bT{font-family:'Share Tech Mono',monospace;font-size:11px;fill:#9fc3cf;text-anchor:middle}
+  .mv{transition:transform .55s ease-in-out}
+  @media (max-width:1000px){.ad{grid-template-columns:1fr}.ad-rules{grid-column:1;-webkit-column-count:1;column-count:1}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9dbcc2"/><stop offset=".7" stop-color="#c9dfe2"/><stop offset="1" stop-color="#a9c6cb"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f6a70"/><stop offset="1" stop-color="#1f3237"/></linearGradient>
+  <linearGradient id="tankG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9ff0ea" stop-opacity=".75"/><stop offset="1" stop-color="#2f8f9a" stop-opacity=".9"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fa3ab"/><stop offset="1" stop-color="#50646c"/></linearGradient>
+  <radialGradient id="coldG"><stop offset="0" stop-color="#d9fffb" stop-opacity=".5"/><stop offset="1" stop-color="#9ff0ea" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".66" stop-color="#041013" stop-opacity=".22"/><stop offset="1" stop-color="#041013" stop-opacity=".85"/></radialGradient>
+  <pattern id="tiles" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="#7fa0a8" stroke-width="2" opacity=".55"/></pattern>
+</defs>
+
+<!-- white tiles, strip lights, a wet floor -->
+<rect x="-1000" y="-600" width="3600" height="1300" fill="url(#wallG)"/><rect x="-1000" y="-600" width="3600" height="1300" fill="url(#tiles)"/>
+<path d="M-1000 700H2600V1500H-1000Z" fill="url(#floorG)"/><path d="M-1000 700H2600" stroke="#22373d" stroke-width="6"/>
+<g class="tube"><rect x="300" y="60" width="420" height="16" rx="8" fill="#f4fffe"/><rect x="900" y="60" width="420" height="16" rx="8" fill="#f4fffe"/></g>
+<g fill="#5d7880"><rect x="-1000" y="100" width="3600" height="16"/><rect x="-1000" y="126" width="3600" height="7" opacity=".6"/></g>
+
+<!-- left wall: the Arm's log, the binder, two cradles for handsets -->
+<g id="armlog" class="hot"><rect x="70" y="178" width="250" height="164" rx="8" fill="#0a1218"/><rect x="84" y="192" width="222" height="136" rx="4" fill="#04110c"/>
+  <g class="mono" font-size="13" fill="#8df0b4"><text x="96" y="214">THE ARM · LOG · TUE</text><text x="96" y="240">14:02 IT = THE JAR</text><text x="96" y="260">14:03 NOT CLEAR</text><text x="96" y="280" fill="#ffb84a">14:04 CANNOT</text><text x="96" y="312">&gt; _</text></g></g>
+<g id="rules" class="hot"><rect x="350" y="250" width="34" height="96" fill="#f2c230"/><rect x="354" y="270" width="26" height="34" fill="#f5f0e2"/><circle cx="367" cy="326" r="6" fill="none" stroke="#16130a" stroke-width="2.500"/><rect x="336" y="346" width="76" height="9" fill="#5d7880"/></g>
+<g id="charger" class="hot"><rect x="84" y="392" width="216" height="104" rx="8" fill="#33454f"/><text x="192" y="414" text-anchor="middle" class="mono" font-size="12" fill="#c9dfe2">DIVER HANDSETS</text>
+  <rect x="104" y="426" width="76" height="58" rx="6" fill="#0c1218"/><rect x="204" y="426" width="76" height="58" rx="6" fill="#0c1218"/>
+  <path d="M124 432h36v46h-36z" fill="#f2c230"/><rect x="130" y="438" width="24" height="12" fill="#0c1218"/><circle cx="142" cy="464" r="6" fill="#0c1218"/><circle cx="170" cy="434" r="4" fill="#7dffb0"/><circle cx="270" cy="434" r="4" fill="#7a2418"/></g>
+<g id="boots" class="hot"><path d="M40 700v-70h34v52q26 2 30 18z" fill="#f2c230"/><path d="M116 700v-70h34v52q26 2 30 18z" fill="#e0b21e"/><path d="M40 640h34M116 640h34" stroke="#16130a" stroke-width="4"/></g>
+
+<!-- the Arm, on its rail -->
+<rect x="380" y="150" width="960" height="14" fill="#33454f"/><path d="M380 164H1340" stroke="#16222b" stroke-width="4"/>
+<g id="arm" class="hot"><g id="armS"><rect x="676" y="140" width="88" height="40" rx="5" fill="#f2c230"/><text x="720" y="167" text-anchor="middle" class="st" font-size="17" fill="#16130a">THE ARM</text>
+  <path d="M720 180V250L770 300" stroke="#f2c230" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="720" cy="250" r="11" fill="#16222b"/><circle cx="770" cy="300" r="9" fill="#16222b"/>
+  <path d="M770 300l-18 30M770 300l20 28" stroke="#9aa7ad" stroke-width="7" stroke-linecap="round"/></g></g>
+
+<!-- the bench, four tanks and a tray -->
+<circle cx="860" cy="430" r="520" fill="url(#coldG)" pointer-events="none"/>
+<g id="tray" class="hot"><path d="M236 560l14-44h150l14 44z" fill="#f4f6f1"/><path d="M252 524h146l8 26H244z" fill="#9fe0e6"/>
+  <g transform="translate(326 538)" fill="none" stroke="#e8743a" stroke-width="5" stroke-linecap="round"><path d="M0 0L0-13M0 0L-30-6M0 0L28-8M0 0L-18 8M0 0L20 9"/><circle r="6" fill="#e8743a" stroke="none"/></g></g>
+<g id="tanks"></g>
+<rect x="210" y="560" width="1160" height="30" fill="url(#steelG)"/><rect x="210" y="590" width="1160" height="110" fill="#3f555c"/><g stroke="#2c4047" stroke-width="3"><path d="M440 590v110M670 590v110M900 590v110M1130 590v110"/></g>
+<g id="round" class="hot"><path d="M520 692l12-92h120l12 92z" fill="#ffe98a"/><rect x="532" y="600" width="120" height="12" fill="#a8402c"/><g stroke="#1b2233" stroke-width="3" stroke-linecap="round"><path d="M546 628h92M544 644h70M542 660h98M540 676h60"/></g></g>
+
+<!-- the sink, the shelf, her notebook -->
+<g id="sink" class="hot"><rect x="1384" y="540" width="170" height="60" fill="#e9eef0"/><rect x="1396" y="552" width="146" height="40" fill="#b9c8cc"/><path d="M1470 540V480q0-22 22-22h10" stroke="#8fa3ab" stroke-width="10" fill="none" stroke-linecap="round"/><rect x="1384" y="600" width="170" height="100" fill="#3f555c"/></g>
+<rect x="1370" y="330" width="200" height="10" fill="#5d7880"/>
+<g id="jar" class="hot"><rect x="1392" y="268" width="50" height="62" rx="6" fill="#d9a070" fill-opacity=".8" stroke="#e9eef0" stroke-width="2"/><rect x="1388" y="258" width="58" height="13" rx="3" fill="#a8402c"/><rect x="1400" y="290" width="34" height="22" fill="#f4f6f1"/></g>
+<g id="notes" class="hot"><path d="M1466 330l8-70h84l8 70z" fill="#27402f"/><path d="M1476 268h80" stroke="#e8f2f2" stroke-width="2" opacity=".5"/><rect x="1494" y="282" width="46" height="24" fill="#e8f2f2"/><text x="1517" y="299" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="17" fill="#27402f">I.H.</text></g>
+
+<rect x="-1000" y="-600" width="3600" height="2100" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go down to the pump room</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="benthos.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null;
+
+  /* four tanks: sea pens, an empty one, Mr Faulkner, the cold tank with its air pipe */
+  (function () {
+    var s = '', i, x;
+    for (i = 0; i < 4; i++) {
+      x = 440 + i * 230;
+      s += '<g id="t' + (i + 1) + '" class="hot"><rect x="' + (x + 40) + '" y="300" width="110" height="12" rx="6" fill="#f4fffe" class="tube"/><rect x="' + x + '" y="360" width="190" height="200" fill="url(#tankG)"/>' +
+        '<rect x="' + x + '" y="520" width="190" height="40" fill="#6d5a40" opacity=".7"/>';
+      if (i === 0) s += '<g id="pens" fill="#ff8a5a">' + [40, 96, 150].map(function (d, k) {
+        var px = x + d, h = 96 + k * 12;
+        return '<g class="sway"><path d="M' + px + ' 540v' + (-h) + '" stroke="#ffd0b0" stroke-width="5" fill="none"/><path d="M' + px + ' ' + (540 - h) + 'q-26 14-22 54q12-26 22-28zM' + px + ' ' + (540 - h) + 'q26 14 22 54q-12-26-22-28zM' + px + ' ' + (560 - h) + 'q-18 18-14 44q8-20 14-22zM' + px + ' ' + (560 - h) + 'q18 18 14 44q-8-20-14-22z"/></g>';
+      }).join('') + '</g><rect x="' + (x + 118) + '" y="372" width="60" height="26" rx="3" fill="#0c1218"/><text x="' + (x + 148) + '" y="391" text-anchor="middle" class="mono" font-size="16" fill="#ffb84a">9°C</text>';
+      if (i === 2) s += '<g id="faulk"><ellipse cx="' + (x + 96) + '" cy="512" rx="20" ry="11" fill="#d9532c"/><path d="M' + (x + 110) + ' 506l44-22l10 6l-8 8M' + (x + 110) + ' 516l46 6l8-8l-10-6" stroke="#d9532c" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<circle cx="' + (x + 108) + '" cy="504" r="3" fill="#16130a"/><circle cx="' + (x + 112) + '" cy="512" r="3" fill="#16130a"/><path d="M' + (x + 84) + ' 520l-10 12M' + (x + 94) + ' 522l-6 12M' + (x + 76) + ' 512l-14 6" stroke="#b8401c" stroke-width="3" stroke-linecap="round"/></g>' +
+        '<rect x="' + (x + 30) + '" y="572" width="130" height="14" fill="#f4f6f1"/><text x="' + (x + 95) + '" y="583" text-anchor="middle" class="mono" font-size="11" fill="#18222a">MR FAULKNER</text>';
+      if (i === 3) s += '<path d="M' + (x + 150) + ' 300V352q0 10 10 10h6v160" stroke="#e9eef0" stroke-width="7" fill="none" stroke-linecap="round"/><g class="bub" fill="#f4fffe">' + [0, 1, 2, 3].map(function (k) {
+        return '<circle cx="' + (x + 160 + (k % 2) * 8) + '" cy="520" r="' + (3 + k % 3) + '" style="animation-delay:-' + (k * 0.85) + 's"/>'; }).join('') + '</g><rect x="' + (x + 12) + '" y="372" width="60" height="26" rx="3" fill="#0c1218"/><text x="' + (x + 42) + '" y="391" text-anchor="middle" class="mono" font-size="16" fill="#7dffb0">6°C</text>';
+      s += '<rect x="' + x + '" y="360" width="190" height="200" fill="none" stroke="#e9eef0" stroke-width="4" opacity=".8"/><path d="M' + (x + 12) + ' 372v170" stroke="#fff" stroke-width="5" opacity=".25"/>' +
+        '<text x="' + (x + 95) + '" y="350" text-anchor="middle" class="st" font-size="22" fill="#3f555c">' + (i + 1) + '</text></g>';
+    }
+    $('#tanks').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'scifi', story: 'benthos', storyTitle: 'Word for Word', id: 'lab', no: 'II', title: 'The Wet Lab',
+    go: 'Go in',
+    intro: [
+      'Limpet is 420 metres away, because its echo took 0.56 seconds to go there <i>and back</i>. It is 260 metres down, because its gauge reads 27: one atmosphere for the air, and twenty-six for the water. Dr Halvorsen&rsquo;s gauge said 27 as well, in a line of the log that also said &ldquo;at Marker 7&rdquo;: and Marker 7 stands at 232 metres. The number was right. The place was wrong. They are together, over the Lip.',
+      'Nobody knows why Limpet says CANNOT. And Kovacs will not let you send it one word until you have practised.',
+      'Dr Halvorsen&rsquo;s laboratory is one deck down: cold, bright, and full of things that were on the sea bed last week. Over the bench hangs the Arm. Kovacs built it out of Limpet&rsquo;s spare parts, and it reads an order exactly as Limpet does.'
+    ],
+    exit: {"next":"pumps","w":{"caf88ad1":"c1ec5b41","d115c820":"ab153d73"}}, tags: {"t1":["9bffa853"],"t2":["4f9c5596"],"t3":["439ab707","1325ba9f"]},
+    sound: ['orbit', { root: 52, bpm: 50, drop: ['mel'], lead: 'keys', beds: [['drips', 0.5], ['hum', 0.3]] }],      /* a cold bright room with water running in it */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('l-file') || null;
+  var prog = ER.flag('l-st') || { n: 0, seq: [] };
+
+  var ROUND = [
+    'The brittle star is muddy. Lift it out of its tray, rinse it under the tap and put it back. Rinse the STAR. The tray is full of clean sea water, and I want that left alone.',
+    'It is too warm at this end of the bench tonight. Move the three sea pens AND the brittle star into the cold tank. All four of them. Mr Faulkner stays where he is: he bites.',
+    'Lids on for the night: but NOT on the cold tank, which is tank 4. Its air pipe goes in over the side, and a lid would squash it flat. And lamps off over every tank except Mr Faulkner&rsquo;s, which is tank 3. He sulks in the dark.'
+  ];
+  var ROUNDDOC = '<h4>The evening round</h4><h5>If I am not back by nine, somebody do this. The Arm will do the lifting. Mind what you say to it. I.H.</h5>' +
+    ROUND.map(function (t, i) { return '<p><b>' + (i + 1) + '</b><span>' + t + '</span></p>'; }).join('');
+  var ARMLOG = '<h4>THE ARM · ORDER LOG · TUESDAY</h4>' +
+    '<p class="o">14:02 ORDER (I.H.): TAKE THE LID OFF THE JAR AND PUT IT IN THE SINK.</p><p>IT = THE JAR (THE LAST THING NAMED).</p><p>DONE. THE JAR IS IN THE SINK. THE LID IS IN MY CLAW.</p>' +
+    '<p class="o">14:03 ORDER (I.H.): NO! THE LID!</p><p class="x">ORDER NOT CLEAR.</p>' +
+    '<p class="o">14:04 ORDER (I.H.): PUT THE LID IN THE SINK AND TAKE IT OUT.</p><p>THE LID IS IN THE SINK. IT = THE SINK (THE LAST THING NAMED).</p><p class="x">CANNOT. THE SINK IS FIXED TO THE WALL.</p>' +
+    '<p class="pen">14:06 I shall do it myself. It did exactly what I said, three times running. I have never been so annoyed by anything so obedient. I.H.</p>';
+  var NOTES = '<h4>I. Halvorsen: field notes</h4>' +
+    '<p>Mon. Marker 7 again. The best sea pens are right on the Lip, where the current brings them their dinner. Naturally. Everything interesting lives on the edge of something.</p>' +
+    '<p>The Lip itself is all soft mud. It slides if you look at it. Told V. that I want a rail out there. V. says that a rail costs money. So does a biologist.</p>' +
+    '<p>Tue. Taking the Lemon out at half past three. Taking the big yellow pad, as always: no screen has ever helped me to think. Taking one of the diver handsets too, in case the telephone sulks. A handset reaches thirty metres. That is thirty metres more than nothing.</p>';
+  var RULES = [
+    ['1', 'It does orders one at a time, in the order you give them. It never looks ahead.'],
+    ['2', 'It does what the words say. It does not guess what you meant.'],
+    ['3', '<u>IT</u> and <u>THAT ONE</u> mean the last thing you named. Not the most important thing. The last.'],
+    ['4', '<u>THEM</u> means the last things you named together: a plural, or things joined with AND.'],
+    ['6', '<u>EVERY</u> and <u>EACH</u>: all of them, one after another. <u>ALL BUT ONE</u>: it works along the row and stops when one is left, so the one it leaves is the last. <u>BOTH</u> needs exactly two things.'],
+    ['8', 'One ping: DONE. Two pings: CANNOT, and it stops there. Three pings: ORDER NOT CLEAR.']
+  ];
+  var MANUAL = '<h4>Limpet (ROV-2): how it reads an order</h4><h5>V. Kovacs · rev. 9 · the copy that hangs beside the Arm</h5>' +
+    '<p><b>1</b><span>It does orders one at a time, in the order you give them. It never looks ahead to see what you are going to say next.</span></p>' +
+    '<p><b>2</b><span>It does what the words say. It does not guess what you meant. <span class="pen">It really doesn&rsquo;t. T.D.</span></span></p>' +
+    '<p><b>3</b><span><u>IT</u> and <u>THAT ONE</u> mean the last thing you named. Not the most important thing. The last.</span></p>' +
+    '<p><b>4</b><span><u>THEM</u> means the last things you named together: a plural (&ldquo;the tanks&rdquo;), or things joined with AND.</span></p>' +
+    '<p><b>5</b><span><u>UNTIL</u>: it goes on doing the thing, and stops at the moment the rest comes true. <u>WHILE</u>: it does the thing only for as long as the rest is true; if the rest is not true now, it does nothing. <u>AS SOON AS</u>: it waits, and acts at the moment the rest comes true. If that never happens, it waits for ever.</span></p>' +
+    '<p><b>6</b><span><u>EVERY</u> and <u>EACH</u>: all of them, one after another. <u>ALL BUT ONE</u>: it works along the row and stops when one is left, so the one it leaves is the last. <u>BOTH</u> needs exactly two things.</span></p>' +
+    '<p><b>7</b><span><u>IF</u>: it looks once, and acts if the thing is true at that moment. <u>UNLESS</u> is the other way round: it acts if the thing is not true.</span></p>' +
+    '<p><b>8</b><span>One ping: DONE. Two pings: CANNOT, and it stops there and waits for new orders. Three pings: ORDER NOT CLEAR.</span></p>' +
+    '<p><b>9</b><span><u>HOLD</u>. If a person tells it to hold a thing &ldquo;until I tell you&rdquo;, then only that person can tell it to let go. Nobody else&rsquo;s order can end it: not mine, not the Chief&rsquo;s. I built that in after the business with the anchor. <span class="pen">Ask him about the anchor. T.D.</span></span></p>';
+
+  /* What each strip says, and what it does. A strip is a list of steps: ['name', thing] only names a thing; any other
+     step is something the Arm does to a thing, and 'it' / 'them' are worked out when the Arm gets there. */
+  var TASKS = [
+    { slots: 3, tiles: [
+      { id: 'd', t: 'Put it back.', ops: [['back', 'it']] },
+      { id: 'a', t: 'Lift the star out of the tray.', ops: [['lift', 'star'], ['name', 'tray']] },
+      { id: 'c', t: 'Rinse it.', ops: [['rinse', 'it']] },
+      { id: 'e', t: 'Rinse the tray.', ops: [['rinse', 'tray']] },
+      { id: 'b', t: 'From the tray, lift the star.', ops: [['name', 'tray'], ['lift', 'star']] }
+    ] },
+    { slots: 2, tiles: [
+      { id: 'c', t: 'Lift the sea pens.', ops: [['lift', 'pens']] },
+      { id: 'f', t: 'Put it in the cold tank.', ops: [['cold', 'it']] },
+      { id: 'b', t: 'Lift the star and Mr Faulkner.', ops: [['lift', 'star'], ['lift', 'lob'], ['group', ['star', 'lob']]] },
+      { id: 'e', t: 'Put them in the cold tank.', ops: [['cold', 'them']] },
+      { id: 'a', t: 'Lift the sea pens and the star.', ops: [['lift', 'pens'], ['lift', 'star'], ['group', ['pens', 'star']]] },
+      { id: 'd', t: 'Lift the star.', ops: [['lift', 'star']] }
+    ] },
+    { slots: 2, tiles: [
+      { id: 'e', t: 'Switch off every lamp.', ops: [['lamps', [1, 2, 3, 4]]] },
+      { id: 'b', t: 'Put a lid on all but one of the tanks.', ops: [['lids', [1, 2, 3]]] },
+      { id: 'c', t: 'Put a lid on both tanks.', ops: [['both', 'tanks']] },
+      { id: 'g', t: 'Switch off each lamp except the third.', ops: [['lamps', [1, 2, 4]]] },
+      { id: 'a', t: 'Put a lid on every tank.', ops: [['lids', [1, 2, 3, 4]]] },
+      { id: 'f', t: 'Switch off all but one of the lamps.', ops: [['lamps', [1, 2, 3]]] },
+      { id: 'd', t: 'Put a lid on the first tank and the last.', ops: [['lids', [1, 4]]] }
+    ] }
+  ];
+  var NAME = { star: 'THE STAR', tray: 'THE TRAY', pens: 'THE SEA PENS', lob: 'MR FAULKNER' }, MANY = { pens: 1 };
+
+  function hints() {
+    if (nextFile) return ['go', ['The round is done, and Kovacs is waiting in the pump room. The button is at the bottom of the screen.']];
+    if (!ER.flag('l-look')) return ['look', [
+      'Read the yellow card that is leaning against the bench: it is the job. Then read the green screen on the left-hand wall: it is what happened yesterday, when Dr Halvorsen gave the Arm an order of her own.',
+      'The Arm is the yellow thing that hangs from the rail over the tanks. Click it when you have read the card and the screen.'
+    ]];
+    return [['t1', [
+      'Each strip is one order, and the Arm does them from the top slot down. Before you send anything, say to yourself what &ldquo;it&rdquo; will mean when the Arm reaches that strip.',
+      'Rule 3: &ldquo;it&rdquo; is the last thing you named. In &ldquo;Lift the star out of the tray&rdquo;, which thing is named last? Yesterday&rsquo;s log shows the same mistake with a lid and a jar.',
+      'You need the star to be the last thing named when the Arm reads &ldquo;Rinse it&rdquo;. One of the two &ldquo;lift&rdquo; strips names the tray first and the star last. Then rinse it, and then put it back.'
+    ]], ['t2', [
+      'Four animals must go into the cold tank with one strip: so &ldquo;it&rdquo; will not do. Read rule 4 for &ldquo;them&rdquo;.',
+      '&ldquo;Them&rdquo; is the last things named together: things joined with AND in one order. If you lift the sea pens in one order and the star in another, they have not been named together.',
+      'One strip lifts all four animals and names them together, with AND. Follow it with the strip that says &ldquo;them&rdquo;. And leave Mr Faulkner out of it.'
+    ]], ['t3', [
+      'Two jobs, two strips: one for the lids and one for the lamps. For each job, count along the row and ask which tanks, or which lamps, the Arm will leave.',
+      'Rule 6: &ldquo;all but one&rdquo; leaves the last one in the row. Is that the tank that must have no lid? Is it the lamp that must stay on?',
+      'The cold tank is the last tank, so &ldquo;all but one&rdquo; is right for the lids. But the lamp that must stay on is the third, not the last: for the lamps you need the strip that says which one.'
+    ]]][Math.min(prog.n, 2)];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#armS').setAttribute('class', !nextFile && ER.flag('l-look') ? 'next' : '');
+    $('#go').classList.toggle('on', !!nextFile && !busy);
+    ER.pips(nextFile ? 3 : prog.n, 3);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The wet lab. The star is clean, the cold tank is full, and Mr Faulkner has his lamp.'); return; }
+    if (prog.n >= 3) { finishLab(); return; }          /* the page was left between the last job and the way out */
+    if (ER.flag('l-seen')) { ER.say('The wet lab: four cold tanks in a row, and the Arm on its rail above them.'); return; }
+    busy = true; ER.flag('l-seen', 1);
+    ER.narrate([
+      'The wet lab. Four tanks of sea water in a row, as cold as the sea outside, and a smell like a beach in winter.',
+      'Against the bench leans a yellow card in thick black pen. THE EVENING ROUND. IF I AM NOT BACK BY NINE, SOMEBODY DO THIS. It is twenty to three in the morning, and she is not back.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things in the lab ---------- */
+  function looked() { if (ER.state().clues.some(function (c) { return c.id === 'round'; }) && !ER.flag('l-look')) { ER.flag('l-look', 1); paint(); } }
+  $('#round').addEventListener('click', function () { if (!busy) ER.read({ html: ROUNDDOC, cls: 'pad', clue: { id: 'round', title: 'The evening round', kind: 'Dr Halvorsen’s card' }, done: looked }); });
+  $('#armlog').addEventListener('click', function () { if (!busy) ER.read({ html: ARMLOG, cls: 'scr', clue: { id: 'armlog', title: 'The Arm’s log: Tuesday', kind: 'On the wall screen' }, done: function () { BEN.learn(['obedient']); } }); });
+  $('#notes').addEventListener('click', function () { if (!busy) ER.read({ html: NOTES, cls: 'hand', clue: { id: 'ihnotes', title: 'Dr Halvorsen’s field notes', kind: 'On the shelf' }, done: function () { BEN.learn(['handset', 'the Lip']); } }); });
+  $('#rules').addEventListener('click', function () { if (!busy) ER.read({ html: MANUAL, cls: 'manual', clue: { id: 'manual', title: 'Limpet: how it reads an order', kind: 'Kovacs’s binder' } }); });
+  $('#charger').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'handset');
+    ER.say('DIVER HANDSETS. A handset is a voice link for somebody working outside: it carries a voice about thirty metres through the water. There are two cradles. One handset is charging. The other cradle is empty.');
+  });
+  $('#t1').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'sea pen'); $('#pens').setAttribute('class', 'lit'); setTimeout(function () { $('#pens').setAttribute('class', ''); }, 2400);
+    ER.say('Sea pens. Each one is not one animal but hundreds of very small ones on a single stalk, standing in the mud like an old feather pen. You tap the glass, and for a moment they light up green. The little screen says 9°C: too warm for them.');
+  });
+  BEN.thing('#tray', 'brittle star', 'A brittle star in a tray of clean sea water: five thin arms round a body no bigger than a coin. The arms break off easily, which is where the name comes from, and then they grow again. This one is wearing a good deal of mud.', isBusy);
+  BEN.thing('#t2', null, 'Tank 2: empty, and scrubbed. A label says: FOR WHATEVER I BRING BACK ON TUESDAY. I.H.', isBusy);
+  BEN.thing('#t3', 'squat lobster', 'A squat lobster as long as your finger, with claws longer than the rest of him. The label says MR FAULKNER. Under it, smaller: &ldquo;Named after the chairman of the committee that pays for us. The likeness is in the eyes. I.H.&rdquo;', isBusy);
+  BEN.thing('#t4', null, 'Tank 4, the cold tank: empty, and running at 6°C, the same as the sea outside. Its air pipe goes in over the side.', isBusy);
+  BEN.thing('#sink', 'tap', 'The sink, and the tap. According to the log, a jar of shrimp paste spent some of yesterday afternoon in here.', isBusy);
+  BEN.thing('#jar', null, 'A jar of shrimp paste, with its lid on. Somebody has written on the lid in thick pen: THIS IS THE LID.', isBusy);
+  BEN.thing('#boots', null, 'Dr Halvorsen&rsquo;s boots. She went out in her socks, as she always does: there is no room for boots in the Lemon.', isBusy);
+  $('#arm').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The Arm hangs over the bench with its claw open, waiting to be told something. It will wait until somebody tells it.'); return; }
+    if (!ER.flag('l-look')) { ER.say('The Arm. It will do whatever you tell it: so find out first what needs doing. There is a yellow card leaning against the bench.'); return; }
+    if (prog.n >= 3) { finishLab(); return; }
+    openArm();
+  });
+
+  /* ---------- the Arm's desk ---------- */
+  function fresh() { return { star: 'tray', clean: false, pens: 't1', lob: 't3', water: true, lids: [0, 0, 0, 0], lamps: [1, 1, 1, 1], claw: 300 }; }
+  var X = { sink: 44, tray: 130, t1: 236, t2: 338, t3: 440, t4: 542 };
+  function benchSvg() {
+    var s = '', i, x;
+    s += '<rect width="600" height="236" fill="#0a1c22"/><rect x="0" y="22" width="600" height="7" fill="#33454f"/><rect x="0" y="198" width="600" height="38" fill="#50646c"/>';
+    s += '<rect x="14" y="170" width="60" height="28" fill="#e9eef0"/><path d="M44 170v-34q0-12 12-12" stroke="#8fa3ab" stroke-width="6" fill="none" stroke-linecap="round"/><text x="44" y="216" class="bT">TAP</text>';
+    s += '<path d="M96 198l6-22h56l6 22z" fill="#f4f6f1"/><path id="lb-water" d="M104 180h52l4 14h-60z" fill="#9fe0e6"/><text x="130" y="216" class="bT">TRAY</text>';
+    for (i = 0; i < 4; i++) {
+      x = X['t' + (i + 1)];
+      s += '<path id="lb-lamp' + (i + 1) + '" d="M' + (x - 24) + ' 60h48l14 40h-76z" fill="#fff6c4" opacity=".4"/><rect x="' + (x - 26) + '" y="52" width="52" height="9" rx="3" fill="#f4fffe" id="lb-bulb' + (i + 1) + '"/>' +
+        '<rect x="' + (x - 40) + '" y="104" width="80" height="94" fill="#2f8f9a" opacity=".75"/><rect x="' + (x - 40) + '" y="104" width="80" height="94" fill="none" stroke="#e9eef0" stroke-width="2.5"/>' +
+        '<rect id="lb-lid' + (i + 1) + '" x="' + (x - 46) + '" y="94" width="92" height="11" rx="3" fill="#f2c230" style="display:none"/><text x="' + x + '" y="216" class="bT">' + (i === 3 ? '4 · COLD' : i + 1) + '</text>';
+    }
+    s += '<path d="M574 60V112q0 8 6 8" stroke="#e9eef0" stroke-width="4" fill="none"/><g id="lb-bub" fill="#f4fffe"><circle cx="572" cy="150" r="3"/><circle cx="576" cy="132" r="2.200"/><circle cx="570" cy="118" r="2.600"/></g>';
+    s += '<g id="lb-lob" class="mv"><ellipse cx="0" cy="0" rx="11" ry="6" fill="#d9532c"/><path d="M8-3l22-11M8 3l24 2" stroke="#d9532c" stroke-width="3.500" stroke-linecap="round"/></g>';
+    s += '<g id="lb-pens" class="mv" fill="#ff8a5a">' + [-18, 0, 18].map(function (d) { return '<path d="M' + d + ' 0v-40" stroke="#ffd0b0" stroke-width="2.500" fill="none"/><path d="M' + d + ' -40q-11 6-9 22q5-11 9-12zM' + d + ' -40q11 6 9 22q-5-11-9-12z"/>'; }).join('') + '</g>';
+    s += '<g id="lb-star" class="mv"><g fill="none" stroke-width="3.500" stroke-linecap="round" id="lb-starA"><path d="M0 0V-10M0 0L-15-4M0 0L14-5M0 0L-9 7M0 0L10 8"/></g><circle r="4" id="lb-starB"/></g>';
+    s += '<g id="lb-claw" class="mv"><rect x="-17" y="14" width="34" height="14" rx="3" fill="#f2c230"/><path d="M0 28V58" stroke="#f2c230" stroke-width="7"/><path d="M0 58l-10 14M0 58l10 14" stroke="#9aa7ad" stroke-width="4" stroke-linecap="round"/></g>';
+    return s;
+  }
+  function openArm() {
+    var box = ER.el('div', 'ad'), w = fresh(), running = false, stop = null, bld = null, s;
+    s = '<div><div class="ad-bench"><svg viewBox="0 0 600 236">' + benchSvg() + '</svg></div><div id="ad-log"></div><p class="pmsg"></p></div>' +
+      '<div class="ad-side"><h6>The Arm<span id="ad-n"></span></h6><div class="doc pad mini" id="ad-card"></div><div id="ad-ob"></div></div>' +
+      '<div class="ad-rules">' + RULES.map(function (r) { return '<p><b>' + r[0] + '</b>' + r[1] + '</p>'; }).join('') + '</div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg'), log = BEN.readout(box.querySelector('#ad-log')), svg = box.querySelector('svg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function q(id) { return svg.querySelector('#' + id); }
+    function at(n, x, y) { n.style.transform = 'translate(' + x + 'px,' + y + 'px)'; }
+    function draw() {
+      var held = [], i;
+      ['star', 'pens', 'lob'].forEach(function (k) { if (w[k] === 'claw') held.push(k); });
+      at(q('lb-claw'), w.claw, 0);
+      at(q('lb-star'), w.star === 'claw' ? w.claw - (held.length > 1 ? 14 : 0) : w.star === 't4' ? X.t4 - 22 : w.star === 'sink' ? X.sink : X.tray, w.star === 'claw' ? 82 : w.star === 't4' ? 186 : w.star === 'sink' ? 164 : 186);
+      at(q('lb-pens'), w.pens === 'claw' ? w.claw + (held.length > 1 ? 14 : 0) : w.pens === 't4' ? X.t4 + 6 : X.t1, w.pens === 'claw' ? 116 : 190);
+      at(q('lb-lob'), w.lob === 'claw' ? w.claw + 14 : w.lob === 't4' ? X.t4 - 14 : X.t3 - 8, w.lob === 'claw' ? 86 : w.lob === 't4' ? 168 : 188);
+      q('lb-starA').setAttribute('stroke', w.clean ? '#ff8a4a' : '#6d5a40'); q('lb-starB').setAttribute('fill', w.clean ? '#ff8a4a' : '#6d5a40');
+      q('lb-water').style.display = w.water ? '' : 'none';
+      for (i = 1; i <= 4; i++) {
+        q('lb-lid' + i).style.display = w.lids[i - 1] ? '' : 'none';
+        q('lb-lamp' + i).style.display = w.lamps[i - 1] ? '' : 'none'; q('lb-bulb' + i).setAttribute('fill', w.lamps[i - 1] ? '#f4fffe' : '#33454f');
+      }
+      q('lb-bub').style.display = w.lids[3] ? 'none' : '';
+      box.setAttribute('data-star', w.star + (w.clean ? '+' : '-')); box.setAttribute('data-lids', w.lids.join('')); box.setAttribute('data-lamps', w.lamps.join(''));
+    }
+    function task() {
+      var T = TASKS[prog.n];
+      box.querySelector('#ad-n').textContent = 'JOB ' + (prog.n + 1) + ' OF 3';
+      box.querySelector('#ad-card').innerHTML = '<p><b>' + (prog.n + 1) + '</b><span>' + ER.gloss(ROUND[prog.n]) + '</span></p>';
+      box.querySelector('#ad-ob').innerHTML = '';
+      bld = BEN.builder(box.querySelector('#ad-ob'), { tiles: T.tiles, slots: T.slots, send: 'Send to the Arm', note: T.slots + ' ORDERS, TOP ONE FIRST', onSend: run,
+        onShort: function () { msg('The Arm wants ' + (T.slots === 3 ? 'three' : 'two') + ' orders for this job: one in each slot.'); } });
+      w = fresh();
+      if (prog.n >= 1) { w.clean = true; }
+      if (prog.n >= 2) { w.star = 't4'; w.pens = 't4'; }
+      draw();
+    }
+    /* one strip, to the letter: returns [what the read-out says ..., how it ended ('ok', 'cannot' or 'unclear')] */
+    function doStrip(tile, ctx) {
+      var out = [], end = 'ok';
+      tile.ops.forEach(function (op) {
+        if (end !== 'ok') return;
+        var v = op[0], a = op[1], list;
+        if (v === 'name') { ctx.last = a; return; }
+        if (v === 'group') { ctx.group = a; return; }
+        if (v === 'both') { out.push(['x', 'ORDER NOT CLEAR. &ldquo;BOTH&rdquo; NEEDS TWO TANKS. I COUNT FOUR.']); end = 'unclear'; return; }
+        if (v === 'lids') { a.forEach(function (n) { w.lids[n - 1] = 1; }); w.claw = X['t' + a[a.length - 1]]; out.push(['k', 'DONE. LIDS ON: ' + a.join(', ') + '.']); return; }
+        if (v === 'lamps') { a.forEach(function (n) { w.lamps[n - 1] = 0; }); out.push(['k', 'DONE. LAMPS OFF: ' + a.join(', ') + '.']); return; }
+        if (a === 'it') {
+          if (!ctx.last) { out.push(['x', 'ORDER NOT CLEAR. &ldquo;IT&rdquo;? NOTHING HAS BEEN NAMED YET.']); end = 'unclear'; return; }
+          if (MANY[ctx.last]) { out.push(['x', 'ORDER NOT CLEAR. &ldquo;IT&rdquo; IS ONE THING. THE LAST THING NAMED WAS ' + NAME[ctx.last] + ': MORE THAN ONE.']); end = 'unclear'; return; }
+          out.push(['it', 'IT = ' + NAME[ctx.last] + ' (THE LAST THING NAMED).']); list = [ctx.last];
+        } else if (a === 'them') {
+          if (!ctx.group) { out.push(['x', 'ORDER NOT CLEAR. &ldquo;THEM&rdquo;? NO THINGS HAVE BEEN NAMED TOGETHER.']); end = 'unclear'; return; }
+          out.push(['it', 'THEM = ' + ctx.group.map(function (k) { return NAME[k]; }).join(' AND ') + ' (NAMED TOGETHER).']); list = ctx.group;
+        } else { list = [a]; ctx.last = a; if (MANY[a]) ctx.group = [a]; }
+        list.forEach(function (k) {
+          if (end !== 'ok') return;
+          if (v === 'lift') { w[k] = 'claw'; w.claw = k === 'star' ? X.tray : k === 'pens' ? X.t1 : X.t3; out.push(['k', 'DONE. ' + NAME[k] + (MANY[k] ? ' ARE' : ' IS') + ' IN MY CLAW.']); }
+          else if (v === 'rinse') {
+            if (k === 'tray') { w.water = false; w.claw = X.sink; out.push(['k', 'DONE. THE TRAY IS RINSED. (I TIPPED THE OLD WATER OUT FIRST.)']); }
+            else { w.clean = true; if (w.star !== 'claw') w.star = 'sink'; w.claw = X.sink; out.push(['k', 'DONE. THE STAR IS RINSED.']); }
+          } else if (v === 'back') {
+            if (k === 'tray') out.push(['k', 'DONE. THE TRAY IS WHERE IT WAS.']);
+            else { w.star = 'tray'; w.claw = X.tray; out.push(['k', 'DONE. THE STAR IS BACK IN THE TRAY.']); }
+          } else if (v === 'cold') {
+            if (w[k] !== 'claw') { out.push(['x', 'CANNOT. ' + NAME[k] + (MANY[k] ? ' ARE' : ' IS') + ' NOT IN MY CLAW.']); end = 'cannot'; return; }
+            w[k] = 't4'; w.claw = X.t4; out.push(['k', 'DONE. ' + NAME[k] + (MANY[k] ? ' ARE' : ' IS') + ' IN THE COLD TANK.']);
+          }
+        });
+      });
+      return [out, end];
+    }
+    function verdict(n) {
+      if (n === 0) return !w.water ? 'The tray is very clean now. It is also empty: the Arm tipped the sea water out in order to rinse it. The star is ' + (w.clean ? 'clean' : 'still muddy') + '.'
+        : !w.clean ? 'The star is exactly as muddy as it was.'
+        : w.star === 'sink' ? 'The star is clean. It is also lying beside the tap, a long way from its tray. The card says: and put it back.'
+        : 'The star is clean, and it is still hanging in the claw. The card says: and put it back.';
+      if (n === 1) return w.lob !== 't3' ? 'Mr Faulkner is ' + (w.lob === 't4' ? 'in the cold tank' : 'hanging in the claw') + ', and he is looking at the brittle star in a way that the star does not like. The sea pens have gone nowhere.'
+        : w.pens === 't4' && w.star !== 't4' ? 'The sea pens are in the cold tank. The star is ' + (w.star === 'claw' ? 'still in the claw' : 'still in its tray, in the warm') + '. The card says: all four.'
+        : w.star === 't4' && w.pens !== 't4' ? 'The star is in the cold tank. The three sea pens are ' + (w.pens === 'claw' ? 'still hanging in the claw, and beginning to droop' : 'still in tank 1') + '. The card says: all four.'
+        : 'Nothing has reached the cold tank. ' + (w.pens === 'claw' || w.star === 'claw' ? 'The claw is full, and nobody has told it where to go.' : '');
+      return w.lids[3] ? 'There is a lid on the cold tank. Under it the air pipe is squashed flat, and the bubbles have stopped.'
+        : !w.lamps[2] ? 'Mr Faulkner&rsquo;s lamp is off. He has gone to the back of his tank and turned his back on the room.' + (w.lamps[3] ? ' The only lamp still on is the last one: &ldquo;all but one&rdquo; leaves the last.' : '')
+        : !(w.lids[0] && w.lids[1] && w.lids[2]) ? 'Not every tank that needs a lid has one. Count along the row: tanks 1, 2 and 3 want lids, and tank 4 does not.'
+        : 'The lids are right. But the lamps over tanks 1, 2 and 4 should be off by now, and some of them are still burning.';
+    }
+    function run(ids) {
+      if (running) return;
+      var T = TASKS[prog.n], ctx = { last: null, group: null }, steps = [], ended = 'ok', n0 = prog.n;
+      running = true; bld.busy(true); log.clear(); msg('');
+      w = fresh(); if (n0 >= 1) w.clean = true; if (n0 >= 2) { w.star = 't4'; w.pens = 't4'; }
+      draw();
+      ids.forEach(function (id, k) {
+        var tile = T.tiles.filter(function (t) { return t.id === id; })[0];
+        steps.push([k ? 950 : 300, function () {
+          if (ended !== 'ok') return;
+          bld.now(k + 1); log.line('ORDER ' + (k + 1) + ': ' + tile.t.toUpperCase(), 'o');
+          var r = doStrip(tile, ctx); r[0].forEach(function (l) { log.line(l[1], l[0]); });
+          ended = r[1]; draw(); BEN.sfx.servo(0.45);
+        }]);
+      });
+      steps.push([1000, function () {
+        var seq = ids.join('>'), box2 = box.querySelector('#ad-log');
+        bld.now(0);
+        if (ended === 'ok' && ER.check('t' + (n0 + 1), seq)) {
+          prog.seq[n0] = seq; prog.n = n0 + 1; ER.flag('l-st', prog); ER.sfx.ok(); log.line('ONE PING.', 'k'); paint();
+          msg(['The Arm lifts the star, holds it under the tap until the mud has gone, and puts it back in its tray as gently as a waiter. One ping.',
+            'Three sea pens and one brittle star go into the cold tank together. The sea pens stand up straighter at once. Mr Faulkner watches them go, with interest.',
+            'Three lids, and the cold tank left open for its pipe. Three lamps out, and one left burning over Mr Faulkner, who does not say thank you.'][n0]);
+          if (prog.n === 3) { stop = BEN.seq([[2600, finishLab]]); return; }
+          stop = BEN.seq([[2800, function () { running = false; task(); msg('The next job on the card.'); }]]);
+          return;
+        }
+        BEN.bump('slips'); BEN.sfx.hm();
+        log.line(ended === 'unclear' ? 'THREE PINGS.' : ended === 'cannot' ? 'TWO PINGS.' : 'ONE PING. ALL ORDERS DONE.', ended === 'ok' ? 'k' : 'x');
+        msg((ended === 'unclear' ? 'Three pings: ORDER NOT CLEAR. The Arm has stopped where it was. ' : ended === 'cannot' ? 'Two pings: CANNOT. The Arm has stopped where it was. ' : 'The Arm did every word of that. ') + verdict(n0));
+        stop = BEN.seq([[3600, function () {
+          w = fresh(); if (n0 >= 1) w.clean = true; if (n0 >= 2) { w.star = 't4'; w.pens = 't4'; }
+          draw(); log.line('BENCH PUT BACK AS IT WAS.', 'dim'); running = false; bld.busy(false);
+        }]]);
+      }]);
+      stop = BEN.seq(steps);
+    }
+    task();
+    msg(prog.n ? 'The Arm is waiting for the next job on the card.' : 'Strips of orders in the tray; slots above them. The Arm will do them from the top down, and the screen on the left will show what it made of every word.');
+    BEN.learn(['order', 'obedient']);
+    ER.addClue('manual', 'Limpet: how it reads an order', MANUAL, 'manual', 'Kovacs’s binder', true);      /* the rules are needed from here on: they go into the notebook even if the binder was never opened */
+    ER.open('ov-lock', box, function () { if (stop) stop(); });
+  }
+  function finishLab() {
+    var file = ER.exitOk([prog.seq.join('|')]);
+    if (!file) { ER.say('Something is wrong with this lock: tell your teacher.'); return; }
+    nextFile = file; ER.flag('l-file', file); BEN.done('lab'); busy = true;
+    BEN.mine('reader', 'How the Arm reads', '<p>IT = the LAST thing I named. (&ldquo;Lift the star out of the tray&rdquo;: last = the tray!)</p><p>THEM = things named TOGETHER, with AND.</p>' +
+      '<p>ALL BUT ONE leaves the last. If I mean another one, I must say which.</p><p>It does the words. Not what I meant.</p>', true);
+    ER.closeAll(); BEN.solved(); paint(); after();
+  }
+  function after() {
+    ER.narrate([
+      'The Arm folds itself away under its rail. It has done three jobs in a row without putting anything in the sink, which Dr Halvorsen would call a record.',
+      'On the wall the speaker clicks. &ldquo;Kovacs. I watched that on the camera. All right. You can talk to it.&rdquo; A pause. &ldquo;But talking will not be enough. I have been thinking about that line. If the winch could not wind Limpet in at 19:40, then whatever it is caught on is heavy.&rdquo;',
+      '&ldquo;The Lemon,&rdquo; says the Chief&rsquo;s voice, behind his.',
+      '&ldquo;The Lemon. So we need the winch, and the winch needs the big pump, and at ten past eleven last night I told the big pump one thing and it did another. Come down to the pump room. Bring your reading with you.&rdquo;'
+    ], function () { busy = false; paint(); });
+  }
+  $('#go').addEventListener('click', function () { if (nextFile && !busy) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Cairn · The Cold Door</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ridge.css">
+<style>
+  body{--bg:#9aa5aa;--accent:#ff8a3c;--font-display:'Fjalla One',sans-serif;--font-ui:'Fjalla One',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(30,36,40,.96);--tc-ink:#eef1f0;--cap-bg:rgba(22,27,30,.93);--panel:#252c30;--face-bg:#8d989d;--q-ink:#ffc58f;--fade:#aab3b8;--hud-bg:rgba(22,27,30,.8)}
+  .sF{font-family:'Fjalla One',sans-serif;text-anchor:middle}
+  .sO{font-family:'Overpass',sans-serif;font-weight:700;text-anchor:middle}
+  .wisp{animation:drift 46s steps(150,end) infinite alternate}
+  .wisp.b{animation-duration:61s;animation-delay:-20s}
+  .wisp.c{animation-duration:34s;animation-delay:-9s}
+  @keyframes drift{from{transform:translateX(-260px)}to{transform:translateX(260px)}}
+  #hood{animation:flap 2.3s ease-in-out infinite;transform-origin:1142px 620px}
+  @keyframes flap{50%{transform:rotate(-5deg)}}
+  #bar1{animation:bar 4.7s steps(1,end) infinite}
+  @keyframes bar{0%{opacity:1}62%{opacity:.15}78%{opacity:1}}
+  #mapcase.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3)}}
+  .hot:hover{filter:brightness(1.14)}
+
+  /* the corner card, the pin, the telephone */
+  .rm-card{fill:rgba(226,240,240,.42);stroke:#1e2a30;stroke-width:1.1}
+  .rm-tick{stroke:#1e2a30;stroke-width:.9}
+  .rm-num{font-family:'Overpass',sans-serif;font-weight:700;font-size:9px;fill:#1e2a30;text-anchor:middle}
+  .rm-zero{fill:#c8321e}
+  .fone{position:absolute;right:16px;bottom:16px;width:318px;display:none;padding:13px 15px 14px;background:#0e1418;color:#e6edf0;border:3px solid #2c363c;border-radius:22px;
+    box-shadow:0 18px 44px rgba(0,0,0,.6);font-family:'Overpass',sans-serif;font-size:13.5px;line-height:1.4}
+  .fone h5{margin:0 0 8px;display:flex;justify-content:space-between;font-family:'Overpass Mono',monospace;font-weight:400;font-size:11.5px;color:#93a4ad;letter-spacing:.05em}
+  .fone .to{margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #2c363c;font-weight:700;font-size:14px}
+  .fone .out{margin:0 0 3px;padding:8px 11px 7px;border-radius:14px 14px 3px 14px;background:#1f6f54;color:#f1fff8}
+  .fone .out.two{background:#33423d;color:#aebdb7}
+  .fone .st{margin:0 0 8px;min-height:15px;font-family:'Overpass Mono',monospace;font-size:11.5px;color:#93a4ad;text-align:right}
+  .fone .st.bad{color:#ff8a6a}
+  .fone .st.ok{color:#8fe3bd}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="fogG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f9aa0"/><stop offset=".5" stop-color="#b3bbbd"/><stop offset="1" stop-color="#99a3a7"/></linearGradient>
+  <linearGradient id="groundG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b6567"/><stop offset=".4" stop-color="#454d50"/><stop offset="1" stop-color="#2a3033"/></linearGradient>
+  <linearGradient id="farG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f8a8f" stop-opacity=".55"/><stop offset="1" stop-color="#7f8a8f" stop-opacity="0"/></linearGradient>
+  <radialGradient id="mist" cx="50%" cy="58%" r="62%"><stop offset="0" stop-color="#c3cbcd" stop-opacity="0"/><stop offset=".6" stop-color="#c3cbcd" stop-opacity=".22"/><stop offset="1" stop-color="#c9d0d2" stop-opacity=".96"/></radialGradient>
+  <radialGradient id="puff"><stop offset="0" stop-color="#dfe5e6" stop-opacity=".55"/><stop offset="1" stop-color="#dfe5e6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="dropG"><stop offset="0" stop-color="#c9d0d2" stop-opacity=".98"/><stop offset=".55" stop-color="#c9d0d2" stop-opacity=".8"/><stop offset="1" stop-color="#c9d0d2" stop-opacity="0"/></radialGradient>
+</defs>
+
+<!-- cloud, and what can be seen of the ridge -->
+<g id="cloud" class="hot"><rect x="-1000" y="-400" width="3600" height="1720" fill="url(#fogG)"/>
+  <path d="M-1000 500Q200 420 700 452T1700 470T2600 440V760H-1000Z" fill="url(#farG)"/></g>
+<path d="M-1000 648Q-100 590 380 612T900 596T1420 612T2600 590V1320H-1000Z" fill="url(#groundG)"/>
+<g fill="#394144" opacity=".8"><path d="M96 668l40 -16 46 10 -10 22h-70z"/><path d="M1016 630l30 -10 30 12 -8 14h-48z"/><path d="M1430 640l44 -14 40 16 -14 18h-62z"/><path d="M40 800l60 -20 70 16 -20 30h-100z"/></g>
+<g stroke="#77805f" stroke-width="3" stroke-linecap="round" opacity=".7" id="grass"></g>
+
+<!-- the fence: up to the cairn, and away to the left -->
+<g id="fence" class="hot" stroke-linecap="round">
+  <g stroke="#23282a"><path d="M200 556v-28" stroke-width="3" opacity=".16"/><path d="M392 566v-40" stroke-width="3.5" opacity=".3"/><path d="M474 576v-50" stroke-width="4" opacity=".5"/><path d="M566 590v-62" stroke-width="5" opacity=".75"/>
+    <path d="M664 608v-80" stroke-width="6"/><path d="M650 660v-102" stroke-width="7"/><path d="M630 746v-146" stroke-width="8"/><path d="M606 892v-214" stroke-width="10"/></g>
+  <g stroke="#3a4042" stroke-width="1.6" fill="none"><path d="M606 700L630 618L650 572L664 540" opacity=".9"/><path d="M664 540L566 540L474 536L392 534L200 534" opacity=".4"/></g>
+  <g fill="#8a4a2a"><circle cx="606" cy="700" r="5"/><circle cx="630" cy="618" r="4"/><circle cx="650" cy="572" r="3.500"/><circle cx="664" cy="540" r="3"/></g>
+</g>
+
+<!-- the cairn -->
+<g id="cairn" class="hot">
+  <ellipse cx="790" cy="606" rx="150" ry="15" fill="#1f2426" opacity=".5"/>
+  <path d="M664 604q-6 -34 26 -44l14 -40q4 -22 30 -26l10 -34q10 -26 40 -24q30 -6 44 22l8 32q30 6 34 34l16 34q30 14 26 46z" fill="#535c60"/>
+  <g fill="#6f797d"><path d="M690 566l34 -12 30 14 -8 28h-52z"/><path d="M764 560l40 -8 26 20 -12 30h-48z"/><path d="M838 570l30 -6 28 22 -6 18h-58z"/><path d="M716 520l30 -14 34 12 -6 28 -40 4z"/><path d="M790 512l34 -6 26 20 -10 26h-44z"/><path d="M742 474l26 -16 34 8 2 28 -48 8z"/><path d="M766 436l22 -12 24 12 -4 24 -38 2z"/></g>
+  <g fill="#8f999d" opacity=".85"><path d="M700 566l22 -8 10 6 -24 10z"/><path d="M772 560l28 -6 8 6 -30 8z"/><path d="M722 520l22 -10 12 4 -26 12z"/><path d="M796 512l24 -4 8 6 -28 6z"/><path d="M748 474l18 -11 12 3 -24 13z"/><path d="M772 436l14 -8 10 5 -18 8z"/></g>
+  <g stroke="#343b3e" stroke-width="2" fill="none"><path d="M690 566l34 -12 30 14M764 560l40 -8 26 20M716 520l30 -14 34 12M790 512l34 -6 26 20M742 474l26 -16 34 8"/></g>
+  <g fill="#b9b46a" opacity=".5"><circle cx="716" cy="586" r="5"/><circle cx="846" cy="592" r="4"/><circle cx="808" cy="536" r="4"/><circle cx="756" cy="486" r="3"/></g>
+</g>
+
+<!-- Kwame -->
+<g id="kwame" class="hot" transform="translate(318 812)">
+  <ellipse cx="0" cy="2" rx="64" ry="9" fill="#1f2426" opacity=".5"/>
+  <path d="M-20 0v-104h16V0zM4 0v-104h16V0z" fill="#30363c"/><path d="M-26 0h24v8h-28zM2 0h24v8h-22z" fill="#5a4630"/>
+  <path d="M-56 -96q-14 -74 20 -100h24v100z" fill="#3d6b2f"/><path d="M-50 -150h18" stroke="#2c4f22" stroke-width="4"/>
+  <path d="M-36 -96q-8 -110 36 -118t40 118z" fill="#2a5ea8"/><path d="M-10 -206l-8 108" stroke="#3d6b2f" stroke-width="9"/>
+  <g id="whistle"><circle cx="-16" cy="-150" r="18" fill="#fff" opacity="0"/><rect x="-22" y="-160" width="11" height="21" rx="3.500" fill="#ff7a1a"/><rect x="-19" y="-166" width="5" height="8" fill="#d95d06"/><circle cx="-16.500" cy="-148" r="2.600" fill="#b34a04"/></g>
+  <path d="M26 -184q30 26 18 62l-24 -8" stroke="#24539a" stroke-width="16" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="20" cy="-130" r="9" fill="#6f4626"/><ellipse cx="6" cy="-134" rx="14" ry="8.500" fill="#e3c88f"/><path d="M-6 -134h24" stroke="#c9a65a" stroke-width="2"/>
+  <rect x="-7" y="-226" width="14" height="14" fill="#5d3a1f"/><circle cx="0" cy="-242" r="23" fill="#6f4626"/>
+  <path d="M-24 -246q0 -30 24 -30t24 30q-12 -9 -24 -9t-24 9z" fill="#f0c020"/><path d="M-24 -246q24 -12 48 0" stroke="#d9a90f" stroke-width="5" fill="none"/>
+  <path d="M3 -240h7M15 -240h6" stroke="#2a1a0c" stroke-width="2.600"/><path d="M5 -228q8 6 15 0" stroke="#f7f1e6" stroke-width="3" fill="none"/>
+</g>
+
+<!-- the flat rock, and the map case open on it -->
+<path d="M800 884q-18 -52 60 -66l220 -12q64 8 66 52l-12 30z" fill="#4c5558"/><path d="M820 836q110 -20 310 -14" stroke="#6a7477" stroke-width="3" fill="none"/>
+<g id="rcard" class="hot"><path d="M776 850l112 -22 9 34 -112 24z" fill="#fbfaf1" stroke="#2a5d4a" stroke-width="2.500"/><path d="M788 858l66 -13M790 867l58 -12M793 876l40 -8" stroke="#26304a" stroke-width="1.600"/><path d="M776 850l112 -22" stroke="#2a5d4a" stroke-width="6"/></g>
+<g id="mapcase" class="hot"><path d="M862 822l150 -14 12 56 -150 16z" fill="#f3f0e2" stroke="#1b1a17" stroke-width="2"/>
+  <g stroke="#bf8246" stroke-width="2" fill="none"><path d="M876 836q36 -20 76 -6t50 -10"/><path d="M880 850q40 -16 74 -2t56 -8"/><path d="M886 864q30 -12 64 -2t62 -8"/></g>
+  <path d="M908 818l10 56M960 813l10 56" stroke="#3f8ed0" stroke-width="1.500"/><path d="M870 846l150 -14" stroke="#3f8ed0" stroke-width="1.500"/></g>
+<g id="keyflap" class="hot"><path d="M1012 808l112 -10 12 56 -112 12z" fill="#c2331f" stroke="#1b1a17" stroke-width="2"/>
+  <text x="1074" y="832" class="sF" font-size="15" fill="#fff" transform="rotate(-5 1074 832)" letter-spacing="1.500">SKALLAN</text>
+  <g stroke="#ffd9c2" stroke-width="2" transform="rotate(-5 1074 846)"><path d="M1034 842h80M1034 850h80M1034 858h54"/></g></g>
+<path d="M862 822l262 -24 12 56 -262 26z" fill="#fff" opacity=".1" pointer-events="none"/>
+
+<!-- Mrs MacAskill, on her rock -->
+<g id="mac" class="hot">
+  <ellipse cx="1140" cy="780" rx="170" ry="14" fill="#1f2426" opacity=".5"/>
+  <path d="M1084 776q-10 -52 40 -62l74 -6q46 6 48 44l-6 26z" fill="#4c5558"/><path d="M1098 724l62 -10 62 8" stroke="#6a7477" stroke-width="3" fill="none"/>
+  <path d="M1140 704L1016 752" stroke="#2c3238" stroke-width="27" stroke-linecap="round"/>
+  <g id="boot"><path d="M1016 736l-34 14q-10 10 -3 22l46 -9z" fill="#5a4630"/><path d="M990 752l24 -8M996 760l22 -7M986 764l10 -3" stroke="#e9e6da" stroke-width="2"/><path d="M976 770l46 -8" stroke="#2a2118" stroke-width="5" stroke-linecap="round"/></g>
+  <path d="M1132 708q-42 4 -66 28l-10 40" stroke="#2c3238" stroke-width="27" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M1046 778l-22 6q-10 2 -8 12h48z" fill="#5a4630"/>
+  <g id="hood"><path d="M1116 624q24 -30 58 -6l-8 26h-42z" fill="#8c2416"/></g>
+  <path d="M1108 712q-10 -90 32 -100q46 -6 54 42l8 58z" fill="#b3321f"/>
+  <path d="M1126 644q-36 22 -50 62" stroke="#a52c1b" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="1074" cy="710" r="9" fill="#e3bd9a"/>
+  <path d="M1180 644q26 28 12 62" stroke="#9c2918" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="1194" cy="708" r="9" fill="#e3bd9a"/>
+  <rect x="1136" y="594" width="14" height="16" fill="#d9b08c"/><circle cx="1142" cy="580" r="23" fill="#e3bd9a"/>
+  <path d="M1118 576q0 -30 24 -30t24 30q-12 -8 -24 -8t-24 8z" fill="#26375c"/><circle cx="1142" cy="544" r="6" fill="#31467a"/>
+  <path d="M1128 582h7M1142 582h7" stroke="#3f5a6a" stroke-width="2.400"/><path d="M1130 594h11" stroke="#8a4a3c" stroke-width="2"/>
+  <path d="M1128 604q12 20 28 2" stroke="#ef7d22" stroke-width="2.200" fill="none"/><path d="M1138 615l-3 14M1150 613l3 14" stroke="#ef7d22" stroke-width="2.200" stroke-linecap="round"/>
+</g>
+<g id="logbook" class="hot"><circle cx="1228" cy="730" r="30" fill="#fff" opacity="0"/><path d="M1204 716l40 -6 6 30 -40 8z" fill="#e8b017" stroke="#8a6a08" stroke-width="2"/><path d="M1212 722l26 -4M1213 730l26 -4" stroke="#26304a" stroke-width="1.600"/><path d="M1206 746l44 -8" stroke="#22201a" stroke-width="2.500"/></g>
+<g id="phone" class="hot"><circle cx="1193" cy="692" r="24" fill="#fff" opacity="0"/><rect x="1182" y="676" width="22" height="38" rx="4" fill="#161b1e" stroke="#59616a" stroke-width="1.500" transform="rotate(-14 1193 695)"/><rect x="1186" y="681" width="14" height="16" fill="#8fd6b4" transform="rotate(-14 1193 695)"/>
+  <rect id="bar1" x="1189" y="691" width="3" height="4" fill="#0e1418" transform="rotate(-14 1193 695)"/></g>
+<g id="sack" class="hot"><ellipse cx="1300" cy="786" rx="54" ry="8" fill="#1f2426" opacity=".5"/><path d="M1262 782q-12 -78 36 -92q46 4 46 60l-6 32z" fill="#3f6d54"/><path d="M1268 720q32 -18 68 0v26q-34 -14 -68 0z" fill="#335a45"/>
+  <rect x="1286" y="700" width="30" height="18" fill="#ef7d22" transform="rotate(-8 1300 709)"/><path d="M1290 708h22" stroke="#fff" stroke-width="2" transform="rotate(-8 1300 709)"/><path d="M1276 760h50" stroke="#22201a" stroke-width="4"/></g>
+<g id="poles" class="hot" stroke-linecap="round"><path d="M1222 806l190 -30M1232 818l190 -24" stroke="#c9ced3" stroke-width="5"/><path d="M1222 806l24 -4M1232 818l24 -3" stroke="#22201a" stroke-width="9"/></g>
+
+<!-- the top of the Staircase -->
+<g id="steps" class="hot">
+  <path d="M1392 772l150 -40 220 22v420h-460z" fill="#30373a"/><path d="M1420 804l134 -30 190 28" stroke="#7b868a" stroke-width="3" fill="none" opacity=".7"/>
+  <path d="M1452 846l122 -22 180 32v300h-330z" fill="#262c2f"/><path d="M1476 868l100 -18 160 26" stroke="#6a7477" stroke-width="2.500" fill="none" opacity=".6"/>
+  <path d="M1516 900l96 -14 150 32v300h-260z" fill="#1c2123"/>
+  <path d="M1414 782q44 4 76 34" stroke="#97a1a5" stroke-width="6" stroke-linecap="round" opacity=".75" fill="none"/>
+  <ellipse cx="1700" cy="1000" rx="430" ry="330" fill="url(#dropG)" pointer-events="none"/>
+</g>
+
+<g pointer-events="none"><ellipse class="wisp" cx="500" cy="380" rx="620" ry="120" fill="url(#puff)"/><ellipse class="wisp b" cx="1200" cy="520" rx="700" ry="110" fill="url(#puff)"/><ellipse class="wisp c" cx="760" cy="700" rx="560" ry="80" fill="url(#puff)"/>
+  <rect x="-1000" y="-400" width="3600" height="1720" fill="url(#mist)"/></g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go to the last fence post</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="map.js"></script>
+<script src="ridge.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  /* tufts of wet grass */
+  (function () {
+    var s = '', i, x, y;
+    for (i = 0; i < 46; i++) { x = (i * 367) % 1600; y = 640 + (i * 131) % 250; s += '<path d="M' + x + ' ' + y + 'l-5 -14M' + (x + 5) + ' ' + y + 'l1 -17M' + (x + 10) + ' ' + y + 'l6 -12"/>'; }
+    $('#grass').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'wild', story: 'ridge', storyTitle: 'The Cold Door', id: 'cairn', no: 'I', title: 'The Cairn',
+    go: 'Stay close',
+    intro: [
+      'A Saturday late in October, twenty to three in the afternoon. You joined the Saturday Hill Club five weeks ago, and this is your first real mountain: Skallan, 912 metres. An hour ago you stood on the top of it. Then the cloud came down, two hours before the forecast said it would.',
+      'There are three of you. Mrs MacAskill has led the club for twenty-two years. Kwame Asante is fifteen, and has been coming for three. You are the one who was told, in the car park this morning, to stay close.',
+      'The plan was simple: along the ridge, down a path of rock steps called the Staircase, and a night in the hut at the bottom. Mrs MacAskill went down the first step to see how wet it was. It was very wet.'
+    ],
+    exit: {"next":"whaleback","w":{"b9d87c8c":"caf4a4de"}}, tags: {"k":["30e1a8ec"],"e":["298a5007"],"n":["cc3cb04c"],"sq":["fc218ea4"],"sw":["d28e3067"],"pin":["6c5e3767"],"barn":["dddaf2e8"]},
+    sound: ['trail', { root: 45, bpm: 52, drop: ['mel', 'arp'], beds: [['wind', 0.9]] }],      /* inside a cloud, with a great deal to read: wind, long notes and no tune */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('a-file') || null; told = ER.flag('a-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('a-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.mac && told.key && told.log; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#mapcase').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.mac ? 1 : 0) + (told.key ? 1 : 0) + (told.log ? 1 : 0) + ((ER.flag('a-stage') || 0) > 1 ? 1 : 0) + (nextFile ? 1 : 0), 5);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['Half a message has gone, and you know where the hut is. Go on to the last fence post.']];
+    if (bench && bench.isOpen()) return [['which', [
+      'Start from her notebook. What did you pass after the pillar on the summit, and on which side? Now find those same things on the map: the pool, the fence, the cairns.',
+      'The fence is the thin black line with small strokes across it. It climbs to the ridge from the bottom of the map, runs along beside the path, and then goes off to the top of the map. Mrs MacAskill wrote down what the fence does at this cairn.',
+      'You were walking east, so your left hand was to the north: the top of the map. Four cairns stand on the ridge. At only one of them does the fence leave the ridge and go away to the left.'
+    ]], ['six', [
+      'Eastings first. Which upright blue line is just to the LEFT of our cairn? Its number is printed in the margin under the map. That is two figures.',
+      'Pick up the corner card that is lying on the map, and put its corner, the red 0, on the cairn. The blue line on the left cuts the top edge of the card between two numbers. Take the smaller: that is the third figure.',
+      'Now the same going up. The blue line BELOW the cairn gives two figures, and the place where it cuts the side of the card gives the last. Never round up.'
+    ]], ['phone', ['There is nothing to do here but watch the message go, or not go. Then put the telephone away.']], ['pin', [
+      'Cut 244 252 in two: 244 and 252. The first half is eastings: find line 24 at the foot of the map, and go 4 tenths of a square to the right of it.',
+      'The second half is northings: line 25, and 2 tenths above it. Where the two meet there is a small black square beside a stream. Click it, and say &ldquo;There&rdquo;.'
+    ]]][bench.stage()];
+    if (!told.mac) return ['mac', ['Mrs MacAskill is sitting on the rock in the middle, in a red jacket. Ask her what happens next.']];
+    if (!told.key) return ['key', [
+      'A map explains itself. Its key is printed on its cover.',
+      'The map case is lying open on the flat rock at the front. The right-hand half of it is red: that is the cover of the map. Click it.'
+    ]];
+    if (!told.log) return ['log', ['Mrs MacAskill wrote down what you passed on the ridge, and when. Her notebook is the small yellow book on the rock beside her.']];
+    return ['map', ['Now the map itself: the pale half of the map case, on the flat rock at the front.']];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('Half a message has gone. The cloud has not.'); return; }
+    if (told.in) { busy = false; ER.say('The cairn, in cloud. A quarter to three.'); return; }
+    tell('in');
+    ER.narrate([
+      'Grey, in every direction. You can see a heap of stones, a line of old iron fence posts, and about twenty metres of ridge. After that the world stops.',
+      'Mrs MacAskill is sitting on a rock with her right leg straight out in front of her. She is doing up the laces of that boot again, very tight, and saying nothing at all.',
+      '&ldquo;It isn&rsquo;t broken,&rdquo; she says at last. &ldquo;It&rsquo;s twisted. I have done it twice before, so I know exactly how much use it is. I can walk. I can&rsquo;t hop down four hundred metres of wet steps.&rdquo;',
+      'Then she pats her pockets, and looks at the empty cord round her neck, and down into the cloud where the Staircase goes. &ldquo;And my glasses have gone on ahead of us.&rdquo;',
+      '&ldquo;Right,&rdquo; she says. &ldquo;I can see a mountain, when there is one. I can&rsquo;t see a map. You can. Bring the map case over here, and stay close.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#mac').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mrs MacAskill', role: 'Leader · the Saturday Hill Club', face: window.FACE('mac'),
+      lines: [
+        { note: 'She has pulled her hat down and her hood up. Only her nose is getting wet.', a: '&ldquo;First rule, when something goes wrong: nobody rushes. We are warm, we are fed, and it is three and a half hours till dark. Sit down.&rdquo;' },
+        { q: 'Does it hurt?', a: 'Yes, thank you. Kwame wanted to take the boot off. Never take the boot off. The ankle swells, and you never get the boot on again. A tight boot is the best bandage on this hill.' },
+        { q: 'What do we do now?', a: 'Two things, in order. One: we tell somebody where we are. Dougal Gillespie at the Glen Stores has a copy of our route card, and up here my telephone has one bar of signal. One bar is a text message, if we are lucky. Two: we find another way down to the hut.' },
+        { q: 'Where are we?', a: 'At a cairn on Skallan Edge. That is no use to Dougal: there are four cairns on this ridge. He needs a grid reference. Six figures, and he can put his finger on the very place. I wrote down what we passed, and when: it is all in my notebook. But I can&rsquo;t read a map without my glasses. So the six figures are yours to find.' },
+        { q: 'How do I find a grid reference?', a: 'The map tells you itself. Its key is printed on the cover: every sign, and how to give a reference. Read that first. Then find our cairn. Then the numbers. I shall check you by the oldest method there is: I shall ask you why.' },
+        { a: 'And then the hut. Our route card gives that as a grid reference too. When the message has gone, show me where the hut is on the map. I know where it is. I want to know that you know.' }
+      ],
+      clue: { id: 'mac1', title: 'Mrs MacAskill, at the cairn', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('mac')) { paint(); ER.say('The map case is on the flat rock in front of her: the map on the left, its red cover on the right, and a card pushed in underneath.'); } }
+    });
+  });
+  $('#kwame').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Kwame Asante', role: 'Fifteen · three years in the club', face: window.FACE('kwame'),
+      lines: [
+        { note: 'He is eating a cheese roll, and holds out the other half to you.', a: '&ldquo;She&rsquo;s all right. If she was badly hurt, she&rsquo;d be polite. Want some?&rdquo;' },
+        { q: 'Did you see which way we came?', a: 'I saw her boots. That&rsquo;s the job of number two: follow the boots. I did notice a pool, a while back. On the left. Tiny. A duck would be embarrassed.' },
+        { q: 'And the cairns?', a: 'Two, since the pool. Or three. I was eating. Don&rsquo;t trust my counting: trust the fence. It came up out of nowhere on the right, and we walked beside it for ages. And here it goes off again, look, down to the left. Fences don&rsquo;t lie. They&rsquo;re too boring.' },
+        { q: 'Can&rsquo;t we ring somebody?', a: 'My phone&rsquo;s got no bars and four per cent. I took a lot of photographs of fog. Hers is the old kind that lasts a week.' },
+        { q: 'What is the whistle for?', a: 'Mrs Mac makes everybody carry one. Three years, and I&rsquo;ve never blown it. I don&rsquo;t even know what you&rsquo;re supposed to blow. A tune?' }
+      ],
+      clue: { id: 'kwame1', title: 'Kwame Asante, at the cairn', kind: 'What he said' },
+      done: function (seen) { if (seen) tell('kwame'); }
+    });
+  });
+
+  /* ---------- papers ---------- */
+  function ico(d) { return '<svg viewBox="0 0 54 20">' + d + '</svg>'; }
+  var K = 'stroke="#1b1a17" fill="none"';
+  var KEY = '<h4><small>Sheet 7 &middot; 1:25 000 &middot; 4 cm to 1 km</small>Skallan &amp; the Cold Door</h4><div class="cols"><div><h5>Signs on this map</h5><table>' +
+    '<tr><td>' + ico('<path d="M27 3l7 12H20z" ' + K + ' stroke-width="1.6" stroke-linejoin="round"/><circle cx="27" cy="11.500" r="1.500" fill="#1b1a17"/>') + '</td><td>triangulation pillar: a concrete post on a summit</td></tr>' +
+    '<tr><td>' + ico('<path d="M21 15q6 -12 12 0z" fill="#1b1a17"/>') + '</td><td>cairn: a heap of stones</td></tr>' +
+    '<tr><td>' + ico('<path d="M4 10h46" ' + K + ' stroke-width="1.8" stroke-dasharray="6 4"/>') + '</td><td>path</td></tr>' +
+    '<tr><td>' + ico('<path d="M4 10h46" ' + K + ' stroke-width="5" stroke-dasharray="9 4"/><path d="M4 10h46" stroke="#f3f0e2" stroke-width="2.400" fill="none"/>') + '</td><td>track, wide enough for a cart</td></tr>' +
+    '<tr><td>' + ico('<path d="M4 10h46M10 6v8M20 6v8M30 6v8M40 6v8" ' + K + ' stroke-width="1.200"/>') + '</td><td>fence</td></tr>' +
+    '<tr><td>' + ico('<rect x="12" y="5" width="12" height="9" fill="#1b1a17"/><circle cx="38" cy="10" r="5" ' + K + ' stroke-width="1.600"/>') + '</td><td>building; ruin</td></tr>' +
+    '<tr><td>' + ico('<path d="M3 13q10 -10 20 -3t16 -4" stroke="#2f7fb5" stroke-width="2.200" fill="none"/><ellipse cx="45" cy="13" rx="6" ry="4" fill="#a9d0ea" stroke="#2f7fb5"/>') + '</td><td>stream; pool</td></tr>' +
+    '<tr><td>' + ico('<path d="M6 5v9M11 4v10M16 5v9M21 4v10M26 5v9M31 4v10M36 5v9M41 4v10M46 5v9" ' + K + ' stroke-width="1.100"/>') + '</td><td>crags: bare rock, too steep to walk on</td></tr>' +
+    '<tr><td>' + ico('<path d="M3 6q24 8 48 0" stroke="#b0733a" stroke-width="2.200" fill="none"/><path d="M3 11q24 8 48 0M3 16q24 7 48 0" stroke="#bf8246" stroke-width="1" fill="none"/>') + '</td><td>contours: one every 10 m, and every fifth one thick</td></tr>' +
+    '<tr><td>' + ico('<circle cx="14" cy="10" r="1.800" fill="#1b1a17"/><text x="20" y="14" font-family="Overpass,sans-serif" font-weight="600" font-size="12" fill="#1b1a17">742</text>') + '</td><td>height above the sea, in metres</td></tr>' +
+    '</table></div><div><h5>How to give a grid reference</h5>' +
+    '<svg class="eg" viewBox="0 0 188 176"><rect x="34" y="14" width="130" height="130" fill="#fbf9ef" stroke="#3f8ed0" stroke-width="1.600"/>' +
+    '<g stroke="#3f8ed0" stroke-width=".8">' + [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (i) { return '<path d="M' + (34 + i * 13) + ' 144v-' + (i === 5 ? 9 : 5) + 'M34 ' + (144 - i * 13) + 'h' + (i === 5 ? 9 : 5) + '"/>'; }).join('') + '</g>' +
+    '<path d="M125 144V92M34 92h91" stroke="#1b1a17" stroke-width="1" stroke-dasharray="3 3" fill="none"/><path d="M119 86l12 12M131 86l-12 12" stroke="#c2331f" stroke-width="2.400"/>' +
+    '<g font-family="Overpass,sans-serif" font-weight="700" font-size="13" fill="#2a78bd" text-anchor="middle"><text x="34" y="162">31</text><text x="164" y="162">32</text><text x="18" y="149">58</text><text x="18" y="19">59</text></g>' +
+    '<g font-family="Handlee,cursive" font-size="15" fill="#c2331f" text-anchor="middle"><text x="80" y="172">7 tenths</text><text x="70" y="124">4 tenths</text></g>' +
+    '<path d="M36 150h87M36 147v6M123 147v6M28 142V94M25 142h6M25 94h6" stroke="#c2331f" stroke-width="1.200" fill="none"/></svg>' +
+    '<p>The blue lines make squares one kilometre across. Every line has a number: look in the margin, and across the middle of the sheet.</p>' +
+    '<p>A <b>grid reference</b> of six figures names one small square, 100 metres across.</p>' +
+    '<p><b>1. Eastings first.</b> Find the upright line just to the LEFT of your point: two figures. Then count the tenths of a square from that line across to your point: one figure more.</p>' +
+    '<p><b>2. Then northings.</b> Find the line just BELOW your point: two figures. Then the tenths from that line up to your point.</p>' +
+    '<p><b>3.</b> Say all six. Count whole tenths only, and never round up.</p>' +
+    '<p>In the drawing the cross is 7 tenths past line 31, and 4 tenths above line 58. Its reference is <b>317 584</b>.</p>' +
+    '<p class="say">&ldquo;Along the corridor, then up the stairs.&rdquo;</p></div></div>';
+  $('#keyflap').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: KEY, cls: 'key', clue: { id: 'key', title: 'The key of the map', kind: 'Printed on its cover' }, done: function () {
+      RIDGE.terms(['grid reference', 'eastings', 'northings', 'cairn', 'triangulation pillar', 'crag']);
+      if (tell('key')) { paint(); ER.say('Eastings, then northings. Along the corridor, then up the stairs.'); }
+    } });
+  });
+  var LOG = '<h4>Sat. Skallan by the west ridge.</h4><p>F.M., Kwame, and our new one.</p>' +
+    '<p><b>9.30</b> car park. Dry, cold, clear.</p><p><b>13.50</b> Skallan, at the pillar. Cloud down on us:</p><p><b></b> two hours early.</p>' +
+    '<p><b>14.05</b> small pool on our LEFT.</p><p><b>14.20</b> fence comes up from the RIGHT</p><p><b></b> and joins us.</p>' +
+    '<p><b>14.35</b> cairn. Fence turns away, downhill</p><p><b></b> to the LEFT. Top of the Staircase.</p><p class="stop"><b>14.40</b> I will just try the first st</p>';
+  $('#logbook').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LOG, cls: 'log', clue: { id: 'log', title: 'Mrs MacAskill’s notebook', kind: 'What we passed, and when' }, done: function () {
+      if (tell('log')) { paint(); ER.say('The last line was never finished. The pencil has gone off the side of the page.'); }
+    } });
+  });
+  var CARD = '<h4>Route card &middot; the Saturday Hill Club</h4><p>Leader: <span class="hand">F. MacAskill</span> &nbsp; Party: <span class="hand">3 (K. Asante, and one new member)</span><br>A copy is with: <span class="hand">D. Gillespie, Glen Stores</span></p>' +
+    '<table><tr><th>Leg</th><th>From</th><th>To</th><th>Bearing</th><th>Km</th><th>Climb</th><th>Naismith</th></tr>' +
+    '<tr><td>1</td><td>car park</td><td>Skallan, the pillar<br>GR 227 261</td><td>path</td><td>6.0</td><td>800 m</td><td>2 h 32</td></tr>' +
+    '<tr><td>2</td><td>Skallan</td><td>cairn at the top of the Staircase</td><td>083&deg;</td><td>1.6</td><td>none</td><td>19 min</td></tr>' +
+    '<tr><td>3</td><td>cairn</td><td>Skallan Hut<br>GR 244 252</td><td>175&deg;</td><td>1.1</td><td>none: 490 m DOWN</td><td>13 min</td></tr></table>' +
+    '<p class="hand">Naismith says 13 minutes for the Staircase. Naismith never met the Staircase. Allow an hour.</p>' +
+    '<p class="hand">Sat. night at Skallan Hut. Sunday: out by the track, and at your counter by three, Dougal. If we are not, come looking.</p>' +
+    '<p class="small">SUNSET 17.50 &middot; DARK BY 18.25</p>';
+  $('#rcard').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'card', clue: { id: 'card', title: 'The route card', kind: 'A copy is with Dougal Gillespie' }, done: function () {
+      RIDGE.terms(['route card']);
+      if (tell('card')) ER.say('Three legs, and you are standing at the end of the second. The third is the Staircase.');
+    } });
+  });
+
+  /* ---------- things on the ridge ---------- */
+  RIDGE.thing('#cairn', 'cairn', 'A cairn: a heap of stones, built by walkers one stone at a time to mark the way. This one is as tall as Kwame, and about as much help as the fog.', isBusy);
+  RIDGE.thing('#fence', 'fence post', 'Old iron fence posts with one rusty wire. They come along the ridge as far as this cairn. Then they turn and go off down the left-hand side, into the cloud.', isBusy);
+  RIDGE.thing('#steps', 'slab', 'The top of the Staircase. The first step is a slab of dark rock, shining with wet. There is a long pale scrape across the moss, the length of a boot.', isBusy);
+  RIDGE.thing('#poles', 'walking pole', 'Two walking poles. Until half an hour ago they were for her knees.', isBusy);
+  RIDGE.thing('#sack', 'rucksack', 'Mrs MacAskill&rsquo;s rucksack. A small orange book is sticking out of the top pocket: THE HILL CLUB FIELD GUIDE. &ldquo;Later,&rdquo; she says. &ldquo;One thing at a time.&rdquo;', isBusy);
+  RIDGE.thing('#phone', null, function () { return nextFile ? 'The telephone is zipped inside her jacket. &ldquo;Cold kills a battery,&rdquo; she says.' : 'Her telephone: an old one, with real buttons. It shows one bar of signal, which comes and goes with the cloud.'; }, isBusy);
+  RIDGE.thing('#cloud', 'cloud', 'Cloud. It is coming up from behind you, out of the west, quite fast, and every piece of it is the same as the last.', isBusy);
+  $('#whistle').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation(); ER.wordAt(e.clientX, e.clientY, 'whistle');
+    ER.say('A bright orange whistle on the strap of Kwame&rsquo;s rucksack. It has never been blown.');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#mapcase').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The map is back in its case, with a pencil ring round the cairn and another round the hut.'); return; }
+    if (!told.mac) { ER.say('A map, in a plastic case. Mrs MacAskill is watching you look at it.'); return; }
+    if (!told.key) { ER.say('&ldquo;Read the key before you read the map,&rdquo; says Mrs MacAskill. &ldquo;It is on the cover: the red half.&rdquo;'); return; }
+    if (!told.log) { ER.say('&ldquo;You will want my notebook,&rdquo; says Mrs MacAskill. &ldquo;It is here beside me. A map can&rsquo;t tell you where you are until you know what you have walked past.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the map: which cairn, its six figures, half a message, and the hut ---------- */
+  function makeBench() {
+    var P = RIDGE.P, CAIRNS = [P(23.25, 26.22), P(23.85, 26.28), P(24.35, 26.35), P(24.85, 26.50)];       /* the four cairn signs, west to east */
+    var stage = ER.flag('a-stage') || 0, pick = ER.flag('a-k') || 0, pin = ER.flag('a-pin') || null, wait = false, timers = [];
+    var box = ER.el('div', 'bx'), s, i;
+    s = '<g id="a-marks"></g><g id="a-romer" class="tool"><rect class="rm-card" x="-214" y="0" width="214" height="214" rx="5"/>';
+    for (i = 0; i <= 10; i++) {
+      s += '<path class="rm-tick" d="M' + (-i * 20) + ' 0v' + (i % 5 ? 7 : 11) + 'M0 ' + (i * 20) + 'h-' + (i % 5 ? 7 : 11) + '"/>';
+      if (i) s += '<text class="rm-num" x="' + (-i * 20) + '" y="22">' + i + '</text><text class="rm-num" x="-19" y="' + (i * 20 + 3.2) + '">' + i + '</text>';
+    }
+    s += '<circle r="3.200" class="rm-zero"/><text class="rm-num rm-zero" x="-9" y="-5">0</text><text class="rm-num" x="-107" y="112" opacity=".6">1:25 000</text></g>';
+    box.innerHTML = '<div class="frame">' + RIDGE.sheet(RIDGE.WHOLE, s) + '<div class="fone"></div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><span id="a-slot"></span><button type="button" class="btn" id="a-go"></button></div>';
+    var svg = box.querySelector('svg.sheet'), marks = box.querySelector('#a-marks'), romer = box.querySelector('#a-romer'), fone = box.querySelector('.fone'),
+      msgEl = box.querySelector('.pmsg'), go = box.querySelector('#a-go'), rpos = { x: 930, y: 250 }, roff = { x: 0, y: 0 };
+    var gr = RIDGE.wheels(box.querySelector('#a-slot'), { label: 'Grid<br>reference', vals: [0, 0, 0, 0, 0, 0].map(function () { return RIDGE.DIGITS; }), start: ER.flag('a-gr') || null, cls: 'gap3',
+      change: function () { ER.flag('a-gr', gr.at()); } });
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function six() { var v = gr.get(); return v.slice(0, 3) + ' ' + v.slice(3); }
+    function draw() {
+      var m = '';
+      if (pick) m += RIDGE.ring(CAIRNS[pick - 1], stage > 0 ? 'us' : '', 11, -9);
+      if (pin) m += (stage > 3 ? RIDGE.ring(pin, 'hut', 11, 14) : '') + '<g transform="translate(' + pin.x + ' ' + pin.y + ')"><path d="M0 0L-3 -17" stroke="#59616a" stroke-width="1.600"/><circle cx="-3.400" cy="-20" r="5" fill="#d3301c" stroke="#7a1a10"/></g>';
+      marks.innerHTML = m;
+      romer.style.display = stage === 1 ? '' : 'none';
+      romer.setAttribute('transform', 'translate(' + rpos.x.toFixed(1) + ' ' + rpos.y.toFixed(1) + ')');
+      gr.node.style.display = stage === 1 || stage === 2 ? '' : 'none'; gr.lock(stage !== 1);
+      fone.style.display = stage === 2 ? 'block' : 'none';
+      go.textContent = ['This is our cairn', 'Read it to her', 'Put the telephone away', 'There'][stage] || 'There';
+      go.style.visibility = stage > 3 ? 'hidden' : '';
+    }
+    function setStage(n) { stage = n; ER.flag('a-stage', n); draw(); paint(); }
+
+    /* the corner card: its corner goes on the place, and the blue lines cut its two edges */
+    ER.drag(romer, {
+      start: function (e) { var p = ER.pt(svg, e); roff.x = rpos.x - p.x; roff.y = rpos.y - p.y; },
+      move: function (e) {
+        var p = ER.pt(svg, e), x = RIDGE.clamp(p.x + roff.x, 6, 1012), y = RIDGE.clamp(p.y + roff.y, -2, 590);
+        CAIRNS.forEach(function (c) { if (Math.abs(c.x - x) < 5 && Math.abs(c.y - y) < 5) { x = c.x; y = c.y; } });
+        rpos.x = x; rpos.y = y; romer.setAttribute('transform', 'translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ')');
+      }
+    });
+    romer.addEventListener('click', function (e) { e.stopPropagation(); });
+
+    svg.addEventListener('click', function (e) {
+      var p = ER.pt(svg, e), best = 0, bd = 16 * 16;
+      if (wait || nextFile) return;
+      if (stage === 0) {
+        CAIRNS.forEach(function (c, k) { var d = (c.x - p.x) * (c.x - p.x) + (c.y - p.y) * (c.y - p.y); if (d < bd) { bd = d; best = k + 1; } });
+        if (!best) { msg('That is not a cairn. On this map a cairn is a small black heap, like half a button: the key shows one.'); return; }
+        pick = best; ER.flag('a-k', pick); RIDGE.sfx.pencil(); draw();
+        msg('A pencil ring round that one. Are you sure? Mrs MacAskill will ask you why.');
+      } else if (stage === 3) {
+        if (p.x < 0 || p.x > 1000 || p.y < 0 || p.y > 600) return;
+        pin = { x: Math.round(p.x * 10) / 10, y: Math.round(p.y * 10) / 10 }; ER.flag('a-pin', pin); RIDGE.sfx.pin(); draw();
+        msg('A pin in the map. If that is 244 252, say &ldquo;There&rdquo;.');
+      }
+    });
+
+    var NOTK = [
+      '&ldquo;Why that one?&rdquo; asks Mrs MacAskill. &ldquo;We passed the pool at five past two, on our left, and walked on for another half an hour. Is that cairn before the pool, or after it?&rdquo;',
+      '&ldquo;Why that one?&rdquo; asks Mrs MacAskill. &ldquo;Look what the fence does there. It comes up to the ridge from the right-hand side as we walked. My notebook says we had it beside us for a quarter of an hour after that.&rdquo;',
+      '&ldquo;Why that one?&rdquo; asks Mrs MacAskill. &ldquo;Tell me about the fence there. Then tell me about the pool.&rdquo;',
+      '&ldquo;Why that one?&rdquo; asks Mrs MacAskill. &ldquo;Is there a fence at it? There is a fence post beside my elbow.&rdquo;'
+    ];
+    function sendText() {
+      var a = 'From F MacAskill, Hill Club, party of 3 on Skallan Edge. I have twisted an ankle. Can walk, slowly. We are at the cairn at the top of the Staircase, GR ' + six() + '.',
+        b = 'We are NOT using the Staircase. Going down by the Cold Door and the track to Skallan Hut tonight. No help needed. Will ring on Sunday.';
+      fone.innerHTML = '<h5><span>MESSAGES</span><span id="a-bars">&#9646;&#9647;&#9647;&#9647;</span></h5><p class="to">To: D. Gillespie</p><p class="out">' + a + '</p><p class="st" id="a-s1">Too long for one message. Sending 1 of 2 &hellip;</p>' +
+        '<p class="out two">' + b + '</p><p class="st" id="a-s2"></p>';
+      go.disabled = true;
+      later(function () { var n = fone.querySelector('#a-s1'); n.textContent = '1 of 2: sent 15.08'; n.className = 'st ok'; fone.querySelector('#a-s2').innerHTML = 'Sending 2 of 2 &hellip;'; RIDGE.sfx.sent(); }, 2300);
+      later(function () {
+        var n = fone.querySelector('#a-s2'); n.textContent = '2 of 2: NOT SENT. No service.'; n.className = 'st bad'; fone.querySelector('#a-bars').innerHTML = '&#9647;&#9647;&#9647;&#9647;'; RIDGE.sfx.fail(); go.disabled = false;
+        msg('The one bar has gone. Mrs MacAskill holds the telephone up at the end of her arm, like a lantern. Nothing. &ldquo;Half a message,&rdquo; she says. &ldquo;Well. It is the half that says where we are.&rdquo;');
+        ER.addClue('text', 'The text to Dougal Gillespie', '<h4><span>MESSAGES</span><span>no service</span></h4><p class="to">To: D. Gillespie</p><p class="out">' + a + '</p><p class="st">1 of 2: sent 15.08</p><p class="out" style="opacity:.55">' + b + '</p><p class="st bad">2 of 2: NOT SENT. No service.</p>', 'phone', 'Sent from the cairn');
+      }, 5400);
+    }
+
+    go.addEventListener('click', function () {
+      var v, e, n, eo, no, code, file;
+      if (wait || nextFile) return;
+      if (stage === 0) {
+        if (!pick) { msg('Click the cairn that we are sitting beside. There are four on the ridge.'); return; }
+        if (!ER.check('k', pick)) { ER.sfx.no(); msg(NOTK[pick - 1]); pick = 0; ER.flag('a-k', 0); draw(); return; }
+        RIDGE.sfx.pencil(); setStage(1);
+        msg('&ldquo;Because the fence leaves us here and goes north,&rdquo; says Mrs MacAskill. &ldquo;Good. Now its six figures. There is a corner card on the map: pick it up if you want it.&rdquo;');
+      } else if (stage === 1) {
+        v = gr.get(); e = v.slice(0, 3); n = v.slice(3); eo = ER.check('e', e); no = ER.check('n', n);
+        if (eo && no) {
+          RIDGE.mine('where', 'Where we are', '<p>The cairn where the fence leaves the ridge and goes north: the top of the Staircase.</p><p>Grid reference <b>' + six() + '</b>. Eastings first, then northings.</p>', true);
+          setStage(2); msg('&ldquo;' + six() + ',&rdquo; says Mrs MacAskill, and types it with one finger. &ldquo;Now let us see what one bar can do.&rdquo;'); sendText(); return;
+        }
+        ER.sfx.no();
+        if (ER.check('sw', v)) msg('&ldquo;Stop,&rdquo; says Mrs MacAskill. &ldquo;You have gone up the stairs before you went along the corridor. Eastings first: the numbers along the foot of the map.&rdquo;');
+        else if (eo) msg('&ldquo;The first three are right,&rdquo; says Mrs MacAskill. &ldquo;Now the northings. Which line is just below us? And how many whole tenths are we above it?&rdquo;');
+        else if (no) msg('&ldquo;The last three are right,&rdquo; says Mrs MacAskill. &ldquo;It is the eastings that are wrong. Which line is just to the left of us? And how many whole tenths past it are we?&rdquo;');
+        else if (ER.check('sq', e.slice(0, 2) + n.slice(0, 2))) msg('&ldquo;The right square,&rdquo; says Mrs MacAskill. &ldquo;But the square is a kilometre across, and Dougal would be all night finding us in it. The tenths: count them again. And never round up.&rdquo;');
+        else msg('&ldquo;Why?&rdquo; asks Mrs MacAskill. (That is her whole method.) &ldquo;Which blue line is just to the left of our cairn? Read me the number at the foot of it.&rdquo;');
+      } else if (stage === 2) {
+        setStage(3);
+        msg('She zips the telephone inside her jacket. &ldquo;Cold kills a battery. Now the hut. The route card says <b>244 252</b>. Put a pin in it for me.&rdquo;');
+      } else if (stage === 3) {
+        if (!pin) { msg('Click the map at 244 252: a red pin will go in. Then say &ldquo;There&rdquo;.'); return; }
+        code = RIDGE.six(pin.x, pin.y);
+        if (!ER.check('pin', code)) {
+          ER.sfx.no();
+          msg(ER.check('barn', code) ? '&ldquo;What is beside your pin?&rdquo; asks Mrs MacAskill. &ldquo;A track, and a river? Then that is the old barn under the Nose, and nobody sleeps there but sheep. You have read the northings first: 252 along and 244 up. Along the corridor first.&rdquo;' :
+            '&ldquo;Is there a building under your pin?&rdquo; asks Mrs MacAskill. &ldquo;Take it slowly. 244: line 24, and four tenths to the right of it. Then 252: line 25, and two tenths up.&rdquo;');
+          pin = null; ER.flag('a-pin', null); draw(); return;
+        }
+        file = ER.exitOk([gr.get() + '-' + code]);
+        if (!file) { msg('The map will not fold. Something is wrong with this page: tell your teacher.'); return; }
+        wait = true; nextFile = file; ER.flag('a-file', file); stage = 4; ER.flag('a-stage', 4);
+        var s0 = ER.state(); s0.done = s0.done || {}; s0.done.cairn = 1; ER.persist(true);
+        RIDGE.sfx.pencil(); draw();
+        RIDGE.mine('hut', 'Where the hut is', '<p>Skallan Hut is at <b>244 252</b>: line 24 and four tenths, line 25 and two tenths. A black square beside a stream.</p><p>From our cairn it is one kilometre away and five hundred metres down. The Slabs are in between.</p>', true);
+        msg('&ldquo;That is it,&rdquo; says Mrs MacAskill. &ldquo;A black square beside the water. One kilometre from here, and five hundred metres straight down. It might as well be in France.&rdquo;');
+        setTimeout(function () {
+          ER.closeAll(); RIDGE.solved(); paint(); busy = true;
+          ER.narrate([
+            'You have a pencil ring round the place where you are, and a pin in the place where you want to be. Between the two, the map is nearly black with tiny strokes.',
+            '&ldquo;The Slabs,&rdquo; says Mrs MacAskill, without looking. &ldquo;The Staircase is the only way through them, and I have just tried it. So we don&rsquo;t go down. We go along.&rdquo;',
+            '&ldquo;Along where?&rdquo; says Kwame. &ldquo;There isn&rsquo;t any along. There&rsquo;s just white.&rdquo;',
+            '&ldquo;There is a kilometre of nothing, called the Whaleback,&rdquo; she says, &ldquo;and at the far end of it there is a door. Help me up.&rdquo;'
+          ], function () { busy = false; showGo(); });
+        }, 3000);
+      }
+    });
+    draw();
+    msg(['The whole of Sheet 7. Somewhere on it is a heap of stones with three people beside it. Click the cairn that you think is ours.',
+      'The cairn is ringed. Now its grid reference: six figures on the wheels, eastings first.',
+      'Mrs MacAskill has the telephone in her hand.', 'The hut is at <b>244 252</b>. Click that place on the map, and a pin will go in.'][stage] || '');
+    return {
+      open: function () { ER.open('ov-lock', box); if (stage === 2 && !fone.innerHTML) sendText(); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return Math.min(stage, 3); }
+    };
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Gap · The Box at Pole Seven</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="tide.css">
+<style>
+  body{--bg:#d3dde2;--accent:#ff8c42;--font-display:'Fjalla One',sans-serif;--font-ui:'Overpass',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(36,48,58,.96);--tc-ink:#eef3f5;--cap-bg:rgba(28,38,46,.93);--panel:#26333d;--face-bg:#a9c4cc;--q-ink:#ffcfa8;--fade:#dfe7ea;--hud-bg:rgba(28,38,46,.82)}
+  .tc-room{letter-spacing:.2em}
+  .sS{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .drift{animation:drift 44s steps(140,end) infinite alternate}
+  .drift.b{animation-duration:58s;animation-delay:-19s}
+  @keyframes drift{from{transform:translateX(-260px)}to{transform:translateX(260px)}}
+  #sheet{animation:creep 70s steps(50,end) forwards}
+  @keyframes creep{from{opacity:.25}to{opacity:.95}}
+  #aerial{animation:tw 3.1s steps(1,end) infinite}
+  @keyframes tw{0%{opacity:1}70%{opacity:.4}82%{opacity:1}}
+  #watch.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.35)}}
+
+  /* listening, with a watch in your hand */
+  .lpair{display:grid;grid-template-columns:1fr 1fr;background:#dbe4e8}
+  .lpair svg{display:block;width:100%;height:auto}
+  .lpair text{pointer-events:none}
+  .pane2{position:relative;display:flex;flex-direction:column;justify-content:center}
+  .fgT{font-family:'Overpass',sans-serif;font-weight:700;fill:#26333d}
+  .slot{position:absolute;width:38%;min-height:46px;border:2px dashed #5b6b76;border-radius:4px;background:rgba(255,255,255,.5);display:grid;place-items:center;padding:3px}
+  .slot.l{left:2%;top:33%}.slot.r{right:2%;top:33%}.slot.b{left:36%;bottom:4%}
+  .tray{display:flex;gap:8px;justify-content:center;min-height:54px;padding:8px 8px 0}
+  .tagb{padding:5px 12px 4px;background:linear-gradient(#f4dc98,#c9a856 55%,#e9cf8a);color:#2a2110;border-radius:3px;box-shadow:inset 0 0 0 1px #7a6230,0 2px 5px rgba(0,0,0,.4);font-family:'Overpass',sans-serif;font-weight:700;font-size:13.5px;line-height:1.15;text-align:center;white-space:nowrap}
+  .tagb small{display:block;font-family:'Overpass Mono',monospace;font-weight:600;font-size:12px;color:#8a1a66}
+  .src{opacity:.16;transition:opacity .5s}
+  .src.on{opacity:1;transition:none}
+  .wedge{fill:#fff;opacity:0;cursor:pointer}
+  .wedge:hover{opacity:.3}
+  #d-map1,#d-route{display:none}
+  .wT{font-family:'Overpass',sans-serif;font-weight:700;fill:#16222b}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="fogG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9d5db"/><stop offset=".55" stop-color="#e4ebed"/><stop offset="1" stop-color="#cfd9dc"/></linearGradient>
+  <linearGradient id="sandG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c5cac0"/><stop offset=".4" stop-color="#a9a88f"/><stop offset="1" stop-color="#77755c"/></linearGradient>
+  <radialGradient id="mist" cx="50%" cy="66%" r="56%"><stop offset="0" stop-color="#e4ebed" stop-opacity="0"/><stop offset=".6" stop-color="#e4ebed" stop-opacity=".4"/><stop offset="1" stop-color="#e6edef" stop-opacity=".98"/></radialGradient>
+  <radialGradient id="puff"><stop offset="0" stop-color="#f1f5f6" stop-opacity=".65"/><stop offset="1" stop-color="#f1f5f6" stop-opacity="0"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#fogG)"/>
+<path d="M-1000 520Q300 500 800 512T2600 500V1320H-1000Z" fill="url(#sandG)"/>
+<!-- a sheet of water, coming -->
+<g id="water" class="hot"><path id="sheet" d="M900 560q200 -22 460 -10t700 -14v70q-400 22 -700 12t-460 -58z" fill="#b9cdd6"/><path d="M1000 566q200 -14 400 -6" stroke="#eef4f6" stroke-width="3" fill="none" opacity=".7"/></g>
+<g stroke="#8d8c74" stroke-width="2.400" fill="none" opacity=".6"><path d="M-100 640q90 -12 180 0t180 0t180 0"/><path d="M500 700q90 -12 180 0t180 0t180 0"/><path d="M1000 760q90 -12 180 0t180 0t180 0"/><path d="M-50 800q100 -14 200 0t200 0"/><path d="M700 860q100 -14 200 0t200 0t200 0"/></g>
+<g fill="#cfdde3" opacity=".7"><ellipse cx="760" cy="640" rx="150" ry="8"/><ellipse cx="1340" cy="840" rx="220" ry="12"/></g>
+
+<!-- pole 10: the last one -->
+<g id="p10" class="hot"><ellipse cx="300" cy="752" rx="60" ry="8" fill="#55543f" opacity=".5"/><g transform="rotate(5 300 750)"><path d="M300 750V330" stroke="#4a4030" stroke-width="18" stroke-linecap="round"/><path d="M294 742V338" stroke="#6b5e46" stroke-width="4"/>
+  <rect x="268" y="356" width="64" height="48" fill="#e9e6d6" stroke="#2a2620" stroke-width="3"/><text x="300" y="393" class="sS" font-size="36" fill="#2a2620">10</text><rect x="291" y="690" width="18" height="52" fill="#6f7a54" opacity=".8"/></g></g>
+
+<!-- where the sand kept her boot -->
+<g id="boot" class="hot"><ellipse cx="1250" cy="712" rx="120" ry="24" fill="#5d5c48"/><ellipse cx="1250" cy="710" rx="96" ry="16" fill="#44443a"/><path d="M1226 708q-4 -22 20 -24q26 0 24 22z" fill="#3d6b2f"/><ellipse cx="1248" cy="686" rx="22" ry="6" fill="#22201a"/>
+  <g stroke="#77755c" stroke-width="2" fill="none"><path d="M1120 716q-30 6 -50 20M1380 716q30 4 44 18M1160 736q-20 14 -24 30"/></g></g>
+
+<!-- Dr Arroyo, with one boot and a wet sock -->
+<g id="arr" class="hot" transform="translate(120 0)">
+  <ellipse cx="930" cy="806" rx="150" ry="13" fill="#55543f" opacity=".45"/>
+  <path d="M880 800q-10 -40 30 -50l120 10q30 6 40 40z" fill="#6b6456"/><path d="M1060 790l56 -6q16 4 10 18l-60 2z" fill="#3a3026"/>
+  <path d="M900 780q60 -50 150 -30" stroke="#6b6456" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M1052 752l40 14q6 8 -2 14l-30 -6z" fill="#e3bd9a"/>
+  <path d="M858 780q-16 -130 36 -146q54 -8 62 52l8 94z" fill="#2f6f8f"/>
+  <path d="M940 660q50 30 90 76" stroke="#2a6482" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="1032" cy="738" r="9" fill="#c99b70"/>
+  <path d="M872 664q-10 40 30 70l80 20" stroke="#2a6482" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="986" cy="756" r="9" fill="#c99b70"/>
+  <path d="M990 748q26 -10 44 6q-6 18 -30 14z" fill="#f1ead8" stroke="#9a927a" stroke-width="1.500"/><path d="M1012 766l-4 20M1020 764l2 18" stroke="#8fb8c9" stroke-width="2" stroke-linecap="round"/>
+  <rect x="896" y="616" width="14" height="18" fill="#b98d66"/><circle cx="906" cy="602" r="23" fill="#c99b70"/><path d="M884 602q0 -26 22 -26t22 26q-10 -10 -22 -10t-22 10z" fill="#2a1d14"/>
+  <path d="M886 610q-10 40 -4 80" stroke="#2a1d14" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <ellipse cx="906" cy="584" rx="44" ry="9" fill="#e3c98a"/><path d="M884 582q0 -22 22 -22t22 22z" fill="#edd79c"/><path d="M884 580h44" stroke="#b5461f" stroke-width="4"/>
+  <path d="M914 602h6" stroke="#2a1d14" stroke-width="2.400"/><path d="M912 616q6 -3 10 1" stroke="#8a3d30" stroke-width="2" fill="none"/>
+</g>
+
+<!-- the orange bag: the radio, the watch on its strap, and the chart open on the sand -->
+<g transform="translate(40 -130)"><g id="bag" class="hot"><ellipse cx="520" cy="842" rx="150" ry="13" fill="#4a4a38" opacity=".5"/><path d="M420 838q-18 -92 34 -108q66 -10 96 6q32 22 16 102z" fill="#f08a24"/><path d="M442 760q50 -20 106 0v28q-54 -16 -106 0z" fill="#d9731a"/><path d="M464 736q26 -32 56 0" stroke="#b5631a" stroke-width="8" fill="none"/></g>
+<g id="radio" class="hot"><path id="aerial" d="M400 760V648" stroke="#16191b" stroke-width="6" stroke-linecap="round"/><rect x="380" y="734" width="40" height="92" rx="8" fill="#16191b"/><rect x="386" y="744" width="28" height="18" fill="#8fd6b4"/><rect x="376" y="794" width="48" height="12" fill="#c8321e"/><circle cx="412" cy="818" r="3" fill="#59e08a"/></g>
+<g id="watch" class="hot"><circle cx="560" cy="806" r="40" fill="#fff" opacity="0"/><path d="M556 744q10 30 4 44" stroke="#3a3026" stroke-width="7" fill="none"/><circle cx="560" cy="808" r="27" fill="#22201a"/><circle cx="560" cy="808" r="22" fill="#f3f0e2"/>
+  <g stroke="#22201a" stroke-width="2"><path d="M560 790v5M560 821v5M542 808h5M573 808h5"/></g><path d="M560 808V793M560 808l10 6" stroke="#c2331f" stroke-width="2.600" stroke-linecap="round"/><circle cx="560" cy="808" r="2.500" fill="#22201a"/></g>
+<g id="chartS" class="hot"><path d="M620 780l250 -30 22 108 -250 34z" fill="#cfe3ee" stroke="#1d1c1a" stroke-width="2"/><path d="M642 788l206 -24 16 84 -206 28z" fill="#cddab4"/><path d="M700 782l14 86M790 770l16 86" stroke="#5f93ad" stroke-width="7" opacity=".8"/><path d="M640 838l240 -30" stroke="#1d1c1a" stroke-width="1.500" stroke-dasharray="2 4"/></g>
+<g id="ckey" class="hot"><path d="M780 846l100 -13 6 30 -100 14z" fill="#f3f6ee" stroke="#b0207e" stroke-width="3"/><g stroke="#b0207e" stroke-width="2" opacity=".85"><path d="M792 852l76 -10M794 861l60 -8"/></g></g></g>
+
+<g pointer-events="none"><ellipse class="drift" cx="400" cy="320" rx="640" ry="140" fill="url(#puff)"/><ellipse class="drift b" cx="1250" cy="500" rx="720" ry="120" fill="url(#puff)"/>
+  <rect x="-1000" y="-400" width="3600" height="1720" fill="url(#mist)"/></g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Climb the ladder</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="tide.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  ER.init({
+    theme: 'wild', story: 'tide', storyTitle: 'The Box at Pole Seven', id: 'gap', no: 'IV', title: 'The Gap',
+    go: 'Stand still',
+    intro: [
+      'By the rule of twelfths the sea rises one twelfth of its range in the first hour, then two, three, three, two and one. Today the range is 4.8 metres, so a twelfth is 0.4, and the rings went on the pole at 0.8, 1.6, 2.8, 4.0 and 4.8. At twenty to two the book said 1.2 and the pole said 1.6. The sea was 0.4 metres above its card. So the ford, which dries 1.6, had shut at 13.40 and not at 14.10.',
+      'And the Runnel, which dries only 1.2, had gone at ten past one. The way back to the mainland was cut before the way home was. That is how a tide comes in over sands: not like a wall from in front, but up the channels, from behind.',
+      'You went west: pole 12, pole 11, pole 10, one of you standing at each pole and whistling until the other had found the next. After pole 10 there was no next. Dr Arroyo walked on thirty steps to look for it. Then she stopped walking, though her feet had not been asked.'
+    ],
+    exit: {"next":"box","w":{"568a47d7":"89bcfb95"}}, tags: {"left":["d7fda865"],"right":["2b675027"],"back":["affee1c4"],"point":["291d5f71"],"p_bell":["057fb147"],"p_light":["061266ba"],"route":["69cade10"],"soft":["ed05f601"],"swash":["fbaf1378","ebc1dad2"]},
+    sound: ['trail', { root: 45, bpm: 48, drop: ['mel', 'arp', 'ost', 'bass'], level: 1.05, beds: [['sea', 0.7], ['wind', 0.5]] }],      /* two horns and a bell are counted against a watch here: no tune, no plucked notes, no bass, nothing with a beat */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.arr && told.radio && told.key; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#watch').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.arr ? 1 : 0) + (told.radio ? 1 : 0) + (told.key ? 1 : 0) + Math.min(3, ER.flag('d-stage') || 0), 6);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['Four black legs, a ladder, and a white box with a 7 on it. Climb the ladder.']];
+    if (bench && bench.isOpen()) return [['names', [
+      'Watch one whole turn of the hand. A horn leaves dashes on the dial, a bell leaves dots. Look at how the dashes of each horn are spaced.',
+      'The corner of the chart says what the letters mean. Horn(2) 30s is a GROUP of two blasts, close together, every 30 seconds. Horn 15s is ONE blast every 15 seconds. Both make two blasts in half a minute: so do not count the blasts. Look at how they fall.',
+      'And the bell: its dots are in different places every minute. It keeps no time, so no hand and no machine is ringing it. The chart has two bells. One of them is rung by hand.'
+    ]], ['point', [
+      'The Box makes no sound today. But the chart shows where it stands: on the Pole Road, which runs in one straight line from the Light to the pier.',
+      'You are close to pole 10. On the chart, is the Box on the Light&rsquo;s side of pole 10, or on the pier&rsquo;s side? Then: on which side of you is that horn?'
+    ]], ['route', [
+      'There are three ways from pole 10 to the Box: straight along the line of the poles, round by the south, or round by the north. Read what the chart prints on each.',
+      'Straight on is marked &ldquo;soft&rdquo;. The south way lies in the Swash, which dries 2.0. The north way goes over sand that dries 2.8 and 3.0. Now: how high is the sea at 14.25?',
+      'By the rings, 14.25 is a quarter of the way from 1.6 to 2.8: that is 1.9. Add the 0.4 that the pole showed: 2.3. Anything lower than 2.3 is under water already.'
+    ]]][bench.stage()];
+    if (!told.arr) return ['arr', ['Dr Arroyo is sitting on the sand with one boot on. Ask her what she can hear.']];
+    if (!told.radio) return ['radio', ['The radio is coughing. It is in the side of the orange bag, with its aerial up.']];
+    if (!told.key) return ['key', [
+      'Mr Nyberg said it: the chart says how each horn sounds. It is printed in the corner.',
+      'The chart is open on the sand beside the bag. Click the small box with the purple edge, in its corner.'
+    ]];
+    return ['watch', ['Now listen, and time what you hear. The watch is hanging on the strap of the orange bag.']];
+  }
+
+  function begin() {
+    TIDE.mine('pole', 'What the tide pole said', '<p>Today&rsquo;s range is 5.2 &minus; 0.4 = 4.8 m, so one twelfth is 0.4 m. By the rule of twelfths the sea should be at 0.8 at 13.10, <b>1.6</b> at 14.10, 2.8 at 15.10, 4.0 at 16.10 and 4.8 at 17.10.</p><p>At 13.40 the book said 1.2 and the pole said 1.6. The sea is <b>0.4 m above its card</b> today: low pressure, and three days of wind on to the shore.</p><p>So every place goes under when the card says 0.4 m LESS than its height.</p>', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The Box is over your heads. The bell on the bar is still ringing for nobody.'); return; }
+    if (told.in) { busy = false; ER.say('Wet sand, fog, two horns and a bell. Twenty-five past two.'); return; }
+    tell('in');
+    ER.narrate([
+      'It took a quarter of an hour. She did it properly: she sat back to spread her weight, and worked one leg out at a time, while you lay flat on the orange bag and pulled. Soft sand does not swallow people. It only holds them still until the sea arrives, which is worse.',
+      'She is out. The sand has kept her left boot. And you have both turned round so many times that neither of you knows which way you are facing. There is no pole in sight. There is no sky. There is wet sand for as far as you could throw a stone, and after that, white.',
+      'But there are sounds. On your left, a horn. On your right, another horn. And behind you, thin and far away, a bell.',
+      '&ldquo;A bell!&rdquo; says Dr Arroyo. &ldquo;Mrs Hebden said that the Box has a bell. We walk to the bell.&rdquo; She is already pointing. In the orange bag, the radio coughs.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#arr').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Dr Arroyo', role: 'Seal scientist · one boot', face: window.FACE('arroyo'),
+      lines: [
+        { note: 'She is sitting on the wet sand, wringing out a sock.', a: '&ldquo;The sand has kept the left one. I hope that it is happy. And do not look at me like that. I walked thirty steps past the last pole into a fog, which is exactly what I tell my students never to do.&rdquo;' },
+        { q: 'Are you hurt?', a: 'Only in my opinion of myself. You did it well: I sat back, you pulled, one leg at a time. Soft sand does not swallow people, whatever they show in films. It only holds them until the tide comes. I have decided that I prefer the films.' },
+        { q: 'Which way were we going?', a: 'I have no idea. We turned round five times, pulling. There is a horn on that side, and a horn on that side, and behind us there is a bell. And Mrs Hebden said this morning that the Box has a bell. So we walk to the bell, and in ten minutes we are in the Box.' },
+        { q: 'Which horn is the island?', a: 'The island gives two blasts: Mrs Hebden said so. So I have counted them both against your watch. This one makes two blasts in half a minute. And that one makes two blasts in half a minute. So now I know nothing, and I have a wet sock.' },
+        { a: 'You have the chart and the watch. I shall say nothing more until I have seen the numbers. I am learning.' }
+      ],
+      clue: { id: 'arr4', title: 'Dr Arroyo, with one boot', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('arr')) { paint(); ER.say('Two horns, two blasts each in half a minute. And a bell.'); } }
+    });
+  });
+  $('#radio').addEventListener('click', function () {
+    if (busy) return;
+    TIDE.sfx.radio();
+    ER.talk({
+      who: 'Mr Nyberg', role: 'On the radio · he can’t hear you', face: window.FACE('radio'),
+      lines: [
+        { note: 'A cough, a hiss, and the small flat voice.', a: '&ldquo;Nyberg to the orange bag. I am on Tarrow, and Mrs Hebden is getting her boat down the slip. I say again: I am on Tarrow.&rdquo;' },
+        { a: 'If you are still with the poles, good. If you have lost them, stand still and listen. The horn is on at the Light, and the pier at Longstrand sounds its own. The men who set the Pole Road set it in one straight line, from the Light to the head of the pier. So when you stand on the road, you have one horn in front of you and one behind.' },
+        { a: 'But be sure which is which. Do not guess. Count it against the watch. The chart says how each of them sounds: it is printed in the corner.' },
+        { a: 'Poles eight and nine went down in the winter, and the sand has gone soft where they stood. Go round. And look at the heights on the chart before you choose a side: it is nearly half past two, and the sea is not where the card says it is.' },
+        { a: 'One thing more. If you hear a bell, ask yourself whose hand is on the rope. I say again: whose hand is on the rope.' }
+      ],
+      clue: { id: 'radio2', title: 'Mr Nyberg, on the radio again', kind: 'From Tarrow', cls: 'radio' },
+      done: function (seen) { if (seen && tell('radio')) { paint(); ER.say('One horn in front and one behind, if you are on the road. But which is which?'); } }
+    });
+  });
+
+  /* ---------- the corner of the chart ---------- */
+  var KEY = '<h4>Fog signals &middot; and the signs on this chart</h4><div class="two"><div>' +
+    '<p>In fog every station makes a sound of its own, and no two on one coast are alike. The chart prints it beside the station, in purple.</p>' +
+    '<table class="sg"><tr><td><b>Horn(2) 30s</b></td><td>a GROUP of two blasts, close together; and the same again every 30 seconds</td></tr>' +
+    '<tr><td><b>Horn 15s</b></td><td>ONE blast every 15 seconds</td></tr>' +
+    '<tr><td><b>Bell</b></td><td>a bell. On a buoy it is rung by the waves, so it keeps no time at all</td></tr></table>' +
+    '<p><b>Count it against a watch:</b> how many blasts in a group, and how many seconds from the start of one group to the start of the next. Then you know WHICH station you can hear, and the chart shows where it stands.</p>' +
+    '<p class="rule">Trust the pattern, not the loudness. Fog makes a near sound faint and a far sound loud. Your ears will tell you which side a sound is on, never its exact direction.</p></div><div>' +
+    '<table><tr><td>Tarrow Light</td><td>Horn(2) 30s</td></tr><tr><td>Longstrand Pier</td><td>Horn 15s</td></tr><tr><td>Bar buoy</td><td>Bell</td></tr><tr><td>The Box (refuge)</td><td>Bell (by hand)</td></tr></table>' +
+    '<svg viewBox="0 0 300 96"><rect width="300" height="96" fill="#fff"/><g font-family="Overpass,sans-serif" font-size="11.500" fill="#1d1c1a">' +
+    '<g fill="#5e6b52"><circle cx="14" cy="14" r="1.300"/><circle cx="22" cy="18" r="1.300"/><circle cx="30" cy="13" r="1.300"/><circle cx="18" cy="23" r="1.300"/><circle cx="27" cy="23" r="1.300"/><circle cx="36" cy="19" r="1.300"/></g><text x="52" y="22">soft sand: go round it</text>' +
+    '<path d="M20 38v10M32 38v10" stroke="#1d1c1a" stroke-width="1.300"/><rect x="19" y="33" width="14" height="8" fill="#fff" stroke="#1d1c1a" stroke-width="1.200"/><text x="52" y="46">refuge: a hut on legs, above every tide</text>' +
+    '<path d="M21 61l6 6M27 61l-6 6" stroke="#1d1c1a" stroke-width="1.200"/><text x="52" y="69">a pole that has fallen</text><text x="26" y="90" text-anchor="middle" font-weight="700">2.4</text><path d="M16 92.500h20" stroke="#1d1c1a" stroke-width="1.200"/><text x="52" y="90">dries 2.4 m above chart datum</text></g></svg></div></div>';
+  $('#ckey').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: KEY, cls: 'ckey', clue: { id: 'ckey', title: 'Fog signals', kind: 'The corner of the chart' }, done: function () {
+      TIDE.terms(['fog signal', 'horn', 'blast', 'buoy', 'refuge', 'soft sand']);
+      if (tell('key')) { paint(); ER.say('Horn(2) 30s. Horn 15s. Bell. And another bell, by hand.'); }
+    } });
+  });
+
+  /* ---------- things in the fog ---------- */
+  TIDE.thing('#p10', 'marker pole', 'Pole 10. It leans a little, as if it were listening. After it there should be pole 9, a hundred and fifty metres on. There is only fog.', isBusy);
+  TIDE.thing('#boot', 'soft sand', 'The place where the sand let go of Dr Arroyo and kept her boot. It looks exactly like the sand all round it. That is the trouble with it.', isBusy);
+  TIDE.thing('#water', null, 'A thin grey sheet of water is lying in the ripples, back where pole 11 must be. Ten minutes ago it was not there. It makes no sound at all.', isBusy);
+  TIDE.thing('#bag', 'rucksack', 'The orange bag, a good deal sandier than it was at breakfast. You lay on it to pull.', isBusy);
+  TIDE.thing('#chartS', 'chart', function () { return told.key ? 'The chart. Before it can tell you which way to walk, you must know which way round you are standing. Listen first: the watch is on the strap of the bag.' : 'The chart, open on the sand, with a corner of the bag to hold it down. The small box with the purple edge is the part to read first.'; }, isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#watch').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The watch says a quarter to three.'); return; }
+    if (!told.arr) { ER.say('A watch, on the strap of the bag. Dr Arroyo has been counting against it. Ask her what she made of it.'); return; }
+    if (!told.radio) { ER.say('The radio is coughing again. Mr Nyberg may have something to say about what you can hear.'); return; }
+    if (!told.key) { ER.say('A watch can count a horn. It can&rsquo;t say which horn it is. That is printed in the corner of the chart: the box with the purple edge.'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- two horns, a bell, a stick and a chart ---------- */
+  function makeBench() {
+    var SPEED = 3, COL = { l: '#d9731a', r: '#1f6f9c', b: '#3f7d4a' }, TR = { l: 170, r: 146, b: 120 }, SRC = { l: [46, 262], r: [474, 262], b: [128, 452] },
+      EV = [[4, 'l'], [9, 'l'], [34, 'l'], [39, 'l'], [1, 'r'], [16, 'r'], [31, 'r'], [46, 'r']], BELLS = [[6.5, 12, 14, 23, 28.5, 37, 39.5, 48, 55, 57.5], [3, 5.5, 11, 19.5, 21, 27, 33.5, 42, 44, 52.5, 58]],
+      DIRS = { f: 0, fr: 45, r: 90, br: 135, b: 180, bl: 225, l: 270, fl: 315 },
+      PTS = { p10: [500, 330], x: [452, 330], s1: [498, 369], s2: [424, 352], n1: [468, 284], n2: [412, 288], box: [386, 330] },
+      stage = ER.flag('d-stage') || 0, dir = ER.flag('d-dir') || '', route = (ER.flag('d-route') || 'p10').split('-'), names = ER.flag('d-names') || {},
+      box = ER.el('div', 'bx'), timer = 0, t0 = 0, rev = -1, fired = {}, drawn = {}, s, w, k, a, i;
+    function pol(cx, cy, r, deg) { var t = deg * Math.PI / 180; return (cx + r * Math.sin(t)).toFixed(1) + ' ' + (cy - r * Math.cos(t)).toFixed(1); }
+    /* the fog, from above: you in the middle, and three places that sounds come from */
+    s = '<svg id="d-fog" viewBox="0 0 520 520"><defs><radialGradient id="dfg"><stop offset="0" stop-color="#b9b8a0"/><stop offset=".45" stop-color="#cfd3c8"/><stop offset="1" stop-color="#eef2f3"/></radialGradient></defs><rect width="520" height="520" fill="url(#dfg)"/>' +
+      '<g stroke="#9d9c84" stroke-width="1.600" fill="none" opacity=".6"><path d="M150 230q30 -8 60 0t60 0t60 0t60 0M170 300q30 -8 60 0t60 0t60 0"/></g>';
+    for (k in SRC) {
+      a = Math.atan2(260 - SRC[k][0], -(260 - SRC[k][1])) * 180 / Math.PI;
+      s += '<g class="src" id="d-src-' + k + '" stroke="' + COL[k] + '" fill="none" stroke-linecap="round">';
+      for (i = 1; i <= 3; i++) s += '<path stroke-width="' + (7 - i) + '" d="M' + pol(SRC[k][0], SRC[k][1], 16 + i * 22, a - 38) + 'A' + (16 + i * 22) + ' ' + (16 + i * 22) + ' 0 0 1 ' + pol(SRC[k][0], SRC[k][1], 16 + i * 22, a + 38) + '"/>';
+      s += '<circle cx="' + SRC[k][0] + '" cy="' + SRC[k][1] + '" r="9" fill="' + COL[k] + '" stroke="none"/></g>';
+    }
+    s += '<g class="fgT" font-size="12" letter-spacing="1.500"><text x="14" y="160">ON YOUR LEFT</text><text x="506" y="160" text-anchor="end">ON YOUR RIGHT</text><text x="60" y="398">BEHIND YOU</text><text x="260" y="34" text-anchor="middle">THE WAY YOU HAPPEN TO BE FACING</text></g>' +
+      '<path d="M260 96V50M250 64L260 46L270 64" fill="none" stroke="#26333d" stroke-width="2.500"/>' +
+      '<g id="d-wedges" style="display:none">';
+    for (k in DIRS) s += '<path class="wedge" data-dir="' + k + '" d="M' + pol(260, 260, 62, DIRS[k] - 22.5) + 'L' + pol(260, 260, 200, DIRS[k] - 22.5) + 'A200 200 0 0 1 ' + pol(260, 260, 200, DIRS[k] + 22.5) + 'L' + pol(260, 260, 62, DIRS[k] + 22.5) + 'A62 62 0 0 0 ' + pol(260, 260, 62, DIRS[k] - 22.5) + 'Z"/>';
+    s += '</g><g id="d-stick"></g><ellipse cx="246" cy="266" rx="19" ry="15" fill="#f08a24"/><circle cx="246" cy="250" r="12" fill="#3b4a52"/><circle cx="282" cy="262" r="21" fill="#e3c98a"/><circle cx="282" cy="262" r="12" fill="#edd79c" stroke="#b5461f" stroke-width="2.500"/></svg>';
+    /* the watch: one track for each sound */
+    w = '<svg id="d-watch" viewBox="0 0 520 520"><rect width="520" height="520" fill="#e9eef0"/><circle cx="260" cy="246" r="212" fill="#22201a"/><circle cx="260" cy="246" r="202" fill="#f6f3e6"/>';
+    for (i = 0; i < 60; i++) w += '<path d="M' + pol(260, 246, 202, i * 6) + 'L' + pol(260, 246, i % 5 ? 196 : 190, i * 6) + '" stroke="#22201a" stroke-width="' + (i % 5 ? 1 : 2.4) + '"/>';
+    for (k in TR) w += '<circle cx="260" cy="246" r="' + TR[k] + '" fill="none" stroke="' + COL[k] + '" stroke-width="1" opacity=".35"/>';
+    w += '<g class="wT" font-size="15" text-anchor="middle"><text x="260" y="78">60</text><text x="436" y="252">15</text><text x="260" y="430">30</text><text x="84" y="252">45</text></g><g id="d-marks"></g><g id="d-dots"></g>' +
+      '<path id="d-hand" d="M260 262V62" stroke="#c2331f" stroke-width="3" stroke-linecap="round"/><circle cx="260" cy="246" r="7" fill="#22201a"/>' +
+      '<g class="wT" font-size="12.500"><rect x="22" y="476" width="26" height="9" fill="' + COL.l + '"/><text x="54" y="485">on your left</text><rect x="186" y="476" width="26" height="9" fill="' + COL.r + '"/><text x="218" y="485">on your right</text>' +
+      '<circle cx="366" cy="480.500" r="5" fill="' + COL.b + '"/><text x="378" y="485">behind you</text><text x="260" y="508" text-anchor="middle" font-size="11" letter-spacing="1">A DASH IS A BLAST OF A HORN · A DOT IS A STROKE OF A BELL</text></g></svg>';
+    a = '';
+    for (k in PTS) a += '<g class="rg" data-id="' + k + '"><circle class="hit" cx="' + PTS[k][0] + '" cy="' + PTS[k][1] + '" r="13"/><circle class="o" cx="' + PTS[k][0] + '" cy="' + PTS[k][1] + '" r="7"/></g>';
+    box.innerHTML = '<div class="frame"><div class="lpair" id="d-two"><div class="pane2">' + s + '<div class="slot l" data-s="l"></div><div class="slot r" data-s="r"></div><div class="slot b" data-s="b"></div></div><div class="pane2">' + w + '<div id="d-map1">' + TIDE.chart({}) + '</div></div></div>' +
+      '<div id="d-route">' + TIDE.chart({ view: [318, 236, 324, 172], over: '<g id="d-rl"></g>' + a }) + '</div></div>' +
+      '<div class="tray" id="d-tray"><div class="tagb dnd-item" data-v="box">The Box<small>Bell (by hand)</small></div><div class="tagb dnd-item" data-v="pier">Longstrand Pier<small>Horn 15s</small></div>' +
+      '<div class="tagb dnd-item" data-v="buoy">Bar buoy<small>Bell</small></div><div class="tagb dnd-item" data-v="light">Tarrow Light<small>Horn(2) 30s</small></div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn quiet" id="d-rub" style="display:none">Rub it out</button><button type="button" class="btn" id="d-go"></button></div>';
+    var fog = box.querySelector('#d-fog'), watch = box.querySelector('#d-watch'), tray = box.querySelector('#d-tray'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#d-go'), rub = box.querySelector('#d-rub'),
+      rsvg = box.querySelector('#d-route svg'), slots = { l: box.querySelector('.slot.l'), r: box.querySelector('.slot.r'), b: box.querySelector('.slot.b') };
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    ['l', 'r', 'b'].forEach(function (q) { if (names[q]) { var t = tray.querySelector('[data-v="' + names[q] + '"]'); if (t) slots[q].appendChild(t); } });
+    function named(q) { var t = slots[q].querySelector('.tagb'); return t ? t.getAttribute('data-v') : ''; }
+    ER.dnd(box, { item: '.dnd-item', slot: '.slot', home: tray, lock: function () { return stage !== 0; }, change: function () { names = { l: named('l'), r: named('r'), b: named('b') }; ER.flag('d-names', names); } });
+
+    /* the sounds, and the marks they leave */
+    function flash(q) { var n = fog.querySelector('#d-src-' + q); n.setAttribute('class', 'src on'); setTimeout(function () { n.setAttribute('class', 'src'); }, 520); }
+    function tick() {
+      var el = (Date.now() - t0) / 1000 * SPEED, r = Math.floor(el / 60), ts = el - r * 60;
+      if (r !== rev) { rev = r; fired = {}; watch.querySelector('#d-dots').innerHTML = ''; }
+      watch.querySelector('#d-hand').setAttribute('transform', 'rotate(' + (ts * 6).toFixed(1) + ' 260 246)');
+      EV.forEach(function (e, j) {
+        if (fired['h' + j] || ts < e[0]) return;
+        fired['h' + j] = 1; flash(e[1]);
+        TIDE.horn(e[1] === 'l' ? { dur: 0.62, f: 150, vol: 0.07, pan: -0.75, lp: 430 } : { dur: 0.62, f: 196, vol: 0.08, pan: 0.75, lp: 520 });
+        if (!drawn[j]) { drawn[j] = 1; watch.querySelector('#d-marks').appendChild(TIDE.el('path', { d: 'M' + pol(260, 246, TR[e[1]], e[0] * 6) + 'A' + TR[e[1]] + ' ' + TR[e[1]] + ' 0 0 1 ' + pol(260, 246, TR[e[1]], (e[0] + 2) * 6), stroke: COL[e[1]], 'stroke-width': 10, fill: 'none', 'data-s': e[1] })); }
+      });
+      BELLS[r % 2].forEach(function (t, j) {
+        if (fired['b' + j] || ts < t) return;
+        fired['b' + j] = 1; flash('b'); TIDE.bell({ f: 1180, vol: 0.035 });
+        watch.querySelector('#d-dots').appendChild(TIDE.el('circle', { cx: pol(260, 246, TR.b, t * 6).split(' ')[0], cy: pol(260, 246, TR.b, t * 6).split(' ')[1], r: 5, fill: COL.b }));
+      });
+      watch.setAttribute('data-l', watch.querySelectorAll('#d-marks [data-s=l]').length); watch.setAttribute('data-r', watch.querySelectorAll('#d-marks [data-s=r]').length);
+    }
+    function listen(on) { clearInterval(timer); timer = 0; if (on) { t0 = Date.now(); rev = -1; timer = setInterval(tick, 80); } }
+
+    function draw() {
+      var d = '', g = '';
+      box.querySelector('#d-two').style.display = stage < 2 ? '' : 'none'; box.querySelector('#d-route').style.display = stage === 2 || stage === 3 ? 'block' : 'none';
+      watch.style.display = stage === 0 ? '' : 'none'; box.querySelector('#d-map1').style.display = stage === 1 ? 'block' : 'none';
+      tray.style.display = stage === 0 ? '' : 'none'; rub.style.display = stage === 2 ? '' : 'none';
+      fog.querySelector('#d-wedges').style.display = stage === 1 ? '' : 'none';
+      if (stage >= 1 && dir) g = '<path d="M260 260L' + pol(260, 260, 150, DIRS[dir]) + '" stroke="#6b4a2a" stroke-width="11" stroke-linecap="round"/><path d="M' + pol(260, 260, 150, DIRS[dir]) + 'L' + pol(260, 260, 176, DIRS[dir]) + '" stroke="#8a6038" stroke-width="6" stroke-linecap="round"/>';
+      fog.querySelector('#d-stick').innerHTML = g; fog.setAttribute('data-dir', dir);
+      route.forEach(function (id, j) { d += (j ? 'L' : 'M') + PTS[id][0] + ' ' + PTS[id][1]; });
+      rsvg.querySelector('#d-rl').innerHTML = route.length > 1 ? '<path class="pn" d="' + d + '"/>' : '';
+      ER.$$('.rg', rsvg).forEach(function (n) { n.setAttribute('class', 'rg' + (n.getAttribute('data-id') === route[route.length - 1] ? ' end' : '')); });
+      rsvg.setAttribute('data-route', route.join('-'));
+      go.textContent = ['Those are their names', 'That is the way to the Box', 'Walk it'][stage] || 'Walk it';
+      go.style.visibility = stage > 2 ? 'hidden' : '';
+    }
+    function setStage(n) { stage = n; ER.flag('d-stage', n); draw(); paint(); listen(n < 2 && !!box.parentNode); }
+    fog.querySelector('#d-wedges').addEventListener('click', function (e) {
+      var k2 = e.target.getAttribute ? e.target.getAttribute('data-dir') : null; if (!k2 || stage !== 1) return;
+      dir = k2; ER.flag('d-dir', dir); TIDE.sfx.pin(); draw(); msg('The stick is lying that way. Is that the way to the Box?');
+    });
+    rsvg.addEventListener('click', function (e) {
+      var g = e.target.closest ? e.target.closest('.rg') : null, id; if (!g || stage !== 2) return;
+      id = g.getAttribute('data-id');
+      if (id === route[route.length - 1]) { if (route.length > 1) route.pop(); }
+      else if (route.indexOf(id) < 0) route.push(id);
+      else return;
+      ER.flag('d-route', route.join('-')); TIDE.sfx.pencil(); draw();
+    });
+    rub.addEventListener('click', function () { if (stage !== 2) return; route = ['p10']; ER.flag('d-route', 'p10'); TIDE.sfx.pencil(); draw(); msg('The line is rubbed out. Begin again from pole 10.'); });
+
+    go.addEventListener('click', function () {
+      var L = named('l'), R = named('r'), Bk = named('b'), r, file;
+      if (nextFile) return;
+      if (stage === 0) {
+        if (!L || !R || !Bk) { msg('Three sounds, three names. Drag a brass tag on to each of them: one tag will be left over.'); return; }
+        if (ER.check('left', L) && ER.check('right', R) && ER.check('back', Bk)) {
+          TIDE.sfx.pin(); setStage(1);
+          msg('&ldquo;So,&rdquo; says Dr Arroyo. &ldquo;On our left, two together, every thirty seconds: Tarrow Light. On our right, one alone, every fifteen: the pier. And my bell is a buoy, out on the bar, rung by the waves. I was going to walk us into the sea.&rdquo; She picks up a piece of driftwood. &ldquo;Then which way is the Box? Lay the stick.&rdquo;'); return;
+        }
+        TIDE.sfx.no();
+        if (Bk === 'box') msg('&ldquo;The Box!&rdquo; says Dr Arroyo. Then she reads the chart over your shoulder. &ldquo;Bell, by hand. By whose hand? There is nobody in the Box. And look at its dots: it keeps no time at all. No hand rings like that.&rdquo;');
+        else if (ER.check('left', R) && ER.check('right', L)) msg('&ldquo;Wait,&rdquo; says Dr Arroyo. &ldquo;Both of them make two blasts in half a minute. That is what I counted, and it told me nothing. Look at the watch again. How do the two blasts FALL: together, or apart?&rdquo;');
+        else if (!ER.check('back', Bk) || L === 'buoy' || L === 'box' || R === 'buoy' || R === 'box') msg('&ldquo;A bell is not a horn,&rdquo; says Dr Arroyo. &ldquo;Even I can hear that. The dashes on the watch are blasts of a horn. The dots are strokes of a bell.&rdquo;');
+        else msg('&ldquo;Count it against the watch,&rdquo; says Dr Arroyo. &ldquo;How many blasts in each group? How many seconds from the start of one group to the start of the next? Then look for exactly that in the corner of the chart.&rdquo;');
+      } else if (stage === 1) {
+        if (!dir) { msg('Click the way you must walk to find the Box: in front of you, behind you, to one side, or between. The stick will point there.'); return; }
+        if (!ER.check('point', dir)) {
+          TIDE.sfx.no();
+          msg(ER.check('p_bell', dir) ? '&ldquo;That is the way to my bell,&rdquo; says Dr Arroyo. &ldquo;And my bell is the buoy on the bar, where the Gutter meets the open sea. It is the last place on this chart that I want to visit.&rdquo;' :
+            ER.check('p_light', dir) ? '&ldquo;That is the way to the Light,&rdquo; says Dr Arroyo. &ldquo;To Tarrow. With the Gutter in between, and Mr Nyberg has already tried the Gutter for us.&rdquo;' :
+            '&ldquo;Why that way?&rdquo; says Dr Arroyo. &ldquo;Look at the chart. The Box stands on the Pole Road, and the Pole Road is one straight line from the Light to the pier. We are close to pole 10. On which side of pole 10 is the Box?&rdquo;');
+          return;
+        }
+        TIDE.sfx.pin(); setStage(2);
+        msg('&ldquo;Towards the pier,&rdquo; says Dr Arroyo. &ldquo;Because the poles run in one line from the Light to the pier, and the Box stands on that line, on the Longstrand side of us. Good. But the soft sand lies on that line too: I have met it. So which way round?&rdquo; It is <b>14.25</b>. Click the pencil rings, one after another, from pole 10 to the Box.');
+      } else if (stage === 2) {
+        r = route.join('-');
+        if (route.length < 2) { msg('Click the pencil rings one after another, from pole 10 to the Box. Click the last ring again to take it off.'); return; }
+        if (route[route.length - 1] !== 'box') { msg('The line has to end at the Box: the small square on legs, at pole 7.'); return; }
+        if (!ER.check('route', r)) {
+          TIDE.sfx.no(); rsvg.querySelector('#d-rl .pn').setAttribute('class', 'pn bad');
+          msg(route.some(function (id) { return ER.check('soft', id); }) ? '&ldquo;Straight on?&rdquo; says Dr Arroyo. &ldquo;That is where my boot lives now. The chart says soft, and for once I agree with the chart.&rdquo;' :
+            route.some(function (id) { return ER.check('swash', id); }) ? '&ldquo;The Swash is the short way round,&rdquo; says Dr Arroyo, &ldquo;and it dries 2.0. How high is the sea at twenty-five past two? A quarter of the way from the 14.10 ring to the 15.10 ring, and then the pole&rsquo;s forty centimetres. I think there is water lying in the Swash already.&rdquo;' :
+            '&ldquo;You have cut the corner,&rdquo; says Dr Arroyo. &ldquo;Look how close that line passes to the dots. Go on to the 3.0 before you turn for the Box.&rdquo;');
+          return;
+        }
+        file = ER.exitOk([names.l + '-' + names.r + '-' + names.b + '-' + dir + '-' + r]);
+        if (!file) { msg('The fog has eaten the chart. Something is wrong with this page: tell your teacher.'); return; }
+        nextFile = file; ER.flag('d-file', file); stage = 3; ER.flag('d-stage', 3);
+        var s0 = ER.state(); s0.done = s0.done || {}; s0.done.gap = 1; ER.persist(true);
+        TIDE.sfx.pencil(); draw();
+        TIDE.mine('horns', 'Two horns and a bell', '<p>On the left: two blasts together, every 30 seconds. Horn(2) 30s: <b>Tarrow Light</b>. On the right: one blast every 15 seconds: <b>Longstrand Pier</b>. Both make two blasts in half a minute: it is the pattern that tells them apart.</p><p>The bell kept no time: rung by waves. So it was the <b>Bar buoy</b>, not the Box, whose bell is rung by hand.</p><p>The Box is on the Pole Road, towards the pier. We went round the soft sand by the north (2.8 and 3.0), not by the Swash (2.0): at 14.25 the sea was already at 2.3.</p>', true);
+        msg('&ldquo;North about,&rdquo; says Dr Arroyo. &ldquo;2.8, and then 3.0: the highest sand between here and the Box. The sea will not reach that for nearly half an hour. It is the long way. I have stopped caring about long.&rdquo;');
+        setTimeout(function () {
+          ER.closeAll(); TIDE.solved(); paint(); busy = true;
+          ER.narrate([
+            'You go round by the north: two hundred steps with the Longstrand horn on your left cheek, on sand that climbs a little under your feet and stays hard. Then west, with the horn in your face, counting.',
+            'When you pass the end of the Swash, it is not sand any more. It is a long grey arm of water, lying exactly where the short way would have gone, and still coming.',
+            'Behind you the bell goes on ringing by itself, out on the bar, for nobody.',
+            'Three hundred steps. Four hundred. Then four black legs come out of the fog, and a ladder, and over your heads a white wooden box with a tin number on it: 7.'
+          ], function () { busy = false; showGo(); });
+        }, 3200);
+      }
+    });
+    draw();
+    msg(['Stand still, hold the watch, and listen. (This watch is in a hurry: its minute lasts twenty seconds.) Every sound leaves a mark on the dial. Then give each sound its name: drag the brass tags from the chart on to the three sounds.',
+      'The chart shows where each sound stands. The Box makes no sound of its own. Which way is it from here? Click the way to walk, and the stick will point.',
+      'It is <b>14.25</b>, and you are close to pole 10. Click the pencil rings, one after another, from pole 10 to the Box, to draw the way you will walk.'][stage] || '');
+    return {
+      open: function () { ER.open('ov-lock', box, function () { listen(false); }); listen(stage < 2); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return Math.min(stage, 2); }
+    };
+  }
+})();
+</script>
+</body>
+</html>

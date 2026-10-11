@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Tide Shed · The Box at Pole Seven</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="tide.css">
+<style>
+  body{--bg:#17130f;--accent:#f0a030;--font-display:'Stardos Stencil',serif;--font-ui:'Overpass',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(23,19,15,.96);--tc-ink:#f3ead2;--cap-bg:rgba(20,16,12,.93);--panel:#211b15;--face-bg:#2a2520;--q-ink:#ffc98a;--fade:#17130f;--hud-bg:rgba(20,16,12,.82)}
+  .sS{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .sC{font-family:'Caveat',cursive;font-weight:700}
+  #shine{animation:shine 7s ease-in-out infinite}
+  @keyframes shine{50%{opacity:.35}}
+  #pennant{animation:flap 1.3s ease-in-out infinite;transform-origin:1392px 372px}
+  @keyframes flap{50%{transform:skewY(7deg) scaleX(.93)}}
+  #gull{animation:bob 5s steps(1,end) infinite}
+  @keyframes bob{0%{transform:translate(0,0)}46%{transform:translate(0,2px)}52%{transform:translate(2px,0)}}
+  #board.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.35)}}
+
+  /* the board, the card and the chart, taken down from the wall */
+  .pane{display:none}
+  .pane.on{display:block}
+  #i-card{background:#f7f3e3;padding:0 0 12px;color:#1c2630;font-family:'Overpass',sans-serif}
+  #i-card h4{margin:0 0 10px;padding:10px 22px 7px;background:#1f4e6b;color:#fff;font-family:'Stardos Stencil',serif;font-weight:700;font-size:24px;letter-spacing:.1em}
+  #i-card h4 small{display:block;font-family:'Overpass',sans-serif;font-weight:600;font-size:12px;letter-spacing:.2em;color:#cfe3ee}
+  #i-card .in{padding:0 22px}
+  #i-card .tt{font-size:15px}
+  #i-card .tt td{padding:5px 8px 3px}
+  #i-card .tt td.d{font-size:14.5px}
+  .tb{display:block;width:100%;height:auto;background:#22303a;touch-action:none}
+  .tb text{pointer-events:none}
+  .tbC{font-family:'Caveat',cursive;font-weight:700;fill:#f1f1e8}
+  .tbN{font-family:'Overpass',sans-serif;font-weight:700;font-size:12px;fill:#dfe6e2}
+  .tbS{font-family:'Overpass',sans-serif;font-weight:600;font-size:11px;fill:#22303a}
+  .tbR{font-family:'Overpass Mono',monospace;font-weight:600;font-size:24px;fill:#2a2110}
+  #i-nudge button{min-width:31px;padding:0 4px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd0e8"/><stop offset=".62" stop-color="#d9ecf0"/><stop offset="1" stop-color="#f6efd6"/></linearGradient>
+  <linearGradient id="sandG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3d6a6"/><stop offset=".5" stop-color="#e9d79c"/><stop offset="1" stop-color="#c9b276"/></linearGradient>
+  <linearGradient id="wallG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#14110e"/><stop offset=".8" stop-color="#231d17"/><stop offset="1" stop-color="#2f2820"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3026"/><stop offset="1" stop-color="#17130f"/></linearGradient>
+  <linearGradient id="spill" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#ffe9b0" stop-opacity=".3"/><stop offset="1" stop-color="#ffe9b0" stop-opacity="0"/></linearGradient>
+</defs>
+
+<!-- what the missing wall lets in: sky, three kilometres of sand, and a thin bright sea -->
+<rect x="-1000" y="-400" width="3600" height="880" fill="url(#skyG)"/>
+<g id="sea" class="hot"><path d="M-1000 470H2600V500H-1000Z" fill="#7fb8d4"/><path id="shine" d="M700 474H2000" stroke="#fff" stroke-width="3" opacity=".8"/>
+  <path d="M-1000 480H2600V1320H-1000Z" fill="url(#sandG)"/>
+  <g stroke="#f6ecc8" stroke-width="4" opacity=".7" stroke-linecap="round"><path d="M760 520h260M1120 548h330M820 600h180M1240 610h260M900 668h420"/></g>
+  <g stroke="#b9a468" stroke-width="2" opacity=".55"><path d="M780 560q60 -8 120 0t120 0M1060 640q80 -10 160 0t160 0M760 700q70 -8 140 0"/></g></g>
+<path d="M700 470q60 -14 150 -12t120 12z" fill="#7d9bb0" opacity=".8"/>
+<!-- the Pole Road, going away -->
+<g id="poles" class="hot" stroke="#3a3026" stroke-linecap="round" transform="translate(-60 0)">
+  <path d="M1296 700V560" stroke-width="9"/><path d="M1204 630V538" stroke-width="6.500"/><path d="M1144 588V522" stroke-width="5"/><path d="M1102 560V510" stroke-width="3.800"/><path d="M1072 540V502" stroke-width="3"/>
+  <path d="M1050 526V496" stroke-width="2.400"/><path d="M1034 516V491" stroke-width="2"/><path d="M1022 508V487" stroke-width="1.600"/><path d="M1013 502V484" stroke-width="1.300"/><path d="M1006 497V482" stroke-width="1.100"/>
+  <rect x="1284" y="566" width="24" height="18" fill="#f3ead2" stroke-width="2"/><text x="1296" y="580" class="sS" font-size="14" fill="#3a3026" stroke="none">19</text>
+</g>
+<g id="farbox" class="hot" transform="translate(-60 0)"><circle cx="988" cy="486" r="16" fill="#fff" opacity="0"/><path d="M984 492v-7M992 492v-7" stroke="#3a3026" stroke-width="1.300"/><rect x="982" y="479" width="12" height="7" fill="#f3ead2" stroke="#3a3026" stroke-width="1"/></g>
+<!-- the slip -->
+<path d="M720 720L1500 720L1900 1320H500Z" fill="#a39a84"/><g stroke="#857c68" stroke-width="3" opacity=".7"><path d="M760 780h860M720 850h1000"/></g>
+<g transform="translate(52 0)"><g id="flag" class="hot"><path d="M1392 720V360" stroke="#3a3026" stroke-width="7" stroke-linecap="round"/><path id="pennant" d="M1392 366l-92 16l92 18z" fill="#c8321e"/></g>
+<g id="gull"><path d="M1380 352q8 -12 22 -8q8 2 10 8l10 2l-10 4q-8 10 -24 6z" fill="#f4f4f0" stroke="#59616a" stroke-width="1.500"/><path d="M1388 352q8 -4 16 2" stroke="#8a8f93" stroke-width="3" fill="none"/><circle cx="1408" cy="348" r="1.500" fill="#22201a"/><path d="M1422 354l8 2l-8 2z" fill="#e8a020"/></g></g>
+
+<!-- Dr Arroyo on a fish box, in the light -->
+<g id="arr" class="hot" transform="translate(-60 0)">
+  <ellipse cx="1010" cy="806" rx="110" ry="12" fill="#3a3026" opacity=".35"/>
+  <path d="M1086 800L1110 560M1110 560L1142 800M1110 560L1120 800" stroke="#22201a" stroke-width="5" stroke-linecap="round"/><path d="M1076 548l76 -18" stroke="#3b4a52" stroke-width="18" stroke-linecap="round"/><circle cx="1154" cy="530" r="10" fill="#8fb8c9"/>
+  <rect x="930" y="744" width="120" height="60" fill="#3d7d9b" stroke="#22201a" stroke-width="2"/><path d="M930 764h120M930 784h120" stroke="#2b5f78" stroke-width="3"/>
+  <path d="M1020 746q40 -6 60 40l6 16h-28l-14 -34z" fill="#5a5347"/><path d="M1076 802h34v8h-40z" fill="#3a3026"/>
+  <path d="M990 746q30 -4 52 34l14 22h-28l-20 -30z" fill="#6b6456"/><path d="M1046 802h34v8h-40z" fill="#3a3026"/>
+  <path d="M954 748q-12 -96 30 -112q46 -4 54 44l8 68z" fill="#2f6f8f"/>
+  <path d="M1012 662q40 6 62 -70" stroke="#2a6482" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="1076" cy="590" r="9" fill="#c99b70"/>
+  <rect x="986" y="618" width="14" height="16" fill="#b98d66"/><circle cx="994" cy="604" r="22" fill="#c99b70"/><path d="M972 604q0 -26 22 -26t22 26q-10 -10 -22 -10t-22 10z" fill="#2a1d14"/>
+  <path d="M974 612q-8 40 -2 74" stroke="#2a1d14" stroke-width="9" fill="none" stroke-linecap="round"/>
+  <ellipse cx="994" cy="586" rx="42" ry="9" fill="#e3c98a"/><path d="M972 584q0 -22 22 -22t22 22z" fill="#edd79c"/><path d="M972 582h44" stroke="#b5461f" stroke-width="4"/>
+  <path d="M1002 604h6" stroke="#2a1d14" stroke-width="2.400"/><path d="M1002 616q6 3 10 -1" stroke="#8a3d30" stroke-width="2" fill="none"/>
+</g>
+
+<!-- Mr Nyberg in the doorway, looking at the weather -->
+<g id="nyb" class="hot" transform="translate(90 0)">
+  <ellipse cx="1250" cy="812" rx="76" ry="10" fill="#3a3026" opacity=".4"/>
+  <g id="staff"><path d="M1322 812L1296 420" stroke="#6b4a2a" stroke-width="8" stroke-linecap="round"/><path d="M1300 480l-4 -60" stroke="#f3ead2" stroke-width="8"/><path d="M1312 660l-4 -60" stroke="#c8321e" stroke-width="8"/></g>
+  <path d="M1226 810V690h20v120zM1254 810V690h20v120z" fill="#3b3a36"/><path d="M1218 810h30v10h-36zM1250 810h30v10h-34z" fill="#22201a"/>
+  <path d="M1206 700q-10 -150 40 -164q54 -6 56 60l4 104z" fill="#4c5a3a"/><path d="M1250 540v160" stroke="#3a4630" stroke-width="4"/>
+  <path d="M1286 566q26 30 20 74" stroke="#445234" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="1306" cy="644" r="10" fill="#d6ad88"/>
+  <path d="M1214 566q-14 40 -6 84" stroke="#445234" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <rect x="1244" y="518" width="14" height="18" fill="#c99f7c"/><circle cx="1252" cy="502" r="24" fill="#d6ad88"/>
+  <path d="M1244 510q10 22 30 12l-2 -18z" fill="#aab0b2"/><path d="M1226 498q2 -26 26 -26q24 0 26 22q-26 -8 -52 4z" fill="#6b4a2a"/><path d="M1270 492l22 6" stroke="#573a1e" stroke-width="7" stroke-linecap="round"/>
+</g>
+
+<!-- the shed itself: one wall missing -->
+<path d="M-1000 -400H2600V136H-1000Z" fill="#17130f"/><path d="M-1000 136H2600V160H-1000Z" fill="#2a231b"/>
+<path d="M-1000 136H742V1320H-1000Z" fill="url(#wallG)"/><g id="planks" stroke="#0e0c0a" stroke-width="3" opacity=".8"></g>
+<path d="M742 136v600" stroke="#3a3026" stroke-width="22"/><path d="M1486 136V760" stroke="#2a231b" stroke-width="30"/><path d="M1500 136H2600V1320H1500Z" fill="#1b1612"/>
+<path d="M-1000 720H742L500 1320H-1000Z" fill="url(#floorG)"/><path d="M1500 720H2600V1320H1900Z" fill="#17130f"/>
+<path d="M740 160L420 900L740 900Z" fill="url(#spill)" pointer-events="none"/>
+<g id="skins" class="hot"><path d="M1520 250h60" stroke="#59616a" stroke-width="5"/><path d="M1524 254q-10 120 4 240h36q10 -120 0 -240z" fill="#d9a514"/><path d="M1542 254v240" stroke="#b3860c" stroke-width="3"/><path d="M1566 262q30 100 20 220h-18z" fill="#3d6b2f"/></g>
+
+<!-- the wall: the barometer and its slate, the card, the chart, and the board -->
+<g id="baro" class="hot"><circle cx="96" cy="262" r="46" fill="#b9953a"/><circle cx="96" cy="262" r="37" fill="#f3ead2"/><g stroke="#22201a" stroke-width="2"><path d="M96 230v8M64 262h8M120 262h8M73 240l6 6M119 240l-6 6"/></g><path d="M96 262L72 246" stroke="#22201a" stroke-width="3" stroke-linecap="round"/><circle cx="96" cy="262" r="4" fill="#22201a"/>
+  <text x="96" y="286" class="sS" font-size="11" fill="#22201a">993</text>
+  <rect x="50" y="326" width="96" height="76" fill="#2b3336" stroke="#8a6038" stroke-width="7"/><g stroke="#eef1ea" stroke-width="2" opacity=".85" stroke-linecap="round"><path d="M62 344h60M62 356h72M62 368h48M62 380h66M62 392h40"/></g></g>
+<g id="card" class="hot"><rect x="176" y="204" width="96" height="124" fill="#f7f3e3" stroke="#1c2630" stroke-width="2"/><rect x="176" y="204" width="96" height="24" fill="#1f4e6b"/><text x="224" y="221" class="sS" font-size="12" fill="#fff" letter-spacing="1">TIDES</text>
+  <g stroke="#1c2630" stroke-width="1.300" opacity=".8"><path d="M184 240h80M184 249h80M184 258h80M184 267h80M184 276h80M184 285h80M184 294h80M184 303h80M184 312h80"/></g><path d="M184 303h80" stroke="#b5461f" stroke-width="3.500" opacity=".7"/><circle cx="224" cy="200" r="4" fill="#8a8f93"/></g>
+<g id="chart" class="hot"><rect x="170" y="352" width="108" height="122" fill="#cfe3ee" stroke="#1d1c1a" stroke-width="2"/><path d="M184 352q8 60 0 122M262 352q-10 60 2 122" stroke="#6f8a5c" stroke-width="2" fill="none"/><rect x="186" y="362" width="76" height="102" fill="#cddab4" opacity=".9"/>
+  <path d="M204 364q8 50 2 100M244 364q-10 50 0 100" stroke="#5f93ad" stroke-width="5" fill="none" opacity=".8"/><path d="M176 420h96" stroke="#1d1c1a" stroke-width="1.300" stroke-dasharray="2 4"/><circle cx="224" cy="348" r="4" fill="#8a8f93"/></g>
+<g id="board" class="hot"><rect x="308" y="186" width="408" height="318" fill="#3a2a1a"/><rect x="320" y="198" width="384" height="294" fill="#22303a"/>
+  <text x="512" y="226" class="sC" font-size="24" fill="#f1f1e8" text-anchor="middle">THURSDAY 12 JUNE</text>
+  <rect x="334" y="352" width="356" height="92" fill="#3f86ad"/>
+  <path d="M334 444V300l22 30l30 50l30 22l20 -16l40 -22l44 -12l40 18l40 10l30 10l14 14l16 -12l40 -26l30 -50V444Z" fill="#d9c58c"/>
+  <path d="M472 330v40M464 330h16M468 318h8v12h-8z" stroke="#f1f1e8" stroke-width="2" fill="#f1f1e8"/>
+  <g stroke="#f1f1e8" stroke-width="1.500" opacity=".7"><path d="M334 300v144M334 316h6M334 348h6M334 380h6M334 412h6"/></g>
+  <path d="M334 462h356" stroke="#b9953a" stroke-width="5"/><path d="M500 452l8 12l8 -12z" fill="#f4dc98"/></g>
+<!-- the bench: two radios on charge, and the orange bag -->
+<path d="M150 640H720V664H150Z" fill="#4a3a28"/><path d="M176 664v160M690 664v100" stroke="#32261a" stroke-width="16"/>
+<g id="radios" class="hot"><rect x="216" y="586" width="26" height="54" rx="5" fill="#16191b"/><path d="M236 586v-34" stroke="#16191b" stroke-width="4"/><rect x="214" y="618" width="30" height="8" fill="#c8321e"/><circle cx="222" cy="634" r="2.500" fill="#59e08a"/>
+  <rect x="258" y="586" width="26" height="54" rx="5" fill="#16191b"/><path d="M278 586v-34" stroke="#16191b" stroke-width="4"/><circle cx="264" cy="634" r="2.500" fill="#59e08a"/><path d="M200 640h100" stroke="#59616a" stroke-width="4"/></g>
+<g id="bag" class="hot"><path d="M380 640q-16 -82 30 -96q60 -10 86 6q30 20 14 90z" fill="#f08a24"/><path d="M398 566q46 -18 96 0v26q-48 -14 -96 0z" fill="#d9731a"/><path d="M420 548q24 -30 50 0" stroke="#b5631a" stroke-width="7" fill="none"/><rect x="426" y="600" width="44" height="20" rx="3" fill="#fff3df"/><path d="M432 610h32" stroke="#b5631a" stroke-width="2.500"/></g>
+<g id="kettle" class="hot"><path d="M586 640q-8 -44 30 -44t30 44z" fill="#59616a"/><path d="M644 610q22 -4 22 14" stroke="#59616a" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M600 598q16 -22 32 0" stroke="#3b444a" stroke-width="5" fill="none"/></g>
+
+<!-- Mrs Hebden, chalking the date -->
+<g id="heb" class="hot">
+  <ellipse cx="800" cy="822" rx="72" ry="10" fill="#000" opacity=".4"/>
+  <path d="M762 818q-14 -140 20 -210h52q30 80 20 210z" fill="#5a5f66"/><path d="M770 818h28v9h-34zM812 818h28v9h-30z" fill="#22201a"/>
+  <path d="M760 660q-12 -110 36 -124q52 -6 58 54l6 70z" fill="#c99a2a"/><path d="M808 540v120" stroke="#a37c1c" stroke-width="4"/>
+  <path d="M776 566q-50 -30 -62 -84" stroke="#b98c22" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="712" cy="478" r="9" fill="#e6c3a4"/><path d="M708 474l-8 -12" stroke="#f7f3e3" stroke-width="5" stroke-linecap="round"/>
+  <path d="M842 566q20 40 8 84" stroke="#b98c22" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="850" cy="652" r="9" fill="#e6c3a4"/>
+  <rect x="798" y="518" width="14" height="18" fill="#d9b393"/><circle cx="804" cy="502" r="23" fill="#e6c3a4"/>
+  <path d="M780 506q-4 -32 24 -32t26 30q-10 -14 -26 -14t-24 16z" fill="#b3271c"/><path d="M782 504q0 20 12 28l10 -6zM828 502q2 20 -10 30l-8 -8z" fill="#b3271c"/>
+  <g fill="#fff"><circle cx="792" cy="484" r="2"/><circle cx="806" cy="478" r="2"/><circle cx="820" cy="486" r="2"/></g>
+  <path d="M790 504h7M802 504h7" stroke="#4a3a24" stroke-width="2.400"/><path d="M792 516h10" stroke="#8a4a3c" stroke-width="2"/>
+</g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Walk out along the poles</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="tide.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  (function () {
+    var s = '', i;
+    for (i = -12; i < 9; i++) s += '<path d="M' + (i * 84 + 30) + ' 160v560"/>';
+    $('#planks').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'wild', story: 'tide', storyTitle: 'The Box at Pole Seven', id: 'shed', no: 'I', title: 'The Tide Shed',
+    go: 'Pick up the bag',
+    intro: [
+      'A Thursday in June, twenty past nine in the morning. You came to the island of Tarrow two weeks ago, to help at the bird and seal station for the summer. Three kilometres of sea lie between Tarrow and the mainland. Twice a day the sea goes away, and leaves three kilometres of sand.',
+      'Today you are going out on that sand for the first time: to Selkie Scar, where the seals have their pups. There are three of you. Mr Nyberg has been the ranger of Tarrow for thirty years. Dr Arroyo is a seal scientist from Spain, who has been here since May. You are the one who was told, at breakfast, to carry the orange bag and stay close.',
+      'Nobody sets foot on Tarrow Sands until the day has been worked out in the tide shed. Mr Nyberg worked it out an hour ago. Now he wants to see you do it.'
+    ],
+    exit: {"next":"scar","w":{"cf660602":"60591b5f"}}, tags: {"day":["1af72772"],"lastthu":["e54bf16a"],"low":["83838bb5"],"lowroad":["d01bb13b"],"from":["1f66a6dd"],"to":["d2af2ecc"],"from_out":["a5f4c90e"],"to_out":["cb39386d"],"hw":["48c380ef","1056ec1f"],"lw":["497d3913"],"night":["c24dd0ba"],"night_out":["0410d3bd"],"night_lw":["1498eccd"]},
+    sound: ['trail', { root: 48, bpm: 54, drop: ['mel'], beds: [['sea', 0.45], ['birds', 0.5]] }],      /* a bright morning, the sea a long way off, gulls; no tune (a horn belongs to this story) */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('a-file') || null; told = ER.flag('a-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('a-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.heb && told.nyb && told.card; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#board').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.heb ? 1 : 0) + (told.nyb ? 1 : 0) + (told.card ? 1 : 0) + Math.min(3, ER.flag('a-stage') || 0) + (nextFile ? 1 : 0), 7);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The day is on the board and the bag is on your back. Walk out along the poles.']];
+    if (bench && bench.isOpen()) return [['day', [
+      'Which day is it? Mrs Hebden chalked it on the board, and said it aloud.',
+      'There are two Thursdays on the card. A week apart, their tides look nothing like each other.'
+    ]], ['low', [
+      'Your road today goes from the slip on Tarrow, over the ford, and then north beside the Gutter to Selkie Scar. You do not go on to the mainland.',
+      'A figure with a line under it is the height of the sand. The lowest figure on your road is the place that goes under first and comes out last.',
+      'The Runnel is lower, but it lies beyond pole 4, and you turn north at pole 11. And 0.3 has no line under it: that is a depth of water, not a height of sand.'
+    ]], ['window', [
+      'Slide the brass pointer along the hours (or use the arrows). The blue blind is the sea. The road is dry while the blue is below the red string.',
+      'There are two moments to find: one in the morning, when the falling sea drops below the string, and one in the afternoon, when it climbs back. Low water is in the middle.',
+      'Read the two times to the minute. Then round each to ten minutes, the safe way: the opening LATER, the shutting EARLIER.'
+    ]], ['night', [
+      'After this afternoon the sea goes up to high water at 18.19, and then down again. Slide the pointer on into the evening.',
+      'Find the moment tonight when the blue drops below the red string. Round it to ten minutes the safe way: for an opening, that is later.'
+    ]]][bench.stage()];
+    if (!told.card) return ['card', [
+      'Mr Nyberg said it: the card is on the wall. Read it first.',
+      'On the dark wall on the left there is a small printed card with a blue top, above a pale chart. Click the card.'
+    ]];
+    if (!told.heb) return ['heb', ['Mrs Hebden is standing at the board with a piece of chalk, in a red headscarf. Ask her how the board works.']];
+    if (!told.nyb) return ['nyb', ['Mr Nyberg is in the doorway with his staff. Ask him what he wants to know, and how exactly.']];
+    return ['board', ['Now the tide board: the big dark board on the wall, with the picture of the sands on it.']];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The door of the shed says: OUT 10.15. SELKIE SCAR. BACK OVER THE FORD BY 13.30.'); return; }
+    if (told.in) { busy = false; ER.say('The tide shed, half past nine. Out on the sands the sea is still going away.'); return; }
+    tell('in');
+    ER.narrate([
+      'The tide shed stands at the top of the slip: black boards, a tin roof, and one wall missing, so that the whole of Tarrow Sands can look in at you. The sea is a thin bright line a long way off. A row of poles walks out towards it.',
+      'Mrs Hebden keeps the shed, the shop, the post and the key of the lighthouse. She is chalking the date on the tide board. &ldquo;Thursday the twelfth,&rdquo; she says. &ldquo;If the date is wrong, everything under it is wrong, however clever you are.&rdquo;',
+      'Mr Nyberg is standing in the doorway with a long staff, looking at the weather as if it owed him money.',
+      '&ldquo;The card is on the wall,&rdquo; he says, without turning round. &ldquo;Read it. Ask Mrs Hebden how her board works. Then tell me when our road is dry. Both ends: when it opens, and when it shuts.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#heb').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mrs Hebden', role: 'The tide shed · the shop · the post · the lighthouse key', face: window.FACE('hebden'),
+      lines: [
+        { note: 'She has chalk on both hands and on the end of her nose.', a: '&ldquo;You&rsquo;re the new one. Good. New ones still read the card. It&rsquo;s the old hands who think they know it by heart.&rdquo;' },
+        { q: 'How does the board work?', a: 'It is a picture of the Pole Road, cut through like a cake: the mainland on the left, Tarrow on the right. When I have hung today&rsquo;s tides on it, the blue blind is the sea. Slide the brass pointer along the hours, and the blind goes up and down as the sea will.' },
+        { q: 'As the sea will?', a: 'As it should. That card was printed two years ago, by people who had never met today. Read my slate, under the barometer.' },
+        { q: 'What is the red string for?', a: 'For the lowest place on your road. Show it to me on the chart, and I&rsquo;ll stretch the string across the board at that height. While the blue is above the string, your road is under the sea. It is as simple as that, and people still get wet.' },
+        { q: 'What is the little hut on legs, in the middle of the picture?', a: 'The Box. At pole seven. For people who are caught out. There is a bell, a kettle and a book to write in. In thirty years as ranger Mr Nyberg has never had to use it, and he would like you to know that.' }
+      ],
+      clue: { id: 'heb1', title: 'Mrs Hebden, at the tide board', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('heb')) { paint(); ER.say('The board will not work until somebody has told it the day.'); } }
+    });
+  });
+  $('#nyb').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mr Nyberg', role: 'Ranger of Tarrow · thirty years', face: window.FACE('nyberg'),
+      lines: [
+        { note: 'He has a grey beard cut square, and he talks to the sands, not to you.', a: '&ldquo;Selkie Scar and back. A kilometre and a bit across to the ford, and nearly a kilometre north beside the Gutter. The Doctor wants two hours with her seals. So do the seals, I expect.&rdquo;' },
+        { q: 'What is the ford?', a: 'The place where the Pole Road crosses the Gutter: the big channel. When the ford is dry, we can walk. When it is not, we can&rsquo;t, and neither can anybody else, whatever their boots cost.' },
+        { q: 'How exact must the times be?', a: 'I don&rsquo;t deal in single minutes on sand. Give me the nearest ten, and round the safe way. If the road opens at seven minutes past, you say ten past. If it shuts at thirteen minutes past, you say ten past. Take the minutes away from yourself, never from the sea.' },
+        { q: 'And then we keep some time in hand?', a: 'I do that part. On an ordinary day I am back over the ford twenty minutes before it shuts. Today the glass is low, and the wind has been blowing on to this shore since Monday. Today I want forty.' },
+        { a: 'And one thing more. A plan has two halves: the one you mean to use, and the one you hope not to. When you have told me today&rsquo;s road, tell me when it dries again tonight. I have never needed that half. I always work it out.' }
+      ],
+      clue: { id: 'nyb1', title: 'Mr Nyberg, in the doorway', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('nyb')) { paint(); ER.say('He goes back to looking at the weather. It does not look back.'); } }
+    });
+  });
+  $('#arr').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Dr Arroyo', role: 'Seal scientist · here since May', face: window.FACE('arroyo'),
+      lines: [
+        { note: 'She is sitting on a fish box, cleaning the glass of a telescope with her shirt.', a: '&ldquo;Marisol. I count seals. You carry the bag, I hear. It is an important bag: my sandwiches are in it.&rdquo;' },
+        { q: 'Have you crossed the sands before?', a: 'Eleven times, always behind Mr Nyberg&rsquo;s boots. Where I come from, the sea stays where you put it. The Mediterranean goes up and down about as much as a cup of tea. Here it goes away for lunch and comes back five metres deep. I find this very badly organised.' },
+        { q: 'When were you last out there?', a: 'Last Thursday. But not on foot. Mrs Hebden took us out in her boat at high water, and we sat on the Rigg, the high bank, with the sea all round us, and counted from there. Four hours, perfectly dry.' },
+        { q: 'Why not do that again today?', a: 'This is what I asked. Mr Nyberg looked at me as if I had asked for the moon. &ldquo;Read the card,&rdquo; he said. So I read the card. It has two Thursdays on it, and they are not at all the same.' }
+      ],
+      clue: { id: 'arr1', title: 'Dr Arroyo, on a fish box', kind: 'What she said' },
+      done: function (seen) { if (seen) tell('arr'); }
+    });
+  });
+
+  /* ---------- papers ---------- */
+  var CARD = '<h4><small>Tarrow Harbour Trust &middot; 2 to 15 June</small>Tide card</h4><div class="cols"><div>' + TIDE.cardTable(false) +
+    '<p style="margin-top:7px;font-size:12.5px">Times are clock times. Heights are in metres above chart datum.</p></div><div><h5>How to read this card</h5>' +
+    '<svg viewBox="0 0 400 118" style="margin:0 0 6px"><rect width="400" height="118" fill="#eef4f2"/><rect x="64" y="14" width="322" height="92" fill="#8fc3dc"/><rect x="64" y="94" width="322" height="12" fill="#3f86ad"/>' +
+    '<path d="M64 106V100H170L230 62H386V106Z" fill="#d9c58c" stroke="#8a7a4a"/><path d="M64 14H386" stroke="#1f4e6b" stroke-width="2"/><path d="M64 94H386" stroke="#1f4e6b" stroke-width="2" stroke-dasharray="5 4"/><path d="M64 106H386" stroke="#b5461f" stroke-width="2"/>' +
+    '<path d="M52 8V110" stroke="#1c2630" stroke-width="2"/><g font-family="Overpass,sans-serif" font-weight="700" font-size="11.500" fill="#1c2630"><text x="46" y="18" text-anchor="end">5.2</text><text x="46" y="66" text-anchor="end">2.4</text><text x="46" y="98" text-anchor="end">0.4</text><text x="46" y="111" text-anchor="end" fill="#b5461f">0</text>' +
+    '<text x="74" y="28">HIGH WATER 5.2</text><text x="74" y="90">LOW WATER 0.4</text><text x="300" y="80" text-anchor="middle">sand: &ldquo;dries 2.4&rdquo;</text><text x="380" y="116" text-anchor="end" fill="#b5461f">chart datum</text></g></svg>' +
+    '<p><b>High water and low water.</b> The sea rises for about six hours and falls for about six. The card gives each turn of the tide: its time, and its height in metres.</p>' +
+    '<p><b>Heights</b> are measured upwards from one fixed level, called chart datum: about as low as the sea ever falls here. So &ldquo;HW 5.2&rdquo; does not mean that the sea is 5.2 m deep. It means that the top of the sea is 5.2 m above that level.</p>' +
+    '<p><b>Later every day.</b> One high water follows another after about 12 hours 25 minutes. So each day&rsquo;s tides come later than the day before: about 50 minutes later, on average. In a week that adds up to about six hours, and high water and low water have changed places.</p>' +
+    '<p><b>Dries.</b> The chart measures the sand from the same level. &ldquo;Dries 2.4&rdquo; means that the sand there is 2.4 m above chart datum: under water when the tide is higher than 2.4 m, and dry when it is lower.</p>' +
+    '<p class="rule">No card can tell you when a road is dry. That you work out yourself: from the card, and from the lowest place on your road.</p></div></div>';
+  $('#card').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'tcard', clue: { id: 'card', title: 'The tide card', kind: 'Pinned up in the tide shed' }, done: function () {
+      TIDE.terms(['tide', 'tide table', 'high water', 'low water', 'chart datum', 'dries']);
+      if (tell('card')) { paint(); ER.say('Fourteen days, four turns of the tide in most of them, and a small black moon against Tuesday.'); }
+    } });
+  });
+  var SLATE = '<h4>The card is a prediction</h4><p>It was worked out two years ago, for <b>average weather</b>. The sea has not read it.</p>' +
+    '<p><b>Low glass, high sea.</b> When the air pressure is low, the sea stands higher: about 1 cm for every hectopascal below 1013.</p>' +
+    '<p><b>Wind on to the shore</b> piles the water up higher still. How much? Nobody can say from a beach.</p>' +
+    '<p>A higher sea gets to every mark <b>early</b> on its way in, and leaves it <b>late</b> on its way out. So a road opens late and shuts early.</p>' +
+    '<p>TODAY: 993. Wind north-east, three days now. &nbsp;P. H.</p>';
+  $('#baro').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: SLATE, cls: 'slate', clue: { id: 'slate', title: 'Mrs Hebden’s slate', kind: 'Under the barometer' }, done: function () {
+      TIDE.terms(['prediction', 'air pressure', 'barometer']);
+      if (tell('slate')) ER.say('The barometer says 993. Twenty below 1013: so, by the slate, about twenty centimetres of sea that are not on the card.');
+    } });
+  });
+
+  /* ---------- things in the shed ---------- */
+  TIDE.thing('#chart', 'chart', 'The chart of Tarrow Sands. A chart is a map for people who have to worry about water. Mrs Hebden will take it down for you when the board needs it.', isBusy);
+  TIDE.thing('#radios', null, 'Two radios, charging. One has a piece of red tape round it. &ldquo;That one hears and does not speak,&rdquo; says Mrs Hebden. &ldquo;Since Easter. It goes in the orange bag, as the spare. The good one goes in Mr Nyberg&rsquo;s pocket. And before you ask: no telephone works on the sands. That is what radios are for.&rdquo;', isBusy);
+  TIDE.thing('#bag', 'rucksack', 'The orange bag: a spare radio, a whistle, a watch, the first-aid box, and Dr Arroyo&rsquo;s sandwiches. Whoever carries it walks next to Mr Nyberg.', isBusy);
+  TIDE.thing('#kettle', null, 'Mrs Hebden&rsquo;s kettle. &ldquo;There is another just like it in the Box,&rdquo; she says. &ldquo;I filled the water can out there on Monday. I do it every spring tide, and every spring tide Mr Nyberg tells me that nobody will drink it.&rdquo;', isBusy);
+  TIDE.thing('#poles', 'marker pole', 'The Pole Road: nineteen poles, a hundred and fifty metres apart, from the slip on Tarrow to the pier at Longstrand. Each has a tin number. The nearest one says 19.', isBusy);
+  TIDE.thing('#farbox', null, 'A long way out, beside the poles, something small is standing on four thin legs. It is the only thing on the sands that is not flat.', isBusy);
+  TIDE.thing('#sea', 'sands', 'Tarrow Sands. At six o&rsquo;clock this morning the sea covered all of it, deep enough for boats. Now a gull is walking where the boats were.', isBusy);
+  TIDE.thing('#flag', null, 'A red flag on the slip, streaming out towards the mainland. The wind is coming in off the sea, from the north-east, as it has for three days.', isBusy);
+  TIDE.thing('#skins', 'oilskins', 'Oilskins on a nail: a yellow one and a green one. Nobody on Tarrow goes out without a coat, in any month.', isBusy);
+  $('#staff').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation(); ER.wordAt(e.clientX, e.clientY, 'staff');
+    ER.say('Mr Nyberg&rsquo;s staff: two metres of ash wood, with bands of paint. He walks with it in front of him, and asks the sand questions.');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#board').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The board says: dry 10.10 to 14.10. Low water 12.10. And in smaller chalk: tonight from 22.30.'); return; }
+    if (!told.card) { ER.say('&ldquo;The card first,&rdquo; says Mrs Hebden, without looking round. &ldquo;The board only knows what the card tells it.&rdquo;'); return; }
+    if (!told.heb) { ER.say('The tide board. Mrs Hebden is standing in front of it with the chalk. It is her board: ask her.'); return; }
+    if (!told.nyb) { ER.say('&ldquo;Ask Mr Nyberg what he wants from you,&rdquo; says Mrs Hebden. &ldquo;He is particular about his minutes.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the tide board: the day, the lowest place, the road, and tonight ---------- */
+  function makeBench() {
+    var PROF = [[0, 5.6], [150, 3.4], [300, 2.2], [450, 1.6], [520, 1.2], [600, 1.8], [750, 2.6], [900, 3.0], [1050, 3.2], [1200, 2.8], [1350, 2.6], [1500, 2.4], [1650, 2.2], [1800, 2.0],
+      [1880, 1.6], [1950, 2.2], [2100, 2.6], [2400, 3.4], [2700, 4.2], [2850, 4.8], [3000, 5.4]];
+    function SX(m) { return 90 + m * 860 / 3000; }
+    function SY(h) { return 380 - 42 * h; }
+    function TX(tm) { return 90 + (tm - 240) * 860 / 1320; }
+    function PH(m) { for (var j = 1; j < PROF.length; j++) if (m <= PROF[j][0]) return PROF[j - 1][1] + (PROF[j][1] - PROF[j - 1][1]) * (m - PROF[j - 1][0]) / (PROF[j][0] - PROF[j - 1][0]); return 5.4; }
+    var stage = ER.flag('a-stage') || 0, day = ER.flag('a-day') || 0, low = ER.flag('a-low') || '', tm = 560, box = ER.el('div', 'bx'), s, i, d, n, x;
+    d = 'M56 400V' + SY(7.2) + 'L' + PROF.map(function (p) { return SX(p[0]).toFixed(1) + ' ' + SY(p[1]).toFixed(1); }).join('L') + 'L986 ' + SY(7.4) + 'V400Z';
+    s = '<svg class="tb" viewBox="0 0 1000 480"><rect width="1000" height="480" fill="#22303a"/><rect x="56" y="24" width="930" height="376" fill="#2c3d49"/>' +
+      '<rect id="i-water" x="56" y="380" width="930" height="20" fill="#3f86ad"/><path id="i-top" d="M56 380H986" stroke="#a9d6ee" stroke-width="2"/>' +
+      '<path d="' + d + '" fill="#d9c58c" stroke="#8a7a4a" stroke-width="1.500"/>';
+    for (n = 1; n <= 19; n++) {
+      if (n === 8 || n === 9) continue;
+      x = SX(150 * n); i = SY(PH(150 * n));
+      s += '<path d="M' + x.toFixed(1) + ' ' + i.toFixed(1) + 'v-30" stroke="#3a3026" stroke-width="2.200"/>';
+      if (n === 1 || n === 4 || n === 10 || n === 12 || n === 13 || n === 16 || n === 19) s += '<text class="tbN" x="' + x.toFixed(1) + '" y="' + (i - 35).toFixed(1) + '" text-anchor="middle" font-size="10.500">' + n + '</text>';
+    }
+    x = SX(1050);
+    s += '<path d="M' + (x - 7) + ' ' + SY(3.2) + 'V' + SY(7.6) + 'M' + (x + 7) + ' ' + SY(3.2) + 'V' + SY(7.6) + '" stroke="#f1f1e8" stroke-width="2"/><rect x="' + (x - 12) + '" y="' + (SY(7.6) - 20) + '" width="24" height="20" fill="#f1f1e8"/>' +
+      '<text class="tbC" x="' + (x + 18) + '" y="' + (SY(7.6) - 4) + '" font-size="19">the Box (pole 7)</text>';
+    for (i = 0; i <= 7; i++) s += '<path d="M48 ' + SY(i) + 'h8" stroke="#dfe6e2" stroke-width="1.500"/><text class="tbN" x="43" y="' + (SY(i) + 4) + '" text-anchor="end">' + i + '</text>';
+    s += '<text class="tbN" x="14" y="18" font-size="10.500">metres above chart datum</text>' +
+      '<g class="tbS" text-anchor="middle"><text x="' + SX(520) + '" y="394">the Runnel</text><text x="' + SX(1880) + '" y="394">the ford</text><text x="' + SX(1210) + '" y="372">TARROW SANDS</text></g>' +
+      '<text class="tbC" x="58" y="421" font-size="18">Longstrand</text><text class="tbC" x="984" y="421" font-size="18" text-anchor="end">Tarrow</text>' +
+      '<g id="i-string" style="display:none"><path id="i-sl" d="M56 0H986" stroke="#ff5a44" stroke-width="2.400"/><text id="i-st" class="tbC" x="700" y="0" font-size="20" fill="#ffb3a6"></text></g>' +
+      '<text class="tbC" id="i-date" x="72" y="52" font-size="27"></text><text class="tbC" id="i-hung" x="966" y="106" font-size="20" fill="#cfe3ee" text-anchor="end"></text>' +
+      '<path d="M90 440H950" stroke="#b9953a" stroke-width="6"/>';
+    for (i = 4; i <= 26; i++) s += '<path d="M' + TX(i * 60).toFixed(1) + ' 440v' + (i % 2 ? 7 : 12) + '" stroke="#dfe6e2" stroke-width="1.500"/>' +
+      (i % 2 ? '' : '<text class="tbN" x="' + TX(i * 60).toFixed(1) + '" y="468" text-anchor="middle">' + ('0' + (i % 24)).slice(-2) + '</text>');
+    s += '<g id="i-ptr"><path d="M0 438L-10 418H10Z" fill="#f4dc98" stroke="#7a6230"/></g><rect id="i-strip" class="tool" x="70" y="408" width="900" height="66" fill="#fff" opacity="0"/>' +
+      '<g transform="translate(800 60)"><rect x="-76" y="-26" width="76" height="46" rx="3" fill="#e9cf8a" stroke="#7a6230"/><text class="tbS" x="-38" y="-13" text-anchor="middle">TIME</text><text class="tbR" id="i-time" x="-38" y="12" text-anchor="middle" font-size="21"></text>' +
+      '<rect x="8" y="-26" width="104" height="46" rx="3" fill="#e9cf8a" stroke="#7a6230"/><text class="tbS" x="60" y="-13" text-anchor="middle">TIDE</text><text class="tbR" id="i-tide" x="60" y="12" text-anchor="middle" font-size="21"></text></g></svg>';
+    box.innerHTML = '<div class="frame"><div class="pane" id="i-card"><h4><small>Tarrow Harbour Trust &middot; 2 to 15 June</small>TIDE CARD</h4><div class="in">' + TIDE.cardTable(true) + '</div></div>' +
+      '<div class="pane" id="i-chart">' + TIDE.chart({ hit: true }) + '</div><div class="pane" id="i-board">' + s + '</div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><span class="nudge" id="i-nudge"></span><span id="i-slot"></span><button type="button" class="btn" id="i-go"></button></div>';
+    var msgEl = box.querySelector('.pmsg'), go = box.querySelector('#i-go'), nudge = box.querySelector('#i-nudge'), slot = box.querySelector('#i-slot'), svg = box.querySelector('svg.tb'), cs = box.querySelector('svg.chart'),
+      wFrom = TIDE.wheels(slot, { label: 'Dry<br>from', vals: [TIDE.HOURS, TIDE.TENS], sep: { 1: '.' }, tail: '0', start: ER.flag('a-wf') || [9, 2], change: keep }),
+      wTo = TIDE.wheels(slot, { label: 'until', vals: [TIDE.HOURS, TIDE.TENS], sep: { 1: '.' }, tail: '0', start: ER.flag('a-wt') || [9, 2], change: keep }),
+      wNight = TIDE.wheels(slot, { label: 'Dry again<br>tonight from', vals: [TIDE.HOURS, TIDE.TENS], sep: { 1: '.' }, tail: '0', start: ER.flag('a-wn') || [18, 2], change: keep });
+    nudge.innerHTML = '<button type="button" data-d="-60" title="an hour back">&laquo;&laquo;</button><button type="button" data-d="-10" title="ten minutes back">&laquo;</button><button type="button" data-d="-1" title="one minute back">&lsaquo;</button>' +
+      '<button type="button" data-d="1" title="one minute on">&rsaquo;</button><button type="button" data-d="10" title="ten minutes on">&raquo;</button><button type="button" data-d="60" title="an hour on">&raquo;&raquo;</button>';
+    function keep() { ER.flag('a-wf', wFrom.at()); ER.flag('a-wt', wTo.at()); ER.flag('a-wn', wNight.at()); }
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function val(w) { return w.get() + '0'; }
+    function setTime(v) {
+      tm = TIDE.clamp(Math.round(v), 240, 1560);
+      var h = TIDE.h(TIDE.THU + tm / 60), y = SY(h);
+      svg.querySelector('#i-water').setAttribute('y', y.toFixed(1)); svg.querySelector('#i-water').setAttribute('height', Math.max(0, 400 - y).toFixed(1));
+      svg.querySelector('#i-top').setAttribute('d', 'M56 ' + y.toFixed(1) + 'H986');
+      svg.querySelector('#i-ptr').setAttribute('transform', 'translate(' + TX(tm).toFixed(1) + ' 0)');
+      svg.querySelector('#i-time').textContent = TIDE.clock(tm); svg.querySelector('#i-tide').textContent = h.toFixed(2) + ' m';
+      svg.setAttribute('data-t', tm);
+    }
+    function draw() {
+      ['i-card', 'i-chart', 'i-board'].forEach(function (id, k) { box.querySelector('#' + id).classList.toggle('on', Math.min(stage, 2) === k); });
+      ER.$$('#i-card tbody tr', box).forEach(function (r) { r.classList.toggle('on', +r.getAttribute('data-d') === day); });
+      ER.$$('.dh', cs).forEach(function (g) { g.classList.toggle('on', g.getAttribute('data-id') === low); });
+      nudge.style.display = stage >= 2 ? '' : 'none';
+      wFrom.node.style.display = wTo.node.style.display = stage === 2 ? '' : 'none'; wNight.node.style.display = stage === 3 ? '' : 'none';
+      go.textContent = ['That is today', 'That is the lowest place on our road', 'Chalk it up', 'Chalk it up'][stage] || 'Chalk it up';
+      go.style.visibility = stage > 3 ? 'hidden' : '';
+      if (stage >= 2) {
+        var p = TIDE.PLACES[low] || { dry: 0 }, y = SY(p.dry);
+        svg.querySelector('#i-string').style.display = ''; svg.querySelector('#i-sl').setAttribute('d', 'M56 ' + y + 'H986');
+        svg.querySelector('#i-st').setAttribute('y', y - 7); svg.querySelector('#i-st').textContent = 'the lowest place on our road: dries ' + TIDE.m1(p.dry);
+        svg.querySelector('#i-date').textContent = 'THURSDAY 12 JUNE';
+        svg.querySelector('#i-hung').textContent = 'HW 06.01 5.2  ·  LW 12.10 0.4  ·  HW 18.19 5.2  ·  LW 00.28 0.4';
+      }
+      setTime(tm);
+    }
+    function setStage(n) { stage = n; ER.flag('a-stage', n); draw(); paint(); }
+
+    box.querySelector('#i-card tbody').addEventListener('click', function (e) {
+      var r = e.target.closest ? e.target.closest('tr') : null; if (!r || stage !== 0) return;
+      day = +r.getAttribute('data-d'); ER.flag('a-day', day); TIDE.sfx.pin(); draw();
+      msg('Your finger is on that line. If that is today, say so.');
+    });
+    cs.addEventListener('click', function (e) {
+      var g = e.target.closest ? e.target.closest('.dh') : null; if (!g || stage !== 1) return;
+      low = g.getAttribute('data-id'); ER.flag('a-low', low); TIDE.sfx.pin(); draw();
+      msg('Your finger is on that figure. Is it the lowest place on the road to Selkie Scar?');
+    });
+    ER.drag(svg.querySelector('#i-strip'), {
+      start: function () { if (stage < 2) return false; },
+      move: function (e) { var p = ER.pt(svg, e); setTime(240 + (p.x - 90) * 1320 / 860); },
+      end: function (e) { var p = ER.pt(svg, e); setTime(240 + (p.x - 90) * 1320 / 860); TIDE.sfx.notch(); }
+    });
+    nudge.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null; if (!b) return;
+      setTime(tm + (+b.getAttribute('data-d'))); TIDE.sfx.notch();
+    });
+
+    go.addEventListener('click', function () {
+      var f, t, v, fo, to, file;
+      if (nextFile) return;
+      if (stage === 0) {
+        if (!day) { msg('Put your finger on today&rsquo;s line of the card: click it.'); return; }
+        if (!ER.check('day', day)) {
+          TIDE.sfx.no();
+          msg(ER.check('lastthu', day) ? '&ldquo;That is last Thursday,&rdquo; says Mrs Hebden. &ldquo;Look at its low waters: 1.7 and 1.7. The ford never came out of the sea all that day, which is why the Doctor went by boat. A week changes everything on this card.&rdquo;' :
+            '&ldquo;Is that the date I chalked on the board?&rdquo; says Mrs Hebden. &ldquo;I wrote it not five minutes ago, and I said it aloud.&rdquo;');
+          day = 0; ER.flag('a-day', 0); draw(); return;
+        }
+        TIDE.sfx.chalk(); setStage(1);
+        msg('&ldquo;Thursday the twelfth,&rdquo; says Mrs Hebden, and hangs four brass tags on the board: high water 06.01, low water 12.10, high water 18.19, low water 00.28. &ldquo;Now the chart. Show me the lowest place on your road.&rdquo;');
+      } else if (stage === 1) {
+        if (!low) { msg('Click a figure on the chart. The ones with a line under them are heights of sand.'); return; }
+        if (!ER.check('low', low)) {
+          TIDE.sfx.no();
+          msg(ER.check('lowroad', low) ? '&ldquo;That is the lowest place on the whole Pole Road,&rdquo; says Mr Nyberg from the doorway. &ldquo;And we are not going that far. We turn north at pole 11. Between the slip and Selkie Scar: what is the lowest?&rdquo;' :
+            low === 'pool' ? '&ldquo;That figure has no line under it,&rdquo; says Mrs Hebden. &ldquo;It is not a height. It is a depth: three tenths of a metre of water, even at the lowest tide. The seals like it. Nobody walks in it.&rdquo;' :
+            '&ldquo;Is there nothing lower on your road?&rdquo; says Mrs Hebden. &ldquo;The slip on Tarrow, the ford, then north beside the Gutter to Selkie Scar. The lowest place is the one that goes under first.&rdquo;');
+          low = ''; ER.flag('a-low', ''); draw(); return;
+        }
+        TIDE.sfx.rope(); TIDE.terms(['chart', 'ford']); setStage(2);
+        msg('&ldquo;The ford,&rdquo; says Mrs Hebden, and stretches a red string across the board at 1.6. &ldquo;Now slide the pointer through the day. When is the blue below my string?&rdquo;');
+      } else if (stage === 2) {
+        f = val(wFrom); t = val(wTo); fo = ER.check('from', f); to = ER.check('to', t);
+        if (fo && to) {
+          TIDE.sfx.chalk(); setStage(3); setTime(1100);
+          msg('&ldquo;Ten past ten to ten past two,&rdquo; says Mr Nyberg. &ldquo;Four hours, with low water in the middle. Good. Now the half of the plan that I never need. When does the road dry again tonight?&rdquo;'); return;
+        }
+        TIDE.sfx.no();
+        if (ER.check('hw', f) || ER.check('hw', t)) msg('&ldquo;That is a high water,&rdquo; says Mrs Hebden. &ldquo;Slide the pointer there and look at your road: five metres down. You want the two moments when the blue crosses my string.&rdquo;');
+        else if (ER.check('lw', f) || ER.check('lw', t)) msg('&ldquo;Ten past twelve is low water,&rdquo; says Mr Nyberg. &ldquo;That is the middle of the dry time, not an end of it. I asked for the two ends.&rdquo;');
+        else if (ER.check('from_out', f)) msg('&ldquo;Put the pointer on that first time and look,&rdquo; says Mr Nyberg. &ldquo;The blue is still above the string. You have rounded towards the sea. An opening is rounded later.&rdquo;');
+        else if (ER.check('to_out', t)) msg('&ldquo;Put the pointer on that second time and look,&rdquo; says Mr Nyberg. &ldquo;The blue is over the string again. You have given the sea ten minutes of ours. A shutting is rounded earlier.&rdquo;');
+        else if (fo) msg('&ldquo;The opening is right,&rdquo; says Mr Nyberg. &ldquo;Now the other end. In the afternoon the blue climbs back to the string. When? To the minute first: then round it the safe way.&rdquo;');
+        else if (to) msg('&ldquo;The shutting is right,&rdquo; says Mr Nyberg. &ldquo;Now the opening. In the morning the blue drops below the string. When? To the minute first: then round it the safe way.&rdquo;');
+        else msg('&ldquo;Slide the pointer,&rdquo; says Mrs Hebden. &ldquo;The road opens when the blue drops below my string, and shuts when it climbs back. Read each time to the minute. Then give Mr Nyberg his tens.&rdquo;');
+      } else if (stage === 3) {
+        v = val(wNight);
+        if (!ER.check('night', v)) {
+          TIDE.sfx.no();
+          msg(ER.check('night_out', v) ? '&ldquo;Put the pointer there,&rdquo; says Mr Nyberg. &ldquo;Still a hand of blue over the string. Round an opening later, by day or by night.&rdquo;' :
+            ER.check('night_lw', v) ? '&ldquo;That is tonight&rsquo;s low water,&rdquo; says Mr Nyberg. &ldquo;The road has been dry for two hours by then. I want the moment it opens.&rdquo;' :
+            '&ldquo;Slide the pointer on past this evening&rsquo;s high water,&rdquo; says Mrs Hebden. &ldquo;The sea goes down again in the dark, the same as by day. When does it drop below my string?&rdquo;');
+          return;
+        }
+        file = ER.exitOk([day + '-' + low + '-' + val(wFrom) + '-' + val(wTo) + '-' + v]);
+        if (!file) { msg('The chalk has broken. Something is wrong with this page: tell your teacher.'); return; }
+        nextFile = file; ER.flag('a-file', file); stage = 4; ER.flag('a-stage', 4);
+        var s0 = ER.state(); s0.done = s0.done || {}; s0.done.shed = 1; ER.persist(true);
+        TIDE.sfx.chalk(); draw();
+        ER.addClue('chart', 'The chart of Tarrow Sands', TIDE.chart({}), 'ckey', 'From the wall of the tide shed', true);
+        TIDE.mine('road', 'Today’s road', '<p>Thursday 12 June. Low water <b>12.10</b>, 0.4 m. High water 18.19, 5.2 m.</p><p>The lowest place on our road is the ford: it dries 1.6. So the road is dry from <b>10.10</b> to <b>14.10</b>, rounded the safe way. And again tonight from <b>22.30</b>.</p><p>Mr Nyberg wants forty minutes in hand today.</p>', true);
+        msg('&ldquo;Half past ten tonight,&rdquo; says Mr Nyberg. &ldquo;Which we shall not need.&rdquo; He takes the chalk from Mrs Hebden, and she lets him.');
+        setTimeout(function () {
+          ER.closeAll(); TIDE.solved(); paint(); busy = true;
+          ER.narrate([
+            'Mr Nyberg chalks it on the door of the shed, for anybody who comes looking: OUT 10.15. SELKIE SCAR. BACK OVER THE FORD BY 13.30. &ldquo;Forty minutes in hand,&rdquo; he says.',
+            'Mrs Hebden puts the radio with the red tape into the orange bag, and the orange bag on to your back. &ldquo;If the fog comes in, I&rsquo;ll go up and put the horn on,&rdquo; she says. &ldquo;Two blasts together. You&rsquo;ll know it&rsquo;s me.&rdquo;',
+            '&ldquo;There is no fog on the card,&rdquo; says Dr Arroyo.',
+            '&ldquo;There never is,&rdquo; says Mrs Hebden.'
+          ], function () { busy = false; showGo(); });
+        }, 2600);
+      }
+    });
+    draw();
+    msg(['The tide card, off its nail. Two weeks of tides, and one of the lines is today. Click it.',
+      'The chart of Tarrow Sands. Find the lowest place on the road from the slip to Selkie Scar, and click its figure.',
+      'The board is set for today, and the red string is at the ford. Slide the pointer: when is the road dry? Set the two times, rounded the safe way.',
+      'Now tonight. Slide the pointer on into the evening: when does the road dry again?'][stage] || '');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return Math.min(stage, 3); }
+    };
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>First Light · Two Aunts</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-news.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="flood.css">
+<style>
+  body{--bg:#4a5568;--accent:#c8501e;--font-display:'Oswald',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Newsreader',serif;
+    --tc-bg:rgba(252,244,232,.97);--tc-ink:#1d2228;--cap-bg:rgba(253,248,240,.96);--cap-ink:#1d2228;--panel:#fbf5ea;--panel-ink:#1d2228;--face-bg:#c9d6e0;--q-ink:#27457a;--fade:#fbe9d2;
+    --hud-bg:rgba(253,248,240,.9);--hud-ink:#1d2228;--hud-line:rgba(29,34,40,.32);--ov-bg:rgba(40,36,44,.62)}
+  .hbtn b{color:#fff}
+  .bird{animation:fly 26s linear infinite}
+  .bird.b2{animation-duration:34s;animation-delay:-9s}.bird.b3{animation-duration:30s;animation-delay:-18s}
+  @keyframes fly{0%{transform:translate(0,0)}100%{transform:translate(1500px,-90px)}}
+  .smoke{animation:smoke 5s ease-out infinite;opacity:0}
+  .smoke.s2{animation-delay:-2.4s}.smoke.s3{animation-delay:-1.2s;animation-duration:6.2s}
+  @keyframes smoke{0%{opacity:0;transform:translate(0,0)}15%{opacity:.5}100%{opacity:0;transform:translate(34px,-70px)}}
+  #strip.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.18)}}
+  .steam{animation:steam 3.2s ease-in-out infinite}
+  @keyframes steam{0%{opacity:0;transform:translateY(4px)}40%{opacity:.7}100%{opacity:0;transform:translateY(-22px)}}
+  .after{display:none}
+  #scene.told .after{display:block}
+  #scene.told .before{display:none}
+
+  /* the last strip off the river printer, and one word for eight o'clock */
+  .job.gl{width:min(900px,95vw)}
+  .gl-top{display:grid;grid-template-columns:330px minmax(0,1fr);gap:18px;align-items:start}
+  .gl-strip{background:#f7f9f6;color:#16222c;font-family:'DM Mono',monospace;font-size:15.5px;line-height:1.5;padding:14px 30px 14px;border-left:14px solid #dfe5e0;border-right:14px solid #dfe5e0;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  .gl-strip h4{margin:0 0 8px;font-weight:500;font-size:12px;letter-spacing:.1em;line-height:1.4;border-bottom:1px dashed #6b7a80;padding-bottom:6px}
+  .gl-strip p{margin:0 0 2px;display:flex;justify-content:space-between}
+  .gl-strip p.gap{justify-content:center;color:#6b7a80;letter-spacing:.3em}
+  .gl-strip p.rule{display:block;margin-top:9px;border-top:1px dashed #6b7a80;padding-top:7px;font-size:13px;line-height:1.4;color:#3a4a52}
+  .gl-strip p.pen{display:block;margin-top:5px;font-family:'Caveat',cursive;font-size:22px;line-height:1.1;color:#27457a;transform:rotate(-1.5deg)}
+  .gl-board{background:#fffdf2;color:#1f1e1a;padding:16px 22px 18px;box-shadow:0 20px 50px rgba(0,0,0,.5);border-left:6px solid #ff4b3e}
+  .gl-board h5{margin:0 0 12px;font-family:'DM Mono',monospace;font-weight:500;font-size:12.5px;letter-spacing:.14em;border-bottom:1px solid #1f1e1a;padding-bottom:6px;display:flex;justify-content:space-between}
+  .gl-line{margin:0 0 6px;font-family:'Special Elite','Courier New',monospace;font-size:23px;line-height:2.1}
+  .wslot{display:inline-block;min-width:170px;height:46px;vertical-align:middle;border:2px dashed #8a7f52;background:#f6efc2;margin:0 4px}
+  .gl-tray{display:flex;gap:12px;margin-top:16px;padding:12px;min-height:74px;background:#e9e2cc;border:1px solid #cfc7ae}
+  .wcard{display:block;width:170px;height:46px;background:#1f1e1a;color:#ffe9a8;font-family:'Oswald',sans-serif;font-weight:600;font-size:21px;letter-spacing:.16em;box-shadow:2px 3px 0 rgba(0,0,0,.3);touch-action:none;cursor:grab}
+  .wslot .wcard{margin:-2px;height:46px}
+  .wcard.held{outline:3px solid #ff4b3e;outline-offset:2px}
+  .wcard.fly{position:fixed;z-index:80;pointer-events:none;cursor:grabbing;margin:0}
+  .gl-board .small{margin:14px 0 0;font-family:'Newsreader',serif;font-style:italic;font-size:16px;color:#57533f}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4c6082"/><stop offset=".5" stop-color="#98a1bd"/><stop offset=".8" stop-color="#eac3ae"/><stop offset="1" stop-color="#fcdba6"/></linearGradient>
+  <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1d2b6"/><stop offset="1" stop-color="#a3b3c8"/></linearGradient>
+  <linearGradient id="yardG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#525862"/><stop offset="1" stop-color="#262a30"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffe9b0"/><stop offset="1" stop-color="#f5c46a"/></linearGradient>
+  <radialGradient id="glowG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd98a" stop-opacity=".6"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="44%" r="84%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#1a1420" stop-opacity=".1"/><stop offset="1" stop-color="#1a1420" stop-opacity=".5"/></radialGradient>
+  <pattern id="bricks" width="44" height="22" patternUnits="userSpaceOnUse"><path d="M0 0H44M0 11H44M0 0V11M22 11V22" stroke="#4a2a20" stroke-width="1.400" opacity=".55"/></pattern>
+</defs>
+
+<!-- the sky at half past seven in February, and the valley under it -->
+<rect x="-1000" y="-400" width="3600" height="920" fill="url(#skyG)"/>
+<g fill="#f6c9b0" opacity=".7"><ellipse cx="300" cy="240" rx="260" ry="16"/><ellipse cx="980" cy="180" rx="320" ry="14"/><ellipse cx="1400" cy="290" rx="220" ry="12"/></g><g fill="#7d8aa8" opacity=".5"><ellipse cx="340" cy="228" rx="230" ry="12"/><ellipse cx="1010" cy="170" rx="280" ry="10"/></g>
+<g fill="none" stroke="#2a3140" stroke-width="2.600" stroke-linecap="round"><path class="bird" d="M-40 200q8 -9 16 0q8 -9 16 0"/><path class="bird b2" d="M-120 260q7 -8 14 0q7 -8 14 0"/><path class="bird b3" d="M-80 150q6 -7 12 0q6 -7 12 0"/></g>
+<g transform="translate(0 -40)"><path d="M-1000 440Q-400 330 100 384T700 352T1300 392T2600 356V480H-1000Z" fill="#6f7f97"/>
+<path d="M-1000 458Q-300 404 300 434T1100 412T2600 446V530H-1000Z" fill="#56677d"/>
+<g id="view" class="hot"><path d="M-1000 474Q200 444 800 466T2600 452V680H-1000Z" fill="url(#waterG)"/>
+  <path d="M-1000 520Q100 486 520 500T1300 494T2600 510" fill="none" stroke="#b9967a" stroke-width="16" opacity=".5"/>
+  <g fill="#3d4a4c"><ellipse cx="120" cy="492" rx="38" ry="8"/><ellipse cx="210" cy="488" rx="26" ry="7"/><ellipse cx="820" cy="486" rx="40" ry="8"/><ellipse cx="900" cy="482" rx="24" ry="7"/><ellipse cx="1180" cy="488" rx="46" ry="8"/><ellipse cx="1300" cy="484" rx="28" ry="7"/><ellipse cx="-80" cy="500" rx="50" ry="9"/></g>
+  <g id="bridge"><rect x="372" y="484" width="330" height="16" fill="#8f8778"/><rect x="372" y="480" width="330" height="5" fill="#a9a08c"/><g id="arches"></g><path d="M372 506h330" stroke="#f1d2b6" stroke-width="2" opacity=".7"/></g></g></g>
+
+<!-- the town, going down the hill -->
+<g id="town" class="hot"></g>
+<ellipse class="smoke" cx="466" cy="560" rx="14" ry="8" fill="#e9e4dc"/><ellipse class="smoke s2" cx="884" cy="584" rx="14" ry="8" fill="#e9e4dc"/><ellipse class="smoke s3" cx="1150" cy="566" rx="12" ry="7" fill="#e9e4dc"/>
+
+<!-- the back yard of Wend Valley Radio -->
+<rect x="-1000" y="652" width="3600" height="30" fill="#75483a"/><rect x="-1000" y="652" width="3600" height="30" fill="url(#bricks)"/><rect x="-1000" y="646" width="3600" height="9" fill="#a9a08c"/>
+<rect x="-1000" y="682" width="3600" height="700" fill="url(#yardG)"/>
+<g fill="#f1d2b6" opacity=".4"><ellipse cx="330" cy="760" rx="150" ry="13"/><ellipse cx="840" cy="826" rx="210" ry="16"/><ellipse cx="1220" cy="792" rx="120" ry="10"/><ellipse cx="80" cy="850" rx="130" ry="12"/></g>
+<g id="door" class="hot"><rect x="1370" y="330" width="1300" height="352" fill="#75483a"/><rect x="1370" y="330" width="1300" height="352" fill="url(#bricks)"/><rect x="1370" y="320" width="1300" height="14" fill="#a9a08c"/>
+  <rect x="1416" y="432" width="118" height="250" fill="#2a1a12"/><rect x="1424" y="440" width="102" height="242" fill="url(#doorG)"/><path d="M1526 440l34 -10v262l-34 -10z" fill="#2f5a4a"/><circle cx="1475" cy="560" r="120" fill="url(#glowG)" pointer-events="none"/>
+  <rect x="1404" y="382" width="142" height="36" fill="#1d2228"/><text x="1475" y="406" class="fO" font-size="16.500" font-weight="600" text-anchor="middle" fill="#f1ede2" letter-spacing="2.400">WVR &#183; NEWS</text>
+  <rect x="1404" y="682" width="146" height="10" fill="#a9a08c"/></g>
+
+<!-- the radio car, home -->
+<g id="car" class="hot" transform="translate(1150 778) scale(1.320) translate(-1130 -778)"><ellipse cx="1130" cy="772" rx="200" ry="12" fill="#000" opacity=".35"/>
+  <path d="M1180 628V250" stroke="#8a9198" stroke-width="7"/><path d="M1180 420V250" stroke="#aeb6bd" stroke-width="4"/><path d="M1160 262h40M1166 280h28M1170 298h20" stroke="#2a2f35" stroke-width="3"/><circle cx="1180" cy="248" r="5" fill="#c23b2c"/>
+  <path d="M964 746V700Q966 676 1000 668L1062 630H1224Q1252 630 1264 656L1284 700V746Z" fill="#e9e4d6"/><path d="M964 706H1284V722H964z" fill="#e8743b"/>
+  <path d="M1070 640h70v28h-112zM1150 640h66q14 0 20 12l8 16h-94z" fill="#5a6c84"/><path d="M1076 646h30l-30 20zM1156 646h26l-26 20z" fill="#fff" opacity=".2"/>
+  <text x="1124" y="699" class="fO" font-size="17" font-weight="700" text-anchor="middle" fill="#1d2228" letter-spacing="3">RADIO CAR</text>
+  <g fill="#1d2228"><circle cx="1022" cy="748" r="29"/><circle cx="1226" cy="748" r="29"/></g><g fill="#8a9198"><circle cx="1022" cy="748" r="11"/><circle cx="1226" cy="748" r="11"/></g>
+  <path d="M964 746q20 -30 60 -26t50 22h90q10 -30 62 -30t58 34h-320z" fill="#6b4a32" opacity=".55"/><g fill="#6b4a32" opacity=".6"><circle cx="1090" cy="690" r="5"/><circle cx="1150" cy="680" r="4"/><circle cx="1010" cy="686" r="6"/><circle cx="1250" cy="690" r="5"/><circle cx="1196" cy="672" r="3"/><circle cx="1120" cy="664" r="3"/></g></g>
+
+<!-- everybody -->
+<g id="dilys" class="hot" transform="translate(214 872) scale(1.080)"></g>
+<g id="brannigan" class="hot" transform="translate(402 870) scale(1.160)"></g>
+<g id="sato" class="hot" transform="translate(572 868) scale(1.160)"></g>
+<g id="lindley" class="hot" transform="translate(738 866) scale(1.060)"></g>
+<g id="haddad" class="hot" transform="translate(900 864) scale(1.130)"></g>
+
+<!-- the last strip off the river printer, in your own hand -->
+<g id="strip" class="hot ready" transform="translate(1440 628) rotate(-7)"><path d="M30 290q-28 -50 -8 -110l44 8v118z" fill="#e8c4a2"/><rect x="24" y="0" width="92" height="250" fill="#000" opacity=".25" transform="translate(5 6)"/><rect x="24" y="0" width="92" height="250" fill="#f7f9f6"/><rect x="24" y="0" width="9" height="250" fill="#dfe5e0"/><rect x="107" y="0" width="9" height="250" fill="#dfe5e0"/>
+  <g stroke="#3a4a52" stroke-width="3"><path d="M42 24h56M42 44h22M74 44h24M42 60h22M74 60h24M42 76h22M74 76h24M42 108h22M74 108h24M42 124h22M74 124h24M42 140h22M74 140h24M42 156h22M74 156h24M42 172h22M74 172h24"/></g><path d="M58 92h24" stroke="#8a9198" stroke-width="3" stroke-dasharray="3 5"/>
+  <path d="M112 178q34 -4 36 22q-4 30 -36 30z" fill="#e8c4a2"/><path d="M114 228q30 0 30 22q-6 24 -30 20z" fill="#e0b894"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">OFF THE NIGHT DESK 08.05</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <h6>What you now know</h6>
+  <ol>
+    <li>Ask of every report: who says so, and how do they know? First-hand is somebody who saw it. Second-hand is somebody who was told.</li>
+    <li>One caller is one source. Two count as two only if they are independent, like two aunts who do not speak: two people who heard it from the same third person are still one.</li>
+    <li>Trust people for what they are in a position to know: the agency for the river, the police for the bridge they have shut, a reporter for what she is looking at.</li>
+    <li>Run what is confirmed. Hold what may be true, and say who can check it. Kill what you know is wrong, or what would put people in danger. Never kill a report because it sounds odd, or because of who sent it.</li>
+    <li>A photograph can be real and still be old, or from somewhere else. Set what is in it against today: the place, the light, the trees, the signs, any number. One thing that cannot be today is enough.</li>
+    <li>A name is not a place until you can find it on the map. Look it up, read it to the end, and if two places fit, ask which one.</li>
+    <li>On the radio a line is heard once: the place first, short sentences, numbers that a voice can say. Say who says so. And say plainly what is not known yet.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Read the news</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the front page</button></div>
+  <small>Two Aunts &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="flood.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, lock = null, told = {}, dil = 0;
+
+  /* the arches of the Old Bridge, the roofs of the town, the five of them */
+  (function () {
+    var s = '', i, r = 17, x, y, w, row, ROOF = ['#3a4250', '#2e3542', '#4a3a3c', '#353c48', '#5a4038'];
+    function rnd() { r = (r * 16807) % 2147483647; return r / 2147483647; }
+    for (i = 0; i < 5; i++) s += '<path d="M' + (386 + i * 64) + ' 500q24 -15 48 0z" fill="#2a2622"/>';
+    $('#arches').innerHTML = s; s = '';
+    s += '<rect x="1004" y="430" width="34" height="130" fill="#6f6a66"/><path d="M998 432l23 -64 23 64z" fill="#4a4d55"/><rect x="1014" y="452" width="14" height="22" fill="#2a2c30"/>';
+    for (row = 0; row < 4; row++) {
+      y = 548 + row * 30;
+      for (x = -260 + row * 23; x < 1500;) {
+        w = 58 + rnd() * 44;
+        s += '<rect x="' + x.toFixed(0) + '" y="' + y + '" width="' + w.toFixed(0) + '" height="120" fill="' + ['#8a6a5a', '#7a7068', '#96806a', '#6f6258'][Math.floor(rnd() * 4)] + '"/>' +
+          '<path d="M' + (x - 5).toFixed(0) + ' ' + (y + 2) + 'L' + (x + w / 2).toFixed(0) + ' ' + (y - 24 - rnd() * 10).toFixed(0) + 'L' + (x + w + 5).toFixed(0) + ' ' + (y + 2) + 'Z" fill="' + ROOF[Math.floor(rnd() * ROOF.length)] + '"/>' +
+          '<rect x="' + (x + w * 0.66).toFixed(0) + '" y="' + (y - 30) + '" width="9" height="20" fill="#4a3a34"/>' +
+          (rnd() < 0.42 ? '<rect x="' + (x + 12).toFixed(0) + '" y="' + (y + 10) + '" width="11" height="13" fill="#ffd98a"/>' : '<rect x="' + (x + 12).toFixed(0) + '" y="' + (y + 10) + '" width="11" height="13" fill="#3a4250"/>');
+        x += w + 3;
+      }
+    }
+    $('#town').innerHTML = s;
+    $('#dilys').innerHTML = FL.who('dilys', { kind: 'mac', top: '#6b4a7a', headset: 0, smile: 5, extra: '<path d="M42 -112v30" stroke="#3a2a1a" stroke-width="3"/><rect x="26" y="-84" width="34" height="28" rx="4" fill="#7a2f2f"/>' });
+    $('#brannigan').innerHTML = FL.who('brannigan', { smile: 5, extra: '<path d="M20 -291l15 -22" stroke="#e9c93a" stroke-width="3.500" stroke-linecap="round"/><g class="before"><path d="M32 -128h20v22q0 5 -5 5h-10q-5 0 -5 -5z" fill="#f1ede2"/></g>' +
+      '<g class="after"><rect x="-52" y="-134" width="20" height="24" rx="3" fill="#e58a1f"/><rect x="-54" y="-139" width="24" height="7" rx="2" fill="#f3efe6"/></g>' });
+    $('#sato').innerHTML = FL.who('sato', { smile: 6, extra: '<path d="M-20 -238q20 16 40 0l6 20q-26 16 -52 0z" fill="#e8743b"/><path d="M12 -224l8 60" stroke="#e8743b" stroke-width="13" stroke-linecap="round"/>' });
+    $('#lindley').innerHTML = FL.who('lindley', { smile: 2, extra: '<g class="before"><rect x="32" y="-134" width="20" height="24" rx="3" fill="#e58a1f"/><rect x="30" y="-139" width="24" height="7" rx="2" fill="#f3efe6"/></g>' +
+      '<g class="after"><path d="M32 -128h20v22q0 5 -5 5h-10q-5 0 -5 -5z" fill="#f1ede2"/><path class="steam" d="M42 -134q-6 -8 0 -16t0 -16" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></g>' });
+    $('#haddad').innerHTML = FL.who('haddad', { asleep: 1, smile: 1, extra: '<path d="M-52 -128h20v22q0 5 -5 5h-10q-5 0 -5 -5z" fill="#f1ede2"/>' });
+  })();
+
+  ER.init({
+    theme: 'news', story: 'flood', storyTitle: 'Two Aunts', id: 'light', no: 'V', title: 'First Light',
+    go: 'Go outside',
+    intro: [
+      'Every line went to the studio with its owner at the front of it: the Environment Agency, the police, the water company, our own reporter. The place came first, the numbers were ones that a voice can say, and two sentences said plainly what nobody knew. Then, with three minutes to go, the oddest call of the night turned out to be true, and one paragraph had to die.',
+      'The river went on rising until a quarter past two in the morning. Danny Sato read the news every half hour, all night, and at about eleven his hands stopped shaking.',
+      'Now it is half past seven, the rain has stopped, and somebody has opened the back door.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"trend":["40a3815c"]},
+    sound: ['morning', { root: 53, bpm: 66, beds: [['birds', 0.5]] }],      /* out of doors at first light, the job done: a major key, and birds */
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('e-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('e-told', told); return true; }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#scene').classList.toggle('told', !!ER.flag('e-done'));
+    $('#strip').classList.toggle('ready', !!(told.lindley && !ER.flag('e-done')));
+    ER.pips((told.lindley ? 1 : 0) + (ER.flag('e-done') ? 1 : 0), 2);
+  }
+  function hints() {
+    if (ER.flag('e-done')) return null;
+    if (lock && lock.isOpen()) return ['word', [
+      'One word for eight o&rsquo;clock. The strip has the rule printed at the bottom of it. Put the right card in the gap, by dragging it or by clicking the card and then the gap.',
+      'The top of the strip is the middle of the night. What matters is what the river has done in the last hour: read down the last five lines. Is each one higher than the one before, the same, or lower?'
+    ]];
+    if (!told.lindley) return ['talk', ['A small old man in a flat cap is standing in the yard with a jar in his hand, and Danny is thanking him. You have never met him. You know his name.', 'Click Mr Lindley, in the middle of the yard.']];
+    return ['strip', ['Brannigan put a strip of paper in your hand: the last readings off the river printer. It is at the bottom right of the picture.', 'Click the strip of paper in your own hand. Danny needs one word from it for the eight o&rsquo;clock news.']];
+  }
+
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    paint();
+    if (ER.flag('e-done')) { busy = false; finish(true); return; }
+    if (told.in) { busy = false; ER.say('The back yard of Wend Valley Radio, half past seven. The river is still out in the meadows.'); return; }
+    tell('in');
+    ER.narrate([
+      'Half past seven. The rain stopped at four. From the back yard of Wend Valley Radio you can see the whole town going down the hill in front of you, wet and grey and all still there.',
+      'The river is three times as wide as it should be. The meadows are a lake, and the Old Bridge has water most of the way up its arches. For a few hours last night that photograph was nearly true. It was still from 2011.',
+      'The radio car is back, with mud up to its windows. Yasmin Haddad is leaning against it in her waders, asleep on her feet, holding a mug.',
+      'Danny Sato has been on air for twelve and a half hours. He has very little voice left, and he is using what there is of it to thank a small old man in a flat cap.',
+      'The old man is holding a jar.',
+      '&ldquo;The agency&rsquo;s latest,&rdquo; says Brannigan, and puts a strip of paper in your hand. &ldquo;Eight o&rsquo;clock news. YOU tell Danny what the river is doing. One word. And think before you choose it. I did not, once.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#lindley').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('e-done')) { ER.say('Mr Lindley is drinking Brannigan&rsquo;s tea. &ldquo;Hot,&rdquo; he says, with some surprise. &ldquo;I shall be ringing about the bins on Thursday.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mr Ronald Lindley', role: '3 Brook Cottages · a regular caller', face: window.FACE('lindley'),
+      lines: [
+        { note: 'Eighty-one, in a flat cap, with a jar in both hands.', a: '&ldquo;Lindley. Brook Cottages. I rang you five times last night. And I shall still want to speak to somebody about that marmalade.&rdquo;' },
+        { q: 'You were right about the brook.', a: 'I know I was right. I have lived beside it for fifty-three years. When the river is high enough, the brook cannot get out. So it fills up from the bottom end, and it comes back past my gate. It did it in 2011, and nobody listened then either.' },
+        { q: 'What happened to the school?', a: 'The brook came over the wall at ten to eleven. The hall was up to the ankles by midnight, they tell me. The young lady with the microphone says there were to have been sixty-one beds in it.</p><p>He looks at the jar. &ldquo;She dropped a stick in my brook. Very thorough. THEN she believed me.&rdquo;' },
+        { q: 'Do you know this photograph?', a: 'I ought to. My son took it, from the river bank, the evening the water came in over our counter. June 2011. That is the shop: LINDLEY AND SON. He was meant to be carrying nails upstairs.</p><p>&ldquo;His girl put it on that Noticeboard on Sunday: &lsquo;Dad&rsquo;s photo of the big flood&rsquo;. I see that somebody has cut her words off and written NOW on it. People will do that.&rdquo;' },
+        { q: 'What is in the jar?', a: 'Marmalade. Mine. Your advert says &ldquo;made the old way&rdquo;, and it is made in a factory with a car park. THIS is the old way. It is for the lady with the cold tea.' }
+      ],
+      clue: { id: 'lindley', title: 'Mr Lindley, of Brook Cottages', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('lindley')) { paint(); FL.terms(['false alarm']); ER.say('The strip of paper is still in your hand, and eight o&rsquo;clock is coming.'); } }
+    });
+  });
+  $('#brannigan').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(ER.flag('e-done') ? '&ldquo;Monday,&rdquo; says Brannigan. &ldquo;Nine o&rsquo;clock. You can make the tea, and then you can have the board.&rdquo;' :
+      !told.lindley ? '&ldquo;First, him,&rdquo; says Brannigan, and nods at the old man in the cap. &ldquo;I thought he was ringing about the marmalade. We owe him ten minutes.&rdquo;' :
+      '&ldquo;Eleven hours,&rdquo; says Brannigan. &ldquo;Nobody hurt. Sixty-one people asleep in the Corn Exchange, four dogs, and a parrot that has learned the station&rsquo;s four notes. I call that a good night. Now: the strip.&rdquo;');
+  });
+  $('#sato').addEventListener('click', function () { if (!busy) ER.say('Danny Sato, in somebody else&rsquo;s scarf. &ldquo;They shut the Old Bridge at one,&rdquo; he whispers. &ldquo;I said so at one. Not at nine. And the parrot is flat.&rdquo;'); });
+  $('#haddad').addEventListener('click', function () { if (!busy) ER.say('Yasmin opens one eye. &ldquo;Brook Street. The water has gone back over the wall. Ten past seven.&rdquo; She shuts it again. She has not let go of the mug.'); });
+  $('#dilys').addEventListener('click', function () {
+    if (busy) return;
+    dil++;
+    ER.say(dil % 2 ? '&ldquo;The trains?&rdquo; says Dilys, with her coat on. &ldquo;A tree on the line, eleven miles up the valley. Nothing to do with the river at all. Baz was right that they had stopped. Nobody ever said why, and nor did we.&rdquo;' :
+      '&ldquo;Carol in Church Lane has sent another text,&rdquo; says Dilys. &ldquo;It says SORRY. And then, in capitals: BUT YOU DID CHECK.&rdquo;');
+  });
+  FL.thing('#view', null, 'The meadows are a lake, pink in the first light. The Old Bridge is still there, with five small dark shapes where its arches go under. The highest reading of the night was 4.12 metres: thirty centimetres short of 2011.', isBusy);
+  FL.thing('#town', null, 'Wendford, going down the hill in rows. The lit windows are people who have been up all night with the radio on.', isBusy);
+  FL.thing('#car', null, 'The radio car, with its mast still up. It has been through water that Brannigan does not want to hear about.', isBusy);
+  FL.thing('#door', null, 'The back door of Wend Valley Radio. Inside, somebody is making tea for everybody, which is your job. You will go in a minute.', isBusy);
+
+  /* ---------- one word ---------- */
+  var STRIP = '<h4>RIVER WEND AT WENDFORD (OLD BRIDGE)<br>ENVIRONMENT AGENCY &middot; LEVELS</h4>' +
+    '<p><span>02.00</span><span>4.11 m</span></p><p><span>02.15</span><span>4.12 m</span></p><p><span>02.30</span><span>4.12 m</span></p><p><span>02.45</span><span>4.12 m</span></p><p class="gap">&middot; &middot; &middot;</p>' +
+    '<p><span>06.30</span><span>3.97 m</span></p><p><span>06.45</span><span>3.95 m</span></p><p><span>07.00</span><span>3.92 m</span></p><p><span>07.15</span><span>3.88 m</span></p><p><span>07.30</span><span>3.84 m</span></p>' +
+    '<p class="rule">RISING: each reading is higher than the last. FALLING: each one is lower. STEADY: no change.</p>';
+  $('#strip').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('e-done')) { ER.say('The strip is in your pocket. You are going to keep it.'); return; }
+    if (!told.lindley) { ER.say('Nine lines of numbers off the river printer. Brannigan puts a hand on your arm. &ldquo;In a minute. There is a man here that you have not met, and you held his slip.&rdquo;'); return; }
+    if (!lock) lock = makeWord();
+    lock.open();
+  });
+  function makeWord() {
+    var box = ER.el('div', 'job gl'), put = ER.flag('e-word') || '', wait = false, kit;
+    box.innerHTML = '<div class="gl-top"><div class="gl-strip">' + STRIP + '<p class="pen">Never from one reading. Wait for three. M.B.</p></div>' +
+      '<div class="gl-board"><h5><span>NEWS &middot; 08.00</span><span>THE FIRST LINE</span></h5><p class="gl-line">&ldquo;The River Wend is <span class="wslot zone" data-z="slot"></span>.&rdquo;</p>' +
+      '<div class="gl-tray zone" data-z="tray"><button type="button" class="wcard" data-v="rising">RISING</button><button type="button" class="wcard" data-v="steady">STEADY</button><button type="button" class="wcard" data-v="falling">FALLING</button></div>' +
+      '<p class="small">One card in the gap. Danny will say it to the whole valley.</p></div></div>' +
+      '<div class="job-foot"><p class="jmsg"></p><button type="button" class="btn" id="g-go">Tell Danny</button></div>';
+    var msgEl = box.querySelector('.jmsg'), slot = box.querySelector('.wslot'), tray = box.querySelector('.gl-tray');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function place(v, where) {
+      ER.$$('.wcard', box).forEach(function (c) { if (c.parentNode === slot && c.getAttribute('data-v') !== v) tray.appendChild(c); });
+      var c = box.querySelector('.wcard[data-v="' + v + '"]');
+      (where === 'slot' ? slot : tray).appendChild(c);
+      put = slot.querySelector('.wcard') ? slot.querySelector('.wcard').getAttribute('data-v') : ''; ER.flag('e-word', put);
+    }
+    kit = FL.place(box, {
+      item: '.wcard', zone: '.zone', lock: function () { return wait; },
+      drop: function (item, zone) { place(item.getAttribute('data-v'), zone.getAttribute('data-z')); FL.sfx.clip(); msg(put ? '&ldquo;The River Wend is ' + put + '.&rdquo; Is that what the strip says?' : 'The gap is empty again.'); }
+    });
+    box.querySelector('#g-go').addEventListener('click', function () {
+      if (wait) return;
+      kit.hold(null);
+      if (!put) { msg('&ldquo;One word,&rdquo; says Brannigan. &ldquo;Put a card in the gap.&rdquo;'); return; }
+      if (!ER.check('trend', put)) {
+        ER.sfx.no();
+        msg(put === 'rising' ? '&ldquo;Rising?&rdquo; says Brannigan. &ldquo;Read down the last five lines. Is each one higher than the one before, or lower?&rdquo;' :
+          '&ldquo;It WAS steady,&rdquo; says Brannigan, &ldquo;at half past two this morning: three readings the same. That is the top of the strip. Now read the bottom of it. What has the river done in the last hour?&rdquo;');
+        place(put, 'tray'); return;
+      }
+      wait = true; FL.solved(); ER.flag('e-done', 1);
+      msg('&ldquo;Falling,&rdquo; you say. &ldquo;Five readings, and every one of them lower than the one before.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); busy = true;
+        ER.narrate([
+          'Brannigan looks at the strip for a long time. In 2011 she said a word like that after one reading. Then she nods, once. &ldquo;Falling,&rdquo; she says. &ldquo;You may tell them.&rdquo;',
+          'At eight o&rsquo;clock, for the first time since Sunday, somebody on Wend Valley Radio says it. &ldquo;The River Wend is falling. The Environment Agency says it stood at about three point eight metres at half past seven.&rdquo;',
+          '&ldquo;We do not yet know when people in Nether Sedge can go home. We will tell you as soon as we do.&rdquo;',
+          'Mr Lindley gives Brannigan the jar. Brannigan gives Mr Lindley the only thing she has in her hands, which is her mug. The tea in it is hot. Nobody in the building can remember that happening before.',
+          '&ldquo;Your mother rang,&rdquo; says Dilys, doing up her coat. &ldquo;She says she loves you, and are you coming home for breakfast.&rdquo;',
+          '&ldquo;Check it,&rdquo; says Brannigan.</p><p>So you ring your mother back, from the telephone in the front office. She does. And there is breakfast.',
+          '&ldquo;One source,&rdquo; says Brannigan, when you tell her. &ldquo;No aunts at all.&rdquo; She tries the marmalade on the end of her pencil. &ldquo;But in a position to know.&rdquo;'
+        ], function () { busy = false; finish(false); });
+      }, 2600);
+    });
+    ER.addClue('strip', 'The river, from two o’clock to half past seven', STRIP, 'strip', 'Off the river printer', true);
+    FL.terms(['gauge']);
+    if (put) place(put, 'slot');
+    msg('The last strip off the river printer, and three cards. One of them goes in the gap.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+
+  /* ---------- the end ---------- */
+  function finish(quick) {
+    var st = ER.state(), mins = FL.minutesPlayed(), hn = ER.hintsUsed();
+    paint();
+    $('#d-time').textContent = 'From ten to nine until the tea: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+    if (quick) ER.say('Five past eight. The river is falling, and Mr Lindley is drinking Brannigan&rsquo;s tea.');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Wend Valley Radio &middot; your turn at the microphone</h4><h3>Read the news</h3>' +
+      '<p>Choose ONE of these. Write it in 60 to 90 words, and then read it aloud, once, as Danny would.</p>' +
+      '<p><b>A</b> It is ten o&rsquo;clock in the morning. Write the news from the notes below. Put the place first, say who says so, keep the sentences short, and say one thing that is not known yet.</p>' +
+      '<p class="notes">Environment Agency, 09.45: River Wend at Wendford 3.52 m, falling. &middot; Police, 09.30: Old Bridge shut since 01.00. An engineer looks at it at noon. Queen&rsquo;s Bridge open. &middot; Council: 61 people at the Corn Exchange. &middot; Nobody can say yet when people in Church Lane and Ferry Row, Nether Sedge, may go home.</p>' +
+      '<p><b>B</b> Explain to a friend why two people who tell you the same thing may be only one source.<br><b>C</b> A friend sends you a frightening photograph and writes: THIS IS HAPPENING NOW. Explain how you would test it before you pass it on.</p>' +
+      '<textarea id="r1"></textarea><div class="count"></div><label for="r2">Name</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

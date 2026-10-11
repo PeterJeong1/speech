@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lost Signal · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-wild.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  /* the wall of a mountain hut: boards, a lamp, and whatever people have pinned up */
+  body{color:#efe6d2;font-family:'Lora',Georgia,serif;-webkit-user-select:none;user-select:none;
+    background:#2a1c12;
+    background-image:radial-gradient(ellipse 880px 500px at 22% -90px,rgba(255,196,110,.34),rgba(255,170,80,.07) 58%,transparent 78%),
+      repeating-linear-gradient(90deg,rgba(0,0,0,.34) 0 2px,transparent 2px 148px),repeating-linear-gradient(90deg,rgba(255,255,255,.022) 0 1px,transparent 1px 37px),linear-gradient(#3b2718,#22160e)}
+  .back{position:fixed;left:14px;top:12px;z-index:3;height:36px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(255,255,255,.24);
+    background:rgba(20,12,7,.7);color:#efe9dc;border-radius:3px;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#ff8a3c;color:#ff8a3c}
+  header{position:relative;max-width:1180px;margin:0 auto;padding:54px 26px 6px;display:grid;grid-template-columns:auto 1fr;gap:10px 34px;align-items:center}
+  .rose{width:132px;height:132px}
+  h1{margin:0;font-family:'Fjalla One',sans-serif;font-weight:normal;font-size:clamp(48px,6.2vw,80px);line-height:.95;letter-spacing:.09em;text-transform:uppercase;color:#f6efdc}
+  h1 b{color:#ff8a3c;font-weight:normal}
+  header p{margin:12px 0 0;max-width:720px;font-size:17px;line-height:1.55;color:#d9cdb4}
+  .rule{display:inline-block;margin-top:14px;padding:6px 16px 5px;border:1px solid #a58d68;font-family:'Overpass Mono',monospace;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:#f0e4c8}
+  /* a shelf, and the cards pinned under it */
+  .shelf{max-width:1180px;margin:20px auto 0;height:14px;border-radius:2px;background:linear-gradient(#8a6038,#5a3a1e 60%,#2e1c0e);box-shadow:0 8px 16px rgba(0,0,0,.55)}
+  main{max-width:1180px;margin:0 auto;padding:22px 26px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(322px,1fr));gap:34px 28px;align-items:start}
+  .rc{position:relative;display:block;padding:0 0 14px;border:0;text-align:left;color:#1e1d1a;cursor:pointer;font:inherit;background:#fbfaf1;
+    box-shadow:0 16px 34px rgba(0,0,0,.55);transition:transform .2s;transform-origin:50% 0}
+  .rc:nth-child(3n+1){transform:rotate(-1.2deg)}.rc:nth-child(3n+2){transform:rotate(.9deg)}.rc:nth-child(3n){transform:rotate(-.5deg)}
+  .rc:hover{transform:rotate(0) translateY(4px)}
+  .pin{position:absolute;left:50%;top:-9px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9d7a,#c2331f 55%,#6e1a10);box-shadow:0 5px 6px rgba(0,0,0,.5);z-index:1}
+  .head{display:flex;justify-content:space-between;align-items:baseline;padding:13px 16px 6px;background:#2a5d4a;color:#f3f0e2;font-family:'Fjalla One',sans-serif;font-size:14.5px;letter-spacing:.2em;text-transform:uppercase}
+  .head i{font-style:normal;font-family:'Overpass Mono',monospace;font-size:11.5px;letter-spacing:.06em;opacity:.8}
+  .rc h2{margin:10px 16px 8px;padding-bottom:5px;border-bottom:1px solid #a9a38c;font-family:'Handlee',cursive;font-weight:normal;font-size:31px;line-height:1.05;color:#26304a}
+  .row{display:grid;grid-template-columns:1.1fr .9fr 1.25fr;gap:0;margin:0 16px 8px;border:1px solid #a9a38c}
+  .row>span{padding:4px 8px 3px;border-right:1px solid #d5cfb8}
+  .row>span:last-child{border-right:0}
+  .rc small{display:block;font-family:'Overpass',sans-serif;font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#2a5d4a}
+  .row b{display:block;font-family:'Handlee',cursive;font-weight:normal;font-size:18.5px;line-height:1.2;color:#26304a;white-space:nowrap}
+  .stars{font-family:Arial,sans-serif;font-size:17px;letter-spacing:2px;color:#c2331f;line-height:1.3}
+  .rc em{display:block;margin:3px 16px 0;font-style:normal;font-family:'Lora',serif;font-size:14px;line-height:1.46;color:#2b2a25}
+  .lbl{margin:0 16px}
+  .sketch{display:block;height:74px;margin:8px 16px 0;background:#f3f0e2;border:1px solid #b8ad8c}
+  .sketch svg{display:block;width:100%;height:100%}
+  .stamp{position:absolute;right:14px;bottom:22px;padding:3px 10px 1px;border:3px solid;font-family:'Stardos Stencil',serif;font-weight:700;font-size:17px;letter-spacing:.12em;transform:rotate(-8deg);opacity:.92;display:none;background:rgba(251,250,241,.82)}
+  .rc.going .stamp{display:block;color:#1f3a8a}
+  .rc.solved .stamp{display:block;color:#1f6f54}
+  .more{margin-top:6px;display:grid;place-items:center;min-height:230px;border:2px dashed rgba(240,228,200,.3);color:rgba(240,228,200,.62);
+    font-family:'Overpass Mono',monospace;font-size:14px;line-height:1.6;text-align:center;padding:20px}
+  footer{max-width:1180px;margin:0 auto;padding:6px 24px 50px;font-family:'Overpass Mono',monospace;font-size:13px;color:#b9a988;text-align:center;line-height:1.9}
+  footer b{color:#ff8a3c;font-weight:normal;letter-spacing:2px;font-family:Arial,sans-serif}
+  @media (max-width:640px){header{grid-template-columns:1fr}.rose{display:none}}
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<header>
+  <svg class="rose" viewBox="0 0 132 132" aria-hidden="true">
+    <circle cx="66" cy="66" r="58" fill="none" stroke="#efe6d2" stroke-width="2"/><circle cx="66" cy="66" r="46" fill="none" stroke="#efe6d2" stroke-width="1" opacity=".6"/>
+    <g stroke="#efe6d2" stroke-width="1.6"><path d="M66 8v9M66 115v9M8 66h9M115 66h9M25 25l6 6M101 101l6 6M25 107l6 -6M101 31l6 -6"/></g>
+    <path d="M66 20L75 66H57Z" fill="#ff8a3c"/><path d="M66 112L75 66H57Z" fill="#efe6d2"/><path d="M20 66L66 59V73ZM112 66L66 59V73Z" fill="#efe6d2" opacity=".45"/>
+    <circle cx="66" cy="66" r="5" fill="#2a1c12" stroke="#efe6d2" stroke-width="2"/>
+  </svg>
+  <div>
+    <h1>Lost S<b>i</b>gnal</h1>
+    <p>Somewhere a long way from a road. The leader cannot go on, the telephone says nothing, and you are the one who was told to stay close. But the land can be read: the map, the sky, the water. Read it before the light goes.</p>
+    <span class="rule">Say where you are going. Then go there.</span>
+  </div>
+</header>
+<div class="shelf"></div>
+<main id="files"></main>
+<footer><b>&#9733;&#9733;&#9733;</b> a full afternoon on the hill &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;</b> longer, and the simple rule lets you down once &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> long, and somebody is sure and wrong<br>
+You will need the mouse in here: there are maps to measure and compasses to turn.</footer>
+
+<script src="../assets/account.js"></script>
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"ridge","title":"The Cold Door","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A Saturday in October, cloud on Skallan Edge, and the leader of your party has just sat down very hard on a wet rock. The hut is five hundred metres straight below you, and that way is shut. Mrs MacAskill knows another way off by heart. But her glasses have gone over the edge, there are three hours of daylight left, and you are the one holding the map.","rooms":5,"first":"cairn.html","firstId":"cairn","last":"hut"},{"id":"tide","title":"The Box at Pole Seven","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"A Thursday in June. The sea has gone away and left three kilometres of sand between the island of Tarrow and the mainland, with seals to count, a line of poles to walk by, and a tide card that says the road is dry until the afternoon. Mr Nyberg has crossed for thirty years and likes forty minutes in hand. But a card is only a promise, there is a white wall out at sea, and you are the one carrying the bag.","rooms":5,"first":"shed.html","firstId":"shed","last":"box"}]), box = document.getElementById('files');
+  /* a corner of each sheet */
+  var C = 'fill="none" stroke="#bf8246" stroke-width="1.3"', W = 'fill="none" stroke="#2f7fb5" stroke-width="1.8" stroke-linecap="round"', B = 'fill="none" stroke="#1b1a17" stroke-linecap="round"';
+  var SKETCH = {
+    ridge: '<g ' + C + '><path d="M-4 20q70 -22 150 -8t150 -14"/><path d="M-4 32q70 -20 150 -6t150 -12"/><path d="M-4 46q60 -16 130 -2t170 -10"/><path d="M-4 62q60 -8 120 6t180 -4"/><path d="M60 14q30 -12 60 -3t-2 9q-30 6 -58 -6z"/></g>' +
+      '<path d="M190 22q-8 20 6 36t-4 20" ' + W + '/><path d="M10 26q60 -18 110 -8" ' + B + ' stroke-width="1.4" stroke-dasharray="4 3"/><path d="M84 6l5 9h-10z" ' + B + ' stroke-width="1.2"/>' +
+      '<rect x="196" y="52" width="8" height="6" fill="#1b1a17"/><path d="M118 14l6 -3 6 3" ' + B + ' stroke-width="1"/><g stroke="#3f8ed0" stroke-width=".7"><path d="M150 -2v80M-4 40h300"/></g>',
+    tide: '<g ' + W + '><path d="M-4 30q20 -8 40 0t40 0 40 0 40 0 40 0 40 0 40 0"/><path d="M-4 46q20 -8 40 0t40 0 40 0 40 0 40 0 40 0 40 0" opacity=".6"/></g><path d="M196 44q24 -30 52 0z" fill="#c9c2a4" stroke="#1b1a17"/><path d="M30 62q80 -14 170 -18" ' + B + ' stroke-width="1.4" stroke-dasharray="4 3"/>',
+    dune: '<g ' + C + '><path d="M-4 60q50 -40 100 -6q40 -34 90 -4q40 -26 100 2"/><path d="M-4 70q60 -30 120 -4t170 -6" opacity=".7"/></g><g fill="#1b1a17"><circle cx="210" cy="14" r="1.6"/><circle cx="226" cy="24" r="1.6"/><circle cx="218" cy="34" r="1.6"/><circle cx="234" cy="12" r="1.6"/><circle cx="60" cy="12" r="1.2"/></g>',
+    karst: '<path d="M20 70q10 -60 110 -60t120 60" ' + B + ' stroke-width="1.6"/><path d="M90 12v16M130 10v24M170 14v12" ' + B + ' stroke-width="2.2"/><path d="M40 66q90 -14 190 0" ' + W + '/>',
+    ice: '<g ' + C + ' stroke="#7fa9c9"><path d="M-4 22h300M-4 40h300M-4 58h300"/></g><path d="M80 -4q16 30 -6 44t10 40M150 -4q-10 26 8 40t-6 44" ' + B + ' stroke-width="1.6"/><path d="M214 56l14 -22 14 22z" fill="#ff8a3c" stroke="#1b1a17"/>'
+  };
+  var PLAIN = '<g ' + C + '><path d="M-4 24q80 -18 150 0t150 -8"/><path d="M-4 42q80 -14 150 2t150 -8"/><path d="M-4 60q80 -10 150 4t150 -6"/></g>';
+  Shelf.init();
+  STORIES.forEach(function (s, i) {
+    var st = Shelf.status('wild', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'rc ' + st.state; b.setAttribute('data-story', s.id);
+    b.innerHTML = '<span class="pin"></span><span class="head"><span>Route card</span><i class="no"></i></span><h2></h2>' +
+      '<span class="row"><span><small>How hard</small><span class="stars"></span></span><span><small>Allow</small><b class="t"></b></span><span><small>Rooms &middot; level</small><b class="r"></b></span></span>' +
+      '<small class="lbl">The day</small><em></em><span class="sketch"><svg viewBox="0 0 290 76" preserveAspectRatio="xMidYMid slice">' + (SKETCH[s.id] || PLAIN) + '</svg></span><span class="stamp"></span>';
+    b.querySelector('.no').textContent = 'No. ' + (i + 1) + ' of 5';
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('.stars').textContent = Shelf.stars(s.stars);
+    b.querySelector('.stars').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.t').textContent = s.minutes + ' min';
+    b.querySelector('.r').textContent = s.rooms + (s.level ? ' · ' + s.level.replace(' to ', '–') : '');
+    b.querySelector('em').textContent = s.blurb;
+    b.querySelector('.stamp').textContent = st.state === 'solved' ? 'BACK SAFE' : 'OUT ON THE HILL';
+    b.addEventListener('click', function () { Shelf.open('wild', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 5) {
+    var m = document.createElement('div'), left = 5 - STORIES.length; m.className = 'more';
+    m.textContent = STORIES.length ? (left === 1 ? 'One more party has' : 'Other parties have') + ' not come down yet. Their route cards will be pinned up here when they do.' : 'Nobody has come down off the hill yet.';
+    box.appendChild(m);
+  }
+})();
+</script>
+</body>
+</html>

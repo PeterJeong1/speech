@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Ford · The Box at Pole Seven</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-wild.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="tide.css">
+<style>
+  body{--bg:#c9cbbf;--accent:#ff7a3c;--font-display:'Stardos Stencil',serif;--font-ui:'Overpass',sans-serif;--font-body:'Lora',serif;
+    --tc-bg:rgba(44,46,40,.96);--tc-ink:#f1efe2;--cap-bg:rgba(34,36,31,.93);--panel:#2f312b;--face-bg:#b9c3c0;--q-ink:#ffc9a0;--fade:#d6d7cc;--hud-bg:rgba(34,36,31,.82)}
+  .sS{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .run path{stroke-dasharray:60 90;animation:run 2.6s linear infinite}
+  .run path:nth-child(2n){animation-duration:3.4s;stroke-dasharray:40 120}
+  .run path:nth-child(3n){animation-duration:2.1s}
+  @keyframes run{to{stroke-dashoffset:-150}}
+  .drift{animation:drift 50s steps(160,end) infinite alternate}
+  .drift.b{animation-duration:66s;animation-delay:-22s}
+  @keyframes drift{from{transform:translateX(-240px)}to{transform:translateX(240px)}}
+  #tpole.ready,#chart.ready,#radio.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3)}}
+  #scene.split #nyb,#scene.split #rope{display:none}
+  #deep{opacity:0;transition:opacity 3s steps(8,end)}
+  #scene.split #deep{opacity:1}
+  #chart{display:none}
+  #scene.split #chart{display:block}
+
+  /* the tide pole, close to */
+  .tp{display:block;width:100%;height:auto;background:#d5d6cb;touch-action:none}
+  .tp text{pointer-events:none}
+  .tpN{font-family:'Stardos Stencil',serif;font-weight:700;fill:#16222b}
+  .tpT{font-family:'Overpass',sans-serif;font-weight:700;fill:#16222b}
+  .ring{cursor:grab}
+  .ring.on{cursor:grabbing}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="fogG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfc2b6"/><stop offset=".5" stop-color="#dcdccf"/><stop offset="1" stop-color="#c6c5b4"/></linearGradient>
+  <linearGradient id="sandG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bdb699"/><stop offset=".4" stop-color="#a69c78"/><stop offset="1" stop-color="#6f6748"/></linearGradient>
+  <linearGradient id="watG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c5cbc4"/><stop offset=".5" stop-color="#8fa0a2"/><stop offset="1" stop-color="#66797c"/></linearGradient>
+  <radialGradient id="mist" cx="50%" cy="62%" r="60%"><stop offset="0" stop-color="#dcdccf" stop-opacity="0"/><stop offset=".62" stop-color="#dcdccf" stop-opacity=".3"/><stop offset="1" stop-color="#dedfd3" stop-opacity=".97"/></radialGradient>
+  <radialGradient id="puff"><stop offset="0" stop-color="#eeeee4" stop-opacity=".6"/><stop offset="1" stop-color="#eeeee4" stop-opacity="0"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#fogG)"/>
+<!-- the Gutter: forty metres of water, running -->
+<g id="water" class="hot"><path d="M-1000 468Q200 446 700 458T1700 452T2600 462V566Q1900 590 1300 578T300 592T-1000 580Z" fill="url(#watG)"/>
+  <path id="deep" d="M-1000 566Q1900 590 1300 578T300 592T-1000 580V640Q300 650 900 632T2600 624V566Z" fill="#7c8d8e"/>
+  <g class="run" stroke="#eef1ea" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"><path d="M-200 492H1900"/><path d="M-200 510H1900"/><path d="M-200 530H1900"/><path d="M-200 548H1900"/><path d="M-200 566H1900"/><path d="M-200 480H1900"/></g></g>
+<path d="M-1000 590Q300 606 900 588T2600 578V1320H-1000Z" fill="url(#sandG)"/>
+<g stroke="#8a8160" stroke-width="2.200" fill="none" opacity=".6"><path d="M-100 680q90 -12 180 0t180 0t180 0"/><path d="M600 740q90 -12 180 0t180 0t180 0"/><path d="M1100 660q80 -10 160 0t160 0"/><path d="M100 840q100 -14 200 0t200 0"/></g>
+<g fill="#cfd6d2" opacity=".8"><ellipse cx="1300" cy="820" rx="210" ry="13"/><ellipse cx="520" cy="700" rx="130" ry="8"/></g>
+
+<!-- pole 12, the rope, and Mr Nyberg knotting it -->
+<g id="p12" class="hot"><ellipse cx="420" cy="770" rx="60" ry="8" fill="#5a5338" opacity=".5"/><path d="M420 770V372" stroke="#4a4030" stroke-width="18" stroke-linecap="round"/><path d="M414 760V380" stroke="#6b5e46" stroke-width="4"/>
+  <rect x="388" y="396" width="64" height="48" fill="#e9e6d6" stroke="#2a2620" stroke-width="3"/><text x="420" y="433" class="sS" font-size="36" fill="#2a2620">12</text><g fill="#6f7a54" opacity=".8"><rect x="411" y="700" width="18" height="60"/></g></g>
+<g id="rope" class="hot"><path d="M420 640q-30 8 -30 -6q0 -12 60 -8q30 2 28 14q-4 10 -40 8" stroke="#c9b27a" stroke-width="7" fill="none"/><path d="M450 646q60 40 120 110" stroke="#c9b27a" stroke-width="6" fill="none"/>
+  <g stroke="#c9b27a" stroke-width="7" fill="none"><ellipse cx="610" cy="772" rx="54" ry="14"/><ellipse cx="610" cy="764" rx="50" ry="13"/><ellipse cx="610" cy="756" rx="46" ry="12"/></g></g>
+<g id="nyb" class="hot">
+  <ellipse cx="520" cy="806" rx="90" ry="10" fill="#5a5338" opacity=".5"/>
+  <path d="M470 804q-6 -60 50 -74l60 6v68z" fill="#3b3a36"/><path d="M566 804h36v10h-44z" fill="#22201a"/><path d="M470 800h34v10h-40z" fill="#22201a"/>
+  <path d="M470 746q-18 -128 34 -144q52 -8 62 50l10 94z" fill="#4c5a3a"/><path d="M520 606v140" stroke="#3a4630" stroke-width="4"/>
+  <path d="M492 640q-30 0 -52 6" stroke="#445234" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="436" cy="646" r="10" fill="#d6ad88"/>
+  <path d="M550 640q-40 20 -88 12" stroke="#445234" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="458" cy="652" r="10" fill="#d6ad88"/>
+  <rect x="506" y="586" width="14" height="18" fill="#c99f7c"/><circle cx="508" cy="570" r="24" fill="#d6ad88"/><path d="M486 574q6 24 26 16l2 -18z" fill="#aab0b2"/>
+  <path d="M484 562q4 -26 28 -24q22 2 22 24q-26 -10 -50 0z" fill="#6b4a2a"/><path d="M490 558l-22 4" stroke="#573a1e" stroke-width="7" stroke-linecap="round"/>
+  <path d="M640 808L690 430" stroke="#6b4a2a" stroke-width="8" stroke-linecap="round"/><path d="M684 480l6 -50" stroke="#f3ead2" stroke-width="8"/>
+</g>
+
+<!-- the tide pole, with its rings of rope and its red plate -->
+<g id="tpole" class="hot"><ellipse cx="1090" cy="640" rx="90" ry="12" fill="#66797c"/><path d="M1090 640V150" stroke="#f1efe2" stroke-width="26" stroke-linecap="butt"/>
+  <g stroke="#b3271c" stroke-width="26"><path d="M1090 600v-50M1090 500v-50M1090 400v-50M1090 300v-50M1090 200v-50"/></g>
+  <path d="M1077 640V150M1103 640V150" stroke="#2a2620" stroke-width="2"/><path d="M1070 150h40l-6 -16h-28z" fill="#2a2620"/>
+  <g stroke="#c9b27a" stroke-width="9" fill="none"><ellipse cx="1090" cy="186" rx="19" ry="6"/><ellipse cx="1090" cy="198" rx="19" ry="6"/><ellipse cx="1090" cy="210" rx="19" ry="6"/><ellipse cx="1090" cy="222" rx="19" ry="6"/><ellipse cx="1090" cy="234" rx="19" ry="6"/></g>
+  <g fill="#f1efe2" stroke="#2a2620" stroke-width="1.500"><rect x="1112" y="574" width="34" height="14"/><rect x="1112" y="256" width="34" height="14"/></g></g>
+<g id="plate" class="hot"><rect x="1150" y="330" width="150" height="110" rx="8" fill="#b3271c" stroke="#f1efe2" stroke-width="4"/><rect x="1150" y="330" width="150" height="32" rx="8" fill="#8c1d14"/>
+  <text x="1225" y="353" class="sS" font-size="15" fill="#fff" letter-spacing="1">TWELFTHS</text><g stroke="#ffd9cf" stroke-width="2.500" stroke-linecap="round"><path d="M1164 378h122M1164 392h122M1164 406h90M1164 420h110"/></g>
+  <path d="M1110 380h40" stroke="#2a2620" stroke-width="5"/></g>
+
+<!-- Dr Arroyo, with one boot in the water -->
+<g id="arr" class="hot">
+  <ellipse cx="800" cy="742" rx="80" ry="10" fill="#5a5338" opacity=".5"/>
+  <path d="M776 740V620h20v120zM804 740V620h20v120z" fill="#6b6456"/><path d="M768 740h30v10h-36zM800 740h30v10h-34z" fill="#3a3026"/>
+  <path d="M754 632q-10 -146 44 -160q54 -6 58 58l4 102z" fill="#2f6f8f"/>
+  <path d="M836 500q20 30 12 70" stroke="#2a6482" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="848" cy="574" r="9" fill="#c99b70"/>
+  <path d="M770 500q-10 -30 10 -50" stroke="#2a6482" stroke-width="18" fill="none" stroke-linecap="round"/><circle cx="780" cy="448" r="9" fill="#c99b70"/>
+  <path d="M700 520L860 410" stroke="#22201a" stroke-width="9" stroke-linecap="round"/><path d="M836 432l40 -28" stroke="#3b4a52" stroke-width="20" stroke-linecap="round"/>
+  <rect x="798" y="454" width="14" height="18" fill="#b98d66"/><circle cx="806" cy="440" r="23" fill="#c99b70"/><path d="M784 440q0 -26 22 -26t22 26q-10 -10 -22 -10t-22 10z" fill="#2a1d14"/>
+  <path d="M786 448q-10 40 -4 80" stroke="#2a1d14" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <ellipse cx="806" cy="422" rx="44" ry="9" fill="#e3c98a"/><path d="M784 420q0 -22 22 -22t22 22z" fill="#edd79c"/><path d="M784 418h44" stroke="#b5461f" stroke-width="4"/>
+</g>
+
+<!-- the orange bag: the radio with the red tape, and the chart -->
+<g id="bag" class="hot"><ellipse cx="230" cy="842" rx="150" ry="13" fill="#4a4430" opacity=".5"/><path d="M110 838q-18 -92 34 -108q66 -10 96 6q32 22 16 102z" fill="#f08a24"/><path d="M132 760q50 -20 106 0v28q-54 -16 -106 0z" fill="#d9731a"/><path d="M154 736q26 -32 56 0" stroke="#b5631a" stroke-width="8" fill="none"/></g>
+<g id="radio" class="hot"><path d="M276 742V640" stroke="#16191b" stroke-width="6" stroke-linecap="round"/><rect x="258" y="716" width="40" height="92" rx="8" fill="#16191b"/><rect x="264" y="726" width="28" height="18" fill="#8fd6b4"/><rect x="254" y="776" width="48" height="12" fill="#c8321e"/><circle cx="290" cy="800" r="3" fill="#59e08a"/></g>
+<g id="chart" class="hot" transform="translate(230 -80)"><path d="M316 760l150 -24 14 80 -150 26z" fill="#cfe3ee" stroke="#1d1c1a" stroke-width="2"/><path d="M336 766l112 -18 10 60 -112 20z" fill="#cddab4"/><path d="M372 760l10 62M420 752l12 62" stroke="#5f93ad" stroke-width="6" opacity=".8"/><path d="M330 796l140 -24" stroke="#1d1c1a" stroke-width="1.500" stroke-dasharray="2 4"/></g>
+
+<g pointer-events="none"><ellipse class="drift" cx="400" cy="300" rx="640" ry="130" fill="url(#puff)"/><ellipse class="drift b" cx="1200" cy="470" rx="720" ry="110" fill="url(#puff)"/>
+  <rect x="-1000" y="-400" width="3600" height="1720" fill="url(#mist)"/></g>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go west along the poles</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="tide.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, pole = null, map = null, told = {};
+
+  ER.init({
+    theme: 'wild', story: 'tide', storyTitle: 'The Box at Pole Seven', id: 'ford', no: 'III', title: 'The Ford',
+    go: 'Go on to the water',
+    intro: [
+      'Last Thursday was two days after the half moon: neap tides, the smallest of the fortnight. High water came to only 3.9 metres, and the top of the Rigg is at 4.4, so Dr Arroyo sat there with half a metre to spare. Today is two days after the new moon: spring tides, the biggest. Tonight&rsquo;s high water is 5.2. There will be eighty centimetres of sea over the place where she ate her sandwiches.',
+      'So nobody stayed. At ten to one the fog came in over the bar and took the seals, the Scar and the sky. Mr Nyberg walked in front with the compass. You walked on his heels, and behind you Dr Arroyo counted her steps aloud, in Spanish.',
+      'It is twenty to two. The fog has cost you ten minutes. By the card, you still have half an hour in hand.'
+    ],
+    exit: {"next":"gap","w":{"8669dcba":"f23dfc10","6d43df28":"9fb97287"}}, tags: {"r1":["425847f2"],"r2":["9e0e6544"],"r3":["12a812c9"],"r4":["d792cd49"],"r5":["c67098ea"],"even":["055ac48c"],"zero":["cd4af6f7"],"surge":["7a1759bd"],"surge_r1":["86f8f6a5"],"surge_near":["6d4e748e","d0ae7e5c"],"wet":["a94aea1c","2d70530b"],"wet_ford":["5ddfad18","a3a9f3b9"],"notyet":["7ef9f7c2","be6cab36","19225c8f"]},
+    sound: ['trail', { root: 43, bpm: 58, mood: 'tense', drop: ['mel'], beds: [['sea', 1.0], ['wind', 0.5]] }],      /* running water, fog, and a clock that has just gone wrong */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function isBusy() { return busy; }
+  function stg() { return ER.flag('c-stage') || 0; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#scene').classList.toggle('split', stg() >= 2);
+    $('#tpole').classList.toggle('ready', !!(told.plate && stg() < 2));
+    $('#chart').classList.toggle('ready', stg() === 2 && !nextFile);
+    ER.pips((told.plate ? 1 : 0) + Math.min(3, stg()) + (nextFile ? 1 : 0), 5);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The ford is shut in front of you and the Runnel is shut behind. Go west along the poles, to the Box.']];
+    if (pole && pole.isOpen()) return [['rings', [
+      'The red plate gives the rule. First find today&rsquo;s range: high water minus low water. Both are on the two tags of the pole, and both are on the card.',
+      'Cut the range into twelve: that is one twelfth. The sea rises 1 twelfth in the first hour, then 2, then 3, 3, 2 and 1. Each ring goes where the sea should be at the END of its hour.',
+      'Do not start from zero: the sea starts from low water, at 0.4. After one hour it is one twelfth above that. After two hours it is three twelfths above it (1 + 2). After three, six twelfths: half way up.'
+    ]], ['surge', [
+      'It is twenty to two. Which two of your rings is that between? And how far from the one to the other?',
+      'Twenty to two is half way between the 13.10 ring and the 14.10 ring. So that is where the sea should be: half way between them. The wet line on the pole is where the sea is. The difference between the two is your answer.'
+    ]]][pole.stage()];
+    if (map && map.isOpen()) return ['wet', [
+      'First, how high is the sea at this minute, 13.55? By your rings, 13.10 is one ring and 14.10 is the next, and 13.55 is three quarters of the way from the one to the other.',
+      'Then add what the pole told you: today the sea is standing 0.4 m above its card. Now you have a height. Every place on the chart that dries LESS than that height is under water already.',
+      'Two places on the Pole Road are lower than that. One is in front of your boots. The other is a long way behind you, between you and Longstrand.'
+    ]];
+    if (stg() >= 2) return ['chart', [
+      'Mr Nyberg said it on the radio: find out where the water is now. Not only in front of you. Behind you.',
+      'The chart is sticking out of the orange bag, at the front on the left. Click it.'
+    ]];
+    if (!told.plate) return ['plate', [
+      'Mr Nyberg said that the rule is on the plate.',
+      'The red plate is fixed to the tall striped pole on the right. Click it, and read it.'
+    ]];
+    return ['pole', ['Now the tide pole itself: the tall pole with red and white bands, at the edge of the water.']];
+  }
+
+  function begin() {
+    TIDE.mine('rigg', 'Why not the Rigg', '<p>Last Thursday was two days after the half moon: <b>neaps</b>. High water was only 3.9 m. The top of the Rigg is 4.4 m: half a metre to spare.</p><p>Today is two days after the new moon: <b>springs</b>. High water tonight is 5.2 m: 0.8 m of sea over the top of the Rigg.</p><p>(And at neaps the ford never dries at all: low water was 1.7 m. Big tides go further out AND come further in.)</p>', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The ford is a river now. Somewhere on the other side of it, Mr Nyberg is walking home alone.'); return; }
+    if (stg() >= 2 && !ER.flag('c-crossed')) { crossing(); return; }      /* the page was left while he was in the water: tell it again */
+    if (stg() >= 2) { busy = false; ER.say('The ford, five to two. The water is over the place where Mr Nyberg went in.'); return; }
+    if (told.in) { busy = false; ER.say('The ford, twenty to two. The water is running.'); return; }
+    tell('in');
+    ER.narrate([
+      'A pole comes out of the fog, with a tin number on it: 12. Then a taller one, striped red and white, with rings of rope round it and a red plate. And beyond that, where the road should be, the sand is moving.',
+      'It is water. It is a finger deep at the edge and a hand deep further in, but it is forty metres wide, and it is running: in from the sea, up the Gutter, with a small, busy sound.',
+      '&ldquo;By the card, that is dry sand until ten past two,&rdquo; says Dr Arroyo.',
+      '&ldquo;The sea has not read the card,&rdquo; says Mr Nyberg. He drops a coil of rope from his shoulder and begins to knot one end of it round pole 12. &ldquo;Ring the tide pole for me,&rdquo; he says to you. &ldquo;The rule is on the plate. Before I trust that water with any of us, I want to know how far ahead of its book it is.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#nyb').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mr Nyberg', role: 'Ranger of Tarrow · tying a knot', face: window.FACE('nyberg'),
+      lines: [
+        { note: 'He is knotting the rope round pole 12, and does not look up.', a: '&ldquo;That striped pole is the tide pole. It stands in the deepest hole of the ford, so it is the first thing here to get its feet wet. The numbers on it are metres above chart datum: the same metres as the card.&rdquo;' },
+        { q: 'What are the rope rings for?', a: 'One ring for each hour after low water. Every spring tide I slide them to where the card says the sea should be at that hour. Then one look at the pole tells me whether the sea is keeping to its book. The white tag marks low water and the red tag marks high water: I hung those two this morning, from the card. The five rings between them are yours.' },
+        { q: 'How do I know where each one goes?', a: 'The rule is on the red plate. It is called the rule of twelfths. It is older than I am, and it works. Read it.' },
+        { q: 'And if the sea is ahead of its book?', a: 'Then I shall know by how much. Mrs Hebden&rsquo;s slate said the low glass would give the sea twenty centimetres. The wind has had three days to add to that. I should like the number before I put anybody in the water.' }
+      ],
+      clue: { id: 'nyb3', title: 'Mr Nyberg, at pole 12', kind: 'What he said' },
+      done: function (seen) { if (seen) tell('nyb'); }
+    });
+  });
+  $('#arr').addEventListener('click', function () {
+    if (busy) return;
+    if (stg() >= 2) { ER.say(nextFile ? '&ldquo;The Box,&rdquo; says Dr Arroyo. &ldquo;I have laughed at that box for six weeks. I should like to say sorry to it in person.&rdquo;' : '&ldquo;Longstrand is nearer than Tarrow,&rdquo; says Dr Arroyo. &ldquo;Less than two kilometres of flat sand. Show me on the chart why we should not simply walk there.&rdquo;'); return; }
+    ER.talk({
+      who: 'Dr Arroyo', role: 'Seal scientist · one boot in the water', face: window.FACE('arroyo'),
+      lines: [
+        { note: 'She has the telescope over her shoulder like a spade.', a: '&ldquo;A hand deep. In Spain we call this a beach. We paddle across, we are home for a late lunch, and I write up my pups.&rdquo;' },
+        { q: 'Mr Nyberg wants the pole ringed first.', a: 'Mr Nyberg wants many things first. But I have learnt one thing today: before I say that a place is safe, I look at the numbers. So ring your pole. I shall stand here and be patient, which I do very badly.' },
+        { q: 'Why is the water running so fast?', a: 'This I can answer. The whole of that sea is trying to come in through this one door. A channel is narrow, so the water has to hurry. It is the same in the mouth of a river, and in a bath.' }
+      ],
+      clue: { id: 'arr3', title: 'Dr Arroyo, at the ford', kind: 'What she said' },
+      done: function (seen) { if (seen) tell('arr'); }
+    });
+  });
+  var RADIO = [
+    { note: 'The voice is small and flat, with a hiss behind it. It does not wait for answers.', a: '&ldquo;Nyberg to the orange bag. I know that you can&rsquo;t answer: that set hears and does not speak, and no telephone has ever found a signal on these sands. So listen, and I shall say everything twice.&rdquo;' },
+    { a: 'I am wet to the neck and I am perfectly well. I can&rsquo;t come back to you: in ten minutes that ford will be a river. And you will not try it. Nobody outruns a tide across a channel. Nobody. Say that to the Doctor.' },
+    { a: 'I can&rsquo;t see you and I can&rsquo;t hear you, so I can&rsquo;t do your thinking for you. You have the chart, the card and the pole. First find out where the water is NOW. Not only in front of you. Behind you.' },
+    { a: 'Then go to the Box. Pole seven. Follow the poles west. I am going for Mrs Hebden and her boat. I say again: where is the water now, and then the Box. Pole seven.' }
+  ];
+  function radio(done) {
+    TIDE.sfx.radio();
+    ER.talk({ who: 'Mr Nyberg', role: 'On the radio · he can’t hear you', face: window.FACE('radio'), lines: RADIO, clue: { id: 'radio1', title: 'Mr Nyberg, on the radio', kind: 'From the far side of the ford', cls: 'radio' }, done: done });
+  }
+  $('#radio').addEventListener('click', function () {
+    if (busy) return;
+    if (stg() < 2) { ER.say('The radio with the red tape round it. It hears and does not speak. At the moment it has nothing to hear: Mr Nyberg is three metres away, tying a knot.'); return; }
+    radio(function () {});
+  });
+
+  /* ---------- the plate ---------- */
+  var PLATE = '<h4><small>Tarrow Harbour Trust &middot; read this before you cross</small>The rule of twelfths</h4><div class="two"><div>' +
+    '<p>From low water to high water the sea takes about six hours. It does not rise evenly: it starts slowly, runs in the middle, and slows down again.</p>' +
+    '<p>Take the whole rise from low water to high water (the <b>range</b>) and cut it into <b>twelve equal parts</b>. Then the sea rises:</p>' +
+    '<p class="rule">1 twelfth in the first hour &middot; 2 in the second &middot; 3 in the third &middot; 3 in the fourth &middot; 2 in the fifth &middot; 1 in the sixth</p>' +
+    '<p style="margin-top:8px"><b>Half of the whole rise comes in the third and fourth hours.</b> Those are the hours that catch people.</p>' +
+    '<p><b>An example.</b> Low water 1.0 m, high water 4.6 m. The range is 3.6 m, so one twelfth is 0.3 m. One hour after low water the sea is at 1.3 m. After two hours, 1.9. After three, 2.8.</p></div><div>' +
+    '<svg viewBox="0 0 330 190"><rect width="330" height="190" fill="#fff"/><g font-family="Overpass,sans-serif" font-weight="700" font-size="12" fill="#16222b">' +
+    [1, 2, 3, 3, 2, 1].map(function (n, i) { return '<rect x="96" y="' + (10 + i * 28) + '" width="' + (n * 66) + '" height="20" fill="' + (n === 3 ? '#b3271c' : n === 2 ? '#d9765f' : '#eab3a6') + '"/><text x="88" y="' + (25 + i * 28) + '" text-anchor="end">hour ' + (i + 1) + '</text><text x="' + (104 + n * 66) + '" y="' + (25 + i * 28) + '">' + n + '</text>'; }).join('') +
+    '<text x="165" y="186" text-anchor="middle" font-size="11.500">twelfths of the range, hour by hour</text></g></svg>' +
+    '<p style="margin-top:8px">These sands are nearly flat: one metre up is about a kilometre along. In the middle hours the edge of the sea crosses them at twenty metres a minute, and it never gets tired.</p>' +
+    '<p><b>And it does not come from in front.</b> It fills the channels first. Long before the water reaches your feet, it may be deep behind you.</p></div></div>';
+  $('#plate').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    ER.read({ html: PLATE, cls: 'plate2', clue: { id: 'plate', title: 'The rule of twelfths', kind: 'The plate on the tide pole' }, done: function () {
+      TIDE.terms(['rule of twelfths', 'twelfth', 'range', 'channel']);
+      if (tell('plate')) { paint(); ER.say('One, two, three, three, two, one. Twelve in all.'); }
+    } });
+  });
+
+  /* ---------- things at the ford ---------- */
+  TIDE.thing('#p12', 'marker pole', 'Pole 12: the last pole on this side of the Gutter. Pole 13 is on the other side, a hundred and fifty metres off. Nobody has seen it since this morning.', isBusy);
+  TIDE.thing('#water', 'ford', function () { return stg() >= 2 ? 'It is not a hand deep any more. It is brown and quick, and it has stopped making a small, busy sound. It makes a large, quiet one.' : 'The ford: the place where the Pole Road crosses the Gutter. On the chart it dries 1.6. At this moment it does not look as if it dries at all.'; }, isBusy);
+  TIDE.thing('#rope', null, 'A long coil of rope, with one end round pole 12. &ldquo;A hand line,&rdquo; says Mr Nyberg. &ldquo;If I take it across and make it fast, you walk over holding it. If.&rdquo;', isBusy);
+  TIDE.thing('#bag', 'rucksack', 'The orange bag. The radio is in the side pocket, with its aerial sticking up.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#tpole').addEventListener('click', function () {
+    if (busy) return;
+    if (stg() >= 2) { ER.say('The tide pole. The water has climbed past your second ring, and it is going up the pole at more than a centimetre a minute.'); return; }
+    if (!told.plate) { ER.say('The tide pole: a tall striped post with five rings of rope bunched at the top. &ldquo;Read the plate first,&rdquo; says Mr Nyberg. &ldquo;The red one.&rdquo;'); return; }
+    if (!pole) pole = makePole();
+    pole.open();
+  });
+  $('#chart').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The chart, with two wet thumb-marks on it: one on the ford, one on the Runnel.'); return; }
+    if (!map) map = makeMap();
+    map.open();
+  });
+
+  /* ---------- the tide pole: five rings, and how far the sea is above its book ---------- */
+  function makePole() {
+    var TIMES = ['13.10', '14.10', '15.10', '16.10', '17.10'], stage = stg(), rings = ER.flag('c-rings') || [null, null, null, null, null], box = ER.el('div', 'bx'), s, i, h;
+    function Y(v) { return 520 - 80 * v; }
+    s = '<svg class="tp" viewBox="0 0 1000 560"><defs><linearGradient id="tpF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c3c6ba"/><stop offset="1" stop-color="#e0e0d4"/></linearGradient></defs><rect width="1000" height="560" fill="url(#tpF)"/>' +
+      '<rect x="0" y="' + Y(1.6) + '" width="1000" height="' + (560 - Y(1.6)) + '" fill="#7f9698"/><path d="M0 ' + Y(1.6) + 'H1000" stroke="#eef1ea" stroke-width="2.500"/>' +
+      '<path d="M0 ' + (Y(1.6) + 3) + 'H330Q400 ' + (Y(1.6) + 6) + ' 430 ' + Y(0.7) + 'T500 ' + Y(0.2) + 'T570 ' + Y(0.7) + 'Q600 ' + (Y(1.6) + 6) + ' 670 ' + (Y(1.6) + 3) + 'H1000V560H0Z" fill="#a69c78"/>' +
+      '<rect x="485" y="30" width="30" height="' + (Y(0.1) - 30) + '" fill="#f1efe2" stroke="#2a2620" stroke-width="2"/>';
+    for (i = 0; i < 6; i += 2) s += '<rect x="486" y="' + Y(i + 2) + '" width="28" height="80" fill="#b3271c" opacity=".9"/>';
+    for (i = 2; i <= 60; i++) {
+      h = i / 10;
+      if (i % 2) continue;
+      s += '<path d="M' + (i % 10 ? 474 : 462) + ' ' + Y(h) + 'H485" stroke="#2a2620" stroke-width="' + (i % 10 ? 1.2 : 2.6) + '"/>';
+      if (i % 10 === 0) s += '<text class="tpN" x="454" y="' + (Y(h) + 9) + '" text-anchor="end" font-size="26">' + (i / 10) + '</text>';
+    }
+    s += '<path d="M478 38h44l-8 -18h-28z" fill="#2a2620"/><text class="tpT" x="440" y="40" text-anchor="end" font-size="11.500" letter-spacing="1">METRES ABOVE CHART DATUM</text>' +
+      '<rect x="485" y="' + (Y(0.4) - 5) + '" width="30" height="10" fill="#fff" stroke="#2a2620" stroke-width="1.500"/><path d="M515 ' + Y(0.4) + 'h40" stroke="#2a2620" stroke-width="2"/><rect x="555" y="' + (Y(0.4) - 13) + '" width="188" height="26" fill="#f1efe2" stroke="#2a2620" stroke-width="1.500"/>' +
+      '<text class="tpT" x="649" y="' + (Y(0.4) + 5) + '" text-anchor="middle" font-size="13">LOW WATER 12.10 · 0.4</text>' +
+      '<rect x="485" y="' + (Y(5.2) - 5) + '" width="30" height="10" fill="#2a2620"/><path d="M515 ' + Y(5.2) + 'h40" stroke="#2a2620" stroke-width="2"/><rect x="555" y="' + (Y(5.2) - 13) + '" width="196" height="26" fill="#b3271c" stroke="#2a2620" stroke-width="1.500"/>' +
+      '<text class="tpT" x="653" y="' + (Y(5.2) + 5) + '" text-anchor="middle" font-size="13" style="fill:#fff">HIGH WATER 18.19 · 5.2</text>' +
+      '<g id="c-now" style="display:none"><path d="M330 ' + Y(1.6) + 'H470" stroke="#16222b" stroke-width="2" stroke-dasharray="6 4"/><path d="M462 ' + (Y(1.6) - 6) + 'l10 6l-10 6" fill="none" stroke="#16222b" stroke-width="2"/>' +
+      '<text class="tpT" x="324" y="' + (Y(1.6) - 8) + '" text-anchor="end" font-size="14">THE SEA NOW: IT IS 13.40</text></g>' +
+      '<g stroke="#4a4030" stroke-width="6" stroke-linecap="round"><path d="M880 70V330"/></g><g id="c-rings"></g></svg>';
+    box.innerHTML = '<div class="frame">' + s + '</div><div class="bx-foot"><p class="pmsg"></p><span id="c-slot"></span><button type="button" class="btn" id="c-go"></button></div>';
+    var svg = box.querySelector('svg'), layer = svg.querySelector('#c-rings'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#c-go'), nodes = [],
+      wS = TIDE.wheels(box.querySelector('#c-slot'), { label: 'The sea is above<br>its book by', vals: [['0', '1', '2'], TIDE.DIGITS], sep: { 1: '.' }, tail: 'm', start: ER.flag('c-ws') || [0, 0], change: function () { ER.flag('c-ws', wS.at()); } });
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    TIMES.forEach(function (t, j) {
+      var g = TIDE.el('g', { 'class': 'ring tool', 'data-j': j }, '<rect x="-34" y="-17" width="170" height="34" fill="#fff" opacity="0"/><ellipse rx="24" ry="8" fill="none" stroke="#c9b27a" stroke-width="9"/><ellipse rx="24" ry="8" fill="none" stroke="#8a7440" stroke-width="1.500"/>' +
+        '<path d="M24 0h26" stroke="#8a7440" stroke-width="2.500"/><rect x="50" y="-13" width="64" height="26" rx="3" fill="#e3c98a" stroke="#6b5a34" stroke-width="1.500"/><text class="tpT" x="82" y="5" text-anchor="middle" font-size="14">' + t + '</text><text class="tpN hv" x="122" y="8" font-size="22" style="fill:#8c1d14"></text>');
+      layer.appendChild(g); nodes.push(g);
+      ER.drag(g, {
+        start: function () { if (stage !== 0) return false; },
+        move: function (e) { var p = ER.pt(svg, e), v = Math.round(TIDE.clamp((520 - p.y) / 80, 0.1, 5.9) * 10) / 10; if (v !== rings[j]) { rings[j] = v; draw(); } },
+        end: function () { ER.flag('c-rings', rings); TIDE.sfx.slide(); }
+      });
+    });
+    function draw() {
+      nodes.forEach(function (g, j) {
+        var v = rings[j];
+        g.setAttribute('transform', v == null ? 'translate(' + (880 - 24) + ' ' + (92 + j * 50) + ')' : 'translate(500 ' + Y(v).toFixed(1) + ')');
+        g.querySelector('.hv').textContent = v == null ? '' : v.toFixed(1);
+      });
+      svg.setAttribute('data-r', rings.map(function (v) { return v == null ? '' : v.toFixed(1); }).join('|'));
+      svg.querySelector('#c-now').style.display = stage >= 1 ? '' : 'none';
+      wS.node.style.display = stage === 1 ? '' : 'none';
+      go.textContent = stage === 0 ? 'The pole is ringed' : 'Tell Mr Nyberg';
+      go.style.visibility = stage > 1 ? 'hidden' : '';
+    }
+    function setStage(n) { stage = n; ER.flag('c-stage', n); draw(); paint(); }
+    var WHY = ['In the first hour the sea rises one twelfth of its range. What is one twelfth today? And where did the sea start from?', 'By the end of the second hour the sea has risen one twelfth and then two more.',
+      'By the end of the third hour it has risen 1, 2 and 3 twelfths: six in all, which is half the range.', 'By the end of the fourth hour: 1, 2, 3 and 3. Nine twelfths.', 'By the end of the fifth hour only one twelfth is left to come.'];
+    go.addEventListener('click', function () {
+      var a, j, bad = -1, v;
+      if (busy && stage > 1) return;
+      if (stage === 0) {
+        if (rings.some(function (x) { return x == null; })) { msg('Five rings are hanging on the peg, each with its time on a wooden tag. Drag every one of them on to the pole.'); return; }
+        a = rings.map(function (x) { return x.toFixed(1); });
+        for (j = 0; j < 5; j++) if (!ER.check('r' + (j + 1), a[j])) { bad = j; break; }
+        if (bad < 0) {
+          TIDE.sfx.rope(); setStage(1);
+          msg('Mr Nyberg looks up from his knot and reads the rings from the bottom. &ldquo;' + a.join(', ') + '. Slow, quick, quick, slow. Good. Now look at the water. It is twenty to two. By your rings, where should the sea be? Where is it? Tell me how far it is above its book.&rdquo;'); return;
+        }
+        TIDE.sfx.no();
+        if (ER.check('even', a.join('-'))) msg('&ldquo;You have given every hour the same share,&rdquo; says Mr Nyberg. &ldquo;The sea does not. It starts slowly, runs in the middle, and slows again. One, two, three, three, two, one.&rdquo;');
+        else if (ER.check('zero', a.join('-'))) msg('&ldquo;The steps are right, and all of them are too low,&rdquo; says Mr Nyberg. &ldquo;You have measured from the bottom of the pole. The sea did not start from nothing. It started from low water.&rdquo;');
+        else msg((bad ? '&ldquo;The first ' + (bad === 1 ? 'ring is' : bad + ' rings are') + ' right,&rdquo; says Mr Nyberg. &ldquo;' : '&ldquo;') + 'Look at the ring for ' + TIMES[bad] + '. ' + WHY[bad] + '&rdquo;');
+      } else if (stage === 1) {
+        v = wS.get().charAt(0) + '.' + wS.get().charAt(1);
+        if (!ER.check('surge', v)) {
+          TIDE.sfx.no();
+          msg(ER.check('surge_r1', v) ? '&ldquo;You have measured from the 13.10 ring,&rdquo; says Mr Nyberg. &ldquo;But it is not ten past one. It is twenty to two: half an hour on. By now the book has the sea half way to the next ring.&rdquo;' :
+            ER.check('surge_near', v) ? '&ldquo;Near,&rdquo; says Mr Nyberg. &ldquo;Do it exactly. Twenty to two is half way between two of your rings. What is half way between their heights? And where is the wet line?&rdquo;' :
+            v === '0.0' ? '&ldquo;Nothing?&rdquo; says Mr Nyberg. &ldquo;Then that would be dry sand, and the Doctor would have dry boots. Where do your rings say the sea should be at twenty to two? And where is it?&rdquo;' :
+            '&ldquo;Show me how,&rdquo; says Mr Nyberg. &ldquo;Twenty to two is half way between the 13.10 ring and the 14.10 ring. So where should the sea be? The wet line shows where it is.&rdquo;');
+          return;
+        }
+        ER.flag('c-surge', v); stage = 2; ER.flag('c-stage', 2); draw();
+        TIDE.mine('pole', 'What the tide pole said', '<p>Today&rsquo;s range is 5.2 &minus; 0.4 = 4.8 m, so one twelfth is 0.4 m. By the rule of twelfths the sea should be at 0.8 at 13.10, <b>1.6</b> at 14.10, 2.8 at 15.10, 4.0 at 16.10 and 4.8 at 17.10.</p><p>At 13.40 the book said 1.2 and the pole said 1.6. The sea is <b>' + v + ' m above its card</b> today: low pressure, and three days of wind on to the shore.</p><p>So every place goes under when the card says ' + v + ' m LESS than its height.</p>', true);
+        msg('&ldquo;' + v + ' metres over the book,&rdquo; says Mr Nyberg. He stands up, and looks at the water for a long moment.');
+        setTimeout(function () { ER.closeAll(); crossing(); }, 2400);
+      }
+    });
+    draw();
+    msg(stage === 0 ? 'The tide pole. The white tag marks low water and the red tag marks high water: Mr Nyberg hung them there this morning, from the card. Five rings of rope hang on the peg, one for each hour between. Drag each ring on to the pole, to where the sea should be at that time.' :
+      'The pole is ringed. It is <b>13.40</b>, and the wet line shows where the sea is. How far is it above its book?');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return Math.min(stage, 1); }
+    };
+  }
+
+  /* ---------- he takes the line across ---------- */
+  function crossing() {
+    busy = true;
+    ER.narrate([
+      '&ldquo;Forty centimetres over the book,&rdquo; says Mr Nyberg. &ldquo;Twenty for the low glass. The wind owes us the rest. So the ford shut at twenty to two, not ten past, and we are standing here at its funeral.&rdquo;',
+      '&ldquo;It is a hand deep on the road. I shall take the line across and make it fast on the far side. Then you come over on the line, one at a time. Not before I say.&rdquo; He goes in with the staff in front of him, feeling for the bottom, and the rope runs out behind him.',
+      'Ten metres. Twenty. In the middle he stops, and the staff goes down a long way. The water is over his knees. Then it is round his waist, and he is going sideways.',
+      'He does not fall. He goes across the last fifteen metres like a man walking down a moving staircase the wrong way, and climbs out on the far side, and stands there with the sea running out of his coat.',
+      '&ldquo;NO!&rdquo; he shouts. &ldquo;Stay there! The sea has dug the ford out: there is a hole in the middle, and it took my legs. Untie the line. LET GO OF IT!&rdquo; You untie it. The rope slides away into the water like something alive.',
+      'For a moment you can still see him: a grey shape, forty metres off, with one arm up. Then the fog shuts. In the orange bag, the radio with the red tape round it coughs.'
+    ], function () {
+      TIDE.sfx.splash(); paint();
+      radio(function () {
+        busy = false; ER.flag('c-crossed', 1); paint();
+        ER.say('&ldquo;The Box?&rdquo; says Dr Arroyo. &ldquo;But Longstrand is nearer than Tarrow! Less than two kilometres of flat sand. We could be on the pier in half an hour. Show me on the chart why not.&rdquo;', 9000);
+      });
+    });
+  }
+
+  /* ---------- the chart: where is the water now? ---------- */
+  function makeMap() {
+    var wet = ER.flag('c-wet') || [], box = ER.el('div', 'bx');
+    box.innerHTML = '<div class="frame">' + TIDE.chart({ hit: true }) + '</div><div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="c-go2">That is where the water is</button></div>';
+    var cs = box.querySelector('svg.chart'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#c-go2');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() { ER.$$('.dh', cs).forEach(function (g) { g.classList.toggle('wet', wet.indexOf(g.getAttribute('data-id')) >= 0); }); cs.setAttribute('data-wet', wet.slice().sort().join('+')); }
+    cs.addEventListener('click', function (e) {
+      var g = e.target.closest ? e.target.closest('.dh') : null, id, k; if (!g || nextFile) return;
+      id = g.getAttribute('data-id'); k = wet.indexOf(id);
+      if (k >= 0) wet.splice(k, 1); else wet.push(id);
+      ER.flag('c-wet', wet); TIDE.sfx.water(); draw();
+    });
+    go.addEventListener('click', function () {
+      var a = wet.slice().sort().join('+'), early = wet.filter(function (id) { return ER.check('notyet', id); }), high, file, surge = ER.flag('c-surge'), rings = ER.flag('c-rings') || [];
+      if (nextFile) return;
+      if (!wet.length) { msg('Click every figure on the chart that is under water at this minute. Click one again to dry it.'); return; }
+      if (!ER.check('wet', a)) {
+        TIDE.sfx.no();
+        high = wet.filter(function (id) { var p = TIDE.PLACES[id]; return p && p.dry > 2.2; });
+        msg(high.length ? '&ldquo;' + TIDE.m1(TIDE.PLACES[high[0]].dry) + ' metres? Under water already?&rdquo; says Dr Arroyo. &ldquo;Then the sea would be nearly at our knees where we stand. Work out how high it is at this minute: by your rings, and then by what the pole said.&rdquo;' :
+          early.length ? '&ldquo;Not yet,&rdquo; says Dr Arroyo, bending over the chart. &ldquo;I make the sea a little lower than ' + TIDE.m1(TIDE.PLACES[early[0]].dry) + ' at this minute. Three quarters of the way from one ring to the next, and then the pole&rsquo;s forty centimetres. That place will go, but it has not gone.&rdquo;' :
+          ER.check('wet_ford', a) ? '&ldquo;The ford, yes. I am looking at it,&rdquo; says Dr Arroyo. &ldquo;And that is all? Then we can walk to Longstrand. Is there nothing on the way that is LOWER than the ford?&rdquo;' :
+          '&ldquo;And the water in front of my boots?&rdquo; says Dr Arroyo. &ldquo;Mark everything that is under the sea at this minute. In front of us, and behind us.&rdquo;');
+        return;
+      }
+      file = ER.exitOk([rings.map(function (x) { return (+x).toFixed(1); }).join('-') + '|' + surge + '|' + a]);
+      if (!file) { msg('The chart has blown away. Something is wrong with this page: tell your teacher.'); return; }
+      nextFile = file; ER.flag('c-file', file); ER.flag('c-stage', 3);
+      var s0 = ER.state(); s0.done = s0.done || {}; s0.done.ford = 1; ER.persist(true);
+      TIDE.mine('behind', 'Where the water was at 13.55', '<p>By the rings the sea should be at 1.4 at 13.55. Add 0.4: it was really at <b>1.8</b>.</p><p>The ford dries 1.6: under water. The Runnel dries only 1.2: under water since <b>13.10</b>, three quarters of an hour before we knew.</p><p>The tide fills the channels first. The way back to Longstrand was cut before the way home was.</p>', true);
+      msg('Two wet marks on the chart. One of them is in front of your boots. The other is a long way behind you.');
+      setTimeout(function () {
+        ER.closeAll(); TIDE.solved(); paint(); busy = true;
+        ER.narrate([
+          'The Runnel dries only 1.2. It went under at ten past one: while you were still walking back from the seals in the fog, and pleased with the time you were making.',
+          '&ldquo;So we have been on an island for three quarters of an hour,&rdquo; says Dr Arroyo slowly, &ldquo;and nobody told us. The sea came round behind us first.&rdquo; She watches the water go past. &ldquo;I take it back. That is not badly organised. That is very well organised indeed.&rdquo;',
+          'The radio coughs. &ldquo;The Box,&rdquo; says Mr Nyberg&rsquo;s voice, very small. &ldquo;Pole seven. One of you stands at each pole and blows the whistle until the other has found the next. I am going for the boat.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 2600);
+    });
+    draw();
+    msg('It is <b>13.55</b>. Click every figure on the chart that is under water at this minute: use your rings, and what the pole told you.');
+    return { open: function () { ER.open('ov-lock', box); }, isOpen: function () { return !!box.parentNode; } };
+  }
+})();
+</script>
+</body>
+</html>

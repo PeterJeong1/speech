@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Air Room · Seven Hours of Air</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-scifi.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0c0f0c;--accent:#ffc14d;--font-display:'Saira Stencil One',sans-serif;--font-ui:'Oswald',sans-serif;--font-body:'Outfit',sans-serif;
+    --tc-bg:rgba(9,12,9,.95);--cap-bg:rgba(12,15,11,.94);--panel:#161b15;--face-bg:#0b161f;--q-ink:#e6c98a;--fade:#050705;--hud-bg:rgba(12,15,11,.74)}
+  .tc-room{letter-spacing:.06em;text-transform:uppercase}
+  .sten{font-family:'Saira Stencil One',sans-serif;text-anchor:middle}
+  .brassT{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;letter-spacing:2.5px;fill:#3a2a08;text-anchor:middle}
+  .digT{font-family:'Share Tech Mono',monospace;font-size:30px;fill:#ffc14d;text-anchor:middle}
+  .tagT{font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;letter-spacing:1.5px;fill:#1c1a12;text-anchor:middle}
+  .gn{transition:transform .5s}
+  .shiver{transform-origin:736px 300px;animation:shiver .5s steps(1,end) infinite}
+  @keyframes shiver{0%{transform:rotate(-.7deg)}33%{transform:rotate(.5deg)}66%{transform:rotate(-.2deg)}}
+  .wisp{animation:wisp 2.6s ease-out infinite;opacity:0}
+  .wisp.w2{animation-delay:-.9s}.wisp.w3{animation-delay:-1.7s}
+  @keyframes wisp{0%{opacity:0;transform:translate(0,0)}15%{opacity:.5}100%{opacity:0;transform:translate(-14px,-70px)}}
+  #lampGlow{animation:lg 4.2s steps(1,end) infinite}
+  @keyframes lg{0%{opacity:.9}46%{opacity:.78}52%{opacity:.9}}
+  #board{animation:bd 3s steps(1,end) infinite}
+  #board.done{animation:none}
+  @keyframes bd{0%{filter:brightness(1)}50%{filter:brightness(1.22)}}
+  .led{animation:led 1.6s steps(1,end) infinite}.led.l2{animation-delay:-.8s}
+  @keyframes led{0%{opacity:1}50%{opacity:.2}}
+
+  /* the pipe board */
+  .pb{display:grid;grid-template-columns:minmax(0,740px) 356px;gap:18px;width:min(1120px,96vw);align-items:start}
+  .pb-main{background:#262c26;border:3px solid #141814;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 2px #3a4239;padding:12px 14px 12px;border-radius:6px}
+  .pb-g{display:flex;gap:10px;margin-bottom:10px}
+  .pb-g div{flex:1;background:#0b0e0b;border:1px solid #3a4239;border-radius:4px;padding:5px 10px 4px;display:flex;align-items:baseline;justify-content:space-between;
+    font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.16em;color:#a9b3a6;text-transform:uppercase}
+  .pb-g b{font-family:'Share Tech Mono',monospace;font-weight:normal;font-size:23px;color:#ffc14d;letter-spacing:0}
+  .pb svg{display:block;width:100%;height:auto}
+  .pb-bar{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .pb-msg{flex:1;min-height:66px;font-family:'Outfit',sans-serif;font-size:17px;line-height:1.3;color:#f1ead8}
+  .pb .btn{white-space:nowrap}
+  .pb-card{background:#f1c40f linear-gradient(168deg,rgba(255,255,255,.3),rgba(120,80,0,.16));color:#16130a;border:3px solid #16130a;border-radius:12px;
+    padding:0 18px 12px;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:16.5px;line-height:1.24;box-shadow:0 20px 50px rgba(0,0,0,.6);
+    -webkit-user-select:text;user-select:text}
+  .pb-card h4{margin:0 -18px 10px;padding:10px 18px 8px;background:#16130a repeating-linear-gradient(-45deg,#16130a 0 14px,#2b2612 14px 28px);color:#f1c40f;
+    font-family:'Orbitron',sans-serif;font-weight:800;font-size:14px;letter-spacing:.14em;text-transform:uppercase;border-radius:8px 8px 0 0}
+  .pb-card h5{margin:10px 0 6px;font-family:'Orbitron',sans-serif;font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;border-bottom:2px solid #16130a;padding-bottom:3px}
+  .pb-card p{margin:0 0 6px}
+  .pb-card .pen{font-family:'Caveat',cursive;font-weight:700;font-size:21px;line-height:1.05;color:#1d2a4a;transform:rotate(-1deg);margin:9px 0 0}
+  .pb-card .w:hover{color:#8c2f24}
+  .tile{cursor:pointer}
+  .tile .tr{transform-box:fill-box;transform-origin:50% 50%;transition:transform .16s}
+  .tile .bg{fill:#1a1f1a;stroke:#0d100d;stroke-width:2}
+  .tile:hover .bg{fill:#232a22}
+  .tile.fix{cursor:not-allowed}
+  .tile.fix .bg{fill:#2b2420;stroke:#5a4a3a}
+  .po{fill:none;stroke:#4a2f16;stroke-width:28;stroke-linecap:butt}
+  .pi{fill:none;stroke:#b9773a;stroke-width:20;stroke-linecap:butt}
+  .ph{fill:none;stroke:#e9b072;stroke-width:5;stroke-linecap:butt;opacity:.8}
+  .wet .pi{stroke:#49c9e6}.wet .ph{stroke:#d9fbff}
+  .stub .pi{stroke:#8a6a3a}.stub.wet .pi{stroke:#49c9e6}
+  .lab{font-family:'Saira Stencil One',sans-serif;font-size:19px;fill:#e9e3d2;letter-spacing:1px}
+  .lab2{font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:2px;fill:#a9b3a6}
+  @media (max-width:900px){.pb{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="plateG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#252c25"/><stop offset=".6" stop-color="#2d352c"/><stop offset="1" stop-color="#1a1f1a"/></linearGradient>
+  <linearGradient id="tankG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#274030"/><stop offset=".35" stop-color="#5a8266"/><stop offset=".6" stop-color="#3d5f49"/><stop offset="1" stop-color="#1e3126"/></linearGradient>
+  <linearGradient id="resG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8f3516"/><stop offset=".35" stop-color="#ee7a42"/><stop offset=".6" stop-color="#c9552a"/><stop offset="1" stop-color="#6e2810"/></linearGradient>
+  <linearGradient id="drumG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8e969c"/><stop offset=".4" stop-color="#c2c9ce"/><stop offset="1" stop-color="#4f565c"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="copG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2a468"/><stop offset=".5" stop-color="#b9773a"/><stop offset="1" stop-color="#6b4420"/></linearGradient>
+  <linearGradient id="olvG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6c7a62"/><stop offset=".5" stop-color="#4a5644"/><stop offset="1" stop-color="#262d23"/></linearGradient>
+  <radialGradient id="faceG"><stop offset="0" stop-color="#f6efdc"/><stop offset=".8" stop-color="#e2d8bd"/><stop offset="1" stop-color="#b8ac8c"/></radialGradient>
+  <radialGradient id="ambG"><stop offset="0" stop-color="#ffd27a" stop-opacity=".55"/><stop offset=".35" stop-color="#ffb347" stop-opacity=".17"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="55%" cy="40%" r="75%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#000" stop-opacity=".34"/><stop offset="1" stop-color="#000" stop-opacity=".92"/></radialGradient>
+  <pattern id="haz" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="40" height="40" fill="#c99a17"/><rect width="20" height="40" fill="#15130c"/></pattern>
+  <pattern id="grate" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" fill="#0c0f0c"/><rect x="3" y="3" width="20" height="20" rx="3" fill="#050605"/></pattern>
+</defs>
+
+<!-- wall of steel plates -->
+<rect x="-1000" width="3600" height="900" fill="url(#plateG)"/>
+<g id="plates"></g>
+<rect x="-1000" y="772" width="3600" height="26" fill="url(#haz)" opacity=".8"/>
+<rect x="-1000" y="798" width="3600" height="102" fill="url(#grate)"/><rect x="-1000" y="796" width="3600" height="6" fill="#2a3229"/>
+
+<!-- pipes along the ceiling -->
+<rect x="-1000" y="28" width="3600" height="52" fill="url(#olvG)"/><rect x="-1000" y="96" width="3600" height="26" fill="url(#copG)"/>
+<g id="flanges"></g>
+<path d="M556 352V160H1300V200" stroke="#6b4420" stroke-width="20" fill="none" stroke-linejoin="round"/><path d="M556 352V160H1300V200" stroke="#c98a4d" stroke-width="12" fill="none" stroke-linejoin="round"/>
+<rect x="363" y="120" width="34" height="64" fill="#4a5644"/><rect x="367" y="120" width="6" height="64" fill="#6c7a62"/><rect x="356" y="170" width="48" height="12" rx="3" fill="#2a3229"/>
+
+<!-- lamp in a cage -->
+<circle id="lampGlow" cx="640" cy="214" r="600" fill="url(#ambG)" pointer-events="none"/>
+<path d="M592 122v34" stroke="#141814" stroke-width="10"/><ellipse cx="592" cy="194" rx="26" ry="34" fill="#ffe2a0"/>
+<g fill="none" stroke="#141814" stroke-width="4"><ellipse cx="592" cy="194" rx="31" ry="40"/><path d="M592 154v80M564 182h56M563 206h58"/></g>
+
+<!-- ladder up to the lab -->
+<g id="ladder" class="hot">
+  <rect x="56" y="0" width="200" height="122" fill="#d9eef4" opacity=".28"/><path d="M56 122L20 800H292L256 122Z" fill="#cfe6ee" opacity=".05"/>
+  <rect x="50" y="118" width="212" height="12" fill="#141814"/>
+  <path d="M100 0V800M212 0V800" stroke="#7b8679" stroke-width="13"/><path d="M96 0V800" stroke="#a9b3a6" stroke-width="3"/>
+  <g id="rungs" stroke="#8d988a" stroke-width="9" stroke-linecap="round"></g>
+</g>
+
+<!-- main tank, nearly empty -->
+<g id="main" class="hot">
+  <path d="M292 262q0-82 88-82t88 82v510H292z" fill="url(#tankG)"/>
+  <path d="M292 340h176M292 660h176" stroke="#1b2d22" stroke-width="12"/>
+  <rect x="434" y="372" width="18" height="268" rx="9" fill="#070b08"/><rect x="437" y="612" width="12" height="25" rx="6" fill="#8fe9ff"/>
+  <g stroke="#3a4f40" stroke-width="2"><path d="M430 420h8M430 480h8M430 540h8M430 600h8"/></g>
+  <text transform="translate(382 588) rotate(-90)" class="sten" font-size="84" fill="#d9e3d2" opacity=".86">MAIN</text>
+  <text x="372" y="312" class="sten" font-size="34" fill="#d9e3d2" opacity=".86">O2</text>
+  <rect x="292" y="772" width="176" height="14" fill="#141814"/>
+</g>
+
+<!-- the reserve bottle -->
+<g id="reserve" class="hot">
+  <path d="M556 392v-40" stroke="#8d959c" stroke-width="10"/>
+  <circle cx="556" cy="372" r="24" fill="none" stroke="#c2301f" stroke-width="9"/><path d="M532 372h48M556 348v48" stroke="#c2301f" stroke-width="6"/>
+  <path d="M506 452q0-56 50-56t50 56v320H506z" fill="url(#resG)"/>
+  <path d="M506 500h100M506 720h100" stroke="#5f230d" stroke-width="9"/>
+  <rect x="580" y="520" width="14" height="184" rx="7" fill="#1a0a05"/><rect x="583" y="524" width="8" height="176" rx="4" fill="#8fe9ff"/>
+  <text transform="translate(560 612) rotate(-90)" class="sten" font-size="36" fill="#fff3e6">RESERVE</text>
+  <rect x="518" y="462" width="62" height="26" fill="#f4f1e6"/><text x="549" y="480" class="tagT">2 HOURS</text>
+  <rect x="506" y="772" width="100" height="14" fill="#141814"/>
+</g>
+
+<!-- three gauges -->
+<g id="gauges"></g>
+
+<!-- filter drum -->
+<g id="filter" class="hot">
+  <path d="M720 742v36M850 742v36" stroke="#141814" stroke-width="14"/>
+  <rect x="690" y="592" width="190" height="152" rx="46" fill="url(#drumG)"/>
+  <path d="M734 594v148M836 594v148" stroke="#5b626a" stroke-width="7"/>
+  <rect x="744" y="640" width="82" height="30" fill="#1b1f24"/><text x="785" y="662" class="sten" font-size="19" fill="#e9e3d2">FILTER</text>
+  <g transform="rotate(-4 786 704)"><rect x="748" y="686" width="76" height="34" fill="#f4f1e6"/><path d="M754 698h62M754 708h44" stroke="#3a4a7a" stroke-width="2.500" stroke-linecap="round"/></g>
+  <g fill="#3b4148"><rect x="700" y="610" width="18" height="10" rx="2"/><rect x="852" y="610" width="18" height="10" rx="2"/></g>
+</g>
+
+<!-- the thin yellow pipe that hisses -->
+<g id="hiss" class="hot">
+  <rect x="880" y="610" width="380" height="90" fill="transparent"/>
+  <rect x="880" y="660" width="366" height="16" fill="#7a6410"/><rect x="880" y="663" width="366" height="9" fill="#e3c022"/><rect x="880" y="664" width="366" height="3" fill="#fff3a6" opacity=".6"/>
+  <rect x="1000" y="656" width="26" height="24" rx="3" fill="#8d959c"/><rect x="1238" y="648" width="16" height="40" rx="3" fill="#8d959c"/>
+  <g stroke="#f1ead8" stroke-width="7" stroke-linecap="round" fill="none">
+    <path class="wisp" d="M1013 652q-10-12 0-24"/><path class="wisp w2" d="M1010 650q10-10 2-22"/><path class="wisp w3" d="M1016 652q-8-10 2-20"/>
+  </g>
+  <g transform="rotate(-2 1140 640)"><rect x="1058" y="626" width="164" height="26" fill="#f4f1e6"/><text x="1140" y="644" class="tagT">GALLEY · HOT WATER</text></g>
+</g>
+
+<!-- junction box with two lights -->
+<rect x="900" y="716" width="120" height="50" rx="5" fill="#1b1f1b"/><circle class="led" cx="928" cy="741" r="7" fill="#ffc14d"/><circle class="led l2" cx="956" cy="741" r="7" fill="#5dff9a"/>
+<g stroke="#3a4239" stroke-width="3"><path d="M978 730h30M978 741h30M978 752h30"/></g>
+
+<!-- the pipe board, the card on its chain, and Keel -->
+<g id="board" class="hot" transform="translate(22 0)">
+  <rect x="1270" y="196" width="292" height="282" rx="10" fill="#3a4239"/><rect x="1270" y="196" width="292" height="282" rx="10" fill="none" stroke="#141814" stroke-width="5"/>
+  <rect x="1286" y="212" width="260" height="216" rx="4" fill="#0f130f"/>
+  <g fill="none" stroke="#4a2f16" stroke-width="15" stroke-linejoin="round"><path d="M1286 262h54v60h60v-60h56v104h60M1340 428v-52h110v-10M1456 212v50M1510 322h36"/></g>
+  <g fill="none" stroke="#b9773a" stroke-width="9" stroke-linejoin="round"><path d="M1286 262h54v60h60v-60h56v104h60M1340 428v-52h110v-10M1456 212v50M1510 322h36"/></g>
+  <g fill="#8d959c"><circle cx="1340" cy="322" r="7"/><circle cx="1456" cy="262" r="7"/><circle cx="1450" cy="376" r="7"/></g>
+  <text x="1416" y="460" class="sten" font-size="23" fill="#e9e3d2">PIPE BOARD</text>
+  <g fill="#141814"><circle cx="1284" cy="210" r="4"/><circle cx="1548" cy="210" r="4"/><circle cx="1284" cy="464" r="4"/><circle cx="1548" cy="464" r="4"/></g>
+</g>
+<g id="fcard" class="hot" transform="translate(22 0)">
+  <path d="M1330 478v60" stroke="#a9b3a6" stroke-width="4" stroke-dasharray="7 5"/>
+  <g transform="rotate(5 1330 600)">
+    <rect x="1276" y="536" width="108" height="150" rx="9" fill="#16130a"/><rect x="1283" y="543" width="94" height="136" rx="4" fill="#f1c40f"/>
+    <rect x="1283" y="543" width="94" height="26" rx="4" fill="#16130a"/><text x="1330" y="561" class="tagT" style="fill:#f1c40f">AIR ALARM</text>
+    <g stroke="#6a5606" stroke-width="3"><path d="M1292 582h76M1292 594h76M1292 606h60M1292 624h76M1292 636h70M1292 648h76M1292 660h50"/></g>
+  </g>
+</g>
+<g id="keel" class="hot"><use href="#ch-keel" x="1444" y="540" width="132" height="172"/></g>
+
+<rect x="-1000" width="3600" height="900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go to the garden</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, read = false, solved = false, nextFile = null, t0 = Date.now();
+  var val = { P: 101, O: 18.9, C: 0.9 }, was = { P: 101, O: 18.9, C: 0.9 }, seen = {}, logged = false, live = [];
+
+  /* plates, rivets, flanges, rungs, the three gauges */
+  var G = { P: [736, 0, 150, 'PRESSURE', [[95, 105, '#2fae5f']]],
+            O: [950, 15, 22, 'OXYGEN', [[15, 17.5, '#d8402f'], [17.5, 19.5, '#e2a61c'], [19.5, 22, '#2fae5f']]],
+            C: [1164, 0, 5, 'CARBON DIOXIDE', [[0, 1, '#2fae5f'], [1, 2, '#e2a61c'], [2, 5, '#d8402f']]] };
+  function ang(k, v) { var g = G[k]; return -125 + (Math.max(g[1], Math.min(g[2], v)) - g[1]) / (g[2] - g[1]) * 250; }
+  (function () {
+    var s = '', x, y, k, g, i, t, cx;
+    for (x = -980; x < 2600; x += 220) {
+      s += '<path d="M' + x + ' 122V772" stroke="#161b16" stroke-width="4"/>';
+      for (y = 150; y < 772; y += 124) s += '<circle cx="' + (x + 14) + '" cy="' + y + '" r="4" fill="#3a4239"/><circle cx="' + (x - 14) + '" cy="' + y + '" r="4" fill="#3a4239"/>';
+    }
+    s += '<path d="M-1000 470H2600" stroke="#161b16" stroke-width="4"/>';
+    $('#plates').innerHTML = s; s = '';
+    for (x = -900; x < 2600; x += 270) s += '<rect x="' + x + '" y="22" width="22" height="64" rx="4" fill="#3a4435"/><rect x="' + (x + 120) + '" y="92" width="14" height="34" rx="3" fill="#8a5a2b"/>';
+    $('#flanges').innerHTML = s; s = '';
+    for (y = 60; y < 800; y += 74) s += '<path d="M100 ' + y + 'H212"/>';
+    $('#rungs').innerHTML = s; s = '';
+    function pt(cx, r, a) { a = a * Math.PI / 180; return (cx + r * Math.sin(a)).toFixed(1) + ' ' + (300 - r * Math.cos(a)).toFixed(1); }
+    for (k in G) {
+      g = G[k]; cx = g[0];
+      s += '<g id="g' + k + '" class="hot"><circle cx="' + cx + '" cy="300" r="106" fill="#141814"/><circle cx="' + cx + '" cy="300" r="100" fill="url(#brassG)"/><circle cx="' + cx + '" cy="300" r="87" fill="url(#faceG)"/>';
+      g[4].forEach(function (b) {
+        var a1 = ang(k, b[0]), a2 = ang(k, b[1]);
+        s += '<path d="M' + pt(cx, 70, a1) + 'A70 70 0 ' + (a2 - a1 > 180 ? 1 : 0) + ' 1 ' + pt(cx, 70, a2) + '" stroke="' + b[2] + '" stroke-width="11" fill="none" opacity=".85"/>';
+      });
+      for (i = 0; i <= 20; i++) { t = -125 + i * 12.5; s += '<path d="M' + pt(cx, i % 5 ? 80 : 75, t) + 'L' + pt(cx, 86, t) + '" stroke="#2a2418" stroke-width="' + (i % 5 ? 1.6 : 3.2) + '"/>'; }
+      s += '<g id="n' + k + '" class="gn" style="transform-origin:' + cx + 'px 300px;transform:rotate(' + ang(k, val[k]).toFixed(1) + 'deg)"><g' + (k === 'P' ? ' class="shiver"' : '') + '>' +
+        '<path d="M' + cx + ' 317V230" stroke="#16130a" stroke-width="5" stroke-linecap="round"/><path d="M' + cx + ' 222l-6 16h12z" fill="#b3261c"/></g></g>';
+      s += '<circle cx="' + cx + '" cy="300" r="10" fill="#16130a"/><circle cx="' + cx + '" cy="300" r="4" fill="#c79b3b"/>';
+      s += '<path d="M' + (cx - 56) + ' 246l32 78" stroke="#fff" stroke-width="9" opacity=".12"/>';
+      s += '<rect x="' + (cx - 82) + '" y="420" width="164" height="28" rx="3" fill="url(#brassG)"/><text x="' + cx + '" y="440" class="brassT">' + g[3] + '</text>';
+      s += '<rect x="' + (cx - 62) + '" y="458" width="124" height="46" rx="5" fill="#0b0e0b" stroke="#3a4239" stroke-width="2"/><text id="r' + k + '" x="' + cx + '" y="492" class="digT">' + (k === 'P' ? '101' : val[k].toFixed(1)) + '</text></g>';
+    }
+    $('#gauges').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'scifi', story: 'air', storyTitle: 'Seven Hours of Air', id: 'airroom', no: 'III', title: 'The Air Room',
+    go: 'Climb down',
+    intro: [
+      'Into the store, past four hundred pairs of socks. Through the side door into the lab. Down the ladder in the lab floor.',
+      'The Air Room is about the size of a wardrobe, and most of it is pipe. Every breath on Keeling Station has been through this room many thousands of times.',
+      'Somewhere behind the tanks, something is hissing.'
+    ],
+    exit: {"next":"garden","w":{"e1aac9f9":"f31e16a9"}}, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+  AIR.clock();
+
+  var FCARD = '<h4>Air alarm</h4>' +
+    '<h5>1 &middot; Which fault is it?</h5>' +
+    '<p>Watch the three gauges.</p>' +
+    '<p>If the pressure is falling, there is a hole in the hull.</p>' +
+    '<p>If the pressure is steady and the oxygen is falling, there is no hole. The garden has stopped making oxygen.</p>' +
+    '<p>If the pressure and the oxygen are both steady, and only the carbon dioxide is rising, the filter is full.</p>' +
+    '<p>If nothing is moving at all, the alarm is broken. Go back to bed.</p>' +
+    '<h5>2 &middot; Where does the reserve go?</h5>' +
+    '<p>Join the reserve bottle to the right place on the pipe board. Then open it.</p>' +
+    '<p>If there is a hole in the hull, send the reserve to the suit room and nowhere else. Never feed a room that has a hole in it.</p>' +
+    '<p>If the garden has stopped, send the reserve to the Spine and nowhere else. Do not send it to the garden. In the dark, the algae use oxygen. They do not make it.</p>' +
+    '<p>If the filter is full, do not open the reserve at all. Change the filter.</p>' +
+    '<p>If any pipe on the way is joined to WASTE, everything in it goes outside.</p>' +
+    '<p class="pen">Loose ends on the board shut themselves. The four outlets do not. J.A.</p>';
+
+  function hints() {
+    if (solved) return ['go', ['The reserve is on. Use the button at the bottom to go to the garden.']];
+    if (!read) return ['look', [
+      'Three gauges, and a yellow card on a chain. Read the card before you touch any pipes.',
+      'Click on each gauge and watch its number for a little while. Then click on the card. It hangs under the pipe board, on the right.'
+    ]];
+    return ['board', [
+      'The card asks two questions. Which fault is it? And where must the reserve air go? You need the gauges for the first one.',
+      'Which number is going down? Which number is not moving at all? Find the sentence in part 1 of the card that fits. Then find the sentence in part 2 for that fault.',
+      'The pressure has not moved, so the first &ldquo;if&rdquo; is not true: there is no hole. Read the next &ldquo;if&rdquo;. On the pipe board, click the pipes to turn them until the bottle is joined to the one place the card names for that fault, and to no other. Three pipes are welded and will not turn. Go round them.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function begin() {
+    AIR.amb.vent(0.07, 300); ER.amb.hum(true); ER.pips(0, 2);
+    t0 = Date.now();
+    setInterval(drift, 1000);
+    setInterval(function () { if (!ER.isOpen() && !busy) AIR.sfx.hiss(0.5, 0.25); }, 5200);
+    ER.narrate([
+      'Three big gauges, two tanks, and a board of pipes with Josef&rsquo;s handwriting all over it.',
+      '&ldquo;I can read the gauges to you,&rdquo; says Keel. &ldquo;I am not allowed to say what they mean. For that there is a card.&rdquo;'
+    ]);
+  }
+  /* the oxygen creeps down, the carbon dioxide creeps up, and the pressure does nothing at all */
+  function show() {
+    $('#rO').textContent = val.O.toFixed(1); $('#rC').textContent = val.C.toFixed(1);
+    $('#nO').style.transform = 'rotate(' + ang('O', val.O).toFixed(1) + 'deg)'; $('#nC').style.transform = 'rotate(' + ang('C', val.C).toFixed(1) + 'deg)';
+    live.forEach(function (f) { f(); });
+  }
+  function drift() {
+    var s = Math.floor((Date.now() - t0) / 1000), o = Math.max(17.2, 18.9 - Math.floor(s / 6) * 0.1), c = Math.min(2.6, 0.9 + Math.floor(s / 9) * 0.1);
+    o = Math.round(o * 10) / 10; c = Math.round(c * 10) / 10;
+    if (o !== val.O) { val.O = o; ER.sfx.tick(0.35); }
+    if (c !== val.C) val.C = c;
+    show();
+  }
+  function gauge(k, name, unit) {
+    $('#g' + k).addEventListener('click', function (e) {
+      if (busy) return;
+      ER.wordAt(e.clientX, e.clientY, 'gauge');
+      seen[k] = 1;
+      if (k === 'P') ER.say('PRESSURE. It was 101 when you came in, and it is 101 now. The needle shivers a little, but it always does.');
+      else if (val[k] === was[k]) ER.say(name + '. ' + val[k].toFixed(1) + ' per cent. Keep your eye on it for a moment.');
+      else ER.say(name + '. It was ' + was[k].toFixed(1) + ' per cent when you came in. It is ' + val[k].toFixed(1) + ' now.');
+      if (!logged && seen.P && seen.O && seen.C && val.O !== was.O && val.C !== was.C) {
+        logged = true;
+        ER.addClue('gauges', 'The three gauges', '<h4>Air Room &middot; gauges</h4><p>PRESSURE: 101 when you came in. 101 later.</p><p>OXYGEN: 18.9 when you came in. ' + val.O.toFixed(1) +
+          ' later.</p><p>CARBON DIOXIDE: 0.9 when you came in. ' + val.C.toFixed(1) + ' later.</p>', 'term', 'Your notes');
+      }
+    });
+  }
+  gauge('P', 'PRESSURE'); gauge('O', 'OXYGEN'); gauge('C', 'CARBON DIOXIDE');
+
+  AIR.thing('#main', 'tank', 'The main oxygen tank. The glass strip on its side shows how full it is. It is not very full.', isBusy);
+  AIR.thing('#reserve', 'reserve', 'The reserve bottle: spare air, for a bad day. The label says TWO HOURS. Its pipe runs to the board on the right.', isBusy);
+  AIR.thing('#filter', 'filter', 'The filter takes the carbon dioxide out of the air. There is a sticker on it: CHANGED THREE DAYS AGO. J.A.', isBusy);
+  AIR.thing('#hiss', null, 'A thin yellow pipe, with a label: GALLEY, HOT WATER. This is what is hissing. On the other side of this wall, Josef&rsquo;s coffee machine is keeping itself warm.', isBusy);
+  $('#ladder').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.leave(nextFile); return; }
+    ER.say('The ladder back up to the lab. There is nothing up there that makes air.');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#fcard').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: FCARD, cls: 'card small', clue: { id: 'faultcard', title: 'Air alarm card', kind: 'Emergency card' },
+      done: function () { if (!read) { read = true; ER.pips(1, 2); } } });
+  });
+  $('#keel').addEventListener('click', function () {
+    if (busy) return;
+    AIR.keel([
+      'I can read the gauges to you, but you have eyes. Pressure, oxygen, carbon dioxide. Watch each of them for a little while before you decide anything.',
+      { q: 'What is the reserve bottle for?', a: 'It is spare air. It will give you two more hours. Seven and two is nine. The lander is eleven hours away. Nine is still less than eleven, but it is a better number.' },
+      { q: 'Can you open it?', a: 'I have no hands. And before anybody opens it, it must be joined to the right place on the pipe board. If it is joined to the wrong place, the air goes to the wrong place.' },
+      { q: 'Which place is the right place?', a: 'That depends on the fault. I am not allowed to guess the fault. The card is on the chain, under the pipe board.' }
+    ], { id: 'keel3', title: 'Keel: the reserve bottle', kind: 'Station computer' });
+  });
+  $('#board').addEventListener('click', function () {
+    if (busy || solved) return;
+    if (!read) { ER.say('A board of copper pipes. You could turn them. You do not yet know where the air ought to go. There is a yellow card on a chain underneath.'); return; }
+    openBoard();
+  });
+
+  /* ---------- the pipe board ---------- */
+  var TYPES = { I: [0, 2], L: [0, 1], T: [0, 1, 3], X: [0, 1, 2, 3] };
+  var GRID = ['LILxTI', 'TLiLLT', 'LLTLII', 'ILxILI'];                        /* small letters are welded */
+  var rot = [[2, 1, 2, 0, 3, 0], [1, 0, 0, 3, 1, 2], [3, 2, 2, 1, 1, 0], [1, 3, 0, 1, 2, 0]];
+  var OUTS = { '0,5,1': 's', '0,3,0': 'g', '3,5,1': 'u', '3,2,2': 'w' };
+  var WHERE = { s: 'the Spine', u: 'the suit room, where nobody is', g: 'the garden, where it is dark', w: 'the waste pipe' };
+  var X0 = 126, Y0 = 66, TS = 84;
+  function arms(r, c) { return TYPES[GRID[r].charAt(c).toUpperCase()].map(function (a) { return (a + rot[r][c]) % 4; }); }
+  function flow() {
+    var mark = {}, q = [], out = {}, order = [], t, DR = [-1, 0, 1, 0], DC = [0, 1, 0, -1];
+    if (arms(1, 0).indexOf(3) < 0) return { set: '', tiles: [] };
+    q.push([1, 0]); mark['1,0'] = 1;
+    while (q.length) {
+      t = q.shift(); order.push(t);
+      arms(t[0], t[1]).forEach(function (d) {
+        var nr = t[0] + DR[d], nc = t[1] + DC[d], k = t[0] + ',' + t[1] + ',' + d;
+        if (nr < 0 || nr > 3 || nc < 0 || nc > 5) { if (OUTS[k]) out[OUTS[k]] = 1; return; }
+        if (mark[nr + ',' + nc] || arms(nr, nc).indexOf((d + 2) % 4) < 0) return;
+        mark[nr + ',' + nc] = 1; q.push([nr, nc]);
+      });
+    }
+    return { set: Object.keys(out).sort().join(''), tiles: order };
+  }
+  function pipe(d) { return '<path class="po" d="' + d + '"/><path class="pi" d="' + d + '"/><path class="ph" d="' + d + '"/>'; }
+  function boardSvg() {
+    var s = '', r, c, ty, x, y, SH = { I: 'M42 0V84', L: 'M42 0V30Q42 42 54 42H84', T: 'M0 42H84M42 42V0', X: 'M0 42H84M42 0V84' };
+    s += '<rect width="760" height="470" rx="8" fill="#12160f"/>';
+    /* the bottle and the four outlets */
+    s += '<g class="stub" id="st-in">' + pipe('M60 192H126') + '</g>';
+    s += '<path d="M14 236q0-44 34-44t34 44v150H14z" fill="url(#resG)"/><path d="M14 268h68M14 356h68" stroke="#5f230d" stroke-width="7"/><path d="M48 192v-22" stroke="#8d959c" stroke-width="8"/>' +
+      '<circle cx="48" cy="160" r="17" fill="none" stroke="#c2301f" stroke-width="7"/><path d="M31 160h34M48 143v34" stroke="#c2301f" stroke-width="4"/>' +
+      '<text transform="translate(55 374) rotate(-90)" class="lab" font-size="20" style="fill:#fff3e6">RESERVE</text>';
+    s += '<g class="stub" id="st-g">' + pipe('M420 66V30') + '</g><text x="420" y="22" class="lab" text-anchor="middle">GARDEN</text>';
+    s += '<g class="stub" id="st-s">' + pipe('M630 108H664') + '</g><text x="672" y="115" class="lab">SPINE</text>';
+    s += '<g class="stub" id="st-u">' + pipe('M630 360H664') + '</g><text x="672" y="358" class="lab">SUIT</text><text x="672" y="378" class="lab">ROOM</text>';
+    s += '<g class="stub" id="st-w">' + pipe('M336 402V436') + '</g><text x="336" y="460" class="lab" text-anchor="middle">WASTE</text><text x="386" y="458" class="lab2">GOES OUTSIDE</text>';
+    for (r = 0; r < 4; r++) for (c = 0; c < 6; c++) {
+      ty = GRID[r].charAt(c); x = X0 + c * TS; y = Y0 + r * TS;
+      s += '<g class="tile' + (ty === ty.toLowerCase() ? ' fix' : '') + '" data-rc="' + r + ',' + c + '" data-r="' + rot[r][c] + '" transform="translate(' + x + ' ' + y + ')">' +
+        '<rect class="bg" x="1" y="1" width="82" height="82" rx="6"/><g class="tr" style="transform:rotate(' + rot[r][c] * 90 + 'deg)"><rect width="84" height="84" fill="transparent"/>' + pipe(SH[ty.toUpperCase()]) + '</g>' +
+        (ty === ty.toLowerCase() ? '<g fill="#8d959c"><circle cx="9" cy="9" r="4"/><circle cx="75" cy="9" r="4"/><circle cx="9" cy="75" r="4"/><circle cx="75" cy="75" r="4"/></g>' : '') + '</g>';
+    }
+    return s;
+  }
+  function openBoard() {
+    var box = ER.el('div', 'pb'), bs, msgEl, flowing = false, turns = {};
+    box.innerHTML = '<div class="pb-main"><div class="pb-g"><div>Pressure <b id="mP">101</b></div><div>Oxygen <b id="mO"></b></div><div>Carbon dioxide <b id="mC"></b></div></div>' +
+      '<svg viewBox="0 0 760 470">' + boardSvg() + '</svg>' +
+      '<div class="pb-bar"><div class="pb-msg"></div><button type="button" class="btn" id="b-open">Open the bottle</button></div></div>' +
+      '<div class="pb-card">' + ER.gloss(FCARD) + '</div>';
+    bs = box.querySelector('svg'); msgEl = box.querySelector('.pb-msg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function mini() { box.querySelector('#mO').textContent = val.O.toFixed(1); box.querySelector('#mC').textContent = val.C.toFixed(1); }
+    live = [mini]; mini();
+    msg('Click a pipe to turn it. The bottle is on the left. The four outlets are round the edge.');
+    function dry() { ER.$$('.wet', bs).forEach(function (n) { n.classList.remove('wet'); }); }
+    ER.$$('.tile', bs).forEach(function (t) {
+      var rc = t.getAttribute('data-rc').split(','), r = +rc[0], c = +rc[1];
+      turns[r + ',' + c] = rot[r][c];
+      t.addEventListener('click', function () {
+        if (flowing || solved) return;
+        if (t.classList.contains('fix')) { ER.sfx.no(); ER.shake(t.querySelector('.tr')); msg('That one is welded. It will not turn.'); return; }
+        dry();
+        rot[r][c] = (rot[r][c] + 1) % 4; turns[r + ',' + c]++;
+        t.setAttribute('data-r', rot[r][c]); t.querySelector('.tr').style.transform = 'rotate(' + turns[r + ',' + c] * 90 + 'deg)';
+        AIR.sfx.turn(); msg('');
+      });
+    });
+    box.querySelector('#b-open').addEventListener('click', function () {
+      if (flowing || solved) return;
+      var f = flow(), i, names;
+      dry();
+      if (!f.tiles.length) { ER.sfx.click(); msg('You open the bottle. Nothing happens. The first pipe is not even joined to the bottle. You shut it again.'); return; }
+      flowing = true; AIR.sfx.flow(0.5 + f.tiles.length * 0.07);
+      bs.querySelector('#st-in').classList.add('wet');
+      f.tiles.forEach(function (t, n) { setTimeout(function () { bs.querySelector('.tile[data-rc="' + t[0] + ',' + t[1] + '"]').classList.add('wet'); }, 70 * n); });
+      setTimeout(function () {
+        flowing = false;
+        for (i = 0; i < f.set.length; i++) bs.querySelector('#st-' + f.set.charAt(i)).classList.add('wet');
+        if (!f.set) { msg('You open the bottle. The air runs along the pipes and stops at a loose end, which shuts itself. It has not reached any of the four outlets. You shut the bottle.'); return; }
+        names = f.set.split('').map(function (k) { return WHERE[k]; });
+        var where = 'You open the bottle. The air goes into ' + (names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' : '') + names[names.length - 1] + '. ';
+        var file = ER.exitOk([f.set]);
+        if (file) { win(file, msg, where); return; }
+        ER.sfx.no(); ER.shake(bs);
+        if (f.set.indexOf('w') >= 0) { AIR.lose(600); msg(where + 'Outside, a small white cloud leaves the station and sets off towards Jupiter. You shut the bottle, quickly. That was ten minutes of air.'); }
+        else if (f.set.length > 1) msg(where + '&ldquo;The card says: and nowhere else,&rdquo; says Keel. You shut the bottle.');
+        else msg(where + '&ldquo;Is that what the card says for this fault?&rdquo; says Keel. &ldquo;Which needle is moving, and which is not?&rdquo; You shut the bottle.');
+      }, 70 * f.tiles.length + 500);
+    });
+    ER.open('ov-lock', box, function () { live = []; });
+  }
+  function win(file, msg, where) {
+    solved = true; busy = true; nextFile = file; ER.sfx.ok(); ER.pips(2, 2);
+    var st = ER.state(); st.done = st.done || {}; st.done.airroom = 1; ER.flag('seen-airroom', 1);
+    msg(where + 'The bottle hisses, and this time it is the right kind of hiss.');
+    setTimeout(function () {
+      ER.closeAll(); AIR.gain(7200); AIR.sfx.hiss(1.6, 1); $('#board').classList.add('done');
+      ER.narrate([
+        'Up on the main deck, new air begins to move along the Spine.',
+        '&ldquo;You now have nine hours,&rdquo; says Keel. &ldquo;The lander needs eleven. I would call this better. I would not call it good.&rdquo;',
+        'You look at the pressure gauge once more. One hundred and one. It has not moved all night.',
+        '&ldquo;The card says the garden has stopped,&rdquo; says Keel. &ldquo;The garden is at the bow. Dr Adeyemi is not going to like this.&rdquo;'
+      ], function () { busy = false; $('#go').classList.add('on'); });
+    }, 2400);
+  }
+})();
+</script>
+</body>
+</html>
