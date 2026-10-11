@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Prep Room · A Smell of Vinegar</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-forensic.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="fair.css">
+<style>
+  body{--bg:#1a130b;--accent:#f0a030;--font-display:'IBM Plex Mono',monospace;--font-ui:'Barlow Condensed',sans-serif;--font-body:'Libre Baskerville',serif;
+    --tc-bg:rgba(22,15,8,.96);--tc-ink:#f3ead6;--cap-bg:rgba(24,16,9,.94);--panel:#21180e;--face-bg:#33161d;--q-ink:#f0c070;--fade:#0a0603;--hud-bg:rgba(24,16,9,.8)}
+  .tc-room{font-weight:600;letter-spacing:.02em;font-size:clamp(32px,4.6vw,60px)}
+  .sB{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-anchor:middle}
+  .sK{font-family:'Permanent Marker',cursive;text-anchor:middle}
+  .sM{font-family:'IBM Plex Mono',monospace;font-weight:500;text-anchor:middle}
+  #drip{animation:drip 2.9s ease-in infinite}
+  @keyframes drip{0%{transform:translateY(0);opacity:0}8%{opacity:1}55%{transform:translateY(0);opacity:1}80%{transform:translateY(46px);opacity:1}81%,100%{transform:translateY(46px);opacity:0}}
+  #bulbG{animation:bulb 7s steps(1,end) infinite}
+  @keyframes bulb{0%{opacity:.9}47%{opacity:.78}49%{opacity:.9}}
+  #tile.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.12)}}
+  .hot:hover{filter:brightness(1.14)}
+
+  /* the bench */
+  .bx .bub{animation:bub 0.9s linear infinite}
+  @keyframes bub{0%,100%{opacity:0}45%{opacity:1}}
+  .bx .ido{transition:fill .9s}
+  .bx .melt{transition:fill 1.6s}
+  .bx .tape{cursor:pointer}
+  .bx .tape:hover rect{fill:#fff6c9}
+  .bx .opt{cursor:pointer}
+  .bx .opt rect{fill:#fbf8ea;stroke:#8a8676;stroke-width:1}
+  .bx .opt:hover rect{fill:#f0b429}
+  .bx .flame{animation:fl .35s steps(2,end) infinite;transform-origin:916px 520px}
+  @keyframes fl{50%{transform:scale(.94,1.06)}}
+  .src{width:min(720px,94vw)}
+  .src .doc{width:100%;max-height:none}
+  .src .doc tr.pick td{cursor:pointer}
+  .src .doc span.it{display:inline-block;margin:1px 4px 1px 0;padding:1px 8px 0;border:1px solid #9c9684;border-radius:3px;background:#fff;cursor:pointer}
+  .src .doc span.it:hover{background:#f0b429;border-color:#1c1d22}
+  .src .doc span.it.no{text-decoration:line-through;color:#9c9684;background:#f1efe6;cursor:default}
+  .src .pmsg{margin-top:12px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a7a52"/><stop offset="1" stop-color="#b3a273"/></linearGradient>
+  <linearGradient id="benchG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a5a34"/><stop offset="1" stop-color="#5a4024"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffe9b0"/><stop offset="1" stop-color="#e9c877"/></linearGradient>
+  <radialGradient id="bulbG2"><stop offset="0" stop-color="#ffd98a" stop-opacity=".75"/><stop offset=".5" stop-color="#ffb84a" stop-opacity=".2"/><stop offset="1" stop-color="#ffb84a" stop-opacity="0"/></radialGradient>
+  <pattern id="tiles" width="46" height="46" patternUnits="userSpaceOnUse"><rect width="46" height="46" fill="#e6dfc6"/><path d="M0 0H46M0 0V46" stroke="#b9ae8c" stroke-width="2"/></pattern>
+  <radialGradient id="vig" cx="50%" cy="52%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#1a0d00" stop-opacity=".32"/><stop offset="1" stop-color="#0a0500" stop-opacity=".9"/></radialGradient>
+</defs>
+
+<!-- the back wall, the shelves -->
+<rect x="-1000" y="-400" width="3600" height="1100" fill="url(#wallG)"/>
+<rect x="-1000" y="468" width="3600" height="180" fill="url(#tiles)"/>
+<g id="shelves" class="hot"></g>
+<g id="ptable" class="hot"><rect x="52" y="54" width="214" height="120" fill="#f3efe0"/><g id="ptc"></g><rect x="52" y="54" width="214" height="120" fill="none" stroke="#3a2c1a" stroke-width="4"/></g>
+<g id="clock" class="hot"><circle cx="1410" cy="92" r="36" fill="#3a2c1a"/><circle cx="1410" cy="92" r="30" fill="#f3efe0"/><g stroke="#1c1d22" stroke-width="3"><path d="M1410 66v6M1410 112v6M1384 92h6M1430 92h6"/></g>
+  <path d="M1410 92l-4-17" stroke="#1c1d22" stroke-width="5" stroke-linecap="round"/><path d="M1410 92l12-22" stroke="#1c1d22" stroke-width="3" stroke-linecap="round"/><circle cx="1410" cy="92" r="3.500" fill="#b3261c"/></g>
+
+<!-- the door, with Mrs Shrike in it -->
+<g id="door"><rect x="1296" y="150" width="232" height="500" fill="#3a2c1a"/><rect x="1312" y="166" width="200" height="484" fill="url(#doorG)"/><path d="M1512 166l60 -22v520l-60 -14z" fill="#5a4630"/><circle cx="1524" cy="420" r="7" fill="#c9a23a"/></g>
+<g id="shrike" class="hot" transform="translate(1410 652)">
+  <path d="M-30 0h60l-5 -74h-50z" fill="#2c2c33"/><path d="M-36 -62q-6 -90 36 -96t36 96z" fill="#a32a2a"/><path d="M-8 -156l8 30 8-30z" fill="#f3efe4"/>
+  <path d="M-34 -122q-12 30 2 60M34 -122q14 24 -4 62" stroke="#a32a2a" stroke-width="15" fill="none" stroke-linecap="round"/><circle cx="30" cy="-58" r="8" fill="#ead0b6"/>
+  <path d="M30 -52v20M26 -34l8 6M34 -40l-8 4" stroke="#c9a23a" stroke-width="3" stroke-linecap="round"/>
+  <rect x="-7" y="-170" width="14" height="16" fill="#e0c2a8"/><circle cx="0" cy="-186" r="22" fill="#ead0b6"/>
+  <path d="M-22 -190q2 -26 22 -26t22 26q-10 -12 -22 -12t-22 12z" fill="#b9ad98"/><circle cx="0" cy="-215" r="10" fill="#b9ad98"/>
+  <path d="M-12 -184h8M5 -186h8" stroke="#3b4a55" stroke-width="2.4"/><path d="M-6 -172h12" stroke="#8a3a3a" stroke-width="2"/>
+</g>
+
+<!-- the skeleton -->
+<g id="skel" class="hot" stroke="#efe9d6" stroke-linecap="round" fill="none">
+  <path d="M170 650V214" stroke="#59616a" stroke-width="8"/><path d="M120 650h100" stroke="#59616a" stroke-width="10"/>
+  <circle cx="170" cy="250" r="28" fill="#efe9d6" stroke="none"/><path d="M152 268h36v16h-36z" fill="#efe9d6" stroke="none"/><circle cx="160" cy="248" r="7" fill="#3a2c1a" stroke="none"/><circle cx="181" cy="248" r="7" fill="#3a2c1a" stroke="none"/><path d="M158 276v8M166 276v8M174 276v8M182 276v8" stroke="#3a2c1a" stroke-width="2"/>
+  <path d="M146 228l8 -22 10 14 6 -18 8 18 10 -14 6 22z" fill="#f0b429" stroke="#b08a1a" stroke-width="2"/>
+  <path d="M170 286v150" stroke-width="9"/><g stroke-width="6"><path d="M140 318q30 -14 60 0M136 340q34 -14 68 0M138 362q32 -14 64 0M144 384q26 -12 52 0"/></g>
+  <path d="M138 304h64" stroke-width="7"/><path d="M138 304l-22 78 -6 76M202 304l22 78 6 76" stroke-width="7"/><path d="M146 442h48l-8 22h-32z" fill="#efe9d6" stroke="none"/>
+  <path d="M156 462l-8 96 -2 84M184 462l8 96 2 84" stroke-width="8"/><path d="M134 646h16M192 646h16" stroke-width="8"/>
+  <rect x="184" y="326" width="30" height="18" fill="#fdfdf8" stroke="#1c1d22" stroke-width="1.500"/><text x="199" y="339.500" class="sB" font-size="12" fill="#b3261c" stroke="none">SIR</text>
+</g>
+
+<!-- the lamp -->
+<path d="M800 -400V46" stroke="#1c150e" stroke-width="4"/><path d="M772 46h56l14 34h-84z" fill="#2a2118"/><circle id="bulbG" cx="800" cy="100" r="230" fill="url(#bulbG2)" pointer-events="none"/><circle cx="800" cy="88" r="13" fill="#fff3c9"/>
+
+<!-- the card and the list on the tiles -->
+<g id="card" class="hot"><rect x="560" y="484" width="150" height="112" rx="6" fill="#f4f1e4" transform="rotate(-1.500 635 540)"/><g transform="rotate(-1.500 635 540)"><text x="635" y="508" class="sM" font-size="12" fill="#22211c" letter-spacing="1.500">WHITE POWDERS</text>
+  <g stroke="#59616a" stroke-width="2"><path d="M574 522h122M574 534h122M574 546h100M574 558h122M574 570h86"/></g><text x="635" y="589" class="sK" font-size="9" fill="#b3261c">Never taste. Never guess.</text><circle cx="635" cy="490" r="5" fill="#b3261c"/></g></g>
+<g id="list" class="hot"><rect x="1086" y="478" width="96" height="136" rx="4" fill="#8a6a3a"/><rect x="1094" y="496" width="80" height="110" fill="#fdfdfb"/><rect x="1116" y="472" width="36" height="14" rx="3" fill="#aab2b8"/>
+  <g stroke="#59616a" stroke-width="1.800"><path d="M1100 510h68M1100 520h68M1100 530h50M1100 544h68M1100 554h68M1100 564h40M1100 578h68"/></g><path d="M1100 592q30 -8 66 2" stroke="#b3261c" stroke-width="2" fill="none"/></g>
+<g id="gas" class="hot"><rect x="300" y="560" width="60" height="16" rx="4" fill="#c9a23a"/><path d="M316 560v-22M344 560v-22" stroke="#c9a23a" stroke-width="7" stroke-linecap="round"/><circle cx="316" cy="536" r="6" fill="#b3261c"/><circle cx="344" cy="536" r="6" fill="#b3261c"/></g>
+
+<!-- Dr Novak, behind the bench -->
+<g id="novak" class="hot" transform="translate(1226 650)">
+  <path d="M-42 0q-6 -100 42 -106t42 106z" fill="#27415e"/><path d="M-8 -104l8 28 8-28z" fill="#eef1f0"/><path d="M-6 -96l5 64M6 -96l-5 64" stroke="#b3261c" stroke-width="2.400"/><rect x="-8" y="-36" width="16" height="18" fill="#f2f4ee"/>
+  <rect x="-7" y="-120" width="14" height="16" fill="#d6ae86"/><circle cx="0" cy="-136" r="23" fill="#e4c19c"/>
+  <path d="M-24 -132q-2 -31 24 -31t24 31q2 14 -5 19q4 -23 -4 -35q-15 -9 -30 0q-8 12 -4 35q-7 -5 -5 -19z" fill="#46464b"/>
+  <circle cx="-8" cy="-134" r="7" fill="none" stroke="#15171a" stroke-width="2"/><circle cx="8" cy="-134" r="7" fill="none" stroke="#15171a" stroke-width="2"/><path d="M-1 -134h2" stroke="#15171a" stroke-width="2"/><path d="M-6 -121q6 3 12 0" stroke="#8c4a3c" stroke-width="2" fill="none"/>
+</g>
+
+<!-- the bench and what is on it -->
+<rect x="-1000" y="640" width="3600" height="34" fill="url(#benchG)"/><rect x="-1000" y="640" width="3600" height="6" fill="#9a7a4a"/>
+<rect x="-1000" y="674" width="3600" height="700" fill="#22382f"/><g id="cupb"></g>
+<g id="sink" class="hot"><rect x="40" y="624" width="210" height="22" rx="4" fill="#d9dde0"/><rect x="56" y="630" width="178" height="12" fill="#8a9298"/><path d="M196 624v-56q0 -22 -24 -22h-10" stroke="#aab2b8" stroke-width="10" fill="none" stroke-linecap="round"/><rect x="186" y="582" width="20" height="10" fill="#59616a"/>
+  <path id="drip" d="M162 552q-5 8 0 12q5 -4 0 -12z" fill="#dfeffb"/></g>
+<g id="balance" class="hot"><rect x="330" y="610" width="150" height="32" rx="5" fill="#d9dde0"/><rect x="342" y="600" width="126" height="12" rx="3" fill="#8a9298"/><rect x="378" y="618" width="58" height="18" fill="#0e1a12"/><text x="407" y="632" class="sM" font-size="12" fill="#8dfc9d">1062 g</text>
+  <rect x="380" y="548" width="56" height="52" rx="5" fill="#f1f1ec"/><rect x="376" y="540" width="64" height="12" rx="3" fill="#2a5aa0"/><rect x="386" y="566" width="44" height="20" fill="#2a5aa0"/><text x="408" y="580" class="sB" font-size="11" fill="#fff">BICARB</text></g>
+<g id="tile" class="hot"><path d="M552 622h400l22 22H530z" fill="#f7f7f2"/><path d="M530 644h444v6H530z" fill="#c9c9c0"/><g id="tdish"></g></g>
+<g id="burner" class="hot"><path d="M1016 642q-14 -30 22 -34q36 4 22 34z" fill="#8fb4d9" opacity=".8"/><rect x="1030" y="598" width="16" height="12" fill="#c9a23a"/><path d="M1038 598q-7 -14 0 -26q7 12 0 26z" fill="#6fa8ff" opacity=".85"/></g>
+<g id="bots"><rect x="984" y="606" width="20" height="36" rx="3" fill="#6b3d1a"/><rect x="988" y="594" width="12" height="14" rx="3" fill="#b3261c"/><rect x="1072" y="600" width="24" height="42" rx="3" fill="#d9c9a0" opacity=".9"/><rect x="1077" y="588" width="14" height="14" rx="3" fill="#e9e6dc"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the head&rsquo;s office</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="fair.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, srcBox = null, told = {}, stage = 0;
+
+  /* shelves of bottles, the periodic table, the cupboards, six dishes on the tile */
+  (function () {
+    var s = '', r, i, x, w, h, c, y, seed = 11, GL = ['#6b3d1a', '#3d6b8a', '#8a8f6a', '#e9e6dc', '#3d8a5a', '#5a3a6b', '#b08a35', '#2a5aa0', '#7d2a1c'];
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (r = 0; r < 4; r++) {
+      y = 150 + r * 104;
+      s += '<rect x="300" y="' + y + '" width="900" height="12" fill="#4a3620"/><rect x="300" y="' + (y + 12) + '" width="900" height="5" fill="#2a1e10"/>';
+      for (x = 312; x < 1180;) {
+        w = 22 + Math.floor(rnd() * 22); h = 34 + Math.floor(rnd() * 44); c = GL[Math.floor(rnd() * GL.length)];
+        if (r === 3 && x > 1070) break;
+        s += '<rect x="' + x + '" y="' + (y - h) + '" width="' + w + '" height="' + h + '" rx="4" fill="' + c + '" opacity=".92"/>' +
+          '<rect x="' + (x + w / 2 - 5) + '" y="' + (y - h - 9) + '" width="10" height="10" rx="2" fill="#2a2118"/>' +
+          (rnd() < 0.7 ? '<rect x="' + (x + 3) + '" y="' + (y - h * 0.62) + '" width="' + (w - 6) + '" height="' + Math.min(18, h * 0.34) + '" fill="#f3efe0"/>' : '') +
+          '<path d="M' + (x + 4) + ' ' + (y - h + 5) + 'v' + (h - 10) + '" stroke="#fff" stroke-width="2" opacity=".2"/>';
+        x += w + 5 + Math.floor(rnd() * 7);
+      }
+    }
+    s += '<rect x="288" y="60" width="14" height="420" fill="#3a2a18"/><rect x="1198" y="60" width="14" height="420" fill="#3a2a18"/>';
+    $('#shelves').innerHTML = s; s = '';
+    for (r = 0; r < 6; r++) for (i = 0; i < 16; i++) {
+      if ((r === 0 && i > 0 && i < 15) || (r < 3 && r > 0 && i > 1 && i < 10)) continue;
+      c = i < 2 ? '#e9a35a' : i > 11 ? '#9ac27a' : '#8fb4d9';
+      s += '<rect x="' + (60 + i * 12.500) + '" y="' + (64 + r * 14) + '" width="11" height="12" fill="' + c + '"/>';
+    }
+    s += '<rect x="235" y="150" width="20" height="16" fill="#f3efe0" stroke="#b3261c" stroke-width="2"/><text x="245" y="162.500" class="sK" font-size="10" fill="#b3261c">Bf</text>';
+    $('#ptc').innerHTML = s; s = '';
+    for (i = -3; i < 9; i++) {
+      x = i * 250 + 40;
+      s += '<rect x="' + x + '" y="690" width="234" height="230" fill="#2c4a3d" stroke="#16261f" stroke-width="4"/><rect x="' + (x + 16) + '" y="706" width="202" height="198" fill="none" stroke="#3a5f4e" stroke-width="3"/><rect x="' + (x + 204) + '" y="780" width="10" height="44" rx="4" fill="#c9a23a"/>';
+    }
+    $('#cupb').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) {
+      x = 596 + i * 62;
+      s += '<ellipse cx="' + x + '" cy="630" rx="24" ry="7" fill="#dfe7ea" stroke="#8a9298" stroke-width="2"/><ellipse cx="' + x + '" cy="628" rx="13" ry="3.500" fill="#fff"/>';
+    }
+    $('#tdish').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'forensic', story: 'fair', storyTitle: 'A Smell of Vinegar', id: 'prep', no: 'II', title: 'The Prep Room',
+    go: 'Mrs Shrike unlocks the door',
+    intro: [
+      'Six prints went into the log. A loop&rsquo;s ridges turn round and go back out on the side they came in, and it has one delta. A whorl goes right round a centre and has two. An arch only rises in the middle, and has none. So bottle number 3 carried a loop, a whorl and a loop in sweat, an arch and a whorl in white powder, and there was one more powdery whorl on the bridge&rsquo;s board.',
+      'Otis&rsquo;s ten fingers are loops and whorls. He has no arch. So the powdery arch, P4, cannot be his: a second person held that bottle, with the white powder already on their fingers.',
+      '&ldquo;A friend of his,&rdquo; said Mrs Shrike. &ldquo;Perhaps,&rdquo; said Dr Novak. &ldquo;First I should like to know what the powder is.&rdquo;',
+      'The prep room is the long cupboard between the two laboratories, where the science teachers keep everything that stains, smells or breaks.'
+    ],
+    exit: {"next":"office","w":{"c361233a":"11a89ca2"}}, tags: {"da":["f45b8802"],"db":["cd3b99d5"],"dc":["f1f09088"],"dd":["be42e5b7"],"de":["88d55012"],"df":["11a154b7"],"src":["c21e87c6"]},
+    sound: ['lab', { root: 52, bpm: 80, drop: ['arp'] }],      /* drops fall and powders fizz in here: no plucked notes that could be taken for either */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {}; stage = ER.flag('b-stage') || 0;
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#tile').classList.toggle('ready', !!(told.card && told.list && !nextFile));
+    ER.pips((told.card ? 1 : 0) + (told.list ? 1 : 0) + (stage ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['The tray is written up. Go up to the head teacher&rsquo;s office: the note is on her desk.']];
+    if (srcBox && srcBox.parentNode) return ['source', [
+      'Dishes A and B are the same stuff: mostly starch, with a little bicarbonate of soda in it. Something on the Science Department&rsquo;s list is exactly that.',
+      'Read the note in red at the bottom of the list. Which table brought a flour that has a raising agent mixed into it already?'
+    ]];
+    if (bench && bench.isOpen()) return ['test', [
+      'Each dish has two wells under it. Carry the vinegar to one well and let go; carry the iodine to the other. Do that for all six dishes before you write on any of them.',
+      'Vinegar asks one question: is there bicarbonate in this? Iodine asks another: is there starch in this? Two of the dishes say no to both. For those two you need the lens, or the spoon and the flame.',
+      'A dish may say yes to both questions. Then it is not one powder but two, mixed together, and there is a label for that.'
+    ]];
+    if (!told.card || !told.list) return ['read', [
+      'Two papers hang on the tiles behind the bench: a card on the left with WHITE POWDERS on it, and a clipboard on the right. Read both.',
+      'The card tells you how to test a powder. The clipboard tells you which powders were in the hall. You will need both before you touch the six dishes.'
+    ]];
+    return ['tile', ['Dr Novak has put six dishes on a white tile in the middle of the bench. Click the tile.']];
+  }
+
+  function begin() {
+    paint();
+    FAIR.mine('log', 'The scene log', '<p>P1 loop, P2 whorl, P3 loop: in sweat, on bottle 3. All three patterns are on Otis&rsquo;s card.</p><p>P4 ARCH and P5 whorl: in white powder, side by side on bottle 3. Two fingers of one hand.</p>' +
+      '<p>P6 whorl: in white powder, on the bridge&rsquo;s board.</p><p>Otis has no arch on either hand. So P4 is not his.</p>', true);
+    if (nextFile) { busy = false; showGo(); ER.say('The tray is written up. The note is waiting upstairs, on the head teacher&rsquo;s desk.'); return; }
+    if (told.in) { busy = false; ER.say('The prep room, five past nine. Six dishes on a white tile.'); return; }
+    tell('in');
+    ER.narrate([
+      'A narrow room that smells of gas and old coffee, with shelves up to the ceiling. In the corner a skeleton is wearing a paper crown.',
+      'Dr Novak has set out six samples in small dishes on a white tile. &ldquo;Three from the hall, one from the top of Table 8, one from Otis&rsquo;s tub, and one I borrowed from Table 9, so that we can see what plain starch does.&rdquo;',
+      '&ldquo;White powder is the easiest thing in the world to be wrong about,&rdquo; she says. &ldquo;They all look alike, and nobody is going to taste them.&rdquo;',
+      'Mrs Shrike is standing in the doorway with her keys. &ldquo;Vinegar,&rdquo; she says. &ldquo;Put vinegar on it and it will fizz. I can tell you that from here.&rdquo;'
+    ], function () { busy = false; FAIR.terms(['sample']); });
+  }
+
+  /* ---------- papers ---------- */
+  var CARD = '<h4>WHITE POWDERS</h4><h5>Never taste. Never guess. Ask the powder four questions.</h5><div class="two"><div>' +
+    '<p><b>1</b> VINEGAR. Does it fizz? Vinegar is an acid. When an acid meets bicarbonate of soda the two make a gas, carbon dioxide, and you see bubbles.</p>' +
+    '<p><b>2</b> IODINE. Does it go blue-black? Iodine in water is brown. When it touches starch (flour, cornflour, potato) it turns blue-black.</p>' +
+    '<p><b>3</b> THE LENS. What shape are the grains? Salt crystals are tiny cubes. Sugar crystals are bigger, with slanting ends. Flour and bicarbonate are only dust.</p>' +
+    '<p><b>4</b> THE FLAME. Does it melt? Sugar melts, goes brown and smells of caramel. Salt will not melt until 801 °C, and a small flame cannot do that.</p></div>' +
+    '<svg viewBox="0 0 150 250"><g fill="#fff" stroke="#22211c" stroke-width="2.200" stroke-linejoin="round"><path d="M30 50h54v54H30z"/><path d="M30 50l18 -18h54l-18 18z"/><path d="M84 50l18 -18v54l-18 18z"/>' +
+    '<path d="M22 178h66l22 30H44z"/><path d="M22 178l14 -16h66l-14 16z"/><path d="M88 178l14 -16 22 30 -14 16z"/></g>' +
+    '<text x="66" y="126" font-family="Patrick Hand,cursive" font-size="19" fill="#17324d" text-anchor="middle">salt: a cube</text><text x="70" y="236" font-family="Patrick Hand,cursive" font-size="19" fill="#17324d" text-anchor="middle">sugar: slanting ends</text></svg></div>' +
+    '<p class="hand">Each test answers ONE question, and only that one. And a powder can be a mixture. Then it may say yes twice.</p>';
+  $('#card').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'bench', clue: { id: 'card', title: 'White powders: four questions', kind: 'The card over the bench' }, done: function () {
+      FAIR.terms(['acid', 'carbon dioxide', 'starch', 'iodine', 'crystal', 'mixture']);
+      if (tell('card')) { paint(); ER.say('Vinegar, iodine, the lens, the flame. One question each.'); }
+    } });
+  });
+  var ROWS = [['Table 6', 'Mount Otis (O. Brice, 8B)', [['bic', 'bicarbonate of soda, 1 kg'], ['vin', 'malt vinegar, 6 × 2 litres'], ['dye', 'red food colouring']]],
+    ['Table 7', 'The Spaghetti Bridge (A. Lindqvist, 9C)', [['non', 'no powders, no liquids']]],
+    ['Table 8', 'Why Do Cakes Rise? (T. and J. Castell, 8B)', [['pf', 'plain flour, 1.5 kg'], ['sr', 'self-raising flour, 1.5 kg'], ['su', 'caster sugar, 1 kg'], ['sa', 'salt, 750 g']]],
+    ['Table 9', 'Oobleck (7A)', [['cf', 'cornflour, 2 kg']]],
+    ['Table 12', 'A Crystal Garden (7C)', [['sa2', 'salt, 2 kg'], ['su2', 'sugar, 2 kg']]]];
+  var HAND = '<p class="hand">Self-raising = plain flour with a raising agent mixed in: a little bicarbonate of soda and a dry acid. That is the twins&rsquo; whole project!<br>Caretaker says the side steps were icy at four. He has put salt down.</p>';
+  function listHtml(pick) {
+    return '<h4>SCIENCE FAIR: WHAT IS ON EACH TABLE</h4><p>For the safety form. Powders and liquids only. Science Department, Thursday.</p><table>' +
+      ROWS.map(function (r) {
+        return '<tr><td>' + r[0] + '</td><td>' + r[1] + '<br>' + r[2].map(function (it) { return pick ? '<span class="it" data-k="' + it[0] + '">' + it[1] + '</span>' : it[1]; }).join(pick ? ' ' : ' &middot; ') + '</td></tr>';
+      }).join('') + '</table>' + HAND;
+  }
+  $('#list').addEventListener('click', function () {
+    if (busy) return;
+    if (stage && !nextFile) { openSource(); return; }
+    ER.read({ html: listHtml(false), cls: 'matlist', clue: { id: 'list', title: 'What is on each table', kind: 'The Science Department’s list' }, done: function () {
+      if (tell('list')) { paint(); ER.say('Four tables brought powders or liquids into the hall. Table 7, the bridge, brought none.'); }
+    } });
+  });
+
+  /* ---------- things in the room ---------- */
+  FAIR.thing('#skel', 'skeleton', 'The skeleton is plastic. Somebody has given it a paper crown and a badge that says SIR.', isBusy);
+  FAIR.thing('#sink', 'tap', 'A tap that drips. It has been dripping since before you were born.', isBusy);
+  FAIR.thing('#shelves', 'stopper', 'Bottles with glass stoppers, and labels in three different teachers&rsquo; handwriting. Copper sulphate, as blue as a swimming pool. A jam jar marked DO NOT USE. NOT JAM.', isBusy);
+  FAIR.thing('#balance', 'balance', 'Otis&rsquo;s tub of bicarbonate is sitting on the balance: 1,062 grams. The label says 1 kg, and an empty tub weighs something. He has not used a spoonful of it.', isBusy);
+  FAIR.thing('#burner', 'spirit burner', 'A small spirit burner. Its flame is blue, and so pale that you can hardly see it.', isBusy);
+  FAIR.thing('#gas', 'gas tap', 'Gas taps, with red handles. All of them are off, and one of them has a note on it: NO.', isBusy);
+  FAIR.thing('#ptable', null, 'The periodic table. Somebody has added a square at the bottom in red pen: Bf, Brackenfoldium.', isBusy);
+  FAIR.thing('#clock', null, 'Five past nine. The caretaker locks up at ten.', isBusy);
+  $('#shrike').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(told.fizz ? '&ldquo;It fizzed,&rdquo; says Mrs Shrike. &ldquo;I do not see what more there is to say.&rdquo; But she has come two steps into the room.' : '&ldquo;Vinegar,&rdquo; says Mrs Shrike from the doorway. &ldquo;I have a letter to sign, Dr Novak.&rdquo;');
+  });
+  $('#novak').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(stage ? '&ldquo;Two dishes the same, and neither of them like his,&rdquo; says Dr Novak. &ldquo;So where did it come from? The clipboard knows.&rdquo;' : '&ldquo;Read the card over the bench,&rdquo; says Dr Novak. &ldquo;Then ask each dish every question you need. Don&rsquo;t write on a dish until it has answered.&rdquo;');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#tile').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Six dishes, six labels, and Dr Novak&rsquo;s initials on the tray.'); return; }
+    if (!told.card) { ER.say('&ldquo;Read the card first,&rdquo; says Dr Novak, and points at the tiles behind the bench. &ldquo;It is a very good card. I wish I had written it.&rdquo;'); return; }
+    if (!told.list) { ER.say('&ldquo;One more paper,&rdquo; says Dr Novak. &ldquo;The clipboard on the right. I want you to know what was in that hall before you tell me what was on its floor.&rdquo;'); return; }
+    if (stage) { openSource(); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the bench: six dishes, two bottles, a lens, a spoon and a flame ---------- */
+  function makeBench() {
+    /* how each sample behaves: v = what vinegar does (0 nothing, 1 a few bubbles, 2 a froth), o = iodine turns blue-black, g = its grains, h = what the flame does */
+    var S = [{ v: 1, o: 1, g: 'mix', h: 'scorch' }, { v: 1, o: 1, g: 'mix', h: 'scorch' }, { v: 2, o: 0, g: 'dust2', h: 'dry' }, { v: 0, o: 0, g: 'cube', h: 'crack' }, { v: 0, o: 0, g: 'slant', h: 'melt' }, { v: 0, o: 1, g: 'dust', h: 'scorch' }];
+    var FROM = [['hall floor,', 'under bridge'], ['bottle 3,', 'beside P4'], ['Otis’s tub,', 'seal cut 9.02'], ['hall floor,', 'by main door'], ['Table 8,', 'table top'], ['Table 9,', 'open bag']];
+    var NAMES = { b: ['BICARBONATE'], c: ['STARCH'], t: ['SALT'], s: ['SUGAR'], m: ['STARCH +', 'BICARBONATE'] }, FULL = { b: 'BICARBONATE', c: 'STARCH', t: 'SALT', s: 'SUGAR', m: 'STARCH + BICARBONATE' };
+    var wells = (ER.flag('b-w') || '------------').split(''), lab = (ER.flag('b-lab') || '------').split(''), seenL = ER.flag('b-l') || [0, 0, 0, 0, 0, 0], seenH = ER.flag('b-h') || [0, 0, 0, 0, 0, 0];
+    var wait = false, box = ER.el('div', 'bx'), s, i, r, cx, k, seed = 5, menuAt = -1;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    function CX(i) { return 91 + i * 126; }
+    function grains(kind) {
+      var g = '', n, x, y, a, w, h;
+      if (kind === 'cube') for (n = 0; n < 9; n++) {
+        x = -26 + (n % 3) * 26 + rnd() * 8; y = -24 + Math.floor(n / 3) * 25 + rnd() * 8; a = rnd() * 50 - 25; w = 12 + rnd() * 5;
+        g += '<g transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + a.toFixed(0) + ')" fill="#fdfdfd" stroke="#6b7479" stroke-width="1.200" stroke-linejoin="round"><path d="M0 0h' + w.toFixed(1) + 'v' + w.toFixed(1) + 'H0z"/><path d="M0 0l4 -4h' + w.toFixed(1) + 'l-4 4zM' + w.toFixed(1) + ' 0l4 -4v' + w.toFixed(1) + 'l-4 4z" fill="#dfe5e8"/></g>';
+      }
+      if (kind === 'slant') for (n = 0; n < 6; n++) {
+        x = -30 + (n % 3) * 30 + rnd() * 6; y = -20 + Math.floor(n / 3) * 34 + rnd() * 8; a = rnd() * 70 - 35; w = 20 + rnd() * 7; h = 11 + rnd() * 4;
+        g += '<g transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') rotate(' + a.toFixed(0) + ')" fill="#fbfbf4" stroke="#6b7479" stroke-width="1.200" stroke-linejoin="round"><path d="M0 0h' + w.toFixed(1) + 'l8 ' + h.toFixed(1) + 'H8z"/><path d="M0 0l5 -5h' + w.toFixed(1) + 'l-5 5z" fill="#e3e8ea"/><path d="M4 3h' + (w - 6).toFixed(1) + '" stroke="#fff" stroke-width="1.500"/></g>';
+      }
+      if (kind === 'dust' || kind === 'dust2' || kind === 'mix') {
+        for (n = 0; n < (kind === 'dust2' ? 70 : 150); n++) { a = rnd() * 6.283; w = Math.sqrt(rnd()) * 38; g += '<circle cx="' + (Math.cos(a) * w).toFixed(1) + '" cy="' + (Math.sin(a) * w).toFixed(1) + '" r="' + (kind === 'dust2' ? 1.1 + rnd() * 1.5 : 0.6 + rnd() * 0.8).toFixed(1) + '" fill="#fff"/>'; }
+        if (kind === 'mix') for (n = 0; n < 6; n++) { a = rnd() * 6.283; w = 8 + rnd() * 24; g += '<circle cx="' + (Math.cos(a) * w).toFixed(1) + '" cy="' + (Math.sin(a) * w).toFixed(1) + '" r="2.400" fill="#fff" stroke="#b9bfc2" stroke-width=".800"/>'; }
+      }
+      return g;
+    }
+    s = '<svg viewBox="0 0 1000 600"><defs><clipPath id="plc"><circle r="39"/></clipPath><radialGradient id="wellG"><stop offset=".7" stop-color="#eeeee8"/><stop offset="1" stop-color="#d2d2ca"/></radialGradient></defs>' +
+      '<rect width="1000" height="600" fill="#6b4f2e"/><g stroke="#5a4024" stroke-width="2" opacity=".7"><path d="M0 70h1000M0 198h1000M0 334h1000M0 470h1000M0 560h1000"/></g>' +
+      '<rect x="22" y="176" width="776" height="300" rx="14" fill="#f7f7f2"/><rect x="22" y="176" width="776" height="300" rx="14" fill="none" stroke="#c4c4ba" stroke-width="3"/>';
+    for (i = 0; i < 6; i++) {
+      cx = CX(i);
+      s += '<g class="dish hit" data-i="' + i + '"><ellipse cx="' + cx + '" cy="84" rx="48" ry="46" fill="#cfd9dd" opacity=".55"/><ellipse cx="' + cx + '" cy="84" rx="48" ry="46" fill="none" stroke="#f4f8f9" stroke-width="4"/>' +
+        '<path d="M' + (cx - 26) + ' 96q4 -30 26 -30t26 30q-26 12 -52 0z" fill="#fbfbf6"/><path d="M' + (cx - 16) + ' 86q6 -12 16 -12" stroke="#e3e3da" stroke-width="3" fill="none"/></g>' +
+        '<rect x="' + (cx - 58) + '" y="136" width="116" height="34" fill="#fdfdf8"/><text x="' + (cx - 44) + '" y="162" class="tK" font-size="25" fill="#b3261c" text-anchor="middle">' + 'ABCDEF'.charAt(i) + '</text>' +
+        '<text x="' + (cx - 26) + '" y="150" class="tM" font-size="9.500" fill="#1c1d22">' + FROM[i][0] + '</text><text x="' + (cx - 26) + '" y="163" class="tM" font-size="9.500" fill="#1c1d22">' + FROM[i][1] + '</text>';
+      for (r = 0; r < 2; r++) {
+        k = i * 2 + r;
+        s += '<g id="pw' + k + '"><circle cx="' + cx + '" cy="' + (238 + r * 96) + '" r="39" fill="url(#wellG)"/><circle cx="' + cx + '" cy="' + (238 + r * 96) + '" r="39" fill="none" stroke="#bdbdb2" stroke-width="2"/>' +
+          '<g transform="translate(' + cx + ' ' + (238 + r * 96) + ')"><path d="M-13 6q2 -15 13 -15t13 15q-13 7 -26 0z" fill="#fff" stroke="#d9d9d0" stroke-width="1"/><g class="fx"></g></g></g>';
+      }
+      s += '<g class="tape" data-i="' + i + '"><rect x="' + (cx - 57) + '" y="392" width="114" height="46" fill="#f3e9c0" transform="rotate(' + [-1.5, 1, -0.5, 1.5, -1, 0.5][i] + ' ' + cx + ' 415)"/><text class="tK l1" x="' + cx + '" y="412" font-size="13.500" fill="#1c1d22" text-anchor="middle"></text><text class="tK l2" x="' + cx + '" y="429" font-size="13.500" fill="#1c1d22" text-anchor="middle"></text></g>';
+    }
+    s += '<text x="410" y="500" class="tH" font-size="19" fill="#f3e9c0" text-anchor="middle" opacity=".85">two wells under each dish &#183; one test in each well &#183; then write on the tape</text>' +
+      /* the two bottles, the burner */
+      '<g><path d="M838 312h40v60q0 8 -8 8h-24q-8 0 -8 -8z" fill="#e9dcc0" opacity=".9"/><path d="M838 336h40v36q0 8 -8 8h-24q-8 0 -8 -8z" fill="#7a4a1e"/><rect x="842" y="344" width="32" height="20" fill="#fdfdf8"/><text x="858" y="358" class="tM" font-size="7.500" fill="#1c1d22" text-anchor="middle">VINEGAR</text><rect x="850" y="302" width="16" height="12" fill="#c9ced3"/></g>' +
+      '<g><path d="M926 322h36v50q0 8 -8 8h-20q-8 0 -8 -8z" fill="#4a2a12"/><rect x="929" y="342" width="30" height="20" fill="#fdfdf8"/><text x="944" y="356" class="tM" font-size="7.500" fill="#1c1d22" text-anchor="middle">IODINE</text><rect x="936" y="312" width="16" height="12" fill="#c9ced3"/></g>' +
+      '<g><path d="M883 586q-22 -38 33 -44q55 6 33 44z" fill="#8fb4d9" opacity=".85"/><path d="M891 578q25 8 50 0" stroke="#dfeffb" stroke-width="3" fill="none" opacity=".6"/><rect x="906" y="528" width="20" height="16" fill="#c9a23a"/>' +
+      '<path class="flame" d="M916 528q-13 -22 0 -46q13 24 0 46z" fill="#6fa8ff" opacity=".9"/><path class="flame" d="M916 526q-6 -12 0 -24q6 12 0 24z" fill="#dfeffb"/></g>' +
+      /* the tools: their own drawing starts from the point that does the work */
+      '<g id="tv" class="tool"><circle r="22" cy="-40" fill="#000" opacity="0"/><path d="M-4 -62h8v52l-4 10 -4 -10z" fill="#e9eef0" stroke="#8a9298" stroke-width="1.200"/><path d="M-3 -40h6v30l-3 8 -3 -8z" fill="#7a4a1e"/><ellipse cx="0" cy="-74" rx="10" ry="14" fill="#f4f1e8" stroke="#8a8676" stroke-width="1.500"/></g>' +
+      '<g id="ti" class="tool"><circle r="22" cy="-40" fill="#000" opacity="0"/><path d="M-4 -62h8v52l-4 10 -4 -10z" fill="#e9eef0" stroke="#8a9298" stroke-width="1.200"/><path d="M-3 -40h6v30l-3 8 -3 -8z" fill="#c46a1e"/><ellipse cx="0" cy="-74" rx="10" ry="14" fill="#b3261c" stroke="#7d1f1f" stroke-width="1.500"/></g>' +
+      '<g id="ts" class="tool"><circle r="24" fill="#000" opacity="0"/><path d="M9 -8l34 -46" stroke="#aab2b8" stroke-width="6" stroke-linecap="round"/><ellipse cx="0" cy="0" rx="17" ry="11" fill="#c9ced3" stroke="#8a9298" stroke-width="1.500" transform="rotate(-20)"/><g class="load"></g></g>' +
+      '<g id="tl" class="tool lens"><path d="M30 30l32 32" stroke="#241a10" stroke-width="13" stroke-linecap="round"/><circle r="42" fill="#7a5a36"/><g clip-path="url(#plc)" class="see"></g><circle r="42" fill="none" stroke="#1d1a16" stroke-width="8"/><circle r="37" fill="none" stroke="#c9a23a" stroke-width="2.200"/>' +
+      '<path d="M-26 -12A30 30 0 0 1 -8 -28" stroke="#fff" stroke-width="3.500" fill="none" opacity=".5" stroke-linecap="round"/></g>' +
+      '<g id="menu" style="display:none"></g></svg>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="p-sign">Write up the tray</button></div>';
+    box.innerHTML = s;
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.pmsg'), see = box.querySelector('#tl .see'), menu = box.querySelector('#menu'), SEE = {};
+    ['cube', 'slant', 'dust', 'dust2', 'mix'].forEach(function (kd) { SEE[kd] = '<circle r="42" fill="#dfe7ea"/><circle r="42" fill="#fff" opacity=".35"/>' + grains(kd); });
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function L(i) { return 'ABCDEF'.charAt(i); }
+    function keep() { ER.flag('b-w', wells.join('')); ER.flag('b-lab', lab.join('')); ER.flag('b-l', seenL); ER.flag('b-h', seenH); }
+    function tested(i, what) { return wells[i * 2] === what || wells[i * 2 + 1] === what; }
+    /* what a well looks like once a drop has gone into it */
+    function drawWell(k, live) {
+      var i = k >> 1, fx = box.querySelector('#pw' + k + ' .fx'), g = '', n, a, d, w = wells[k];
+      if (w === 'v') {
+        g = '<ellipse rx="24" ry="19" fill="#a8763a" opacity=".5"/>';
+        n = S[i].v === 2 ? 26 : S[i].v === 1 ? 6 : 0;
+        for (; n > 0; n--) { a = rnd() * 6.283; d = Math.sqrt(rnd()) * (S[i].v === 2 ? 27 : 14); g += '<circle' + (live ? ' class="bub" style="animation-delay:' + (rnd() * 0.9).toFixed(2) + 's;animation-duration:' + (0.5 + rnd() * 0.7).toFixed(2) + 's"' : '') + ' cx="' + (Math.cos(a) * d).toFixed(1) + '" cy="' + (Math.sin(a) * d).toFixed(1) + '" r="' + (S[i].v === 2 ? 2 + rnd() * 4.5 : 1.4 + rnd() * 1.6).toFixed(1) + '" fill="' + (S[i].v === 2 ? '#fff' : 'none') + '" stroke="#fff" stroke-width="1.200" opacity="' + (live ? 1 : S[i].v === 2 ? 0.85 : 0.6) + '"/>'; }
+      }
+      if (w === 'i') g = '<ellipse class="ido" rx="20" ry="16" fill="' + (live || !S[i].o ? '#c46a1e' : '#17172e') + '" opacity=".92"/><ellipse rx="7" ry="4" cx="-6" cy="-6" fill="#fff" opacity=".25"/>';
+      fx.innerHTML = g;
+      if (live && w === 'i' && S[i].o) setTimeout(function () { var e = fx.querySelector('.ido'); if (e) e.setAttribute('fill', '#17172e'); }, 450);
+      if (live && w === 'v') setTimeout(function () { drawWell(k, false); }, 2600);
+    }
+    function drawTape(i) {
+      var t = box.querySelector('.tape[data-i="' + i + '"]'), nm = NAMES[lab[i]] || ['', ''];
+      t.querySelector('.l1').textContent = nm.length > 1 ? nm[0] : ''; t.querySelector('.l2').textContent = nm.length > 1 ? nm[1] : '';
+      if (nm.length === 1) { t.querySelector('.l1').textContent = nm[0]; t.querySelector('.l1').setAttribute('y', 421); } else t.querySelector('.l1').setAttribute('y', 412);
+    }
+    function drawAll() { for (var k = 0; k < 12; k++) drawWell(k, false); for (k = 0; k < 6; k++) drawTape(k); }
+    function wellAt(p) { for (var k = 0; k < 12; k++) if (Math.abs(p.x - CX(k >> 1)) < 40 && Math.abs(p.y - (238 + (k & 1) * 96)) < 40) return k; return -1; }
+    function dishAt(p, r) { for (var i = 0; i < 6; i++) if (Math.abs(p.x - CX(i)) < (r || 46) && Math.abs(p.y - 84) < (r || 46)) return i; return -1; }
+
+    /* the two droppers */
+    function dropper(id, what, home) {
+      var t = FAIR.tool(svg, box.querySelector(id), home, {
+        end: function (p) {
+          var k = wellAt(p), i = k >> 1, o = S[i];
+          t.home();
+          if (wait || nextFile || stage) return;
+          if (k < 0) { if (dishAt(p) >= 0) msg('&ldquo;Not into the dish,&rdquo; says Dr Novak. &ldquo;That is all we have of it. Use the wells underneath: a pinch of each dish is in them already.&rdquo;'); return; }
+          if (wells[k] !== '-' && wells[k] !== what) { msg('&ldquo;One test, one well,&rdquo; says Dr Novak. &ldquo;That well has had ' + (wells[k] === 'v' ? 'vinegar' : 'iodine') + ' in it. If you mix the two, I can&rsquo;t read either. Use the other well.&rdquo;'); return; }
+          if (wells[k] === '-' && tested(i, what)) { msg('Dish ' + L(i) + ' has had its ' + (what === 'v' ? 'vinegar' : 'iodine') + ' already. Save the other well for the other bottle.'); return; }
+          wells[k] = what; keep(); FAIR.sfx.drop(); drawWell(k, true);
+          if (what === 'v') {
+            if (o.v) FAIR.sfx.fizz(o.v);
+            msg('Vinegar on dish <b>' + L(i) + '</b>: ' + (o.v === 2 ? 'it froths up at once, hissing, until the well is full of foam.' : o.v === 1 ? 'a few small bubbles come up through it, slowly, and then stop.' : 'nothing. The vinegar soaks in, and that is all.') +
+              (o.v === 1 && tell('fizz') ? ' &ldquo;There,&rdquo; says Mrs Shrike from the doorway. &ldquo;It fizzes.&rdquo; &ldquo;It does,&rdquo; says Dr Novak. &ldquo;Now ask it the other question.&rdquo;' : ''));
+          } else msg('Iodine on dish <b>' + L(i) + '</b>: ' + (o.o ? 'the brown drop turns blue-black as it touches the powder.' : 'the drop stays brown.'));
+        }
+      });
+      return t;
+    }
+    dropper('#tv', 'v', { x: 858, y: 300 }); dropper('#ti', 'i', { x: 944, y: 310 });
+    /* the lens */
+    var lens = FAIR.tool(svg, box.querySelector('#tl'), { x: 848, y: 448 }, {
+      move: function (p) {
+        var i = dishAt(p, 50);
+        see.innerHTML = i < 0 ? '' : SEE[S[i].g];
+        if (i >= 0 && !seenL[i]) {
+          seenL[i] = 1; keep();
+          msg('Dish <b>' + L(i) + '</b> under the lens: ' + { cube: 'small clear cubes, every one of them.', slant: 'clear grains, bigger than the others, with slanting ends.', dust: 'a very fine dust, with no shape to it at all.', dust2: 'a fine white dust, a little coarser than flour. No shape to speak of.', mix: 'a very fine dust. Here and there in it is a slightly bigger grain.' }[S[i].g]);
+        }
+      }
+    });
+    /* the spoon and the flame */
+    var loadEl = box.querySelector('#ts .load'), loaded = -1, heated = false, heatT = 0;
+    function drawLoad(col) { loadEl.innerHTML = loaded < 0 ? '' : '<path class="melt" d="M-9 2q2 -10 9 -10t9 8q-9 6 -18 2z" fill="' + (col || '#fbfbf6') + '" stroke="#b9bfc2" stroke-width=".800" transform="rotate(-20)"/>'; }
+    var spoon = FAIR.tool(svg, box.querySelector('#ts'), { x: 948, y: 420 }, {
+      start: function () { clearTimeout(heatT); if (heated) { loaded = -1; heated = false; drawLoad(); } },
+      end: function (p) {
+        var i = dishAt(p), h;
+        if (wait || nextFile || stage) { spoon.home(); return; }
+        if (loaded < 0) {
+          if (i < 0) { spoon.home(); return; }
+          loaded = i; drawLoad(); spoon.set(CX(i) + 30, 110);
+          msg('A little of dish <b>' + L(i) + '</b> on the spoon. Now carry it to the flame, and hold it there.');
+          return;
+        }
+        if (Math.abs(p.x - 916) < 44 && p.y > 440 && p.y < 546) {
+          spoon.set(916, 490); h = S[loaded].h; heated = true; i = loaded;
+          if (h === 'melt') FAIR.sfx.sizzle();
+          heatT = setTimeout(function () {
+            var e = loadEl.querySelector('.melt');
+            if (e) e.setAttribute('fill', h === 'melt' ? '#8a4a12' : h === 'scorch' ? '#b99a6a' : '#fbfbf6');
+            seenH[i] = 1; keep();
+            msg('Dish <b>' + L(i) + '</b> in the flame: ' + { melt: 'it melts into a clear liquid, turns golden, and then brown. The whole room smells of caramel.', crack: 'it gets hot. A grain or two cracks and jumps. Nothing melts.', dry: 'nothing that you can see. It is still a dry white powder.', scorch: 'it does not melt. It goes brown at the edges, and smells of burnt toast.' }[h]);
+          }, 700);
+          return;
+        }
+        loaded = -1; drawLoad(); spoon.home();
+      }
+    });
+    /* writing on the tape */
+    function closeMenu() { menu.style.display = 'none'; menu.innerHTML = ''; menuAt = -1; }
+    ER.$$('.tape', svg).forEach(function (t) {
+      t.addEventListener('click', function (e) {
+        var i = +t.getAttribute('data-i'), x = Math.min(Math.max(CX(i) - 105, 10), 590), g = '', n = 0, c;
+        e.stopPropagation();
+        if (wait || nextFile || stage) return;
+        if (menuAt === i) { closeMenu(); return; }
+        if (!tested(i, 'v') || !tested(i, 'i')) { closeMenu(); msg('&ldquo;Not yet,&rdquo; says Dr Novak. &ldquo;Dish ' + L(i) + ' has not had both drops. Vinegar in one well, iodine in the other. Then you may write on it.&rdquo;'); return; }
+        g = '<rect x="' + x + '" y="226" width="210" height="160" rx="5" fill="#27333a" opacity=".96"/>';
+        for (c in NAMES) { g += '<g class="opt" data-v="' + c + '"><rect x="' + (x + 8) + '" y="' + (234 + n * 29) + '" width="194" height="25" rx="3"/><text x="' + (x + 105) + '" y="' + (252 + n * 29) + '" class="tK" font-size="13.500" fill="#1c1d22" text-anchor="middle">' + FULL[c] + '</text></g>'; n++; }
+        menu.innerHTML = g; menu.style.display = ''; menuAt = i;
+        ER.$$('.opt', menu).forEach(function (o) {
+          o.addEventListener('click', function (ev) {
+            var v = o.getAttribute('data-v'); ev.stopPropagation(); closeMenu();
+            if ((v === 't' || v === 's') && !seenL[i] && !seenH[i]) { msg('&ldquo;Salt or sugar?&rdquo; says Dr Novak. &ldquo;Two drops cannot tell you that. Look at the grains of dish ' + L(i) + ' through the lens, or hold some in the flame. Then write.&rdquo;'); return; }
+            lab[i] = v; keep(); FAIR.sfx.scratch(); drawTape(i);
+          });
+        });
+      });
+    });
+    svg.addEventListener('click', closeMenu);
+    function why(i) {
+      var c = lab[i], o = S[i], d = 'dish ' + L(i);
+      if (c === 'b') return o.o ? 'You have written BICARBONATE on ' + d + '. It fizzed, and that is true. But look at its other well. Plain bicarbonate has no starch in it: the iodine would have stayed brown.' : 'BICARBONATE on ' + d + '? The vinegar did nothing to it at all.';
+      if (c === 'c') return o.v ? 'You have written STARCH on ' + d + '. The iodine says that there is starch in it, and that is true. But plain starch does not fizz, and this did. Each test answers one question.' : 'STARCH on ' + d + '? The iodine stayed brown.';
+      if (c === 'm') return 'STARCH + BICARBONATE on ' + d + '? Then it must say yes to the vinegar and yes to the iodine. Did it do both?';
+      if (o.v || o.o) return FULL[c] + ' on ' + d + '? ' + (c === 't' ? 'Salt' : 'Sugar') + ' says no to the vinegar and no to the iodine. This dish did not.';
+      if (!seenL[i] && !seenH[i]) return FULL[c] + ' on ' + d + '. It said no twice, so you are in the right part of the card. But you have not looked at its grains through the lens, or held any in the flame. That is a guess.';
+      return c === 't' ? 'SALT on ' + d + '? Salt crystals are cubes, and salt will not melt in a flame like ours. Look at this one again.' : 'SUGAR on ' + d + '? Sugar crystals have slanting ends, and sugar melts and goes brown. Look at this one again.';
+    }
+    box.querySelector('#p-sign').addEventListener('click', function () {
+      var i;
+      if (wait || nextFile) return;
+      closeMenu();
+      if (stage) { openSource(); return; }
+      for (i = 0; i < 6; i++) if (lab[i] === '-') { msg('&ldquo;Six dishes, six labels,&rdquo; says Dr Novak. &ldquo;Dish ' + L(i) + ' has nothing written on it.&rdquo;'); return; }
+      for (i = 0; i < 6; i++) if (!ER.check('d' + 'abcdef'.charAt(i), lab[i])) {
+        ER.sfx.no(); ER.shake(box.querySelector('.tape[data-i="' + i + '"]'));
+        msg('Dr Novak peels a label off again. &ldquo;' + why(i) + '&rdquo;');
+        lab[i] = '-'; keep(); drawTape(i); return;
+      }
+      stage = 1; ER.flag('b-stage', 1); paint(); FAIR.sfx.stamp(); wait = true;
+      msg('Dr Novak reads along the row of labels and nods. &ldquo;Six out of six. Now look at A and B together. What in that hall was <b>that</b>? You have the Science Department&rsquo;s list.&rdquo;');
+      setTimeout(function () { wait = false; openSource(); }, 3400);
+    });
+    drawAll();
+    msg('Six dishes, A to F. Under each one are two wells with a pinch of it in them. On the right: vinegar, iodine, a lens, and a spoon for the flame. Pick things up and carry them.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+
+  /* ---------- where did it come from? ---------- */
+  var NOPE = {
+    bic: 'Bicarbonate of soda has no starch in it. Dish C is the proof: its iodine stayed brown.', vin: 'That is a liquid. Dishes A and B are a powder.', dye: 'That is a liquid, and it is red.',
+    non: 'Table 7 brought no powders at all. That is what the list says.', pf: 'Plain flour is starch and nothing else. It would not have fizzed, not even a little.',
+    su: 'Sugar said no to both tests. A and B said yes to both.', sa: 'Salt said no to both tests. A and B said yes to both.', cf: 'Cornflour is dish F: starch and nothing else. It did not fizz.',
+    sa2: 'Salt said no to both tests. A and B said yes to both.', su2: 'Sugar said no to both tests. A and B said yes to both.'
+  };
+  function openSource() {
+    if (!srcBox) {
+      srcBox = ER.el('div', 'src', '<div class="doc matlist">' + listHtml(true) + '</div><p class="pmsg"></p>');
+      var m = srcBox.querySelector('.pmsg');
+      m.innerHTML = ER.gloss('Dishes A and B are the same: starch with a little bicarbonate in it. Which thing on this list is that? Click it.');
+      ER.$$('.it', srcBox).forEach(function (n) {
+        n.addEventListener('click', function () {
+          var k = n.getAttribute('data-k'), file;
+          if (nextFile || n.classList.contains('no')) return;
+          if (!ER.check('src', k)) { ER.sfx.no(); n.classList.add('no'); m.innerHTML = ER.gloss('&ldquo;No,&rdquo; says Dr Novak. &ldquo;' + (NOPE[k] || 'Not that.') + '&rdquo;'); return; }
+          file = ER.exitOk([(ER.flag('b-lab') || '') + '-' + k]);
+          if (!file) { m.textContent = 'The tray will not close. Something is wrong with this page: tell your teacher.'; return; }
+          nextFile = file; ER.flag('b-file', file);
+          var s0 = ER.state(); s0.done = s0.done || {}; s0.done.prep = 1; ER.persist(true);
+          n.style.background = '#f0b429'; FAIR.sfx.stamp();
+          m.innerHTML = ER.gloss('Dr Novak says nothing for a moment. Then she writes it on the tray, in capitals, and underlines it twice.');
+          setTimeout(function () {
+            ER.closeAll(); FAIR.solved(); paint(); busy = true;
+            ER.narrate([
+              'Dr Novak puts the stopper back in the iodine. &ldquo;Well,&rdquo; she says. &ldquo;It fizzed. The caretaker was quite right about that. So were you, Mrs Shrike.&rdquo;',
+              'Mrs Shrike has stopped looking at her watch. She is looking at the clipboard instead, and at one line of it.',
+              '&ldquo;There is still the note,&rdquo; she says at last. &ldquo;Somebody wrote that note. It is on my desk.&rdquo;',
+              '&ldquo;Then that is where we are going,&rdquo; says Dr Novak.'
+            ], function () { busy = false; showGo(); });
+          }, 2600);
+        });
+      });
+    }
+    ER.open('ov-lock', srcBox);
+  }
+})();
+</script>
+</body>
+</html>

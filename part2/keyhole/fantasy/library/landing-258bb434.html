@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Landing · The Library That Locks at Dusk</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#0d1118;--accent:#b9d2ff;--font-display:'Almendra',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(9,13,20,.93);--tc-ink:#dfe6f2;--cap-bg:rgba(10,14,22,.94);--cap-ink:#e9eef6;--panel:#161c27;--face-bg:#2a3350;--q-ink:#a9bfe6;--fade:#05070b;
+    --hud-bg:rgba(9,13,20,.72)}
+  .hud,.btn,.ov-x{font-weight:600}
+  .tc-room{font-weight:700;font-style:italic;letter-spacing:.01em;color:#dbe6ff}
+  .tc-text,.cap{font-size:clamp(19px,1.6vw,24px)}
+  .rune{animation:rune 3.4s steps(3) infinite}.rune:nth-child(2n){animation-delay:-1.2s}.rune:nth-child(3n){animation-delay:-2.3s}
+  @keyframes rune{50%{opacity:.28}}
+  #lanFlame{transform-origin:650px 128px;animation:fl 2s ease-in-out infinite}
+  @keyframes fl{0%,100%{transform:scale(1,1)}30%{transform:scale(.9,1.12)}60%{transform:scale(1.08,.93)}}
+  #lanGlow{animation:gl 3.6s steps(4) infinite}
+  @keyframes gl{50%{opacity:.78}}
+  #cloud{animation:cloud 46s linear infinite}
+  @keyframes cloud{from{transform:translateX(-110px)}to{transform:translateX(120px)}}
+  .mote{animation:mote 14s linear infinite}
+  @keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.7}85%{opacity:.5}100%{transform:translate(40px,120px);opacity:0}}
+  #octavo{transition:transform .5s cubic-bezier(.3,1.4,.5,1)}
+  #sheet{transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+  #sheet.on{transition:none}
+  #sheet.off{transition:transform .9s cubic-bezier(.5,0,.8,.4),opacity .5s .5s;opacity:0;pointer-events:none}
+  #page{transition:transform .25s}
+  #page.on{transition:none}
+  #pageGlow{animation:pg 2.6s ease-in-out infinite}
+  @keyframes pg{0%,100%{opacity:0}50%{opacity:.35}}
+  .bk{transition:transform .35s}
+  .disc{transition:opacity .5s}
+  #doorOpen{transition:opacity 1.2s}
+  .lbl{font-family:'Cinzel',serif;font-weight:700;font-size:9px;letter-spacing:1px;fill:#3a2a08;text-anchor:middle}
+
+  /* a page written backwards */
+  .bw{width:min(600px,92vw)}
+  .bw .doc{width:100%}
+  .bw .back{transform:scaleX(-1);-webkit-user-select:none;user-select:none}
+  .bw-cap{margin:16px 0 0;text-align:center;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:20px;color:#cfdcf5}
+  /* the same page, in the mirror */
+  .mir{position:relative;padding:34px 30px 30px;border-radius:230px 230px 10px 10px / 150px 150px 10px 10px;
+    background:linear-gradient(120deg,#17110e,#3a2a20 30%,#120c0a 60%,#2a1e17);box-shadow:0 26px 70px rgba(0,0,0,.75),inset 0 0 0 3px #7d6a3a,inset 0 0 0 6px #17110e}
+  .mir-glass{position:relative;padding:86px 44px 44px;border-radius:200px 200px 4px 4px / 120px 120px 4px 4px;overflow:hidden;
+    background:linear-gradient(160deg,#5c6f8c,#27344a 42%,#18212f 70%,#33435c)}
+  .mir-glass:after{content:'';position:absolute;left:-10%;top:0;width:46%;height:100%;pointer-events:none;
+    background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.14) 48%,rgba(255,255,255,0) 60%)}
+  .mir .doc{width:min(540px,84vw);max-height:none;transform:rotate(-1.2deg);font-size:21px;line-height:1.36;padding:28px 36px 22px}
+  .mir .doc p{margin-bottom:9px}
+  .mir-cap{margin:14px 0 0;text-align:center;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:18px;color:#b9c6dc}
+
+  /* the Founder's door */
+  .wh{display:grid;grid-template-columns:520px 330px;gap:26px;padding:22px 26px 20px;color:#e6edf8;
+    background:#171d28 linear-gradient(160deg,#232c3b,#11161f);border:1px solid #44536b;box-shadow:0 26px 70px rgba(0,0,0,.75),inset 0 0 0 4px #0c1018}
+  .wh svg.wheel{display:block;width:520px;height:520px;touch-action:none}
+  .ring{cursor:grab}.ring.on{cursor:grabbing}
+  .wh-say{margin:2px 0 14px;font-family:'IM Fell English',Georgia,serif;font-size:19.5px;line-height:1.36;color:#dfe6f2}
+  .wh h5{margin:0 0 8px;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#b9d2ff}
+  .wh-found{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;min-height:150px;align-content:start}
+  .fs{display:flex;align-items:center;gap:9px;font-family:'IM Fell English',Georgia,serif;font-size:15.5px;line-height:1.14;color:#cfd8e8}
+  .fs svg{flex:0 0 auto}
+  .fs b{display:block;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#f0d98f}
+  .wh-none{grid-column:1/3;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:18px;color:#9fb0c9}
+  .wh-help{margin:14px 0 0;font-family:'Cinzel',serif;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#8ea0bd}
+  .wh-msg{min-height:76px;margin:12px 0 10px;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:18.5px;line-height:1.3;color:#ffd9a0}
+  .wh-side{display:flex;flex-direction:column}
+  .wh-side .btn{align-self:flex-start;margin-top:auto}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="edgeL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#05070b" stop-opacity=".9"/><stop offset=".22" stop-color="#05070b" stop-opacity=".28"/><stop offset=".5" stop-color="#05070b" stop-opacity="0"/><stop offset=".78" stop-color="#05070b" stop-opacity=".28"/><stop offset="1" stop-color="#05070b" stop-opacity=".9"/></linearGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1330"/><stop offset="1" stop-color="#27407a"/></linearGradient>
+  <linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe0ff" stop-opacity=".2"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="caseG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#241710"/><stop offset=".5" stop-color="#37241a"/><stop offset="1" stop-color="#20140e"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2c2018"/><stop offset=".5" stop-color="#453224"/><stop offset="1" stop-color="#271c15"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a0"/><stop offset=".5" stop-color="#c9a044"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7388a8"/><stop offset=".4" stop-color="#2c3b54"/><stop offset=".7" stop-color="#1a2434"/><stop offset="1" stop-color="#3c4f6c"/></linearGradient>
+  <linearGradient id="sheetG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b9b6aa"/><stop offset=".35" stop-color="#e4e1d6"/><stop offset=".7" stop-color="#c9c6ba"/><stop offset="1" stop-color="#a5a296"/></linearGradient>
+  <linearGradient id="stepG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#586579"/><stop offset="1" stop-color="#3a4454"/></linearGradient>
+  <linearGradient id="jarG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b452c"/><stop offset=".45" stop-color="#a26c44"/><stop offset="1" stop-color="#5a3a26"/></linearGradient>
+  <linearGradient id="jarG2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f5a4a"/><stop offset=".45" stop-color="#7d8b72"/><stop offset="1" stop-color="#434c3f"/></linearGradient>
+  <radialGradient id="lanG"><stop offset="0" stop-color="#ffd98a" stop-opacity=".75"/><stop offset=".3" stop-color="#ffab4a" stop-opacity=".2"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="moonG"><stop offset="0" stop-color="#f4f7ff" stop-opacity=".5"/><stop offset="1" stop-color="#cfe0ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="domeG"><stop offset="0" stop-color="#5a6fd0" stop-opacity=".9"/><stop offset="1" stop-color="#0a0e24" stop-opacity="1"/></radialGradient>
+  <radialGradient id="vig" gradientUnits="userSpaceOnUse" cx="800" cy="432" r="666" gradientTransform="translate(800 432) scale(4 1) translate(-800 -432)"><stop offset="0" stop-color="#04060a" stop-opacity="0"/><stop offset=".6" stop-color="#04060a" stop-opacity=".25"/><stop offset="1" stop-color="#04060a" stop-opacity=".85"/></radialGradient>
+  <pattern id="rugP" width="60" height="24" patternUnits="userSpaceOnUse"><rect width="60" height="24" fill="#27345c"/><path d="M0 12l15-9 15 9-15 9z" fill="#3a4c82"/><path d="M30 12l15-9 15 9-15 9z" fill="#1c2748"/><circle cx="15" cy="12" r="2.500" fill="#c9a24a"/></pattern>
+  <clipPath id="winC"><path d="M104 470V262Q104 196 146 190Q188 196 188 262V470Z"/></clipPath>
+  <clipPath id="mirC"><path d="M1204 750V392Q1204 314 1280 314Q1356 314 1356 392V750Z"/></clipPath>
+</defs>
+
+<!-- the round wall -->
+<rect x="-1000" y="-500" width="3600" height="1900" fill="#2b3340"/>
+<g id="blocks"></g>
+<path d="M-1000 -500H2600V58Q800 116-1000 58Z" fill="#10141c"/><path d="M-1000 58Q800 116 2600 58" stroke="#3d4758" stroke-width="5" fill="none"/>
+<path d="M-1000 1400V830Q800 610 2600 830V1400Z" fill="#232a35"/>
+<g id="flags" stroke="#171c25" stroke-width="2.500" fill="none"></g>
+<path d="M-1000 830Q800 610 2600 830" stroke="#12161d" stroke-width="7" fill="none"/>
+
+<!-- the window and the moon -->
+<g id="window" class="hot">
+  <path d="M84 482V258Q84 174 146 166Q208 174 208 258V482Z" fill="#56617a"/>
+  <g clip-path="url(#winC)">
+    <rect x="96" y="180" width="100" height="300" fill="url(#nightG)"/>
+    <g fill="#fff"><circle cx="118" cy="330" r="1.300"/><circle cx="172" cy="372" r="1.500"/><circle cx="130" cy="410" r="1.200"/><circle cx="176" cy="300" r="1.100"/></g>
+    <circle cx="150" cy="262" r="46" fill="url(#moonG)"/><circle cx="150" cy="262" r="22" fill="#f1f5ff"/><circle cx="143" cy="256" r="4" fill="#d6dff1"/><circle cx="156" cy="268" r="3" fill="#d6dff1"/>
+    <g id="cloud" fill="#3b4f86" opacity=".85"><ellipse cx="146" cy="288" rx="46" ry="9"/><ellipse cx="170" cy="282" rx="26" ry="8"/></g>
+  </g>
+  <path d="M146 190V470" stroke="#56617a" stroke-width="6"/><path d="M104 360H188" stroke="#56617a" stroke-width="5"/>
+  <rect x="78" y="478" width="136" height="14" fill="#687590"/>
+</g>
+<path d="M92 734L206 728L420 900H150Z" fill="url(#beamG)" pointer-events="none"/>
+<g id="motes" fill="#dfe9ff" pointer-events="none"></g>
+
+<!-- the Founder, painted -->
+<g id="paint" class="hot">
+  <rect x="362" y="56" width="176" height="172" fill="#7d6a3a"/><rect x="368" y="62" width="164" height="160" fill="#c9a94a"/><rect x="378" y="72" width="144" height="140" fill="#1f1a2a"/>
+  <path d="M396 212q6-56 54-60 48 4 54 60z" fill="#5a1f2c"/><path d="M428 156q22 16 44 0l-6-14h-32z" fill="#e9e3d6"/>
+  <circle cx="450" cy="124" r="22" fill="#d9b59a"/><path d="M428 122q0-26 22-26t22 26q-22-14-44 0z" fill="#5a4a3a"/><circle cx="450" cy="94" r="9" fill="#5a4a3a"/>
+  <path d="M442 122h4M454 122h4" stroke="#2a1c14" stroke-width="2.500" stroke-linecap="round"/><path d="M445 133q5 3 10 0" stroke="#8a5a4a" stroke-width="2" fill="none"/>
+  <rect x="378" y="196" width="144" height="16" fill="#3a2a1e"/><path d="M468 198l34-6v8z" fill="#efe6cf"/>
+  <path d="M480 178q16 6 18 20" stroke="#5a1f2c" stroke-width="11" fill="none" stroke-linecap="round"/><circle cx="497" cy="196" r="6" fill="#d9b59a"/>
+  <path d="M497 196L514 150q6 12-2 30z" fill="#f4efe2"/>
+  <rect x="418" y="230" width="64" height="15" fill="url(#brassG)"/><text x="450" y="241.500" class="lbl">E. WREN</text>
+</g>
+
+<!-- the lantern -->
+<g id="lantern" class="hot">
+  <circle id="lanGlow" cx="650" cy="130" r="300" fill="url(#lanG)" pointer-events="none"/>
+  <path d="M650 60V94" stroke="#0c0f14" stroke-width="4"/><path d="M632 94h36l8 62h-52z" fill="#ffd27a" opacity=".9"/>
+  <path d="M628 94h44M622 156h56M650 94v62M636 94l-8 62M664 94l8 62" stroke="#0c0f14" stroke-width="4" fill="none"/><path d="M638 94q12-16 24 0" stroke="#0c0f14" stroke-width="4" fill="none"/>
+  <g id="lanFlame"><path d="M650 110q-6 10-6 15a6 6 0 0 0 12 0q0-5-6-15z" fill="#fff6d8"/></g>
+</g>
+
+<!-- the bookcase -->
+<g id="case">
+  <rect x="284" y="238" width="332" height="14" fill="#3f2a1c"/><rect x="292" y="250" width="316" height="486" fill="url(#caseG)"/><rect x="306" y="262" width="288" height="462" fill="#110b08"/>
+  <g id="books"></g>
+  <g id="globe" class="hot"><path d="M430 548h44l-8-12h-28z" fill="url(#brassG)"/><path d="M452 536V520" stroke="#c9a044" stroke-width="5"/>
+    <circle cx="452" cy="476" r="44" fill="#2f6f8a"/><path d="M424 452q14-12 26 0t10 22-18 8-16-10zM462 488q18-6 24 8t-12 20q-12-6-12-28zM470 440q10 2 14 12-10 2-14-12z" fill="#7da35a"/>
+    <ellipse cx="452" cy="476" rx="44" ry="13" fill="none" stroke="#f0d98f" stroke-width="1.500" opacity=".6"/><path d="M452 432V520" stroke="#f0d98f" stroke-width="1.500" opacity=".6"/>
+    <path d="M402 452A52 52 0 0 0 478 522" stroke="url(#brassG)" stroke-width="5" fill="none"/></g>
+  <g id="hourglass" class="hot"><path d="M330 470h44M330 548h44" stroke="#5a3a22" stroke-width="7"/><path d="M336 474h32q0 26-16 35 16 9 16 35h-32q0-26 16-35-16-9-16-35z" fill="#cfe0ea" fill-opacity=".3" stroke="#cfe0ea" stroke-width="2"/><path d="M342 540h20q-2-14-10-18-8 4-10 18z" fill="#e3c26a"/></g>
+  <g><rect x="508" y="528" width="74" height="20" fill="#4a2b4e"/><rect x="514" y="510" width="62" height="18" fill="#7a5a22"/><path d="M508 538h74M514 519h62" stroke="#c9a24a" stroke-width="1.500" opacity=".7"/></g>
+  <g fill="#3f2a1c"><rect x="306" y="392" width="288" height="12"/><rect x="306" y="548" width="288" height="12"/><rect x="306" y="718" width="288" height="12"/></g>
+</g>
+
+<!-- the Founder's door -->
+<g id="door" class="hot">
+  <path d="M776 620V300Q776 146 920 138Q1064 146 1064 300V620Z" fill="#59647a"/>
+  <g stroke="#3a4352" stroke-width="3" fill="none"><path d="M776 550h34M776 470h34M776 390h34M776 310h34M1030 550h34M1030 470h34M1030 390h34M1030 310h34M786 230l28 16M834 170l18 28M920 138v32M1006 170l-18 28M1054 230l-28 16"/></g>
+  <path d="M810 620V302Q810 178 920 170Q1030 178 1030 302V620Z" fill="url(#doorG)"/>
+  <path d="M846 192V620M883 174V620M957 174V620M994 192V620" stroke="#1d1510" stroke-width="3"/>
+  <g fill="#14151a"><path d="M810 246h220v12H810zM810 562h220v12H810z"/></g>
+  <g fill="#3a3c46"><circle cx="828" cy="252" r="3.500"/><circle cx="866" cy="252" r="3.500"/><circle cx="974" cy="252" r="3.500"/><circle cx="1012" cy="252" r="3.500"/><circle cx="828" cy="568" r="3.500"/><circle cx="866" cy="568" r="3.500"/><circle cx="974" cy="568" r="3.500"/><circle cx="1012" cy="568" r="3.500"/></g>
+  <g id="wheelMini">
+    <circle cx="920" cy="412" r="88" fill="#1d1510"/><circle cx="920" cy="412" r="82" fill="url(#brassG)"/><circle cx="920" cy="412" r="60" fill="#b08a35"/><circle cx="920" cy="412" r="58" fill="url(#brassG)"/>
+    <circle cx="920" cy="412" r="38" fill="#b08a35"/><circle cx="920" cy="412" r="36" fill="url(#brassG)"/><circle cx="920" cy="412" r="16" fill="#3a2a1e"/>
+    <g id="miniMarks" stroke="#4a360c" stroke-width="2.200" stroke-linecap="round"></g>
+    <path d="M908 308h24l-12 20z" fill="url(#brassG)" stroke="#4a360c" stroke-width="1.500"/>
+  </g>
+  <g id="doorOpen" opacity="0" pointer-events="none">
+    <path d="M810 620V302Q810 178 920 170Q1030 178 1030 302V620Z" fill="#070a1c"/>
+    <ellipse cx="930" cy="360" rx="110" ry="190" fill="url(#domeG)" opacity=".8"/>
+    <g fill="#ffe9a8"><circle cx="884" cy="290" r="3"/><circle cx="930" cy="252" r="3.500"/><circle cx="978" cy="296" r="3"/><circle cx="958" cy="360" r="2.500"/><circle cx="900" cy="376" r="2.500"/></g>
+    <path d="M810 620V302Q810 230 838 198L852 216V620Z" fill="#33251b"/><path d="M852 216V620" stroke="#14100c" stroke-width="3"/>
+  </g>
+  <g id="runes" stroke-linecap="round" fill="none">
+    <g class="rune"><path d="M787 518v-24l10 12-10 12" stroke="#b79cff" stroke-width="8" opacity=".3"/><path d="M787 518v-24l10 12-10 12" stroke="#e6dbff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M786 360h14M793 348v26" stroke="#b79cff" stroke-width="8" opacity=".3"/><path d="M786 360h14M793 348v26" stroke="#e6dbff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M800 220l11 12-11 12M812 220l-12 24" stroke="#b79cff" stroke-width="8" opacity=".3"/><path d="M800 220l11 12-11 12M812 220l-12 24" stroke="#e6dbff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M864 154l8 18 8-18" stroke="#b79cff" stroke-width="8" opacity=".3"/><path d="M864 154l8 18 8-18" stroke="#e6dbff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M966 152v22M958 158l16 9" stroke="#b79cff" stroke-width="8" opacity=".3"/><path d="M966 152v22M958 158l16 9" stroke="#e6dbff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M1030 220l10 24M1040 220l-10 24" stroke="#b79cff" stroke-width="8" opacity=".3"/><path d="M1030 220l10 24M1040 220l-10 24" stroke="#e6dbff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M1042 350l10 10-10 10v-20" stroke="#b79cff" stroke-width="8" opacity=".3"/><path d="M1042 350l10 10-10 10v-20" stroke="#e6dbff" stroke-width="2.400"/></g>
+    <g class="rune"><path d="M1041 496h13l-13 20h13" stroke="#b79cff" stroke-width="8" opacity=".3"/><path d="M1041 496h13l-13 20h13" stroke="#e6dbff" stroke-width="2.400"/></g>
+  </g>
+</g>
+
+<!-- four steps up to the door -->
+<g id="stairs">
+  <g id="st4" class="hot st"><rect x="770" y="620" width="300" height="30" fill="url(#stepG)"/><rect x="770" y="620" width="300" height="6" fill="#77859c"/><path d="M986 646q24-7 46 2" stroke="#11151c" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+  <g id="st3" class="hot st"><rect x="748" y="650" width="344" height="30" fill="url(#stepG)"/><rect x="748" y="650" width="344" height="6" fill="#77859c"/></g>
+  <g id="st2" class="hot st"><rect x="726" y="680" width="388" height="30" fill="url(#stepG)"/><rect x="726" y="680" width="388" height="6" fill="#77859c"/></g>
+  <g id="st1" class="hot st"><rect x="704" y="710" width="432" height="30" fill="url(#stepG)"/><rect x="704" y="710" width="432" height="6" fill="#77859c"/><path d="M792 736q26-7 50 2" stroke="#11151c" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+  <rect x="704" y="738" width="432" height="6" fill="#0c0f15" opacity=".7"/>
+</g>
+<g id="rug" class="hot"><ellipse cx="920" cy="800" rx="260" ry="30" fill="url(#rugP)"/><ellipse cx="920" cy="800" rx="260" ry="30" fill="none" stroke="#c9a24a" stroke-width="4"/><ellipse cx="920" cy="800" rx="242" ry="24" fill="none" stroke="#1c2748" stroke-width="3"/></g>
+
+<!-- the Founder's page, pinned beside the door -->
+<g id="page" class="drag">
+  <g transform="rotate(4 702 452)">
+    <rect x="668" y="404" width="72" height="98" fill="#05070b" opacity=".45" transform="translate(4 5)"/>
+    <rect x="668" y="404" width="72" height="98" fill="#ece2c4"/>
+    <path d="M734 416h-56M734 426h-50M734 436h-56M734 446h-38M734 456h-56M734 466h-46M734 476h-56M734 488h-22" stroke="#4a3d6b" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="704" cy="408" r="3.200" fill="#8a2a1c"/>
+    <rect id="pageGlow" x="668" y="404" width="72" height="98" fill="#fff" opacity="0"/>
+  </g>
+</g>
+
+<!-- something tall under a dust sheet -->
+<g id="mirror" class="hot">
+  <path d="M1198 778l-14 14h36zM1362 778l14 14h-36z" fill="#17110e"/>
+  <path d="M1186 776V390Q1186 296 1280 296Q1374 296 1374 390V776Z" fill="#1c1512"/>
+  <path d="M1195 768V391Q1195 305 1280 305Q1365 305 1365 391V768Z" fill="none" stroke="#8a744a" stroke-width="2.500"/>
+  <path d="M1204 750V392Q1204 314 1280 314Q1356 314 1356 392V750Z" fill="url(#glassG)"/>
+  <g clip-path="url(#mirC)"><path d="M1250 560V470q0-30 16-34 16 4 16 34v90z" fill="#27407a" opacity=".55"/><circle cx="1266" cy="474" r="9" fill="#dfe8ff" opacity=".6"/>
+    <path d="M1196 420l150-110M1196 480l190-140" stroke="#fff" stroke-width="14" opacity=".07"/><path d="M1330 760l40-30" stroke="#fff" stroke-width="10" opacity=".06"/></g>
+  <path d="M1262 296q18-22 36 0z" fill="#8a744a"/>
+</g>
+<g id="sheet" class="drag">
+  <path d="M1164 306Q1176 274 1280 268Q1384 274 1396 306L1410 778Q1384 796 1348 784Q1310 800 1274 786Q1236 800 1200 784Q1176 794 1152 780Z" fill="url(#sheetG)"/>
+  <g stroke="#8f8c80" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"><path d="M1196 300q-14 200 4 480M1246 280q-10 240 28 504M1316 276q16 220-6 506M1366 296q14 220-18 486"/></g>
+  <path d="M1164 306Q1176 274 1280 268Q1384 274 1396 306" stroke="#f4f2ea" stroke-width="4" fill="none"/>
+</g>
+<g id="octavo" class="hot"><use href="#ch-octavo" x="1235" y="156" width="90" height="117"/></g>
+
+<!-- two jars -->
+<g id="jarW" class="hot jar">
+  <ellipse cx="146" cy="792" rx="54" ry="8" fill="#000" opacity=".4"/>
+  <path d="M112 792Q84 722 114 664Q124 650 124 638H168Q168 650 178 664Q208 722 180 792Z" fill="url(#jarG2)"/>
+  <path d="M100 716q46 12 92 0M104 742q42 10 84 0" stroke="#343b31" stroke-width="3" fill="none"/><ellipse cx="146" cy="638" rx="24" ry="7" fill="#1b1f19"/><ellipse cx="146" cy="638" rx="24" ry="7" fill="none" stroke="#8d9b82" stroke-width="3"/>
+</g>
+<g id="jarM" class="hot jar">
+  <ellipse cx="1458" cy="792" rx="54" ry="8" fill="#000" opacity=".4"/>
+  <path d="M1424 792Q1396 722 1426 664Q1436 650 1436 638H1480Q1480 650 1490 664Q1520 722 1492 792Z" fill="url(#jarG)"/>
+  <path d="M1412 716q46 12 92 0M1416 742q42 10 84 0" stroke="#4a2f1e" stroke-width="3" fill="none"/><ellipse cx="1458" cy="638" rx="24" ry="7" fill="#1f140c"/><ellipse cx="1458" cy="638" rx="24" ry="7" fill="none" stroke="#b98a5a" stroke-width="3"/>
+</g>
+
+<!-- the brass signs, where they turn up -->
+<g id="discs" pointer-events="none"></g>
+
+<rect x="-1000" y="-500" width="3600" height="1900" fill="url(#edgeL)" pointer-events="none"/>
+<rect x="-1000" y="-500" width="3600" height="1900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, talked = false, mirror = false, readOnce = false, solved = false, found = {}, owlT = 0;
+  /* six hiding places, and what is in each */
+  var PLACES = {
+    st1: { sign: 'snail', where: 'under the lowest step', at: [734, 725] },
+    st4: { sign: 'fish', where: 'under the top step', at: [1010, 604] },
+    T3: { sign: 'feather', where: 'behind the red book, above the globe', at: [0, 0] },
+    B3: { sign: 'bell', where: 'behind the red book, below the globe', at: [0, 0] },
+    jarM: { sign: 'crown', where: 'in the jar next to the mirror', at: [1458, 620] },
+    jarW: { sign: 'leaf', where: 'in the jar under the window', at: [146, 620] }
+  };
+  var RINGS = [
+    { r0: 182, r1: 250, k: 1.2, signs: ['snail', 'key', 'bell', 'feather', 'moon', 'fish', 'crown', 'leaf'] },
+    { r0: 114, r1: 178, k: 1, signs: ['feather', 'leaf', 'snail', 'moon', 'crown', 'key', 'fish', 'bell'] },
+    { r0: 50, r1: 110, k: 0.8, signs: ['crown', 'bell', 'moon', 'snail', 'leaf', 'feather', 'key', 'fish'] }
+  ];
+  var pos = [4, 7, 6], rot = [-180, -315, -270];
+
+  /* ---------- the wall, the floor, the books ---------- */
+  (function () {
+    var r = LIB.rng(23), s = '', y, x, w, i, sh = ['#343d4c', '#3a4454', '#303947', '#3e4959', '#2e3644'], row = 0;
+    for (y = 60; y < 840; y += 62, row++) {
+      x = -1000 - (row % 2) * 70;
+      while (x < 2600) { w = 120 + Math.floor(r() * 70); s += '<rect x="' + x + '" y="' + y + '" width="' + (w - 4) + '" height="58" fill="' + sh[Math.floor(r() * sh.length)] + '"/>'; x += w; }
+    }
+    $('#blocks').innerHTML = s; s = '';
+    s += '<path d="M-1000 884Q800 692 2600 884"/><path d="M-1000 958Q800 786 2600 958"/><path d="M-1000 1060Q800 900 2600 1060"/>';
+    for (x = -730; x < 2400; x += 210) s += '<path d="M' + x + ' ' + (728 + Math.abs(x - 800) * 0.018).toFixed(0) + 'l' + ((x - 800) * 0.05).toFixed(0) + ' 58"/>';
+    for (x = -620; x < 2400; x += 250) s += '<path d="M' + x + ' ' + (794 + Math.abs(x - 800) * 0.016).toFixed(0) + 'l' + ((x - 800) * 0.08).toFixed(0) + ' 76"/>';
+    $('#flags').innerHTML = s; s = '';
+    /* two shelves of big books: T = above the globe, B = below it */
+    function row2(tag, base, list) {
+      var x = 314, out = '';
+      list.forEach(function (b, n) {
+        var id = tag + (n + 1), w = b[1], h = b[2];
+        out += '<g class="hot bk" data-b="' + id + '" style="transform-origin:' + x + 'px ' + base + 'px"><rect x="' + x + '" y="' + (base - h) + '" width="' + w + '" height="' + h + '" fill="' + b[0] + '"/>' +
+          '<rect x="' + x + '" y="' + (base - h) + '" width="4" height="' + h + '" fill="#fff" opacity=".13"/><rect x="' + (x + w - 5) + '" y="' + (base - h) + '" width="5" height="' + h + '" fill="#000" opacity=".2"/>' +
+          '<path d="M' + x + ' ' + (base - h + 14) + 'h' + w + 'M' + x + ' ' + (base - 14) + 'h' + w + '" stroke="#e3c98a" stroke-width="2.6" opacity=".8"/>' +
+          '<rect x="' + (x + 7) + '" y="' + (base - h * 0.66).toFixed(0) + '" width="' + (w - 14) + '" height="' + (h * 0.2).toFixed(0) + '" fill="#e3c98a" opacity=".3"/></g>';
+        if (PLACES[id]) PLACES[id].at = [x + w / 2 + 3, base - h - 15];
+        x += w + 4;
+      });
+      return out;
+    }
+    var G = '#2f7350', R = '#a8372b';
+    s = row2('T', 392, [['#5a3a22', 36, 100], [G, 38, 110], [R, 36, 102], [G, 40, 114], ['#2a4a7a', 34, 96], ['#b98a3a', 30, 106], [R, 36, 98]]) +
+        row2('B', 718, [['#2a4a7a', 34, 120], [G, 38, 126], [R, 36, 116], [G, 40, 130], ['#5a3a22', 36, 112], ['#6f7482', 32, 122], ['#4a2b4e', 38, 118]]);
+    $('#books').innerHTML = s; s = '';
+    for (i = 0; i < 9; i++) s += '<circle class="mote" cx="' + Math.round(110 + r() * 200) + '" cy="' + Math.round(480 + r() * 250) + '" r="' + (1 + r() * 1.2).toFixed(1) +
+      '" style="animation-duration:' + (10 + r() * 9).toFixed(1) + 's;animation-delay:-' + (r() * 14).toFixed(1) + 's"/>';
+    $('#motes').innerHTML = s; s = '';
+    for (i = 0; i < 24; i++) s += '<path transform="rotate(' + (i * 15) + ' 920 412)" d="M920 ' + (412 - (i % 3 ? 76 : 80)) + 'V' + (412 - 64) + '"/>';
+    for (i = 0; i < 16; i++) s += '<path transform="rotate(' + (i * 22.5) + ' 920 412)" d="M920 ' + (412 - 54) + 'V' + (412 - 42) + '"/>';
+    for (i = 0; i < 8; i++) s += '<path transform="rotate(' + (i * 45) + ' 920 412)" d="M920 ' + (412 - 32) + 'V' + (412 - 22) + '"/>';
+    $('#miniMarks').innerHTML = s; s = '';
+    Object.keys(PLACES).forEach(function (k) {
+      var p = PLACES[k];
+      s += '<g class="disc" id="d-' + k + '" opacity="0" transform="translate(' + p.at[0] + ' ' + p.at[1] + ') scale(.62)">' + LIB.discG(p.sign) + '</g>';
+    });
+    $('#discs').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'library', storyTitle: 'The Library That Locks at Dusk', id: 'landing', no: 'II', title: 'The Landing',
+    go: 'Climb the last step',
+    intro: [
+      'Poems at the left end, stones at the right. The fattest book was the lightest, and the smallest was the heaviest. When the last one stood on the shelf, the gate swung open by itself.',
+      'The stairs go round and round inside the wall. Octavo flies ahead and waits for you on every tenth step, to be polite.',
+      'At the top there is a round room, a door with no handle, and something tall under a dust sheet.'
+    ],
+    exit: {"next":"dome","w":{"c9394f9f":"75bdb027"}}, tags: {"r1":["0a71935c"],"r2":["b24f325d"],"r3":["1e4a6031"],"any":["38e38c11","091f7195","364ed113"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var PAGE = '<p>To whoever needs my Dome at night.</p>' +
+    '<p>Three signs open this door. I hid them where tidy people never look.</p>' +
+    '<p>The first is under the lowest step.</p>' +
+    '<p>The second is behind the red book between two green books, on the shelf above the globe.</p>' +
+    '<p>The third is in the jar next to the mirror.</p>' +
+    '<p>The biggest ring takes the first sign, the middle ring the second, the smallest ring the third. Turn each ring until its sign is at the top, under the arrow.</p>' +
+    '<p class="sig">E. W.</p>';
+
+  function rightFound() { return Object.keys(found).filter(function (k) { return ER.check('any', PLACES[k].sign); }).length; }
+  function hints() {
+    if (solved) return null;
+    if (!talked) return ['octavo', [
+      'Octavo is sitting on top of the tall thing on the right. Click on him.',
+      'Listen to the end. He knows what the door wants, and where the Founder wrote it down.'
+    ]];
+    if (!readOnce) return ['mirror', [
+      'The page beside the door is written backwards. What do people use to turn writing the right way round?',
+      'Something tall is standing under the dust sheet on the right. Drag the sheet down to pull it off.',
+      'Now drag the page from the wall onto the mirror, and read it there. It will be kept in your Notebook.'
+    ]];
+    if (rightFound() < 3) return ['signs', [
+      'The page gives you three places. Read each one slowly. The small words matter most: under, behind, between, above, in, next to.',
+      'There are two jars, two shelves with a red book between green ones, and four steps. Only one of each is in the right place. Which step is the lowest? Which shelf is above the globe? Which jar is next to the mirror?',
+      'Click on the step at the very bottom. Click on the red book between the two green ones on the top shelf. Click on the jar at the side of the mirror. Each place gives you a brass sign.'
+    ]];
+    return ['wheel', [
+      'Click on the door. The page says which ring takes which sign: the biggest ring takes the first, the middle ring the second, the smallest ring the third.',
+      'Drag a ring round, or click on it, until the sign you want is at the top, under the arrow. Do this for all three rings, then push the door.',
+      'Use only the three signs from the three places on the page. The first place was under a step, the second behind a book, the third in a jar. If the door stays shut, check each place against the page once more.'
+    ]];
+  }
+  function pips() { ER.pips((talked ? 1 : 0) + (readOnce ? 1 : 0) + (solved ? 1 : 0), 3); }
+  function begin() {
+    pips();
+    owlT = setInterval(function () { if (!busy && !ER.isOpen()) (Math.random() < 0.5 ? LIB.snd.owl : LIB.snd.wind)(); }, 19000);
+    setTimeout(LIB.snd.wind, 900);
+    ER.narrate([
+      'A round stone room with the moon in its window. The door has three brass rings where the handle ought to be.',
+      'Beside the door, somebody has pinned up a page of small, quick writing.'
+    ]);
+  }
+
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#window', null, 'The moon is up over Marrowby. It is properly night now.');
+  thing('#paint', 'left-handed', 'Dame Edda Wren, the Founder. She is writing something. The pen is in her left hand.');
+  thing('#lantern', 'lantern', null);
+  thing('#globe', 'globe', 'A globe. Marrowby is not on it.');
+  thing('#hourglass', 'hourglass', 'All the sand is at the bottom. Nobody has turned it over for a long time.');
+  thing('#rug', 'rug', null);
+  $('#mirror').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'mirror');
+    ER.say(readOnce ? 'A tall mirror in a black frame. You look like somebody who has slept in a chair.'
+      : 'A tall mirror in a black frame. In it you are the wrong way round, and so is everything else.');
+  });
+  $('#octavo').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.octavo;
+    LIB.snd.flutter();
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('octavo', '#2a3350'),
+      lines: [
+        'This is the Founder&rsquo;s landing. That is her door, and her Dome is behind it. I have never been inside. I cannot turn the rings.',
+        'The door wants three signs. She hid them in this room. She hid some wrong ones too, because she did not like people who guess.',
+        'She wrote down where the right ones are. That is the page, pinned up beside the door. Good luck with it.',
+        { q: 'Why &ldquo;good luck&rdquo;?', a: 'She wrote everything backwards, from right to left. She was left-handed, and she did not like ink on her sleeve.' },
+        { q: 'What is in the Dome?', a: 'The sky. Her sky. The doors of this library never look out of the window. They watch the Dome. When the brass sun goes down up there, they lock. When it comes up again, they open.' },
+        'It has never once been wrong. But then, nobody has ever asked it to be.'
+      ],
+      clue: { id: 'octavo2', title: 'Octavo, on the landing' },
+      done: function (seen) { if (seen) { talked = true; pips(); } }
+    });
+  });
+
+  /* ---------- hiding places ---------- */
+  function reveal(k, e, line) {
+    var p = PLACES[k];
+    if (found[k]) { ER.wordAt(e.clientX, e.clientY, p.sign); return; }
+    found[k] = 1;
+    $('#d-' + k).setAttribute('opacity', 1);
+    ER.sfx.glass();
+    ER.wordAt(e.clientX, e.clientY, p.sign);
+    ER.say(line);
+    ER.addClue('sign-' + k, 'A brass sign: ' + p.sign, '<h4>A brass sign</h4><p>There is a ' + p.sign + ' on it.</p><p>You found it ' + p.where + '.</p>', 'statement', 'Brass sign', true);
+  }
+  $('#st1').addEventListener('click', function (e) { if (!busy) reveal('st1', e, 'You feel under the lowest step. Your fingers find a small brass disc, with a snail on it.'); });
+  $('#st4').addEventListener('click', function (e) { if (!busy) reveal('st4', e, 'You feel under the top step. There is a small brass disc, with a fish on it.'); });
+  $('#st2').addEventListener('click', function () { if (!busy) ER.say('Nothing under this step but cold stone.'); });
+  $('#st3').addEventListener('click', function () { if (!busy) ER.say('Nothing under this step but cold stone.'); });
+  $('#jarM').addEventListener('click', function (e) { if (!busy) reveal('jarM', e, 'You put your arm into the jar, up to the elbow. At the bottom there is a brass disc, with a crown on it.'); });
+  $('#jarW').addEventListener('click', function (e) { if (!busy) reveal('jarW', e, 'You put your arm into the jar. At the bottom: a brass disc with a leaf on it, and a very old apple.'); });
+  ER.$$('.bk').forEach(function (b) {
+    var id = b.getAttribute('data-b');
+    b.addEventListener('click', function (e) {
+      if (busy) return;
+      if (!PLACES[id]) { ER.say('You pull this book out. Behind it there is only dust.'); return; }
+      b.style.transform = 'rotate(-7deg)';
+      reveal(id, e, id === 'T3' ? 'You pull the red book out a little. Behind it, on the back of the shelf: a brass disc with a feather on it.'
+        : 'You pull the red book out a little. Behind it: a brass disc with a bell on it.');
+    });
+  });
+
+  /* ---------- the dust sheet ---------- */
+  var sheet = $('#sheet'), sy = 0, sd = 0;
+  ER.drag(sheet, {
+    start: function (e) { if (busy || mirror) return false; sy = ER.pt(svg, e).y; sd = 0; },
+    move: function (e) { sd = Math.max(0, Math.min(420, ER.pt(svg, e).y - sy)); sheet.style.transform = 'translateY(' + sd + 'px)'; },
+    end: function (e, moved) {
+      if (sd > 90) { unveil(); return; }
+      sheet.style.transform = '';
+      if (!moved) { ER.wordAt(e.clientX, e.clientY, 'dust sheet'); ER.say('Something tall and flat is standing under a dust sheet. One good pull would bring the sheet down.'); }
+    }
+  });
+  function unveil() {
+    mirror = true; sheet.classList.add('off'); sheet.style.transform = 'translateY(560px)';
+    LIB.snd.whoosh(); setTimeout(LIB.snd.flutter, 200);
+    $('#octavo').style.transform = 'translate(26px,-58px)';
+    setTimeout(function () { $('#octavo').style.transform = 'translate(0,27px)'; }, 650);
+    ER.say('The dust sheet slides to the floor. Octavo goes up like a leaf and comes down again on top of a tall mirror, looking cross.', 5200);
+  }
+
+  /* ---------- the page ---------- */
+  var page = $('#page'), px = 0, py = 0;
+  ER.drag(page, {
+    start: function (e) { if (busy) return false; var p = ER.pt(svg, e); px = p.x; py = p.y; },
+    move: function (e) { var p = ER.pt(svg, e); page.style.transform = 'translate(' + (p.x - px) + 'px,' + (p.y - py) + 'px)'; },
+    end: function (e, moved) {
+      var p = ER.pt(svg, e);
+      page.style.transform = '';
+      if (!moved) { if (readOnce) readInMirror(); else readBackwards(); return; }
+      if (p.x > 1150 && p.x < 1410 && p.y > 270 && p.y < 800) {
+        if (mirror) readInMirror();
+        else ER.say('You hold the page up to the dust sheet. The dust sheet is no help at all.');
+      }
+    }
+  });
+  function readBackwards() {
+    var box = ER.el('div', 'bw', '<div class="doc founder back">' + PAGE + '</div><p class="bw-cap"></p>');
+    box.querySelector('.bw-cap').textContent = mirror ? 'Every letter is the wrong way round. And there is a mirror in this room.' : 'Every letter is the wrong way round.';
+    ER.sfx.paper();
+    ER.open('ov-read', box);
+  }
+  function readInMirror() {
+    var box = ER.el('div', 'mir', '<div class="mir-glass"><div class="doc founder">' + ER.gloss(PAGE) + '</div></div><p class="mir-cap">In the mirror, the writing comes out the right way round.</p>');
+    ER.sfx.paper(); if (!readOnce) LIB.snd.sparkle();
+    readOnce = true; pips(); $('#pageGlow').style.display = 'none';
+    ER.addClue('founder', 'The Founder’s page, in the mirror', PAGE, 'founder', 'Notebook page');
+    ER.open('ov-read', box);
+  }
+
+  /* ---------- the door: three rings ---------- */
+  $('#door').addEventListener('click', function () { if (!busy) openWheel(); });
+  function annulus(R, r) {
+    return 'M0 ' + (-R) + 'A' + R + ' ' + R + ' 0 1 0 0 ' + R + 'A' + R + ' ' + R + ' 0 1 0 0 ' + (-R) + 'ZM0 ' + (-r) + 'A' + r + ' ' + r + ' 0 1 1 0 ' + r + 'A' + r + ' ' + r + ' 0 1 1 0 ' + (-r) + 'Z';
+  }
+  function topOf(n) { return RINGS[n].signs[pos[n]]; }
+  function openWheel() {
+    var box = ER.el('div', 'wh'), s, n, i, R, rm;
+    s = '<svg class="wheel" viewBox="-270 -270 540 540"><defs>' +
+      '<linearGradient id="whB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a0"/><stop offset=".5" stop-color="#c9a044"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>' +
+      '<radialGradient id="whW"><stop offset="0" stop-color="#4a3626"/><stop offset="1" stop-color="#241912"/></radialGradient></defs>' +
+      '<circle r="266" fill="#0f1218"/><circle r="260" fill="url(#whW)"/>';
+    for (n = 0; n < 3; n++) {
+      R = RINGS[n]; rm = (R.r0 + R.r1) / 2;
+      s += '<g class="ring drag" data-n="' + n + '" data-top="' + topOf(n) + '" transform="rotate(' + rot[n] + ')">' +
+        '<path fill-rule="evenodd" fill="url(#whB)" stroke="#4a360c" stroke-width="2" d="' + annulus(R.r1, R.r0) + '"/>' +
+        '<circle r="' + (R.r1 - 5) + '" fill="none" stroke="#fff3c4" stroke-width="1.300" opacity=".55"/><circle r="' + (R.r0 + 5) + '" fill="none" stroke="#6f531a" stroke-width="1.300" opacity=".7"/>';
+      for (i = 0; i < 8; i++) {
+        s += '<g transform="rotate(' + (i * 45) + ') translate(0 ' + (-rm) + ')">' + LIB.sign(R.signs[i], '#33240a', R.k) + '</g>' +
+          '<path transform="rotate(' + (i * 45 + 22.5) + ')" d="M0 ' + (-R.r1 + 7) + 'V' + (-R.r0 - 7) + '" stroke="#7d5f1d" stroke-width="1.600"/>';
+      }
+      s += '</g>';
+    }
+    s += '<circle r="46" fill="#1d1510" stroke="#4a360c" stroke-width="2"/><g transform="translate(0 2) scale(1.1)" fill="#c9a044"><ellipse cx="-2" cy="2" rx="15" ry="11"/><circle cx="12" cy="-7" r="7.500"/><path d="M19-8l9 2-9 3zM-14-2l-12-16 2 20z"/></g>' +
+      '<g pointer-events="none"><path d="M-27 -252L-17 -52M27 -252L17 -52" stroke="#fff6d8" stroke-width="2" opacity=".5"/>' +
+      '<path d="M-20 -270H20L0 -238Z" fill="url(#whB)" stroke="#33240a" stroke-width="2.500" stroke-linejoin="round"/></g></svg>' +
+      '<div class="wh-side"><p class="wh-say">Three brass rings, one inside another, with eight signs on each. Above them a brass arrow points down.</p>' +
+      '<h5>Signs you have found</h5><div class="wh-found"></div><p class="wh-help">drag a ring round, or click on it</p>' +
+      '<div class="wh-msg"></div><button type="button" class="btn">Push the door</button></div>';
+    box.innerHTML = s;
+    ER.glossIn(box, '.wh-say');
+    var wheel = box.querySelector('svg.wheel'), msg = box.querySelector('.wh-msg'), fl = box.querySelector('.wh-found'), keys = Object.keys(found);
+    fl.innerHTML = keys.length ? '' : '<div class="wh-none">None yet. The page beside the door says where to look.</div>';
+    keys.forEach(function (k) {
+      var p = PLACES[k], d = ER.el('div', 'fs', LIB.disc(p.sign, 46) + '<span><b></b><i></i></span>');
+      d.querySelector('b').textContent = p.sign; d.querySelector('i').textContent = p.where; d.querySelector('i').style.fontStyle = 'normal';
+      fl.appendChild(d);
+    });
+    function idx(a) { return ((Math.round(-a / 45) % 8) + 8) % 8; }
+    function set(g, n, a) { rot[n] = a; g.setAttribute('transform', 'rotate(' + a.toFixed(2) + ')'); }
+    function settle(g, n, to) {
+      var from = rot[n], t0 = Date.now();
+      pos[n] = idx(to); g.setAttribute('data-top', topOf(n));
+      (function step() {
+        var k = Math.min(1, (Date.now() - t0) / 140);
+        set(g, n, from + (to - from) * k);
+        if (k < 1) requestAnimationFrame(step);
+      })();
+    }
+    ER.$$('.ring', box).forEach(function (g) {
+      var n = +g.getAttribute('data-n'), prev = 0, last = 0;
+      function ang(e) { var p = ER.pt(wheel, e); return Math.atan2(p.x, -p.y) * 180 / Math.PI; }
+      ER.drag(g, {
+        start: function (e) { if (solved) return false; prev = ang(e); last = idx(rot[n]); msg.textContent = ''; },
+        move: function (e, moved) {
+          if (!moved) return;
+          var a = ang(e), d = a - prev; prev = a;
+          if (d > 180) d -= 360; if (d < -180) d += 360;
+          set(g, n, rot[n] + d);
+          if (idx(rot[n]) !== last) { last = idx(rot[n]); LIB.snd.ratchet(); }
+        },
+        end: function (e, moved) {
+          if (moved) settle(g, n, Math.round(rot[n] / 45) * 45);
+          else { settle(g, n, Math.round(rot[n] / 45) * 45 + (ang(e) >= 0 ? 45 : -45)); LIB.snd.ratchet(); }
+        }
+      });
+    });
+    box.querySelector('.btn').addEventListener('click', function () {
+      if (solved) return;
+      var tops = [topOf(0), topOf(1), topOf(2)], from = tops.map(function (t) {
+        var k = Object.keys(found).filter(function (q) { return PLACES[q].sign === t; })[0];
+        return k || null;
+      }), bad;
+      if (ER.exit([tops.join('-')], { delay: 6000 })) {
+        solved = true; busy = true; pips(); clearInterval(owlT);
+        msg.style.color = '#b9e6b0'; msg.textContent = 'The three rings sink into the wood. Inside the door, one after another, three bolts slide back.';
+        ER.sfx.clunk(); setTimeout(ER.sfx.clunk, 420); setTimeout(ER.sfx.clunk, 840);
+        setTimeout(function () {
+          ER.closeAll();
+          $('#doorOpen').style.opacity = 1; $('#wheelMini').setAttribute('opacity', 0); ER.sfx.creak();
+          ER.say('The door opens inwards without a sound. Beyond it everything is dark blue, with small lights hanging in it.', 4200);
+        }, 1900);
+        return;
+      }
+      ER.sfx.no(); ER.shake(wheel);
+      if (from.indexOf(null) >= 0) { msg.innerHTML = '&ldquo;Where did you find that one?&rdquo; says Octavo. &ldquo;Find the signs first. Then turn the rings.&rdquo;'; return; }
+      bad = from.filter(function (k) { return !ER.check('any', PLACES[k].sign); })[0];
+      msg.innerHTML = bad ? 'The door does not move. &ldquo;One of those signs was ' + PLACES[bad].where + ',&rdquo; says Octavo. &ldquo;Is that what the page says?&rdquo;'
+        : 'The door does not move. &ldquo;Three good signs, on the wrong rings,&rdquo; says Octavo. &ldquo;The biggest ring takes the first sign.&rdquo;';
+    });
+    ER.open('ov-lock', box);
+  }
+})();
+</script>
+</body>
+</html>

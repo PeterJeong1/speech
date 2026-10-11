@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Consultation Room 2 · A Quarter Past Four</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-court.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="glass.css">
+<style>
+  body{--bg:#2a2419;--accent:#e2a9bb;--font-display:'Cormorant Garamond',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(30,25,18,.97);--tc-ink:#f1ead8;--cap-bg:rgba(30,25,18,.93);--panel:#241f17;--face-bg:#3b3f52;--q-ink:#d9c7a3;--fade:#15110b;--hud-bg:rgba(30,25,18,.8)}
+  #strip{animation:st 7.1s steps(1,end) infinite}
+  @keyframes st{0%{opacity:1}64%{opacity:.7}65%{opacity:1}}
+  #bundle.ready{animation:nudge 1.7s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+
+  /* two statements side by side, and a reel of pink tape */
+  .ws{width:min(1160px,96vw)}
+  .ws-docs{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:74px}
+  .ws-doc{background:#fdfdfb;color:#1b1c1f;padding:12px 16px 9px;font-family:'Tinos','Times New Roman',serif;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .ws-doc.l{transform:rotate(-.3deg)}.ws-doc.r{transform:rotate(.3deg)}
+  .ws-doc h4{margin:0 0 7px;padding-bottom:6px;border-bottom:1px solid #1b1c1f;font-family:'Tinos',serif;font-weight:700;font-size:15px;line-height:1.2;text-align:center}
+  .ws-doc h4 small{display:block;font-weight:400;font-size:13px}
+  .ws-p{position:relative;display:grid;grid-template-columns:20px minmax(0,1fr);gap:5px;width:100%;margin:0 0 2px;padding:3px 7px 2px;text-align:left;font-family:'Tinos',serif;font-size:15.5px;line-height:1.24;
+    color:#1b1c1f;border-radius:3px;border:1.5px solid transparent}
+  .ws-p:hover{background:rgba(244,224,77,.3)}
+  .ws-p.sel{border-color:#d4577c;background:rgba(212,87,124,.12)}
+  .ws-p.tied{background:rgba(212,87,124,.1)}
+  .ws-p.tied:hover{background:rgba(212,87,124,.1)}
+  .ws-flag{position:absolute;top:50%;width:30px;height:30px;margin-top:-15px;border-radius:50%;background:#d4577c;color:#fff;font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;line-height:30px;text-align:center;
+    box-shadow:0 2px 5px rgba(0,0,0,.4);display:none}
+  .ws-doc.l .ws-flag{right:-24px}.ws-doc.r .ws-flag{left:-24px}
+  .ws-p.tied .ws-flag{display:block}
+  .ws.s2 .ws-doc.l .ws-p.tied{cursor:pointer}
+  .ws.s2 .ws-doc.l .ws-p.tied .ws-flag{animation:fl 1.2s ease-in-out infinite}
+  @keyframes fl{50%{transform:scale(1.22)}}
+  .ws-p.issue .ws-flag{background:#1f4a37;box-shadow:0 0 0 4px #e7c477}
+  .ws-doc .tru{margin:5px 0 0;padding-top:5px;border-top:1px solid #9b9b95;font-style:italic;font-size:13.5px;line-height:1.25;display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+  .ws-doc .tru .sig{font-family:'Homemade Apple',cursive;font-style:normal;white-space:nowrap;font-size:14px;color:#1d2a52}
+  .ws-tape{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .ws-tape path{fill:none;stroke:#d4577c;stroke-width:6;stroke-linecap:round;opacity:.92}
+  .ws-bar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:start;margin-top:12px}
+  .ws .pmsg{min-height:74px;font-size:18px}
+  .ws-sheet{display:none;background:#e6d5ae;color:#1c1b18;padding:10px 16px 10px;font-family:'Courier Prime',monospace;font-size:14.5px;box-shadow:0 10px 26px rgba(0,0,0,.5);border-top:6px solid #d4577c}
+  .ws.s3 .ws-sheet{display:block}
+  .ws-sheet div{display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap}
+  .ws-sheet label{width:222px;font-weight:700;letter-spacing:.04em}
+  .ws-sheet button{padding:5px 10px 3px;border:1.5px solid #1c1b18;font-family:'Courier Prime',monospace;font-size:14.5px;color:#1c1b18;border-radius:2px;background:rgba(255,255,255,.35)}
+  .ws-sheet button.on{background:#1c1b18;color:#f4e9c9}
+  .ws-sheet .btn{--accent:#1f4a37;margin-top:2px;font-family:'Oswald',sans-serif;font-size:13px;padding:7px 16px;border-color:#1f4a37;color:#1f4a37}
+  .ws-sheet .btn:hover{background:#1f4a37;color:#fdfdfb}
+  .ws-doc .w:hover{color:#8c2f24}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e1d6bd"/><stop offset="1" stop-color="#c9bc9b"/></linearGradient>
+  <linearGradient id="tableG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c49a64"/><stop offset="1" stop-color="#a47a48"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8c98a2"/><stop offset="1" stop-color="#c3cbd0"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2b4564"/><stop offset=".5" stop-color="#365578"/><stop offset="1" stop-color="#27405e"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a26"/><stop offset=".3" stop-color="#e6c873"/><stop offset=".55" stop-color="#b08a35"/><stop offset=".8" stop-color="#f0d98f"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="stripL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe8" stop-opacity=".5"/><stop offset="1" stop-color="#fffbe8" stop-opacity="0"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="44%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".66" stop-color="#1a1408" stop-opacity=".16"/><stop offset="1" stop-color="#140f06" stop-opacity=".74"/></radialGradient>
+  <pattern id="wire" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0H16M0 0V16" stroke="#59645f" stroke-width="1.2"/></pattern>
+  <pattern id="grain" width="240" height="40" patternUnits="userSpaceOnUse"><path d="M0 10q60-8 120 0t120 0M0 28q60 8 120 0t120 0" stroke="#8f6a3c" stroke-width="2" fill="none" opacity=".4"/></pattern>
+  <clipPath id="wcl"><rect x="88" y="138" width="234" height="322"/></clipPath>
+</defs>
+
+<!-- the back wall of a very small room -->
+<rect x="-1000" y="-400" width="3600" height="1100" fill="url(#wallG)"/>
+<rect x="-1000" y="606" width="3600" height="60" fill="#b0a383"/>
+<path d="M420 0h760l160 300H260z" fill="url(#stripL)" pointer-events="none"/>
+<rect id="strip" x="500" y="6" width="600" height="18" rx="5" fill="#fffdf2"/><rect x="480" y="0" width="640" height="8" fill="#9b947f"/>
+
+<!-- the window, with wire in the glass -->
+<g id="window" class="hot"><rect x="74" y="124" width="262" height="350" fill="#8a836d"/><rect x="88" y="138" width="234" height="322" fill="url(#skyG)"/>
+  <path d="M88 460v-90q60-22 110 0t124-14v104z" fill="#6f7a78" opacity=".5"/><rect x="88" y="138" width="234" height="322" fill="url(#wire)" opacity=".6"/>
+  <g class="rain" clip-path="url(#wcl)"><path d="M110 120l-16 360M150 120l-16 360M196 120l-16 360M240 120l-16 360M284 120l-16 360M316 120l-16 360"/></g>
+  <path d="M205 138v322" stroke="#8a836d" stroke-width="8"/>
+  <g fill="#e9e3d0"><rect x="84" y="138" width="242" height="14"/><rect x="84" y="158" width="242" height="14"/><rect x="84" y="178" width="242" height="14"/><rect x="84" y="198" width="242" height="14"/></g><path d="M100 138v80M310 138v80" stroke="#b9b19a" stroke-width="2"/>
+  <rect x="60" y="472" width="290" height="16" fill="#8a836d"/></g>
+<g id="plant" class="hot"><path d="M268 472l8-44h44l8 44z" fill="#a9623f"/><path d="M298 430q-6-34-30-44M298 430q2-40 22-52M298 430q-18-20-34-18M298 430q16-22 34-22" stroke="#8d8256" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <g fill="#9a8a55"><ellipse cx="266" cy="384" rx="9" ry="4" transform="rotate(30 266 384)"/><ellipse cx="322" cy="376" rx="9" ry="4" transform="rotate(-40 322 376)"/><ellipse cx="262" cy="412" rx="8" ry="4"/></g><ellipse cx="344" cy="470" rx="8" ry="3" fill="#9a8a55"/></g>
+<g id="radiator" class="hot"><rect x="84" y="512" width="250" height="96" rx="6" fill="#ece6d4"/><g stroke="#c4bca4" stroke-width="5"><path d="M112 518v84M146 518v84M180 518v84M214 518v84M248 518v84M282 518v84M312 518v84"/></g></g>
+
+<!-- the clock, the poster, the door -->
+<g id="clock" class="hot"><circle cx="812" cy="96" r="40" fill="#5a5340"/><circle cx="812" cy="96" r="33" fill="#fbf8ec"/><g stroke="#1c1d1f" stroke-width="3"><path d="M812 67v7M812 118v7M783 96h7M834 96h7"/></g>
+  <path d="M812 96V78" stroke="#1c1d1f" stroke-width="5" stroke-linecap="round" transform="rotate(310.5 812 96)"/><path d="M812 96V70" stroke="#1c1d1f" stroke-width="3" stroke-linecap="round" transform="rotate(126 812 96)"/><circle cx="812" cy="96" r="3.500" fill="#b3261c"/></g>
+<g id="poster" class="hot"><rect x="1172" y="150" width="140" height="196" fill="#fdfdfb"/><rect x="1172" y="150" width="140" height="44" fill="#2f6a4a"/><text x="1242" y="179" class="sT" font-size="17" fill="#fdfdfb" letter-spacing="2">MEDIATION</text>
+  <path d="M1190 214h56q8 0 8 8v22q0 8-8 8h-30l-12 12v-12h-14q-8 0-8-8v-22q0-8 8-8z" fill="#e2a9bb"/><path d="M1238 262h56q8 0 8 8v22q0 8-8 8h-14v12l-12-12h-30q-8 0-8-8v-22q0-8 8-8z" fill="#9fc0d8"/>
+  <text x="1242" y="330" class="sT" font-size="11.500" fill="#1c1d1f" letter-spacing="1">HAVE YOU TRIED TALKING?</text></g>
+<g id="door" class="hot"><rect x="1352" y="116" width="200" height="560" fill="#5a5340"/><rect x="1364" y="128" width="176" height="548" fill="url(#doorG)"/>
+  <rect x="1470" y="168" width="44" height="190" fill="#cfe0e0"/><rect x="1470" y="168" width="44" height="190" fill="url(#wire)" opacity=".7"/>
+  <rect x="1384" y="186" width="70" height="46" fill="url(#brassG)"/><text x="1419" y="205" class="cT" font-size="10" fill="#3a2a08">CONSULTATION</text><text x="1419" y="223" class="cT" font-size="13" fill="#3a2a08">ROOM 2</text>
+  <rect x="1384" y="244" width="70" height="22" rx="3" fill="#1a0d0b"/><text x="1419" y="260" class="sT" font-size="11" fill="#ff6a5a" letter-spacing="2">ENGAGED</text>
+  <rect x="1378" y="400" width="12" height="54" rx="4" fill="url(#brassG)"/></g>
+
+<!-- Selin and Emre, on the far side of the table -->
+<rect x="462" y="452" width="276" height="230" rx="26" fill="#6f8496"/><rect x="866" y="482" width="250" height="200" rx="24" fill="#6f8496"/>
+<g id="selin" class="hot"><rect x="430" y="150" width="340" height="520" fill="#000" opacity="0"/><use href="#ch-selin" x="380" y="88" width="440" height="572"/></g>
+<g id="emre" class="hot"><rect x="850" y="230" width="280" height="440" fill="#000" opacity="0"/><use href="#ch-emre" x="800" y="166" width="380" height="494"/></g>
+
+<!-- the table, and what is on it -->
+<path d="M40 650h1520l300 320h-2120z" fill="url(#tableG)"/><path d="M40 650h1520l300 320h-2120z" fill="url(#grain)"/><path d="M40 650h1520" stroke="#dcb886" stroke-width="5"/>
+<g id="tissues" class="hot"><path d="M118 742l14-52h92l14 52z" fill="#7fa5c9"/><path d="M118 742h120v18h-120z" fill="#5f87ad"/><path d="M160 690q-6-30 16-34q10 10 24 0q10 16 0 34z" fill="#fdfdfb"/></g>
+<g id="cups"><path d="M352 700l5 44h26l5-44z" fill="#fdfdfb" opacity=".9"/><ellipse cx="370" cy="700" rx="18" ry="5" fill="#e6e2d6"/><ellipse cx="370" cy="702" rx="13" ry="3" fill="#8a6a42"/></g>
+<g id="claim" class="hot"><g transform="rotate(-9 330 800)"><path d="M226 746h200l16 124h-230z" fill="#fdfdfb"/><path d="M228 758h196" stroke="#1b1c1f" stroke-width="12"/><g stroke="#8d8f92" stroke-width="2.5"><path d="M232 782h80M332 782h90M230 800h192M230 816h170M228 832h196M228 848h130"/></g>
+  <rect x="330" y="772" width="94" height="22" fill="none" stroke="#1b1c1f" stroke-width="2"/></g></g>
+<g id="bundle" class="hot">
+  <path d="M520 716h560l40 150h-640z" fill="#d9c49a"/><path d="M540 708h250l8 150h-276z" fill="#fdfdfb"/><path d="M810 708h250l18 150h-276z" fill="#fdfdfb"/>
+  <g stroke="#8d8f92" stroke-width="2.4"><path d="M556 730h216M554 746h220M552 762h224M550 778h200M548 794h228M546 810h210M544 826h232M826 730h216M826 746h220M828 762h224M828 778h180M830 794h228M830 810h200M832 826h220"/></g>
+  <path d="M556 720h216M826 720h216" stroke="#1b1c1f" stroke-width="4"/>
+  <path d="M470 846q120-40 250-12t230-20t200 6" stroke="#d4577c" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M1150 820q30 10 22 34q-12 14-30 2" stroke="#d4577c" stroke-width="8" fill="none" stroke-linecap="round"/>
+</g>
+<g id="card" class="hot"><g transform="rotate(7 1240 790)"><path d="M1136 736h204q10 0 11 10l12 96q1 10-9 10h-226q-10 0-9-10l8-96q1-10 9-10z" fill="#fffef8"/><path d="M1140 748h200" stroke="#d4577c" stroke-width="10"/>
+  <g stroke="#6b6453" stroke-width="2.4"><path d="M1140 770h196M1138 786h180M1136 802h204M1134 818h170M1132 834h196"/></g><path d="M1150 740l170 110" stroke="#fff" stroke-width="16" opacity=".5"/></g></g>
+<g id="phone" class="hot"><g transform="rotate(14 1450 820)"><path d="M1414 770h66q8 0 9 8l10 98q1 8-7 8h-84q-8 0-7-8l6-98q1-8 7-8z" fill="#17181a"/><path d="M1420 780h54l8 92h-66z" fill="#22262b"/></g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Take the exhibits to the Advocates&rsquo; Room</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="glass.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, wsBox = null, step = 1;
+
+  ER.init({
+    theme: 'court', story: 'glass', storyTitle: 'A Quarter Past Four', id: 'consult', no: 'II', title: 'Consultation Room 2',
+    go: 'Shut the door',
+    intro: [
+      'The usher&rsquo;s slip came right when you stopped guessing and read the list. In Thistlewood v Demir the claimant is the name in front of the v: Mr Thistlewood, who is asking for £900. The defendant is Emre, although he is thirteen. His sister Selin is his litigation friend, the grown-up who runs the case for him. The judge is District Judge Ormerod. And the case is called aloud as &ldquo;Thistlewood and Demir&rdquo;.',
+      'The lay representative, who is not a lawyer and who will have to stand up and speak for Emre, is you.',
+      'Consultation Room 2 has a table, three chairs, a box of tissues and a plant that has given up. Selin puts Emre in one chair and herself in another. You untie the pink tape.'
+    ],
+    exit: {"next":"exhibits","w":{"89697817":"ff25037f"}}, tags: {"tie":["6543848d","db8874df","4e41aca7","6c876c5c","a16646ae"],"issue":["7aa5845a"],"burden":["99156f23"],"sure":["75280ad1"]},
+    sound: ['bench', { root: 47, bpm: 60, drop: ['mel'], beds: [['rain', 0.4]] }],      /* a small room, and two statements to read: slower, and no tune */
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('c-file') || null;
+
+  var CLAIM = '<h4>Claim Form<small>In the County Court at Hatherwick<br>Claim No. K07HW418</small></h4>' +
+    '<div class="two"><div class="bx"><small>Claimant</small><span>Mr Stanley Thistlewood<br>6 Laburnum Grove, Hatherwick</span></div>' +
+    '<div class="bx"><small>Defendant</small><span>Emre Demir (a child by Selin Demir his litigation friend)<br>21 Tanners Row, Hatherwick</span></div></div>' +
+    '<div class="two"><div class="bx"><small>Brief details of claim</small><span>Damage to a greenhouse</span></div><div class="bx"><small>Value</small><span>£900</span></div></div>' +
+    '<div class="bx"><small>Particulars of claim</small><ol><li>On Saturday 18 October at about 4.15 pm the Defendant kicked a football over the fence between his garden and mine.</li>' +
+    '<li>The football went through the roof of my greenhouse and broke the glass.</li><li>The repairs cost £900.</li><li>I claim £900 from the Defendant.</li></ol></div>' +
+    '<div class="bx"><small>Statement of truth</small><span>I believe that the facts stated in these particulars of claim are true.</span><br><span class="sig">S. Thistlewood</span></div>';
+  var SCALE = '<svg class="scale" viewBox="0 0 150 96"><g fill="none" stroke="#39507e" stroke-width="2.6" stroke-linecap="round"><path d="M75 16v62M52 82h46M20 26h110"/><path d="M20 26l-14 34h28zM130 26l-14 34h28z"/><path d="M6 60q14 10 28 0M116 60q14 10 28 0"/></g><circle cx="75" cy="14" r="5" fill="#39507e"/>' +
+    '<text x="20" y="84" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="15" fill="#39507e">he did it</text><text x="122" y="84" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="15" fill="#39507e">he didn&rsquo;t</text>' +
+    '<text x="75" y="95" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="14" fill="#b3261c">LEVEL = NOT PROVED</text></svg>';
+  var CARD = '<h4>BEFORE YOU GO IN<small>read me every time. N.</small></h4><ol>' +
+    '<li>Find the <b class="t">ISSUE</b>. Most of what the two sides say is the same story. Cross out everything that they agree about. What is left is what the judge has to decide.</li>' +
+    '<li>Ask who has to <b class="t">PROVE</b> it. The one who makes the claim must prove it. That is the <b class="t">BURDEN OF PROOF</b>, and in a civil court it lies on the claimant. Our client does not have to prove a thing.</li>' +
+    '<li>' + SCALE + 'Ask <b class="t">HOW SURE</b> the judge must be. In a criminal court, where people go to prison: sure, <b class="t">BEYOND REASONABLE DOUBT</b>. In a civil court: only <b class="t">ON THE BALANCE OF PROBABILITIES</b>, which means &ldquo;more likely than not&rdquo;. Think of a pair of scales. The claimant has to make them tip. If they hang level, he loses.</li>' +
+    '<li>Listen for <b class="t">MUST HAVE</b>. A witness tells the court what he saw and heard. When he says what &ldquo;must have&rdquo; happened, he has stopped being a witness and started being a detective.</li>' +
+    '<li>We never let a court believe something that we know is not true. <span class="pen">Not even a little.</span></li></ol>';
+  var ST = [
+    'I am 74 years old. For thirty-one years I was a signalman on the railway. I notice the time of things, and I write it down.',
+    'My garden backs on to the garden of 21 Tanners Row, where the Defendant lives. He kicks a football against the fence between us nearly every afternoon. Sooner or later it comes over.',
+    'In June one of his footballs cracked a pane of my greenhouse. Nobody from that house said sorry, then or since.',
+    'On Friday 17 October I was in the greenhouse until six in the evening. When I left it, every pane of glass was whole.',
+    'On Saturday 18 October, at a quarter past four, I heard a crash of glass. I noted the time by my alarm clock.',
+    'The boy was in his garden that afternoon as usual. I had heard his ball against the fence.',
+    'When I went down the garden I found the greenhouse wrecked, and a football lying in the middle of it. It has E. DEMIR written on it. I took a photograph at once (exhibit ST1).',
+    'He must have kicked the ball over the fence and through the roof. Nothing else can have broken the glass.',
+    'The repairs cost me £900 (receipt, exhibit ST2).'
+  ];
+  var ED = [
+    'I am 13 and in Year 9. I live at 21 Tanners Row with my mother and my sister Selin.',
+    'After school I practise in our back garden. I kick the ball against our fence. Sometimes it goes over into Mr Thistlewood&rsquo;s garden.',
+    'In June my ball cracked one pane of his greenhouse. I went round that evening with my mother and said sorry, and she paid him £20 for the glass.',
+    'The football in the photograph is mine. I wrote my name on it myself.',
+    'On Saturday 18 October I was not at home in the afternoon. I was swimming in the Autumn Gala at Hatherwick Baths from two o&rsquo;clock until six. Selin took me.',
+    'I did not kick a ball into Mr Thistlewood&rsquo;s garden on Saturday 18 October.',
+    'I do not know how my ball got into his greenhouse.'
+  ];
+  function stmt(who, role, list, sig, date) {
+    return '<h4>In the County Court at Hatherwick &middot; Claim No. K07HW418</h4><h5>WITNESS STATEMENT OF ' + who + '<br>' + role + '</h5><ol>' + list.map(function (t) { return '<li>' + t + '</li>'; }).join('') +
+      '</ol><p class="tru">I believe that the facts stated in this witness statement are true.<br><span class="sig">' + sig + '</span> &nbsp; ' + date + '</p>';
+  }
+  function fileStatements() {
+    ER.addClue('st-t', 'Statement of Mr Thistlewood', stmt('STANLEY THISTLEWOOD', 'the Claimant', ST, 'S. Thistlewood', '9 January'), 'wstmt', 'Witness statement', true);
+    ER.addClue('st-e', 'Statement of Emre Demir', stmt('EMRE DEMIR', 'the Defendant, aged 13', ED, 'E. Demir', '2 February'), 'wstmt', 'Witness statement');
+    GLASS.learn(['witness', 'witness statement', 'statement of truth', 'exhibit']);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['Mr Makepeace has given you the Advocates&rsquo; Room. Use the button at the bottom of the screen.']];
+    if (wsBox && step === 3) return ['sheet', [
+      'Both answers are on Ms Nair&rsquo;s card: rule 2 and rule 3. The Notebook button is at the top of the puzzle.',
+      'Rule 2 says that the one who makes the claim must prove it. Who is making this claim? Rule 3 says that there are two kinds of court and two standards. Which kind of court are you sitting in?',
+      'Rule 2 again: who is the claimant here? The proving is that person&rsquo;s job, and nobody else&rsquo;s. Rule 3 again: this is a civil court, where nobody goes to prison. Which of the three phrases belongs to a civil court?'
+    ]];
+    if (wsBox && step === 2) return ['issue', [
+      'Three disagreements. But the judge is here to decide only one thing: does Mr Thistlewood get his £900? Which of the three decides that?',
+      'Try each one like this: &ldquo;If the judge decides this, is the case over?&rdquo; Whether somebody said sorry in June does not decide who pays for October. Where Emre was on Saturday afternoon is only a step on the way.',
+      'The issue is the paragraph in which Mr Thistlewood says what Emre did. Click the number on that piece of tape, on the left-hand statement.'
+    ]];
+    if (wsBox) return ['ties', [
+      'Rule 1 on Ms Nair&rsquo;s card: cross out everything that the two of them agree about. They agree that Emre kicks a ball against the fence, that balls come over, that a pane was cracked in June, and that the ball in the greenhouse is Emre&rsquo;s. None of those is a fight.',
+      'A real disagreement is two paragraphs that cannot both be true. Take Mr Thistlewood&rsquo;s paragraphs one at a time and ask: does Emre say the opposite anywhere? And be careful with the crash: a crash is only a noise, and a noise does not need Emre.',
+      'Look at three of Mr Thistlewood&rsquo;s paragraphs: the one about saying sorry, the one about where Emre was that afternoon, and the one about what Emre did with the ball. Emre answers each of them.'
+    ]];
+    return ['look', [
+      'Ms Nair&rsquo;s white card is on the table, on the right. Rule 1 tells you what to do with two statements. Read it, read the claim form on the left, and talk to Selin and to Emre.',
+      'Both witness statements are in the open file in the middle of the table. Click the file.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#go').classList.toggle('on', !!nextFile);
+    $('#bundle').classList.toggle('ready', !nextFile && !!ER.flag('c-card'));
+    ER.pips(nextFile ? 3 : (ER.flag('c-issue') ? 2 : ((ER.flag('c-ties') || []).length >= 3 ? 1 : 0)), 3);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The file is tied up again. The Advocates&rsquo; Room is waiting.'); return; }
+    if (ER.flag('c-in')) { ER.say('Consultation Room 2. The file is open on the table.'); return; }
+    busy = true; ER.flag('c-in', 1);
+    ER.narrate([
+      'Inside the file: a claim form, two witness statements, three exhibits in a plastic wallet, and a white card that Ms Nair has had laminated.',
+      'Selin is watching you. Emre is watching the table.',
+      'Half an hour. Start with the card.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the room ---------- */
+  $('#card').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'crib', clue: { id: 'card', title: 'Ms Nair’s card: Before you go in', kind: 'In the front of the file' },
+      done: function () { ER.flag('c-card', 1); paint(); GLASS.learn(['issue', 'prove', 'burden of proof', 'balance of probabilities', 'beyond reasonable doubt', 'criminal court']); } });
+  });
+  $('#claim').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CLAIM, cls: 'n1', clue: { id: 'claim', title: 'The claim form', kind: 'Thistlewood v Demir' }, done: function () { GLASS.learn(['claim', 'particulars of claim', 'statement of truth']); } });
+  });
+  $('#selin').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Selin Demir', role: 'Emre’s sister · his litigation friend', face: window.FACE('selin'),
+      lines: [
+        { note: 'Selin sits down without taking off the yellow raincoat, like somebody who may have to leave in a hurry.', q: 'Tell me about that Saturday.',
+          a: 'Saturday the eighteenth. Emre had the Autumn Gala at the Baths. I took him at half past one and we got home after six. Fifty metres backstroke. He came third, not that anybody asks. When we got in there was a note on the mat, all in capitals. YOUR BOY HAS DESTROYED MY GREENHOUSE.' },
+        { q: 'And then?',
+          a: 'Sunday morning he was on our step, with the ball under his arm like a prisoner. I said it was probably the wind. On the Friday night it blew the bins right down our street, and I nearly came off my bike going to work. He said his greenhouse had stood there for twenty-two years and was not afraid of a bit of wind. Then he said nine hundred pounds, and I shut the door. I shouldn&rsquo;t have. But I did.' },
+        { q: 'Has one of Emre&rsquo;s footballs broken his glass before?',
+          a: 'One pane. In June. Emre went round with Mum the same evening and said sorry, to his own shoes, the way he does. Mum paid twenty pounds. Mr Thistlewood says that nobody ever said sorry. Maybe he didn&rsquo;t hear it. He was doing a lot of the talking.' },
+        { a: 'Look. Emre is a pain. He kicks that ball against the fence until your teeth hurt. But he doesn&rsquo;t lie. If he says he didn&rsquo;t kick it over on Saturday, then he didn&rsquo;t kick it over on Saturday.' }
+      ],
+      clue: { id: 'selin2', title: 'Selin, about that weekend', kind: 'What she said' }, last: 'Thank you'
+    });
+  });
+  $('#emre').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Emre Demir', role: 'The Defendant · aged thirteen', face: window.FACE('emre'),
+      lines: [
+        { note: 'Emre is drawing on the table with one finger: a rectangle, with a goal at each end.', q: 'Emre. Did you kick that ball into his garden on Saturday?', a: 'No.' },
+        { q: 'Is it your ball in his carrier bag?', a: 'Yeah. It&rsquo;s got my name on. I wrote it myself.' },
+        { q: 'So how did it get into his greenhouse?', a: 'Don&rsquo;t know.</p><p class="note">He rubs the football pitch out with his sleeve.</p><p>I don&rsquo;t know how it got in there. That&rsquo;s true. It&rsquo;s in my statement.' },
+        { q: 'Is there anything that isn&rsquo;t in your statement?', a: 'Everything in my statement&rsquo;s true.' }
+      ],
+      clue: { id: 'emre2', title: 'Emre, in Consultation Room 2', kind: 'What he said' }, last: 'All right'
+    });
+  });
+  $('#bundle').addEventListener('click', function () { if (busy) return; if (nextFile) { ER.say('The file is tied up again, with the issue written on the front in your own writing.'); return; } openWs(); });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  GLASS.thing('#window', null, 'Wire in the glass, and rain on the other side of it. Beyond the rain there is a car park.', isBusy);
+  GLASS.thing('#plant', null, 'A plant that has sat through a great many consultations, and has given up.', isBusy);
+  GLASS.thing('#radiator', 'radiator', 'The radiator is either off or boiling. Today it is off.', isBusy);
+  GLASS.thing('#clock', null, 'Twenty-one minutes past ten. In Hearing Room 3 the parking company is still explaining its map.', isBusy);
+  GLASS.thing('#poster', null, 'MEDIATION. HAVE YOU TRIED TALKING? Selin read it when she came in. &ldquo;I tried,&rdquo; she said. &ldquo;On our front step. He had the ball under his arm.&rdquo;', isBusy);
+  GLASS.thing('#door', null, 'CONSULTATION ROOM 2. The little brass slide says ENGAGED.', isBusy);
+  GLASS.thing('#tissues', 'tissues', 'A box of tissues. The court puts one in every consultation room. They get used.', isBusy);
+  GLASS.thing('#phone', null, 'Your phone. Nothing from Ms Nair since 9.52. No signal on her train, or no battery, or both.', isBusy);
+
+  /* ---------- two statements and a reel of pink tape ---------- */
+  var NOPE = {
+    '2>2': 'Selin shakes her head. &ldquo;They&rsquo;re saying the same thing. He kicks it at the fence, and sometimes it goes over. Nobody is fighting about that.&rdquo;',
+    '7>4': '&ldquo;The ball is Emre&rsquo;s. He says so, and we say so. That isn&rsquo;t a fight. That&rsquo;s a choir.&rdquo;',
+    '3>2': '&ldquo;A ball cracked a pane in June: they both say that. Read the rest of his paragraph. What ELSE does he say about June?&rdquo;',
+    '5>5': '&ldquo;A crash at a quarter past four, and Emre at the Baths at a quarter past four. Why can&rsquo;t both of those be true? A crash doesn&rsquo;t need Emre.&rdquo;',
+    '5>6': '&ldquo;He heard a crash. Emre didn&rsquo;t kick a ball. Both can be true at once: a crash is only a noise. Which paragraph says what MADE the noise?&rdquo;',
+    '6>6': '&ldquo;Careful. He says Emre was in his garden. Emre says he didn&rsquo;t kick a ball over. You can stand in a garden without kicking a ball over a fence. Which paragraph says where Emre WAS?&rdquo;',
+    '7>6': '&ldquo;He FOUND the ball. He doesn&rsquo;t say in that paragraph that anybody kicked it. Finding and kicking are two different things.&rdquo;',
+    '7>7': '&ldquo;He found the ball in the greenhouse. Emre doesn&rsquo;t know how it got there. Those two fit together fine. Emre has never said that the ball wasn&rsquo;t in there.&rdquo;',
+    '4': '&ldquo;Friday at six, every pane whole. Emre&rsquo;s statement doesn&rsquo;t argue with that.&rdquo; Selin runs her finger down the page. &ldquo;Emre&rsquo;s statement doesn&rsquo;t say anything about Friday at all.&rdquo;',
+    '9': '&ldquo;Nobody says the repairs didn&rsquo;t cost nine hundred pounds. The fight is about who pays.&rdquo;',
+    '1': '&ldquo;He was a signalman. Emre is in Year 9. I don&rsquo;t think the judge is going to have to choose.&rdquo;',
+    '*': 'Selin reads the two paragraphs aloud, one after the other. &ldquo;I don&rsquo;t see it. Couldn&rsquo;t both of those be true?&rdquo;'
+  };
+  function yes(tn, en) { return 'His paragraph ' + tn + ' and Emre&rsquo;s paragraph ' + en + ' cannot both be true. Selin nods. A length of pink tape goes across the table.'; }
+  function openWs() {
+    var box = ER.el('div', 'ws'), ties = ER.flag('c-ties') || [], sel = null, pick = { burden: '', sure: '' }, done = false;
+    function col(side, title, sub, list, sig, date) {
+      return '<div class="ws-doc ' + (side === 't' ? 'l' : 'r') + '"><h4>WITNESS STATEMENT OF ' + title + '<small>' + sub + '</small></h4>' +
+        list.map(function (t, i) { return '<button type="button" class="ws-p" data-s="' + side + '" data-n="' + (i + 1) + '"><span>' + (i + 1) + '.</span><span>' + ER.gloss(t) + '</span><i class="ws-flag"></i></button>'; }).join('') +
+        '<p class="tru"><span>I believe that the facts stated in this witness statement are true.</span><span class="sig">' + sig + '</span></p></div>';
+    }
+    box.innerHTML = '<div class="ws-docs"><svg class="ws-tape"></svg>' + col('t', 'STANLEY THISTLEWOOD', 'the Claimant &middot; 9 January', ST, 'S. Thistlewood') + col('e', 'EMRE DEMIR', 'the Defendant, aged 13 &middot; 2 February', ED, 'E. Demir') +
+      '</div><div class="ws-bar"><p class="pmsg"></p><div class="ws-sheet">' +
+      '<div data-k="burden"><label>WHO HAS TO PROVE IT?</label><button type="button" data-v="claimant">Mr Thistlewood</button><button type="button" data-v="defendant">Emre</button><button type="button" data-v="both">both of them</button></div>' +
+      '<div data-k="sure"><label>HOW SURE MUST THE JUDGE BE?</label><button type="button" data-v="certain">certain</button><button type="button" data-v="doubt">sure, beyond reasonable doubt</button><button type="button" data-v="likely">more likely than not</button></div>' +
+      '<button type="button" class="btn" id="ws-go">Tie up the file</button></div></div>';
+    var msgEl = box.querySelector('.pmsg'), tape = box.querySelector('.ws-tape'), docs = box.querySelector('.ws-docs');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function P(s, n) { return box.querySelector('.ws-p[data-s="' + s + '"][data-n="' + n + '"]'); }
+    function draw() {
+      var r0 = docs.getBoundingClientRect(), s = '';
+      ER.$$('.ws-p', box).forEach(function (p) { p.classList.remove('tied'); });
+      ties.forEach(function (t, i) {
+        var a = P('t', t.split('>')[0]), b = P('e', t.split('>')[1]), ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+        var x1 = ra.right - r0.left + 4, y1 = ra.top + ra.height / 2 - r0.top, x2 = rb.left - r0.left - 4, y2 = rb.top + rb.height / 2 - r0.top;
+        a.classList.add('tied'); b.classList.add('tied'); a.querySelector('.ws-flag').textContent = b.querySelector('.ws-flag').textContent = i + 1;
+        s += '<path d="M' + x1.toFixed(1) + ' ' + y1.toFixed(1) + 'C' + (x1 + 44).toFixed(1) + ' ' + y1.toFixed(1) + ' ' + (x2 - 44).toFixed(1) + ' ' + y2.toFixed(1) + ' ' + x2.toFixed(1) + ' ' + y2.toFixed(1) + '"/>';
+      });
+      tape.innerHTML = s;
+      box.setAttribute('data-ties', ties.length); box.setAttribute('data-step', step);
+    }
+    function setStep(n) {
+      step = n; box.classList.toggle('s2', n === 2); box.classList.toggle('s3', n === 3);
+      if (n === 2) msg('Three places where the two stories cannot both be true. Selin looks at the three lengths of tape. &ldquo;So which one is the judge actually here for? The other two are just noise.&rdquo; <i>Click the number on one of the three.</i>');
+      if (n === 3) msg('<b>The issue:</b> did Emre&rsquo;s ball break the glass? Everything else in the two statements is either agreed, or beside the point. Now the front sheet of the file has two more boxes, and Ms Nair fills them in for every case.');
+      draw(); paint();
+    }
+    function tie(tn, en) {
+      var k = tn + '>' + en;
+      if (ties.some(function (t) { return t.split('>')[0] === String(tn); })) { msg('That paragraph of Mr Thistlewood&rsquo;s is tied already.'); return; }
+      if (ER.check('tie', k)) {
+        ties.push(k); ER.flag('c-ties', ties); GLASS.sfx.tape(); draw();
+        if (ties.length >= 3) { setTimeout(function () { if (step === 1) setStep(2); }, 2600); msg(yes(tn, en) + ' <b>That is three.</b>'); }
+        else msg(yes(tn, en) + ' <b>' + (ties.length === 1 ? 'That is one.' : 'That is two.') + '</b>');
+        return;
+      }
+      GLASS.bump('c-wrong'); GLASS.sfx.hm();
+      msg(NOPE[k] || NOPE[tn] || NOPE['*']);
+    }
+    ER.$$('.ws-p', box).forEach(function (p) {
+      p.addEventListener('click', function () {
+        var s = p.getAttribute('data-s'), n = +p.getAttribute('data-n');
+        if (done) return;
+        if (step === 2) {
+          if (!p.classList.contains('tied')) return;
+          if (s === 'e') n = +ties.filter(function (t) { return t.split('>')[1] === String(n); }).pop().split('>')[0];      /* the same piece of tape, from its other end */
+          if (ER.check('issue', n)) { ER.flag('c-issue', n); p.classList.add('issue'); GLASS.sfx.pencil(); setStep(3); return; }
+          GLASS.bump('c-wrong'); GLASS.sfx.hm();
+          msg(n === 3 ? '&ldquo;June?&rdquo; says Selin. &ldquo;It matters to Mum. But suppose the judge decides that Emre did say sorry in June. Does that tell her who pays for October?&rdquo;'
+            : '&ldquo;Closer. But think. Say the judge decides that he WAS at the Baths. Is it all over? Couldn&rsquo;t the ball have done it at some other time? Where he was is a step on the way. It isn&rsquo;t the question.&rdquo;');
+          return;
+        }
+        if (step !== 1) return;
+        if (p.classList.contains('tied')) { msg('That one is tied already.'); return; }
+        if (!sel || sel.getAttribute('data-s') === s) { if (sel) sel.classList.remove('sel'); sel = sel === p ? null : p; if (sel) sel.classList.add('sel'); ER.sfx.click(); return; }
+        var a = s === 't' ? p : sel, b = s === 't' ? sel : p;
+        sel.classList.remove('sel'); sel = null;
+        tie(+a.getAttribute('data-n'), +b.getAttribute('data-n'));
+      });
+    });
+    ER.$$('.ws-sheet div button', box).forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (done) return;
+        var k = b.parentNode.getAttribute('data-k'); pick[k] = b.getAttribute('data-v');
+        ER.$$('button', b.parentNode).forEach(function (o) { o.classList.toggle('on', o === b); }); ER.sfx.click();
+      });
+    });
+    box.querySelector('#ws-go').addEventListener('click', function () {
+      var file;
+      if (done) return;
+      if (!pick.burden || !pick.sure) { msg('Two boxes, and one of them is still empty.'); return; }
+      if (!ER.check('burden', pick.burden)) {
+        GLASS.bump('c-wrong'); GLASS.sfx.hm();
+        msg(pick.burden === 'both' ? '&ldquo;Both of them?&rdquo; says Selin. &ldquo;Then why does the card say that our client doesn&rsquo;t have to prove a thing? Rule 2.&rdquo;'
+          : 'Selin reads rule 2 off Ms Nair&rsquo;s card, slowly, the way you read to a very small child. &ldquo;The one who makes the claim must prove it.&rdquo; She looks at her brother. &ldquo;You don&rsquo;t have to prove that you didn&rsquo;t. He has to prove that you did.&rdquo;');
+        return;
+      }
+      if (!ER.check('sure', pick.sure)) {
+        GLASS.bump('c-wrong'); GLASS.sfx.hm();
+        msg(pick.sure === 'certain' ? '&ldquo;Certain? Then nobody would ever win anything. Even HE can&rsquo;t be certain, and it&rsquo;s his greenhouse. Rule 3.&rdquo;'
+          : '&ldquo;Beyond reasonable doubt is for crimes,&rdquo; says Selin, with her finger on the card. &ldquo;Nobody is going to prison over a greenhouse. Rule 3: what does a civil court want?&rdquo;');
+        return;
+      }
+      file = ER.exitOk([ties.map(function (t) { return t.split('>')[0]; }).sort().join('+') + '|' + ER.flag('c-issue') + '|' + pick.burden + '|' + pick.sure]);
+      if (!file) { msg('The tape will not tie. Something is wrong with this lock: tell your teacher.'); return; }
+      done = true; nextFile = file; ER.flag('c-file', file); GLASS.done('consult'); GLASS.sfx.tape();
+      msg('You write three lines on the front of the file. <b>ISSUE:</b> did Emre&rsquo;s ball break the glass? <b>TO BE PROVED BY:</b> Mr Thistlewood. <b>HOW SURE:</b> more likely than not.');
+      GLASS.mine('front', 'The front of the file', '<p>ISSUE: did Emre&rsquo;s ball break the glass?</p><p>TO BE PROVED BY: Mr Thistlewood. He is the claimant, so the burden of proof is on him. Emre does not have to prove anything.</p><p>HOW SURE: on the balance of probabilities. More likely than not.</p><p>Level scales = not proved.</p>', true);
+      setTimeout(function () {
+        ER.closeAll(); GLASS.solved(); paint(); busy = true;
+        ER.narrate([
+          '&ldquo;So we don&rsquo;t have to prove what DID break it,&rdquo; says Selin slowly. &ldquo;He has to prove that the ball did. And all he has is that he found it in there.&rdquo;',
+          '&ldquo;And a crash,&rdquo; you say. &ldquo;At a quarter past four. He noted the time by his alarm clock.&rdquo; Selin pulls a face. &ldquo;Who looks at an alarm clock in the afternoon?&rdquo;',
+          'Nobody has an answer to that. Emre goes on looking at the table.',
+          'The door opens four inches. It is Mr Makepeace. &ldquo;The map has gone badly for the parking company,&rdquo; he says, with quiet pleasure. &ldquo;Twenty minutes. There are three exhibits in that file, and the big table in the Advocates&rsquo; Room is free. Nobody will mind. Nobody is ever in there.&rdquo;'
+        ], function () { busy = false; });
+      }, 3200);
+    });
+    fileStatements();
+    wsBox = box; step = ER.flag('c-issue') ? 3 : (ties.length >= 3 ? 2 : 1);
+    ER.open('ov-lock', box, function () { wsBox = null; window.removeEventListener('resize', draw); });
+    window.addEventListener('resize', draw);
+    if (ER.flag('c-issue')) P('t', ER.flag('c-issue')).classList.add('issue');
+    if (step === 1) { msg('Two statements about the same weekend. Most of what they say is the same story. <b>Tie together two paragraphs that cannot both be true:</b> click one on the left, then one on the right. There are three such pairs.'); draw(); }
+    else setStep(step);
+    setTimeout(draw, 60);
+  }
+})();
+</script>
+</body>
+</html>

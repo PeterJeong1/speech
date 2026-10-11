@@ -1,0 +1,173 @@
+/* Move Sixteen - what every room of the story shares: a small congress's kinds of paper, a clipboard for the notebook,
+   the hints and the word tags, and a few small parts. Each room sets its own palette on <body>. */
+
+/* ---- shared bits ---- */
+.tc-theme{font-family:'Oswald',sans-serif}
+.tc-room{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.04em}
+.tc-text{font-family:'EB Garamond',Georgia,serif}
+.cap{font-family:'EB Garamond',Georgia,serif}
+.tk-name{font-family:'Cinzel',serif;font-weight:700;font-size:25px;letter-spacing:.03em}
+.tk-text{font-family:'EB Garamond',Georgia,serif}
+.gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:1px solid var(--accent,#e3b23c);
+  color:var(--accent,#e3b23c);background:var(--hud-bg,rgba(20,16,12,.92));font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.18em;
+  text-transform:uppercase;border-radius:3px}
+.gobtn.on{display:block}
+.gobtn:hover{background:var(--accent,#e3b23c);color:#14110b}
+.pmsg{min-height:54px;margin:0;font-family:'EB Garamond',Georgia,serif;font-size:18.5px;line-height:1.36;color:#f1ecdf}
+.pmsg b{color:#f0cf7a;font-weight:600}
+.pmsg i{color:#cfd3cf}
+.sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+.cT{font-family:'Cinzel',serif;font-weight:700;text-anchor:middle}
+.kT{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+.hT{font-family:'Caveat',cursive;font-weight:700;text-anchor:middle}
+.ready{animation:nudge 1.7s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateY(-6px)}}
+
+/* ---- the congress's paper ---- */
+.doc b.t{font-weight:700;letter-spacing:.04em}
+.doc .pen{font-family:'Caveat',cursive;font-weight:700;font-size:1.3em;line-height:1;color:#2b3f86}
+.doc .red{font-family:'Caveat',cursive;font-weight:700;font-size:1.3em;line-height:1;color:#b3261c}
+.doc .sig{font-family:'Homemade Apple',cursive;font-size:16px;color:#1d2a52;line-height:1.4}
+/* Form G: green, printed on the town hall's own copier */
+.doc.formg{width:min(820px,94vw);padding:20px 28px 18px;background:#d6e6cf linear-gradient(172deg,rgba(255,255,255,.5),rgba(90,130,90,.14));font-family:'Special Elite','Courier New',monospace;
+  font-size:14.5px;line-height:1.38;color:#1c261c;transform:rotate(-.3deg)}
+.doc.formg h4{margin:0 0 6px;display:flex;justify-content:space-between;align-items:flex-end;font-family:'Oswald',sans-serif;font-weight:600;font-size:21px;letter-spacing:.1em;border-bottom:3px solid #1c261c;padding-bottom:5px}
+.doc.formg h4 small{font-family:'Stardos Stencil',serif;font-weight:700;font-size:26px;letter-spacing:.06em}
+.doc.formg .ln{display:grid;grid-template-columns:240px minmax(0,1fr);gap:8px;margin:0 0 3px;border-bottom:1px dotted #4c5f4c;padding-bottom:1px;font-size:13.5px}
+.doc.formg .ln>span:last-child{font-family:'Caveat',cursive;font-weight:700;font-size:20px;line-height:1;color:#2b3f86}
+.doc.formg h5{margin:10px 0 5px;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.2em;text-transform:uppercase;background:#1c261c;color:#d6e6cf;padding:3px 10px 2px}
+.doc.formg p{margin:0 0 6px}
+.doc.formg ol{margin:0 0 6px;padding-left:26px}
+.doc.formg li{margin:0 0 3px}
+.doc.formg .pen{font-size:1.45em}
+/* the congress rules: typed, and copied so often that the letters have gone soft */
+.doc.rules{width:min(760px,94vw);padding:24px 34px 20px;background:#f3f1e8 radial-gradient(circle at 20% 30%,rgba(0,0,0,.035) 0 1px,transparent 2px) 0 0/7px 9px;font-family:'Special Elite','Courier New',monospace;
+  font-size:14.5px;line-height:1.4;color:#24231f;transform:rotate(.35deg)}
+.doc.rules:before{content:'';position:absolute;left:18px;top:14px;width:26px;height:5px;background:#8d9097;transform:rotate(-38deg)}
+.doc.rules h4{margin:0 0 2px;text-align:center;font-family:'Stardos Stencil',serif;font-weight:700;font-size:23px;letter-spacing:.08em}
+.doc.rules h5{margin:0 0 10px;text-align:center;font-family:'Special Elite',monospace;font-weight:400;font-size:13px;letter-spacing:.1em;border-bottom:2px solid #24231f;padding-bottom:7px}
+.doc.rules p{margin:0 0 7px;padding-left:30px;text-indent:-30px}
+.doc.rules p b{letter-spacing:.06em}
+/* a slip from the arbiter's pad: the pink copy */
+.doc.slip{width:min(640px,94vw);padding:20px 28px 18px;background:#f6cfd6 linear-gradient(168deg,rgba(255,255,255,.5),rgba(160,60,90,.14));font-family:'Caveat',cursive;font-weight:700;font-size:22px;line-height:1.18;
+  color:#27365f;transform:rotate(-.8deg)}
+.doc.slip h4{margin:0 0 8px;display:flex;justify-content:space-between;align-items:flex-end;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.14em;color:#3a1d26;border-bottom:2px solid #3a1d26;padding-bottom:5px}
+.doc.slip h4 small{font-family:'Courier Prime',monospace;font-weight:700;font-size:14px;letter-spacing:.04em}
+.doc.slip p{margin:0 0 7px}
+.doc.slip ol{margin:0 0 6px;padding-left:28px}
+.doc.slip li{margin:0 0 5px}
+.doc.slip .fine{font-family:'Oswald',sans-serif;font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#3a1d26;border-top:1px solid #3a1d26;padding-top:5px;margin-top:8px}
+.doc.slip .r7{display:inline-block;padding:1px 10px 0;border:3px solid #b3261c;color:#b3261c;font-family:'Stardos Stencil',serif;font-size:17px;letter-spacing:.12em;transform:rotate(-4deg)}
+/* the wall chart */
+.doc.chart{width:min(860px,95vw);padding:20px 26px 16px;background:#fdfdfb;font-family:'Oswald',sans-serif;font-size:15px;line-height:1.3;color:#1c1d22;border-top:12px solid #1f5a3a}
+.doc.chart h4{margin:0 0 2px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:25px;letter-spacing:.08em;color:#1f5a3a}
+.doc.chart h5{margin:0 0 8px;font-weight:400;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#55584f}
+.doc.chart table{width:100%;border-collapse:collapse}
+.doc.chart th{font-weight:500;font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-align:left;border-bottom:2px solid #1c1d22;padding:3px 6px}
+.doc.chart td{padding:4px 6px 3px;border-bottom:1px solid #c9ccd0;font-size:16px}
+.doc.chart td.n{font-family:'Courier Prime',monospace;font-weight:700;text-align:center;width:44px}
+.doc.chart td.res{font-family:'Courier Prime',monospace;font-weight:700;font-size:17px;text-align:center;width:150px;white-space:nowrap}
+.doc.chart td.res s{color:#8d9097}
+.doc.chart tr.b1 td{background:#fff3c4}
+.doc.chart p{margin:9px 0 0;font-family:'EB Garamond',serif;font-size:16.5px;line-height:1.36}
+/* a score sheet: printed boxes, and a pencil */
+.doc.sheet{width:min(600px,94vw);padding:18px 24px 14px;background:#fbf9ef;font-family:'Outfit',Arial,sans-serif;font-weight:300;font-size:13.5px;color:#22231f;transform:rotate(.4deg)}
+.doc.sheet h4{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.12em;border-bottom:2px solid #22231f;padding-bottom:4px}
+.doc.sheet .top{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;margin-bottom:7px}
+.doc.sheet .top span b,.doc.sheet td.h{font-family:'Caveat',cursive;font-weight:700;font-size:20px;line-height:1;color:#4a4f5a}
+.doc.sheet table{width:100%;border-collapse:collapse}
+.doc.sheet th{font-weight:500;font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px solid #6b6d66;padding:2px 4px;background:#ecebe0}
+.doc.sheet td{border:1px solid #9a9c94;padding:0 6px;height:23px;text-align:center}
+.doc.sheet td:first-child{width:34px;font-weight:500;color:#6b6d66}
+.doc.sheet td.m{width:74px;background:#f3f6ea}
+.doc.sheet .res{margin:7px 0 0;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+/* the corridor sheet, on its clipboard */
+.doc.signout{width:min(700px,94vw);padding:46px 28px 16px;background:#fdfdfb;font-family:'Outfit',Arial,sans-serif;font-weight:400;font-size:14px;color:#22231f;border:10px solid #7a5a36;border-top-width:14px;border-radius:5px}
+.doc.signout:before{content:'';position:absolute;left:50%;top:-12px;width:150px;height:40px;margin-left:-75px;border-radius:6px;background:linear-gradient(#c9ccd0,#8d9097)}
+.doc.signout h4{margin:0 0 2px;font-family:'Oswald',sans-serif;font-weight:600;font-size:18px;letter-spacing:.12em}
+.doc.signout h5{margin:0 0 8px;font-weight:300;font-size:13px}
+.doc.signout .cols{display:grid;grid-template-columns:1fr 1fr;gap:0 26px}
+.doc.signout table{width:100%;border-collapse:collapse}
+.doc.signout th{font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:left;border-bottom:2px solid #22231f;padding:2px 6px}
+.doc.signout td{border-bottom:1px solid #c9ccd0;padding:0 6px;height:24px;font-family:'Caveat',cursive;font-weight:700;font-size:20px;line-height:1;color:#2b3f86}
+.doc.signout p{margin:8px 0 0;font-size:12.5px;font-weight:300}
+/* the Chief Arbiter's incident book */
+.doc.inc{width:min(640px,94vw);padding:26px 34px 22px 58px;background:#f6f0dc repeating-linear-gradient(transparent 0 29px,rgba(70,100,150,.2) 29px 30px);font-family:'Caveat',cursive;font-weight:700;font-size:22.5px;line-height:30px;color:#1d2a52;
+  box-shadow:0 26px 70px rgba(0,0,0,.6),inset 42px 0 0 #f6f0dc,inset 44px 0 0 rgba(200,90,90,.5);transform:rotate(-.5deg)}
+.doc.inc h4{margin:0;font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;line-height:30px;letter-spacing:.2em;color:#5a2030}
+.doc.inc p{margin:0}
+/* the telephone list, taped to the lid of a shoe box */
+.doc.phones{width:min(560px,94vw);padding:20px 26px 16px;background:#c9a877 linear-gradient(170deg,rgba(255,255,255,.3),rgba(90,60,20,.2));font-family:'Courier Prime',monospace;font-size:15px;line-height:1.34;color:#2a2318}
+.doc.phones h4{margin:0 0 2px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:21px;letter-spacing:.08em}
+.doc.phones h5{margin:0 0 8px;font-family:'Courier Prime',monospace;font-weight:400;font-size:13px}
+.doc.phones table{width:100%;border-collapse:collapse;background:rgba(255,255,255,.55)}
+.doc.phones th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-align:left;border-bottom:2px solid #2a2318;padding:3px 8px}
+.doc.phones td{border-bottom:1px solid rgba(42,35,24,.35);padding:2px 8px;font-family:'Caveat',cursive;font-weight:700;font-size:20px;line-height:1.05;color:#27365f}
+.doc.phones p{margin:8px 0 0;font-size:13.5px}
+/* Miss Ferrars's card: she had it laminated after the fortieth parent */
+.doc.lam{width:min(720px,94vw);padding:22px 30px 18px;background:#fffef8 linear-gradient(118deg,rgba(255,255,255,0) 30%,rgba(190,220,255,.34) 46%,rgba(255,255,255,0) 60%);border-radius:16px;border:1px solid #cfd3d6;
+  font-family:'Outfit',Arial,sans-serif;font-weight:400;font-size:15.5px;line-height:1.4;color:#1c1d22;transform:rotate(.5deg)}
+.doc.lam h4{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:19px;letter-spacing:.1em;color:#7b1f2a;border-bottom:3px solid #e8b923;padding-bottom:5px}
+.doc.lam h4 small{display:block;font-family:'Caveat',cursive;font-weight:700;font-size:20px;letter-spacing:0;color:#2b3f86}
+.doc.lam p{margin:0 0 7px}
+.doc.lam .dg{float:right;width:190px;height:auto;margin:0 0 4px 16px}
+.doc.lam .ex{background:#fff3c4;padding:7px 12px 6px;border-left:5px solid #e8b923}
+/* the Chair's card: gold edge, and a quotation */
+.doc.gilt{width:min(720px,94vw);padding:26px 36px 22px;background:#fbf6e6;border:2px solid #c9a24a;outline:6px solid #fbf6e6;box-shadow:0 26px 70px rgba(0,0,0,.6),0 0 0 8px #c9a24a;font-family:'Tinos',Georgia,serif;font-size:16.5px;line-height:1.4;color:#22211c}
+.doc.gilt h4{margin:0 0 10px;text-align:center;font-family:'Cormorant SC',serif;font-weight:700;font-size:23px;letter-spacing:.12em;color:#3d3046}
+.doc.gilt p{margin:0 0 9px}
+.doc.gilt .six{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:20px;color:#6a2f52}
+/* the back of an Under-9 score sheet, in Mr Quayle's pencil */
+.doc.back{width:min(620px,94vw);padding:24px 30px 20px;background:#fbf9ef;font-family:'Caveat',cursive;font-weight:700;font-size:23px;line-height:1.2;color:#4a4f5a;transform:rotate(-.7deg)}
+.doc.back h4{margin:0 0 8px;font-size:27px;font-weight:700;text-decoration:underline;color:#3a3f4a}
+.doc.back p{margin:0 0 8px}
+.doc.back .egs{color:#2f6243}
+.doc.back .ghost{position:absolute;right:18px;top:12px;font-family:'Oswald',sans-serif;font-weight:500;font-size:11px;letter-spacing:.14em;color:#c9ccc0;transform:scaleX(-1)}
+/* the lost property book */
+.doc.lost{width:min(800px,95vw);padding:22px 28px 18px;background:#f6f0dc;border-left:22px solid #8f1d2c;border-right:4px solid #8f1d2c;font-family:'Caveat',cursive;font-weight:700;font-size:20.5px;line-height:1.1;color:#27365f}
+.doc.lost h4{margin:0 0 8px;font-family:'Cinzel',serif;font-weight:700;font-size:18px;letter-spacing:.14em;color:#8f1d2c}
+.doc.lost table{width:100%;border-collapse:collapse}
+.doc.lost th{font-family:'Oswald',sans-serif;font-weight:500;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;color:#5a2030;border-bottom:2px solid #8f1d2c;padding:2px 8px 2px 0}
+.doc.lost td{border-bottom:1px solid rgba(143,29,44,.35);padding:5px 10px 3px 0;vertical-align:top}
+.doc.lost td:first-child{white-space:nowrap}
+.doc.lost td:nth-child(3){width:210px}
+.doc.lost td:last-child{white-space:nowrap;width:176px;padding-right:0}
+.doc.lost .sig{font-size:13.5px}
+/* what you worked out, on the runner's pad */
+.doc.mine{width:min(600px,94vw);padding:38px 30px 26px 34px;background:#eef3f6 repeating-linear-gradient(transparent 0 30px,rgba(60,110,170,.22) 30px 31px);font-family:'Caveat',cursive;font-weight:700;
+  font-size:24px;line-height:31px;color:#1f3a8a;border-top:16px solid #2b2f36;transform:rotate(-.5deg)}
+.doc.mine:before{content:'';position:absolute;left:0;right:0;top:-10px;height:8px;background:radial-gradient(circle,#c9ccd0 3px,transparent 4px) 6px 0/22px 8px repeat-x}
+.doc.mine h4{margin:0;font-size:28px;font-weight:700;line-height:31px;text-decoration:underline}
+.doc.mine p{margin:0}
+/* what was said at the table */
+.doc.said{width:min(660px,94vw);padding:26px 36px 24px;background:#fbf8ec;font-family:'Tinos',serif;font-size:17.5px;line-height:1.42;color:#1c1d1f;border-left:8px solid #6a2f52}
+.doc.said h4{margin:0 0 12px;font-family:'Oswald',sans-serif;font-weight:500;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#6a2f52}
+.doc.said p{margin:0 0 9px}
+.doc.said p b{font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6b6453;margin-right:6px}
+.doc.said p.j{font-style:italic}
+.doc.said p.q{font-style:italic;color:#4a4f5a}
+.doc.statement{background:#fbf8ec;font-family:'EB Garamond',Georgia,serif;font-size:19px;border-left:8px solid #1f5a3a}
+.doc.statement h4{color:#1f5a3a}
+
+/* ---- the notebook: the runner's clipboard ---- */
+.nb{background:#6b4a2a linear-gradient(150deg,#8a6238,#4f3419);border:1px solid #2a1b10;border-radius:5px;color:#f1e9d6;
+  box-shadow:0 30px 90px rgba(0,0,0,.75),inset 0 0 0 5px #3a2614,inset 0 0 0 6px rgba(240,217,143,.35)}
+.nb-tabs{border-bottom-color:rgba(240,217,143,.4)}
+.nb-tabs button{font-family:'Oswald',sans-serif;font-weight:500;font-size:15px;letter-spacing:.2em;color:#e6d5ae}
+.nb-tabs button.on{background:#fbf8ec;color:#3a2614;border-color:rgba(240,217,143,.6)}
+.nb-list{border-right-color:rgba(240,217,143,.4)}
+.nb-list button{font-family:'EB Garamond',serif;font-size:17.5px;color:#f1e9d6}
+.nb-list button.on{background:#fbf8ec;color:#3a2614}
+.nb-view{background:#3a2614}
+.nb-words{background:#fbf8ec;color:#22211c}
+.nb-words b{font-family:'Tinos',serif;font-weight:700;font-size:18px}
+.nb-words span{font-family:'EB Garamond',serif;font-size:17px;color:#55503f}
+.nb-ko{border-color:#8f8873;color:#55503f}
+.nb-ko.on{background:#3a2614;color:#fbf8ec;border-color:#3a2614}
+.wtip,.wtag{background:#fbf8ec;color:#22211c;border-radius:2px;box-shadow:0 10px 26px rgba(0,0,0,.55),inset 5px 0 0 #1f5a3a}
+.wtag{padding-left:20px}.wtag:before{display:none}.wtip{padding-left:19px}
+.wtip b,.wtag b{font-family:'Tinos',serif;font-weight:700;font-size:18px}
+.hintbox{background:#fbf8ec;color:#22211c;border-top:6px solid #1f5a3a;border-radius:2px}
+.hintbox h6{color:#1f5a3a}
+.hintbox p i{background:#1f5a3a;color:#fbf8ec}
+.toast{font-family:'Oswald',sans-serif;background:rgba(22,16,10,.95)}

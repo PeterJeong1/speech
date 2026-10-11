@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Yard · Warm in the Middle</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-forensic.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="cake.css">
+<style>
+  body{--bg:#e9d2c4;--accent:#7a4fa0;--font-display:'Patrick Hand',cursive;--font-ui:'Barlow Condensed',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(250,240,232,.97);--tc-ink:#2a2230;--cap-bg:rgba(252,246,240,.96);--cap-ink:#2a2230;--panel:#faf2ea;--panel-ink:#2a2230;--face-bg:#e9cfc0;--q-ink:#5a3a7a;--fade:#faf0e8;
+    --hud-bg:rgba(252,246,240,.86);--hud-ink:#2a2230;--hud-line:rgba(42,34,48,.3);--ov-bg:rgba(48,36,44,.62)}
+  .tc-room{font-size:clamp(46px,6.6vw,88px);letter-spacing:.01em}
+  .tc-theme{color:#7a4fa0}
+  .tk-name{font-size:30px}
+  .tk-role{color:#7a4fa0}
+  .hbtn.hnt{border-color:#7a4fa0;color:#7a4fa0}
+  .ov-x{background:rgba(252,246,240,.9);color:#2a2230;border-color:rgba(42,34,48,.4)}
+  .gobtn{--accent:#5a3a7a}
+  .sB{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-anchor:middle}
+  .sZ{font-family:'Cinzel',serif;font-weight:700;text-anchor:middle}
+  .bird{animation:bird 26s linear infinite}
+  .bird.b2{animation-duration:34s;animation-delay:-12s}
+  @keyframes bird{0%{transform:translate(-200px,40px)}100%{transform:translate(1900px,-60px)}}
+  #sun{opacity:0;transition:opacity 5s steps(8,end)}
+  #scene.day #sun{opacity:1}
+  #table.ready{animation:tb 1.500s ease-in-out infinite}
+  @keyframes tb{50%{transform:translateY(-5px)}}
+  .hot:hover{filter:brightness(1.07)}
+
+  /* three patches and a brush */
+  .bn .bmsg{color:#fbf3ec}
+  .bn .bmsg b{color:#e3c6f5}
+  .bn .dish{cursor:pointer}
+  .bn .dish .ring{fill:none;stroke:none;stroke-width:4}
+  .bn .dish:hover .ring{stroke:#c9a3e6}
+  .bn .dish.on .ring{stroke:#7a4fa0}
+  .bn .patch{cursor:pointer}
+  .bn .patch path{transition:fill .8s}
+  .bn .btn{--accent:#e3c6f5}
+
+  /* the card at the end */
+  .done{position:fixed;right:2.2vw;top:62px;z-index:34;width:min(510px,94vw);max-height:calc(100vh - 80px);overflow:auto;padding:16px 26px 14px;display:none;background:#fffdf8;color:#2a2230;border-top:10px solid #7a4fa0;box-shadow:0 20px 60px rgba(60,30,50,.4)}
+  .done.on{display:block}
+  .okstamp{display:inline-block;padding:3px 14px 0;border:4px solid #b3261c;color:#b3261c;font-family:'Stardos Stencil',serif;font-weight:700;font-size:26px;letter-spacing:.14em;transform:rotate(-3deg);margin-bottom:8px}
+  .done h6{margin:9px 0 5px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;letter-spacing:.26em;text-transform:uppercase;color:#7a4fa0}
+  .done p{margin:0 0 3px;font-family:'IBM Plex Mono',monospace;font-size:13.500px;line-height:1.4}
+  .done ol{margin:0;padding-left:20px;font-family:'EB Garamond',serif;font-size:15.500px;line-height:1.3}
+  .done li{margin:0 0 3px}
+  .done .row{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+  .done .btn{--accent:#5a3a7a;font-size:14px;padding:7px 13px}
+  .done .btn:hover:not([disabled]){color:#fffdf8}
+  .done small{display:block;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:12px;opacity:.75;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+  .rp{width:min(780px,94vw);max-height:84vh;overflow:auto;background:#fffdf8;color:#2a2230;padding:22px 34px 18px;box-shadow:0 26px 70px rgba(0,0,0,.5);-webkit-user-select:text;user-select:text;border-left:16px solid #7a4fa0}
+  .rp h4{margin:0 0 3px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;letter-spacing:.26em;text-transform:uppercase;color:#7a4fa0}
+  .rp h3{margin:0 0 8px;font-family:'Patrick Hand',cursive;font-weight:normal;font-size:30px;line-height:1.1}
+  .rp p,.rp label{display:block;font-family:'EB Garamond',serif;font-size:18px;line-height:1.4;margin:0 0 6px;color:#2a2230}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Patrick Hand',cursive;font-size:22px;line-height:30px;color:#2b3a66;background:#fff repeating-linear-gradient(transparent 0 29px,#cdbdea 29px 30px);border:1px solid #b9a6dc;padding:0 12px;border-radius:0;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:184px}
+  .rp input[type=text]{height:32px}
+  .rp .count{font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;text-align:right;margin-top:3px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .rp .foot span{flex:1;font-family:'IBM Plex Mono',monospace;font-size:12.500px;opacity:.75}
+  .rp .btn{--accent:#5a3a7a}.rp .btn:hover:not([disabled]){color:#fffdf8}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f8eab"/><stop offset=".45" stop-color="#d9b3b0"/><stop offset=".75" stop-color="#ffd3ae"/><stop offset="1" stop-color="#ffe6c4"/></linearGradient>
+  <linearGradient id="sunG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fc4ea"/><stop offset=".6" stop-color="#ffe9c9"/><stop offset="1" stop-color="#fff4dc"/></linearGradient>
+  <pattern id="brk" width="60" height="30" patternUnits="userSpaceOnUse"><rect width="60" height="30" fill="#a5644c"/><path d="M0 1H60M0 16H60M1 0V15M31 15V30" stroke="#c9a08a" stroke-width="2"/></pattern>
+  <pattern id="flag" width="150" height="90" patternUnits="userSpaceOnUse"><rect width="150" height="90" fill="#9a938e"/><path d="M0 1H150M0 46H150M1 0V45M76 45V90" stroke="#7d7672" stroke-width="3"/></pattern>
+  <linearGradient id="dawnG" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#ffc79a" stop-opacity=".42"/><stop offset=".6" stop-color="#ffc79a" stop-opacity=".1"/><stop offset="1" stop-color="#6a6a8a" stop-opacity=".18"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6c873"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#3a1a2a" stop-opacity=".08"/><stop offset="1" stop-color="#2a1020" stop-opacity=".4"/></radialGradient>
+</defs>
+
+<!-- the sky, the town -->
+<rect x="-1000" y="-400" width="3600" height="1060" fill="url(#skyG)"/><rect id="sun" x="-1000" y="-400" width="3600" height="1060" fill="url(#sunG)"/>
+<g fill="#6a6078" opacity=".8"><path d="M900 420V330l60 -40 60 40v-30h30v60l70 -50 70 50v60z"/><path d="M1380 420v-80l50 -34 50 34v-40h24v50l96 -60v130z"/><rect x="960" y="270" width="16" height="40"/><rect x="1440" y="262" width="16" height="44"/></g>
+<g id="tower" class="hot"><path d="M1246 420V200h72v220z" fill="#5a5068"/><path d="M1240 200l42 -92 42 92z" fill="#4a4058"/><circle cx="1282" cy="250" r="22" fill="#f6efe2"/><path d="M1282 250l2.800 15.800" stroke="#2a2230" stroke-width="4" stroke-linecap="round"/><path d="M1282 250l-15.600 9" stroke="#2a2230" stroke-width="2.500" stroke-linecap="round"/><circle cx="1282" cy="250" r="2.500" fill="#b3261c"/></g>
+<g fill="none" stroke="#3a3248" stroke-width="3" stroke-linecap="round"><path class="bird" d="M0 150q10 -10 18 0q8 -10 18 0"/><path class="bird b2" d="M0 90q8 -8 14 0q6 -8 14 0"/></g>
+
+<!-- the yard wall, and the cat on it -->
+<rect x="880" y="400" width="1720" height="244" fill="url(#brk)"/><rect x="880" y="400" width="1720" height="244" fill="#3a2a3a" opacity=".22"/><rect x="872" y="388" width="1740" height="16" fill="#b9b0a8"/>
+<g id="catw" class="hot" transform="translate(1000 390)"></g>
+
+<!-- the back of the shop -->
+<rect x="-1000" y="-400" width="1900" height="1044" fill="url(#brk)"/><rect x="-1000" y="-400" width="1900" height="1044" fill="#3a2a3a" opacity=".3"/><rect x="884" y="-400" width="16" height="1044" fill="#8a5440"/>
+<path d="M822 -400V644" stroke="#3a3a42" stroke-width="12"/><g fill="#2a2a32"><rect x="812" y="120" width="32" height="8"/><rect x="812" y="420" width="32" height="8"/></g>
+<g id="flatwin" class="hot"><rect x="366" y="96" width="148" height="164" fill="#f1ece0"/><rect x="378" y="108" width="124" height="140" fill="#ffd98a"/><path d="M378 108h30q8 70 -30 140zM502 108h-30q-8 70 30 140z" fill="#9c2b2b"/><path d="M440 108v140M378 178h124" stroke="#f1ece0" stroke-width="6"/>
+  <rect x="360" y="256" width="160" height="22" fill="#5a4630"/><g fill="#c0392b"><circle cx="384" cy="250" r="9"/><circle cx="410" cy="246" r="10"/><circle cx="440" cy="250" r="9"/><circle cx="468" cy="246" r="10"/><circle cx="496" cy="250" r="9"/></g><g fill="#3d7a3a"><circle cx="397" cy="254" r="6"/><circle cx="426" cy="255" r="6"/><circle cx="454" cy="254" r="6"/><circle cx="482" cy="255" r="6"/></g></g>
+<g id="door" class="hot"><rect x="346" y="326" width="168" height="318" fill="#d9d2c4"/><rect x="360" y="340" width="140" height="304" fill="#dfeef2"/><g stroke="#bfd0d6" stroke-width="2"><path d="M360 400h140M360 448h140M360 496h140M406 340v200M452 340v200"/></g><rect x="360" y="540" width="140" height="22" fill="#2f5a4c"/><rect x="360" y="562" width="140" height="82" fill="#9a938a"/>
+  <path d="M360 340l-34 18v300l34 -14z" fill="#2f5a4c"/><path d="M352 352l-18 10v274l18 -8z" fill="none" stroke="#234438" stroke-width="3"/>
+  <rect x="380" y="290" width="100" height="26" fill="#fdfbf4"/><text x="430" y="308" class="sB" font-size="14" fill="#2f5a4c" letter-spacing="2">DELIVERIES</text></g>
+<g id="win" class="hot"><rect x="566" y="386" width="172" height="142" fill="#f1ece0"/><rect x="578" y="398" width="148" height="118" fill="#e9f4f6"/><path d="M652 398v118" stroke="#f1ece0" stroke-width="6"/><rect x="558" y="524" width="188" height="12" fill="#b9b0a8"/>
+  <path d="M606 516v-18h60v18z" fill="#b9c2c8" stroke="#7d8a92" stroke-width="2"/><path d="M608 498q28 -14 56 0" fill="#e3b565" stroke="#c4914a" stroke-width="2"/></g>
+<g id="bins" class="hot"><g><path d="M52 660v-116h84v116z" fill="#9aa5ac"/><path d="M44 544h100v-12H44z" fill="#7d8a92"/><path d="M68 660v-116M94 660v-116M120 660v-116" stroke="#8a969d" stroke-width="3"/><path d="M80 532q14 -12 28 0" fill="none" stroke="#7d8a92" stroke-width="4"/></g>
+  <g><path d="M158 664v-108h78v108z" fill="#aab4ba"/><path d="M150 556h94v-12h-94z" fill="#8a969d"/><path d="M178 664v-108M204 664v-108" stroke="#98a3a9" stroke-width="3"/></g></g>
+
+<!-- the ground -->
+<rect x="-1000" y="644" width="3600" height="800" fill="url(#flag)"/><rect x="-1000" y="644" width="3600" height="800" fill="url(#dawnG)" pointer-events="none"/>
+<rect x="336" y="640" width="188" height="24" fill="#c9c2ba"/><rect x="336" y="660" width="188" height="6" fill="#8f8a86"/>
+
+<!-- the van -->
+<g id="van" class="hot"><ellipse cx="1340" cy="704" rx="250" ry="14" fill="#000" opacity=".25"/>
+  <path d="M1120 664V468q0 -26 26 -26h296q36 0 54 34l42 78q12 20 12 46v64z" fill="#2f5a4c"/><path d="M1120 556h430v24h-430z" fill="#f1e6c8"/>
+  <path d="M1416 462h34q14 0 22 14l32 60h-88z" fill="#cfe6f5"/><path d="M1416 462v74" stroke="#234438" stroke-width="5"/>
+  <text x="1264" y="526" class="sZ" font-size="34" fill="#e6c873" letter-spacing="3">WHITLOW’S</text><text x="1264" y="573" class="sB" font-size="13" fill="#2f5a4c" letter-spacing="4">CAKES · SINCE 1961</text>
+  <path d="M1120 446l-74 22v198l74 -6z" fill="#27493e"/><path d="M1108 462l-50 14v172l50 -4z" fill="none" stroke="#1c3a30" stroke-width="3"/><rect x="1120" y="446" width="10" height="214" fill="#0e1a15"/>
+  <circle cx="1212" cy="668" r="38" fill="#1c1d22"/><circle cx="1212" cy="668" r="16" fill="#aab4ba"/><circle cx="1466" cy="668" r="38" fill="#1c1d22"/><circle cx="1466" cy="668" r="16" fill="#aab4ba"/><rect x="1540" y="596" width="14" height="22" rx="3" fill="#ffe9a0"/></g>
+<g id="flowers" class="hot"></g>
+
+<!-- the folding table -->
+<g id="table" class="hot"><path d="M1076 660l150 96M1226 660l-150 96" stroke="#8a6a3a" stroke-width="7" stroke-linecap="round"/><rect x="1062" y="646" width="178" height="12" rx="3" fill="#b08a55"/>
+  <ellipse cx="1100" cy="644" rx="24" ry="6" fill="#fdfbf4" stroke="#c9c2b4" stroke-width="1.500"/><path d="M1086 642q14 -22 28 0z" fill="#f3cf2e"/><path d="M1090 642q10 -14 20 0" fill="none" stroke="#fdf6c9" stroke-width="2"/>
+  <rect x="1140" y="614" width="18" height="32" rx="3" fill="#dfeef2" opacity=".8" stroke="#9fb4bd" stroke-width="1.500"/><rect x="1170" y="620" width="14" height="26" rx="3" fill="#8a5a2a"/><rect x="1172" y="612" width="10" height="9" fill="#1c1d22"/>
+  <path d="M1196 644l34 -22" stroke="#6b4a2a" stroke-width="4" stroke-linecap="round"/><path d="M1230 622l8 -6" stroke="#2a2230" stroke-width="5" stroke-linecap="round"/></g>
+
+<!-- the cake -->
+<g transform="translate(760 694)" id="trol"></g>
+<g id="cakeG" class="hot" transform="translate(760 680)"></g>
+
+<!-- Dr Novak, old Mr Whitlow, Chika, Mr Whitlow -->
+<g id="novak" class="hot" transform="translate(236 886)"></g>
+<g id="arthur" class="hot" transform="translate(430 664)"></g>
+<g id="chika" class="hot" transform="translate(992 858) scale(.95)"></g>
+<g id="whitlow" class="hot" transform="translate(1356 876) scale(.97)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">CASE CLOSED</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <h6>What you now know</h6>
+  <ol>
+    <li>Acids, such as lemon juice, vinegar and cream of tartar, have a pH below 7. Alkalis, such as bicarbonate of soda, soap and washing soda, have a pH above 7. Pure water is neutral: 7.</li>
+    <li>An indicator is a dye that changes colour with pH. Litmus only takes sides: red in an acid, blue in an alkali. Universal indicator gives a number.</li>
+    <li>Every indicator has colours of its own. Red cabbage is red or pink in an acid and purple when neutral; then blue, green and yellow as the alkali gets stronger.</li>
+    <li>An acid and an alkali cancel each other. That is neutralising, and it is how the cake was mended.</li>
+    <li>A hot thing cools quickly at first and then more and more slowly, because the speed depends on how much hotter it is than the room. On a graph that is a curve. A straight line gives the wrong time.</li>
+    <li>Pattern and size only say what kind of shoe it was. Wear and damage pick out the one shoe. Where two marks cross, the later one lies on top. A foot is about 15% of a person&rsquo;s height: a rough guide.</li>
+    <li>A pen leaves dents in the sheet underneath. A light held low at one side fills them with shadow, and the writing can be read.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Tell a friend</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the shelf</button></div>
+  <small>Warm in the Middle &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="cake.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, bench = null, told = {};
+  var LILAC = '#cdbdea', GREEN = '#8ecb8b';
+
+  /* the cat, the people, the florist's buckets, the cake as it is this morning */
+  function drawCake() { $('#cakeG').innerHTML = CAKE.cake(ER.flag('e-lock') ? { spray: true, flowers: !!ER.flag('e-done') } : { stain: [GREEN, GREEN] }); }
+  (function () {
+    var s = '', i, k, C = ['#e8a6b8', '#b79ad6', '#fdfbf4', '#d67dbd'];
+    [[1450, 838], [1512, 852], [1574, 836]].forEach(function (b, n) {
+      s += '<path d="M' + (b[0] - 26) + ' ' + (b[1] - 46) + 'l6 46h40l6 -46z" fill="#aab4ba"/><ellipse cx="' + b[0] + '" cy="' + (b[1] - 46) + '" rx="26" ry="6" fill="#7d8a92"/>';
+      for (i = 0; i < 9; i++) { k = (i * 37 + n * 11) % 44; s += '<path d="M' + (b[0] - 18 + k * 0.8) + ' ' + (b[1] - 46) + 'l' + ((k % 9) - 4) + ' -' + (34 + (i * 13) % 30) + '" stroke="#5a8a4a" stroke-width="2"/><circle cx="' + (b[0] - 18 + k * 0.8 + (k % 9) - 4) + '" cy="' + (b[1] - 80 - (i * 13) % 30) + '" r="7" fill="' + C[(i + n) % 4] + '"/>'; }
+    });
+    $('#flowers').innerHTML = s;
+    $('#catw').innerHTML = CAKE.fig('catsit'); $('#trol').innerHTML = CAKE.trolley();
+    $('#novak').innerHTML = CAKE.fig('novak'); $('#arthur').innerHTML = CAKE.fig('arthur'); $('#chika').innerHTML = CAKE.fig('chika'); $('#whitlow').innerHTML = CAKE.fig('whitlow');
+  })();
+
+  ER.init({
+    theme: 'forensic', story: 'cake', storyTitle: 'Warm in the Middle', id: 'yard', no: 'V', title: 'The Yard',
+    go: 'Saturday morning',
+    intro: [
+      'Mr Whitlow stopped the Sunday sponge on 6 April, and believed that nobody had ever thanked him for one. Two cards on his own board said otherwise: a baby cake in a second box in June, and a small plain one for afterwards in August.',
+      'The pad of gift labels kept the rest. A pen presses dents into the sheet underneath, and a light held low, almost flat along the paper, gives every dent a shadow: first from the side, then from the far edge, because a stroke only shows when the light crosses it. For Mr and Mrs Petrosyan. A little plain cake for Sunday, when the fuss is over. With Whitlow&rsquo;s compliments, as always. A.W.',
+      'Nobody went home. At about midnight Mr Whitlow said sorry to Chika, badly. At one o&rsquo;clock he said it again, rather better.',
+      'It is twenty to six on Saturday morning. Dr Novak says that nobody should match a colour under a strip light, so the cake has been wheeled out into the yard to wait for the day.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"fix":["4677ba8f"]},
+    sound: ['morning', { root: 53, bpm: 70, beds: [['birds', 0.6]] }],      /* the same night's work, with the sun coming: a major key, and a blackbird */
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('e-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('e-told', told); return true; }
+  function isBusy() { return busy; }
+  function hints() {
+    if (ER.flag('e-done') || ER.flag('e-lock')) return null;
+    if (bench && bench.parentNode) return ['mend', [
+      'Click a dish to wet the brush, and then click a patch to touch it once. Watch which way the colour moves along the red-cabbage strip at the top.',
+      'An alkali sent the icing green, so an acid will bring it back, one step for each touch. Lemon juice is already in the recipe. If you go past lilac into pink, a weak alkali takes it one step back the other way.'
+    ]];
+    if (!told.arthur) return ['arthur', ['A small man in a tartan dressing gown is standing on the back step with a ball of string. He has come down for his sponge. Talk to him.']];
+    return ['table', ['Chika has put a folding table beside the trolley, with half a lemon on it and a very small brush. Click the table.']];
+  }
+
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    drawCake();
+    CAKE.mine('label', 'The label', '<p>Two cards since 6 April thank Mr Whitlow for a small second cake: June and August.</p><p>The pad, under slanting light:</p>' +
+      '<p>For Mr and Mrs Petrosyan. A little plain cake for Sunday, when the fuss is over. With Whitlow&rsquo;s compliments, as always. A.W.</p><p>A.W. is Arthur Whitlow.</p>', true);
+    if (ER.flag('e-done')) { busy = false; finish(true); return; }
+    if (ER.flag('e-lock')) { ending(); return; }          /* the page was left in the middle of the ending: tell it again */
+    if (told.in) { busy = false; if (told.arthur && !ER.flag('e-lock')) $('#table').classList.add('ready'); ER.say('The yard, a quarter to six. The sky is going pink.'); return; }
+    tell('in');
+    ER.narrate([
+      'A brick yard behind the shop, a green van with its back doors open, and a sky going from grey to pink. Next door, the florist is already carrying buckets about.',
+      'The cake stands on its trolley by the back step, with its green side turned to the light.',
+      'At a quarter to six the back door opens, and a small man in a tartan dressing gown and a pair of old white clogs comes out with a ball of string in his hand. He stops on the step. He looks at Dr Novak, and at you, and at his son, and at the new girl.',
+      '&ldquo;Graham,&rdquo; he says. &ldquo;Somebody has put a hole in my sponge.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- old Mr Whitlow ---------- */
+  $('#arthur').addEventListener('click', function () {
+    if (busy) return;
+    if (told.arthur) { ER.say(ER.flag('e-lock') ? '&ldquo;Soda for the floor and lemon for the cake,&rdquo; says old Mr Whitlow. &ldquo;Sixty-five years, and I had it the wrong way round for one night.&rdquo;' : '&ldquo;I should like to watch this,&rdquo; says old Mr Whitlow. &ldquo;I have never seen a cake mended with a paintbrush.&rdquo;'); return; }
+    ER.talk({
+      who: 'Arthur Whitlow', role: 'Baker · Whitlow’s, since 1961', face: window.FACE('arthur'),
+      lines: [
+        { note: 'Eighty-six, and not much taller than the trolley. His glasses are pushed up into his hair, where he has clearly forgotten them.', a: '&ldquo;Two holes, in fact. Right in the middle. I came down to wrap it.&rdquo;' },
+        { q: 'Your sponge?', a: 'The Sunday sponge. Six-inch, plain, a bit of lemon. One goes out with every wedding cake: for the two of them, for Sunday, when the fuss is over. Since 1961. My wife thought of it.</p><p>&ldquo;We stopped those at Easter, Dad,&rdquo; says Mr Whitlow.</p><p>&ldquo;You stopped them at Easter.&rdquo;' },
+        { a: 'So I come down on a Friday, when he has gone home. I have my own key: I fitted that lock. I buy my own eggs. It goes into the van in the morning in a plain box, and nobody is any the wiser. Fourteen since Easter.</p><p>He looks at Chika.</p><p>&ldquo;You are the new one. You nearly caught me twice.&rdquo;' },
+        { q: 'And last night?', a: 'Last night the flour beat me. Top shelf, sixteen kilos. It used to be nothing. It went everywhere, and I trod it through to the bakehouse, so I did what you do: hot water, a handful of soda, and the mop. Then the timer went, and I got the sponge out, and my hip said sit down. I meant to finish the floor at eleven. I sat down in front of the snooker.</p><p>&ldquo;And?&rdquo;</p><p>&ldquo;And it is morning.&rdquo;' },
+        { note: 'Dr Novak turns the trolley a little, without a word. He goes right up to the cake and looks at the green for some time, with his head on one side.', a: '&ldquo;I did that? With the mop?&rdquo;</p><p>He rubs his eyes.</p><p>&ldquo;I couldn&rsquo;t see it, you know. They are doing my eyes in October. Everything is the colour of weak tea.&rdquo; Then, more quietly, to Chika: &ldquo;And he thought it was you.&rdquo;' },
+        { a: 'Sixty-five years I have washed that floor with soda. But there was never a purple cake standing by the sink before. Cakes were white.</p><p>He turns round.</p><p>&ldquo;Can it be mended? Because if it can&rsquo;t, I am going to put my coat on and tell Mrs Farrant myself.&rdquo;' }
+      ],
+      clue: { id: 'arthur', title: 'Arthur Whitlow, on the back step', kind: 'What he said' },
+      done: function (seen) {
+        if (!seen || !tell('arthur')) return;
+        busy = true;
+        ER.narrate([
+          '&ldquo;It can be mended,&rdquo; says Dr Novak. &ldquo;That is the good thing about an indicator: it goes both ways. An alkali sent your icing green. An acid will bring it back, one small step at a time. Too much, and you will have a pink cake.&rdquo;',
+          'Chika has set up a folding table beside the trolley: half a lemon on a saucer, a little vinegar, a pinch of bicarbonate in a glass of water, a glass of plain water, and the finest brush in the shop. &ldquo;Daylight,&rdquo; she says. &ldquo;You can&rsquo;t match a colour under a strip light.&rdquo;'
+        ], function () { busy = false; $('#table').classList.add('ready'); });
+      }
+    });
+  });
+
+  /* ---------- things in the yard ---------- */
+  $('#cakeG').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(ER.flag('e-done') ? 'Four tiers of lilac, a spray of sugar wisteria, and fresh sweet peas on the top. You would have to know where to look.' : ER.flag('e-lock') ? 'Lilac again. Where the worst of the green was, a spray of sugar wisteria hangs across the bottom tier.' : 'In daylight the green is worse. It is also, you notice, exactly the green that the soda crystals made on Dr Novak&rsquo;s tile.');
+  });
+  CAKE.thing('#door', null, 'The back door, and the bakehouse behind it, with its strip light still on. Nobody has been to bed.', isBusy);
+  CAKE.thing('#flatwin', null, 'The window of the flat, with a light on and a box of geraniums. From up there you can hear everything that happens in this yard, if you have your hearing aids in.', isBusy);
+  CAKE.thing('#win', null, 'On the window sill inside stands a small round tin, with a sponge in it and two neat holes in the sponge.', isBusy);
+  CAKE.thing('#bins', 'dustbin', 'Two dustbins. In the nearer one, on top, is a split paper sack: PLAIN FLOUR, 16 kg. Mr Whitlow swept the passage himself at four o&rsquo;clock this morning, and would not let anybody help.', isBusy);
+  CAKE.thing('#van', null, function () { return ER.flag('e-done') ? 'The van has gone and come back. There were two boxes in it: a tall one and a small one.' : 'The van: WHITLOW&rsquo;S, CAKES SINCE 1961, in gold. Its back doors are open, and the tall crate is ready. It leaves at eight.'; }, isBusy);
+  CAKE.thing('#flowers', null, 'Buckets of sweet peas from Yarrow&rsquo;s next door: pink, white and lilac. The florist said good morning, looked at the cake, and very kindly asked no questions.', isBusy);
+  CAKE.thing('#catw', null, 'Crumb, on the wall, awake at last. He watched all of it, and he is not going to tell anybody.', isBusy);
+  CAKE.thing('#tower', null, function () { return ER.flag('e-done') ? 'The church clock. They will be ringing those bells at noon.' : 'The church clock says twenty to six. The wedding is at noon, in that church.'; }, isBusy);
+  $('#whitlow').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(ER.flag('e-lock') ? '&ldquo;Fridays, eight till nine, the little oven,&rdquo; Mr Whitlow is saying to his father. &ldquo;And somebody else carries the flour.&rdquo;' : told.arthur ? '&ldquo;I had all of it, you know,&rdquo; says Mr Whitlow. &ldquo;Every bit. I only had it in the wrong order.&rdquo;' : 'Mr Whitlow is looking at the back door, and at his watch, and at the back door.');
+  });
+  $('#chika').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(ER.flag('e-lock') ? '&ldquo;Last week&rsquo;s roses looked like cabbages,&rdquo; says Chika. &ldquo;This week the cabbage looks like wisteria. I am getting somewhere.&rdquo;' : told.arthur ? '&ldquo;I will hold the saucer,&rdquo; says Chika. &ldquo;You paint. My hands are shaking, and I am not going to say why.&rdquo;' : 'Chika has made tea for five people. She is drinking hers standing up, with her coat still on.');
+  });
+  $('#novak').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(ER.flag('e-lock') ? '&ldquo;He had the facts,&rdquo; says Dr Novak. &ldquo;Most people do. That is why we carry a thermometer.&rdquo;' : told.arthur ? '&ldquo;Lemon is in the recipe already,&rdquo; says Dr Novak. &ldquo;One touch at a time, and stop at lilac.&rdquo;' : '&ldquo;Here he comes,&rdquo; says Dr Novak. &ldquo;Be kind. He has no idea.&rdquo;');
+  });
+  $('#table').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('e-lock')) { ER.say('Half a lemon, a saucer, and a very small brush. That was all it needed, once somebody knew what had happened.'); return; }
+    if (!told.arthur) { ER.say('A folding table, half a lemon, and a brush with about six hairs. Not yet: somebody is coming out of the back door.'); return; }
+    openBench();
+  });
+
+  /* ---------- mending the cake: three patches, four dishes and a brush ---------- */
+  var ICE = ['#e77d95', '#e5acd5', LILAC, '#8baee9', '#77c2cc', GREEN, '#dce081'], ICEN = ['red-pink', 'pink', 'lilac', 'blue', 'blue-green', 'green', 'yellow'];
+  function openBench() {
+    var state = ER.flag('e-p') || [5, 4, 5], load = '', wait = false, svg, m;
+    if (!bench) {
+      bench = ER.el('div', 'bn', '<svg viewBox="0 0 1000 600"></svg><div class="bn-foot"><p class="bmsg"></p><button type="button" class="btn" id="m-go">Stand back and look</button></div>');
+      svg = bench.querySelector('svg'); m = bench.querySelector('.bmsg');
+      var s = '<rect width="1000" height="600" fill="' + LILAC + '"/><rect width="700" height="600" fill="#5a3a8a" opacity=".06"/><path d="M0 566h700" stroke="#b9a6dc" stroke-width="2"/>', i, k;
+      for (i = 0; i < 24; i++) s += '<circle cx="' + (14 + i * 30) + '" cy="578" r="10" fill="#f7f3fc" stroke="#b9a6dc" stroke-width="1.200"/>';
+      s += '<rect x="20" y="12" width="660" height="96" rx="8" fill="#fdfdfb" stroke="#c5ccd3" stroke-width="1.500"/>';
+      ICE.forEach(function (c, n) { s += '<rect x="' + (36 + n * 90) + '" y="48" width="84" height="28" fill="' + c + '" stroke="#b9a6dc" stroke-width="1"/><text x="' + (78 + n * 90) + '" y="94" class="tO" font-size="13" fill="#6b3f8f" text-anchor="middle">' + ICEN[n] + '</text>'; });
+      s += '<path d="M258 46l-8 -11h16z" fill="#2a2230"/><text x="258" y="30" class="tB" font-size="12.500" fill="#2a2230" text-anchor="middle" letter-spacing="1.500">THE CAKE</text>' +
+        '<path d="M44 30h120" stroke="#56616c" stroke-width="1.200"/><path d="M36 30l9 -4.500v9z" fill="#56616c"/><text x="172" y="34" class="tO" font-size="12" fill="#56616c">acid</text>' +
+        '<path d="M536 30h120" stroke="#56616c" stroke-width="1.200"/><path d="M664 30l-9 -4.500v9z" fill="#56616c"/><text x="528" y="34" class="tO" font-size="12" fill="#56616c" text-anchor="end">alkali</text><text x="390" y="34" class="tB" font-size="12" fill="#6b3f8f" text-anchor="middle" letter-spacing="2">RED CABBAGE, IN ICING</text>';
+      [[130, 'M-46 0q10 60 -4 140q-6 80 30 110q52 30 70 -30q16 -70 -6 -130q-14 -60 -4 -90z'], [350, 'M-30 30q-10 70 6 120q14 60 44 40q30 -30 16 -100q-10 -40 -6 -60z'], [560, 'M-52 -6q6 80 -10 170q0 86 54 96q64 4 70 -70q8 -100 -14 -196z']].forEach(function (p, n) {
+        s += '<g class="patch" data-n="' + n + '" transform="translate(' + p[0] + ' 190)"><path d="' + p[1] + '" fill="' + ICE[state[n]] + '" stroke="#fff" stroke-opacity=".5" stroke-width="2"/><circle cx="4" cy="-34" r="15" fill="#2a2230"/><text x="4" y="-28.500" class="tB" font-size="17" fill="#fff" text-anchor="middle">' + (n + 1) + '</text><text class="pn" x="4" y="322" font-family="Patrick Hand,cursive" font-size="19" fill="#2a2230" text-anchor="middle"></text></g>';
+      });
+      /* the folding table */
+      s += '<rect x="700" y="0" width="300" height="600" fill="#b08a55"/><g stroke="#9a7848" stroke-width="2"><path d="M700 150h300M700 300h300M700 450h300"/></g><text x="850" y="34" class="tB" font-size="15" fill="#3a2a14" text-anchor="middle" letter-spacing="3">ON THE TABLE</text>';
+      [['lemon', 'LEMON JUICE', '<ellipse cx="0" cy="12" rx="44" ry="11" fill="#fdfbf4" stroke="#c9c2b4" stroke-width="2"/><path d="M-26 8q26 -46 52 0z" fill="#f3cf2e"/><path d="M-18 8q18 -30 36 0" fill="none" stroke="#fdf6c9" stroke-width="3"/><path d="M0 -14v20M-10 -8l10 14 10 -14" stroke="#fdf6c9" stroke-width="1.500"/>'],
+        ['vinegar', 'VINEGAR', '<path d="M-14 22v-40q0 -8 6 -10v-10h16v10q6 2 6 10v40z" fill="#8a5a2a"/><rect x="-10" y="-6" width="20" height="18" fill="#fdfbf4"/><rect x="-7" y="-44" width="14" height="8" fill="#1c1d22"/>'],
+        ['bicarb', 'BICARBONATE', '<path d="M-18 22v-48h36v48z" fill="#f4fbfd" fill-opacity=".7" stroke="#8fa6b0" stroke-width="2"/><path d="M-16 20v-26h32v26z" fill="#e3eff3"/><path d="M-12 14q6 -4 12 0t12 0" stroke="#fff" stroke-width="2" fill="none"/>'],
+        ['water', 'TAP WATER', '<path d="M-18 22v-48h36v48z" fill="#f4fbfd" fill-opacity=".7" stroke="#8fa6b0" stroke-width="2"/><path d="M-16 20v-30h32v30z" fill="#cfe6f5"/>']].forEach(function (d, n) {
+        s += '<g class="dish" data-k="' + d[0] + '" transform="translate(850 ' + (104 + n * 112) + ')"><rect class="ring" x="-124" y="-48" width="248" height="100" rx="8"/><rect x="-124" y="-48" width="248" height="100" fill="#000" opacity="0"/><g transform="translate(-70 0)">' + d[2] + '</g><text x="-14" y="6" class="tB" font-size="15.500" fill="#2a1e10" letter-spacing=".600">' + d[1] + '</text></g>';
+      });
+      s += '<g id="brushst" transform="translate(850 548)"><path d="M-96 4l150 -8" stroke="#6b4a2a" stroke-width="7" stroke-linecap="round"/><path d="M54 -4l22 -2" stroke="#c9ced3" stroke-width="8" stroke-linecap="round"/><path id="tip" d="M76 -6q16 -2 26 2q-12 6 -26 2z" fill="#2a2230"/><text id="bt" x="0" y="34" class="tH" font-size="17" fill="#2a1e10" text-anchor="middle">the brush is dry</text></g>';
+      svg.innerHTML = s;
+      function names() { ER.$$('.patch', svg).forEach(function (p) { var n = +p.getAttribute('data-n'); p.querySelector('path').setAttribute('fill', ICE[state[n]]); p.querySelector('.pn').textContent = ICEN[state[n]]; }); }
+      function msg(t) { m.innerHTML = ER.gloss(t); }
+      ER.$$('.dish', svg).forEach(function (d) {
+        d.addEventListener('click', function () {
+          var k = d.getAttribute('data-k');
+          if (wait || ER.flag('e-lock')) return;
+          if (k === 'vinegar') { ER.sfx.no(); msg('&ldquo;Vinegar would do it,&rdquo; says Dr Novak. &ldquo;An acid is an acid.&rdquo; &ldquo;It would do it,&rdquo; says old Mr Whitlow, &ldquo;and the bride would smell it from the church door. Not on a wedding cake.&rdquo; The bottle is taken away.'); return; }
+          load = k; CAKE.sfx.drop();
+          ER.$$('.dish', svg).forEach(function (o) { o.setAttribute('class', 'dish' + (o === d ? ' on' : '')); });
+          svg.querySelector('#tip').setAttribute('fill', { lemon: '#e9c93a', bicarb: '#9fb6c9', water: '#7fb4d9' }[k]);
+          svg.querySelector('#bt').textContent = { lemon: 'lemon juice on the brush', bicarb: 'bicarbonate on the brush', water: 'water on the brush' }[k];
+          msg({ lemon: 'Lemon juice on the brush: a weak acid. Now touch a patch.', bicarb: 'Bicarbonate of soda in water on the brush: a weak alkali. Now touch a patch.', water: 'Tap water on the brush: neutral. Now touch a patch.' }[k]);
+        });
+      });
+      ER.$$('.patch', svg).forEach(function (p) {
+        p.addEventListener('click', function () {
+          var n = +p.getAttribute('data-n'), was = state[n];
+          if (wait || ER.flag('e-lock')) return;
+          if (!load) { msg('The brush is dry. Click one of the four things on the table first.'); return; }
+          if (load === 'water') { CAKE.sfx.brush(); msg('A touch of water on patch ' + (n + 1) + '. Nothing changes: water is neutral, and it pushes the colour neither way.'); return; }
+          state[n] = CAKE.clamp(was + (load === 'lemon' ? -1 : 1), 0, 6); ER.flag('e-p', state); CAKE.sfx.brush(); names();
+          msg(state[n] === was ? 'Patch ' + (n + 1) + ' is as ' + ICEN[was] + ' as it can go. That is the end of the strip.' :
+            'A touch of ' + (load === 'lemon' ? 'lemon juice' : 'bicarbonate') + ' on patch ' + (n + 1) + ': ' + ICEN[was] + ' turns <b>' + ICEN[state[n]] + '</b>.' +
+            (state[n] === 2 ? ' That is the colour of the cake. Stop there.' : state[n] < 2 ? ' Too far: the acid has pushed it past lilac. A weak alkali will bring it one step back.' : state[n] > 5 ? ' That is the wrong way: more alkali, and further from lilac.' : ''));
+        });
+      });
+      bench.querySelector('#m-go').addEventListener('click', function () {
+        var i, bad = -1;
+        if (wait || ER.flag('e-lock')) return;
+        if (!ER.check('fix', state.join('-'))) {
+          for (i = 0; i < 3; i++) if (state[i] !== 2 && bad < 0) bad = i;
+          ER.sfx.no();
+          msg('Old Mr Whitlow shuts one eye. &ldquo;' + (bad < 0 ? 'Not yet' : 'Number ' + (bad + 1) + ' is still ' + ICEN[state[bad]] + (state[bad] < 2 ? ': too much lemon' : '') + '') + ',&rdquo; he says. &ldquo;Even I can see that.&rdquo;');
+          return;
+        }
+        wait = true; ER.flag('e-lock', 1); $('#table').classList.remove('ready'); CAKE.solved();
+        msg('Three patches, <b>lilac</b> again. An alkali turned the indicator, and an acid has turned it back: neutralised, one brushful at a time. Chika lets out a breath that she seems to have been holding since ten o&rsquo;clock last night.');
+        setTimeout(function () { ER.closeAll(); drawCake(); ending(); }, 4600);
+      });
+      names();
+      msg('The side of the cake, close up: three patches where the soda fell. At the top, what red cabbage does in icing. On the table: four things, and one brush. Click a dish to wet the brush, then click a patch.');
+    }
+    ER.open('ov-lock', bench);
+  }
+
+  /* ---------- eight o'clock, noon, Monday ---------- */
+  function ending() {
+    busy = true;
+    ER.narrate([
+      'On the bottom tier, where the soda lay longest, the lilac has come back a shade too pale: a strong alkali wears the colour out in the end. Chika looks at it, opens her white box, and fixes a spray of sugar wisteria across the place, as if it had always been meant to be there.',
+      'Old Mr Whitlow puts his nose almost on the piped pearls. &ldquo;Who did these?&rdquo; &ldquo;I did,&rdquo; says Chika. He looks for some time. &ldquo;She has got hands, Graham.&rdquo; &ldquo;I know she has, Dad. I said so.&rdquo;',
+      '&ldquo;I rang you last night and told you not to come in today,&rdquo; says Mr Whitlow. &ldquo;I should like to take that back. Will you come in today?&rdquo; &ldquo;I have been in since ten o&rsquo;clock last night,&rdquo; says Chika. &ldquo;I am on overtime.&rdquo;',
+      'Nobody sends out a sponge with two holes in it. So at six o&rsquo;clock Arthur Whitlow bakes another in the little oven, and his son carries the flour. It is the first time in years that the two of them have shared an oven without an argument. There is a small argument.',
+      'At eight the van leaves with two boxes: a tall one and a small one. The small one goes in last, still a little warm in the middle, which Arthur says does not count, because nobody is going to ice it. On its label there are two sets of initials now: A.W., and under it, in marker pen, G.W.',
+      'At noon Miss Farrant becomes Mrs Petrosyan. Her mother tells nine people that the wisteria on the bottom tier was her own idea. The bride, who teaches Chemistry, looks at that tier for rather a long time, and smells it, and smiles, and says nothing at all.',
+      'On Monday morning there is a white box on the steps of the laboratory. Inside is a six-inch sponge with two small holes in the top, where a thermometer went in. The label says: For the laboratory. For Monday, when the fuss is over.'
+    ], function () { busy = false; ER.flag('e-done', 1); finish(false); });
+    setTimeout(function () { $('#scene').classList.add('day'); }, 6000);
+  }
+  function finish(quick) {
+    var st = ER.state(), mins = CAKE.minutesPlayed(), hn = ER.hintsUsed();
+    $('#scene').classList.add('day'); drawCake();
+    $('#d-time').textContent = 'From the shop door to the yard: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+    if (quick) ER.say('Saturday morning, and a lilac cake.');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Warm in the Middle &middot; in your own words</h4><h3>Tell a friend</h3>' +
+      '<p>A friend of yours was not at Whitlow&rsquo;s on Friday night, and does not believe a word of it. Choose ONE of these and explain it, aloud or in writing, in 60 to 90 words. Use: first, then, because, so.</p>' +
+      '<p><b>A</b> How you knew that washing soda, and not bicarbonate of soda, had turned the icing green.<br><b>B</b> How a thermometer and a curve showed that the sponge came out of the oven at nine, and not at seven.<br><b>C</b> How you could tell that the clogs in the flour were not Chika&rsquo;s, though they were the same make and the same size.</p>' +
+      '<textarea id="r1"></textarea><div class="count"></div><label for="r2">Name</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

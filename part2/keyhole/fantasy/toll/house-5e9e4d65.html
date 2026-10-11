@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Toll-House · The Keeper Gives No Change</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="toll.css">
+<style>
+  body{--bg:#200f0a;--accent:#ffa765;--font-display:'Uncial Antiqua',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(28,12,7,.96);--tc-ink:#f6e6d2;--cap-bg:rgba(28,12,7,.94);--cap-ink:#fbeedd;--panel:#2a1410;--face-bg:#4a241a;--q-ink:#f0c9a0;--fade:#0e0503;--hud-bg:rgba(28,12,7,.82)}
+  .tc-room,.tk-name{font-family:'IM Fell English',Georgia,serif;font-style:italic;letter-spacing:0}      /* a room full of people: plain old book type */
+  .tk-name{font-size:30px}
+  #fireGlow{animation:fg 2.6s steps(5) infinite}
+  @keyframes fg{20%{opacity:.86}50%{opacity:1}70%{opacity:.8}}
+  .flm{animation:flm 1.5s ease-in-out infinite;transform-origin:250px 700px}
+  .flm:nth-child(2){animation-duration:1.9s;animation-delay:-.6s}.flm:nth-child(3){animation-duration:1.2s;animation-delay:-.3s}
+  @keyframes flm{0%,100%{transform:scale(1,1)}40%{transform:scale(.9,1.16)}70%{transform:scale(1.08,.9)}}
+  .steam{stroke-dasharray:10 16;animation:steam 3.4s linear infinite;opacity:.45}
+  @keyframes steam{to{stroke-dashoffset:-52}}
+  .cfl{animation:flm 1.7s ease-in-out infinite}
+  #mabelH{animation:snore 4.6s ease-in-out infinite}
+  @keyframes snore{50%{transform:translateY(-2px)}}
+  #notice{transition:transform .5s;transform-origin:605px 158px}
+  #notice.loose{transform:rotate(5deg)}
+  #nail{animation:glint 2.8s steps(1) infinite}
+  @keyframes glint{0%,84%{opacity:1}88%{opacity:.5}92%{opacity:1}}
+  body.holding .who{cursor:copy}
+
+  /* what you are carrying */
+  .sat{position:fixed;left:50%;top:10px;transform:translateX(-50%);z-index:31;display:flex;align-items:center;height:40px;padding:0 8px 0 10px;border:1px solid rgba(255,220,170,.3);
+    background:var(--hud-bg);border-radius:3px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);white-space:nowrap}
+  .sat>svg{width:22px;height:22px;margin-right:8px;fill:none;stroke:#e3c9a6;stroke-width:1.8;stroke-linejoin:round}
+  .sat-it{display:inline-flex;align-items:center;height:30px;margin-left:5px;padding:0 10px 0 5px;border:1px solid rgba(255,220,170,.4);border-radius:16px;color:#f6eedb;
+    font-family:'Almendra',serif;font-weight:700;font-size:15.5px;background:rgba(70,30,18,.85)}
+  .sat-it svg{width:24px;height:24px;margin-right:5px}
+  .sat-it:hover{border-color:#ffd9a0}
+  .sat-it.on{background:#ffd9a0;color:#2a1410;border-color:#ffd9a0}
+  .sat-none{font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:15.5px;color:#cdb9a0}
+  @media (max-width:1400px){.sat{left:55%}}      /* in a narrower window the room's name on the left needs the space */
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5e2f1e"/><stop offset="1" stop-color="#38190f"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2a18"/><stop offset="1" stop-color="#22110a"/></linearGradient>
+  <linearGradient id="stoneG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a675c"/><stop offset="1" stop-color="#4d3f38"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a3620"/><stop offset=".5" stop-color="#7a4d2c"/><stop offset="1" stop-color="#4a2c18"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3e8ee"/><stop offset=".5" stop-color="#a9b2bc"/><stop offset="1" stop-color="#6f7781"/></linearGradient>
+  <radialGradient id="fireG"><stop offset="0" stop-color="#ffb050" stop-opacity=".62"/><stop offset=".4" stop-color="#ff7a2a" stop-opacity=".2"/><stop offset="1" stop-color="#ff5a1a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="candG"><stop offset="0" stop-color="#ffe7a8" stop-opacity=".6"/><stop offset="1" stop-color="#ffb24a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="46%" cy="50%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#0e0503" stop-opacity=".25"/><stop offset="1" stop-color="#0e0503" stop-opacity=".88"/></radialGradient>
+  <clipPath id="winC"><rect x="772" y="152" width="146" height="146"/></clipPath>
+</defs>
+
+<!-- the room: plaster, black beams, boards -->
+<rect x="-1000" y="-640" width="3600" height="1354" fill="url(#wallG)"/>
+<path d="M-1000 -640H2600V98H-1000Z" fill="#1c0c07"/><rect x="-1000" y="92" width="3600" height="30" fill="#20100a"/>
+<g fill="#20100a"><rect x="474" y="120" width="24" height="594"/><rect x="1404" y="120" width="24" height="594"/><rect x="-520" y="120" width="24" height="594"/><rect x="2100" y="120" width="24" height="594"/></g>
+<g fill="#20100a"><rect x="130" y="-640" width="26" height="738"/><rect x="560" y="-640" width="26" height="738"/><rect x="990" y="-640" width="26" height="738"/><rect x="1420" y="-640" width="26" height="738"/><rect x="-300" y="-640" width="26" height="738"/><rect x="1850" y="-640" width="26" height="738"/></g>
+<path d="M-1000 712H2600V1500H-1000Z" fill="url(#floorG)"/><path d="M-1000 712H2600" stroke="#150906" stroke-width="7"/>
+<g id="boards" stroke="#1a0c07" stroke-width="3" fill="none" opacity=".8"></g>
+
+<!-- the window, and the rain on it -->
+<g id="window" class="hot"><rect x="758" y="138" width="174" height="176" fill="#20100a"/><rect x="772" y="152" width="146" height="146" fill="#0d1a2e"/>
+  <g class="rain" clip-path="url(#winC)"><path d="M790 120l-16 220M826 120l-16 220M862 120l-16 220M900 120l-16 220M926 120l-16 220"/></g>
+  <path d="M845 152v146M772 225h146" stroke="#20100a" stroke-width="7"/><rect x="750" y="312" width="190" height="12" fill="#2a160d"/></g>
+
+<!-- the Keeper's rules for this room: and one nail that has worked loose -->
+<g id="rules" class="hot"><g id="notice"><rect x="524" y="154" width="170" height="192" fill="#0e0503" opacity=".4"/><rect x="520" y="150" width="170" height="192" fill="#efe3c2"/>
+  <text x="605" y="184" class="un" font-size="15" fill="#5a1f16">Rules of</text><text x="605" y="204" class="un" font-size="15" fill="#5a1f16">the House</text>
+  <g stroke="#5a4a36" stroke-width="2.200" stroke-linecap="round"><path d="M538 226h134M538 240h96M538 258h134M538 272h70M538 290h120M538 308h134M538 322h60"/></g>
+  <circle cx="605" cy="158" r="4.500" fill="#2a2422"/></g></g>
+<g id="nail" class="hot"><circle cx="532" cy="334" r="24" fill="#000" opacity="0"/><path d="M526 340l14-16" stroke="#3a3632" stroke-width="5" stroke-linecap="round"/><circle cx="541" cy="323" r="6" fill="#aab0b8"/><circle cx="539.500" cy="321.500" r="2" fill="#fff" opacity=".8"/></g>
+
+<!-- the fire, and the soup -->
+<circle id="fireGlow" cx="250" cy="600" r="620" fill="url(#fireG)" pointer-events="none"/>
+<g id="fire" class="hot">
+  <path d="M60 714V300Q60 250 110 250H390Q440 250 440 300V714Z" fill="url(#stoneG)"/><g stroke="#3a2e28" stroke-width="2.500" opacity=".7"><path d="M60 330h60M60 420h60M60 510h60M60 600h60M380 330h60M380 420h60M380 510h60M380 600h60M120 300h260M180 250v50M320 250v50"/></g>
+  <path d="M120 714V440Q120 380 250 380Q380 380 380 440V714Z" fill="#140805"/>
+  <path d="M176 700h150" stroke="#3a2110" stroke-width="20" stroke-linecap="round"/><path d="M200 690l100-10" stroke="#4a2c16" stroke-width="16" stroke-linecap="round"/>
+  <g><path class="flm" d="M210 700q-16-40 10-70q0 26 18 30q-10-40 16-64q-2 34 20 50q10-18 4-34q26 30 8 88z" fill="#ff8a2a"/><path class="flm" d="M228 700q-8-26 10-46q0 18 12 20q-4-24 10-38q2 22 14 30q10 16 0 34z" fill="#ffc24a"/><path class="flm" d="M242 700q-4-14 6-24q2 10 8 10q0-10 6-16q6 14 2 30z" fill="#fff0b0"/></g>
+  <rect x="40" y="236" width="420" height="22" fill="url(#woodG)"/><path d="M40 258h420" stroke="#20100a" stroke-width="4"/>
+</g>
+<g id="pot" class="hot"><path d="M250 380v96" stroke="#0e0806" stroke-width="5"/><path d="M204 500q46-44 92 0" stroke="#0e0806" stroke-width="5" fill="none"/>
+  <path d="M196 502q-10 78 54 82q64-4 54-82z" fill="#1d1816"/><ellipse cx="250" cy="502" rx="54" ry="11" fill="#2e2824"/><ellipse cx="250" cy="502" rx="46" ry="8" fill="#c9963a"/>
+  <g stroke="#f6e6d2" stroke-width="3" fill="none" stroke-linecap="round"><path class="steam" d="M232 490q-10-16 0-30t0-30"/><path class="steam" d="M256 488q10-18 0-34t2-30"/><path class="steam" d="M276 492q-8-14 2-28"/></g></g>
+<g id="bowls" class="hot"><g fill="#d9c9a4"><path d="M70 236q0-18 26-18t26 18zM130 236q0-18 26-18t26 18zM190 236q0-18 26-18t26 18zM250 236q0-18 26-18t26 18zM310 236q0-18 26-18t26 18z"/></g><g stroke="#a8946a" stroke-width="2" fill="none"><path d="M72 226h48M132 226h48M192 226h48M252 226h48M312 226h48"/></g>
+  <rect x="404" y="196" width="12" height="40" fill="#efe6cf"/><path class="cfl" style="transform-origin:410px 196px" d="M410 172q-6 10-6 16a6 6 0 0 0 12 0q0-6-6-16z" fill="#ffe9a8"/></g>
+<g id="mabel" class="hot"><ellipse cx="330" cy="790" rx="190" ry="26" fill="#5a1f22"/><ellipse cx="330" cy="790" rx="190" ry="26" fill="none" stroke="#c9a044" stroke-width="3"/><ellipse cx="330" cy="790" rx="160" ry="18" fill="none" stroke="#3a1014" stroke-width="3"/>
+  <g id="mabelH"><ellipse cx="350" cy="762" rx="54" ry="28" fill="#f8f5ec"/><path d="M398 756q22-12 26-34q-24 4-36 22z" fill="#e9e4d6"/><path d="M312 760q-14-18 6-26q22-2 26 14q-2 12-18 14z" fill="#f8f5ec"/><path d="M330 752l16 4-14 6z" fill="#e88a2a"/><path d="M318 744q4 3 8 0" stroke="#1d1410" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M336 768q22 12 44 0" stroke="#cfc9b8" stroke-width="3" fill="none" stroke-linecap="round"/></g></g>
+
+<!-- Mistress Tamsel, in the rocking chair -->
+<g id="tamsel" class="hot who">
+  <path d="M452 722Q565 754 692 722" stroke="#3a2110" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M482 660V424Q482 334 565 334Q648 334 648 424V660Z" fill="url(#woodG)"/><path d="M516 350v300M565 336v314M614 350v300" stroke="#3a2110" stroke-width="4"/>
+  <path d="M470 700V560M660 700V560" stroke="#4a2c18" stroke-width="13" stroke-linecap="round"/>
+  <path d="M488 590Q478 696 500 716H640Q662 696 648 590Z" fill="#3f5546"/><path d="M512 716h40l4 12h-48zM590 716h40l4 12h-48z" fill="#1d1410"/>
+  <use href="#ch-tamsel" x="470" y="350" width="190" height="247"/>
+  <g id="scarfG"><path d="M583 594h64q22 62 62 112l-74 16q-38-50-52-128z" fill="#b3261c"/><path d="M590 622l62-6M602 652l64-10M618 682l66-14" stroke="#8f1d16" stroke-width="3"/><path d="M640 722l-4 12M660 718l-2 12M680 714l0 12M700 710l2 12" stroke="#b3261c" stroke-width="3" stroke-linecap="round"/></g>
+</g>
+
+<!-- Bryony Thistledown, and Duchess -->
+<g id="bryony" class="hot who">
+  <path d="M706 720V650M826 720V650" stroke="#4a2c18" stroke-width="11" stroke-linecap="round"/><rect x="694" y="640" width="144" height="14" rx="5" fill="url(#woodG)"/>
+  <path d="M698 612Q688 664 700 690H832Q844 664 834 612Z" fill="#6b4a2e"/>
+  <use href="#ch-bryony" x="686" y="410" width="160" height="208"/>
+  <path d="M704 626q62 26 124 0l-10 46q-52 16-104 0z" fill="#b98a4a"/><path d="M704 626q62 26 124 0" stroke="#8a6230" stroke-width="5" fill="none"/><path d="M712 648q54 18 108 0M716 664q50 14 100 0M736 634v40M766 640v38M796 634v40" stroke="#8a6230" stroke-width="2" fill="none"/>
+  <g id="duchess"><ellipse cx="764" cy="616" rx="42" ry="22" fill="#9a5a2e"/><path d="M728 610q-14-10-10-26q14 4 18 18z" fill="#7a4420"/><circle cx="798" cy="596" r="12" fill="#9a5a2e"/><path d="M792 585q2-8 6-4q2-6 6 0q4-2 2 6z" fill="#c9281c"/><path d="M809 596l9 3-9 4z" fill="#e2b23a"/><circle cx="801" cy="594" r="2" fill="#1d1410"/><path d="M748 614q16 12 34 2" stroke="#7a4420" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+</g>
+
+<!-- the table: a pedlar, a knight, a helmet and the house book -->
+<circle cx="1088" cy="530" r="150" fill="url(#candG)" pointer-events="none"/>
+<g id="wickett" class="hot who"><use href="#ch-wickett" x="862" y="345" width="195" height="253"/>
+  <g id="scarfW" style="display:none"><path d="M916 520q44 22 88 0l4 22q-48 22-96 0z" fill="#b3261c"/><path d="M984 536l10 56-22 4-8-54z" fill="#9a1f16"/></g></g>
+<g id="osric" class="hot who"><path d="M1330 500Q1380 470 1420 486" stroke="#9aa3ad" stroke-width="34" fill="none" stroke-linecap="round"/><path d="M1398 470q26-8 40 14l-14 22q-22 4-34-14z" fill="url(#steelG)"/>
+  <use href="#ch-osric" x="1110" y="290" width="236" height="307"/>
+  <g id="bugle"><use href="#ch-bugle-h" x="1376" y="380" width="92" height="101"/></g></g>
+<g id="table"><rect x="856" y="596" width="456" height="22" fill="#8a5c34"/><rect x="872" y="618" width="424" height="18" fill="#5a3620"/><path d="M886 636v82M1282 636v82" stroke="#4a2c18" stroke-width="18" stroke-linecap="round"/></g>
+<g id="trayG"><path d="M872 566h180l6 30H866z" fill="#6b4526"/><path d="M872 566h180" stroke="#3a2110" stroke-width="4"/>
+  <path d="M888 584h52" stroke="#aab0b8" stroke-width="8" stroke-linecap="round"/><g fill="#3a3632"><circle cx="900" cy="584" r="1.800"/><circle cx="912" cy="584" r="1.800"/><circle cx="924" cy="584" r="1.800"/></g>
+  <rect x="952" y="576" width="36" height="16" fill="#b98a4a"/><path d="M956 578q14-12 28 0" stroke="#3a3632" stroke-width="2.500" fill="none"/>
+  <circle cx="1014" cy="578" r="12" fill="#cfe0ea"/><circle cx="1014" cy="578" r="12" fill="none" stroke="#8a6a26" stroke-width="3"/><path d="M1022 588l10 8" stroke="#8a6a26" stroke-width="5" stroke-linecap="round"/>
+  <g id="featherT"><path d="M1046 590Q1032 500 1060 432q30 54 2 130z" fill="#c9281c"/><path d="M1046 592Q1040 510 1058 444" stroke="#7a140e" stroke-width="2.500" fill="none"/><path d="M1052 480l14 8M1048 510l18 6M1046 540l18 2" stroke="#e0574a" stroke-width="2" stroke-linecap="round"/></g></g>
+<g><rect x="1082" y="556" width="12" height="40" fill="#efe6cf"/><path class="cfl" style="transform-origin:1088px 556px" d="M1088 530q-6 10-6 17a6 6 0 0 0 12 0q0-7-6-17z" fill="#ffe9a8"/><path d="M1074 596h28" stroke="#8a6a26" stroke-width="6" stroke-linecap="round"/></g>
+<g id="book" class="hot"><rect x="1112" y="574" width="86" height="22" rx="2" fill="#5a2a22"/><rect x="1116" y="578" width="78" height="6" fill="#efe3c2"/><path d="M1164 574v22" stroke="#d8b150" stroke-width="3"/><path d="M1202 592l20-16" stroke="#f4efe2" stroke-width="4" stroke-linecap="round"/></g>
+<g id="helmet" class="hot"><path d="M1230 596V548q0-30 34-30t34 30v48z" fill="url(#steelG)"/><path d="M1236 556h56" stroke="#2a2422" stroke-width="6"/><path d="M1264 518v78" stroke="#6f7781" stroke-width="3"/><g fill="#55504a"><circle cx="1248" cy="578" r="2"/><circle cx="1280" cy="578" r="2"/></g>
+  <g id="featherH" style="display:none"><path d="M1262 520Q1244 440 1276 372q32 56 0 132z" fill="#c9281c"/><path d="M1262 522Q1254 446 1274 384" stroke="#7a140e" stroke-width="2.500" fill="none"/></g></g>
+
+<!-- the way out to the gate -->
+<g id="door" class="hot"><path d="M1478 714V330Q1478 286 1530 286H1700V714Z" fill="#20100a"/><path d="M1490 714V334Q1490 298 1532 298H1700V714Z" fill="url(#woodG)"/>
+  <path d="M1540 298V714" stroke="#3a2110" stroke-width="4"/><path d="M1490 400h140M1490 620h140" stroke="#150906" stroke-width="11"/><circle cx="1512" cy="520" r="8" fill="#150906"/></g>
+
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="sat" id="sat"></div>
+<button type="button" class="gobtn" id="go">Take Bugle out to the lamp</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="toll.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, held = null;
+
+  (function () {
+    var s = '', i;
+    s += '<path d="M-1000 770H2600M-1000 848H2600"/>';
+    for (i = -8; i <= 24; i++) s += '<path d="M' + (i * 110) + ' 712L' + (800 + (i * 110 - 800) * 2.2).toFixed(0) + ' 1500"/>';
+    $('#boards').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'toll', storyTitle: 'The Keeper Gives No Change', id: 'house', no: 'IV', title: 'The Toll-House',
+    go: 'Open the door',
+    intro: [
+      'The gate opens &ldquo;when day begins&rdquo; (Clause 3), and day begins when the Keeper hears a cock crow (Clause 2): the Charter never says &ldquo;sunrise&rdquo;. By day he <i>may</i> ask a toll (Clause 4), but while the lamp burns he <i>shall not</i> (Clause 6), and &ldquo;shall not&rdquo; wins. And he cannot put the lamp out, because it shall burn until the <i>sun</i> is up (Clause 5). One cock, crowing at midnight, would open the gate and close the Keeper&rsquo;s hand.',
+      'All you need is the cock.',
+      'In the toll-house there are four people who cannot cross, a pot of soup, and one small fat bird in a hood. The Keeper has rules for this room too. Under his roof a bargain is one thing for one thing; and nobody takes what is not given.'
+    ],
+    exit: {"next":"crow","w":{"fd98de88":"16f06a35"}}, tags: {"deal":["945d6c20","66f2a7d6","289fc3b5","befe5c21","105518fb","2a1f9d39","c84151a0"]},
+    sound: ['candle', { root: 52, bpm: 72, beds: [['fire', 0.7], ['rain', 0.3]] }],        /* a warm room with people in it: brighter and quicker, a fire, rain on the window */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('h-file') || null;
+  var st = ER.flag('h-st') || { met: {}, inv: { cheese: 9 }, done: {} };
+  var NAME = { tamsel: 'Mistress Tamsel', wickett: 'Wickett', osric: 'Sir Osric', bryony: 'Bryony' };
+  var ICON = {
+    cheese: '<path d="M3 11v8q11 7 22 0v-8z" fill="#d3a23a"/><ellipse cx="14" cy="11" rx="11" ry="5" fill="#fbe9a4"/>',
+    nail: '<path d="M8 6h12v3H8z" fill="#8a8f96"/><path d="M12.500 9h3L14 24z" fill="#aab0b8"/>',
+    needle: '<path d="M5 23L21 7" stroke="#e3cf9f" stroke-width="2.600" stroke-linecap="round"/><circle cx="22.500" cy="5.500" r="3" fill="#e3cf9f"/>',
+    egg: '<ellipse cx="14" cy="15" rx="8" ry="10.500" fill="#f4ead6"/><ellipse cx="11" cy="11" rx="2.500" ry="4" fill="#fff" opacity=".7"/>',
+    scarf: '<path d="M4 8h20v7H4z" fill="#c9342a"/><path d="M16 15h7v9h-7z" fill="#a3241c"/><path d="M17 24v3M19.500 24v3M22 24v3" stroke="#c9342a" stroke-width="1.500"/><path d="M4 11.500h20" stroke="#e0685c" stroke-width="1.200"/>',
+    feather: '<path d="M8 25Q8 10 20 3q4 10-6 18z" fill="#d93a2c"/><path d="M7 26L18 6" stroke="#7a140e" stroke-width="1.400"/>',
+    bugle: ''
+  };
+  var LABEL = { cheese: 'cheese', nail: 'a nail', needle: 'the needle', egg: 'the egg', scarf: 'the scarf', feather: 'the feather', bugle: 'Bugle' };
+
+  var RULES = '<h4>Rules of the House</h4>' +
+    '<p>1. One thing for one thing.</p>' +
+    '<p>2. Nobody takes what is not given.</p>' +
+    '<p>3. No goats. (Clause 9.)</p>' +
+    '<p>4. A bargain refused is a mistake, and mistakes are counted. Mistress Tamsel keeps the jar when the Keeper is out.</p>' +
+    '<p>5. Whoever signs the house book washes the soup bowls.</p>' +
+    '<p style="text-align:right">S., Keeper</p>' +
+    '<p class="pen">Everybody signs. Nobody reads. That is how I get my washing-up done. H. T.</p>';
+
+  var TALK = {
+    tamsel: { clue: 'Mistress Tamsel, by the fire', lines: [
+      { note: 'A small square woman in a rocking chair by the fire. She is knitting something long and red on one needle, which is not easy, and she does not look at her hands while she does it.',
+        a: '&ldquo;Nine years, dear, since you&rsquo;re wondering. My toll was one penny. I had a silver shilling, which is twelve pennies, and he gives no change. I told him that I would not pay a troll eleven pence for nothing. So I sat down to wait for somebody with change. It&rsquo;s the principle of the thing.&rdquo;' },
+      { q: 'I need the knight&rsquo;s bird. It&rsquo;s a cockerel, isn&rsquo;t it?',
+        a: 'Of course it&rsquo;s a cockerel. Everybody knows that it&rsquo;s a cockerel, except Sir Osric. But you&rsquo;ll not get him for nothing. In this house it&rsquo;s one thing for one thing, and nobody takes what isn&rsquo;t given. The Keeper has it in writing, on the wall.' },
+      { q: 'Then I shall have to bargain. What would you take for that scarf?',
+        a: 'An egg. The soup wants an egg, and Bryony&rsquo;s hen has laid one. But a scarf is not a scarf until it is cast off the needles, and I can&rsquo;t cast off with only one. The pedlar has my other needle. He borrowed it on Tuesday, to pin up his pack. &ldquo;Until I find a nail,&rdquo; he said.' },
+      { q: 'So: an egg, and your needle back.',
+        a: 'Both, dear, and then the scarf is yours. I&rsquo;m not unkind. I&rsquo;m exact. You pick it up, living here.' }
+    ] },
+    wickett: { clue: 'Jem Wickett, the pedlar', lines: [
+      { note: 'A thin man with a tray in front of him and a hat that has been rained on for years. On the tray: a tin whistle, a mousetrap, a small looking-glass, and one very tall red feather.',
+        a: '&ldquo;Jem Wickett, and everything&rsquo;s for sale. Well. For swapping. Nobody in this room has seen a penny since the Keeper&rsquo;s lamp went up.&rdquo;' },
+      { q: 'What will you swap for?',
+        a: 'Anything on my tray for anything I can sell. Unless it&rsquo;s food. I never carry food: it goes off, and then so do the customers.' },
+      { q: 'Why are you still here?',
+        a: 'My barrow lost its wheel on the hill. A barrow with no wheel is a box, and I can&rsquo;t carry a box that size. So here I sit. And before you say it: I saw your spare. A cart wheel on a barrow! I&rsquo;d be pushing a windmill.' },
+      { q: 'Mistress Tamsel wants her needle back.',
+        a: 'And she shall have it! &ldquo;Until I find a nail,&rdquo; I said, and I&rsquo;m a man of my word. I just haven&rsquo;t found one. I haven&rsquo;t looked, if we&rsquo;re being exact. But looking wasn&rsquo;t what I promised.' }
+    ] },
+    osric: { clue: 'Sir Osric Maundrel', lines: [
+      { note: 'A long man in a great deal of armour, sitting very upright on a bench that is too low for him. His helmet is on the table. On his wrist sits a small round bird in a leather hood.',
+        a: '&ldquo;Sir Osric Maundrel, knight errant. I do not, as a rule, speak to cheesemongers. But a fortnight in this place has widened my mind.&rdquo;' },
+      { q: 'Why can&rsquo;t you cross?',
+        a: 'Four pennies, for the four legs of my horse. Nothing for myself, the Keeper tells me, so long as I stay in the saddle: he is very particular about the words &ldquo;on foot&rdquo;. But my purse is with my squire, and my squire is in Overwater. I offered the Keeper my word as a knight. He said that he had one of his own.' },
+      { q: 'That&rsquo;s a fine hawk.',
+        a: 'Is he not? I had him of the poultry-girl for one penny, to be paid when I have crossed the bridge. He is not yet trained. He will not fly at a pigeon, and when he sees a candle he makes a noise that I cannot describe. So I keep him hooded.' },
+      { q: 'Would you part with him?',
+        a: 'A knight does not bargain until he has supped. It is a rule of my order. Ask me again when I have eaten. And I do not take soup: it gets into the armour.' }
+    ] },
+    bryony: { clue: 'Bryony Thistledown', lines: [
+      { note: 'A girl of about your own age, on a stool, with a basket on her knees and a brown hen in the basket. She looks at your boots, and then at the door, as if she were measuring something.',
+        a: '&ldquo;I came with ten hens and a cockerel. He took one hen at the gate: one in every ten. Then it was a penny for every leg that walked, and a penny for me. I hadn&rsquo;t a penny. I&rsquo;ve sold eight hens on the road since, for bread. This is Duchess. She&rsquo;s the last.&rdquo;' },
+      { q: 'And the cockerel?',
+        a: 'Bugle. The knight has him. He said: &ldquo;I shall pay you one penny when I have crossed the bridge.&rdquo; I thought he meant that day. But I need the penny to cross, and he has to cross before he owes me the penny. Mistress Tamsel says that we shall both be here till we are old.' },
+      { q: 'Does Bugle crow?',
+        a: 'At anything. A candle. The moon. He thinks that every light is the sun coming up, and he tells everybody. That&rsquo;s why the knight keeps the hood on him. Take it off him under a lamp, and they&rsquo;ll hear him in Overwater.' },
+      { q: 'Has Duchess laid an egg today?',
+        a: 'One. You can have it for a cheese. I&rsquo;ve eaten nothing but eggs for three weeks, and I never want to see another.' }
+    ] }
+  };
+  var REMIND = {
+    tamsel: function () {
+      return st.done['wickett<scarf'] || st.inv.scarf ? '&ldquo;That was a good scarf,&rdquo; says Mistress Tamsel. &ldquo;I&rsquo;ve started another. I have the time.&rdquo;'
+        : '&ldquo;An egg for the soup, and my needle back from the pedlar,&rdquo; says Mistress Tamsel. &ldquo;Both, dear. Then the scarf is yours.&rdquo;' + (st.done['tamsel<egg'] ? ' She has had her egg.' : '') + (st.done['tamsel<needle'] ? ' She has her needle.' : '');
+    },
+    wickett: function () {
+      return st.done['wickett<scarf'] ? '&ldquo;Pleasure doing business,&rdquo; says Wickett, from inside nine years of red wool.'
+        : '&ldquo;Anything on my tray for anything I can sell,&rdquo; says Wickett. &ldquo;Unless it&rsquo;s food.&rdquo;' + (st.done['wickett<nail'] ? '' : ' He scratches his ear with the head of a knitting needle. &ldquo;And the lady&rsquo;s needle goes home when I find a nail.&rdquo;');
+    },
+    osric: function () {
+      return st.done['osric<feather'] ? '&ldquo;A knight again,&rdquo; says Sir Osric to the looking-glass.'
+        : st.done['osric<cheese'] ? '&ldquo;A crest,&rdquo; says Sir Osric. &ldquo;A feather for my helm, and a tall one. For that, and for nothing else, the hawk is yours.&rdquo;'
+        : '&ldquo;I do not bargain until I have supped,&rdquo; says Sir Osric. His stomach agrees with him, loudly.';
+    },
+    bryony: function () {
+      return st.done['bryony<cheese'] ? '&ldquo;Duchess only lays one a day,&rdquo; says Bryony. &ldquo;Get Bugle back, if you can. He isn&rsquo;t a hawk. I told him.&rdquo;'
+        : '&ldquo;An egg for a cheese,&rdquo; says Bryony. &ldquo;That&rsquo;s my bargain.&rdquo;';
+    }
+  };
+  var CAST_OFF = 'Mistress Tamsel casts off the last row faster than you can watch, bites through the wool, and puts the scarf into your arms. &ldquo;An egg and a needle. One thing for one thing, twice.&rdquo;';
+  var YES = {
+    'wickett<nail': function () { lose('nail'); gain('needle'); TOLL.sfx.tap();
+      return '&ldquo;Well, I never,&rdquo; says Wickett. &ldquo;I&rsquo;ve found a nail.&rdquo; He looks at it as a man looks at a bill. Then he pulls Mistress Tamsel&rsquo;s needle out of his pack-strap, knocks the nail into its place with the mousetrap, and holds the needle out to you. &ldquo;Until I find a nail. A man of my word.&rdquo;'; },
+    'bryony<cheese': function () { lose('cheese'); gain('egg'); TOLL.sfx.cluck();
+      return 'Bryony has eaten one corner of the cheese before she remembers to say thank you. Then she takes the egg from under the hen and puts it into your hand. It is still warm.'; },
+    'tamsel<needle': function () { lose('needle');
+      if (st.done['tamsel<egg']) { gain('scarf'); return '&ldquo;There it is.&rdquo; The needle is in the wool before you have let go of it. ' + CAST_OFF; }
+      return '&ldquo;There it is.&rdquo; The needle is in the wool before you have let go of it. &ldquo;Now I can cast off. Bring me that egg, dear, and you shall have your scarf.&rdquo;'; },
+    'tamsel<egg': function () { lose('egg');
+      if (st.done['tamsel<needle']) { gain('scarf'); return 'The egg goes into the pot, and the whole room smells better at once. ' + CAST_OFF; }
+      return 'The egg goes into the pot, and the whole room smells better at once. &ldquo;That&rsquo;s the soup finished. And the scarf will be finished when I have two needles again. I don&rsquo;t forget, dear.&rdquo;'; },
+    'wickett<scarf': function () { lose('scarf'); gain('feather');
+      return '&ldquo;Now <i>that</i> I can sell. Red wool, never worn, knitted by a lady of nine years&rsquo; experience.&rdquo; The scarf goes round Wickett&rsquo;s own neck, and the tall red feather comes off the tray. &ldquo;One thing for one thing.&rdquo;'; },
+    'osric<cheese': function () { lose('cheese');
+      var t = 'Sir Osric eats the cheese in four bites, standing up, with his gauntlets on. &ldquo;Excellent. I have supped; now we may bargain. The hawk? I will part with him for one thing, and for one thing only: a crest for my helm. My own went into the river at the ford. A knight with no feather in his helmet is a kettle with legs.&rdquo;';
+      ER.addClue('osric2', 'Sir Osric, after his supper', '<h4>Sir Osric, after his supper</h4><p>' + t + '</p>', 'statement', 'What he said', true);
+      return t; },
+    'osric<feather': function () { lose('feather'); gain('bugle');
+      return 'Sir Osric stands the feather in his helmet, and looks at it in the pedlar&rsquo;s looking-glass for some time. &ldquo;A knight again,&rdquo; he says. Then he lifts the small hooded bird off his wrist and sets him on yours. &ldquo;One thing for one thing. He answers to no name that I have tried.&rdquo;'; }
+  };
+  var NO = {
+    wickett: { cheese: '&ldquo;Food,&rdquo; says Wickett, and holds up one finger. &ldquo;Unless it&rsquo;s food, I said. A lovely cheese. No.&rdquo;',
+      egg: '&ldquo;That&rsquo;s food with a shell on,&rdquo; says Wickett. &ldquo;Unless it&rsquo;s food, I said.&rdquo;',
+      needle: '&ldquo;That&rsquo;s the lady&rsquo;s needle,&rdquo; says Wickett. &ldquo;I&rsquo;ve only just given it back. I can&rsquo;t sell what was never mine.&rdquo;',
+      feather: '&ldquo;That was mine a minute ago,&rdquo; says Wickett. &ldquo;I can sell it. I just did.&rdquo;' },
+    tamsel: { cheese: '&ldquo;Cheese? In soup? No, dear. I was married to a cheesemonger for thirty years. Why do you think I left home with nothing but a shilling?&rdquo;',
+      nail: '&ldquo;I&rsquo;ve just given you that,&rdquo; says Mistress Tamsel. &ldquo;It&rsquo;s the pedlar who is looking for a nail. Or who isn&rsquo;t looking.&rdquo;',
+      feather: '&ldquo;Very grand. I can&rsquo;t knit with a feather, dear.&rdquo;',
+      scarf: '&ldquo;I made that for you to bargain with, dear, not to give back.&rdquo;' },
+    bryony: { cheese: '&ldquo;One&rsquo;s enough,&rdquo; says Bryony, with her mouth full. &ldquo;I&rsquo;d be sick.&rdquo;',
+      egg: '&ldquo;I&rsquo;ve only just <i>given</i> you that,&rdquo; says Bryony.',
+      scarf: '&ldquo;It&rsquo;s lovely,&rdquo; says Bryony. &ldquo;It&rsquo;s not Bugle.&rdquo;',
+      feather: '&ldquo;Duchess has plenty of those,&rdquo; says Bryony.',
+      '*': '&ldquo;What would I do with that?&rdquo; says Bryony. &ldquo;I want a cheese, or my bird back.&rdquo;' },
+    osric: { cheese: '&ldquo;I have supped,&rdquo; says Sir Osric. &ldquo;A knight sups once.&rdquo;',
+      feather: '&ldquo;A handsome feather,&rdquo; says Sir Osric, and his eyes follow it. &ldquo;But I do not bargain until I have supped.&rdquo;',
+      scarf: '&ldquo;A scarf is not a crest,&rdquo; says Sir Osric. &ldquo;I should look like a kettle with a cold.&rdquo;',
+      egg: '&ldquo;Raw?&rdquo; says Sir Osric. &ldquo;I am a knight, not a weasel.&rdquo;',
+      '*': '&ldquo;I thank you, no,&rdquo; says Sir Osric. &ldquo;I have iron enough about me already.&rdquo;' }
+  };
+
+  function hints() {
+    if (nextFile) return ['go', ['You have the bird. The lamp over the gate is outside. The button is at the bottom of the screen.']];
+    if (Object.keys(st.met).length < 4) return ['start', [
+      'Talk to all four people before you offer anybody anything. Each of them tells you what they have, and what they will take for it. Listen for the small words: unless, until, only.',
+      'Read the notice on the wall too. It is the Keeper&rsquo;s rules for this room.'
+    ]];
+    if (st.inv.scarf || st.inv.feather || st.done['wickett<scarf']) return ['end', [
+      'The scarf is for the pedlar: it is not food, and he can sell it. His feather is for the knight: but Sir Osric does not bargain until he has supped, and you have cheese.'
+    ]];
+    return ['plan', [
+      'Work backwards from the bird. Sir Osric will take one thing only for him (ask him again when he has eaten something). Who has that thing? What will that person take for it? Go on until you come to something that you have got.',
+      'The knight wants a feather. The pedlar swaps the feather for anything that he can sell, unless it is food: so not a cheese, and not an egg. Mistress Tamsel&rsquo;s scarf is not food. She wants an egg, and her needle back. Bryony gives an egg for a cheese.',
+      'The pedlar keeps the needle &ldquo;until I find a nail&rdquo;: so find him one. Look at the corner of the notice on the wall. To give somebody a thing, click it in the bar at the top of the screen, and then click the person.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function saveSt() { ER.flag('h-st', st); }
+  function gain(it) { st.inv[it] = (st.inv[it] || 0) + 1; }
+  function lose(it) { st.inv[it]--; if (st.inv[it] <= 0) delete st.inv[it]; }
+  function drawBag() {
+    var s = '<svg viewBox="0 0 26 26"><path d="M5 10h16l2 13H3z"/><path d="M9 10V7q0-4 4-4t4 4v3"/></svg>', keys = ['cheese', 'nail', 'needle', 'egg', 'scarf', 'feather', 'bugle'].filter(function (k) { return st.inv[k]; });
+    if (!keys.length) s += '<span class="sat-none">nothing</span>';
+    keys.forEach(function (k) {
+      s += '<button type="button" class="sat-it' + (held === k ? ' on' : '') + '" data-it="' + k + '">' +
+        (k === 'bugle' ? '<svg viewBox="0 0 100 110"><use href="#ch-bugle-h"/></svg>' : '<svg viewBox="0 0 28 28">' + ICON[k] + '</svg>') +
+        (k === 'cheese' ? 'cheese &times;' + st.inv.cheese : k === 'bugle' ? 'Bugle' : k) + '</button>';
+    });
+    $('#sat').innerHTML = s;
+    document.body.classList.toggle('holding', !!held);
+  }
+  function paint() {
+    $('#nail').style.display = st.inv.nail || st.done['wickett<nail'] ? 'none' : '';
+    $('#notice').setAttribute('class', st.inv.nail || st.done['wickett<nail'] ? 'loose' : '');
+    $('#scarfG').style.display = st.inv.scarf || st.done['wickett<scarf'] ? 'none' : '';
+    $('#scarfW').style.display = st.done['wickett<scarf'] ? '' : 'none';
+    $('#featherT').style.display = st.done['wickett<scarf'] ? 'none' : '';
+    $('#featherH').style.display = st.done['osric<feather'] ? '' : 'none';
+    $('#bugle').style.display = st.done['osric<feather'] ? 'none' : '';
+    $('#go').classList.toggle('on', !!nextFile && !busy);
+    ER.pips(Object.keys(st.done).length, 7);
+    drawBag();
+  }
+  function begin() {
+    paint();
+    if (!nextFile && st.inv.bugle) { finish(); return; }          /* the page was left between the last bargain and the way out */
+    if (nextFile) { ER.say('The toll-house. Bugle is on your wrist, and everybody is looking at the door.'); return; }
+    if (ER.flag('h-seen')) { ER.say('The toll-house: a fire, a pot of soup, and four people who cannot cross.'); return; }
+    busy = true; ER.flag('h-seen', 1);
+    ER.narrate([
+      'The toll-house. It is warm, and it smells of soup, and nobody in it is in a hurry, because nobody in it is going anywhere.',
+      '&ldquo;Back again?&rdquo; says the woman with the knitting. &ldquo;He asked you his riddles, and you&rsquo;re still in one piece. Well. Sit down and tell us what you want. We&rsquo;ve nothing else to listen to.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- your hands ---------- */
+  $('#sat').addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.sat-it') : null; if (!b || busy || nextFile) return;
+    var k = b.getAttribute('data-it');
+    held = held === k ? null : k; ER.sfx.click(); drawBag();
+    if (held) ER.say('You are holding ' + (held === 'cheese' ? 'a cheese' : LABEL[held]) + '. Click on somebody to offer it; or click it again to put it away.', 5200); else ER.hush();
+  });
+
+  /* ---------- four people ---------- */
+  function talk(who) {
+    var T = TALK[who];
+    ER.talk({
+      who: CAST[who].who, role: CAST[who].role, face: FACE(who), lines: T.lines,
+      clue: { id: who, title: T.clue, kind: 'What ' + (who === 'tamsel' || who === 'bryony' ? 'she' : 'he') + ' said' },
+      done: function (seen) {
+        if (!seen) return;
+        st.met[who] = 1; saveSt(); paint();
+        if (Object.keys(st.met).length === 4 && !ER.flag('h-all')) { ER.flag('h-all', 1); TOLL.learn(['bargain', 'swap', 'unless', 'until']); ER.say('That is everybody. Four people, and every one of them will take exactly one kind of thing.'); }
+      }
+    });
+  }
+  function offer(who, it) {
+    var key = who + '<' + it, t;
+    if (!st.met[who]) { ER.say('You had better hear what ' + NAME[who] + ' has to say before you offer ' + (who === 'tamsel' || who === 'bryony' ? 'her' : 'him') + ' anything.'); return; }
+    if (!st.done[key] && ER.check('deal', key) && !(who === 'osric' && it === 'feather' && !st.done['osric<cheese']) && YES[key]) {
+      st.done[key] = 1; t = YES[key](); held = null; saveSt(); paint(); busy = true;
+      ER.sfx.ok();
+      ER.narrate([t], function () { busy = false; if (st.inv.bugle) finish(); });
+      return;
+    }
+    held = null; drawBag();
+    t = (NO[who][it] || NO[who]['*'] || '&ldquo;No, thank you,&rdquo; says ' + NAME[who] + '.');
+    ER.say(t + (TOLL.miss() === 1 || !ER.flag('h-miss') ? ' By the fire, Mistress Tamsel drops a pebble into a jar without looking up.' : ''), 9000);
+    ER.flag('h-miss', 1); TOLL.sfx.hm();
+  }
+  ['tamsel', 'wickett', 'osric', 'bryony'].forEach(function (who) {
+    $('#' + who).addEventListener('click', function () {
+      if (busy) return;
+      if (nextFile) { ER.say(who === 'bryony' ? '&ldquo;Go on, then,&rdquo; says Bryony. &ldquo;I&rsquo;m coming to watch.&rdquo;' : who === 'tamsel' ? '&ldquo;Take the bird out to that lamp, dear,&rdquo; says Mistress Tamsel. She has put her shoes on, for the first time in nine years.' : who === 'osric' ? '&ldquo;I shall saddle my horse,&rdquo; says Sir Osric. &ldquo;In case.&rdquo;' : '&ldquo;Midnight, and the gate wide open,&rdquo; says Wickett. &ldquo;I could sell tickets.&rdquo;'); return; }
+      if (held) { offer(who, held); return; }
+      if (!st.met[who]) { talk(who); return; }
+      ER.say(REMIND[who](), 7000);
+    });
+  });
+
+  /* ---------- things in the room ---------- */
+  $('#nail').addEventListener('click', function (e) {
+    if (busy || nextFile) return;
+    e.stopPropagation();
+    gain('nail'); saveSt(); paint(); ER.sfx.tick();
+    ER.wordAt(e.clientX, e.clientY, 'nail');
+    ER.say('&ldquo;That nail?&rdquo; says Mistress Tamsel, without turning round. &ldquo;It has been working loose since the spring. I hung that notice, so it is my nail; and I give it you. Nobody takes what isn&rsquo;t given.&rdquo;', 9000);
+  });
+  $('#rules').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: RULES, cls: 'rules', clue: { id: 'rules', title: 'Rules of the House', kind: 'On the wall of the toll-house' }, done: function () { TOLL.learn(['bargain']); } });
+  });
+  TOLL.thing('#book', null, 'The house book. Your name is the last one in it, and the ink is hardly dry. At the top of the page, in small neat letters, it says: &ldquo;I, who sign below, shall wash the soup bowls.&rdquo; You did not read that. It was raining.', isBusy);
+  TOLL.thing('#bowls', null, 'Five soup bowls on the shelf over the fire, and they are yours to wash. You signed for them.', isBusy);
+  TOLL.thing('#pot', null, function () { return st.done['tamsel<egg'] ? 'The soup, with its egg. Mistress Tamsel says that it is the first finished thing in this house for nine years.' : 'Soup. It has been on the fire since Tuesday. Mistress Tamsel says that all it wants now is an egg.'; }, isBusy);
+  TOLL.thing('#fire', null, 'A good fire. The Keeper sends in a basket of wood every evening, and a bill for it every morning, which nobody can pay.', isBusy);
+  TOLL.thing('#mabel', 'goose', 'Mabel has found the warmest place in the room, and she is asleep in it with her head under her wing. Nobody has asked her to pay for anything.', isBusy);
+  TOLL.thing('#window', null, 'Rain on the window, and beyond it the Keeper&rsquo;s lamp, burning over the gate. It will burn until the sun is up. It says so.', isBusy);
+  TOLL.thing('#helmet', 'helmet', function () { return st.done['osric<feather'] ? 'Sir Osric&rsquo;s helmet, with a tall red feather in it. It looks like a kettle that has been to a wedding.' : 'Sir Osric&rsquo;s helmet. There is a small hole in the top, where a feather used to stand.'; }, isBusy);
+  $('#door').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.leave(nextFile); return; }
+    ER.say('The door to the gate. Outside it is dark and wet, and the Keeper&rsquo;s lamp is burning. There is no point in going out there without a cock.');
+  });
+
+  /* ---------- the bird in the hand ---------- */
+  function finish() {
+    var file = ER.exitOk([Object.keys(st.done).sort().join('+')]);
+    if (!file) { ER.say('Something is wrong with this lock: tell your teacher.'); return; }
+    nextFile = file; ER.flag('h-file', file); TOLL.done('house'); TOLL.solved(); busy = true; held = null; paint();
+    ER.narrate([
+      'He weighs about as much as a small loaf, and he is fast asleep. Bryony is at your elbow before you have turned round. &ldquo;That&rsquo;s Bugle,&rdquo; she says. &ldquo;What do you want him for?&rdquo;',
+      '&ldquo;Clause 2,&rdquo; you say. And you tell them all of it: the cock, the gate, and the lamp that must burn until the sun is up. Nobody says anything for a moment. The fire cracks.',
+      '&ldquo;Nine years,&rdquo; says Mistress Tamsel slowly, &ldquo;I have sat under that Charter, and I never once asked to read it.&rdquo; She puts down her knitting. &ldquo;Well, don&rsquo;t stand there, dear. Take the bird out to that lamp.&rdquo;'
+    ], function () { busy = false; paint(); });
+  }
+  $('#go').addEventListener('click', function () { if (nextFile && !busy) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>

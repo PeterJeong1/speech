@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Behind the Great Dial · The Eleventh Hour</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="hours.css">
+<style>
+  body{--bg:#0e1320;--accent:#bfd4ff;--font-display:'Cinzel',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(10,14,26,.96);--tc-ink:#e6ecf8;--cap-bg:rgba(10,14,26,.94);--cap-ink:#eef2fb;--panel:#141a2c;--face-bg:#232c48;--q-ink:#a9bdf0;--fade:#04060d;--hud-bg:rgba(10,14,26,.82)}
+  .tc-room{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.04em}
+  #glass{animation:gls 7s steps(4) infinite}
+  @keyframes gls{50%{opacity:.9}}
+  #dawD{animation:bob 5s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  #heap{transition:opacity .8s}
+  #scene.hung #heap{opacity:0;pointer-events:none}
+  #ring9{opacity:0;transition:opacity .8s}
+  #scene.hung #ring9{opacity:1}
+  #scene .pl rect{fill:#0b0e17;stroke:#05070c;stroke-width:3}
+  #scene .pl text{fill:#fff8d8;font-family:'Cinzel',serif;font-weight:700;font-size:21px;text-anchor:middle}
+  #shadowP{transform-origin:760px -300px}
+  #scene.hung #shadowP{animation:swing 2s ease-in-out infinite}
+  @keyframes swing{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+
+  /* the lever frame and the back of the dial */
+  .dl{display:grid;grid-template-columns:minmax(0,560px) 340px;gap:22px;width:min(950px,96vw);align-items:start}
+  .dl-dial{display:block;width:100%;height:auto;background:#0b0f1a;border:6px solid #05070c;border-radius:6px;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .dl-dial .hk{cursor:pointer}
+  .dl-dial .hk circle.spot{fill:#fff;fill-opacity:.001;stroke:#5c6a8c;stroke-width:1.5;stroke-dasharray:4 5}
+  .dl-dial .hk:hover circle.spot{stroke:#fff;stroke-dasharray:none}
+  .dl-dial .pl{cursor:pointer}
+  .dl-dial .pl rect{fill:#161a26;stroke:#454d66;stroke-width:2}
+  .dl-dial .pl text{fill:#fff3c2;font-family:'Cinzel',serif;font-weight:700;font-size:21px;text-anchor:middle}
+  .dl-dial .pl.sel rect{stroke:#ffd66e;stroke-width:4}
+  .dl-dial .pl.fix{cursor:default}
+  .dl-dial .pl.fix rect{fill:#0e111a}
+  .dl-dial .pl.shake{animation:plsh .5s 2}
+  @keyframes plsh{25%{opacity:.4}75%{opacity:1}}
+  .dl-side h4{margin:0 0 8px;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.2em;color:#bfd4ff}
+  .dl-lev{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+  .dl-lev button{position:relative;height:44px;padding:0 6px 0 22px;border-radius:3px;border:2px solid #222838;background:linear-gradient(#f6f1e2,#d6ceb6);color:#1c2030;font-family:'Cinzel',serif;font-weight:700;font-size:12.500px;letter-spacing:.08em;text-align:left;
+    box-shadow:0 3px 6px rgba(0,0,0,.5)}
+  .dl-lev button:before{content:'';position:absolute;left:7px;top:9px;width:8px;height:26px;border-radius:4px;background:#5c6373}
+  .dl-lev button.clean:before{background:#e9c15a;box-shadow:0 0 6px rgba(255,214,110,.8)}
+  .dl-lev button:hover{border-color:#bfd4ff}
+  .dl-lev button.on{background:linear-gradient(#fff3c8,#ffd66e)}
+  .dl-lev button.on:before{top:4px}
+  .dl-side .pmsg{min-height:214px;font-size:17.5px}
+  @media (max-width:900px){.dl{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <radialGradient id="glassG" cx="58%" cy="38%"><stop offset="0" stop-color="#ffffff"/><stop offset=".3" stop-color="#e3ebfa"/><stop offset="1" stop-color="#93a6cf"/></radialGradient>
+  <linearGradient id="wallD" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#101626"/><stop offset=".5" stop-color="#1c2540"/><stop offset="1" stop-color="#0c111e"/></linearGradient>
+  <linearGradient id="floorD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3350"/><stop offset="1" stop-color="#0c111e"/></linearGradient>
+  <linearGradient id="enamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f1e2"/><stop offset="1" stop-color="#cfc7ae"/></linearGradient>
+  <radialGradient id="vig" cx="48%" cy="48%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#04060d" stop-opacity=".2"/><stop offset="1" stop-color="#04060d" stop-opacity=".86"/></radialGradient>
+  <clipPath id="glassC"><circle cx="760" cy="420" r="372"/></clipPath>
+</defs>
+
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#wallD)"/>
+<g id="bricks" stroke="#0a0e19" stroke-width="2.500" fill="none" opacity=".7"></g>
+
+<!-- the dial, from behind: white glass, black iron, the moon -->
+<g id="dialB" class="hot">
+  <circle cx="760" cy="420" r="392" fill="#05070c"/><circle id="glass" cx="760" cy="420" r="372" fill="url(#glassG)"/>
+  <g clip-path="url(#glassC)"><circle cx="930" cy="250" r="70" fill="#fff" opacity=".7"/>
+    <g id="shadowP"><path d="M760 -300V760" stroke="#56658c" stroke-width="16" opacity=".35"/><circle cx="760" cy="700" r="60" fill="#56658c" opacity=".3"/></g>
+    <path d="M760 420L882 262" stroke="#0e1320" stroke-width="20" stroke-linecap="round" opacity=".55"/><path d="M760 420H1050" stroke="#0e1320" stroke-width="13" stroke-linecap="round" opacity=".55"/></g>
+  <g id="spokes" stroke="#05070c" stroke-width="7"></g>
+  <circle cx="760" cy="420" r="372" fill="none" stroke="#05070c" stroke-width="14"/><circle cx="760" cy="420" r="262" fill="none" stroke="#05070c" stroke-width="6"/><circle cx="760" cy="420" r="26" fill="#05070c"/>
+  <g id="hooks" fill="#05070c"></g>
+  <g id="fixed"></g><g id="ring9"></g>
+</g>
+<g id="hookXI" class="hot"><circle cx="918" cy="146" r="34" fill="#fff" fill-opacity=".001"/></g>
+<g id="hatch" class="hot"><rect x="1000" y="250" width="70" height="92" fill="#cfe0ff"/><path d="M1070 250l44-16v92l-44 16z" fill="#05070c"/><rect x="1000" y="250" width="70" height="92" fill="none" stroke="#05070c" stroke-width="6"/>
+  <g id="dawD"><use href="#ch-byword" x="1006" y="186" width="54" height="70"/></g></g>
+
+<!-- the floor, a sill, the heap of hours -->
+<path d="M-1000 800H2600V1500H-1000Z" fill="url(#floorD)"/><path d="M-1000 800H2600" stroke="#04060d" stroke-width="6"/>
+<g id="sill" class="hot"><rect x="150" y="610" width="230" height="20" fill="#2a3350"/><path d="M170 630v170M360 630v170" stroke="#1c2540" stroke-width="14"/>
+  <rect x="176" y="576" width="96" height="34" fill="#3d2f5a"/><rect x="182" y="570" width="96" height="34" fill="#f3ead0"/><path d="M192 582h70M192 592h56" stroke="#5a3f86" stroke-width="2.500"/>
+  <path d="M300 606h44" stroke="#e2c56f" stroke-width="5" stroke-linecap="round"/><circle cx="300" cy="606" r="5" fill="#e2c56f"/><path d="M322 598q20-16 40 0l-6 10h-28z" fill="#c9553f"/></g>
+<g id="heap" class="hot"></g>
+<g id="cardD" class="hot"><path d="M470 150V172" stroke="#c9bfa0" stroke-width="2"/><rect x="436" y="172" width="70" height="92" fill="#f4ecd4" transform="rotate(-5 471 218)"/><g stroke="#5a3f86" stroke-width="2.500" stroke-linecap="round" transform="rotate(-5 471 218)"><path d="M446 190h50M446 204h44M446 218h50M446 232h38M446 246h46"/></g></g>
+
+<!-- the lever frame -->
+<g id="frame" class="hot">
+  <rect x="1230" y="560" width="340" height="240" fill="#141a2c"/><rect x="1230" y="560" width="340" height="240" fill="none" stroke="#05070c" stroke-width="8"/>
+  <g id="levers"></g>
+  <g id="cardL"><rect x="1250" y="606" width="62" height="84" fill="#f4ecd4" transform="rotate(4 1281 648)"/><g stroke="#5a3f86" stroke-width="2.500" stroke-linecap="round" transform="rotate(4 1281 648)"><path d="M1258 622h46M1258 636h40M1258 650h46M1258 664h34"/></g></g>
+</g>
+<g id="stairsD" class="hot"><path d="M-1000 800V560h1040v40h60v40h60v40h60v40h60v40h60v40z" fill="#141a2c"/><path d="M40 560v40h60v40h60v40h60v40h60v40h60v40" stroke="#05070c" stroke-width="5" fill="none"/></g>
+
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the workroom</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="hours.js"></script>
+<script>
+(function () {
+  var $ = ER.$, sc = $('#scene'), busy = false, nextFile = null;
+  var ROM = ['XII', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI'], LOOSE = [1, 2, 3, 4, 5, 7, 8, 9, 10];
+  var LEV = [['kill', 'Kill time'], ['mark', 'Mark time'], ['keep', 'Keep time'], ['make', 'Make time'], ['save', 'Save time'], ['waste', 'Waste time'], ['take', 'Take your time']];
+
+  /* a plate as it looks from behind: the figures are cut through the iron, so they read backwards */
+  function plate(h, x, y, s, cls) {
+    return '<g class="pl ' + (cls || '') + '" data-h="' + h + '" transform="translate(' + x.toFixed(0) + ' ' + y.toFixed(0) + ') scale(' + (s || 1) + ')"><rect x="-30" y="-21" width="60" height="42" rx="6"/>' +
+      '<text transform="scale(-1 1)" y="8">' + ROM[h % 12] + '</text></g>';
+  }
+  function at(pos, r, cx, cy) { var a = pos * 30 * Math.PI / 180; return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; }
+
+  (function () {
+    var s = '', x, y, row = 0, p, q, i;
+    for (y = -600; y < 800; y += 48, row++) {
+      s += '<path d="M-1000 ' + y + 'H2600"/>';
+      for (x = -960 + (row % 2) * 64; x < 2600; x += 128) s += '<path d="M' + x + ' ' + y + 'v48"/>';
+    }
+    $('#bricks').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { p = at(i, 262, 760, 420); q = at(i, 372, 760, 420); s += '<path d="M' + p[0].toFixed(0) + ' ' + p[1].toFixed(0) + 'L' + q[0].toFixed(0) + ' ' + q[1].toFixed(0) + '"/>'; }
+    $('#spokes').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { p = at(i, 316, 760, 420); s += '<circle cx="' + p[0].toFixed(0) + '" cy="' + p[1].toFixed(0) + '" r="9"/>'; }
+    $('#hooks').innerHTML = s;
+    p = at(0, 316, 760, 420); q = at(6, 316, 760, 420);
+    $('#fixed').innerHTML = plate(12, p[0], p[1], 1.5) + plate(6, q[0], q[1], 1.5);
+    s = ''; LOOSE.forEach(function (h) { p = at((12 - h) % 12, 316, 760, 420); s += plate(h, p[0], p[1], 1.5); });
+    $('#ring9').innerHTML = s; s = '';
+    /* the heap: the ninth hour lies on top, and from in here it reads XI */
+    [[430, 846, -18, 1], [690, 842, 16, 5], [520, 852, 6, 10], [610, 846, -10, 3], [470, 812, 20, 8], [650, 808, 14, 2], [600, 790, 8, 7], [520, 786, -12, 4], [562, 764, -5, 9]].forEach(function (c) {
+      s += '<g transform="rotate(' + c[2] + ' ' + c[0] + ' ' + c[1] + ')">' + plate(c[3], c[0], c[1], 1.3) + '</g>';
+    });
+    $('#heap').innerHTML = s; s = '';
+    LEV.forEach(function (l, k) {
+      x = 1340 + k * 32;
+      s += '<path d="M' + x + ' 760V' + (k === 6 ? 590 : 600) + '" stroke="#05070c" stroke-width="9" stroke-linecap="round"/><circle cx="' + x + '" cy="' + (k === 6 ? 584 : 594) + '" r="10" fill="' + (k === 6 ? '#e9c15a' : '#5c6373') + '"/>' +
+        '<rect x="' + (x - 12) + '" y="700" width="24" height="56" fill="url(#enamG)"/>';
+    });
+    $('#levers').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'hours', storyTitle: 'The Eleventh Hour', id: 'dial', no: 'III', title: 'Behind the Great Dial',
+    go: 'Step out behind the dial',
+    intro: [
+      'Byword&rsquo;s proverbs were not orders, so each of them meant what people mean. The handle said TWO TO WIND, so it was &ldquo;many hands&rdquo; and not &ldquo;too many cooks&rdquo;. Enough was four days, from Thursday to Monday. You wound steadily; and because a clock that gains is going too fast, you let the bob down two turns, to make the pendulum longer and slower.',
+      'Fifty more steps, and you come out behind the great dial: a wheel of white glass four times your height, with the moon on the other side of it.',
+      'From in here, everything about a clock is the wrong way round. And nine of its hours are lying on the floor.'
+    ],
+    exit: {"next":"workroom","w":{"b9ba06b1":"25f51f9d"}}, tags: {"lev1":["4ad99feb"],"lev2":["72e1bd99"],"pl1":["7b41f10e"],"pl2":["93e81070"],"pl3":["2c894576"],"pl4":["9cf1ce46"],"pl5":["3752156b"],"pl7":["726cf706"],"pl8":["ea1ad912"],"pl9":["dad10fb8"],"pl10":["3c31795e"]},
+    sound: ['candle', { root: 48, bpm: 56, drop: ['mel', 'arp'], beds: [['wind', 0.6], ['night', 0.3]] }],      /* high, cold and bright: the pendulum will tick in this room, so nothing plucked */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null;
+
+  var HANG = '<h4>TO HANG AN HOUR</h4><ol>' +
+    '<li>First stop the clock dead. Nothing in it may move while an hour is in your hands: the weights are pulling, and a plate hung on a pulling clock slides straight off again.</li>' +
+    '<li>Then hang each hour on its own hook.</li>' +
+    '<li>Then try them. Set the pendulum swinging with the hands standing still, so that the clock ticks and goes nowhere. An hour on the wrong hook will shake loose.</li>' +
+    '<li>Only when every hour hangs quiet may the clock be told to go on. It cannot go on past a gap. If an hour is truly lost, there is a receipt for that in the workroom. I have never needed it.</li></ol>' +
+    '<p>The levers do all this. They were named by a Warden who thought he was funny. Each one gives the clock an order; and you know what this clock does with orders.</p><p class="sig">W.Q.</p>';
+  var INSIDE = '<h4>FROM IN HERE</h4><p>You are standing behind the dial, looking at the back of every hour.</p>' +
+    '<p>XII stays at the top and VI at the bottom. Mr Ferrow riveted those two, and they have never moved. Everything else changes sides. Seen from the square, the hours go round clockwise. Seen from in here, they go round anticlockwise.</p>' +
+    '<p>The figures are cut right through the iron, so that the moon can shine in them. So from in here every figure is back to front as well: read it as you would read writing in a mirror.</p>' +
+    '<p>The hooks are not numbered. A Warden is expected to know.</p><p class="sig">W.Q.</p>';
+  var BOOK = '<h4>THE WARDEN&rsquo;S DAY-BOOK &middot; THIS WEEK</h4>' +
+    '<p><b>MONDAY.</b> Wound the clock. The pin of the XI is working loose, and the nine hours that hang on the same wire will go if it goes. A stitch in time saves nine. I shall see to it tomorrow.</p>' +
+    '<p><b>TUESDAY.</b> Tomorrow.</p><p><b>WEDNESDAY.</b> Tomorrow will do.</p>' +
+    '<p><b>THURSDAY, MIDSUMMER EVE.</b> My last day. The Mayor came up at four to practise under the bell. He is a kind man, and he talks too much. He told me that there was no hurry about anything.</p>' +
+    '<p><b>A QUARTER TO ELEVEN.</b> I have hooked back the pendulum. I am going up.</p>';
+
+  function read2() { return ER.flag('d-hang') && ER.flag('d-inside'); }
+  function hints() {
+    if (nextFile) return ['go', ['Nine hours are back. One hook is empty, and the Warden&rsquo;s card says where the receipt for a lost hour is kept. The stair goes on up.']];
+    if (ER.flag('d-open')) return ['hang', [
+      'A lever gives the clock an order, so the clock takes each label to the letter. Read the card TO HANG AN HOUR again, and find the lever whose words, taken word for word, do what step 1 asks.',
+      'KILL TIME stops time dead. Then hang the nine hours: but from in here the dial is back to front. XII and VI are riveted. Which way round do the others go? And look hard at how the VII and the VIII are written.',
+      'Every figure is in mirror writing: the plate that reads XI is the IX, and the one that reads VI is the IV. The hours run anticlockwise from the top, so I goes on the first hook to the LEFT of XII. One hook stays empty. Then MARK TIME: the clock ticks and goes nowhere.'
+    ]];
+    return ['start', [
+      'Two cards hang in this room, in the Warden&rsquo;s violet ink: one on the lever frame, and one on the iron of the dial, high up on the left. Read both. Her day-book is on the sill.',
+      'Then go to the lever frame, on the right. The hours are hung from there.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    sc.classList.toggle('hung', !!nextFile);
+    $('#frame').setAttribute('class', 'hot' + (read2() && !nextFile ? ' nudge' : ''));
+    $('#go').classList.toggle('on', !!nextFile && !busy);
+    ER.pips((read2() ? 1 : 0) + (nextFile ? 1 : 0), 2);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('Nine hours on their hooks, one hook empty, and the clock ticking and going nowhere.'); return; }
+    if (read2()) { ER.say('Behind the great dial. The lever frame is on the right.'); return; }
+    busy = true;
+    ER.narrate([
+      'The moon comes through the glass and lays the shadow of the hands across the floor. They say a quarter to eleven, backwards.',
+      'XII is in its place at the top, and VI at the bottom. Every other hook on the great iron ring is empty; and in a heap under the dial lie nine plates of black iron, with figures cut right through them.',
+      'Nine. You count them twice. The Mayor said that the eleventh hour had flown. And there, on top of the heap, is a plate that says XI.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the room ---------- */
+  function hangCard() {
+    ER.read({ html: HANG, cls: 'card', clue: { id: 'hang', title: 'To hang an hour', kind: 'The Warden’s card' },
+      done: function () { ER.flag('d-hang', 1); HRS.learn(['to the letter', 'order']); paint(); } });
+  }
+  $('#cardD').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: INSIDE, cls: 'card', clue: { id: 'inside', title: 'From in here', kind: 'The Warden’s card' },
+      done: function () { ER.flag('d-inside', 1); HRS.learn(['clockwise', 'anticlockwise', 'back to front']); paint(); } });
+  });
+  $('#sill').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BOOK, cls: 'daybook', clue: { id: 'daybook', title: 'The Warden’s day-book', kind: 'On the sill' }, done: function () { HRS.learn(['A stitch in time saves nine']); } });
+  });
+  $('#frame').addEventListener('click', function (e) {
+    if (busy) return;
+    if (nextFile) { ER.say('Seven levers. MARK TIME is down. Six of the handles are grey with dust; and the seventh, TAKE YOUR TIME, has been wiped clean by somebody&rsquo;s hand.', 8000); return; }
+    if (!ER.flag('d-hang')) { hangCard(); return; }
+    if (!ER.flag('d-inside')) { ER.say('Seven levers with enamel labels. Before you hang anything on that dial, read the other card: it hangs on the iron of the dial, high up on the left.'); return; }
+    openDial();
+  });
+  $('#heap').addEventListener('click', function () {
+    if (busy) return;
+    ER.say('Nine plates of iron, each as big as a tea-tray. You can read II and III and V. One says XI. Two of them say IIV and IIIV, which are not numbers at all.', 8000);
+  });
+  $('#hookXI').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    ER.say('One hook has no hour lying under it. Its pin has not snapped. Somebody has drawn the pin out and laid it on the sill, very tidily, beside a duster.', 8000);
+  });
+  $('#hatch').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    if (ER.flag('d-daw')) { ER.say('The little door in the dial: the one that opened when the Mayor shouted &ldquo;Open up!&rdquo; Byword is sitting in it. &ldquo;' + HRS.said('sides') + '&rdquo; he says.'); return; }
+    ER.talk({
+      who: CAST.byword.who, role: CAST.byword.role, face: FACE('byword'),
+      lines: [
+        { note: 'He is sitting in the little door in the dial, with the whole of Gilderby behind him and a very long way down.',
+          q: 'Why do the hours look so strange from in here?', a: '&ldquo;' + HRS.said('sides') + '&rdquo;' },
+        { q: 'Is that the eleventh hour, on top of the heap?', a: 'He looks at the plate. He looks at you. He says nothing at all, which is a thing that he does not often do.' }
+      ],
+      last: 'Leave him',
+      done: function (seen) { if (!seen) return; ER.flag('d-daw', 1); HRS.byword('sides'); }
+    });
+  });
+  HRS.thing('#dialB', 'dial', 'The back of the great dial: white glass, and a ring of black iron with twelve hooks in it. Through the glass you can see the shadow of the hands, and the moon.', isBusy);
+  HRS.thing('#stairsD', null, 'The stair you came up by. A hundred and thirty-two steps in all, the Mayor said; and you are at ninety.', isBusy);
+
+  /* ---------- the hanging of the hours ---------- */
+  var SAYL = {
+    make: 'The wheels groan, and the clock makes some: one new minute, still warm, drops out of the works and rolls away under the frame. It fits nowhere. People who say that are finding time for a friend.',
+    save: 'A small drawer opens under the lever, marked SAVINGS. The clock puts one minute into it, and shuts it. That minute is saved. It is of no use to anybody.',
+    waste: 'The shadows of the hands spin twice round the glass and come back to a quarter to eleven. An hour of nothing has gone by, somewhere. You feel a little older.'
+  };
+  function openDial() {
+    var box = ER.el('div', 'dl'), st = ER.flag('d-st') || { mode: 'stuck', hung: {} }, sel = null, done = false, s, i, p;
+    ER.flag('d-open', 1); ER.flag('d-st', st);
+    s = '<svg class="dl-dial" viewBox="0 0 600 640"><circle cx="300" cy="280" r="262" fill="url(#glassG)"/><circle cx="300" cy="280" r="262" fill="none" stroke="#05070c" stroke-width="12"/><circle cx="300" cy="280" r="168" fill="none" stroke="#05070c" stroke-width="4"/>';
+    for (i = 0; i < 12; i++) { p = at(i, 215, 300, 280); s += '<path d="M' + at(i, 168, 300, 280).map(function (v) { return v.toFixed(0); }).join(' ') + 'L' + at(i, 262, 300, 280).map(function (v) { return v.toFixed(0); }).join(' ') + '" stroke="#05070c" stroke-width="5"/>'; }
+    s += '<circle cx="300" cy="280" r="16" fill="#05070c"/><g id="dl-hooks"></g><g id="dl-pl"></g><text x="300" y="574" text-anchor="middle" font-family="Cinzel,serif" font-weight="700" font-size="11" letter-spacing="3" fill="#8fa3c9">ON THE FLOOR</text></svg>' +
+      '<div class="dl-side"><h4>THE LEVER FRAME</h4><div class="dl-lev">';
+    LEV.forEach(function (l) { s += '<button type="button" data-l="' + l[0] + '"' + (l[0] === 'take' ? ' class="clean"' : '') + '>' + l[1] + '</button>'; });
+    s += '</div><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg'), hooksG = box.querySelector('#dl-hooks'), plG = box.querySelector('#dl-pl');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function keep() { ER.flag('d-st', st); }
+    function nHung() { return Object.keys(st.hung).length; }
+    function draw() {
+      var h = '', q = '', slot = 0, used = {};
+      Object.keys(st.hung).forEach(function (k) { used[st.hung[k]] = 1; });
+      for (i = 1; i < 12; i++) { if (i === 6 || used[i]) continue; p = at(i, 215, 300, 280); h += '<g class="hk" data-p="' + i + '"><circle class="spot" cx="' + p[0].toFixed(0) + '" cy="' + p[1].toFixed(0) + '" r="27"/><circle cx="' + p[0].toFixed(0) + '" cy="' + (p[1] - 20).toFixed(0) + '" r="5" fill="#05070c"/></g>'; }
+      hooksG.innerHTML = h;
+      p = at(0, 215, 300, 280); q += plate(12, p[0], p[1], 1, 'fix'); p = at(6, 215, 300, 280); q += plate(6, p[0], p[1], 1, 'fix');
+      LOOSE.forEach(function (hh) {
+        if (st.hung[hh] != null) { p = at(st.hung[hh], 215, 300, 280); q += plate(hh, p[0], p[1], 1, sel === hh ? 'sel' : ''); }
+      });
+      [4, 9, 2, 7, 10, 1, 8, 5, 3].forEach(function (hh) { if (st.hung[hh] == null) { q += plate(hh, 44 + slot * 64, 606, 1, sel === hh ? 'sel' : ''); } slot++; });
+      plG.innerHTML = q;
+      ER.$$('.dl-lev button', box).forEach(function (b) { b.classList.toggle('on', (b.getAttribute('data-l') === 'kill' && st.mode === 'dead') || (b.getAttribute('data-l') === 'mark' && st.mode === 'mark')); });
+    }
+    function fall(list) { list.forEach(function (hh) { delete st.hung[hh]; }); keep(); HRS.sfx.drop(); }
+    box.querySelector('.dl-dial').addEventListener('click', function (e) {
+      if (done) return;
+      var pl = e.target.closest ? e.target.closest('.pl') : null, hk = e.target.closest ? e.target.closest('.hk') : null, hh;
+      if (pl && !pl.classList.contains('fix')) {
+        hh = +pl.getAttribute('data-h');
+        if (st.hung[hh] != null && sel == null) { delete st.hung[hh]; keep(); sel = hh; HRS.sfx.plate(); draw(); msg('You lift it down again. It is in your hands.'); return; }
+        sel = sel === hh ? null : hh; ER.sfx.click(); draw();
+        if (sel === 9 && !ER.flag('d-xi')) { ER.flag('d-xi', 1); HRS.byword('glitter'); HRS.sfx.caw(); msg('You pick up the plate that reads XI. The eleventh hour, lying on the floor all the time! Byword looks at it, and then at you. &ldquo;' + HRS.said('glitter') + '&rdquo;'); }
+        else if (sel != null) msg('It is heavier than it looks, and cold. Now choose a hook for it.');
+        return;
+      }
+      if (pl && pl.classList.contains('fix')) { msg('Riveted, by Mr Ferrow, three hundred years ago. It is not going anywhere.'); return; }
+      if (hk) {
+        if (sel == null) { msg('An empty hook. Pick up an hour first: they are in a row along the floor.'); return; }
+        if (st.mode !== 'dead') {
+          HRS.slip(); HRS.sfx.drop(); sel = null; draw();
+          msg(st.mode === 'mark' ? 'The clock is ticking. The whole ring is trembling with it; and the plate trembles off its hook, and rings on the floor. <i>Nothing may move while an hour is in your hands.</i>'
+            : 'You hang it. The three weights are pulling on every wheel in the tower, and the iron ring shivers with the strain. The plate slides off its hook, and rings on the floor. <i>Read step 1 of the Warden&rsquo;s card again.</i>');
+          return;
+        }
+        st.hung[sel] = +hk.getAttribute('data-p'); sel = null; keep(); HRS.sfx.plate(); draw();
+        msg(nHung() === 9 ? 'That is all nine. They hang there and say nothing. There is one way to find out whether they are right.' : 'It hangs. ' + (9 - nHung()) + ' on the floor.');
+      }
+    });
+    box.querySelector('.dl-lev').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null, l, wrong, n, file, k;
+      if (!b || done) return;
+      l = b.getAttribute('data-l'); HRS.sfx.lever();
+      if (l === 'kill') {
+        if (st.mode === 'dead') { msg('KILL TIME is down already. Nothing in the tower is moving.'); return; }
+        st.mode = 'dead'; keep(); draw();
+        msg('The lever goes down. Every wheel in the tower stops as if it had been turned to stone. Even the weights seem to hang more quietly. People who say that are only waiting for a train. The clock has killed time: stone dead.');
+        return;
+      }
+      if (l === 'mark') {
+        if (nHung() < 9) {
+          st.mode = 'mark'; keep(); draw(); ER.sfx.tick(); setTimeout(ER.sfx.tock, 600);
+          msg('Tick. Tock. The pendulum swings, and the hands stand still. People who say that are waiting, and getting nowhere; and so is the clock. But there are hours on the floor still, and nothing can be hung while it ticks.');
+          return;
+        }
+        wrong = LOOSE.filter(function (hh) { return !ER.check('pl' + hh, st.hung[hh]); });
+        ER.sfx.tick(); setTimeout(ER.sfx.tock, 600);
+        if (!wrong.length) {
+          k = 'kill-' + LOOSE.map(function (hh) { return st.hung[hh]; }).join('.') + '-mark'; file = ER.exitOk([k]);
+          if (!file) { msg('The lever sticks half way. Something is wrong with this lock: tell your teacher.'); return; }
+          st.mode = 'mark'; keep(); draw(); done = true; nextFile = file; ER.flag('d-file', file); HRS.done('dial'); busy = true;
+          msg('Tick. Tock. The pendulum swings; the hands stand still; and nine hours hang as quiet as coats in a cupboard.');
+          setTimeout(function () { ER.closeAll(); HRS.solved(); hungAll(); }, 2600);
+          return;
+        }
+        n = wrong.length; HRS.slip();
+        if (n === 9 && LOOSE.every(function (hh) { return st.hung[hh] === hh; })) {
+          HRS.byword('sides');
+          msg('Tick. Tock. Every hour that you have hung shivers once, and lets go. Nine plates ring on the boards. You have hung them as they go on the outside. &ldquo;' + HRS.said('sides') + '&rdquo; says Byword; and you are on the other side of this one.');
+        } else {
+          msg('Tick. Tock. The ring trembles. ' + (n === 1 ? 'One hour shakes loose and rings' : n + ' hours shake loose and ring') + ' on the boards. ' + (n === 9 ? 'Not one of them was on its own hook.' : 'The other ' + (9 - n === 1 ? 'one hangs' : (9 - n) + ' hang') + ' quiet.') +
+            (wrong.indexOf(9) >= 0 ? ' <i>The plate that reads XI was the first to fall.</i>' : '') + (Object.keys(st.hung).some(function (hh) { return st.hung[hh] === 1; }) ? ' <i>One hook on this dial ought to stay empty: the one whose hour is not here.</i>' : ''));
+        }
+        st.mode = 'dead'; fall(wrong); draw();
+        return;
+      }
+      if (l === 'keep') {
+        HRS.slip(); ER.sfx.tick(); setTimeout(ER.sfx.clunk, 500);
+        msg('The clock tries to go on. It reaches for eleven, finds no eleventh hour to go to, and stops with a jolt. People who say that mean a clock that tells the right time; and this one cannot, with a gap in it. The lever comes back up by itself.');
+        return;
+      }
+      if (l === 'take') {
+        k = Object.keys(st.hung);
+        if (k.length) { n = +k[k.length - 1]; delete st.hung[n]; keep(); sel = null; draw(); HRS.slip(); HRS.sfx.plate();
+          msg('People who say that mean &ldquo;there is no hurry&rdquo;. The clock means something else by it: an hour comes off its hook and into your hands, as gently as an apple. <i>This is the one lever with no dust on its handle.</i>'); }
+        else msg('People who say that mean &ldquo;there is no hurry&rdquo;. Nothing happens: the clock has no hour hanging loose to let you take. <i>But look at the handle. Six levers are grey with dust, and this one is clean.</i>');
+        return;
+      }
+      HRS.slip(); msg(SAYL[l]);
+    });
+    draw();
+    msg(st.mode === 'dead' ? 'KILL TIME is down. Nothing in the tower is moving.' : 'Seven levers, nine hours, ten empty hooks. The Warden&rsquo;s card says what has to happen first.');
+    ER.open('ov-lock', box);
+  }
+  function hungAll() {
+    sc.classList.add('hung');
+    ER.narrate([
+      'People who talk of marking time are waiting, and getting nowhere. So is the clock: it ticks, and it stays at a quarter to eleven. But nine of its hours are home.',
+      'Byword walks along the top of the lever frame and looks at the nine of them, one by one. &ldquo;' + HRS.said('stitch') + '&rdquo; he says, in the old woman&rsquo;s voice. She wrote that on Monday, and put it off until tomorrow.',
+      'So the plate that said XI was the ninth hour, seen from behind. The eleventh was never in the heap. And its hook has not been broken: the pin was drawn out by hand, and wiped, and laid on the sill.',
+      '&ldquo;Any sign of it?&rdquo; says the Mayor&rsquo;s voice, very small, from the speaking-tube. &ldquo;The constable has been up every tree in the square. He has found one owl.&rdquo;'
+    ], function () {
+      HRS.byword('stitch');
+      HRS.mine('n-dial', 'Where is the eleventh hour?', '<p>Nine hours hung, back to front. IX looks like XI from inside.</p><p>The XI did not fall with the others. Its pin was DRAWN OUT.</p><p>Seven levers. Six are dusty. One is clean: TAKE YOUR TIME.</p><p>The card says: a receipt for a lost hour, in the workroom.</p>');
+      busy = false; paint();
+    });
+  }
+  $('#go').addEventListener('click', function () { if (nextFile && !busy) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Office · Warm in the Middle</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-forensic.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="cake.css">
+<style>
+  body{--bg:#0f1611;--accent:#e9c46a;--font-display:'Special Elite',monospace;--font-ui:'Barlow Condensed',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(14,20,15,.96);--tc-ink:#f1ead8;--cap-bg:rgba(15,21,16,.94);--panel:#172019;--face-bg:#2a3a2c;--q-ink:#e9d49a;--fade:#070b08;--hud-bg:rgba(15,21,16,.8)}
+  .tc-room{letter-spacing:.06em;font-size:clamp(34px,5vw,64px)}
+  .tk-name{letter-spacing:.02em}
+  .sB{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-anchor:middle}
+  .sE{font-family:'Special Elite',monospace;text-anchor:middle}
+  .sC{font-family:'Caveat',cursive;text-anchor:middle}
+  .sK{font-family:'Permanent Marker',cursive;text-anchor:middle}
+  #lglow{animation:lg 8s steps(1,end) infinite}
+  @keyframes lg{0%{opacity:1}57%{opacity:.9}59%{opacity:1}}
+  #board.ready,#pad.ready{animation:rd 1.600s steps(1,end) infinite}
+  @keyframes rd{50%{filter:brightness(1.3)}}
+
+  /* the board of cards */
+  .cb{width:min(1010px,95vw);padding:14px 20px 12px;background:#b58d57;background-image:radial-gradient(rgba(90,60,20,.28) 1px,transparent 1.6px),radial-gradient(rgba(255,240,200,.18) 1px,transparent 1.6px);background-size:9px 9px,13px 13px;
+    border:12px solid #5a2f1a;box-shadow:0 26px 70px rgba(0,0,0,.7);-webkit-user-select:none;user-select:none}
+  .cb-note{display:table;max-width:92%;margin:0 auto 12px;padding:9px 18px 7px;background:#ffe98a;color:#3a1d12;font-family:'Permanent Marker',cursive;font-size:17px;line-height:1.3;transform:rotate(-.8deg);box-shadow:0 4px 10px rgba(0,0,0,.3)}
+  .cb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 16px}
+  .tcd{position:relative;display:block;text-align:left;background:#fffdf6;color:#2b2540;padding:24px 16px 10px;min-height:172px;box-shadow:0 5px 12px rgba(0,0,0,.35);cursor:pointer}
+  .tcd:nth-child(odd){transform:rotate(-.7deg)}.tcd:nth-child(even){transform:rotate(.6deg)}
+  .tcd:before{content:'';position:absolute;left:50%;top:7px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f0f0f2,#6b6f76)}
+  .tcd small{display:block;margin-bottom:5px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8a7f66}
+  .tcd span{display:block}
+  .tcd.h1{font-family:'Caveat',cursive;font-size:21.5px;line-height:1.12}
+  .tcd.h2{font-family:'Patrick Hand',cursive;font-size:17.5px;line-height:1.22}
+  .tcd.h3{font-family:'Homemade Apple',cursive;font-size:13.500px;line-height:1.7}
+  .tcd i{display:block;margin-top:4px;font-style:normal;text-align:right}
+  .tcd:hover{box-shadow:0 5px 12px rgba(0,0,0,.35),0 0 0 3px #e9c46a}
+  .tcd.on:after{content:'';position:absolute;right:10px;top:-8px;width:26px;height:40px;background:#c0392b;-webkit-clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%);clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%);box-shadow:0 2px 4px rgba(0,0,0,.4)}
+  .tcd.off{opacity:.55;cursor:default}
+  .cb .bn-foot{margin-top:12px}
+  .cb .bmsg{color:#1e140a;min-height:50px}
+  .cb .bmsg b{color:#8a1f14}
+  .cb .btn{--accent:#1e140a;background:rgba(255,255,255,.3)}
+  .cb .btn:hover:not([disabled]){color:#f6efdc}
+
+  /* the pad of labels, and a torch */
+  .pdw{width:min(1050px,95vw)}
+  .pd{position:relative;width:100em;height:56em;font-size:min(10.5px,.95vw);overflow:hidden;border-radius:.5em;background:#14261f linear-gradient(160deg,#1c3329,#0e1a15);box-shadow:0 26px 70px rgba(0,0,0,.7);-webkit-user-select:none;user-select:none}
+  .pd:before{content:'';position:absolute;left:1.5em;top:1.5em;right:1.5em;bottom:1.5em;border:.18em solid rgba(201,162,58,.5)}
+  .pd .sheet{position:absolute;left:6em;top:5em;width:64em;height:46em;background:#f4ecd8;box-shadow:0 .7em 1.8em rgba(0,0,0,.55);--la:0;--lb:0}
+  .pd .tear{position:absolute;left:0;top:0;right:0;height:2.4em;background:#e3d8bd;border-bottom:.15em dashed #b9ab88}
+  .pd .tear:after{content:'';position:absolute;left:8em;right:30em;top:1.2em;height:1.2em;background:#f9f3e3;-webkit-clip-path:polygon(0 0,100% 0,96% 100%,88% 40%,74% 90%,60% 30%,44% 100%,30% 50%,14% 90%,4% 30%);clip-path:polygon(0 0,100% 0,96% 100%,88% 40%,74% 90%,60% 30%,44% 100%,30% 50%,14% 90%,4% 30%)}
+  .pd .txt{position:absolute;left:1em;top:1.150em;right:.400em;font-family:'Caveat',cursive;font-size:4.200em;line-height:1.7;color:#857657;white-space:nowrap}
+  .pd .txt p{margin:0}
+  .pd .da,.pd .db,.pd .wk-cell.given{text-shadow:.03em .035em 0 rgba(255,255,255,.95),-.025em -.03em 0 rgba(50,40,20,.45)}
+  .pd .da{opacity:var(--la)}.pd .db{opacity:var(--lb)}
+  .pd .ga .wk-cell.given{opacity:var(--la)}.pd .gb .wk-cell.given{opacity:var(--lb)}
+  .pd .wk-gap{--wk-line:rgba(60,70,100,.55);--wk-cur:rgba(233,196,106,.5);--wk-hit:#3a6a4a;--wk-bad:#b3261c}
+  .pd .wk-cell{text-transform:lowercase;width:.500em;height:1.050em;margin:0 .020em}
+  .pd .wk-gap[data-key="w2"] .wk-cell:first-child{text-transform:uppercase}
+  .pd .wk-cell.given{border-bottom-color:transparent}
+  .pd .wk-cell.blank{color:#2b3a66;border-bottom:.04em dashed rgba(60,70,100,.6);background:rgba(60,70,100,.07)}
+  .pd .wk-cell.blank.cur{background:rgba(233,196,106,.6);border-bottom:.05em solid #b08a35}
+  .pd .wk-gap.ok .wk-cell{opacity:1!important;color:#2b3a66;text-shadow:none;background:none;border-bottom-color:transparent}
+  .pd.read .da,.pd.read .db,.pd.read .wk-cell{opacity:1!important;color:#2b3a66;text-shadow:none}
+  .pd .beam{position:absolute;left:0;top:0;right:0;bottom:0;pointer-events:none}
+  .pd .torch{position:absolute;width:11em;height:11em;margin:-5.5em 0 0 -5.5em;cursor:grab;touch-action:none}
+  .pd .torch.on{cursor:grabbing}
+  .pd .torch svg{display:block;width:100%;height:100%;pointer-events:none}
+  .pd .side{position:absolute;left:42.500em;top:3.100em;width:13.400em;color:#e6dcc2;font-family:'Patrick Hand',cursive;font-size:1.720em;line-height:1.25}
+  .pd .side b{display:block;margin-bottom:.4em;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:.82em;letter-spacing:.24em;text-transform:uppercase;color:#e9c46a}
+  .pd .side p{margin:0 0 .7em}
+  .pd .side .rd{margin-top:1em;padding:.5em .6em;border:1px solid rgba(233,196,106,.5);color:#fff3cf;min-height:5.2em}
+  .pdw .bmsg{min-height:54px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="tg" width="46" height="46" patternUnits="userSpaceOnUse"><rect width="46" height="46" fill="#2f4a3f"/><path d="M1 0V46" stroke="#243a31" stroke-width="2.500"/><path d="M5 0V46" stroke="#3a5a4c" stroke-width="1"/></pattern>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffe6a0" stop-opacity=".7"/><stop offset=".5" stop-color="#ffc85a" stop-opacity=".18"/><stop offset="1" stop-color="#ffc85a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="mahG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a4226"/><stop offset="1" stop-color="#4f2814"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6c873"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <radialGradient id="vig" cx="46%" cy="56%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#050a06" stop-opacity=".4"/><stop offset="1" stop-color="#020402" stop-opacity=".94"/></radialGradient>
+</defs>
+
+<!-- the wall, and the stairs that are its ceiling -->
+<rect x="-1000" y="-400" width="3600" height="1104" fill="url(#tg)"/><rect x="-1000" y="640" width="3600" height="64" fill="#22362e"/>
+<path id="stairs" d="" fill="#150d07"/><path id="stairsl" d="" fill="none" stroke="#3a2a1c" stroke-width="5"/>
+
+<!-- thank-you cards -->
+<g id="board" class="hot"><rect x="186" y="186" width="342" height="342" fill="#5a2f1a"/><rect x="198" y="198" width="318" height="318" fill="#b58d57"/><rect x="290" y="204" width="134" height="26" fill="#fdfbf4" transform="rotate(-1.500 357 217)"/><text x="357" y="223" class="sB" font-size="17" fill="#6e2233" letter-spacing="3" transform="rotate(-1.500 357 217)">THANK YOU</text><g id="cards"></g></g>
+
+<!-- sixty-five years of cakes -->
+<g id="photos" class="hot"></g>
+<g id="cal" class="hot"><rect x="1010" y="330" width="100" height="124" fill="#fdfbf4"/><rect x="1010" y="330" width="100" height="26" fill="#8a2a3a"/><text x="1060" y="348" class="sB" font-size="13" fill="#fff" letter-spacing="2">SEPTEMBER</text><g id="days"></g></g>
+<g id="keys" class="hot"><rect x="1150" y="402" width="146" height="92" rx="4" fill="#6e3b22"/><g id="hooks"></g></g>
+
+<!-- the door, with the passage behind it -->
+<rect x="1500" y="-400" width="1100" height="1104" fill="#c4ae82"/><rect x="1500" y="-400" width="1100" height="1104" fill="#ffc56a" opacity=".22"/><rect x="1488" y="-400" width="20" height="1104" fill="#1e140c"/>
+
+<!-- the floor -->
+<rect x="-1000" y="704" width="3600" height="700" fill="#4a3220"/><g stroke="#33200f" stroke-width="3" opacity=".8"><path d="M-800 740H2400M-800 792H2400M-800 868H2400M-800 980H2400"/></g>
+<path d="M360 760h880l90 150H270z" fill="#6e2233" opacity=".8"/><path d="M400 776h800l66 110H334z" fill="none" stroke="#c9a23a" stroke-width="3" opacity=".5"/>
+
+<!-- the safe -->
+<g id="safe" class="hot"><rect x="1380" y="660" width="116" height="146" rx="6" fill="#2f5a4c"/><rect x="1392" y="672" width="92" height="122" rx="4" fill="none" stroke="#1c3a30" stroke-width="4"/><circle cx="1438" cy="726" r="15" fill="#c9ced3"/><path d="M1438 726l8 -9" stroke="#1c1d22" stroke-width="3"/><rect x="1462" y="750" width="8" height="26" rx="3" fill="url(#brassG)"/>
+  <rect x="1388" y="632" width="30" height="28" rx="3" fill="#c9a23a"/><rect x="1424" y="626" width="30" height="34" rx="3" fill="#8a949b"/><rect x="1460" y="636" width="30" height="24" rx="3" fill="#b3261c"/><rect x="1462" y="642" width="26" height="11" fill="#fdfbf4"/><text x="1475" y="651" class="sB" font-size="9" fill="#1c1d22">TINS</text></g>
+
+<!-- the desk -->
+<g id="holes"><rect x="556" y="466" width="660" height="140" fill="#4f2814"/><g id="pig"></g></g>
+<path d="M500 600h780l30 28H470z" fill="url(#mahG)"/><rect x="470" y="628" width="840" height="178" fill="#5a2f1a"/><rect x="770" y="640" width="240" height="166" fill="#140a05"/>
+<g fill="none" stroke="#3d1e0d" stroke-width="4"><rect x="490" y="644" width="260" height="66"/><rect x="490" y="722" width="260" height="72"/><rect x="1030" y="644" width="260" height="66"/><rect x="1030" y="722" width="260" height="72"/></g>
+<g fill="url(#brassG)"><rect x="600" y="672" width="40" height="9" rx="4"/><rect x="600" y="754" width="40" height="9" rx="4"/><rect x="1140" y="672" width="40" height="9" rx="4"/><rect x="1140" y="754" width="40" height="9" rx="4"/></g>
+<circle id="lglow" cx="664" cy="560" r="300" fill="url(#lampG)" pointer-events="none"/>
+<g id="lampO" class="hot"><ellipse cx="664" cy="606" rx="34" ry="8" fill="url(#brassG)"/><path d="M664 604v-74" stroke="#b08a35" stroke-width="7"/><path d="M604 536q0 -40 60 -40t60 40z" fill="#2f7a55"/><path d="M618 520q10 -16 46 -16" stroke="#7fc49a" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/><ellipse cx="664" cy="536" rx="60" ry="7" fill="#fff3c9"/></g>
+<g id="manual" class="hot"><path d="M510 622l8 -26h46l4 26z" fill="#f6f2e6"/><path d="M568 622l-4 -26h46l8 26z" fill="#efe9d8"/><path d="M564 596l4 26" stroke="#1f1c16" stroke-width="3"/><g stroke="#8a8676" stroke-width="1.300"><path d="M522 604h34M520 611h38M574 604h34M576 611h38"/></g></g>
+<g id="cbox" class="hot"><path d="M894 612l42 -112h14l-28 112z" fill="#eceae2"/><path d="M748 612v-58h136v58z" fill="#fbf9f2"/><path d="M748 554l14 -14h136l-14 14z" fill="#e6e2d6"/><path d="M884 554l14 -14v58l-14 14z" fill="#d6d1c2"/><path d="M764 552q20 -16 36 -4q18 -14 34 0q18 -12 34 2" fill="none" stroke="#d9c8ee" stroke-width="7" stroke-linecap="round"/></g>
+<g id="pad" class="hot"><path d="M938 622l14 -22h96l-8 22z" fill="#f4ecd8"/><path d="M938 622v6h102v-6z" fill="#cfc4a6"/><path d="M956 603h86" stroke="#b9ab88" stroke-width="2" stroke-dasharray="4 3"/><path d="M1052 614l44 -10" stroke="#1c2a55" stroke-width="6" stroke-linecap="round"/><path d="M1096 604l8 -2" stroke="#c9a23a" stroke-width="4" stroke-linecap="round"/><rect x="1058" y="618" width="22" height="7" rx="3" fill="#1c2a55" transform="rotate(14 1069 621)"/></g>
+<g id="book" class="hot"><path d="M1110 624l10 -30h66l4 30z" fill="#f4efdf"/><path d="M1190 624l-4 -30h66l10 30z" fill="#efe8d4"/><path d="M1104 628h164" stroke="#6e2233" stroke-width="8" stroke-linecap="round"/><path d="M1186 594l4 30" stroke="#6e2233" stroke-width="3"/><g stroke="#3a4a7a" stroke-width="1.300"><path d="M1124 602h54M1122 609h58M1120 616h60M1196 602h54M1198 609h56"/></g><rect x="1212" y="578" width="44" height="26" fill="#ffe98a" transform="rotate(-8 1234 591)"/></g>
+
+<!-- Dr Novak, Mr Whitlow, Chika -->
+<g id="novak" class="hot" transform="translate(96 888)"></g>
+<g id="whitlow" class="hot" transform="translate(1334 890) scale(.97)"></g>
+<g id="chika" class="hot" transform="translate(1546 884) scale(.94)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Wait for the morning</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="cake.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, told = {}, cardsBox = null, padBox = null, stage = 0;
+
+  /* the stairs overhead, the cards on the board, the photographs, the calendar, the keys, the pigeonholes */
+  (function () {
+    var d = 'M-1000 -400H2600V436', l = 'M1630 428', i, x, y, s = '', seed = 7;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    d += 'H1630'; for (i = 0; i < 22; i++) { d += 'v-19h-70'; l += 'v-19h-70'; } d += 'H-1000z';
+    $('#stairs').setAttribute('d', d); $('#stairsl').setAttribute('d', l);
+    [[212, 244, -2], [316, 246, 1.5], [418, 242, -1], [214, 380, 1], [318, 384, -2], [420, 380, 2]].forEach(function (c) {
+      s += '<g transform="rotate(' + c[2] + ' ' + (c[0] + 42) + ' ' + (c[1] + 56) + ')"><rect x="' + c[0] + '" y="' + c[1] + '" width="84" height="112" fill="#fffdf6"/><circle cx="' + (c[0] + 42) + '" cy="' + (c[1] + 8) + '" r="4" fill="#8a949b"/>' +
+        '<g stroke="#4a4470" stroke-width="1.400">' + [26, 38, 50, 62, 74, 86].map(function (dy, n) { return '<path d="M' + (c[0] + 10) + ' ' + (c[1] + dy) + 'h' + (n === 5 ? 40 : 64) + '"/>'; }).join('') + '</g></g>';
+    });
+    $('#cards').innerHTML = s; s = '';
+    [[600, 300, '1961'], [720, 312, '1978'], [840, 304, '1996'], [916, 392, '2011']].forEach(function (f, n) {
+      x = f[0]; y = f[1];
+      s += '<rect x="' + x + '" y="' + y + '" width="' + (n === 3 ? 70 : 96) + '" height="' + (n === 3 ? 84 : 118) + '" fill="#15100c"/><rect x="' + (x + 8) + '" y="' + (y + 8) + '" width="' + (n === 3 ? 54 : 80) + '" height="' + (n === 3 ? 58 : 86) + '" fill="' + ['#cfc3a8', '#c9bfa8', '#d6cdb8', '#dfd8c8'][n] + '"/>' +
+        '<g fill="#6b5f4a" transform="translate(' + (x + (n === 3 ? 35 : 54)) + ' ' + (y + (n === 3 ? 62 : 90)) + ') scale(' + (n === 3 ? 0.6 : 0.9) + ')"><rect x="-22" y="-16" width="44" height="16"/><rect x="-16" y="-32" width="32" height="16"/><rect x="-10" y="-48" width="20" height="16"/><rect x="-5" y="-62" width="10" height="14"/></g>' +
+        (n === 0 ? '<g fill="#3a3024"><circle cx="' + (x + 24) + '" cy="' + (y + 62) + '" r="6"/><rect x="' + (x + 18) + '" y="' + (y + 68) + '" width="12" height="24"/><rect x="' + (x + 19) + '" y="' + (y + 46) + '" width="10" height="12" fill="#f4f1e8"/></g>' : '') +
+        '<text x="' + (x + (n === 3 ? 35 : 48)) + '" y="' + (y + (n === 3 ? 78 : 110)) + '" class="sE" font-size="10" fill="#cfc3a8">' + f[2] + '</text>';
+    });
+    $('#photos').innerHTML = s; s = '';
+    for (i = 0; i < 30; i++) {
+      x = 1018 + ((i + 1) % 7) * 12.500; y = 370 + Math.floor((i + 1) / 7) * 16;
+      s += (i === 11 ? '<circle cx="' + (x + 4) + '" cy="' + (y - 4) + '" r="8" fill="none" stroke="#b3261c" stroke-width="2"/>' : '') + '<text x="' + (x + 4) + '" y="' + y + '" class="sB" font-size="9.500" fill="' + ((i + 1) % 7 === 5 || (i + 1) % 7 === 6 ? '#8a2a3a' : '#2a2016') + '">' + (i + 1) + '</text>';
+    }
+    $('#days').innerHTML = s; s = '';
+    ['SHOP', 'YARD', 'VAN', 'SAFE', 'STAIRS'].forEach(function (k, n) {
+      x = 1166 + n * 28;
+      s += '<circle cx="' + x + '" cy="424" r="3.500" fill="#e6c873"/><text x="' + x + '" y="415" class="sB" font-size="7" fill="#f3e9c0">' + k + '</text>' +
+        (n === 4 ? '<path d="M' + x + ' 426q-8 14 0 22q8 -8 0 -22" fill="none" stroke="#d9c9a0" stroke-width="2"/><circle cx="' + x + '" cy="456" r="7" fill="none" stroke="#8a949b" stroke-width="3.500"/><path d="M' + x + ' 463v20h7M' + x + ' 476h5" stroke="#8a949b" stroke-width="3.500" fill="none"/>' :
+          '<circle cx="' + x + '" cy="433" r="5" fill="none" stroke="#c9ced3" stroke-width="2.500"/><path d="M' + x + ' 438v14h4M' + x + ' 446h3" stroke="#c9ced3" stroke-width="2.500" fill="none"/>');
+    });
+    $('#hooks').innerHTML = s; s = '';
+    for (i = 0; i < 16; i++) {
+      x = 566 + (i % 8) * 81; y = 474 + Math.floor(i / 8) * 64;
+      s += '<rect x="' + x + '" y="' + y + '" width="73" height="56" fill="#22110a"/>';
+      if (i === 1 || i === 2) continue;
+      for (var k = 0; k < 3; k++) if (rnd() < 0.8) s += '<rect x="' + (x + 6 + k * 20 + rnd() * 6).toFixed(0) + '" y="' + (y + 10 + rnd() * 14).toFixed(0) + '" width="' + (10 + rnd() * 8).toFixed(0) + '" height="46" fill="' + ['#efe5cc', '#fdfbf4', '#d9cfb8', '#e9dfc4'][Math.floor(rnd() * 4)] + '"/>';
+    }
+    $('#pig').innerHTML = s;
+    $('#whitlow').innerHTML = CAKE.fig('whitlow'); $('#novak').innerHTML = CAKE.fig('novak'); $('#chika').innerHTML = CAKE.fig('chika');
+  })();
+
+  ER.init({
+    theme: 'forensic', story: 'cake', storyTitle: 'Warm in the Middle', id: 'office', no: 'IV', title: 'The Office',
+    go: 'The little door under the stairs',
+    intro: [
+      'At marker 3 the boot print was whole, and the cat&rsquo;s paws had spoilt the pattern of the clog. So the clog came first, then the cat, then Mr Whitlow&rsquo;s boots at twenty to ten. At marker 4 the clog print that pointed to the stairs lay on top of the one that pointed to the bakehouse. And the last print of all was half under a locked door.',
+      'Behind that door, on the bottom stair, stood a pair of old clogs. The print in the flour was 26 cm long: a foot of about 24 cm, and so a person of about 1.60 m. That fitted Chika. So did the pattern, and so did the size.',
+      'The wear did not. The print had a heel worn smooth on its outer edge, a cut like a V, and one diamond missing. So had the left clog from the stair. Chika&rsquo;s clogs are three weeks old, and have none of the three.',
+      'The clogs belong to old Mr Whitlow, who is eighty-six and asleep upstairs. Nobody can think why he would come down. It is twenty past eleven.'
+    ],
+    exit: {"next":"yard","w":{"fb165800":"c3b238d4"}}, tags: {"w1":["30720d90"],"w1@":["dfd5183a","7d1c8a6f","15dc8e71","3b114a10","138626db"],"w1?":["661a2f0c","b804c9fa","ace8ab2a","ff165260","653ebd37"],"w1#":["887c00b6"],"w2":["de145606"],"w2@":["18969079","4142ec25","303f278c","87f46b87","d0f7fc1f","7b50c9d0"],"w2?":["caa8e4bd","e585dab9","f90fdd7e","a1577689","63527f3c","e885f334"],"w2#":["8db47371"],"w3":["7dd405dd"],"w3@":["290a8a45","23d7d9eb","dfba7ae4","9c7ffe35"],"w3?":["27cb8234","906aa938","cbc18bd0","7d4bc217"],"w3#":["6635ecb4"],"w4":["b7ebb6cb"],"w4@":["e7401acf","181fa937","91d4a573","e793b81a","68e65ef0","9cde7611","6dd8f585","f3b50a3e","df5fa678","0278f43f","f180a0bd"],"w4?":["d6352bd0","d6d8c1ed","85898779","5b07e877","257731e8","ce1daa9e","59c8285c","c2a3bd38","3fa5cc53","1fad9b66","8b7db16c"],"w4#":["872070df"],"w5":["facd7221"],"w5@":["af468e14","69bdca8a","04c87547","9d9dcc4c","788ce8c3","659c83e7"],"w5?":["f07764f6","1b232868","e9c173b3","796780d7","59369135","d3707ea0"],"w5#":["7e325ffb"],"cards":["f741229e"]},
+    sound: ['lab', { root: 45, bpm: 60, drop: ['arp', 'mel'] }],      /* a cupboard, a lamp, a good deal to read: the quietest room of the four */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {}; stage = ER.flag('d-st') || 0;
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#board').classList.toggle('ready', !!(told.book && told.manual && !stage && !nextFile));
+    $('#pad').classList.toggle('ready', !!(stage && !nextFile));
+    ER.pips((told.book ? 1 : 0) + (told.manual ? 1 : 0) + (stage ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['The label is read: A.W. There is nothing to do now but wait for the morning, and for the man who has a parcel to send.']];
+    if (padBox && padBox.parentNode) return ['pad', [
+      'Take hold of the torch and carry it about. Close above the middle of the pad the paper looks blank. Now take it far out to one side, so that the light lies almost flat along the paper.',
+      'Page 40: a dent only shows when the light crosses it. So read the label twice: once with the torch far out at the left or the right, and once with it at the far edge, above the top of the pad. Each way shows different words.',
+      'Five words have letters that will not come up at all: the small pencil boxes. Type them on the keyboard. What is a cake with no icing and no fruit? What do you call all the noise and worry of a wedding? What do polite people send &ldquo;with their&rdquo;&hellip;?'
+    ]];
+    if (cardsBox && cardsBox.parentNode) return ['cards', [
+      'Read Mr Whitlow&rsquo;s yellow note at the top of the board: a date, and something he is sure of. Then read each card for two things: when the wedding was, and what exactly they are thanking him for.',
+      'A second, small cake is called different things on different cards. And some cards say &ldquo;little&rdquo; about something that is not a cake at all. Only a wedding after 6 April matters.',
+      'There are two cards that the note cannot explain. Both weddings were in the summer. Click a card to pin a red flag on it, and click again to take the flag off.'
+    ]];
+    if (!told.book || !told.manual) return ['read', [
+      'Two things to read before you touch anything on this desk: the order book, lying open at the right-hand end of the desk, and Dr Novak&rsquo;s field manual at the left-hand end.',
+      'There is a yellow note stuck in the front of the order book. Mr Whitlow wrote it himself, at Easter.'
+    ]];
+    if (!stage) return ['board', ['The board of thank-you cards is on the wall on the left. Dr Novak wants something checked.']];
+    return ['padgo', ['The pad of labels is on the desk, beside the white box, with a pen lying next to it. Click the pad.']];
+  }
+
+  function begin() {
+    paint();
+    CAKE.mine('floor', 'Findings 3 and 4', '<p>At marker 3: clog first, then the cat, then Mr Whitlow&rsquo;s boots.</p><p>The last clog trail went to the stair door. Its last print is half under the door.</p>' +
+      '<p>The print: 26 cm, so a foot of about 24 cm and a person of about 1.60 m. (Rough. It fits Chika too.)</p><p>Heel worn smooth, a cut like a V, a diamond missing: the same three as the old clogs on the bottom stair. Not Chika&rsquo;s.</p>', true);
+    if (nextFile) { busy = false; showGo(); ER.say('For Sunday, when the fuss is over. A.W.'); return; }
+    if (told.in) { busy = false; ER.say('The office, twenty past eleven. There is still no room in it.'); return; }
+    tell('in');
+    ER.narrate([
+      'The office is the cupboard under the stairs, and the stairs are its ceiling. There is room in it for a desk, a chair and one person. Mr Whitlow counts as two.',
+      'A green lamp, an order book, a wall of old photographs. And on the desk, where there is never anything but paper, stands a small white box, made up and lined with tissue: a box for a six-inch cake.',
+      '&ldquo;That is not for the Farrants,&rdquo; says Mr Whitlow. &ldquo;Theirs goes in the tall crate.&rdquo;',
+      'Beside the box lies the pad of gift labels, and a pen with its top off.',
+      '&ldquo;Nobody touches that pad,&rdquo; says Dr Novak. &ldquo;Page 40 first. And have a look at the order book, and at that board of cards, while I find my torch. Mr Whitlow has just told me something that I should like to check.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- papers ---------- */
+  var BOOK = '<h4>WHITLOW&rsquo;S &middot; WEDDINGS</h4><table>' +
+    '<tr><td>When</td><td>Saturday 12 September, at noon. Deliver by ten.</td></tr>' +
+    '<tr><td>Who</td><td>Miss R. Farrant and Mr A. Petrosyan. 220 guests, and the town band.</td></tr>' +
+    '<tr><td>What</td><td>Four tiers: 14, 12, 10 and 8 inch. Fruit cake at the bottom, lemon sponge above.</td></tr>' +
+    '<tr><td>Icing</td><td>WISTERIA. The bride&rsquo;s own recipe: red cabbage (!). Nothing out of a bottle.</td></tr>' +
+    '<tr><td>Flowers</td><td>Fresh sweet peas for the top, from Yarrow&rsquo;s next door, seven o&rsquo;clock on Saturday morning.</td></tr>' +
+    '<tr><td>Mrs Farrant rang</td><td>Monday, twice. Tuesday, three times. Wednesday, twice. Thursday, four times. Friday: see the machine.</td></tr></table>' +
+    '<div class="slip">6 April. FROM TODAY: NO MORE SUNDAY SPONGES.<br>&pound;11 a wedding, and not one customer has ever said thank you for one. G.W.</div>';
+  $('#book').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BOOK, cls: 'ledger', clue: { id: 'book', title: 'The order book, and a yellow note', kind: 'On the desk' }, done: function () {
+      if (tell('book')) { paint(); ER.say('&ldquo;Sunday sponges,&rdquo; says Mr Whitlow. &ldquo;A little plain cake that went out free with every wedding cake. Dad&rsquo;s idea, or Mum&rsquo;s. I stopped them at Easter. Eleven pounds a time, and nobody ever noticed.&rdquo;'); }
+    } });
+  });
+  var DIAG = '<svg viewBox="0 0 210 196"><text x="105" y="16" font-family="Patrick Hand,cursive" font-size="14" fill="#221f1a" text-anchor="middle">light from above</text>' +
+    '<path d="M12 70h70l16 14 16 -14h84" fill="none" stroke="#221f1a" stroke-width="3"/><g stroke="#e0a81c" stroke-width="2"><path d="M70 24v40M98 24v54M126 24v40"/></g><text x="105" y="100" font-family="Patrick Hand,cursive" font-size="13" fill="#7a705c" text-anchor="middle">the dent is lit: nothing to see</text>' +
+    '<text x="105" y="124" font-family="Patrick Hand,cursive" font-size="14" fill="#221f1a" text-anchor="middle">slanting light</text><path d="M12 166h70l16 14 16 -14h84" fill="none" stroke="#221f1a" stroke-width="3"/><path d="M82 166l16 14" stroke="#221f1a" stroke-width="7"/>' +
+    '<g stroke="#e0a81c" stroke-width="2"><path d="M8 140l70 22M40 136l72 28M8 152l42 12"/></g><text x="150" y="150" font-family="Patrick Hand,cursive" font-size="13" fill="#b3261c" text-anchor="middle">shadow</text><path d="M136 154l-40 18" stroke="#b3261c" stroke-width="1.500"/></svg>';
+  var MANUAL = '<h4>Field manual &middot; Documents</h4><h3>Dents</h3><div class="two"><div>' +
+    '<p>Write on the top sheet of a pad, and the point of the pen presses a <b>dent</b> into the sheet underneath: every stroke of every letter. Tear the top sheet off and take it away, and the next sheet still has the message. It only looks blank.</p>' +
+    '<p>Light from straight above fills the dents, and shows nothing. So hold a lamp low, almost flat along the paper: <b>slanting light</b>. Now every dent has a bright side and a <b>shadow</b>, and the writing stands up.</p>' +
+    '<p>A dent only shows when the light crosses it. Light that runs along a stroke falls straight into it. So look twice: once with the lamp out at the side of the page, and once with it at the far edge.</p></div>' + DIAG + '</div>' +
+    '<p class="rule">Never rub a pencil over the page to bring the writing up. It works once, and it spoils the evidence. Light costs nothing.</p><p class="pg">40</p>';
+  $('#manual').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: MANUAL, cls: 'manual', clue: { id: 'manual40', title: 'Dents', kind: 'Field manual, page 40' }, done: function () {
+      CAKE.terms(['dent', 'slanting light', 'shadow']);
+      if (tell('manual')) { paint(); ER.say('A pen writes twice: once in ink on the top sheet, and once in dents on the sheet below.'); }
+    } });
+  });
+
+  /* ---------- things in the office ---------- */
+  CAKE.thing('#photos', null, 'Sixty-five years of wedding cakes, in black frames. In the first, dated 1961, a small young man in a tall white hat stands beside a cake that is taller than he is. A. WHITLOW, says the card underneath. He looks as if somebody has just told him that it is not quite straight.', isBusy);
+  CAKE.thing('#keys', 'hook', 'A board of hooks, each with its label: SHOP, YARD, VAN, SAFE, STAIRS. The stairs key is back on its hook, on its loop of string. One key. Nobody has ever asked whether there were two.', isBusy);
+  CAKE.thing('#cal', null, 'SEPTEMBER. Saturday the 12th has a red ring round it, and Mrs Farrant&rsquo;s telephone number underneath. Twice.', isBusy);
+  CAKE.thing('#safe', 'safe', 'A small green safe. On top of it: a tin of string, a tin of pens, and a tin marked TINS.', isBusy);
+  CAKE.thing('#cbox', 'tissue paper', 'A white box, made up and lined with tissue paper: a box for a six-inch cake. Its lid is leaning against the wall. It is waiting for something that is still cooling.', isBusy);
+  CAKE.thing('#lampO', null, 'A green glass lamp. Dr Novak has switched it off twice to use her torch. Mr Whitlow has switched it on again twice, without noticing that he did.', isBusy);
+  $('#whitlow').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;Fourteen,&rdquo; says Mr Whitlow. &ldquo;Fourteen weddings since Easter.&rdquo;' : stage ? '&ldquo;I thought they meant the top tier,&rdquo; says Mr Whitlow again, to the board.' : '&ldquo;Sunday sponges,&rdquo; says Mr Whitlow. &ldquo;I stopped them at Easter: there is a note in the front of the order book. Not one customer has ever mentioned one. You may look at every card on that board.&rdquo;');
+  });
+  $('#chika').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? 'Chika has gone to put the kettle on. Somebody had to.' : 'Chika cannot get into the office: there is no room. She is reading the board of cards from the doorway, with her head on one side.');
+  });
+  $('#novak').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;Let him sleep,&rdquo; says Dr Novak.' : stage ? '&ldquo;I have found the torch,&rdquo; says Dr Novak. &ldquo;The pad is yours.&rdquo;' : told.book && told.manual ? '&ldquo;He says that nobody ever thanked him for one,&rdquo; says Dr Novak quietly. &ldquo;There are six cards on that board. Check it.&rdquo;' : '&ldquo;Page 40, and the order book,&rdquo; says Dr Novak. &ldquo;I know I had a torch.&rdquo;');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#board').addEventListener('click', function () {
+    if (busy) return;
+    if (stage) { ER.say('Six cards. Two of them have a red flag now: June, and August.'); return; }
+    if (!told.book) { ER.say('A board of thank-you cards. Mr Whitlow says they prove something. Read the order book first: his yellow note is stuck in the front of it.'); return; }
+    if (!told.manual) { ER.say('&ldquo;Page 40 before anything else,&rdquo; says Dr Novak. &ldquo;It is at the end of the desk. Then the board.&rdquo;'); return; }
+    openCards();
+  });
+  $('#pad').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The pad of labels. It looks quite blank, to anybody who has not read page 40.'); return; }
+    if (!told.manual) { ER.say('&ldquo;Nobody touches that pad,&rdquo; says Dr Novak, &ldquo;until they have read page 40. It is at the end of the desk.&rdquo;'); return; }
+    if (!stage) { ER.say('&ldquo;In a minute,&rdquo; says Dr Novak, with her head in her case. &ldquo;I am still looking for my torch. The cards first.&rdquo;'); return; }
+    openPad();
+  });
+
+  /* ---------- six cards and a yellow note ---------- */
+  var CARDS = [['feb', 'h2', 'married 14 February', 'Dear Whitlow&rsquo;s, the cake was perfect, and so was the little lemon sponge you sent for the Sunday. We ate it in the car on the way to the airport.', 'Josie &amp; Mark'],
+    ['apr', 'h1', 'married 18 April', 'Mr Whitlow, what a cake! Everybody wanted the recipe for the top tier. (My aunt just wanted the top tier.)', 'Hannah and Dev'],
+    ['may', 'h2', 'married 23 May', 'Thank you for bringing it through all that rain. PS. One of the little sugar doves was missing when we cut it. We think it was the dog.', 'Sam &amp; Leila'],
+    ['jun', 'h1', 'married 6 June', 'A perfect cake, thank you. And the baby cake in the second box! We had it for breakfast on the Sunday, when everybody had gone home.', 'Beth and Arjun'],
+    ['aug', 'h1', 'married 8 August', 'Thank you for our cake. And thank you for the small plain one for afterwards. That was the one we liked best (please don&rsquo;t tell my mother).', 'Tom and Nadia'],
+    ['old', 'h3', 'married 13 September 1986', 'To all at Whitlow&rsquo;s: forty years married this month, and we still talk about the little cake you tucked in with the big one.', 'Joan and Peter']];
+  var NOPE = {
+    feb: 'Married in February. The note is dated 6 April: in February the Sunday sponge was still going out with every cake. He can explain that one.',
+    apr: 'April, after the note: yes. But read what they are thanking him for. The top tier is part of the wedding cake. Nobody on that card mentions a second cake.',
+    may: 'May, after the note: yes. But the little thing on that card is a sugar dove, and it went missing. Blame the dog. There is no second cake.',
+    old: 'Married in 1986. Of course there was a little cake: old Mr Whitlow was baking then. That card shows how old the custom is. It says nothing about this summer.'
+  };
+  function openCards() {
+    if (!cardsBox) {
+      cardsBox = ER.el('div', 'cb', '<div class="cb-note">6 April. FROM TODAY: NO MORE SUNDAY SPONGES. &pound;11 a wedding, and not one customer has ever said thank you for one. G.W.</div><div class="cb-grid"></div>' +
+        '<div class="bn-foot"><p class="bmsg"></p><button type="button" class="btn" id="c-go">That is all of them</button></div>');
+      var grid = cardsBox.querySelector('.cb-grid'), m = cardsBox.querySelector('.bmsg'), wait = false;
+      CARDS.forEach(function (c) {
+        var b = ER.el('button', 'tcd ' + c[1], '<small>' + c[2] + '</small><span>' + c[3] + '</span><i>' + c[4] + '</i>');
+        b.type = 'button'; b.setAttribute('data-k', c[0]);
+        b.addEventListener('click', function () { if (wait || stage || b.classList.contains('off')) return; b.classList.toggle('on'); ER.sfx.click(); });
+        grid.appendChild(b);
+      });
+      m.innerHTML = ER.gloss('Six cards: Chika has pinned the one from the till up with the other five. Mr Whitlow stopped the Sunday sponge on 6 April, and says that no customer has ever thanked him for one. Pin a red flag on every card that his note cannot explain.');
+      cardsBox.querySelector('#c-go').addEventListener('click', function () {
+        var sel = ER.$$('.tcd.on', cardsBox).map(function (b) { return b.getAttribute('data-k'); }).sort(), bad = sel.filter(function (k) { return NOPE[k]; })[0], n;
+        if (wait || stage) return;
+        if (!sel.length) { m.innerHTML = ER.gloss('No flags yet. Click a card to pin a red flag on it. Which of these six could not have been written, if Mr Whitlow is right?'); return; }
+        if (sel.length > 3) {
+          ER.sfx.no(); ER.$$('.tcd.on', cardsBox).forEach(function (b) { b.classList.remove('on'); });
+          m.innerHTML = ER.gloss('&ldquo;You have flagged most of the board,&rdquo; says Dr Novak, and takes every flag off again. &ldquo;Mr Whitlow can explain most of these cards perfectly well. Read them, and pin only the ones that he cannot.&rdquo;');
+          return;
+        }
+        if (bad) {
+          ER.sfx.no(); n = cardsBox.querySelector('.tcd[data-k="' + bad + '"]'); n.classList.remove('on'); n.classList.add('off');
+          m.innerHTML = ER.gloss('Dr Novak takes one flag off again. &ldquo;' + NOPE[bad] + '&rdquo;');
+          return;
+        }
+        if (!ER.check('cards', sel.join('+'))) { ER.sfx.no(); m.innerHTML = ER.gloss('&ldquo;That one, certainly,&rdquo; says Dr Novak. &ldquo;A little cake, after the sixth of April. But it is not the only one on the board.&rdquo;'); return; }
+        wait = true; stage = 1; ER.flag('d-st', 1); CAKE.sfx.stamp(); paint();
+        m.innerHTML = ER.gloss('Two cards. Two weddings since Easter, and a small plain cake went out with both. Mr Whitlow takes the June card off the board and reads it with his lips moving. &ldquo;I thought they meant the top tier,&rdquo; he says. &ldquo;People get muddled.&rdquo; &ldquo;People do,&rdquo; says Dr Novak, and switches on her torch.');
+        CAKE.mine('cards', 'Two cards', '<p>Mr Whitlow stopped the Sunday sponge on 6 April.</p><p>Married 6 June: &ldquo;the baby cake in the second box&rdquo;.</p><p>Married 8 August: &ldquo;the small plain one for afterwards&rdquo;.</p><p>Somebody has gone on sending them.</p>');
+        setTimeout(function () { wait = false; ER.close(); openPad(); }, 5200);
+      });
+    }
+    ER.open('ov-lock', cardsBox);
+  }
+
+  /* ---------- the pad of labels under a torch ---------- */
+  var solved = ER.flag('d-w') || {}, LEARN = { w1: 'plain', w3: 'fuss', w4: 'compliments' };
+  var TORCH = '<svg viewBox="-55 -55 110 110"><g class="tg"><path d="M-46 -9h46l12 -9h18v36h-18l-12 -9h-46z" fill="#2a3138" stroke="#0e1418" stroke-width="2"/><rect x="-36" y="-9" width="10" height="18" fill="#e9c46a"/><path d="M30 -18h8v36h-8z" fill="#fff3c9"/><path d="M38 -18l14 -8v52l-14 -8z" fill="#ffe9a0" opacity=".7"/></g></svg>';
+  function gap(key, show, cls) { return '<span class="wk-gap ' + cls + '" data-key="' + key + '" data-show="' + show + '"></span>'; }
+  function wd(t, cls) { return '<span class="' + cls + '">' + t + '</span>'; }
+  function openPad() {
+    var pd, sheet, torch, rdEl, m, gaps, restoring = false, pos = ER.flag('d-pos') || [38, 17], misses = {};
+    padBox = ER.el('div', 'pdw', '<div class="pd"><div class="sheet"><div class="tear"></div><div class="txt">' +
+      '<p>' + wd('For', 'da') + ' ' + wd('Mr', 'db') + ' ' + wd('and', 'da') + ' ' + wd('Mrs', 'db') + ' ' + wd('Petrosyan.', 'da') + '</p>' +
+      '<p>' + wd('A', 'db') + ' ' + wd('little', 'da') + ' ' + gap('w1', 'pl__n', 'gb') + ' ' + wd('cake', 'da') + ' ' + wd('for', 'db') + ' ' + gap('w2', 'S_nd_y', 'ga') + wd(',', 'da') + '</p>' +
+      '<p>' + wd('when', 'db') + ' ' + wd('the', 'da') + ' ' + gap('w3', 'f_ss', 'gb') + ' ' + wd('is', 'da') + ' ' + wd('over.', 'db') + '</p>' +
+      '<p>' + wd('With', 'da') + ' ' + wd('Whitlow&rsquo;s', 'db') + ' ' + gap('w4', 'c_mplim_nts', 'ga') + wd(',', 'da') + '</p>' +
+      '<p>' + wd('as', 'db') + ' ' + gap('w5', 'alw__s', 'gb') + wd('.', 'db') + ' &nbsp; &nbsp; &nbsp; &nbsp; ' + wd('A.W.', 'da') + '</p>' +
+      '</div></div><div class="beam"></div><div class="side"><b>M.N.</b><p>The top label is gone. This one looks blank.</p><p>Small boxes: letters that will not come up. Type those.</p><p class="rd"></p></div><div class="torch">' + TORCH + '</div></div>' +
+      '<div class="bn-foot"><p class="bmsg"></p></div>');
+    pd = padBox.querySelector('.pd'); sheet = padBox.querySelector('.sheet'); torch = padBox.querySelector('.torch'); rdEl = padBox.querySelector('.rd'); m = padBox.querySelector('.bmsg');
+    function msg(t) { m.innerHTML = ER.gloss(t); }
+    function light(x, y, quiet) {
+      var dx = (x - 38) / 44, dy = (y - 28) / 24, nd = Math.max(Math.abs(dx), Math.abs(dy)), al = CAKE.clamp((nd - 0.45) / 0.4, 0, 1), sum = Math.abs(dx) + Math.abs(dy) || 1;
+      var wa = Math.abs(dx) / sum, la = al * CAKE.clamp((wa - 0.35) / 0.45, 0, 1), lb = al * CAKE.clamp((1 - wa - 0.35) / 0.45, 0, 1);
+      pos = [x, y];
+      torch.style.left = x + 'em'; torch.style.top = y + 'em';
+      torch.querySelector('.tg').setAttribute('transform', 'rotate(' + (Math.atan2(28 - y, 38 - x) * 180 / Math.PI).toFixed(1) + ')');
+      sheet.style.setProperty('--la', la.toFixed(3)); sheet.style.setProperty('--lb', lb.toFixed(3));
+      pd.setAttribute('data-la', la.toFixed(2)); pd.setAttribute('data-lb', lb.toFixed(2));
+      padBox.querySelector('.beam').style.background = 'radial-gradient(circle at ' + x + '% ' + (y / 0.56) + '%, rgba(255,236,170,' + (0.5 - al * 0.22).toFixed(2) + '), rgba(255,236,170,0) ' + (38 + al * 30).toFixed(0) + '%), rgba(4,8,6,.3)';
+      if (!quiet) rdEl.textContent = al < 0.15 ? 'The torch is close above the paper. Light from above: the page looks blank.' : la > 0.6 ? 'Low light from the side. Some of the words stand up.' : lb > 0.6 ? 'Low light from the far edge. Other words stand up.' : al < 0.6 ? 'Lower. Carry the torch further out, so that the light lies flatter.' : 'From a corner: a little of everything, and nothing clearly.';
+    }
+    function where(e) { var r = pd.getBoundingClientRect(); return [CAKE.clamp((e.clientX - r.left) / r.width * 100, 2, 98), CAKE.clamp((e.clientY - r.top) / r.height * 56, 2, 54)]; }
+    ER.drag(torch, { move: function (e) { var p = where(e); light(p[0], p[1]); }, end: function () { ER.flag('d-pos', pos); CAKE.sfx.lamp(); } });
+    ER.open('ov-lock', padBox);
+    gaps = WK.gaps(padBox.querySelector('.txt'), {
+      sound: false,
+      onWord: function (key, word) {
+        if (restoring) return;
+        solved[key] = word; ER.flag('d-w', solved); CAKE.sfx.pencil();
+        if (LEARN[key]) WK.learn(LEARN[key]);
+        msg({ w1: '<b>plain</b>: a little plain cake. Nothing on it, and nothing in it but cake.', w2: '<b>Sunday</b>. The wedding is on Saturday. The cake is for the day after.',
+          w3: '<b>fuss</b>: when the fuss is over. Two hundred and twenty guests and a town band are a good deal of fuss.', w4: '<b>compliments</b>: with Whitlow&rsquo;s compliments. That is how a shop says: this one is a present.',
+          w5: '<b>always</b>: as always. So this is not the first label of its kind.' }[key]);
+      },
+      onMiss: function (key, node, n) {
+        misses[key] = n;
+        msg(n < 2 ? '&ldquo;It has to fit the dents, and it has to make sense,&rdquo; says Dr Novak. &ldquo;Try the torch from the other side, and read the words round it again.&rdquo;' :
+          { w1: '&ldquo;A little &hellip; cake,&rdquo; says Dr Novak. &ldquo;No icing, no fruit, no pearls. What is the word for a thing with nothing added?&rdquo;',
+            w2: '&ldquo;A cake for a day of the week,&rdquo; says Dr Novak. &ldquo;The wedding is on the Saturday.&rdquo;',
+            w3: '&ldquo;When the &hellip; is over,&rdquo; says Dr Novak. &ldquo;The noise, the hats, the photographs, Mrs Farrant. One short word for all of it.&rdquo;',
+            w4: '&ldquo;With somebody&rsquo;s &hellip;,&rdquo; says Dr Novak. &ldquo;What you send with a present, when you want no money for it. It can also mean kind words about somebody&rsquo;s cooking.&rdquo;',
+            w5: '&ldquo;As &hellip;,&rdquo; says Dr Novak. &ldquo;Not sometimes. Every time.&rdquo;' }[key]);
+      },
+      onDone: function () {
+        if (restoring) return;
+        var file = ER.exitOk([['w1', 'w2', 'w3', 'w4', 'w5'].map(function (k) { return solved[k]; }).join('-')]);
+        if (!file) { msg('The label will not come clear. Something is wrong with this page: tell your teacher.'); return; }
+        nextFile = file; ER.flag('d-file', file);
+        var s0 = ER.state(); s0.done = s0.done || {}; s0.done.office = 1; ER.persist(true);
+        pd.classList.add('read'); CAKE.sfx.stamp();
+        msg('Dr Novak copies it out underneath, word for word, and reads it back. <b>For Mr and Mrs Petrosyan. A little plain cake for Sunday, when the fuss is over. With Whitlow&rsquo;s compliments, as always. A.W.</b>');
+        setTimeout(function () {
+          ER.closeAll(); CAKE.solved(); paint(); busy = true;
+          ER.narrate([
+            'Mr Whitlow reads it aloud, slowly, the way people read a thing that they once knew by heart. &ldquo;For Sunday, when the fuss is over. That was on every one of them. Mum wrote the first.&rdquo;',
+            '&ldquo;A.W.,&rdquo; says Dr Novak.',
+            '&ldquo;Arthur Whitlow. My father.&rdquo; He counts on his fingers. &ldquo;Fourteen weddings since Easter. He has been coming down those stairs on a Friday night, with his hip, and baking them himself. In the little oven. And getting them into the van somehow.&rdquo;',
+            '&ldquo;Two Saturday mornings out of my three,&rdquo; says Chika from the doorway. &ldquo;I said it was warm.&rdquo;',
+            '&ldquo;Tonight a sack of flour beat him,&rdquo; says Dr Novak. &ldquo;He trod it through to the bakehouse, and he cleaned up after himself the way he was taught: hot water, soda crystals and a mop, round a cake the colour of red cabbage. I doubt if he knows what he did. Let him sleep. He will be down before the van goes. He has a parcel to send.&rdquo;',
+            'Mr Whitlow looks at his watch, and then through the wall, in the direction of the cake. &ldquo;And that? It goes at eight.&rdquo;',
+            '&ldquo;That,&rdquo; says Dr Novak, &ldquo;went green because an alkali touched an indicator. You have read my card, Mr Whitlow. What does it say will send it back?&rdquo;'
+          ], function () { busy = false; showGo(); });
+        }, 5200);
+      }
+    });
+    restoring = true; Object.keys(solved).forEach(function (k) { gaps.fill(k); }); restoring = false;
+    light(pos[0], pos[1]);
+    msg(Object.keys(solved).length ? 'The pad, and the torch. ' + Object.keys(solved).length + ' of the five words are in.' : 'The pad of labels, with Dr Novak&rsquo;s torch lying on it. The top label has been torn off and taken away. Take hold of the torch and carry it about, and watch the paper.');
+  }
+})();
+</script>
+</body>
+</html>

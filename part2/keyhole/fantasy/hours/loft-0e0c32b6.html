@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Bell Loft · The Eleventh Hour</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="hours.css">
+<style>
+  body{--bg:#0a1620;--accent:#8fe0c8;--font-display:'Cinzel Decorative','Cinzel',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(8,18,26,.96);--tc-ink:#e4f1ee;--cap-bg:rgba(8,18,26,.94);--cap-ink:#eef7f4;--panel:#10222c;--face-bg:#1d3a44;--q-ink:#a6dccd;--fade:#030a0f;--hud-bg:rgba(8,18,26,.82)}
+  .tc-room{font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700}
+  #lampL{animation:gl 3.4s steps(4) infinite}
+  @keyframes gl{50%{opacity:.8}}
+  #dawL{animation:bob 5s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  #bellG{transform-origin:800px 170px}
+  #bellG.ring{animation:ring .5s ease-out}
+  @keyframes ring{20%{transform:rotate(1.2deg)}60%{transform:rotate(-.8deg)}100%{transform:rotate(0)}}
+  #panGlow{transition:opacity 1s}
+  #count{opacity:0;transition:opacity .4s}
+  #count.on{opacity:1}
+  #dots{opacity:0;transition:opacity .5s}
+  #dots.on{opacity:1}
+  #dots circle{fill:#1d3a44;transition:fill .2s}
+  #dots circle.on{fill:#ffe2a0}
+  #pocket{opacity:.0;animation:pk 2.4s steps(4) infinite}
+  #scene.held #pocket{opacity:.55}
+  @keyframes pk{50%{opacity:.25}}
+  #flyXI{opacity:0;transform:translate(-880px,202px);transition:transform 2.6s cubic-bezier(.3,1.5,.5,1),opacity .3s}
+  #scene.flown #flyXI{opacity:1;transform:translate(0,0)}
+  #scene.home #flyXI{opacity:0;transition:opacity 1.2s}
+  #scene.flown #pocket,#scene.home #pocket{display:none}
+  #mayorL{opacity:0;transition:opacity 1.4s;pointer-events:none}
+  #scene.midnight #mayorL{opacity:1;pointer-events:auto}
+  #warm{opacity:0;transition:opacity 5s}
+  #scene.ended #warm{opacity:.14}
+  #scene.quick *{transition-duration:.01s!important}
+
+  /* which words? */
+  .wo{width:min(820px,96vw);padding:20px 26px 18px;background:#10222c linear-gradient(165deg,#1d3a44,#0a1620);border:7px solid #05101a;border-radius:6px;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 2px rgba(143,224,200,.22)}
+  .wo h4{margin:0;font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700;font-size:22px;color:#cdf3e6}
+  .wo h5{margin:4px 0 12px;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-weight:400;font-size:17.5px;line-height:1.3;color:#b9d6cd;border-bottom:2px solid rgba(143,224,200,.25);padding-bottom:10px}
+  .wo-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .wo-cards button{padding:9px 14px;border-radius:3px;border:2px solid #3d6a62;background:#f4ecd4;color:#3b2a5c;font-family:'Almendra',serif;font-style:italic;font-weight:700;font-size:19px;line-height:1.2;text-align:left}
+  .wo-cards button:hover{border-color:#fff;background:#fff8e2}
+  .wo-cards button.no{opacity:.45}
+  .wo .pmsg{min-height:96px;margin-top:12px}
+
+  /* the end of the night */
+  .done{position:fixed;right:2vw;top:60px;z-index:34;width:min(500px,94vw);max-height:calc(100vh - 74px);overflow:auto;padding:16px 26px 12px;display:none;background:#f4ecd4;color:#3b2a5c;
+    border-left:16px solid #3d2f5a;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .done.on{display:block}
+  .done .stampd{display:inline-block;margin:0 0 8px;padding:3px 12px 1px;border:3px solid #2f6a5c;color:#2f6a5c;font-family:'Cinzel',serif;font-weight:700;font-size:15px;letter-spacing:.12em;transform:rotate(-2deg)}
+  .done p{margin:0 0 2px;font-family:'Almendra',serif;font-style:italic;font-size:17px;line-height:1.3}
+  .done h6{margin:10px 0 4px;font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700;font-size:16px;color:#3d2f5a}
+  .done ol{margin:0;padding-left:20px;font-family:'IM Fell English',Georgia,serif;font-size:15.5px;line-height:1.26;color:#2a2233}
+  .done li{margin:0 0 3px}
+  .done li b{font-family:'Cinzel',serif;font-weight:700;font-size:12.5px;letter-spacing:.06em}
+  .done .row{display:flex;flex-wrap:wrap;margin-top:10px}
+  .done .btn{--accent:#3d2f5a;font-size:12.5px;padding:7px 12px;margin:0 7px 6px 0}
+  .done .btn:hover:not([disabled]){color:#f4ecd4}
+  .done small{display:block;margin-top:4px;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:14px;opacity:.8;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+  .rp{width:min(760px,94vw);max-height:84vh;overflow:auto;background:#f4ecd4;color:#2a2233;padding:24px 36px 20px;box-shadow:0 26px 70px rgba(0,0,0,.6);-webkit-user-select:text;user-select:text;border-left:16px solid #3d2f5a}
+  .rp h4{margin:0 0 4px;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#3d2f5a}
+  .rp h3{margin:0 0 10px;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:27px;line-height:1.1}
+  .rp label{display:block;font-family:'IM Fell English',Georgia,serif;font-size:18.5px;line-height:1.36;margin:8px 0 6px}
+  .rp label b{font-family:'Cinzel',serif;font-size:14px}
+  .rp textarea{width:100%;min-height:230px;font-family:'Caveat',cursive;font-size:25px;line-height:34px;color:#3b2a5c;background:#fffaf0 repeating-linear-gradient(transparent 0 33px,rgba(110,80,150,.25) 33px 34px);border:1px solid #b9b09a;
+    padding:0 12px;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp .count{font-family:'Cinzel',serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right;margin-top:4px}
+  .rp .foot{display:flex;align-items:center;margin-top:10px}
+  .rp .foot span{flex:1;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:15px;opacity:.75}
+  .rp .btn{--accent:#3d2f5a;margin-left:10px}.rp .btn:hover:not([disabled]){color:#f4ecd4}
+  @media print{
+    .stage,.hud,.cap,.done,.gobtn,.ov-bar,.rp .foot{display:none!important}
+    body{overflow:visible;background:#fff}
+    .ov{position:static;display:block!important;background:none;padding:0}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050d1c"/><stop offset=".6" stop-color="#102a44"/><stop offset="1" stop-color="#1f4a5c"/></linearGradient>
+  <linearGradient id="bellGr" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f5a52"/><stop offset=".35" stop-color="#7fbfa8"/><stop offset=".6" stop-color="#4f8a7a"/><stop offset="1" stop-color="#1f3d38"/></linearGradient>
+  <linearGradient id="timG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a1c"/><stop offset="1" stop-color="#1f150c"/></linearGradient>
+  <linearGradient id="flL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3a40"/><stop offset="1" stop-color="#0c161c"/></linearGradient>
+  <radialGradient id="lampLG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".7"/><stop offset=".4" stop-color="#ffb050" stop-opacity=".2"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="panLG"><stop offset="0" stop-color="#ffd27a" stop-opacity=".95"/><stop offset=".5" stop-color="#ff7a2a" stop-opacity=".35"/><stop offset="1" stop-color="#ff5a1a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".66" stop-color="#030a0f" stop-opacity=".2"/><stop offset="1" stop-color="#030a0f" stop-opacity=".85"/></radialGradient>
+</defs>
+
+<!-- the sky on every side, and Gilderby a long way down -->
+<rect x="-1000" y="-640" width="3600" height="1500" fill="url(#skyL)"/>
+<g id="starsL" fill="#eaf0ff"></g>
+<g id="moonL" class="hot"><circle cx="1330" cy="250" r="120" fill="#cfe0ff" opacity=".12"/><circle cx="1330" cy="250" r="40" fill="#eef3ff"/></g>
+<g id="town" class="hot" fill="#081420"><path d="M-1000 760V690l80-30 80 30v-40l100-40 100 40v30l70-26 70 26v-50l90-36 90 36v60l110-40 110 40v-30l80-30 80 30v50l90-34 90 34v-44l100-40 100 40v40l80-30 80 30v-56l90-36 90 36v60l900-20V760Z"/></g>
+<g fill="#ffcf7a"><rect x="120" y="704" width="7" height="9"/><rect x="250" y="690" width="7" height="9"/><rect x="1180" y="700" width="7" height="9"/><rect x="1320" y="690" width="7" height="9"/><rect x="1440" y="706" width="7" height="9"/><rect x="560" y="700" width="7" height="9"/></g>
+
+<!-- four posts, a roof, a floor -->
+<path d="M-1000 -640H2600V60H-1000Z" fill="#0c0906"/><path d="M-1000 60H2600" stroke="#050302" stroke-width="8"/>
+<g fill="url(#timG)"><rect x="60" y="60" width="54" height="700"/><rect x="1486" y="60" width="54" height="700"/><rect x="-600" y="60" width="54" height="700"/><rect x="2140" y="60" width="54" height="700"/></g>
+<g id="louvres" stroke="#1f150c" stroke-width="12" opacity=".9"></g>
+<path d="M-1000 760H2600V1500H-1000Z" fill="url(#flL)"/><path d="M-1000 760H2600" stroke="#050b10" stroke-width="6"/>
+<g id="boardsL" stroke="#0a1218" stroke-width="3" fill="none" opacity=".8"></g>
+
+<!-- the beam, the Warden's list, the quarter bells, the great bell -->
+<rect x="-1000" y="120" width="3600" height="50" fill="url(#timG)"/><path d="M-1000 170H2600" stroke="#0c0906" stroke-width="5"/>
+<g id="list" class="hot"><rect x="1010" y="176" width="300" height="132" fill="#e9e0c9"/><rect x="1010" y="176" width="300" height="132" fill="none" stroke="#1f150c" stroke-width="5"/>
+  <text x="1160" y="200" class="cz" font-size="12.500" fill="#7a2230">NOT TO BE SAID IN THIS TOWER</text><g stroke="#3b2a5c" stroke-width="3" stroke-linecap="round" opacity=".8"><path d="M1030 220h200M1030 238h240M1030 256h180M1030 274h256M1030 292h220"/></g>
+  <path d="M1040 170v8M1280 170v8" stroke="#8a8f96" stroke-width="4"/></g>
+<g id="qbells" class="hot"><path d="M330 170v30M450 170v30" stroke="#15131a" stroke-width="8"/><path d="M300 290q0-90 30-90t30 90q10 14 10 22h-80q0-8 10-22z" fill="url(#bellGr)"/><path d="M416 300q0-100 34-100t34 100q10 14 10 24h-88q0-10 10-24z" fill="url(#bellGr)"/></g>
+<g id="bellG" class="hot"><rect x="700" y="150" width="200" height="40" rx="6" fill="#15131a"/><path d="M770 190v20M830 190v20" stroke="#15131a" stroke-width="14"/>
+  <path d="M680 520Q680 210 800 210Q920 210 920 520Q950 556 954 590H646Q650 556 680 520Z" fill="url(#bellGr)"/><path d="M646 590H954" stroke="#1f3d38" stroke-width="10" stroke-linecap="round"/>
+  <path d="M700 480q100 22 200 0M690 540q110 24 220 0" stroke="#2f5a52" stroke-width="4" fill="none" opacity=".8"/><path d="M800 590v44" stroke="#15131a" stroke-width="10"/><circle cx="800" cy="646" r="20" fill="#15131a"/>
+  <path d="M1010 420L940 470" stroke="#15131a" stroke-width="14" stroke-linecap="round"/><rect x="994" y="394" width="44" height="40" rx="6" fill="#3a3d46"/></g>
+<text id="count" x="800" y="430" class="cd" font-size="76" fill="#fff3c8" stroke="#1f3d38" stroke-width="2" pointer-events="none"></text>
+<g id="dots" pointer-events="none"></g>
+<g id="dawL" class="hot"><circle cx="560" cy="86" r="42" fill="#000" opacity="0"/><use id="dawU" href="#ch-byword" x="530" y="42" width="62" height="80"/></g>
+
+<!-- the Warden, a stool, a teapot, a lantern -->
+<g id="warden" class="hot"><circle id="lampL" cx="270" cy="700" r="220" fill="url(#lampLG)" pointer-events="none"/>
+  <path d="M330 760L344 600q66-26 132 0l14 160z" fill="#4a3a6e"/><use href="#ch-quillon" x="322" y="400" width="176" height="229"/>
+  <path d="M372 632h76v96h-76z" fill="#e9e0c9"/><path d="M384 660h52v44h-52z" fill="#d9cfb4" stroke="#a89c7c" stroke-width="2.500"/><circle id="pocket" cx="410" cy="682" r="34" fill="#ffe2a0"/>
+  <path d="M344 640q10 34 46 40M476 640q-10 34-46 40" stroke="#4a3a6e" stroke-width="22" fill="none" stroke-linecap="round"/><ellipse cx="398" cy="680" rx="17" ry="11" fill="#e6c4a6"/><ellipse cx="424" cy="684" rx="17" ry="11" fill="#dcb89a"/>
+  <path d="M250 760v-34h40v34z" fill="#15131a"/><path d="M254 726h32l-4-30h-24z" fill="#ffd98a"/><path d="M250 726h40M258 696h24" stroke="#15131a" stroke-width="4"/>
+  <ellipse cx="560" cy="740" rx="36" ry="24" fill="#7a2230"/><path d="M592 734q26-8 30-28" stroke="#7a2230" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M524 740q-22 0-22-16t22-14" stroke="#7a2230" stroke-width="7" fill="none"/><ellipse cx="560" cy="718" rx="16" ry="5" fill="#5a1a24"/></g>
+
+<!-- the trapdoor, the pan, and (in time) the Mayor -->
+<g id="trap" class="hot"><path d="M1180 760h230l40 56h-310z" fill="#04080c"/><path d="M1230 760V700M1360 760V700" stroke="#3f2814" stroke-width="12"/><path d="M1230 716h130" stroke="#5a3c22" stroke-width="9"/></g>
+<g id="mayorL"><use href="#ch-sable" x="1218" y="560" width="160" height="208"/></g>
+<g id="pan" class="hot"><circle id="panGlow" cx="1010" cy="716" r="120" fill="url(#panLG)" pointer-events="none"/><path d="M940 700h140l-12 36H952z" fill="#1c1c22"/><path d="M1080 706h80" stroke="#1c1c22" stroke-width="10" stroke-linecap="round"/><path d="M1124 698h36v16h-36z" fill="#e9e0c9"/></g>
+<g id="flyXI" pointer-events="none"><g transform="translate(1290 480) rotate(-8)"><rect x="-48" y="-34" width="96" height="68" rx="9" fill="#0b0e17" stroke="#454d66" stroke-width="3"/><text y="13" class="cz" font-size="34" fill="#fff3c2">XI</text></g></g>
+
+<rect id="warm" x="-1000" y="-640" width="3600" height="2140" fill="#ffc890" pointer-events="none"/>
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="stampd">TWELVE HOURS &middot; ALL PRESENT</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-slips"></p><p id="d-words"></p>
+  <h6>What the clock taught you</h6>
+  <ol>
+    <li>An <b>ORDER</b> tells somebody to do something: &ldquo;Drop me a line.&rdquo; A <b>STATEMENT</b> only says: &ldquo;Time flies.&rdquo;</li>
+    <li>An idiom means more than its words. &ldquo;Drop me a line&rdquo; is &ldquo;write to me&rdquo;; &ldquo;kill time&rdquo; is &ldquo;wait&rdquo;.</li>
+    <li>Taken <b>TO THE LETTER</b>, the same words do something else. Know who is listening.</li>
+    <li>A proverb is advice, and advice depends on the place: many hands for a heavy handle, one cook for one pan.</li>
+    <li><b>FIRST, THEN, WHILE, UNTIL, BEFORE, ONCE</b>: every one of them is about when.</li>
+    <li>A pinch is not a spoonful. Twice is not three times.</li>
+    <li>Better late than never.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Write a receipt</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the shelf</button></div>
+  <small>The Eleventh Hour &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="hours.js"></script>
+<script>
+(function () {
+  var $ = ER.$, sc = $('#scene'), busy = false, step = 0;
+  var NUM = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', 'ELEVEN'];
+
+  (function () {
+    var s = '', i, x, y, seed = 23;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (i = 0; i < 140; i++) s += '<circle class="tw" cx="' + (-300 + rnd() * 2200).toFixed(0) + '" cy="' + (60 + rnd() * 600).toFixed(0) + '" r="' + (0.7 + rnd() * 1.5).toFixed(1) + '" opacity="' + (0.4 + rnd() * 0.6).toFixed(2) + '"/>';
+    $('#starsL').innerHTML = s; s = '';
+    for (y = 200; y < 400; y += 44) s += '<path d="M114 ' + y + 'H250M1350 ' + y + 'H1486M-546 ' + y + 'H60M1540 ' + y + 'H2140"/>';
+    $('#louvres').innerHTML = s; s = '';
+    for (x = -900; x < 2600; x += 170) s += '<path d="M' + x + ' 760L' + (800 + (x - 800) * 2.2).toFixed(0) + ' 1500"/>';
+    $('#boardsL').innerHTML = s; s = '';
+    for (i = 0; i < 15; i++) s += '<circle cx="' + (i < 4 ? 626 + i * 22 : 730 + (i - 4) * 22) + '" cy="694" r="' + (i < 4 ? 5 : 7) + '"/>';
+    $('#dots').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'hours', storyTitle: 'The Eleventh Hour', id: 'loft', no: 'V', title: 'The Bell Loft',
+    go: 'Climb into the loft',
+    intro: [
+      'The receipt was written for a cook, in the one room where the clock cannot hear; so &ldquo;kill time&rdquo; meant only &ldquo;wait&rdquo;, and you waited. A pinch, half a pan, twice, three drops, once more: every measure as it was written. And one cook, because the wall said TOO MANY COOKS.',
+      'You climb the ladder with the hot pan in both hands. Above you is the bell loft: the great bell of Old Punctual, the open sky on four sides, and the one room in the tower where every spoken order is carried out to the letter.',
+      'Somebody is sitting under the bell.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"words":["89e9783b"],"say":["63cf62c2"]},
+    sound: ['candle', { root: 50, bpm: 50, drop: ['mel', 'arp', 'bass'], beds: [['wind', 0.7], ['night', 0.4]], then: ['morning', { root: 50, bpm: 66, drop: ['mel'], beds: [['night', 0.4]] }] }],      /* the bell is struck and counted here: held notes and wind only, nothing with a beat */
+    hints: hints, onBegin: begin
+  });
+
+  step = ER.flag('v-step') || 0;
+
+  var LIST = '<h4>NOT TO BE SAID IN THIS TOWER</h4><p>Every one of these is an order. Under the bell, an order is done to the letter.</p>' +
+    '<ol><li>Look before you leap.</li><li>Make hay while the sun shines.</li><li>Let sleeping dogs lie.</li><li>Never put off till tomorrow what you can do today.</li><li>Strike while the iron is hot.</li></ol>' +
+    '<p>And nobody is to tell anybody to take anything, hold anything, or hurry up.</p><p class="sig">W.Q.</p>';
+
+  function ready() { return ER.flag('v-talk') && ER.flag('v-list'); }
+  function hints() {
+    if (step >= 3) return null;
+    if (step === 2) return ['say', [
+      'You are the Warden now, and you are standing under the bell. Whatever is said here as an order, the clock carries out to the letter. So do not ask what each line means: ask what each line would DO.',
+      'She does not want to leave the tower. One of the four lines is an order which, taken word for word, makes the tower her home. People say it to a guest.'
+    ]];
+    if (step === 1) return null;
+    if (ready()) return ['words', [
+      'The Words are an order, and they are for this moment: under the bell, with a hot iron pan in your hands. The board on the beam has five orders on it. Byword knows all five, and has never said one.',
+      'What can a CLOCK do, to the letter? It cannot leap, and it cannot make hay. Which of the five has a verb in it that is a clock&rsquo;s own word?',
+      'The receipt said: carry it up &ldquo;while it is hot&rdquo;. One of the five says &ldquo;while the iron is hot&rdquo;; and its first word is what a clock does to tell the hour.'
+    ]];
+    return ['start', [
+      'Talk to the woman under the bell. Then read the board that is nailed to the beam, on the right.',
+      'Then go to Byword. He is on the beam, on the left, and he is not looking at you.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    sc.classList.toggle('held', step === 0); sc.classList.toggle('flown', step === 1);
+    sc.classList.toggle('home', step >= 2); sc.classList.toggle('midnight', step >= 2); sc.classList.toggle('ended', step >= 3);
+    $('#panGlow').style.opacity = step === 0 ? '1' : '0';
+    $('#dawL').setAttribute('class', 'hot' + (step === 0 && ready() && !busy ? ' nudge' : ''));
+    ER.pips(step >= 3 ? 2 : step >= 1 ? 1 : 0, 2);
+  }
+  function begin() {
+    if (step >= 1) { sc.classList.add('quick'); setTimeout(function () { sc.classList.remove('quick'); }, 400); }
+    paint();
+    if (step >= 3) { finish(); return; }
+    if (step === 2) { ER.say('A minute to midnight. The key is in your hand, the Mayor is holding out his card, and everybody is waiting for you to speak. Click on the Mayor.'); return; }
+    if (step === 1) { turn(); return; }
+    if (ER.flag('v-talk')) { ER.say('The bell loft. The pan is still hot.'); return; }
+    busy = true;
+    ER.narrate([
+      'The bell of Old Punctual is as big as a haystack and as green as a pond. Under it, on a three-legged stool, with a lantern at her feet and a teapot at her elbow, sits a small upright woman in an apron.',
+      'She has both hands folded over the pocket of the apron. She looks at the pan, and then at you. &ldquo;Mind your head,&rdquo; she says. &ldquo;And mind your tongue.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the loft ---------- */
+  $('#warden').addEventListener('click', function () {
+    if (busy) return;
+    if (step === 2) { openSay(); return; }
+    if (step >= 3) { ER.say('Mistress Quillon has hung her hat on the hammer of the great bell, where it has hung for forty-one years. &ldquo;Mondays,&rdquo; she says. &ldquo;Do not forget.&rdquo;'); return; }
+    if (ER.flag('v-talk')) { ER.say('&ldquo;There is no hurry,&rdquo; says Mistress Quillon, with both hands over her pocket. &ldquo;The Mayor said so himself.&rdquo;'); return; }
+    ER.talk({
+      who: CAST.quillon.who, role: CAST.quillon.role, face: FACE('quillon'),
+      lines: [
+        { note: 'Grey hair in a knot, with a hatpin through it; spectacles on a chain; and the straight back of somebody who has climbed a hundred and thirty-two stairs every day for forty-one years.',
+          a: '&ldquo;So you are the one. Thirteen. I was thirteen.&rdquo; She nods at the pan. &ldquo;And you have made Orrin&rsquo;s receipt, and made it right, by the smell. I never could bear the smell.&rdquo;' },
+        { q: 'Mistress Quillon, the eleventh hour is gone.',
+          a: 'Is it? The Mayor says that it flew. The Mayor heard a jackdaw say &ldquo;Time flies&rdquo;, and took a saying for a fact. That bird has never told this clock to do anything in his life. I saw to that.' },
+        { q: 'You taught him?',
+          a: 'A hundred sayings in forty-one years, and every one of them a plain statement. &ldquo;Many hands make light work.&rdquo; &ldquo;Time flies.&rdquo; Nothing with an order in it. Up here an order is done to the letter, whoever gives it, and whoever it is given to. My list is on the beam.' },
+        { q: 'The receipt says that the Words are to be said here. Somebody has cut them off the page.',
+          a: 'I did. Orrin read them out once, in the workroom, where the clock cannot hear; and the bird was sitting on his shoulder. He was Orrin&rsquo;s bird long before he was mine. A jackdaw forgets nothing. So I gave him a hundred other things to say, and hoped that he would never get round to that one.' },
+        { q: 'Then he knows them.',
+          a: 'He knows them. He knows that he is not to say them. And I shall not be the one to tell him that he may.' },
+        { note: 'She folds her hands a little more tightly over her pocket.', a: '&ldquo;There is no hurry, after all. The Mayor said so himself.&rdquo;' }
+      ],
+      clue: { id: 'quillon', title: 'Mistress Quillon, under the bell', kind: 'What she said' }, last: 'Leave her',
+      done: function (seen) {
+        if (!seen) return;
+        ER.flag('v-talk', 1); HRS.learn(['statement', 'order']); paint();
+        ER.say(ready() ? 'Byword is on the beam, on the left, with his back to everybody.' : 'There is a board nailed to the beam, on the right, in violet paint.');
+      }
+    });
+  });
+  $('#list').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LIST, cls: 'card', clue: { id: 'list', title: 'Not to be said in this tower', kind: 'The Warden’s list' },
+      done: function () { ER.flag('v-list', 1); paint(); } });
+  });
+  $('#dawL').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    if (step >= 1) { ER.say('Byword is walking up and down the beam like a bird who has said something at last, and would rather like to say it again. He does not.'); return; }
+    if (!ready()) { ER.wordAt(e.clientX, e.clientY, 'jackdaw'); ER.say('Byword is on the beam with his back to you. He has a hundred sayings, and tonight he does not seem to want any of them.'); return; }
+    openWords();
+  });
+  $('#mayorL').addEventListener('click', function () {
+    if (busy) return;
+    if (step === 2) { openSay(); return; }
+    ER.say('The Mayor has reached page thirty-one. &ldquo;And so, in the nick of time,&rdquo; he is saying, for the third time.');
+  });
+  HRS.thing('#bellG', 'bell', 'The great bell. Its tongue is as long as your leg: and once, long ago, somebody under it was told to hold his tongue.', isBusy);
+  HRS.thing('#qbells', null, 'The two quarter bells, a small one and a smaller: ting, and tang. They ring four times before every hour, and the hour is struck after them.', isBusy);
+  HRS.thing('#pan', null, function () { return step === 0 ? 'The iron pan, with a cloth round its handle. It is still too hot to touch, and it is humming.' : 'The pan is cold now. It did what it was made for.'; }, isBusy);
+  HRS.thing('#trap', null, 'The trapdoor, and the top of the ladder. A hundred and thirty-two stairs, counting the ladder as twelve.', isBusy);
+  HRS.thing('#town', null, 'Gilderby, a long way down, with a light in every window. Nobody can go to bed until it is eleven.', isBusy);
+  HRS.thing('#moonL', null, 'The moon: white, and three days from full. Not once has it been blue.', isBusy);
+
+  /* ---------- which are the Words? ---------- */
+  function cards(title, sub, list, onPick, first) {
+    var box = ER.el('div', 'wo'), s = '<h4>' + title + '</h4><h5>' + sub + '</h5><div class="wo-cards">';
+    list.forEach(function (c) { s += '<button type="button" data-k="' + c[0] + '">&ldquo;' + c[1] + '&rdquo;</button>'; });
+    box.innerHTML = s + '</div><p class="pmsg"></p>';
+    var msgEl = box.querySelector('.pmsg');
+    box.say = function (t) { msgEl.innerHTML = ER.gloss(t); };
+    box.addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('.wo-cards button') : null; if (b) onPick(b.getAttribute('data-k'), b, box); });
+    box.say(first);
+    ER.open('ov-lock', box);
+    return box;
+  }
+  var NOTW = {
+    leap: 'You stop your finger an inch from the beam. To the letter, somebody in this loft would have to look, and then leap; and it is sixty feet to the square. Not that one.',
+    hay: 'To the letter, that is an order to make hay, and to make it while the sun shines. It is night, and there is no grass in a bell loft. The clock would wait for sunrise with great patience.',
+    dogs: 'To the letter, that orders everybody to leave sleeping dogs where they lie. The clock would do it very well. There are no dogs.',
+    never: 'To the letter, the clock would never put anything off again, and it would begin with the Mayor&rsquo;s speech. But that would not bring an hour home.'
+  };
+  function openWords() {
+    var done = false;
+    cards('Which are the Words?', 'Byword knows them, and has never once said them. Point to a line, and nod to him. (Do not tell him to say it. Not in here.)',
+      [['fly', 'Time flies.'], ['leap', 'Look before you leap.'], ['stitch', 'A stitch in time saves nine.'], ['hay', 'Make hay while the sun shines.'], ['dogs', 'Let sleeping dogs lie.'], ['haste', 'More haste, less speed.'],
+        ['never', 'Never put off till tomorrow what you can do today.'], ['strike', 'Strike while the iron is hot.']],
+      function (k, b, box) {
+        if (done) return;
+        if (ER.check('words', k)) {
+          done = true; busy = true; ER.sfx.click();
+          box.say('You point to the last line on the board, and nod. It is an order. A clock can carry it out, for a clock strikes. And the iron is in your hands, and it is hot.');
+          setTimeout(function () { ER.closeAll(); strikeNow(); }, 2800);
+          return;
+        }
+        HRS.slip(); HRS.sfx.hm(); b.classList.add('no');
+        box.say(NOTW[k] || 'Byword says it at once, and gladly. Nothing happens. It is a thing that is only said: there is no order in it, and the clock lets it pass.');
+      },
+      'Eight sayings. Three of them he has said to you tonight, and five are on the Warden&rsquo;s board. The pan is hot in your hands.');
+  }
+  function strikeNow() {
+    step = 1; ER.flag('v-step', 1); ER.pips(1, 2); $('#dawL').setAttribute('class', 'hot');
+    $('#dawU').setAttribute('href', '#ch-byword-o');
+    ER.narrate([
+      'Byword looks at the board. He looks at Mistress Quillon, who has given him a hundred other things to say. He shuts his eyes.',
+      '&ldquo;Strike while the iron is hot.&rdquo;',
+      'He says it in the cross old voice: the one that is a great deal older than the Warden&rsquo;s. And every wheel in the tower begins to turn.'
+    ], chime);
+  }
+  /* four quarters, and then eleven: every stroke is shown as well as heard */
+  function chime() {
+    var t = 400, i, dots = ER.$$('#dots circle'), cnt = $('#count');
+    cnt.setAttribute('class', 'cd on'); $('#dots').setAttribute('class', 'on');
+    function quarter(k) {
+      setTimeout(function () { cnt.setAttribute('font-size', 40); cnt.textContent = 'ting'; HRS.sfx.ting(); }, t);
+      setTimeout(function () { cnt.textContent = 'ting-tang'; HRS.sfx.tang(); dots[k].setAttribute('class', 'on'); }, t + 420);
+      t += 1000;
+    }
+    function hour(k) {
+      setTimeout(function () {
+        var b = $('#bellG');
+        cnt.setAttribute('font-size', 76); cnt.textContent = NUM[k]; HRS.sfx.stroke(); dots[3 + k].setAttribute('class', 'on'); $('#panGlow').style.opacity = String(1 - k / 11);
+        b.setAttribute('class', 'hot'); void b.getBoundingClientRect(); b.setAttribute('class', 'hot ring');
+      }, t);
+      t += 1150;
+    }
+    for (i = 0; i < 4; i++) quarter(i);
+    t += 500;
+    for (i = 1; i <= 11; i++) hour(i);
+    setTimeout(function () { $('#dawU').setAttribute('href', '#ch-byword'); sc.classList.remove('held'); sc.classList.add('flown'); HRS.solved(true); }, t + 200);
+    setTimeout(turn, t + 3300);
+  }
+  function turn() {
+    busy = true; sc.classList.remove('held'); sc.classList.add('flown'); $('#panGlow').style.opacity = '0';
+    ER.narrate([
+      'At the eleventh stroke the iron goes cold; and the pocket of Mistress Quillon&rsquo;s apron gives a jump. Something square and black comes out of it like a cork out of a bottle, goes twice round the bell, and hangs humming in the air over the trapdoor. There are two figures cut through it: an X, and an I.',
+      '&ldquo;' + HRS.said('fly') + '&rdquo; says Byword, with great satisfaction. For the first time tonight, it is a fact.',
+      '&ldquo;Well,&rdquo; says Mistress Quillon. &ldquo;Now you know. The Mayor came up at four to practise. He stood where you are standing, and he said: <i>Take your time, Mistress Quillon.</i> Under the bell. He meant it kindly. The clock does not know what kindly means.&rdquo;',
+      '&ldquo;At a quarter to eleven I put out my hand, and the hour came off its hook like a ripe plum. While it was a quarter to eleven, it could not be midnight. And at midnight I give you the key, and go down a hundred and thirty-two stairs, to live with my sister in Lower Gilder, where there is no clock at all.&rdquo;',
+      '&ldquo;You were told to take your time,&rdquo; you say. &ldquo;Nobody told you to keep it.&rdquo; She looks at you over her spectacles. Then she laughs: one short dry laugh, like a clock that has not struck for years. &ldquo;No,&rdquo; she says. &ldquo;Nobody did.&rdquo;',
+      'She takes the hour out of the air as you would take a hen off a perch, puts it under her arm, and goes down the ladder herself. You hear the pin go home. You hear a lever. And Old Punctual, with twelve hours on its face, begins to keep time.'
+    ], function () {
+      sc.classList.add('home'); HRS.learn(['take your time', 'keep time', 'time flies']);
+      HRS.mine('n-loft', 'Where the eleventh hour was', '<p>&ldquo;Time flies&rdquo; was only SAID. Nothing flew.</p><p>&ldquo;Take your time&rdquo; was an ORDER, under the bell. The Mayor meant: no hurry. The clock let her take an hour.</p><p>&ldquo;Strike while the iron is hot&rdquo; = do it now, while you can. The clock struck, while the iron was hot: eleven.</p>', true);
+      ER.narrate([
+        'Eleven o&rsquo;clock went by in the ordinary way, one minute at a time. The eleventh hour was back on its hook in the nick of time, the Mayor says. It is in his speech now, twice.',
+        'It is a minute to midnight. The Mayor has climbed all hundred and thirty-two stairs, and is holding on to the top of the ladder. Mistress Quillon has put on her hat, and put the key of the tower into your hand.',
+        '&ldquo;By the custom of Gilderby,&rdquo; says the Mayor, when he can, &ldquo;the old Warden gives up the key, and the new Warden speaks the first words of the new wardenship. Under the bell. I have written down what has been said before.&rdquo; He holds out a card.'
+      ], function () { step = 2; ER.flag('v-step', 2); busy = false; $('#count').setAttribute('class', 'cd'); $('#dots').setAttribute('class', ''); paint(); openSay(); });
+    });
+  }
+
+  /* ---------- the first words of the new Warden ---------- */
+  var NOTS = {
+    up: 'That is the line that most Wardens have used. But it is not an order at all: it only says a thing, and the clock would let it pass. Nothing would change. She would go down the stairs.',
+    take: 'An order: and that is how this night began. To the letter, she would take another hour off the dial. You shut your mouth again.',
+    stranger: 'An order, and a kind one. But to the letter she is no stranger, so the clock would have nothing to do. People mean &ldquo;come and see us&rdquo;; and she would have a hundred and thirty-two stairs to climb every time.'
+  };
+  function openSay() {
+    var done = false;
+    cards('The first words of the new Warden', 'The Mayor&rsquo;s card has four lines on it: things that new Wardens have said before. You are standing under the bell, and the clock is listening.',
+      [['up', 'Your time is up, Mistress Quillon.'], ['take', 'Take your time, Mistress Quillon.'], ['stranger', 'Don&rsquo;t be a stranger, Mistress Quillon.'], ['home', 'Make yourself at home, Mistress Quillon.']],
+      function (k, b, box) {
+        if (done) return;
+        if (ER.check('say', k)) {
+          done = true; busy = true; ER.sfx.click();
+          box.say('You look at the bell, and then at her hat. You know what people mean by it. You know what this clock will make of it.');
+          setTimeout(function () { ER.closeAll(); ending(); }, 2600);
+          return;
+        }
+        HRS.slip(); HRS.sfx.hm(); b.classList.add('no'); box.say(NOTS[k]);
+      },
+      'Mistress Quillon is looking out at the roofs of Gilderby, with her hat on. She is not looking at the stairs.');
+  }
+  function ending() {
+    step = 3; ER.flag('v-step', 3); ER.pips(2, 2);
+    ER.narrate([
+      '&ldquo;Make yourself at home, Mistress Quillon.&rdquo;',
+      'People say it to a guest, and they mean: sit down, be comfortable. The clock knows nothing about guests. Over your heads, every wheel in Old Punctual turns once, like a key in a lock. Down the stair, one after another, three doors open by themselves; and in the workroom a kettle that nobody has filled begins to sing.',
+      '&ldquo;But the Warden&rsquo;s rooms go with the office!&rdquo; says the Mayor. &ldquo;It is in the town book!&rdquo; &ldquo;They do,&rdquo; you say. &ldquo;I am the Warden, they are mine, and I have just told the clock what to do with them.&rdquo; The Mayor opens his mouth. Then he looks up at the bell, very carefully, and shuts it again. He is learning.',
+      'Mistress Quillon takes off her hat. &ldquo;I shall wind on Mondays,&rdquo; she says. &ldquo;You will want somebody on the other grip. Two to wind.&rdquo;',
+      'Then Old Punctual strikes twelve: the four quarters first, and the hour after them. All over Gilderby, people who have waited three hours for eleven o&rsquo;clock find that it is tomorrow, and go to bed. The Mayor&rsquo;s speech goes on into the small hours. Nobody tells him to cut it short. Not under the bell.',
+      'And Byword, who kept one order asleep for longer than anybody likes to count, and has given it at last, walks to the end of the beam and says the only thing that is left to say. &ldquo;' + HRS.said('late') + '&rdquo;'
+    ], function () {
+      HRS.byword('late', true); HRS.learn(['make yourself at home', 'the small hours', 'in the nick of time', 'Better late than never']);
+      busy = false; paint(); finish(); HRS.solved(true);
+    });
+  }
+  function finish() {
+    var st = ER.state(), mins = HRS.minutes(), hn = ER.hintsUsed(), sl = HRS.slips();
+    sc.classList.add('ended');
+    try { if (ER.track) ER.track.play(['morning', { root: 50, bpm: 66, drop: ['mel'], beds: [['night', 0.4]] }]); } catch (e) {}
+    $('#d-time').textContent = 'The night took you ' + mins + (mins === 1 ? ' minute' : ' minutes') + ': and no time at all, by the clock.';
+    $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+    $('#d-slips').textContent = sl ? 'Slips of the tongue and of the hand: ' + sl + '. Byword counted. He says that to err is human.' : 'Not one slip of the tongue or of the hand. Byword counted twice.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' papers and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('v-task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>The Eleventh Hour &middot; a receipt of your own</h4><h3>To be carried out to the letter</h3>' +
+      '<label for="r1">Write a receipt of your own: To Make a Good Saturday, To Catch the Early Bus, To Cheer Up a Friend. Six steps, 60 to 90 words. Use <b>first</b>, <b>then</b>, <b>while</b>, <b>until</b>, <b>before</b> and <b>once</b>; give every measure (a pinch, twice, half); and put in one idiom about time. Then read it to somebody who takes every word to the letter.</label><textarea id="r1"></textarea>' +
+      '<div class="count"></div><div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    box.querySelector('#r1').value = saved.r1 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('v-task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

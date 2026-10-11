@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Reading Room · The Library That Locks at Dusk</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#170b10;--accent:#f0b65a;--font-display:'Uncial Antiqua',serif;--font-ui:'Almendra',serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(24,10,15,.92);--tc-ink:#f3e2c2;--cap-bg:rgba(26,12,16,.94);--panel:#27151b;--face-bg:#2d2440;--q-ink:#e3b98a;--fade:#0c0508;
+    --hud-bg:rgba(22,9,13,.72)}
+  .hud,.btn,.ov-x{font-weight:700}
+  .tc-room{letter-spacing:.01em;color:#f6dca6}
+  .plq{font-family:'Uncial Antiqua',serif;font-size:21px;letter-spacing:3px;fill:#e9c876;text-anchor:middle}
+  .flame{animation:fl 1.9s ease-in-out infinite}
+  .flame.f2{animation-duration:2.3s;animation-delay:-.7s}.flame.f3{animation-duration:1.6s;animation-delay:-1.1s}.flame.f4{animation-duration:2.1s;animation-delay:-.3s}
+  @keyframes fl{0%,100%{transform:scale(1,1)}30%{transform:scale(.9,1.12)}60%{transform:scale(1.08,.93)}}
+  .glow{animation:gl 3.4s steps(4) infinite}.glow.g2{animation-delay:-1.3s}.glow.g3{animation-delay:-2.2s}
+  @keyframes gl{50%{opacity:.72}}
+  .mote{animation:mote 16s linear infinite}
+  @keyframes mote{0%{transform:translate(0,0);opacity:0}12%{opacity:.7}88%{opacity:.5}100%{transform:translate(-70px,-150px);opacity:0}}
+  #noticeGlow{animation:ng 2.8s ease-in-out infinite}
+  @keyframes ng{0%,100%{opacity:0}50%{opacity:.4}}
+  #octavo{animation:bob 4.2s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-3px)}}
+  #gate{transform-origin:1396px 480px;transition:transform 1.7s cubic-bezier(.5,0,.3,1)}
+  #night,#stars,#shaft{transition:opacity 2.4s}
+  #town circle{transition:opacity 1.2s}
+  #lampGlow{animation:gl 4.1s steps(4) infinite}
+
+  /* the returns shelf: a scale, a trolley, a shelf, a rule */
+  .rs{display:grid;grid-template-columns:400px 650px;gap:24px;padding:20px 24px 16px;color:#f3e6cf;
+    background:#2a171c linear-gradient(165deg,#3b2228,#1e1014);border:1px solid #6b4a3a;box-shadow:0 26px 70px rgba(0,0,0,.72),inset 0 0 0 4px #1a0c10}
+  .rs-plate{position:relative;padding:20px 26px 14px;border:3px solid #6f531a;border-radius:4px;color:#2e2008;
+    background:linear-gradient(135deg,#8a6a26,#e6c873 26%,#b08a35 52%,#f0d98f 76%,#8a6a26);font-family:'EB Garamond',Georgia,serif;font-weight:600;font-size:19.5px;
+    line-height:1.24;text-shadow:0 1px 0 rgba(255,240,190,.65)}
+  .rs-plate h4{margin:0 0 11px;padding-bottom:9px;border-bottom:2px solid rgba(74,54,12,.5);font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700;
+    font-size:16px;letter-spacing:.03em;text-align:center}
+  .rs-plate p{margin:0 0 8px}
+  .rs-plate:before,.rs-plate:after{content:'';position:absolute;top:8px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f7e7ae,#6f531a)}
+  .rs-plate:before{left:8px}.rs-plate:after{right:8px}
+  .rs-plate .w:hover,.rs-ledger .w:hover{color:#7b1f14}
+  .rs-ledger{margin-top:18px;padding:14px 18px 10px;background:#f1e7c9;color:#2a2118;border-left:12px solid #5a2a22;font-family:'IM Fell English',Georgia,serif;
+    font-size:16px;line-height:1.2;box-shadow:0 6px 16px rgba(0,0,0,.45)}
+  .rs-ledger h4{margin:0 0 6px;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:17px;color:#5a2a22}
+  .rs-ledger table{width:100%;border-collapse:collapse}
+  .rs-ledger th{font-family:'Almendra',serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-align:left;color:#7a5a3a;padding:0 8px 2px 0;border-bottom:2px solid #7a5a3a}
+  .rs-ledger td{padding:5px 8px 5px 0;border-bottom:1px solid #c5b48a;vertical-align:top;font-family:'EB Garamond',Georgia,serif;font-size:17px;
+    font-variant-numeric:lining-nums;-webkit-font-feature-settings:'lnum';font-feature-settings:'lnum'}
+  .rs-ledger tr:last-child td{border-bottom:0}
+  .rs-ledger td:first-child{font-family:'IM Fell English',Georgia,serif;font-size:16px;font-style:italic;width:35%}
+  .rs-ledger td:nth-child(2){width:15%}
+  .rs-ledger tr.oct td{font-family:'Caveat',cursive;font-style:normal;font-size:17.5px;line-height:1.02;color:#3d3566}
+  .rs-scale{position:relative;width:650px;height:240px}
+  .rs-scale svg{position:absolute;left:0;top:0;width:650px;height:240px;display:block;overflow:visible}
+  #rsBeam{transform-origin:325px 74px}
+  #rsBeam,#rsPanL,#rsPanR{transition:transform .55s cubic-bezier(.3,1.5,.5,1)}
+  .pan{position:absolute;top:112px;width:176px;height:70px;display:flex;align-items:flex-end;justify-content:center;transition:top .55s cubic-bezier(.3,1.5,.5,1);cursor:pointer}
+  .pan[data-p=L]{left:22px}.pan[data-p=R]{left:452px}
+  .rs-read{height:28px;text-align:center;font-family:'EB Garamond',Georgia,serif;font-size:18.5px;line-height:28px;font-style:italic;color:#f0d9a8;white-space:nowrap}
+  .rs-read b{font-style:normal;font-weight:600;color:#fff1cf}
+  .rs-trolley{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:14px;height:134px;margin:6px 40px 0;padding:0 16px;border-bottom:12px solid #7a5230;
+    box-shadow:0 4px 0 #4a2f1c}
+  .rs-trolley:before,.rs-trolley:after{content:'';position:absolute;bottom:-32px;width:20px;height:20px;border-radius:50%;background:#17120f;box-shadow:inset 0 0 0 5px #17120f,inset 0 0 0 8px #8a7a5a}
+  .rs-trolley:before{left:18px}.rs-trolley:after{right:18px}
+  .rs-lab{position:absolute;font-family:'Almendra',serif;font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#b89a78;opacity:.8;pointer-events:none}
+  .rs-trolley .rs-lab{left:-6px;top:4px}
+  .rs-shelf{position:relative;display:flex;justify-content:center;gap:8px;height:140px;margin:28px 20px 0;align-items:flex-end;
+    border-bottom:12px solid #c9a044;box-shadow:0 4px 0 #7d5f1d;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.22))}
+  .place{width:80px;height:132px;display:flex;align-items:flex-end;justify-content:center;border:1.5px dashed rgba(240,217,143,.34);border-bottom:0;border-radius:3px 3px 0 0;cursor:pointer}
+  .rs-shelf .rs-lab{left:-6px;top:4px}
+  .rs-foot{display:flex;align-items:center;gap:14px;margin-top:12px;min-height:44px}
+  .rs-msg{flex:1;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:18.5px;line-height:1.25;color:#ffd9a0}
+  .bk{position:relative;width:var(--w);height:var(--h);flex:0 0 auto;background:var(--c);color:var(--ink);border-radius:2px 2px 1px 1px;display:flex;align-items:center;justify-content:center;
+    box-shadow:inset 3px 0 0 rgba(255,255,255,.14),inset -4px 0 0 rgba(0,0,0,.24),0 2px 5px rgba(0,0,0,.5);
+    font-family:'Almendra',serif;font-weight:700;font-size:var(--f,13px);line-height:1.06;text-align:center;overflow:hidden}
+  .bk i{position:absolute;left:0;right:0;height:3px;background:rgba(240,217,143,.72);pointer-events:none}
+  .bk i:first-of-type{top:8px}.bk i:last-of-type{bottom:8px}
+  .bk span{-webkit-writing-mode:vertical-rl;writing-mode:vertical-rl;pointer-events:none;white-space:nowrap}
+  .bk[data-id=t]{background-image:radial-gradient(circle at 20% 24%,rgba(255,255,255,.22) 0 2px,transparent 3px),radial-gradient(circle at 70% 60%,rgba(0,0,0,.28) 0 2px,transparent 3px),
+    radial-gradient(circle at 40% 82%,rgba(255,255,255,.16) 0 1.5px,transparent 2.5px);border-radius:1px}
+  .bk[data-id=t] i{display:none}
+  .pan .bk{width:var(--h);height:var(--w)}
+  .pan .bk i{left:auto;right:auto;top:0;bottom:0;width:3px;height:auto}
+  .pan .bk i:first-of-type{left:8px;top:0}.pan .bk i:last-of-type{right:8px;bottom:0}
+  .pan .bk span{-webkit-writing-mode:horizontal-tb;writing-mode:horizontal-tb}
+  .bk.fly{box-shadow:0 14px 26px rgba(0,0,0,.6)}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1722"/><stop offset=".55" stop-color="#442836"/><stop offset="1" stop-color="#34202b"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b2a5e"/><stop offset=".4" stop-color="#7c4275"/><stop offset=".68" stop-color="#dd6b4c"/><stop offset=".84" stop-color="#f7b35c"/><stop offset="1" stop-color="#fbd98a"/></linearGradient>
+  <linearGradient id="caseG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2e190f"/><stop offset=".5" stop-color="#452817"/><stop offset="1" stop-color="#29160d"/></linearGradient>
+  <linearGradient id="oakG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4b2f18"/><stop offset=".5" stop-color="#6e4727"/><stop offset="1" stop-color="#432a15"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5d3920"/><stop offset="1" stop-color="#352010"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a0"/><stop offset=".5" stop-color="#c9a044"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="stoneG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a696e"/><stop offset="1" stop-color="#4f4248"/></linearGradient>
+  <linearGradient id="shaftG" gradientUnits="userSpaceOnUse" x1="0" y1="612" x2="0" y2="900"><stop offset="0" stop-color="#ffb062" stop-opacity=".38"/><stop offset="1" stop-color="#ff9d4a" stop-opacity="0"/></linearGradient>
+  <linearGradient id="stairL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ea2e6" stop-opacity=".42"/><stop offset=".7" stop-color="#8ea2e6" stop-opacity="0"/></linearGradient>
+  <radialGradient id="candG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".85"/><stop offset=".28" stop-color="#ffb04a" stop-opacity=".24"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" gradientUnits="userSpaceOnUse" cx="800" cy="414" r="666" gradientTransform="translate(800 414) scale(4 1) translate(-800 -414)"><stop offset="0" stop-color="#0a0406" stop-opacity="0"/><stop offset=".58" stop-color="#0a0406" stop-opacity=".28"/><stop offset="1" stop-color="#0a0406" stop-opacity=".88"/></radialGradient>
+  <pattern id="rugP" width="84" height="56" patternUnits="userSpaceOnUse"><rect width="84" height="56" fill="#5c1e24"/><path d="M42 6l30 22-30 22-30-22z" fill="#74272c"/><path d="M42 17l15 11-15 11-15-11z" fill="#c9a24a"/><circle cx="0" cy="0" r="5" fill="#2f4a3c"/><circle cx="84" cy="0" r="5" fill="#2f4a3c"/><circle cx="0" cy="56" r="5" fill="#2f4a3c"/><circle cx="84" cy="56" r="5" fill="#2f4a3c"/></pattern>
+  <pattern id="lead" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M0 13L13 0L26 13L13 26Z" fill="none" stroke="#1a1020" stroke-width="1.300" opacity=".5"/></pattern>
+  <pattern id="frieze" width="48" height="26" patternUnits="userSpaceOnUse"><path d="M0 3H48M0 23H48" stroke="#b08a45" stroke-width="1.500"/><path d="M24 7l6 6-6 6-6-6z" fill="#b08a45"/><circle cx="0" cy="13" r="2.200" fill="#b08a45"/><circle cx="48" cy="13" r="2.200" fill="#b08a45"/></pattern>
+  <clipPath id="winClip"><path d="M664 606V292Q664 122 800 106Q936 122 936 292V606Z"/></clipPath>
+  <clipPath id="gateClip"><path d="M1394 704V338Q1394 252 1484 246Q1574 252 1574 338V704Z"/></clipPath>
+</defs>
+
+<!-- walls, floor, rug -->
+<rect x="-1000" width="3600" height="704" fill="url(#wallG)"/>
+<rect x="-1000" y="-500" width="3600" height="560" fill="#12080b"/>
+<g id="beams" fill="#1d0f11"></g>
+<rect x="-1000" y="90" width="3600" height="26" fill="url(#frieze)" opacity=".42"/>
+<rect x="-1000" y="560" width="3600" height="144" fill="#291719"/>
+<g id="panels" fill="none" stroke="#3b2224" stroke-width="3"></g>
+<rect x="-1000" y="554" width="3600" height="9" fill="#4d2f24"/>
+<rect x="-1000" y="704" width="3600" height="700" fill="#2b1912"/>
+<g id="boards" stroke="#190d09" stroke-width="2.500"></g>
+<rect x="-1000" y="700" width="3600" height="8" fill="#140a07"/>
+<path d="M400 746H1200L1583 1200H17Z" fill="url(#rugP)"/><path d="M400 746H1200L1583 1200H17Z" fill="none" stroke="#c9a24a" stroke-width="5"/>
+<path d="M416 756H1184L1553 1200" fill="none" stroke="#2f4a3c" stroke-width="3"/><path d="M416 756L47 1200" fill="none" stroke="#2f4a3c" stroke-width="3"/>
+<path id="shaft" d="M664 612H936L1150 900H470Z" fill="url(#shaftG)"/>
+
+<!-- the tall window, and the last of the day -->
+<g id="window" class="hot">
+  <path d="M640 620V290Q640 96 800 78Q960 96 960 290V620Z" fill="url(#stoneG)"/>
+  <g clip-path="url(#winClip)">
+    <rect x="640" y="80" width="320" height="540" fill="url(#skyG)"/>
+    <path d="M640 520Q700 462 772 498T900 474T980 506V620H640Z" fill="#4a2a52"/>
+    <path d="M640 560Q716 516 800 548T960 536V620H640Z" fill="#26172f"/>
+    <rect id="night" x="640" y="80" width="320" height="540" fill="#12102e" opacity="0"/>
+    <g id="stars" fill="#fff" opacity="0"><circle cx="704" cy="246" r="1.800"/><circle cx="748" cy="300" r="1.300"/><circle cx="716" cy="352" r="1.500"/><circle cx="866" cy="262" r="1.800"/><circle cx="902" cy="330" r="1.300"/><circle cx="842" cy="366" r="1.500"/><circle cx="772" cy="430" r="1.200"/><circle cx="884" cy="420" r="1.200"/></g>
+    <g id="town" fill="#ffd27a"><circle cx="706" cy="574" r="2.400" opacity="0"/><circle cx="726" cy="584" r="2" opacity="0"/><circle cx="752" cy="568" r="2.400" opacity="0"/><circle cx="779" cy="586" r="2" opacity="0"/><circle cx="808" cy="576" r="2.400" opacity="0"/><circle cx="836" cy="586" r="2" opacity="0"/><circle cx="862" cy="572" r="2.400" opacity="0"/><circle cx="889" cy="582" r="2" opacity="0"/><circle cx="914" cy="570" r="2.400" opacity="0"/></g>
+    <rect x="640" y="80" width="320" height="540" fill="url(#lead)"/>
+  </g>
+  <path d="M800 236V606M664 404H936" stroke="#5e4e53" stroke-width="10"/>
+  <path d="M664 292Q668 240 740 232M936 292Q932 240 860 232" stroke="#5e4e53" stroke-width="8" fill="none"/>
+  <circle cx="800" cy="190" r="50" fill="#5e4e53"/><circle cx="800" cy="190" r="40" fill="#7a2f4c"/><circle cx="800" cy="190" r="40" fill="url(#lead)"/>
+  <g transform="translate(800 192)" fill="#f0c95a"><ellipse cx="-2" cy="2" rx="15" ry="11"/><circle cx="12" cy="-7" r="7.500"/><path d="M19-8l9 2-9 3zM-14-2l-12-16 2 20z"/><path d="M-4 12v9M4 12v9" stroke="#f0c95a" stroke-width="2"/></g>
+  <rect x="626" y="606" width="348" height="16" fill="#7a696e"/><rect x="626" y="606" width="348" height="4" fill="#93838a"/>
+  <rect x="648" y="622" width="304" height="26" rx="8" fill="#5a2f3a"/><path d="M660 628h280" stroke="#7a4452" stroke-width="2"/>
+</g>
+
+<!-- bookcases -->
+<g id="shelvesL" class="hot">
+  <rect x="278" y="112" width="334" height="16" fill="#4d2c19"/><rect x="286" y="126" width="318" height="578" fill="url(#caseG)"/><rect x="298" y="140" width="294" height="548" fill="#140a07"/>
+  <g id="booksL"></g>
+  <g fill="#452817"><rect x="298" y="240" width="294" height="10"/><rect x="298" y="344" width="294" height="10"/><rect x="298" y="448" width="294" height="10"/><rect x="298" y="552" width="294" height="10"/><rect x="298" y="656" width="294" height="10"/></g>
+</g>
+<g id="shelvesR" class="hot">
+  <rect x="988" y="112" width="190" height="16" fill="#4d2c19"/><rect x="996" y="126" width="174" height="578" fill="url(#caseG)"/><rect x="1008" y="140" width="150" height="548" fill="#140a07"/>
+  <g id="booksR"></g>
+  <g fill="#452817"><rect x="1008" y="240" width="150" height="10"/><rect x="1008" y="344" width="150" height="10"/><rect x="1008" y="448" width="150" height="10"/><rect x="1008" y="552" width="150" height="10"/><rect x="1008" y="656" width="150" height="10"/></g>
+</g>
+
+<!-- candles on the wall, either side of the window -->
+<g id="sconceL" class="hot">
+  <circle class="glow" cx="622" cy="336" r="150" fill="url(#candG)" pointer-events="none"/>
+  <path d="M612 400q10 14 20 0M622 400v-14" stroke="#17161a" stroke-width="5" fill="none"/><rect x="606" y="380" width="32" height="7" rx="3" fill="#17161a"/>
+  <rect x="616" y="350" width="12" height="32" fill="#efe6cf"/><g class="flame" style="transform-origin:622px 350px"><path d="M622 322q-8 12-8 19a8 8 0 0 0 16 0q0-7-8-19z" fill="#ffd66b"/><path d="M622 333q-3.500 5-3.500 9a3.500 3.500 0 0 0 7 0q0-4-3.500-9z" fill="#fff6d8"/></g>
+</g>
+<g id="sconceR" class="hot">
+  <circle class="glow g2" cx="980" cy="336" r="150" fill="url(#candG)" pointer-events="none"/>
+  <path d="M970 400q10 14 20 0M980 400v-14" stroke="#17161a" stroke-width="5" fill="none"/><rect x="964" y="380" width="32" height="7" rx="3" fill="#17161a"/>
+  <rect x="974" y="350" width="12" height="32" fill="#efe6cf"/><g class="flame f2" style="transform-origin:980px 350px"><path d="M980 322q-8 12-8 19a8 8 0 0 0 16 0q0-7-8-19z" fill="#ffd66b"/><path d="M980 333q-3.500 5-3.500 9a3.500 3.500 0 0 0 7 0q0-4-3.500-9z" fill="#fff6d8"/></g>
+</g>
+
+<!-- the front door, from the inside -->
+<g id="door" class="hot">
+  <path d="M10 704V338Q10 214 110 208Q210 214 210 338V704Z" fill="url(#stoneG)"/>
+  <g stroke="#40343a" stroke-width="2.500" fill="none"><path d="M10 640h20M10 560h20M10 480h20M10 400h20M190 640h20M190 560h20M190 480h20M190 400h20M22 300l16 12M56 240l10 18M110 208v22M164 240l-10 18M198 300l-16 12"/></g>
+  <path d="M30 704V340Q30 234 110 229Q190 234 190 340V704Z" fill="url(#oakG)"/>
+  <path d="M62 250V704M94 233V704M126 233V704M158 250V704" stroke="#3a2412" stroke-width="3"/>
+  <g fill="#17161a"><path d="M30 392h104l12 8-12 8H30zM30 612h104l12 8-12 8H30z"/><rect x="146" y="482" width="34" height="50" rx="4"/></g>
+  <g fill="#3a3942"><circle cx="46" cy="400" r="3.500"/><circle cx="78" cy="400" r="3.500"/><circle cx="110" cy="400" r="3.500"/><circle cx="46" cy="620" r="3.500"/><circle cx="78" cy="620" r="3.500"/><circle cx="110" cy="620" r="3.500"/><circle cx="163" cy="507" r="7"/></g>
+  <path d="M30 700h160" stroke="#0c0605" stroke-width="8"/>
+</g>
+<g id="notice" class="hot" transform="rotate(-2 254 375)">
+  <rect x="222" y="326" width="62" height="96" fill="#1a0e0a" opacity=".5" transform="translate(3 4)"/>
+  <rect x="222" y="326" width="62" height="96" fill="#ead9b0"/>
+  <path d="M230 342h46" stroke="#5a1f16" stroke-width="3.500"/><path d="M230 354h46M230 362h46M230 370h34M230 382h46M230 390h46" stroke="#8a744a" stroke-width="1.700"/>
+  <circle cx="253" cy="408" r="6.500" fill="#a5301f"/><circle cx="253" cy="330" r="2.600" fill="#3a2412"/>
+  <rect id="noticeGlow" x="222" y="326" width="62" height="96" fill="#fff3c9" opacity="0"/>
+</g>
+
+<!-- the short shelf for returns, and its plate -->
+<g id="wallshelf" class="hot">
+  <circle id="lampGlow" cx="1272" cy="314" r="120" fill="url(#candG)" pointer-events="none" opacity=".8"/>
+  <path d="M1272 262v20" stroke="#17161a" stroke-width="4"/><path d="M1258 282h28l6 44h-40z" fill="#ffdc8f" opacity=".92"/><path d="M1254 282h36M1250 326h44" stroke="#17161a" stroke-width="5"/><path d="M1272 282v44" stroke="#17161a" stroke-width="2"/>
+  <rect x="1176" y="364" width="192" height="10" fill="#4d2c19"/><rect x="1182" y="372" width="180" height="104" fill="#1b0e0b"/>
+  <path d="M1224 380v92M1260 380v92M1296 380v92M1332 380v92" stroke="#2e1a14" stroke-width="1.500"/>
+  <g id="shelfBooks" opacity="0"></g>
+  <rect x="1174" y="474" width="196" height="12" fill="url(#brassG)"/><rect x="1174" y="486" width="196" height="4" fill="#6f531a"/>
+  <rect x="1210" y="502" width="124" height="38" rx="3" fill="url(#brassG)"/><rect x="1210" y="502" width="124" height="38" rx="3" fill="none" stroke="#6f531a" stroke-width="2"/>
+  <path d="M1222 514h100M1222 521h100M1222 528h66" stroke="#6f531a" stroke-width="1.700"/>
+</g>
+
+<!-- the stairs, and the gate across them -->
+<g id="gateway" class="hot">
+  <path d="M1372 704V334Q1372 230 1484 224Q1596 230 1596 334V704Z" fill="url(#stoneG)"/>
+  <g stroke="#40343a" stroke-width="2.500" fill="none"><path d="M1372 640h22M1372 560h22M1372 480h22M1372 400h22M1574 640h22M1574 560h22M1574 480h22M1574 400h22M1386 296l16 12M1424 244l10 18M1484 224v22M1544 244l-10 18M1582 296l-16 12"/></g>
+  <path d="M1394 704V338Q1394 252 1484 246Q1574 252 1574 338V704Z" fill="#0a0813"/>
+  <g clip-path="url(#gateClip)"><g id="steps"></g><rect x="1394" y="240" width="180" height="470" fill="url(#stairL)"/></g>
+  <g id="gate"><g clip-path="url(#gateClip)"><g id="bars" stroke="#15141a" stroke-width="5.500" fill="none"></g></g></g>
+</g>
+
+<!-- the good chair -->
+<g id="chair" class="hot">
+  <ellipse cx="152" cy="838" rx="124" ry="12" fill="#000" opacity=".42"/>
+  <rect x="74" y="800" width="14" height="36" fill="#2b170f"/><rect x="216" y="800" width="14" height="36" fill="#2b170f"/>
+  <path d="M66 808V612Q66 548 150 544Q234 548 234 612V808Z" fill="#2a5343"/>
+  <path d="M86 724V618Q86 572 150 568Q214 572 214 618V724Z" fill="#366853"/>
+  <g fill="#234638"><circle cx="118" cy="612" r="4"/><circle cx="150" cy="602" r="4"/><circle cx="182" cy="612" r="4"/><circle cx="134" cy="652" r="4"/><circle cx="166" cy="652" r="4"/></g>
+  <rect x="50" y="690" width="42" height="120" rx="19" fill="#2a5343"/><rect x="208" y="690" width="42" height="120" rx="19" fill="#2a5343"/>
+  <rect x="88" y="716" width="124" height="36" rx="11" fill="#3e7862"/><rect x="84" y="750" width="132" height="58" fill="#2a5343"/>
+  <path d="M112 720l30-10 30 10-30 7z" fill="#7a2f2a"/><path d="M142 710v17" stroke="#4a1a17" stroke-width="2"/>
+  <path d="M190 694q30-10 60 4l6 96q-34 14-68 0z" fill="#b98a3a"/><path d="M194 720q28 8 58 0M192 752q30 8 62 0" stroke="#8c6424" stroke-width="3" fill="none"/>
+  <path d="M190 794v12M200 797v12M210 799v12M220 800v12M230 799v12M240 797v12M250 794v12" stroke="#b98a3a" stroke-width="3"/>
+</g>
+<g id="sidetable" class="hot">
+  <circle class="glow g3" cx="300" cy="650" r="120" fill="url(#candG)" pointer-events="none"/>
+  <path d="M272 832q28-22 56 0z" fill="#352010"/><rect x="295" y="716" width="10" height="104" fill="#352010"/><ellipse cx="300" cy="712" rx="44" ry="9" fill="#5d3920"/><ellipse cx="300" cy="709" rx="44" ry="8" fill="#75492a"/>
+  <ellipse cx="300" cy="706" rx="16" ry="4" fill="url(#brassG)"/><rect x="294" y="664" width="12" height="42" fill="#efe6cf"/>
+  <g class="flame f3" style="transform-origin:300px 664px"><path d="M300 638q-8 12-8 19a8 8 0 0 0 16 0q0-7-8-19z" fill="#ffd66b"/><path d="M300 648q-3.500 5-3.500 9a3.500 3.500 0 0 0 7 0q0-4-3.500-9z" fill="#fff6d8"/></g>
+</g>
+
+<!-- the returns desk -->
+<g id="desk">
+  <ellipse cx="590" cy="834" rx="250" ry="12" fill="#000" opacity=".4"/>
+  <rect x="368" y="676" width="444" height="154" fill="url(#deskG)"/>
+  <g fill="none" stroke="#2a180c" stroke-width="3"><rect x="384" y="692" width="124" height="122"/><rect x="672" y="692" width="124" height="122"/></g>
+  <rect x="520" y="700" width="140" height="44" rx="3" fill="#2a180c"/><rect x="524" y="704" width="132" height="36" rx="2" fill="none" stroke="#c9a044" stroke-width="1.500"/>
+  <text x="590" y="730" class="plq">RETURNS</text>
+  <path d="M356 650H824L838 678H342Z" fill="#7a4a29"/><path d="M356 650H824" stroke="#96623a" stroke-width="3"/>
+</g>
+<g id="ledger" class="hot">
+  <path d="M392 646l6-22 42 3 42-3 6 22z" fill="#5a2a22"/><path d="M398 640l4-16 38 3v16zM482 640l-4-16-38 3v16z" fill="#f1e7c9"/>
+  <path d="M406 630l28 2M406 636l28 2M446 632l28-2M446 638l28-2" stroke="#8a744a" stroke-width="1.500"/><path d="M440 627v19l5-4 5 4" fill="#a5301f"/>
+</g>
+<g id="inkpot" class="hot">
+  <path d="M690 650v-14q0-6 12-6t12 6v14z" fill="#1b2440"/><rect x="694" y="624" width="16" height="7" rx="2" fill="#2a3660"/>
+  <path d="M703 628Q690 586 668 560q4 26 26 66z" fill="#f4efe2"/><path d="M703 628Q692 594 670 562" stroke="#b9b2a0" stroke-width="1.500" fill="none"/>
+</g>
+<g id="candle" class="hot">
+  <circle class="glow g2" cx="752" cy="578" r="130" fill="url(#candG)" pointer-events="none"/>
+  <ellipse cx="752" cy="649" rx="22" ry="5" fill="url(#brassG)"/><path d="M740 648q12-10 24 0" fill="url(#brassG)"/><rect x="745" y="594" width="14" height="52" fill="#efe6cf"/><path d="M745 600q-5 10 0 20" stroke="#efe6cf" stroke-width="4" fill="none"/>
+  <g class="flame f4" style="transform-origin:752px 594px"><path d="M752 566q-9 13-9 20a9 9 0 0 0 18 0q0-7-9-20z" fill="#ffd66b"/><path d="M752 577q-4 6-4 10a4 4 0 0 0 8 0q0-4-4-10z" fill="#fff6d8"/></g>
+</g>
+<g id="scale" class="hot">
+  <ellipse cx="590" cy="649" rx="50" ry="7" fill="url(#brassG)"/><path d="M566 648q24-16 48 0z" fill="url(#brassG)"/>
+  <rect x="585" y="506" width="10" height="138" fill="url(#brassG)"/>
+  <g transform="rotate(-4 590 516)"><rect x="492" y="512" width="196" height="8" rx="4" fill="url(#brassG)"/>
+    <path d="M498 516L474 592M498 516L522 592M682 516L658 592M682 516L706 592" stroke="#b8923a" stroke-width="2"/>
+    <path d="M466 592H530Q498 612 466 592ZM650 592H714Q682 612 650 592Z" fill="url(#brassG)"/><path d="M466 592H530M650 592H714" stroke="#f7e3a0" stroke-width="2.500"/></g>
+  <circle cx="590" cy="516" r="9" fill="#7d5f1d"/><circle cx="590" cy="516" r="4.500" fill="#f7e3a0"/>
+  <ellipse cx="590" cy="503" rx="22" ry="5" fill="url(#brassG)"/>
+</g>
+<g id="octavo" class="hot"><use href="#ch-octavo" x="545" y="386" width="90" height="117"/></g>
+
+<!-- the returns trolley -->
+<g id="trolley" class="hot">
+  <ellipse cx="1010" cy="836" rx="150" ry="10" fill="#000" opacity=".4"/>
+  <rect x="892" y="716" width="10" height="100" fill="#4a2f1c"/><rect x="1118" y="716" width="10" height="100" fill="#4a2f1c"/>
+  <rect x="892" y="772" width="236" height="10" fill="#6b4628"/>
+  <path d="M930 772v-12h70v12zM938 760v-10h54v10z" fill="#3d2f52"/><path d="M930 766h70M938 755h54" stroke="#c9a24a" stroke-width="1.500"/>
+  <g id="trolleyBooks"></g>
+  <rect x="884" y="706" width="252" height="14" fill="#7a5230"/><rect x="884" y="706" width="252" height="4" fill="#9a6a40"/>
+  <circle cx="906" cy="822" r="13" fill="#17120f"/><circle cx="906" cy="822" r="5" fill="#8a7a5a"/><circle cx="1114" cy="822" r="13" fill="#17120f"/><circle cx="1114" cy="822" r="5" fill="#8a7a5a"/>
+  <path d="M1132 710V664h20" stroke="#4a2f1c" stroke-width="7" fill="none" stroke-linecap="round"/>
+</g>
+
+<g id="motes" fill="#ffd9a0" pointer-events="none"></g>
+<rect x="-1000" y="-500" width="3600" height="1900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, talked = false, solved = false, lightT = 0, windT = 0;
+  var BOOKS = {
+    p: { t: 'Poems of<br>One Line', n: 'Poems of One Line', w: 60, h: 94, f: 14, c: '#8fa6bd', ink: '#17243a' },
+    e: { t: 'How to<br>Be Early', n: 'How to Be Early', w: 27, h: 88, f: 11, c: '#c99a2e', ink: '#33240a' },
+    a: { t: 'Atlas of the<br>Flat Sea', n: 'Atlas of the Flat Sea', w: 40, h: 126, f: 13, c: '#2a6a66', ink: '#f3e3b0' },
+    s: { t: 'Soup:<br>A History', n: 'Soup: A History', w: 46, h: 100, f: 13, c: '#a4372c', ink: '#f8e6c2' },
+    t: { t: 'Stones I<br>Have Known', n: 'Stones I Have Known', w: 30, h: 72, f: 11, c: '#77726a', ink: '#f4efe4' }
+  };
+  var START = ['s', 'a', 't', 'p', 'e'], where = { p: 'home', e: 'home', a: 'home', s: 'home', t: 'home' };
+
+  /* what the room is built from */
+  (function () {
+    var s = '', x, i, k, cols = ['#6e2a24', '#2f4a3c', '#27405a', '#7a5a22', '#4a2b4e', '#5a3a22', '#8a3b2a', '#33533f', '#1f3350', '#6b5a3a', '#3b3050'];
+    for (x = -980; x < 2600; x += 200) s += '<rect x="' + x + '" y="60" width="26" height="24"/>';
+    $('#beams').innerHTML = s; s = '';
+    for (x = -976; x < 2600; x += 164) s += '<rect x="' + (x + 12) + '" y="578" width="140" height="108"/>';
+    $('#panels').innerHTML = s; s = '';
+    [736, 778, 834].forEach(function (y) { s += '<path d="M-1000 ' + y + 'H2600"/>'; });
+    for (k = -12; k <= 12; k++) s += '<path d="M' + (800 + k * 104) + ' 704L' + (800 + k * 240) + ' 1096"/>';
+    $('#boards').innerHTML = s; s = '';
+    [240, 344, 448, 552, 656].forEach(function (y, n) { s += LIB.books({ x: 302, y: y, w: 288, h: 88, seed: 11 + n * 7, cols: cols }); });
+    $('#booksL').innerHTML = s; s = '';
+    [240, 344, 448, 552, 656].forEach(function (y, n) { s += LIB.books({ x: 1012, y: y, w: 144, h: 88, seed: 53 + n * 5, cols: cols }); });
+    $('#booksR').innerHTML = s; s = '';
+    for (i = 0; i < 8; i++) s += '<rect x="' + (1394 + i * 23) + '" y="' + (704 - (i + 1) * 40) + '" width="200" height="' + ((i + 1) * 40) + '" fill="#' + ['1b1a2c', '201f33', '25243a', '2a2942', '2f2e49', '353451', '3a3958', '403f60'][i] + '"/>' +
+      '<rect x="' + (1394 + i * 23) + '" y="' + (704 - (i + 1) * 40) + '" width="200" height="4" fill="#5b5a80" opacity=".7"/>';
+    $('#steps').innerHTML = s; s = '';
+    for (x = 1404; x < 1574; x += 20) s += '<path d="M' + x + ' 240V704"/>';
+    s += '<path d="M1394 330H1574M1394 452H1574M1394 664H1574"/>';
+    for (x = 1414; x < 1570; x += 40) s += '<circle cx="' + x + '" cy="391" r="10"/><circle cx="' + (x + 20) + '" cy="558" r="10"/>';
+    $('#bars').innerHTML = s; s = '';
+    var r = LIB.rng(7);
+    for (i = 0; i < 16; i++) s += '<circle class="mote" cx="' + Math.round(560 + r() * 560) + '" cy="' + Math.round(420 + r() * 420) + '" r="' + (1 + r() * 1.3).toFixed(1) +
+      '" style="animation-duration:' + (11 + r() * 12).toFixed(1) + 's;animation-delay:-' + (r() * 16).toFixed(1) + 's"/>';
+    $('#motes').innerHTML = s;
+    s = ''; x = 912;
+    START.forEach(function (id) { s += spine(id, x, 706, 0.72); x += BOOKS[id].w * 0.72 + 12; });
+    $('#trolleyBooks').innerHTML = s;
+  })();
+  /* one of the five returns, drawn small: on the trolley at first, on the shelf by the gate at the end */
+  function spine(id, x, base, k) {
+    var b = BOOKS[id], w = b.w * k, h = b.h * k;
+    return '<rect x="' + x.toFixed(1) + '" y="' + (base - h).toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" fill="' + b.c + '"/>' +
+      '<rect x="' + x.toFixed(1) + '" y="' + (base - h).toFixed(1) + '" width="2.5" height="' + h.toFixed(1) + '" fill="#fff" opacity=".14"/>' +
+      (id === 't' ? '' : '<path d="M' + x.toFixed(1) + ' ' + (base - h + 7 * k + 2).toFixed(1) + 'h' + w.toFixed(1) + 'M' + x.toFixed(1) + ' ' + (base - 7 * k - 2).toFixed(1) + 'h' + w.toFixed(1) + '" stroke="#f0d98f" stroke-width="2" opacity=".75"/>');
+  }
+  function shelve(ids) {
+    $('#shelfBooks').innerHTML = ids.map(function (id, n) { return spine(id, 1206 + n * 36 - BOOKS[id].w * 0.28, 474, 0.56); }).join('');
+    $('#trolleyBooks').setAttribute('opacity', 0); $('#shelfBooks').setAttribute('opacity', 1);
+  }
+
+  ER.init({
+    theme: 'fantasy', story: 'library', storyTitle: 'The Library That Locks at Dusk', id: 'reading', no: 'I', title: 'The Reading Room',
+    go: 'Wake up',
+    intro: [
+      'Everybody in Marrowby knows two things about the library on the hill. It is free. And it locks at dusk.',
+      'Nobody locks it. It locks itself, as it has done every evening for three hundred years, and it does not look to see who is still inside.',
+      'You came up the hill at five with a book for your aunt. The book is called <em>How to Be Early</em>, and it is eleven years late. The librarian was not at her desk, so you put it on the trolley, sat down in the good chair, and read one page of something else.',
+      'It was a long page.'
+    ],
+    exit: {"next":"landing","w":{"00aa2555":"db7a6dcb"}}, tags: {"hv":["dac3ee2d","13a3872b","edb5ed91","347d3d00","8f156f2a","0e84d7eb","98a73a6c","9c3d739f","06a17d81","04108a54"],"s1":["dfd817b1"],"s2":["ed7255ea"],"s3":["b35ad388"],"s4":["87439090"],"s5":["f47686b5"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var NOTICE = '<h4>Marrowby Free Library</h4>' +
+    '<p>Founded by Dame Edda Wren</p>' +
+    '<p>Open from dawn.</p>' +
+    '<p class="big">This library locks at dusk.</p>' +
+    '<p>It locks itself. It does not look to see who is inside.</p>' +
+    '<p>Returns go on the trolley.</p>' +
+    '<p>Every book here is free, if you bring it back.</p>' +
+    '<span class="seal">W</span>';
+  var LEDGER = '<h4>Returns &middot; today</h4><table>' +
+    '<tr><th>Book</th><th>Printed</th><th>Note</th></tr>' +
+    '<tr><td>Atlas of the Flat Sea</td><td>1502</td><td>From a ship&rsquo;s captain. He says it is wrong.</td></tr>' +
+    '<tr><td>Poems of One Line</td><td>1688</td><td>One line on every page. The rest is air.</td></tr>' +
+    '<tr><td>Soup: A History</td><td>1377</td><td>Stains on pages 12 to 90.</td></tr>' +
+    '<tr><td>Stones I Have Known</td><td>1450</td><td>The covers are real stone. Mind your feet.</td></tr>' +
+    '<tr class="oct"><td>How to Be Early</td><td>1611</td><td>Eleven years late. Written in after dusk, by Octavo.</td></tr>' +
+    '</table>';
+  var RULE = '<h4>The Founder&rsquo;s Rule for Returns</h4>' +
+    '<p>The lightest book stands at the left end.</p>' +
+    '<p>The heaviest book stands at the right end.</p>' +
+    '<p>The tallest book stands in the middle.</p>' +
+    '<p>Two books are left. The older one stands next to the heaviest.</p>' +
+    '<p>No book is weighed by eye.</p>';
+
+  function hints() {
+    if (solved) return null;
+    if (!talked) return ['octavo', [
+      'Somebody small is sitting on top of the scale, on the returns desk. Click on him.',
+      'Keep clicking Next until he has finished. He knows what keeps the stair gate shut.'
+    ]];
+    return ['shelf', [
+      'Click on the trolley. The brass plate has a rule with four lines, and each line tells you where a book stands. Read it one line at a time.',
+      'You cannot see how heavy a book is. Drag one book onto each side of the scale. The side that goes down is heavier. Keep the heavier book there and try the others against it, until nothing is heavier. Find the lightest in the same way.',
+      'The scale gives you the lightest and the heaviest. Your eyes give you the tallest. For the last two books, look at the years in the returns book: the older book has the smaller number. Put all five on the shelf, then try the gate.'
+    ]];
+  }
+  function pips() { ER.pips((talked ? 1 : 0) + (solved ? 1 : 0), 2); }
+  function begin() {
+    pips();
+    LIB.snd.bigBell();
+    setTimeout(ER.sfx.clunk, 1700);
+    [2500, 2950, 3350, 3700, 4000].forEach(function (t, i) { setTimeout(function () { ER.sfx.tock(0.55 - i * 0.09); }, t); });
+    var lamps = ER.$$('#town circle'), n = 0;
+    lightT = setInterval(function () {
+      if (n >= 12) { clearInterval(lightT); return; }
+      n++;
+      $('#night').style.opacity = (0.66 * n / 12).toFixed(2); $('#stars').style.opacity = (n / 12).toFixed(2); $('#shaft').style.opacity = (1 - n / 12).toFixed(2);
+      if (n > 2 && n < 12) lamps[[4, 1, 7, 2, 5, 0, 8, 3, 6][n - 3]].style.opacity = 1;
+    }, 5000);
+    windT = setInterval(function () { if (!busy) LIB.snd.wind(); }, 17000);
+    ER.narrate([
+      'High above you, a bell rings once. The front door goes <em>clunk</em>. Then every other door in the building does the same, one after another.',
+      'Outside the tall window, the sky is going from orange to purple.',
+      'On the returns desk, something small folds its wings and looks at you over its glasses.'
+    ]);
+  }
+
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#door', 'hinge', 'No handle on this side, and no keyhole. Somebody thought about this door for a long time.');
+  thing('#window', 'dusk', 'The sun has gone behind the hills. Down in Marrowby, people are lighting their lamps. One of those lamps is your aunt&rsquo;s.');
+  thing('#chair', 'armchair', 'The good chair. All of this is the chair&rsquo;s fault.');
+  thing('#shelvesL', 'spine', 'Eleven thousand books. You came to bring one back, and read one page of another.');
+  thing('#shelvesR', 'spine', 'More books. Every one of them has been back on time, at least once.');
+  thing('#sconceL', 'candle', null);
+  thing('#sconceR', 'candle', null);
+  thing('#sidetable', 'candlestick', 'Your candle. It was a lot longer when you sat down.');
+  thing('#candle', 'candlestick', null);
+  thing('#inkpot', 'quill', 'A pen made from a feather, and a pot of ink. Somebody with very small feet has walked through the ink.');
+  $('#gateway').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'gate');
+    ER.say('An iron gate across the stairs. It has no lock and no keyhole. Beside it there is a short shelf with a brass plate.');
+  });
+  $('#notice').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: NOTICE, cls: 'vellum', clue: { id: 'notice', title: 'Notice by the front door', kind: 'Notice' } });
+  });
+  $('#ledger').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LEDGER, cls: 'ledger', clue: { id: 'ledger', title: 'The returns book', kind: 'Library book' } });
+  });
+  $('#octavo').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.octavo;
+    LIB.snd.flutter();
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('octavo'), last: 'Look at the trolley',
+      lines: [
+        'Good evening. You are still here. People usually are not.',
+        'My name is Octavo. I am the night librarian. I start work at dusk, when the doors lock. Yes, I am a moth. You get used to it. I did.',
+        { q: 'How do I get out?', a: 'You don&rsquo;t. The doors open at dawn, and dawn is eleven hours away. The chair is very good, they tell me.' },
+        { q: 'Is there no other way?', a: 'There is the Dome, at the top of the stairs. The Founder kept the workings of every lock up there. I have never touched them. I am lighter than a bookmark.' },
+        'The stairs are behind that iron gate. The gate stays shut while there are books on the returns trolley. That was the Founder&rsquo;s idea. She wanted tidy librarians.',
+        'So: five books, one shelf. Her rule is on the brass plate under the shelf, and the scale is on my desk. I would do it myself, but the smallest of those books is forty times heavier than I am.'
+      ],
+      clue: { id: 'octavo1', title: 'Octavo, in the Reading Room' },
+      done: function (seen) {
+        if (!seen || talked) return;
+        talked = true; pips();
+        ER.say('Five books on the trolley. One short shelf beside the gate. One brass scale.');
+      }
+    });
+  });
+  function tryOpen(e, word, line) {
+    if (busy) return;
+    if (!talked) { ER.wordAt(e.clientX, e.clientY, word); ER.say(line); return; }
+    openShelf();
+  }
+  $('#trolley').addEventListener('click', function (e) { tryOpen(e, 'trolley', 'The returns trolley. Five books came back today. The thin yellow one is your aunt&rsquo;s.'); });
+  $('#scale').addEventListener('click', function (e) { tryOpen(e, 'scale', 'A brass scale. A moth is sitting on top of it. The moth is wearing glasses.'); });
+  $('#wallshelf').addEventListener('click', function (e) { tryOpen(e, 'brass', 'A short shelf with room for five books, and a brass plate under it. The writing on the plate is very small.'); });
+
+  /* ---------- the returns shelf ---------- */
+  function openShelf() {
+    var box = ER.el('div', 'rs'), s;
+    s = '<div class="rs-left"><div class="rs-plate">' + ER.gloss(RULE) + '</div><div class="rs-ledger">' + ER.gloss(LEDGER) + '</div></div>' +
+      '<div class="rs-right"><div class="rs-scale"><svg viewBox="0 0 650 240"><defs>' +
+      '<linearGradient id="rsB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a0"/><stop offset=".5" stop-color="#c9a044"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient></defs>' +
+      '<path d="M262 226h126l-16-16h-94z" fill="url(#rsB)"/><rect x="250" y="224" width="150" height="9" rx="3" fill="#7d5f1d"/>' +
+      '<rect x="319" y="74" width="12" height="140" fill="url(#rsB)"/>' +
+      '<g id="rsPanL"><path d="M110 76L34 184M110 76L186 184" stroke="#b8923a" stroke-width="2.500"/><path d="M22 182H198Q110 216 22 182Z" fill="url(#rsB)"/><path d="M22 182H198" stroke="#f7e3a0" stroke-width="3.500" stroke-linecap="round"/></g>' +
+      '<g id="rsPanR"><path d="M540 76L464 184M540 76L616 184" stroke="#b8923a" stroke-width="2.500"/><path d="M452 182H628Q540 216 452 182Z" fill="url(#rsB)"/><path d="M452 182H628" stroke="#f7e3a0" stroke-width="3.500" stroke-linecap="round"/></g>' +
+      '<g id="rsBeam"><rect x="102" y="69.500" width="446" height="9" rx="4.500" fill="url(#rsB)"/><circle cx="110" cy="74" r="7" fill="#7d5f1d"/><circle cx="540" cy="74" r="7" fill="#7d5f1d"/></g>' +
+      '<circle cx="325" cy="74" r="12" fill="#7d5f1d"/><circle cx="325" cy="74" r="6" fill="#f7e3a0"/><ellipse cx="325" cy="60" rx="20" ry="4.500" fill="url(#rsB)"/>' +
+      '<use href="#ch-octavo" x="299" y="-9" width="52" height="68"/></svg>' +
+      '<div class="pan" data-p="L"></div><div class="pan" data-p="R"></div></div><div class="rs-read"></div>' +
+      '<div class="rs-trolley"><span class="rs-lab">trolley</span></div>' +
+      '<div class="rs-shelf"><span class="rs-lab">shelf</span><div class="place"></div><div class="place"></div><div class="place"></div><div class="place"></div><div class="place"></div></div>' +
+      '<div class="rs-foot"><div class="rs-msg"></div><button type="button" class="btn">Try the gate</button></div></div>';
+    box.innerHTML = s;
+    var tray = box.querySelector('.rs-trolley'), pans = ER.$$('.pan', box), places = ER.$$('.place', box), read = box.querySelector('.rs-read'), msg = box.querySelector('.rs-msg');
+    START.forEach(function (id) {
+      var b = BOOKS[id], n = ER.el('div', 'bk dnd-item', (id === 't' ? '' : '<i></i>') + '<span>' + b.t + '</span>' + (id === 't' ? '' : '<i></i>')), at = where[id];
+      n.setAttribute('data-id', id);
+      n.style.setProperty('--w', b.w + 'px'); n.style.setProperty('--h', b.h + 'px'); n.style.setProperty('--c', b.c); n.style.setProperty('--ink', b.ink); n.style.setProperty('--f', b.f + 'px');
+      (at === 'L' ? pans[0] : at === 'R' ? pans[1] : at === 'home' ? tray : places[+at]).appendChild(n);
+    });
+    function idIn(n) { var b = n.querySelector('.bk'); return b ? b.getAttribute('data-id') : ''; }
+    function weigh(quiet) {
+      var l = idIn(pans[0]), r = idIn(pans[1]), d = 0;
+      if (l && r) d = ER.check('hv', l + '>' + r) ? 1 : -1; else if (l) d = 1; else if (r) d = -1;
+      box.querySelector('#rsBeam').style.transform = 'rotate(' + (-6.5 * d) + 'deg)';
+      box.querySelector('#rsPanL').style.transform = 'translateY(' + (24 * d) + 'px)';
+      box.querySelector('#rsPanR').style.transform = 'translateY(' + (-24 * d) + 'px)';
+      pans[0].style.top = (112 + 24 * d) + 'px'; pans[1].style.top = (112 - 24 * d) + 'px';
+      if (l && r) {
+        read.innerHTML = d > 0 ? '<b>' + BOOKS[l].n + '</b> goes down. It is heavier than <b>' + BOOKS[r].n + '</b>.'
+          : '<b>' + BOOKS[l].n + '</b> goes up. It is lighter than <b>' + BOOKS[r].n + '</b>.';
+        if (!quiet) setTimeout(LIB.snd.thud, 240);
+      } else if (l || r) read.textContent = 'One book, and nothing on the other side. That tells you very little.';
+      else read.textContent = 'Put one book on each side of the scale.';
+    }
+    function remember() {
+      ER.$$('.bk', box).forEach(function (b) {
+        var p = b.parentNode, id = b.getAttribute('data-id');
+        where[id] = p === pans[0] ? 'L' : p === pans[1] ? 'R' : p === tray ? 'home' : String(places.indexOf(p));
+      });
+    }
+    ER.dnd(box, { item: '.bk', slot: '.pan, .place', home: tray, lock: function () { return solved; },
+      change: function () { remember(); weigh(); msg.textContent = ''; LIB.snd.book(); } });
+    weigh(true);
+
+    box.querySelector('.btn').addEventListener('click', function () {
+      if (solved) return;
+      var ids = places.map(idIn);
+      if (ids.indexOf('') >= 0) {
+        msg.textContent = 'The gate does not move. There are still books off the shelf.';
+        ER.sfx.chain(); ER.shake(box.querySelector('.rs-shelf')); return;
+      }
+      if (ER.exit([ids.join('-')], { delay: 6200 })) {
+        solved = true; busy = true; pips(); clearInterval(windT);
+        msg.style.color = '#b9e6b0'; msg.textContent = 'Somewhere inside the wall, something heavy drops.';
+        LIB.snd.thud(1.4);
+        setTimeout(function () {
+          ER.closeAll();
+          shelve(ids);
+          $('#gate').style.transform = 'scaleX(.07)'; ER.sfx.creak();
+          ER.say('The iron gate swings open by itself. &ldquo;After you,&rdquo; says Octavo. &ldquo;I have always wanted to see up there.&rdquo;', 4400);
+        }, 1700);
+        return;
+      }
+      ER.sfx.chain(); ER.shake(box.querySelector('.rs-shelf'));
+      msg.innerHTML = ER.gloss(!ER.check('s1', ids[0]) ? 'The gate rattles and stays shut. &ldquo;Line one,&rdquo; says Octavo. &ldquo;The lightest. Did you weigh them, or did you only look at them?&rdquo;'
+        : !ER.check('s5', ids[4]) ? 'The gate rattles and stays shut. &ldquo;Line two,&rdquo; says Octavo. &ldquo;The heaviest goes at the right end. It is not always the biggest.&rdquo;'
+        : !ER.check('s3', ids[2]) ? 'The gate rattles and stays shut. &ldquo;Line three,&rdquo; says Octavo. &ldquo;The tallest. That one you may do by eye.&rdquo;'
+        : 'The gate rattles and stays shut. &ldquo;The last two,&rdquo; says Octavo. &ldquo;Which is older? The years are in the returns book. A small number is a long time ago.&rdquo;');
+    });
+    ER.addClue('rule', 'The Founder’s rule for returns', RULE, 'brass', 'Brass plate', true);
+    ER.addClue('ledger', 'The returns book', LEDGER, 'ledger', 'Library book', true);
+    ER.open('ov-lock', box);
+  }
+})();
+</script>
+</body>
+</html>

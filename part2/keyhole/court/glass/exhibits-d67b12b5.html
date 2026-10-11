@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Advocates’ Room · A Quarter Past Four</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-court.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="glass.css">
+<style>
+  body{--bg:#0c110d;--accent:#e7c477;--font-display:'Cormorant Garamond',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(10,15,11,.97);--tc-ink:#efe9d8;--cap-bg:rgba(10,15,11,.93);--panel:#141a15;--face-bg:#3a4a44;--q-ink:#c9d6c2;--fade:#060906;--hud-bg:rgba(10,15,11,.8)}
+  #pool{animation:pool 4.3s steps(1,end) infinite}
+  @keyframes pool{0%{opacity:1}55%{opacity:.93}}
+  #page.ready{animation:nudge 1.7s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+  .drip{animation:drip 2.8s ease-in infinite;opacity:0}
+  .drip.d2{animation-delay:-1.3s}
+  @keyframes drip{0%{transform:translateY(0);opacity:0}12%{opacity:.8}80%{opacity:.8}100%{transform:translateY(150px);opacity:0}}
+
+  /* the photograph, to be looked at closely */
+  .ph{width:min(1060px,96vw);display:grid;grid-template-columns:minmax(0,720px) minmax(0,1fr);gap:22px;align-items:start}
+  .ph-print{background:#f4f1e8;padding:14px 14px 10px;box-shadow:0 26px 70px rgba(0,0,0,.7);transform:rotate(-.6deg)}
+  .ph-print svg{display:block;width:100%;height:auto}
+  .ph-print p{margin:8px 2px 0;display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;font-size:14.5px;color:#22211c}
+  .ph-spot{cursor:pointer;fill:#fff;fill-opacity:0;stroke:#fff;stroke-opacity:0;stroke-width:3;stroke-dasharray:7 6}
+  .ph-spot:hover{stroke-opacity:.8}
+  .ph-spot.got{stroke:#e7c477;stroke-opacity:.9;stroke-dasharray:none;stroke-width:2.500}
+  .ph-side h6{margin:0 0 10px;font-family:'Oswald',sans-serif;font-weight:400;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#c9d6c2}
+  .ph-side ol{margin:0;padding:0;list-style:none;counter-reset:n}
+  .ph-side li{counter-increment:n;position:relative;min-height:46px;margin:0 0 8px;padding:8px 12px 7px 44px;background:rgba(244,241,232,.08);border-left:3px solid rgba(231,196,119,.35);font-family:'EB Garamond',serif;font-size:17.5px;line-height:1.28;color:#f1ecdf}
+  .ph-side li:before{content:counter(n);position:absolute;left:12px;top:8px;width:22px;height:22px;border-radius:50%;border:1.5px solid #e7c477;color:#e7c477;font-family:'Oswald',sans-serif;font-size:12px;line-height:20px;text-align:center}
+  .ph-side li.no{color:rgba(241,236,223,.4);font-style:italic}
+  .ph-side li.got{border-left-color:#e7c477}
+
+  /* Ms Nair's page, and three stamps */
+  .sp{width:min(1120px,96vw);display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:26px;align-items:start}
+  .sp-page{background:#fbf8ec;color:#1c1d22;padding:20px 30px 18px 58px;font-family:'Tinos','Times New Roman',serif;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 42px 0 0 #fbf8ec,inset 44px 0 0 rgba(212,87,124,.6);transform:rotate(-.4deg)}
+  .sp-page h4{margin:0;font-family:'Tinos',serif;font-weight:700;font-size:19px;letter-spacing:.05em}
+  .sp-page h5{margin:2px 0 12px;font-family:'Caveat',cursive;font-weight:700;font-size:21px;line-height:1.1;color:#39507e;border-bottom:1px solid #1c1d22;padding-bottom:9px}
+  .sp-line{padding:3px 0 3px 30px;text-indent:-30px;border-bottom:1px dotted #9b9685;font-size:19px;line-height:48px}
+  .sp-line>b{display:inline-block;width:30px;text-indent:0;font-family:'Oswald',sans-serif;font-weight:500;font-size:14px;color:#8f2947}
+  .sp-slot{position:relative;display:inline-grid;vertical-align:middle;width:196px;height:42px;margin:0 9px;text-indent:0;line-height:1.25;border:2px dashed #9aa3b0;border-radius:3px;place-items:center;cursor:pointer;background:rgba(40,60,120,.05)}
+  .sp-slot:hover{border-color:#d4577c}
+  .sp-slot i{font-style:normal;font-family:'Stardos Stencil',serif;font-weight:700;font-size:20px;letter-spacing:.06em;padding:1px 8px 0;border:3px solid;border-radius:3px;line-height:1.25;white-space:nowrap}
+  .sp-slot i.must{color:#a01f30}.sp-slot i.might{color:#2f5f8f}.sp-slot i.cannot{color:#1c1d22}
+  .sp-slot.hit i{animation:thud .22s}
+  @keyframes thud{0%{transform:scale(1.5);opacity:.3}100%{transform:scale(1);opacity:1}}
+  .sp-box{background:#6b4a2a linear-gradient(160deg,#86603a,#58391d);padding:14px 14px 16px;border-radius:5px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .sp-box h6{margin:0 0 10px;font-family:'Oswald',sans-serif;font-weight:400;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#f0d98f}
+  .sp-stamps{display:grid;gap:8px}
+  .sp-st{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:12px;padding:7px 12px 6px 8px;background:#f4efdf;border-radius:3px;color:#1c1d22;text-align:left;transition:transform .14s}
+  .sp-st svg{width:44px;height:44px}
+  .sp-st span{font-family:'Stardos Stencil',serif;font-weight:700;font-size:22px;letter-spacing:.08em}
+  .sp-st[data-v=must] span{color:#a01f30}.sp-st[data-v=might] span{color:#2f5f8f}
+  .sp-st:hover{transform:translateX(-4px)}
+  .sp-st.on{outline:3px solid #e7c477;outline-offset:2px;transform:translateX(-10px)}
+  .sp-phone{margin-top:14px;padding:12px 14px 12px;background:#0e1114;border:6px solid #23272c;border-radius:20px;font-family:'Outfit',Arial,sans-serif;font-size:15px;line-height:1.34;color:#eef2f4;min-height:206px;display:flex;flex-direction:column}
+  .sp-phone h6{margin:0 0 8px;text-align:center;font-weight:600;font-size:13px;letter-spacing:.06em;color:#aeb6bd}
+  .sp-msg{flex:1}
+  .sp-msg p{margin:0 0 6px;padding:7px 11px;background:#262c33;border-radius:13px 13px 13px 3px}
+  .sp-msg p.me{background:#2f6a4a;border-radius:13px 13px 3px 13px;margin-left:44px}
+  .sp-phone .btn{--accent:#7be0a0;margin-top:6px;font-size:12.5px;padding:8px 10px;letter-spacing:.12em}
+  .sp-msg .w:hover{color:#e7c477}
+  @media (max-width:900px){.sp,.ph{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c3026"/><stop offset="1" stop-color="#14231b"/></linearGradient>
+  <linearGradient id="oakG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3d2917"/><stop offset=".5" stop-color="#4f361f"/><stop offset="1" stop-color="#352312"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d8992"/><stop offset="1" stop-color="#b4bdc2"/></linearGradient>
+  <linearGradient id="topG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#215a41"/><stop offset="1" stop-color="#163d2c"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a26"/><stop offset=".3" stop-color="#e6c873"/><stop offset=".55" stop-color="#b08a35"/><stop offset=".8" stop-color="#f0d98f"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="leatherG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7b2532"/><stop offset="1" stop-color="#4a141d"/></linearGradient>
+  <radialGradient id="poolG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".6"/><stop offset=".5" stop-color="#ffe9a8" stop-opacity=".2"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="46%" cy="60%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#030604" stop-opacity=".34"/><stop offset="1" stop-color="#020402" stop-opacity=".93"/></radialGradient>
+  <clipPath id="wcl"><rect x="1204" y="134" width="252" height="322"/></clipPath>
+</defs>
+
+<!-- green wall; shelves of law reports -->
+<rect x="-1000" y="-400" width="3600" height="1100" fill="url(#wallG)"/>
+<rect x="-1000" y="60" width="2132" height="570" fill="#22160c"/>
+<g id="books"></g>
+<g fill="url(#oakG)"><rect x="-1000" y="44" width="2146" height="22"/><rect x="-1000" y="196" width="2146" height="14"/><rect x="-1000" y="338" width="2146" height="14"/><rect x="-1000" y="480" width="2146" height="14"/><rect x="-1000" y="618" width="2146" height="26"/>
+  <rect x="330" y="60" width="18" height="566"/><rect x="726" y="60" width="18" height="566"/><rect x="1122" y="44" width="24" height="600"/></g>
+<g id="wig" class="hot"><ellipse cx="620" cy="472" rx="52" ry="10" fill="#000" opacity=".4"/><path d="M572 474v-52q0-30 48-30t48 30v52z" fill="#15161a"/><ellipse cx="620" cy="474" rx="48" ry="9" fill="#0d0e11"/><path d="M574 428q46 16 92 0" stroke="url(#brassG)" stroke-width="3" fill="none"/><rect x="604" y="440" width="32" height="14" rx="2" fill="url(#brassG)"/></g>
+<g id="clock" class="hot"><rect x="884" y="268" width="62" height="70" rx="5" fill="url(#brassG)"/><rect x="890" y="276" width="50" height="56" rx="3" fill="#fbf8ec"/><path d="M915 304V288" stroke="#1c1d1f" stroke-width="3.500" stroke-linecap="round" transform="rotate(319 915 304)"/><path d="M915 304V283" stroke="#1c1d1f" stroke-width="2.200" stroke-linecap="round" transform="rotate(228 915 304)"/><circle cx="915" cy="304" r="2.500" fill="#b3261c"/><path d="M900 268q15-16 30 0" stroke="url(#brassG)" stroke-width="4" fill="none"/></g>
+
+<!-- the window on to the car park, the kettle, two wet raincoats -->
+<g id="window" class="hot"><rect x="1190" y="120" width="280" height="350" fill="#3d2917"/><rect x="1204" y="134" width="252" height="322" fill="url(#skyG)"/>
+  <path d="M1204 456v-76h252v76z" fill="#5d6468"/><g fill="#3f4a55"><rect x="1222" y="392" width="62" height="26" rx="8"/><rect x="1306" y="398" width="66" height="26" rx="8"/><rect x="1392" y="390" width="56" height="26" rx="8"/></g><g fill="#8fa0b0"><rect x="1232" y="384" width="40" height="14" rx="5"/><rect x="1318" y="390" width="42" height="14" rx="5"/></g>
+  <g class="rain" clip-path="url(#wcl)"><path d="M1226 110l-16 370M1272 110l-16 370M1320 110l-16 370M1366 110l-16 370M1410 110l-16 370M1448 110l-16 370"/></g>
+  <path d="M1330 134v322M1204 290h252" stroke="#3d2917" stroke-width="8"/><rect x="1176" y="468" width="308" height="16" fill="#4f361f"/></g>
+<g id="tea" class="hot"><rect x="1196" y="560" width="270" height="14" fill="#4f361f"/><path d="M1210 574v70M1452 574v70" stroke="#3d2917" stroke-width="10"/>
+  <path d="M1232 560v-44q0-12 26-12t26 12v44z" fill="#c9cdc6"/><path d="M1284 524q22-2 22 12" stroke="#c9cdc6" stroke-width="7" fill="none"/><rect x="1246" y="494" width="24" height="10" rx="3" fill="#17181a"/>
+  <g fill="#f4efdf"><rect x="1322" y="532" width="26" height="28" rx="3"/><rect x="1356" y="532" width="26" height="28" rx="3"/></g><rect x="1398" y="524" width="54" height="36" rx="4" fill="#8f2947"/><rect x="1398" y="524" width="54" height="10" rx="4" fill="#b83a5e"/>
+  <g transform="rotate(-3 1330 508)"><rect x="1300" y="484" width="96" height="34" fill="#fbf8ec"/><path d="M1308 494h80M1308 502h72M1308 510h60" stroke="#55523f" stroke-width="2"/></g></g>
+<g id="gowns" class="hot"><path d="M1546 200v450" stroke="#3d2917" stroke-width="9"/><path d="M1516 652h60" stroke="#3d2917" stroke-width="10" stroke-linecap="round"/><path d="M1520 214h52" stroke="#3d2917" stroke-width="7" stroke-linecap="round"/>
+  <path d="M1522 218q-24 190-12 380q20 10 34 0q-8-190 0-380z" fill="#15161a"/><path d="M1568 218q26 180 16 372q-18 12-34 2q6-190-4-374z" fill="#1d1e24"/>
+  <circle class="drip" cx="1522" cy="606" r="3.500" fill="#b9cfe0"/><circle class="drip d2" cx="1578" cy="598" r="3.500" fill="#b9cfe0"/><ellipse cx="1548" cy="756" rx="52" ry="8" fill="#0a120d" opacity=".7"/></g>
+
+<!-- an old leather chair -->
+<g id="chair" class="hot"><path d="M-40 660v-190q0-46 60-46h100q60 0 60 46v190z" fill="url(#leatherG)"/><path d="M-20 660v-110q0-24 30-24h120q30 0 30 24v110z" fill="#5d1a25"/>
+  <g fill="#3a0f17"><circle cx="20" cy="462" r="4"/><circle cx="70" cy="456" r="4"/><circle cx="120" cy="462" r="4"/><circle cx="44" cy="500" r="4"/><circle cx="96" cy="500" r="4"/></g>
+  <path d="M-60 660v-96q0-22 26-22t26 22v96zM152 660v-96q0-22 26-22t26 22v96z" fill="#6a1f2b"/></g>
+
+<!-- the big table, the lamp, the papers -->
+<path d="M100 648h1400l260 330h-1920z" fill="#3d2917"/><path d="M150 660h1300l210 300h-1720z" fill="url(#topG)"/><path d="M172 672h1256l186 276h-1628z" fill="none" stroke="#c9a24a" stroke-width="2.500" opacity=".55"/>
+<ellipse id="pool" cx="640" cy="800" rx="640" ry="190" fill="url(#poolG)" pointer-events="none"/>
+<g id="lamp" class="hot"><ellipse cx="250" cy="712" rx="56" ry="13" fill="url(#brassG)"/><path d="M250 708v-92" stroke="url(#brassG)" stroke-width="10"/><path d="M170 618q0-44 80-44t80 44q-10 8-80 8t-80-8z" fill="#1f6a48"/><path d="M178 612q0-30 72-32" stroke="#57b089" stroke-width="5" fill="none" opacity=".7"/><ellipse cx="250" cy="622" rx="78" ry="9" fill="#fff3c0"/><path d="M300 610q14 20 4 40" stroke="url(#brassG)" stroke-width="2.500" fill="none"/><circle cx="304" cy="652" r="4" fill="url(#brassG)"/></g>
+<g id="phone" class="hot"><g transform="rotate(-10 250 830)"><path d="M214 780h66q8 0 9 8l10 98q1 8-7 8h-84q-8 0-7-8l6-98q1-8 7-8z" fill="#17181a"/><path d="M220 790h54l8 92h-66z" fill="#22262b"/><rect x="226" y="800" width="40" height="12" rx="6" fill="#2f6a4a"/></g></g>
+<g id="ex-photo" class="hot"><g transform="rotate(-6 540 770)"><path d="M436 700h210l14 150h-240z" fill="#f4f1e8"/><path d="M448 712h186l10 112h-208z" fill="#39505a"/>
+  <path d="M452 716l80 36 98-36" stroke="#c9d6da" stroke-width="3" fill="none"/><path d="M532 752v70" stroke="#c9d6da" stroke-width="2.500"/><path d="M448 790h196" stroke="#8a6a42" stroke-width="10"/><circle cx="548" cy="806" r="11" fill="#fdfdfb"/><g fill="#c8791f"><circle cx="600" cy="780" r="7"/><circle cx="618" cy="786" r="6"/></g>
+  <text x="540" y="842" class="sT" font-size="11" fill="#22211c" letter-spacing="1">ST1</text></g></g>
+<g id="ex-wx" class="hot"><g transform="rotate(3 790 770)"><path d="M690 690h200l12 170h-224z" fill="#f7faf3"/><g fill="#a9d0b4" opacity=".7"><path d="M689 712h202l1 14h-204zM687 740h206l1 14h-208zM685 768h210l1 14h-212zM683 796h214l1 14h-216zM681 824h218l1 14h-220z"/></g>
+  <path d="M700 702h110" stroke="#18211c" stroke-width="4"/><g stroke="#3d4a42" stroke-width="2"><path d="M698 720h180M696 734h184M694 748h188M692 762h190M690 776h194M688 790h196M686 804h198M684 818h200M682 832h204"/></g>
+  <text x="868" y="706" class="sT" font-size="11" fill="#2f5f8f" letter-spacing="1">D1</text></g></g>
+<g id="ex-bill" class="hot"><g transform="rotate(-4 1010 780)"><path d="M936 706h150l10 150h-170z" fill="#fdf3b4"/><path d="M944 718h134" stroke="#1c1b18" stroke-width="5"/><g stroke="#2b3f86" stroke-width="2.200"><path d="M942 738h138M940 752h120M940 766h142M938 780h110M938 794h144M936 808h126"/></g><path d="M934 826h154" stroke="#2b3f86" stroke-width="3"/><rect x="1030" y="832" width="50" height="16" fill="none" stroke="#b3261c" stroke-width="2.500" transform="rotate(-5 1055 840)"/>
+  <text x="1062" y="716" class="sT" font-size="11" fill="#b3261c" letter-spacing="1">ST2</text></g></g>
+<g id="page" class="hot"><g transform="rotate(5 1220 790)"><path d="M1130 690h180l16 200h-212z" fill="#fbf8ec"/><path d="M1152 690l-12 200" stroke="#d4577c" stroke-width="2.500"/><path d="M1160 706h130" stroke="#1c1d22" stroke-width="4"/>
+  <g stroke="#55523f" stroke-width="2.200"><path d="M1160 730h40M1246 730h62M1158 752h30M1236 752h74M1156 774h46M1250 774h62M1154 796h36M1240 796h74M1152 818h44M1248 818h68M1150 840h34M1238 840h80M1148 862h42M1246 862h74"/></g>
+  <g fill="none" stroke="#9aa3b0" stroke-width="2" stroke-dasharray="5 4"><rect x="1204" y="722" width="38" height="15"/><rect x="1192" y="744" width="40" height="15"/><rect x="1206" y="766" width="40" height="15"/><rect x="1194" y="788" width="42" height="15"/><rect x="1200" y="810" width="44" height="15"/><rect x="1188" y="832" width="46" height="15"/><rect x="1194" y="854" width="48" height="15"/></g></g></g>
+<g id="box" class="hot"><path d="M1356 700h170l14 64h-198z" fill="#6b4a2a"/><path d="M1352 640h178l-4 60h-170z" fill="#86603a"/><path d="M1362 650h158l-3 42h-152z" fill="#e9dcc0"/><g stroke="#6b6453" stroke-width="2"><path d="M1372 662h130M1372 672h118M1372 682h126"/></g>
+  <path d="M1342 764h198v14h-198z" fill="#4f361f"/><rect x="1366" y="712" width="150" height="40" rx="3" fill="#2a1c10"/>
+  <g><rect x="1378" y="700" width="30" height="40" rx="5" fill="#a01f30"/><rect x="1374" y="734" width="38" height="12" rx="2" fill="#1c1d22"/><rect x="1426" y="696" width="30" height="44" rx="5" fill="#2f5f8f"/><rect x="1422" y="734" width="38" height="12" rx="2" fill="#1c1d22"/><rect x="1474" y="700" width="30" height="40" rx="5" fill="#3a3c44"/><rect x="1470" y="734" width="38" height="12" rx="2" fill="#1c1d22"/></g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go into Hearing Room 3</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="glass.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, spBox = null;
+
+  /* four shelves of law reports: the same books every time */
+  (function () {
+    var s = '', seed = 7, r, x, w, h, c, COL = ['#6b1f2a', '#7b2532', '#1f2f52', '#243a5c', '#7a5a34', '#2f4a37', '#5a2a1c', '#6b1f2a', '#1f2f52'], Y = [196, 338, 480, 618];
+    function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+    for (r = 0; r < 4; r++) {
+      x = -70;
+      while (x < 1118) {
+        w = 20 + Math.floor(rnd() * 15); h = 104 + Math.floor(rnd() * 22); c = COL[Math.floor(rnd() * COL.length)];
+        if ((x > 322 - w && x < 350) || (x > 718 - w && x < 746)) { x += w; continue; }
+        if ((r === 2 && x > 556 && x < 680) || (r === 1 && x > 868 && x < 950)) { x += w; continue; }      /* room for the wig tin and the clock */
+        if (rnd() < 0.06) { x += w + 8; continue; }
+        s += '<rect x="' + x + '" y="' + (Y[r] - h) + '" width="' + (w - 2) + '" height="' + h + '" fill="' + c + '"/>' +
+          '<rect x="' + x + '" y="' + (Y[r] - h + 14) + '" width="' + (w - 2) + '" height="3" fill="#c9a24a" opacity=".8"/><rect x="' + x + '" y="' + (Y[r] - h + 34) + '" width="' + (w - 2) + '" height="3" fill="#c9a24a" opacity=".8"/>' +
+          '<rect x="' + (x + 3) + '" y="' + (Y[r] - h + 19) + '" width="' + (w - 8) + '" height="11" fill="#1a1208" opacity=".55"/>';
+        x += w;
+      }
+    }
+    $('#books').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'court', story: 'glass', storyTitle: 'A Quarter Past Four', id: 'exhibits', no: 'III', title: 'The Advocates’ Room',
+    go: 'Spread out the exhibits',
+    intro: [
+      'Two statements, and most of both was the same story: a boy, a fence, a football with his name on it. You tied pink tape across the three places where they cannot both be true. Only one of the three decides the case, and that is the issue: did Emre&rsquo;s ball break the glass?',
+      'Then Ms Nair&rsquo;s card answered two questions. Who has to prove it? Mr Thistlewood, because he is the claimant: the burden of proof is his. How sure must the judge be? Not certain, and not &ldquo;beyond reasonable doubt&rdquo;. In a civil court it is enough that a thing is more likely than not.',
+      'The Advocates&rsquo; Room smells of old books and wet raincoats. There is one lamp, one enormous table, and nobody at all. You have twenty minutes and three exhibits.'
+    ],
+    exit: {"next":"hearing","w":{"e40bceb3":"4072b597"}}, tags: {"l1":["fda34717"],"l2":["18059968"],"l3":["6a71c1b6"],"l4":["6de2767f"],"l5":["47b92a16"],"l6":["344e2c6d"],"l7":["6112b41d"]},
+    sound: ['bench', { root: 50, bpm: 63, drop: ['mel'], beds: [['rain', 0.3]] }],       /* books, one lamp, and a great deal to read: no tune */
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('x-file') || null;
+
+  /* ---------- the three exhibits ---------- */
+  var WX = '<span class="stampd">CERTIFIED COPY</span><h4>HATHERWICK AERODROME</h4><h5>WEATHER OBSERVATIONS &middot; 17 TO 19 OCTOBER &middot; document D1</h5>' +
+    '<table><tr><th>HOUR FROM</th><th class="n">WIND mph</th><th class="n">GUST mph</th><th class="n">RAIN mm</th><th>SKY</th></tr>' +
+    [['Fri 17  17:00', 11, 18, '0.0', 'cloud'], ['Fri 17  23:00', 24, 38, '1.2', 'rain'], ['Sat 18  00:00', 29, 44, '2.6', 'rain'], ['Sat 18  01:00', 33, 49, '3.1', 'rain'], ['Sat 18  02:00', 38, 55, '3.8', 'rain'],
+      ['Sat 18  03:00', 43, 61, '4.0', 'rain'], ['Sat 18  04:00', 48, 67, '3.5', 'rain'], ['Sat 18  05:00', 36, 52, '0.0', 'clearing'], ['Sat 18  08:00', 19, 30, '0.0', 'sun'], ['Sat 18  12:00', 9, 15, '0.0', 'sun'],
+      ['Sat 18  16:00', 6, 10, '0.0', 'sun'], ['Sun 19  12:00', 8, 13, '0.0', 'cloud']].map(function (r) {
+      return '<tr><td>' + r[0] + '</td><td class="n">' + r[1] + '</td><td class="n">' + r[2] + '</td><td class="n">' + r[3] + '</td><td>' + r[4] + '</td></tr>'; }).join('') + '</table>' +
+    '<p class="key">RAIN began 23:02 Fri. RAIN ended 04:56 Sat. NO RAIN after that until Tue 21 Oct.</p><p>STRONGEST GUST: 67 mph at 04:14 Sat.</p><p>SUN: set 18:03 Fri. Rose 07:33 Sat, set 18:01 Sat.</p>' +
+    '<p class="key">WIND is the average for the hour. FORCE 8, GALE, 39 to 46 mph: twigs break off trees. FORCE 9, STRONG GALE, 47 to 54 mph: slight damage to buildings (chimney pots and slates removed).</p>';
+  var BILL = '<h4>A. FOXTON &amp; DAUGHTER<small>No. 1187</small></h4><h5>Glaziers &middot; 3 Kiln Lane, Hatherwick &middot; exhibit ST2</h5>' +
+    '<p>Mr S. Thistlewood, 6 Laburnum Grove. Greenhouse, 8 ft by 6 ft.</p><table>' +
+    '<tr><td>Mon 20 Oct: called out. Made safe, cleared the broken glass</td><td>£70</td></tr>' +
+    '<tr><td>17 new panes, 610 x 610 mm. Roof 9 (both sides), door end 3, far end 2, east wall 2, west wall 1</td><td>£306</td></tr>' +
+    '<tr><td>6 more panes had slid out of the frame, NOT broken. Put back</td><td>£54</td></tr>' +
+    '<tr><td>52 glazing clips gone. New ones</td><td>£26</td></tr>' +
+    '<tr><td>Bar along the top of the roof bent. Straightened</td><td>£84</td></tr>' +
+    '<tr><td>Fri 24 Oct: two of us, one day</td><td>£360</td></tr>' +
+    '<tr class="tot"><td>TOTAL</td><td>£900</td></tr></table>' +
+    '<p><span class="paid">PAID 27 OCT</span> &nbsp; With thanks. D. Foxton (the daughter)</p>';
+  var LID = '<h4>THREE STAMPS</h4>' +
+    '<p><b class="st must">MUST HAVE</b> The evidence leaves no other way. <i>The path is wet, the sky is clear and nobody here owns a hose: it must have rained.</i></p>' +
+    '<p><b class="st cannot">CANNOT HAVE</b> The evidence rules it out. <i>She was on the 8.15 train when it left. She cannot have been in the shop at 8.20.</i></p>' +
+    '<p><b class="st might">MIGHT HAVE</b> It fits the evidence, but so does something else. <i>Most of life is MIGHT.</i></p>' +
+    '<p>Use the strongest stamp that is true, and not one bit stronger. A judge forgives a MIGHT. She never forgives a MUST that turns out to be a MIGHT.</p>' +
+    '<p>And remember rule 2. It is not for us to prove what happened. He has to get past MIGHT. We do not. <span class="pen">N.</span></p>';
+
+  /* the photograph: Mr Thistlewood's greenhouse at half past four on the Saturday, seen from the door */
+  var SPOTS = [
+    ['roof', 'The roof. There are holes in both sides of it, and the bar along the top is bent.'],
+    ['paper', 'On the bench, under the holes: Friday&rsquo;s Hatherwick Gazette, open at the crossword. It is soaked to pulp.'],
+    ['mug', 'A mug on the bench, full to the very brim with water. There is a leaf floating in it.'],
+    ['dry', 'The far end of the bench, under panes that are still whole. Seed packets, as dry as dust. The wet stops in a line, just where the whole glass begins.'],
+    ['ball', 'The football: E. DEMIR, in black pen. It is lying on top of the broken glass. There is no glass on top of it, and wet leaves are stuck to it.'],
+    ['door', 'The door, held by its hook. It is open about a foot, which is wider than a football.']
+  ];
+  function photoSvg(live) {
+    var s = '<svg viewBox="0 0 720 470" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="phsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb6d8"/><stop offset="1" stop-color="#d9e8ef"/></linearGradient>' +
+      '<linearGradient id="phfl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a44"/><stop offset="1" stop-color="#5d3a2c"/></linearGradient></defs>' +
+      '<rect width="720" height="470" fill="url(#phsky)"/><path d="M0 300h720v40H0z" fill="#7f9a6a"/><path d="M0 250q120-30 220-6t240-10 260 14v60H0z" fill="#9db58a" opacity=".7"/>' +
+      /* glass that is still whole: the far end of the roof, and most of the walls */
+      '<g fill="#eaf6f4" opacity=".5"><path d="M250 112l110-64v84l-110 46zM360 48l110 64v66l-110-46z"/><path d="M96 190l154-12v150l-154 20zM624 190l-154-12v150l154 20z"/><path d="M250 178h220v150h-220z"/></g>' +
+      /* the frame */
+      '<g fill="none" stroke="#8494a0" stroke-width="5" stroke-linejoin="round"><path d="M36 30L360 -30M684 30L360 -30"/><path d="M36 30v410M684 30v410"/><path d="M250 112v230M470 112v230M250 112l110-64 110 64"/><path d="M36 30L250 112M684 30L470 112M36 200L250 178M684 200L470 178"/><path d="M360 48v294"/></g>' +
+      '<g fill="none" stroke="#9aa9b3" stroke-width="3"><path d="M110 6L286 96M190 -12L326 72M610 6L434 96M530 -12L394 72M36 114L250 145M684 114L470 145M110 24v398M190 44v360M610 24v398M530 44v360"/></g>' +
+      /* the ridge bar, bent, and the holes: sky where glass should be, with teeth of glass round the edges */
+      '<path d="M360 -30q-26 44 -8 78" stroke="#66757f" stroke-width="8" fill="none"/>' +
+      '<g fill="#a9d4f2" stroke="#55646e" stroke-width="2.500" stroke-linejoin="round"><path d="M70 22L186 -8L250 60L150 96zM118 100l112 34-8 36-114-22z"/><path d="M650 22L560 -2L500 70L600 96z"/></g>' +
+      '<g fill="#f4fbfb" opacity=".9"><path d="M70 22l26 30-30 4zM186 -8l-6 34 30-10zM150 96l10-30 22 26zM650 22l-30 26 34 8zM500 70l30-8-12 30z"/></g>' +
+      /* the brick floor, puddles, broken glass */
+      '<path d="M250 342h220l214 128H36z" fill="url(#phfl)"/><g stroke="#4a2c20" stroke-width="2" opacity=".6"><path d="M228 356h264M196 376h328M160 398h400M116 424h488M70 452h580M300 342l-60 128M360 342v128M420 342l60 128"/></g>' +
+      '<g fill="#3f5a66" opacity=".75"><ellipse cx="300" cy="430" rx="70" ry="12"/><ellipse cx="450" cy="392" rx="46" ry="8"/></g>' +
+      '<g fill="#e9f6f7" opacity=".92"><path d="M320 400l34-12 8 20zM392 414l40 6-22 16zM286 446l30-4-10 18zM430 442l36-10 4 18zM350 430l22 4-14 12zM402 380l20-8 4 14z"/></g>' +
+      /* the bench on the left: wet at this end, dry at the far end */
+      '<path d="M36 300L250 268v34L36 352z" fill="#4a3526"/><path d="M36 300L160 281v37L36 352z" fill="#2c2018"/><path d="M36 352v88M160 318v60M250 302v40" stroke="#3a2a1c" stroke-width="7"/>' +
+      '<path d="M40 344l116-23" stroke="#9fc8dc" stroke-width="3" opacity=".8"/><g fill="#9fc8dc" opacity=".85"><ellipse cx="70" cy="352" rx="2.500" ry="5"/><ellipse cx="104" cy="346" rx="2.500" ry="5"/><ellipse cx="136" cy="338" rx="2.500" ry="5"/></g><ellipse cx="110" cy="430" rx="62" ry="10" fill="#3f5a66" opacity=".7"/>' +
+      '<path d="M50 300l84-13 6 22-88 16z" fill="#b9b3a2"/><g stroke="#77736a" stroke-width="2"><path d="M60 304l66-10M62 312l50-8"/></g><g fill="#5d594f"><rect x="100" y="298" width="5" height="5"/><rect x="108" y="297" width="5" height="5"/><rect x="100" y="306" width="5" height="5"/><rect x="116" y="304" width="5" height="5"/></g>' +
+      '<path d="M140 268h24v22h-24z" fill="#f4f1e8"/><ellipse cx="152" cy="268" rx="12" ry="4" fill="#9fc0d0"/><path d="M164 272q12 2 10 12" stroke="#f4f1e8" stroke-width="4" fill="none"/><ellipse cx="149" cy="268" rx="4" ry="1.500" fill="#6f8a3c"/>' +
+      '<g><rect x="184" y="262" width="16" height="20" fill="#e8c95a" transform="rotate(-8 192 272)"/><rect x="206" y="258" width="16" height="20" fill="#d9764a" transform="rotate(6 214 268)"/><rect x="226" y="256" width="15" height="19" fill="#8fbf7a" transform="rotate(-4 233 265)"/></g>' +
+      /* chrysanthemums on the right */
+      '<g><path d="M500 330h46l-6 36h-34zM556 322h46l-6 40h-34zM612 334h50l-8 44h-34z" fill="#a9623f"/><g stroke="#4f7a3c" stroke-width="4" fill="none"><path d="M522 330v-50M540 330q4-30 14-44M578 322v-62M596 322q10-34-4-54M636 334v-58M650 336q14-20 22-44"/></g>' +
+      '<g fill="#c8791f"><circle cx="522" cy="272" r="14"/><circle cx="578" cy="252" r="16"/></g><g fill="#e8b23a"><circle cx="556" cy="282" r="12"/><circle cx="636" cy="270" r="15"/><circle cx="592" cy="262" r="10"/></g><g fill="#f4efdf"><circle cx="674" cy="288" r="12"/></g>' +
+      '<path d="M508 384q22 6 30-8M572 390q20 8 34-2" stroke="#4f7a3c" stroke-width="4" fill="none"/><g fill="#c8791f"><circle cx="540" cy="378" r="9"/></g><g fill="#e8b23a"><circle cx="608" cy="388" r="10"/></g></g>' +
+      /* the football */
+      '<circle cx="372" cy="398" r="27" fill="#fdfdfb"/><circle cx="372" cy="398" r="27" fill="none" stroke="#9a9a94" stroke-width="2"/><path d="M372 384l11 8-4 13h-14l-4-13z" fill="#2b2b2e"/><path d="M372 384v-12M383 392l11-5M379 405l8 10M365 405l-8 10M361 392l-11-5" stroke="#2b2b2e" stroke-width="2"/>' +
+      '<text x="372" y="423" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="9" fill="#1c1d22">E. DEMIR</text><g fill="#8a6a2c"><path d="M352 380q8-6 12 2-8 4-12-2zM388 408q8-2 8 6-8 2-8-6z"/></g>' +
+      /* the door, on its hook */
+      '<path d="M0 0h36v470H0z" fill="#aab4b8"/><path d="M36 60h30l14 380H36z" fill="#dfeef0" opacity=".55"/><path d="M36 60h30l14 380" fill="none" stroke="#c9d3d6" stroke-width="5"/><path d="M36 250h22l10 12" stroke="#5a4a2c" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="36" cy="250" r="5" fill="#5a4a2c"/>';
+    if (live) s += '<rect class="ph-spot" data-k="roof" x="62" y="-6" width="200" height="140" rx="8"/><rect class="ph-spot" data-k="paper" x="44" y="286" width="92" height="46" rx="8"/><ellipse class="ph-spot" data-k="mug" cx="154" cy="278" rx="24" ry="22"/>' +
+      '<rect class="ph-spot" data-k="dry" x="180" y="250" width="66" height="38" rx="8"/><circle class="ph-spot" data-k="ball" cx="372" cy="400" r="38"/><rect class="ph-spot" data-k="door" x="2" y="216" width="74" height="72" rx="8"/>';
+    return s + '</svg>';
+  }
+  function found() { return ER.flag('x-spots') || []; }
+  function photoHtml() {
+    var f = found();
+    return photoSvg(false) + '<h4>EXHIBIT ST1 &middot; taken by Mr Thistlewood, Saturday 18 October, 4.30 pm</h4><ul>' +
+      SPOTS.filter(function (s) { return f.indexOf(s[0]) >= 0; }).map(function (s) { return '<li>' + s[1] + '</li>'; }).join('') +
+      (f.length < SPOTS.length ? '<li><i>There is more in this photograph. You have not looked at all of it yet.</i></li>' : '') + '</ul>';
+  }
+  function filePhoto() {
+    var st = ER.state(), i;
+    for (i = 0; i < st.clues.length; i++) if (st.clues[i].id === 'photo') { st.clues[i].h = photoHtml(); ER.persist(true); return; }
+    ER.addClue('photo', 'Exhibit ST1: the photograph', photoHtml(), 'photo', 'Exhibit');
+  }
+  function openPhoto() {
+    var box = ER.el('div', 'ph'), f = found();
+    box.innerHTML = '<div class="ph-print">' + photoSvg(true) + '<p><span>ST1</span><span>Sat 18 Oct &middot; 4.30 pm &middot; S.T.</span></p></div><div class="ph-side"><h6>What the photograph shows</h6><ol></ol></div>';
+    function list() {
+      box.querySelector('ol').innerHTML = SPOTS.map(function (s) { return f.indexOf(s[0]) >= 0 ? '<li class="got">' + ER.gloss(s[1]) + '</li>' : '<li class="no">Something that you have not looked at yet.</li>'; }).join('');
+      ER.$$('.ph-spot', box).forEach(function (n) { n.classList.toggle('got', f.indexOf(n.getAttribute('data-k')) >= 0); });
+      box.setAttribute('data-found', f.length);
+    }
+    ER.$$('.ph-spot', box).forEach(function (n) {
+      n.addEventListener('click', function () {
+        var k = n.getAttribute('data-k');
+        if (f.indexOf(k) < 0) { f.push(k); ER.flag('x-spots', f); GLASS.sfx.pencil(); }
+        list();
+      });
+    });
+    list(); ER.sfx.paper();
+    ER.open('ov-read', box, function () {
+      filePhoto(); paint();
+      if (found().length < SPOTS.length) ER.say('There is more in that photograph. You have looked at ' + found().length + ' of the six things in it that matter.');
+      else if (!ER.flag('x-seen')) { ER.flag('x-seen', 1); ER.say('Mr Thistlewood took this photograph himself, to show what the ball had done. It shows a good deal more than he meant it to.'); }
+    });
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['Mr Makepeace is calling the case. Go in, with the button at the bottom of the screen.']];
+    if (spBox) return ['stamps', [
+      'Start with the photograph and the weather record together. Inside the greenhouse everything is soaked, but only under the holes in the roof. Now look at the record: when did the rain begin, and when did it stop?',
+      'For every line ask two questions. Does the evidence leave any other way? If not: MUST. Does the evidence rule it out? If so: CANNOT. If the line fits what you can see, but something else would fit as well, it is only MIGHT. Three of these seven lines are only MIGHT.',
+      'Nobody saw the wind break anything, and nobody watched the ball roll. What is the honest stamp for a thing that fits, but that nobody saw? Then read the last line with rule 2 in your head. You would love to rule it out, but which exhibit does that for you? And lines 2 and 3 are the same fact, said in two ways.'
+    ]];
+    return ['look', [
+      'Three exhibits are lying on the green table: a photograph, a printed weather record and a yellow receipt. Look hard at all three. The photograph has six things in it that are worth a click.',
+      'Ms Nair&rsquo;s wooden box of stamps is on the table too, on the right: read the note in its lid. Then click her page, the long white sheet with the gaps in it.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#go').classList.toggle('on', !!nextFile);
+    $('#page').classList.toggle('ready', !nextFile && found().length >= SPOTS.length && !!ER.flag('x-wx') && !!ER.flag('x-bill'));
+    ER.pips(nextFile ? 1 : 0, 1);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The page is stamped, and Mr Makepeace is calling the case.'); return; }
+    if (ER.flag('x-in')) { ER.say('The Advocates&rsquo; Room. Three exhibits, three stamps and one page.'); return; }
+    busy = true; ER.flag('x-in', 1);
+    ER.narrate([
+      'Three exhibits. ST1 and ST2 are Mr Thistlewood&rsquo;s own: his photograph, and his receipt. D1 is yours: Ms Nair sent to the aerodrome for it, and paid £12 out of the tea money.',
+      'There is also a page in her writing, POINTS FOR THE JUDGE, with a gap in every line, and a wooden box with three rubber stamps in it.',
+      'She has left a note on the page. &ldquo;I ran out of evening. Finish these from the exhibits. Do not guess. N.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the room ---------- */
+  $('#ex-photo').addEventListener('click', function () { if (!busy) openPhoto(); });
+  $('#ex-wx').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: WX, cls: 'wx', clue: { id: 'wx', title: 'Document D1: the weather record', kind: 'Exhibit' }, done: function () { ER.flag('x-wx', 1); paint(); GLASS.learn(['evidence', 'exhibit', 'gale', 'gust']); } });
+  });
+  $('#ex-bill').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BILL, cls: 'bill', clue: { id: 'bill', title: 'Exhibit ST2: the receipt', kind: 'Exhibit' }, done: function () { ER.flag('x-bill', 1); paint(); GLASS.learn(['receipt', 'pane']); } });
+  });
+  $('#box').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LID, cls: 'lid', clue: { id: 'lid', title: 'Three stamps: the note in the lid', kind: 'Ms Nair’s box' }, done: function () { GLASS.learn(['evidence', 'rule out']); } });
+  });
+  $('#page').addEventListener('click', function () { if (busy) return; if (nextFile) { ER.say('Seven lines, seven stamps, and not one of them says more than the paper does.'); return; } openPage(); });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  GLASS.thing('#wig', 'wig', 'A black tin with a barrister&rsquo;s wig inside it. Not for small claims, and not for you.', isBusy);
+  GLASS.thing('#clock', null, 'Twenty-two minutes to eleven by the little brass clock. It has been right since 1961, Mr Makepeace says, because nobody is allowed to touch it.', isBusy);
+  GLASS.thing('#window', null, 'The car park, in the rain. Somewhere beyond it there is a railway line, and on the railway line there is a tree.', isBusy);
+  GLASS.thing('#tea', 'kettle', 'A kettle, two mugs and a tin of biscuits. A card has been propped against the tin: ADVOCATES ARE REMINDED THAT THE BISCUITS ARE NOT EVIDENCE AND MAY NOT BE REMOVED.', isBusy);
+  GLASS.thing('#gowns', null, 'Two black raincoats on the coat stand, dripping. Their owners are upstairs in Court 1, in wigs and gowns, arguing about a car park.', isBusy);
+  GLASS.thing('#chair', null, 'A leather armchair that has been sat in by a hundred years of lawyers. It is shaped like all of them.', isBusy);
+  GLASS.thing('#lamp', 'lamp', null, isBusy);
+  GLASS.thing('#phone', null, function () { return nextFile ? 'Your phone. Ms Nair&rsquo;s battery has gone.' : 'Your phone. One bar of signal, and it comes and goes. You can send Ms Nair her page when you have stamped it.'; }, isBusy);
+
+  /* ---------- seven lines and three stamps ---------- */
+  var L = [['Rain', 'fallen inside the greenhouse.'], ['The roof', 'been broken before five o&rsquo;clock on Saturday morning.'], ['The roof', 'been whole until a quarter past four on Saturday afternoon.'],
+    ['The gale', 'broken the glass.'], ['One football', 'done all the damage on the receipt.'], ['The ball', 'rolled in through the open door, after the glass had fallen.'], ['A football', 'broken one pane, at some time in the night.']];
+  var NAME = { must: 'MUST HAVE', might: 'MIGHT HAVE', cannot: 'CANNOT HAVE' }, KINDS = ['must', 'might', 'cannot'];
+  var NUDGE = [
+    { might: 'Wet under the holes, dry under the whole glass. What else puts water exactly there?', cannot: 'Look at his newspaper. Look at his mug.' },
+    { '*': 'When did the rain stop? Then when was that roof open?' },
+    { '*': 'Line 2 and line 3 are one fact, seen from its two sides.' },
+    { must: 'Did anybody SEE the wind do it? Then which is the honest stamp?', cannot: 'Sixty-seven miles an hour. Read the bottom of D1.' },
+    { '*': 'Seventeen panes, six faces of a greenhouse, fifty-two clips. One ball, one kick.' },
+    { must: 'It fits beautifully. But did anybody watch it roll?', cannot: 'How wide is the gap at the door? How wide is a football?' },
+    { cannot: 'I should love to stamp CANNOT on that one. Which exhibit rules it out? None of them. And whose job is it to prove things?', must: 'Careful. That is HIS case you are proving for him.' }
+  ];
+  var STAMP = '<svg viewBox="0 0 44 44"><rect x="15" y="3" width="14" height="22" rx="5" fill="currentColor"/><rect x="8" y="24" width="28" height="9" rx="2" fill="#3a3c44"/><rect x="6" y="33" width="32" height="6" rx="1.500" fill="#1c1d22"/></svg>';
+  function openPage() {
+    var box = ER.el('div', 'sp'), vals = ER.flag('x-vals') || ['', '', '', '', '', '', ''], held = '', done = false, s;
+    s = '<div class="sp-page"><h4>THISTLEWOOD v DEMIR &middot; POINTS FOR THE JUDGE</h4><h5>What the three exhibits show. Finish these: do not guess. N.</h5>';
+    L.forEach(function (l, i) { s += '<div class="sp-line"><b>' + (i + 1) + '</b><span>' + l[0] + '</span><span class="sp-slot" data-i="' + i + '"></span><span>' + l[1] + '</span></div>'; });
+    s += '</div><div class="sp-side"><div class="sp-box"><h6>Ms Nair&rsquo;s box</h6><div class="sp-stamps">' +
+      KINDS.map(function (k) { return '<button type="button" class="sp-st" data-v="' + k + '" style="color:' + (k === 'must' ? '#a01f30' : k === 'might' ? '#2f5f8f' : '#3a3c44') + '">' + STAMP + '<span>' + NAME[k] + '</span></button>'; }).join('') +
+      '</div></div><div class="sp-phone"><h6>MS NAIR &middot; one bar of signal</h6><div class="sp-msg"></div><button type="button" class="btn" id="sp-go">Send her the page</button></div></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.sp-msg');
+    function says(list, mine) { msgEl.innerHTML = (mine ? '<p class="me">' + mine + '</p>' : '') + list.map(function (t) { return '<p>' + ER.gloss(t) + '</p>'; }).join(''); }
+    function ink(i, hit) {
+      var sl = box.querySelector('.sp-slot[data-i="' + i + '"]');
+      sl.innerHTML = vals[i] ? '<i class="' + vals[i] + '" style="transform:rotate(' + (((i * 37) % 7) - 3) + 'deg)">' + NAME[vals[i]] + '</i>' : '';
+      sl.setAttribute('data-v', vals[i]);
+      if (hit) { sl.classList.remove('hit'); void sl.offsetWidth; sl.classList.add('hit'); }
+    }
+    ER.$$('.sp-st', box).forEach(function (b) {
+      b.addEventListener('click', function () { if (done) return; held = b.getAttribute('data-v'); ER.$$('.sp-st', box).forEach(function (o) { o.classList.toggle('on', o.getAttribute('data-v') === held); }); ER.sfx.click(); });
+    });
+    ER.$$('.sp-slot', box).forEach(function (sl) {
+      sl.addEventListener('click', function () {
+        var i = +sl.getAttribute('data-i');
+        if (done) return;
+        if (!held) { says(['Pick up one of the three stamps first. Then press it on a line.']); return; }
+        vals[i] = held; ER.flag('x-vals', vals); ink(i, true); GLASS.sfx.stamp();
+      });
+    });
+    box.querySelector('#sp-go').addEventListener('click', function () {
+      var over = 0, under = 0, back = 0, first = -1, i, right, parts = [], n, file, t;
+      if (done) return;
+      if (vals.indexOf('') >= 0) { says(['Seven lines. I can see gaps from here.']); return; }
+      for (i = 0; i < 7; i++) {
+        if (ER.check('l' + (i + 1), vals[i])) continue;
+        if (first < 0) first = i;
+        right = KINDS.filter(function (k) { return ER.check('l' + (i + 1), k); })[0];
+        if (right === 'might') over++; else if (vals[i] === 'might') under++; else back++;
+      }
+      GLASS.sfx.sent();
+      if (first < 0) {
+        file = ER.exitOk([vals.join('-')]);
+        if (!file) { says(['Something is wrong with this lock: tell your teacher.']); return; }
+        done = true; nextFile = file; ER.flag('x-file', file); GLASS.done('exhibits');
+        GLASS.mine('points', 'Points for the judge', L.map(function (l, k) { return '<p>' + (k + 1) + '. ' + l[0] + ' ' + NAME[vals[k]] + ' ' + l[1] + '</p>'; }).join(''), true);
+        says(['That is exactly how far the paper goes, and not one step further.', 'Now the hard part. Do NOT tell the judge any of it. Ask HIM questions until he tells her himself. Page 2 of the little book.', 'Battery 1%. You know more than you th'], 'Page sent.');
+        setTimeout(function () {
+          ER.closeAll(); GLASS.solved(); paint(); busy = true;
+          ER.narrate([
+            'Her battery has gone. You are on your own now, with seven stamped lines and a boy who looks at tables.',
+            'Out in the hall a voice like a church door is calling. &ldquo;Thistlewood and Demir! Hearing Room 3! Thistlewood and Demir!&rdquo;',
+            'Nobody says &ldquo;versus&rdquo;.'
+          ], function () { busy = false; });
+        }, 5200);
+        return;
+      }
+      n = GLASS.bump('x-sends');
+      if (over) parts.push(over + (over === 1 ? ' line says' : ' lines say') + ' MORE than the paper gives us.');
+      if (under) parts.push(under + (under === 1 ? ' line says' : ' lines say') + ' LESS than it gives us. That is a point we have proved, and you are giving it away.');
+      if (back) parts.push(back + (back === 1 ? ' line has' : ' lines have') + ' it the wrong way round.');
+      t = n === 1 ? 'The train is still not moving. I have all the time in the world.' : n === 2 ? 'Read the note in the lid of the box again. All of it.' :
+        'Look at line ' + (first + 1) + '. ' + (NUDGE[first][vals[first]] || NUDGE[first]['*'] || 'What exactly do the exhibits show?');
+      says(parts.concat([t]), 'Page sent.');
+    });
+    for (s = 0; s < 7; s++) ink(s);
+    says(['Stamp every line, then send me the page. I shall tell you how many lines go too far and how many do not go far enough. Not which. This signal will not last.']);
+    spBox = box;
+    ER.open('ov-lock', box, function () { spBox = null; });
+  }
+})();
+</script>
+</body>
+</html>

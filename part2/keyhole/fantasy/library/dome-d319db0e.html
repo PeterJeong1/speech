@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Dome · The Library That Locks at Dusk</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="kit.css">
+<style>
+  body{--bg:#070916;--accent:#f0cd72;--font-display:'Cinzel Decorative','Cinzel',serif;--font-ui:'Cinzel Decorative','Cinzel',serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(6,8,22,.93);--tc-ink:#efe6cc;--cap-bg:rgba(8,10,26,.94);--panel:#12152b;--face-bg:#1d2350;--q-ink:#d9c489;--fade:#03040c;
+    --hud-bg:rgba(6,8,22,.72)}
+  .hud,.btn,.ov-x,.tc-theme{font-weight:700}
+  .hbtn,.chip,.ov-x,.btn{letter-spacing:.1em}
+  .tc-room{font-weight:700;letter-spacing:.04em;color:#f3d98c}
+  .compass{font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700;font-size:22px;letter-spacing:7px;fill:#3a2a08;text-anchor:middle}
+  .ptitle{font-family:'Cinzel',serif;font-weight:700;font-size:9.500px;letter-spacing:1.200px;fill:#3a2a08;text-anchor:middle}
+  .tw{animation:tw 3.1s steps(3) infinite}.tw.t2{animation-duration:4.3s;animation-delay:-1.4s}.tw.t3{animation-duration:5.2s;animation-delay:-2.6s}
+  @keyframes tw{50%{opacity:.35}}
+  .lamp .lg{animation:lg 2.8s steps(4) infinite;transition:opacity .5s}
+  .lamp:nth-child(2n) .lg{animation-delay:-1.1s}.lamp:nth-child(3n) .lg{animation-delay:-2s}
+  @keyframes lg{50%{opacity:.7}}
+  .lamp .st{transition:fill .5s}
+  .lamp.out .lg{opacity:0;animation:none}
+  .lamp.out .st{fill:#333c78}
+  .lamp.out .core{opacity:0}
+  .lamp .smoke{opacity:0}
+  .lamp.out .smoke{animation:smoke 1.6s ease-out 1}
+  @keyframes smoke{0%{opacity:.7;transform:translateY(0)}100%{opacity:0;transform:translateY(-46px)}}
+  .gear{animation:spin 14s linear infinite}
+  .gear.g2{animation-duration:9s;animation-direction:reverse}.gear.g3{animation-duration:20s}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .leaf{transition:transform 1.1s cubic-bezier(.5,0,.3,1)}
+  #chain,#rope{transition:transform .3s cubic-bezier(.3,1.7,.5,1)}
+  #chain.on,#rope.on{transition:none}
+  #sunGlow{transition:opacity .6s}
+  #dawnSky,#dayLight,#vigR{transition:opacity 4.5s}
+  #plateGlow{animation:pg 2.8s ease-in-out infinite}
+  @keyframes pg{0%,100%{opacity:0}50%{opacity:.4}}
+  #octavo{animation:bob 4.2s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(-3px)}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <radialGradient id="skyG" gradientUnits="userSpaceOnUse" cx="800" cy="470" r="450" gradientTransform="translate(800 470) scale(1.62 1) translate(-800 -470)"><stop offset="0" stop-color="#2c3a84"/><stop offset=".55" stop-color="#171f58"/><stop offset="1" stop-color="#0a0d2c"/></radialGradient>
+  <linearGradient id="dawnG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffd27a"/><stop offset=".3" stop-color="#f59a7a"/><stop offset=".66" stop-color="#8f7fd0"/><stop offset="1" stop-color="#4353b0"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a0"/><stop offset=".5" stop-color="#c9a044"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="brassH" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1d98c"/><stop offset=".5" stop-color="#b98f36"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="mahG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b1712"/><stop offset=".5" stop-color="#5c261c"/><stop offset="1" stop-color="#33130f"/></linearGradient>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f2a30"/><stop offset="1" stop-color="#0a1b20"/></linearGradient>
+  <linearGradient id="shutG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a3a20"/><stop offset=".5" stop-color="#7c5230"/><stop offset="1" stop-color="#523418"/></linearGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#03040d"/><stop offset="1" stop-color="#0d1430"/></linearGradient>
+  <radialGradient id="starG"><stop offset="0" stop-color="#fff0b0" stop-opacity=".9"/><stop offset=".3" stop-color="#ffd66b" stop-opacity=".3"/><stop offset="1" stop-color="#ffd66b" stop-opacity="0"/></radialGradient>
+  <radialGradient id="sunGl"><stop offset="0" stop-color="#ffe9a0" stop-opacity=".9"/><stop offset=".35" stop-color="#ffc45a" stop-opacity=".3"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="sunB"><stop offset="0" stop-color="#fff2bf"/><stop offset=".7" stop-color="#e3b548"/><stop offset="1" stop-color="#a87a22"/></radialGradient>
+  <radialGradient id="vig" gradientUnits="userSpaceOnUse" cx="800" cy="450" r="666" gradientTransform="translate(800 450) scale(4 1) translate(-800 -450)"><stop offset="0" stop-color="#02030a" stop-opacity="0"/><stop offset=".62" stop-color="#02030a" stop-opacity=".3"/><stop offset="1" stop-color="#02030a" stop-opacity=".88"/></radialGradient>
+  <linearGradient id="dayG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffcf8a" stop-opacity=".34"/><stop offset="1" stop-color="#ffcf8a" stop-opacity=".1"/></linearGradient>
+  <clipPath id="domeC"><path d="M100 470A700 430 0 0 1 1500 470Z"/></clipPath>
+  <clipPath id="pullC"><rect x="200" y="506" width="1000" height="400"/></clipPath>
+</defs>
+
+<!-- above and around the dome -->
+<rect x="-1000" y="-500" width="3600" height="1900" fill="#090b18"/>
+<path d="M-1000 -500H2600V496H-1000Z" fill="#0c1a1f"/>
+<path d="M70 470A730 460 0 0 1 1530 470Z" fill="#3a2f18"/><path d="M84 470A716 446 0 0 1 1516 470Z" fill="#8a6f2c"/>
+
+<!-- the painted sky -->
+<path d="M100 470A700 430 0 0 1 1500 470Z" fill="url(#skyG)"/>
+<g clip-path="url(#domeC)">
+  <g stroke="#3c4a9a" stroke-width="2" fill="none" opacity=".5"><path d="M800 44Q220 60 220 470M800 44Q420 80 420 470M800 44Q610 100 610 470M800 44Q990 100 990 470M800 44Q1180 80 1180 470M800 44Q1380 60 1380 470"/><path d="M230 300Q800 190 1370 300M330 180Q800 100 1270 180"/></g>
+  <g id="tiny"></g>
+  <g stroke="#e9c56a" stroke-width="1.600" fill="none" opacity=".55"><path d="M560 150L604 188L654 172L694 212M930 122L984 158L1042 148L1012 208L952 198ZM398 286L440 252L474 292M1180 236L1222 278L1200 322L1160 300Z"/></g>
+  <g fill="#f3dc98"><circle cx="560" cy="150" r="3"/><circle cx="604" cy="188" r="3.500"/><circle cx="654" cy="172" r="3"/><circle cx="694" cy="212" r="3.500"/><circle cx="930" cy="122" r="3.500"/><circle cx="984" cy="158" r="3"/><circle cx="1042" cy="148" r="3.500"/><circle cx="1012" cy="208" r="3"/><circle cx="952" cy="198" r="3"/><circle cx="398" cy="286" r="3"/><circle cx="440" cy="252" r="3.500"/><circle cx="474" cy="292" r="3"/><circle cx="1180" cy="236" r="3"/><circle cx="1222" cy="278" r="3.500"/><circle cx="1200" cy="322" r="3"/><circle cx="1160" cy="300" r="3"/></g>
+  <path id="dawnSky" d="M100 470A700 430 0 0 1 1500 470Z" fill="url(#dawnG)" opacity="0"/>
+  <!-- the sun's rail -->
+  <path d="M280 470A520 300 0 0 1 1320 470" stroke="#6f5a22" stroke-width="7" fill="none"/><path d="M280 470A520 300 0 0 1 1320 470" stroke="#d9b959" stroke-width="2.500" fill="none" stroke-dasharray="3 15"/>
+  <g id="sun" class="drag" transform="translate(1312 418)">
+    <circle id="sunGlow" r="120" fill="url(#sunGl)" opacity=".35" pointer-events="none"/>
+    <g id="rays" fill="#e3b548"></g>
+    <circle r="31" fill="url(#sunB)" stroke="#7d5f1d" stroke-width="2.500"/><circle r="21" fill="none" stroke="#a87a22" stroke-width="1.500"/><circle r="11" fill="none" stroke="#a87a22" stroke-width="1.500"/>
+    <circle r="52" fill="transparent"/>
+  </g>
+  <!-- painted hills, east and west -->
+  <g pointer-events="none">
+    <path d="M100 470V436Q170 392 250 418Q322 376 400 414Q470 398 540 440L566 470Z" fill="#0c1634"/><path d="M100 436Q170 392 250 418Q322 376 400 414Q470 398 540 440" stroke="#2b3c7c" stroke-width="3" fill="none"/>
+    <path d="M1500 470V436Q1430 392 1350 418Q1278 376 1200 414Q1130 398 1060 440L1034 470Z" fill="#0c1634"/><path d="M1500 436Q1430 392 1350 418Q1278 376 1200 414Q1130 398 1060 440" stroke="#2b3c7c" stroke-width="3" fill="none"/>
+    <g fill="#16244e"><path d="M180 470q6-30 16 0zM214 470q8-40 20 0zM456 470q6-28 16 0zM1420 470q-6-30-16 0zM1386 470q-8-40-20 0zM1144 470q-6-28-16 0z"/></g>
+  </g>
+</g>
+
+<!-- five star-lamps -->
+<g id="lamps"></g>
+
+<!-- the wall under the dome -->
+<rect x="-1000" y="496" width="3600" height="238" fill="url(#wallG)"/>
+<g id="panels" fill="none" stroke="#1b4047" stroke-width="3"></g>
+<rect x="-1000" y="466" width="3600" height="36" fill="url(#brassH)"/><rect x="-1000" y="466" width="3600" height="5" fill="#fff0b8" opacity=".6"/><rect x="-1000" y="499" width="3600" height="4" fill="#4a360c"/>
+<g id="hillE" class="hot"><rect x="210" y="468" width="180" height="32" fill="transparent"/><text x="300" y="493" class="compass">EAST</text></g>
+<g id="hillW" class="hot"><rect x="1210" y="468" width="180" height="32" fill="transparent"/><text x="1300" y="493" class="compass">WEST</text></g>
+<g fill="#4a360c"><path d="M176 484l8-8 8 8-8 8zM408 484l8-8 8 8-8 8zM1176 484l8-8 8 8-8 8zM1408 484l8-8 8 8-8 8z"/><circle cx="800" cy="484" r="5"/><circle cx="560" cy="484" r="3"/><circle cx="1040" cy="484" r="3"/></g>
+<g id="pstars" fill="#8a6f2c" opacity=".55"></g>
+<rect x="-1000" y="734" width="3600" height="670" fill="#17100c"/>
+<g id="planks" stroke="#0b0705" stroke-width="2.500"></g>
+<rect x="-1000" y="728" width="3600" height="9" fill="#06090b"/>
+<g fill="none" stroke="#b98f36" opacity=".8"><ellipse cx="800" cy="846" rx="330" ry="42" stroke-width="4"/><ellipse cx="800" cy="846" rx="300" ry="36" stroke-width="1.500"/><path d="M800 804V888M470 846H1130M566 816L1034 876M566 876L1034 816" stroke-width="1.500"/></g>
+
+<!-- two windows, shuttered -->
+<g id="winL" class="hot">
+  <rect x="62" y="512" width="196" height="212" fill="#2b1c12"/><rect x="74" y="524" width="172" height="188" fill="url(#nightG)"/>
+  <g fill="#e9eeff"><circle cx="104" cy="560" r="1.400"/><circle cx="210" cy="548" r="1.200"/><circle cx="188" cy="620" r="1.500"/><circle cx="112" cy="660" r="1.200"/><circle cx="224" cy="676" r="1.300"/></g>
+  <circle cx="150" cy="590" r="20" fill="#f1f5ff"/><circle cx="143" cy="584" r="4" fill="#d6dff1"/><circle cx="156" cy="597" r="3" fill="#d6dff1"/>
+  <path d="M160 524V712M74 618H246" stroke="#2b1c12" stroke-width="6"/>
+  <g class="leaf" style="transform-origin:74px 618px"><rect x="74" y="524" width="86" height="188" fill="url(#shutG)"/><g class="slats" data-x="74"></g></g>
+  <g class="leaf" style="transform-origin:246px 618px"><rect x="160" y="524" width="86" height="188" fill="url(#shutG)"/><g class="slats" data-x="160"></g></g>
+</g>
+<g id="winR" class="hot">
+  <rect x="1342" y="512" width="196" height="212" fill="#2b1c12"/><rect x="1354" y="524" width="172" height="188" fill="url(#nightG)"/>
+  <g fill="#e9eeff"><circle cx="1384" cy="566" r="1.400"/><circle cx="1490" cy="552" r="1.200"/><circle cx="1452" cy="600" r="1.500"/><circle cx="1396" cy="650" r="1.200"/><circle cx="1500" cy="680" r="1.300"/><circle cx="1424" cy="548" r="1.100"/></g>
+  <path d="M1354 712v-22q30-34 62-14t50-10 60 6v40z" fill="#060a18"/><g fill="#ffd27a"><circle cx="1392" cy="700" r="1.800"/><circle cx="1430" cy="704" r="1.500"/><circle cx="1476" cy="698" r="1.800"/></g>
+  <path d="M1440 524V712M1354 618H1526" stroke="#2b1c12" stroke-width="6"/>
+  <g class="leaf" style="transform-origin:1354px 618px"><rect x="1354" y="524" width="86" height="188" fill="url(#shutG)"/><g class="slats" data-x="1354"></g></g>
+  <g class="leaf" style="transform-origin:1526px 618px"><rect x="1440" y="524" width="86" height="188" fill="url(#shutG)"/><g class="slats" data-x="1440"></g></g>
+</g>
+
+<!-- the chain that works the shutters -->
+<path d="M282 500h36v10h-36z" fill="url(#brassG)"/>
+<g clip-path="url(#pullC)"><g id="chain" class="drag">
+  <path d="M300 420V640" stroke="#c9a044" stroke-width="5" stroke-dasharray="9 5" fill="none"/>
+  <circle cx="300" cy="658" r="17" fill="none" stroke="url(#brassG)" stroke-width="7"/><rect x="262" y="560" width="76" height="130" fill="transparent"/>
+</g></g>
+
+<!-- the long snuffer, and the clockmaker's stool -->
+<g id="snuffer" class="hot">
+  <path d="M452 730L484 512" stroke="url(#brassG)" stroke-width="6" stroke-linecap="round"/><path d="M484 512q14-10 26 2" stroke="#c9a044" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M500 512l22 4-6 26q-12 4-22-4z" fill="url(#brassG)" stroke="#7d5f1d" stroke-width="1.500"/><rect x="430" y="500" width="100" height="232" fill="transparent"/>
+</g>
+<g>
+  <ellipse cx="1200" cy="736" rx="46" ry="6" fill="#000" opacity=".4"/>
+  <path d="M1172 690l-10 44M1228 690l10 44M1200 690v46" stroke="#3a2412" stroke-width="6" stroke-linecap="round"/><ellipse cx="1200" cy="688" rx="36" ry="8" fill="#5a3a20"/><ellipse cx="1200" cy="685" rx="36" ry="7" fill="#7c5230"/>
+  <path d="M1188 684v-16q0-6 12-6t12 6v16z" fill="url(#brassG)"/><path d="M1212 670l22-12" stroke="#c9a044" stroke-width="3.500" stroke-linecap="round"/><path d="M1194 662q6-8 12 0" stroke="#c9a044" stroke-width="3" fill="none"/>
+</g>
+
+<!-- the engine that turns the sky -->
+<g id="engine" class="hot">
+  <ellipse cx="800" cy="806" rx="250" ry="12" fill="#000" opacity=".45"/>
+  <rect x="612" y="604" width="376" height="196" fill="url(#mahG)"/><rect x="604" y="794" width="392" height="12" fill="#1a0b08"/>
+  <path d="M598 590H1002V606H598Z" fill="url(#brassH)"/>
+  <g stroke="#2a0f0b" stroke-width="3"><path d="M624 616V790M976 616V790"/></g>
+  <rect x="636" y="630" width="136" height="146" rx="6" fill="#0c0806"/>
+  <g fill="#c9a044">
+    <g class="gear" style="transform-origin:688px 684px"><circle cx="688" cy="684" r="30" fill="none" stroke="#c9a044" stroke-width="9" stroke-dasharray="7.850 7.850"/><circle cx="688" cy="684" r="24"/><circle cx="688" cy="684" r="7" fill="#0c0806"/><path d="M688 664v40M668 684h40" stroke="#7d5f1d" stroke-width="4"/></g>
+    <g class="gear g2" style="transform-origin:736px 728px"><circle cx="736" cy="728" r="21" fill="none" stroke="#e3c26a" stroke-width="8" stroke-dasharray="6.600 6.600"/><circle cx="736" cy="728" r="16" fill="#e3c26a"/><circle cx="736" cy="728" r="5" fill="#0c0806"/></g>
+    <g class="gear g3" style="transform-origin:668px 744px"><circle cx="668" cy="744" r="15" fill="none" stroke="#a87a22" stroke-width="7" stroke-dasharray="5.900 5.900"/><circle cx="668" cy="744" r="11" fill="#a87a22"/><circle cx="668" cy="744" r="4" fill="#0c0806"/></g>
+  </g>
+  <rect x="636" y="630" width="136" height="146" rx="6" fill="none" stroke="url(#brassG)" stroke-width="5"/><path d="M648 640l40 126" stroke="#fff" stroke-width="12" opacity=".06"/>
+  <!-- the bell -->
+  <rect x="716" y="500" width="10" height="92" fill="#1c1410"/><rect x="874" y="500" width="10" height="92" fill="#1c1410"/><rect x="700" y="492" width="344" height="12" rx="3" fill="#2a1e17"/>
+  <path d="M800 504v14" stroke="#7d5f1d" stroke-width="5"/><path d="M764 580Q766 524 800 518Q834 524 836 580Z" fill="url(#brassG)"/><path d="M754 580H846" stroke="#7d5f1d" stroke-width="7" stroke-linecap="round"/><circle cx="800" cy="590" r="6" fill="#5a4312"/>
+  <path d="M776 572q2-34 16-44" stroke="#fff6d8" stroke-width="3" fill="none" opacity=".6"/>
+</g>
+<g id="plate" class="hot">
+  <rect x="796" y="632" width="172" height="112" rx="4" fill="url(#brassG)"/><rect x="796" y="632" width="172" height="112" rx="4" fill="none" stroke="#6f531a" stroke-width="2.500"/>
+  <text x="882" y="652" class="ptitle">THE EVENING ORDER</text>
+  <path d="M810 664h144M810 676h132M810 688h144M810 700h106M810 712h144M810 724h120" stroke="#6f531a" stroke-width="1.700"/>
+  <g fill="#6f531a"><circle cx="803" cy="639" r="2"/><circle cx="961" cy="639" r="2"/><circle cx="803" cy="737" r="2"/><circle cx="961" cy="737" r="2"/></g>
+  <rect id="plateGlow" x="796" y="632" width="172" height="112" rx="4" fill="#fff6d8" opacity="0"/>
+</g>
+<g clip-path="url(#pullC)"><g id="rope" class="drag">
+  <path d="M1030 400V636" stroke="#cdb98c" stroke-width="5.500"/><path d="M1030 400V636" stroke="#8a7a52" stroke-width="5.500" stroke-dasharray="2 7"/>
+  <rect x="1019" y="634" width="22" height="50" rx="9" fill="#7a5230"/><path d="M1019 648h22M1019 668h22" stroke="#4a2f1c" stroke-width="2"/><rect x="994" y="560" width="72" height="140" fill="transparent"/>
+</g></g>
+<g id="octavo" class="hot"><use href="#ch-octavo" x="610" y="476" width="90" height="117"/></g>
+
+<rect id="dayLight" x="-1000" y="-500" width="3600" height="1900" fill="url(#dayG)" opacity="0" pointer-events="none"/>
+<rect id="vigR" x="-1000" y="-500" width="3600" height="1900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, talked = false, read = false, done = false, tickT = 0, saidSnuff = false;
+  var LX = [500, 650, 800, 950, 1100], LY = [366, 314, 300, 314, 366];
+  var STOP = { wd: 10, wu: 30, top: 90, eu: 150, ed: 170 }, phi = 10;
+  var st = { lit: [1, 1, 1, 1, 1], order: '', open: false, sun: 'wd', t: { lamps: 0, shutters: 0, sun: 0 }, n: 0 };
+
+  /* ---------- what the room is built from ---------- */
+  (function () {
+    var r = LIB.rng(41), s = ['', '', ''], i, x, y, k, a, out = '';
+    for (i = 0; i < 150; i++) {
+      x = 110 + r() * 1380; y = 50 + r() * 400;
+      if (Math.pow((x - 800) / 690, 2) + Math.pow((470 - y) / 420, 2) > 1) continue;
+      s[i % 3] += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="' + (0.7 + r() * 1.3).toFixed(1) + '"/>';
+    }
+    $('#tiny').innerHTML = '<g class="tw" fill="#dfe6ff">' + s[0] + '</g><g class="tw t2" fill="#fff3c9">' + s[1] + '</g><g class="tw t3" fill="#cfd8ff">' + s[2] + '</g>';
+    for (i = 0; i < 12; i++) { a = i * 30; out += '<path transform="rotate(' + a + ')" d="M-6 -36L0 -50L6 -36Z"/>'; }
+    $('#rays').innerHTML = out; out = '';
+    LX.forEach(function (lx, n) {
+      out += '<g class="lamp hot" data-i="' + n + '" transform="translate(' + lx + ' ' + LY[n] + ')">' +
+        '<path d="M0 -74V-22" stroke="#b98f36" stroke-width="2.500" stroke-dasharray="5 3"/><circle cx="0" cy="-76" r="4" fill="#b98f36"/>' +
+        '<circle class="lg" r="74" fill="url(#starG)"/>' +
+        '<path class="smoke" d="M0 -22q-8-10 0-20t0-20" stroke="#cfd8ff" stroke-width="3" fill="none" stroke-linecap="round"/>' +
+        '<path class="st" d="M0-24L6-8.300L22.800-7.400L9.700 3.100L14.200 19.400L0 10.200L-14.200 19.400L-9.700 3.100L-22.800-7.400L-6-8.300Z" fill="#fff3b8" stroke="#b98f36" stroke-width="2" stroke-linejoin="round"/>' +
+        '<circle class="core" r="5" fill="#fff"/><circle r="40" fill="transparent"/></g>';
+    });
+    $('#lamps').innerHTML = out; out = '';
+    for (x = -980; x < 2600; x += 180) out += '<rect x="' + (x + 14) + '" y="520" width="152" height="188"/><rect x="' + (x + 26) + '" y="532" width="128" height="164" opacity=".45"/>';
+    $('#panels').innerHTML = out; out = '';
+    for (x = -980; x < 2600; x += 180) out += '<path transform="translate(' + (x + 90) + ' 614)" d="M0-13L3.200-3.200L13 0L3.200 3.200L0 13L-3.200 3.200L-13 0L-3.200-3.200Z"/>';
+    $('#pstars').innerHTML = out; out = '';
+    [770, 814, 866].forEach(function (yy) { out += '<path d="M-1000 ' + yy + 'H2600"/>'; });
+    for (k = -12; k <= 12; k++) out += '<path d="M' + (800 + k * 110) + ' 734L' + (800 + k * 242) + ' 1066"/>';
+    $('#planks').innerHTML = out;
+    ER.$$('.slats').forEach(function (g) {
+      var x0 = +g.getAttribute('data-x'), t = '';
+      for (y = 536; y < 708; y += 14) t += '<path d="M' + (x0 + 8) + ' ' + y + 'h70" stroke="#3a2412" stroke-width="3"/><path d="M' + (x0 + 8) + ' ' + (y + 3) + 'h70" stroke="#9a6a40" stroke-width="1" opacity=".6"/>';
+      g.innerHTML = t + '<rect x="' + (x0 + 1.5) + '" y="525.5" width="83" height="185" fill="none" stroke="#3a2412" stroke-width="3"/>';
+    });
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'library', storyTitle: 'The Library That Locks at Dusk', id: 'dome', no: 'III', title: 'The Dome',
+    go: 'Step inside',
+    intro: [
+      'A snail, a feather and a crown: the lowest step, the shelf above the globe, the jar next to the mirror. The three rings sank into the wood, and the door opened without a sound.',
+      'Behind it is the biggest room in the library, and most of it is ceiling.',
+      'A blue dome, five star-lamps, and a brass sun that went down two hours ago behind some painted hills. Under it all a machine ticks quietly, like something counting.'
+    ],
+    exit: {"next":"dawn","w":{"e8068b99":"2a859513"}}, tags: {"lamps":["28113e99"],"sun":["e3914ea6"],"order":["64c64892"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var ORDER = '<h4>The Evening Order</h4>' +
+    '<p>Every day at dusk, the Dome does four things by itself.</p>' +
+    '<p>First the bell rings, and every door locks.</p>' +
+    '<p>Next the brass sun goes down in the west.</p>' +
+    '<p>Then the shutters close.</p>' +
+    '<p>Last, the five star-lamps are lit, one at a time, from left to right.</p>' +
+    '<p>At dawn the Dome does the opposite of all this, and it begins at the end.</p>' +
+    '<p class="sig">E. W.</p>';
+
+  function hints() {
+    if (done) return null;
+    if (!read) return ['plate', [
+      'There is a brass plate on the front of the machine. Click on it and read every line.',
+      'Then talk to Octavo, who is sitting on the machine. He knows what the bell rope is for.'
+    ]];
+    return ['dawn', [
+      'The plate tells you how the Dome makes an evening. You want a morning. Read the last sentence on the plate again.',
+      '&ldquo;It begins at the end.&rdquo; So start with the last line of the Evening Order and go up to the first. For each line, do the opposite. The opposite of &ldquo;lit&rdquo; is &ldquo;put out&rdquo;. What is the opposite of &ldquo;close&rdquo;? Of &ldquo;down&rdquo;? Of &ldquo;west&rdquo;? Of &ldquo;from left to right&rdquo;?',
+      'Click the star-lamps to put them out, in the opposite direction. Drag the chain down for the shutters. Drag the brass sun along its rail to the place that is the opposite of &ldquo;down in the west&rdquo;. Do these three jobs in that order, and pull the bell rope only when they are all done.'
+    ]];
+  }
+  function pips() { ER.pips((read ? 1 : 0) + (talked ? 1 : 0) + (done ? 1 : 0), 3); }
+  function begin() {
+    pips();
+    tickT = setInterval(function () { if (!done) ER.sfx.tick(0.16); }, 1000);
+    ER.narrate([
+      'It is night in here too. Five star-lamps are burning, the shutters are closed, and the brass sun is down behind the hills in the west.',
+      'Octavo lands on top of the machine and looks at everything twice.'
+    ]);
+  }
+
+  /* ---------- things to look at ---------- */
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#hillE', null, 'A word is cut into the brass under the painted hills on this side: EAST.');
+  thing('#hillW', null, 'A word is cut into the brass under the painted hills on this side: WEST.');
+  thing('#snuffer', 'snuffer', 'A long brass snuffer, for putting out lamps that are too high to reach.');
+  thing('#engine', 'cog','Wheels inside wheels, all turning. It has done its job every day for three hundred years, and nobody has ever told it anything.');
+  function win(e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'shutters');
+    ER.say(st.open ? 'Outside the glass it is black night, with the real moon in it. The Dome does not look.' : 'Wooden shutters, closed. A brass chain hangs on the wall beside the left-hand window.');
+  }
+  $('#winL').addEventListener('click', win); $('#winR').addEventListener('click', win);
+  $('#plate').addEventListener('click', function () {
+    if (busy) return;
+    $('#plateGlow').style.display = 'none';
+    ER.read({ html: ORDER, cls: 'brass', clue: { id: 'order', title: 'The Evening Order', kind: 'Brass plate' }, done: function () { read = true; pips(); } });
+  });
+  $('#octavo').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.octavo;
+    LIB.snd.flutter();
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('octavo', '#1d2350'),
+      lines: [
+        'So this is the Dome. I thought it would be smaller.',
+        'That brass plate is the Evening Order. The Dome did all of it at dusk, by itself, as it does every day. I heard the bell from my desk.',
+        { q: 'And in the morning?', a: 'In the morning it does something else, and the doors open. I have never seen it. I am always asleep by dawn. It is the main thing about moths.' },
+        { q: 'Can I work it by hand?', a: 'Every part of it moves. The lamps, the chain for the shutters, the sun on its rail. The Founder did not trust clockwork. She did not trust anything much.' },
+        'When you think it is morning, pull the bell rope. The bell tells the doors. If the Dome does not agree with you, it puts everything back as it was, and waits.',
+        'Outside it is night. In here it is whatever the Dome says it is.'
+      ],
+      clue: { id: 'octavo3', title: 'Octavo, in the Dome' },
+      done: function (seen) { if (seen) { talked = true; pips(); } }
+    });
+  });
+
+  /* ---------- the star-lamps ---------- */
+  function stamp(k) { st.t[k] = ++st.n; }
+  ER.$$('.lamp').forEach(function (g) {
+    var i = +g.getAttribute('data-i');
+    g.addEventListener('click', function (e) {
+      if (busy) return;
+      if (!st.lit[i]) { ER.say('That one is out already. You have nothing to light it with.'); return; }
+      st.lit[i] = 0; st.order += (i + 1); g.classList.add('out'); LIB.snd.snuff();
+      if (st.order.length === 5) { stamp('lamps'); ER.say('All five star-lamps are out.'); }
+      else if (!saidSnuff) { saidSnuff = true; ER.wordAt(e.clientX, e.clientY, 'snuffer'); ER.say('You reach up with the long brass snuffer, and the star-lamp goes out.'); }
+    });
+  });
+
+  /* ---------- the shutters ---------- */
+  function shutters(open) {
+    st.open = open;
+    ER.$$('.leaf').forEach(function (l) { l.style.transform = open ? 'scaleX(.1)' : ''; });
+    LIB.snd.wood();
+  }
+  var chain = $('#chain'), cy0 = 0, cd = 0;
+  ER.drag(chain, {
+    start: function (e) { if (busy) return false; cy0 = ER.pt(svg, e).y; cd = 0; },
+    move: function (e) { cd = Math.max(0, Math.min(70, ER.pt(svg, e).y - cy0)); chain.style.transform = 'translateY(' + cd + 'px)'; },
+    end: function (e, moved) {
+      var far = cd > 38; chain.style.transform = '';
+      if (far) {
+        ER.sfx.chain(); shutters(!st.open); stamp('shutters');
+        ER.say(st.open ? 'The shutters fold back. Outside the glass it is black night. The Dome does not look.' : 'The shutters close again.');
+      } else if (!moved) { ER.wordAt(e.clientX, e.clientY, 'chain'); ER.say('A brass chain for the shutters. It wants pulling down.'); }
+    }
+  });
+
+  /* ---------- the sun on its rail ---------- */
+  var sun = $('#sun'), lastSq = 0;
+  function sunAt(a) {
+    phi = a;
+    var r = a * Math.PI / 180;
+    sun.setAttribute('transform', 'translate(' + (800 + 520 * Math.cos(r)).toFixed(1) + ' ' + (470 - 300 * Math.sin(r)).toFixed(1) + ')');
+    $('#sunGlow').setAttribute('opacity', (0.3 + 0.6 * Math.max(0, Math.sin(r) - 0.17)).toFixed(2));
+  }
+  function sunTo(a, ms, then) {
+    var from = phi, t0 = Date.now();
+    (function step() {
+      var k = Math.min(1, (Date.now() - t0) / ms);
+      sunAt(from + (a - from) * (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2));
+      if (k < 1) requestAnimationFrame(step); else if (then) then();
+    })();
+  }
+  var SUNLINE = {
+    wd: 'The sun is down again behind the hills in the west.',
+    wu: 'The sun is up, but only just, and in the west. It looks like the end of an afternoon.',
+    top: 'The sun is right at the top of the Dome. It looks like the middle of the day.',
+    eu: 'The sun is up over the hills in the east.',
+    ed: 'The sun is down behind the hills in the east. It looks like the middle of the night.'
+  };
+  ER.drag(sun, {
+    start: function () { if (busy) return false; },
+    move: function (e, moved) {
+      if (!moved) return;
+      var p = ER.pt(svg, e), a = Math.atan2((470 - p.y) / 300, (p.x - 800) / 520) * 180 / Math.PI;
+      if (a < -90) a = 170; else if (a < 10) a = 10; else if (a > 170) a = 170;
+      if (Math.abs(a - phi) > 0.2 && Date.now() - lastSq > 420) { lastSq = Date.now(); LIB.snd.squeak(); }
+      sunAt(a);
+    },
+    end: function (e, moved) {
+      if (!moved) { ER.say('A brass sun as big as a cart wheel, on a curved rail. It moves if you drag it.'); return; }
+      var best = 'wd', k;
+      for (k in STOP) if (Math.abs(STOP[k] - phi) < Math.abs(STOP[best] - phi)) best = k;
+      sunTo(STOP[best], 260);
+      ER.sfx.click();
+      if (best !== st.sun) { st.sun = best; stamp('sun'); }
+      ER.say(SUNLINE[best]);
+    }
+  });
+
+  /* ---------- the bell rope ---------- */
+  var rope = $('#rope'), ry0 = 0, rd = 0;
+  ER.drag(rope, {
+    start: function (e) { if (busy) return false; ry0 = ER.pt(svg, e).y; rd = 0; },
+    move: function (e) { rd = Math.max(0, Math.min(70, ER.pt(svg, e).y - ry0)); rope.style.transform = 'translateY(' + rd + 'px)'; },
+    end: function (e, moved) {
+      var far = rd > 38; rope.style.transform = '';
+      if (far) judge();
+      else if (!moved) { ER.wordAt(e.clientX, e.clientY, 'bell rope'); ER.say('The bell rope. Pull it down when you think it is morning.'); }
+    }
+  });
+  function judge() {
+    var seq = ['lamps', 'shutters', 'sun'].filter(function (k) { return st.t[k]; }).sort(function (a, b) { return st.t[a] - st.t[b]; }).join('>');
+    var cand = st.order + '/' + seq + '/' + (st.open ? 'open' : 'shut') + '/' + st.sun, line;
+    ER.sfx.chain();
+    if (ER.exit([cand], { quiet: true, delay: 10500 })) { morning(); return; }
+    LIB.snd.bigBell(0.8);
+    if (!st.n && !st.order) {
+      ER.say('The bell rings once. Every door in the library is locked already, so nothing happens. &ldquo;That is how an evening begins,&rdquo; says Octavo. &ldquo;You want to know how a morning ends.&rdquo;', 7000);
+      return;
+    }
+    line = st.order.length < 5 ? '&ldquo;It cannot be morning with star-lamps still burning,&rdquo; says Octavo.'
+      : !st.open ? '&ldquo;The shutters are still closed,&rdquo; says Octavo. &ldquo;What is the opposite of closed?&rdquo;'
+      : !ER.check('sun', st.sun) ? '&ldquo;In the evening the sun goes down in the west,&rdquo; says Octavo. &ldquo;Take the opposite of each word. Where does that put it?&rdquo;'
+      : !ER.check('lamps', st.order) ? '&ldquo;The lamps came on from left to right,&rdquo; says Octavo. &ldquo;The Dome would never put them out the same way.&rdquo;'
+      : '&ldquo;All the right things, in the wrong order,&rdquo; says Octavo. &ldquo;It begins at the end. Read the plate from the bottom line up.&rdquo;';
+    busy = true;
+    ER.say('The bell rings once. Nothing unlocks. ' + line + ' Slowly, the Dome puts everything back.', 9000);
+    setTimeout(reset, 1500);
+  }
+  function reset() {
+    sunTo(STOP.wd, 1300);
+    if (st.open) shutters(false);
+    var lit = st.lit.slice();
+    st = { lit: [1, 1, 1, 1, 1], order: '', open: false, sun: 'wd', t: { lamps: 0, shutters: 0, sun: 0 }, n: 0 };
+    ER.$$('.lamp').forEach(function (g, i) {
+      if (lit[i]) return;
+      setTimeout(function () { g.classList.remove('out'); LIB.snd.relight(); }, 700 + i * 260);
+    });
+    setTimeout(function () { busy = false; }, 2300);
+  }
+  function morning() {
+    done = true; busy = true; pips(); clearInterval(tickT);
+    LIB.snd.bigBell(1);
+    ER.say('The bell rings once. For a moment the Dome does nothing at all.', 2800);
+    setTimeout(function () {
+      $('#dawnSky').style.opacity = 0.94; $('#dayLight').style.opacity = 1; $('#vigR').style.opacity = 0.45;
+      $('#sunGlow').setAttribute('opacity', 1); LIB.snd.rise();
+    }, 2300);
+    setTimeout(function () {
+      ER.say('Then the painted sky goes from blue to gold. Far below you, a lock goes <em>clunk</em>. Then another. Then all of them.', 7000);
+      [900, 1500, 1950, 2300, 2580, 2800, 2980].forEach(function (t, i) { setTimeout(function () { ER.sfx.tock(0.9 - i * 0.1); }, t); });
+      setTimeout(ER.sfx.ok, 3600);
+    }, 3600);
+  }
+})();
+</script>
+</body>
+</html>

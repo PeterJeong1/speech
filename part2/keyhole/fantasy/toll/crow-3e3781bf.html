@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Cock-Crow · The Keeper Gives No Change</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="toll.css">
+<style>
+  body{--bg:#080c1e;--accent:#ffd27a;--font-display:'Uncial Antiqua',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(8,11,28,.96);--tc-ink:#e9ecf6;--cap-bg:rgba(8,11,28,.94);--cap-ink:#f1f3fa;--panel:#131a36;--face-bg:#232c55;--q-ink:#b9c6f0;--fade:#03050e;--hud-bg:rgba(8,11,28,.78)}
+  #glow{animation:gl 3.4s steps(4) infinite;transition:opacity 5s}
+  @keyframes gl{50%{opacity:.82}}
+  #flame{transform-origin:380px 356px;animation:fl 1.9s ease-in-out infinite}
+  @keyframes fl{0%,100%{transform:scale(1,1)}35%{transform:scale(.88,1.14)}65%{transform:scale(1.1,.92)}}
+  .tw{animation:tw 4s steps(2) infinite}.tw:nth-child(3n){animation-delay:-1.3s}.tw:nth-child(5n){animation-delay:-2.6s}
+  @keyframes tw{50%{opacity:.35}}
+  .shim{stroke-dasharray:34 110;animation:shim 8s linear infinite}
+  .shim:nth-child(2n){animation-duration:11s;stroke-dasharray:22 84}
+  @keyframes shim{to{stroke-dashoffset:-144}}
+  #bugle[data-m="h"] #bB,#bugle[data-m="h"] #bC,#bugle[data-m="b"] #bH,#bugle[data-m="b"] #bC,#bugle[data-m="c"] #bH,#bugle[data-m="c"] #bB{display:none}
+  #bugle.ready{animation:nudge 1.7s ease-in-out infinite}
+  #crowT{opacity:0}
+  #crowT.on{animation:crowT 3.6s ease-out forwards}
+  @keyframes crowT{0%{opacity:0}10%{opacity:1}75%{opacity:1}100%{opacity:0}}
+  #gateShut{transition:opacity .8s}
+  #gateOpen{opacity:0;transition:opacity .8s .4s}
+  #scene.open #gateShut{opacity:0}
+  #scene.open #gateOpen{opacity:1}
+  #troll{opacity:0;transition:opacity 1.3s;pointer-events:none}
+  #scene.out #troll{opacity:1;pointer-events:auto}
+  .fig{transition:transform 17s linear}
+  .fig.go{transform:translateX(1640px)}
+  #f-wickett{transition-delay:3s}#f-bryony{transition-delay:5.5s}#f-osric{transition-delay:9s}
+  #f-you{transition:transform 22s linear}
+  #f-you.go{transform:translateX(1900px)}
+  #fore{transition:opacity 6s}
+  #scene.dawn #fore{opacity:.3}
+  #scene.gone .folk{display:none}
+  #skyD,#riverD,#warm{opacity:0;transition:opacity 6s}
+  #scene.dawn #skyD,#scene.dawn #riverD{opacity:1}
+  #scene.dawn #warm{opacity:.16}
+  #scene.dawn #glow{opacity:0;animation:none}
+  #scene.dawn #stars,#scene.dawn #moonG{opacity:0}
+  #stars,#moonG{transition:opacity 5s}
+  #scene.dawn #flame{display:none}
+  #scene.dawn #lampGlass{fill:#3a4260}
+  #scene.dawn #bugle,#scene.dawn #youG{opacity:0}
+  #bugle,#youG{transition:opacity 2s}
+  #sunR{transition:transform 8s ease-out}
+  #scene.dawn #sunR{transform:translateY(-120px)}
+  #scene.quick *{transition-duration:.01s!important;transition-delay:0s!important}
+
+  /* the Keeper's receipt */
+  .rc{display:grid;grid-template-columns:minmax(0,620px) 340px;gap:26px;width:min(1000px,96vw);align-items:start}
+  .rc-page{position:relative;padding:36px 40px 26px 46px;background:#f3ead0 repeating-linear-gradient(transparent 0 35px,rgba(60,90,140,.2) 35px 36px);border-left:26px solid #5a2a22;color:#2a2440;
+    box-shadow:0 26px 70px rgba(0,0,0,.7);font-family:'Almendra',serif;font-style:italic;font-size:23px;line-height:36px}
+  .rc-page h4{margin:0;font-family:'Uncial Antiqua',serif;font-style:normal;font-weight:normal;font-size:25px;line-height:36px;color:#5a2a22}
+  .rc-page p{margin:0 0 36px}
+  .rc-page .wk-w{padding:0 1px}
+  .rc-page .rc-hit{display:inline-block;padding:0 6px;background:#c9342a;color:#fff;border-radius:3px}
+  .rc-sign{display:flex;align-items:center;font-style:normal;height:36px}
+  .rc-sign span{font-family:'Cinzel',serif;font-weight:700;font-size:14px;letter-spacing:.16em;text-transform:uppercase;margin-right:14px}
+  .rc-pen{flex:1;height:36px;border-bottom:2px solid #2a2440;text-align:left;font-family:'Homemade Apple',cursive;font-size:16px;color:rgba(42,36,64,.5);padding:0 10px}
+  .rc-pen:hover{background:rgba(90,42,34,.12);color:#2a2440}
+  .rc-how{margin:0 0 14px;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;line-height:1.55;color:#ffe2a8}
+  .rc-side .pmsg{min-height:200px}
+  @media (max-width:900px){.rc{grid-template-columns:1fr}}
+
+  /* the end of the night */
+  .done{position:fixed;right:2vw;top:60px;z-index:34;width:min(500px,94vw);max-height:calc(100vh - 74px);overflow:auto;padding:16px 26px 12px;display:none;background:#f3ead0;color:#2a2440;
+    border-left:16px solid #5a2a22;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .done.on{display:block}
+  .done .stampd{display:inline-block;margin:0 0 8px;padding:3px 12px 1px;border:3px solid #9a2418;color:#9a2418;font-family:'Cinzel',serif;font-weight:700;font-size:15px;letter-spacing:.12em;transform:rotate(-2deg)}
+  .done p{margin:0 0 2px;font-family:'Almendra',serif;font-style:italic;font-size:17px;line-height:1.3}
+  .done h6{margin:10px 0 4px;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:19px;color:#5a2a22}
+  .done ol{margin:0;padding-left:20px;font-family:'IM Fell English',Georgia,serif;font-size:15.5px;line-height:1.26}
+  .done li{margin:0 0 3px}
+  .done li b{font-family:'Cinzel',serif;font-weight:700;font-size:12.5px;letter-spacing:.06em}
+  .done .row{display:flex;flex-wrap:wrap;margin-top:10px}
+  .done .btn{--accent:#5a2a22;font-size:12.5px;padding:7px 12px;margin:0 7px 6px 0}
+  .done .btn:hover:not([disabled]){color:#f3ead0}
+  .done small{display:block;margin-top:4px;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:14px;opacity:.8;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+  .rp{width:min(760px,94vw);max-height:84vh;overflow:auto;background:#f3ead0;color:#2a2440;padding:24px 36px 20px;box-shadow:0 26px 70px rgba(0,0,0,.6);-webkit-user-select:text;user-select:text;border-left:16px solid #5a2a22}
+  .rp h4{margin:0 0 4px;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#5a2a22}
+  .rp h3{margin:0 0 10px;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:28px;line-height:1.1}
+  .rp label{display:block;font-family:'IM Fell English',Georgia,serif;font-size:18.5px;line-height:1.36;margin:8px 0 6px}
+  .rp label b{font-family:'Cinzel',serif;font-size:14px}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Caveat',cursive;font-size:25px;line-height:34px;color:#27365f;background:#fffaf0 repeating-linear-gradient(transparent 0 33px,rgba(60,100,170,.25) 33px 34px);border:1px solid #b9b09a;
+    padding:0 12px;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:206px}
+  .rp input[type=text]{height:36px}
+  .rp .count{font-family:'Cinzel',serif;font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right;margin-top:4px}
+  .rp .foot{display:flex;align-items:center;margin-top:10px}
+  .rp .foot span{flex:1;font-family:'IM Fell English',Georgia,serif;font-style:italic;font-size:15px;opacity:.75}
+  .rp .btn{--accent:#5a2a22;margin-left:10px}.rp .btn:hover:not([disabled]){color:#f3ead0}
+  @media print{
+    .stage,.hud,.cap,.done,.gobtn,.ov-bar,.rp .foot{display:none!important}
+    body{overflow:visible;background:#fff}
+    .ov{position:static;display:block!important;background:none;padding:0}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#060a1c"/><stop offset=".6" stop-color="#131f44"/><stop offset="1" stop-color="#2a3b66"/></linearGradient>
+  <linearGradient id="skyDG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f7fb4"/><stop offset=".55" stop-color="#b9b6cf"/><stop offset=".85" stop-color="#f3b99a"/><stop offset="1" stop-color="#ffe0a8"/></linearGradient>
+  <linearGradient id="rivN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2e55"/><stop offset="1" stop-color="#080e22"/></linearGradient>
+  <linearGradient id="rivD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0c0a0"/><stop offset=".3" stop-color="#8fa3c8"/><stop offset="1" stop-color="#3a4f7a"/></linearGradient>
+  <linearGradient id="brG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#465071"/><stop offset="1" stop-color="#272e48"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffe7a8" stop-opacity=".85"/><stop offset=".3" stop-color="#ffb24a" stop-opacity=".28"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="moonGr"><stop offset="0" stop-color="#eef3ff" stop-opacity=".4"/><stop offset="1" stop-color="#c9d6f0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="sunGr"><stop offset="0" stop-color="#fff6d0" stop-opacity=".9"/><stop offset="1" stop-color="#ffc070" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".66" stop-color="#03050e" stop-opacity=".2"/><stop offset="1" stop-color="#03050e" stop-opacity=".82"/></radialGradient>
+  <path id="crowArc" d="M350 286Q560 96 880 170"/>
+  <clipPath id="brC"><path clip-rule="evenodd" d="M300 470H1700V760H300ZM360 760V640A170 130 0 0 1 700 640V760ZM770 760V640A170 130 0 0 1 1110 640V760ZM1180 760V640A170 130 0 0 1 1520 640V760Z"/></clipPath>
+</defs>
+
+<!-- the night: and, under it, tomorrow morning -->
+<rect x="-1000" y="-640" width="3600" height="1200" fill="url(#skyN)"/>
+<rect id="skyD" x="-1000" y="-640" width="3600" height="1200" fill="url(#skyDG)"/>
+<g id="sunR"><circle cx="1330" cy="596" r="170" fill="url(#sunGr)"/><circle cx="1330" cy="596" r="46" fill="#fff0c0"/></g>
+<g id="stars" fill="#eaf0ff"></g>
+<g id="moonG" class="hot"><circle cx="1180" cy="150" r="90" fill="url(#moonGr)"/><path d="M1180 110a40 40 0 1 0 28 68a32 32 0 1 1-28-68z" fill="#eef3ff"/></g>
+<path d="M-1000 500Q-500 440 0 480T520 462Q760 430 1000 474T1500 440Q1900 400 2600 470V600H-1000Z" fill="#0d1330"/>
+<g fill="#ffd98a"><circle cx="1492" cy="452" r="1.800"/><circle cx="1512" cy="446" r="1.500"/><circle cx="1534" cy="450" r="2"/><circle cx="1556" cy="442" r="1.600"/><circle cx="1578" cy="446" r="1.800"/></g>
+
+<!-- Stickle Water, behind the bridge -->
+<rect x="-1000" y="540" width="3600" height="960" fill="url(#rivN)"/><rect id="riverD" x="-1000" y="540" width="3600" height="960" fill="url(#rivD)"/>
+
+<!-- the near bank, and the toll-house -->
+<path d="M-1000 470H300V1500H-1000Z" fill="#0d1124"/><path d="M-1000 470H300" stroke="#2a3250" stroke-width="4"/>
+<g id="house" class="hot">
+  <rect x="70" y="300" width="200" height="170" fill="#272d47"/><path d="M52 306L112 248H232L288 306Z" fill="#12162a"/><rect x="198" y="222" width="24" height="40" fill="#272d47"/>
+  <rect x="94" y="346" width="56" height="56" fill="#12162a"/><rect x="100" y="352" width="44" height="44" fill="#ffc46a"/><path d="M122 352v44M100 374h44" stroke="#12162a" stroke-width="4"/>
+  <path d="M172 470V400q0-18 22-18t22 18v70z" fill="#3a2a1c"/><circle cx="208" cy="430" r="3" fill="#12162a"/>
+  <g stroke="#1a1f36" stroke-width="2" opacity=".8"><path d="M70 330h200M70 360h20M150 360h120M70 420h100M218 420h52M70 446h100M218 446h52"/></g>
+</g>
+
+<!-- Stickle Bridge -->
+<path fill-rule="evenodd" d="M300 470H1700V760H300ZM360 760V640A170 130 0 0 1 700 640V760ZM770 760V640A170 130 0 0 1 1110 640V760ZM1180 760V640A170 130 0 0 1 1520 640V760Z" fill="url(#brG)"/>
+<g fill="none" stroke="#5a6588" stroke-width="5"><path d="M360 640A170 130 0 0 1 700 640M770 640A170 130 0 0 1 1110 640M1180 640A170 130 0 0 1 1520 640"/></g>
+<g clip-path="url(#brC)"><g id="courses" stroke="#1f2640" stroke-width="2" opacity=".7"></g></g>
+<path d="M1560 470H2600V1500H1560Z" fill="#0d1124"/>
+
+<!-- the people of the toll-house; then you -->
+<g id="folk" class="hot folk"></g>
+<g id="youG"></g>
+<g id="troll" class="hot"><path d="M418 470V416q0-14 14-14h76q14 0 14 14v54z" fill="#4a2d3f"/><use href="#ch-spandrel" x="412" y="258" width="116" height="151"/></g>
+
+<!-- the parapet, the gate, the lamp and one small bird -->
+<rect x="300" y="450" width="1400" height="20" fill="#566282"/><path d="M300 450H1700" stroke="#8591b0" stroke-width="3"/>
+<g fill="#6b7798"><rect x="716" y="440" width="38" height="30"/><rect x="1126" y="440" width="38" height="30"/></g>
+<rect id="fore" x="-1000" y="650" width="3600" height="900" fill="#0a1124" opacity=".72"/>
+<circle id="glow" cx="380" cy="350" r="330" fill="url(#lampG)" pointer-events="none"/>
+<g stroke="#ffcf7a" stroke-width="3" stroke-linecap="round" opacity=".5" fill="none"><path class="shim" d="M330 676h110"/><path class="shim" d="M346 704h76"/><path class="shim" d="M320 736h124"/><path class="shim" d="M352 772h60"/></g>
+<g stroke="#7d8fbf" stroke-width="2" stroke-linecap="round" opacity=".35" fill="none"><path class="shim" d="M560 690h420"/><path class="shim" d="M900 730h520"/><path class="shim" d="M100 760h380"/><path class="shim" d="M1100 800h440"/><path class="shim" d="M520 840h600"/></g>
+<g id="gateShut"><path d="M312 404L352 412V468L312 466Z" fill="#1a1410"/><path d="M312 420l40 6M312 436l40 4M312 452l40 2" stroke="#3a2c20" stroke-width="3"/></g>
+<g id="gateOpen"><path d="M312 404H430V450H312Z" fill="none" stroke="#1a1410" stroke-width="5"/><path d="M312 420H430M312 436H430M312 450L430 404" stroke="#1a1410" stroke-width="4"/></g>
+<path d="M298 392Q298 300 380 300V318" stroke="#0a0c16" stroke-width="6" fill="none" stroke-linecap="round"/>
+<rect x="286" y="384" width="26" height="86" fill="#4a5270"/><rect x="278" y="374" width="42" height="12" fill="#6b7798"/>
+<g id="lampV" class="hot"><path d="M370 318h20l3 6h-26z" fill="#0a0c16"/><path id="lampGlass" d="M368 324h24l6 42h-36z" fill="#ffd98a"/><path id="flame" d="M380 336q-6 10-6 15a6 6 0 0 0 12 0q0-5-6-15z" fill="#fff6d8"/>
+  <path d="M368 324h24M362 366h36M380 324v42M368 324l-6 42M392 324l6 42" stroke="#0a0c16" stroke-width="3.500" fill="none"/></g>
+<g id="bugle" class="hot" data-m="h"><circle cx="298" cy="336" r="50" fill="#000" opacity="0"/><use id="bH" href="#ch-bugle-h" x="262" y="294" width="74" height="81"/><use id="bB" href="#ch-bugle" x="262" y="294" width="74" height="81"/><use id="bC" href="#ch-bugle-c" x="258" y="286" width="82" height="90"/></g>
+<text id="crowT" font-family="Almendra,serif" font-weight="700" font-style="italic" font-size="50" fill="#ffe2a8" pointer-events="none"><textPath href="#crowArc" xlink:href="#crowArc">Cock-a-doodle-doo!</textPath></text>
+
+<rect id="warm" x="-1000" y="-640" width="3600" height="2140" fill="#ffc890" pointer-events="none"/>
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="stampd">RECEIVED SIXPENCE &middot; OWED NOTHING</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-jar"></p><p id="d-words"></p>
+  <h6>The Keeper&rsquo;s small words</h6>
+  <ol>
+    <li><b>MAY</b> lets you. It does not make you. <b>SHALL</b> and <b>MUST</b> do.</li>
+    <li><b>MAY</b> and <b>SHALL NOT</b> can both be kept, by not doing the thing. So &ldquo;shall not&rdquo; wins.</li>
+    <li><b>UNLESS</b> means &ldquo;except if&rdquo;. <b>ONLY IF</b> names what is needed, and promises nothing.</li>
+    <li><b>UNTIL</b> has an end. Ask what happens then, and whether you can make it happen.</li>
+    <li>&ldquo;Each leg that walks&rdquo; is fewer legs than &ldquo;each leg&rdquo;. Read to the end of the line.</li>
+    <li>&ldquo;All but two&rdquo; is not two. &ldquo;On foot&rdquo; is not on your hands.</li>
+    <li>Read it before you sign it.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Write a bargain</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the shelf</button></div>
+  <small>The Keeper Gives No Change &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="toll.js"></script>
+<script>
+(function () {
+  var $ = ER.$, sc = $('#scene'), busy = false, step = 0;
+  var NUM = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
+
+  /* stars, the stones of the bridge, and five small people */
+  (function () {
+    var s = '', i, x, y, seed = 5;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (i = 0; i < 120; i++) s += '<circle class="tw" cx="' + (-300 + rnd() * 2200).toFixed(0) + '" cy="' + (-300 + rnd() * 720).toFixed(0) + '" r="' + (0.7 + rnd() * 1.5).toFixed(1) + '" opacity="' + (0.4 + rnd() * 0.6).toFixed(2) + '"/>';
+    $('#stars').innerHTML = s; s = '';
+    for (y = 494; y < 640; y += 24) s += '<path d="M300 ' + y + 'H1700"/>';
+    for (i = 0; i < 4; i++) { x = [330, 735, 1145, 1545][i]; s += '<path d="M' + x + ' 470V760"/>'; }
+    $('#courses').innerHTML = s;
+    var F = {
+      osric: '<g transform="translate(-70 0)"><path d="M-36 -36q0-14 16-14h34q14 0 18 10l10-22q4-8 12-4l6 16q-6 6-12 4l-6 22q-4 10-16 10h-48q-14 0-14-12z" fill="#4a4038"/><path d="M-28 -24v24M-12 -22v22M18 -22v22M32 -26v26" stroke="#4a4038" stroke-width="7" stroke-linecap="round"/><path d="M-36 -38q-12 6-10 26" stroke="#2a2420" stroke-width="5" fill="none" stroke-linecap="round"/></g>' +
+        '<path d="M-9 0v-36M9 0v-36" stroke="#8a929c" stroke-width="8"/><path d="M-14 -36h28l-2-34h-24z" fill="#b9c1ca"/><path d="M-10 -80q0-14 10-14t10 14v10h-20z" fill="#c9d0d8"/><path d="M-7 -82h14" stroke="#2a2422" stroke-width="3"/><path d="M0 -94q-8-22 6-38q12 20 0 38z" fill="#c9281c"/>',
+      tamsel: '<path d="M-16 0L-12 -44h24L16 0z" fill="#3f5546"/><path d="M-14 -44q14-12 28 0l-4 16h-20z" fill="#6f8a77"/><circle cx="0" cy="-58" r="10" fill="#e8c3a4"/><path d="M-11 -60q0-12 11-12t11 12q-11-6-22 0z" fill="#f4f0e6"/><circle cx="18" cy="-28" r="10" fill="#b3261c"/>',
+      wickett: '<path d="M-8 0v-30M8 0v-30" stroke="#3a2a18" stroke-width="7"/><path d="M-12 -30h24l-3-30h-18z" fill="#6b4f2e"/><circle cx="0" cy="-70" r="9" fill="#dcae86"/><ellipse cx="0" cy="-78" rx="17" ry="4" fill="#3f331f"/><path d="M-8 -78q0-12 8-12t8 12z" fill="#54452b"/><rect x="-36" y="-70" width="24" height="38" fill="#8a6238"/><path d="M-36 -54h24" stroke="#3a2110" stroke-width="2"/><path d="M-7 -60q8 6 14 0l2 8q-9 6-18 0z" fill="#b3261c"/>',
+      bryony: '<path d="M-13 0L-10 -34h20L13 0z" fill="#7a5a3a"/><rect x="-9" y="-46" width="18" height="14" fill="#efe6cf"/><circle cx="0" cy="-54" r="9" fill="#ecc7a8"/><path d="M-10 -56q0-11 10-11t10 11q-10-5-20 0z" fill="#3f6a8a"/><ellipse cx="16" cy="-24" rx="11" ry="7" fill="#b98a4a"/><circle cx="19" cy="-33" r="5" fill="#9a5a2e"/>'
+    };
+    $('#folk').innerHTML = [['osric', 138], ['tamsel', 178], ['wickett', 214], ['bryony', 250]].map(function (p) { return '<g id="f-' + p[0] + '" class="fig"><g transform="translate(' + p[1] + ' 468)">' + F[p[0]] + '</g></g>'; }).join('');
+    $('#youG').innerHTML = '<g id="f-you" class="fig"><g transform="translate(-190 468)"><path d="M-7 0v-28M7 0v-28" stroke="#33301f" stroke-width="7"/><path d="M-11 -28h22l-3-28h-16z" fill="#5a6a4a"/><circle cx="0" cy="-66" r="9" fill="#e6c3a0"/><path d="M-10 -68q0-11 10-11t10 11z" fill="#4a3320"/>' +
+      '<g transform="translate(58 0)"><circle cx="0" cy="-15" r="15" fill="none" stroke="#7a5632" stroke-width="4"/><rect x="-30" y="-38" width="60" height="16" fill="#7a5632"/><path d="M-30 -32L-52 -44" stroke="#5a3f26" stroke-width="4" stroke-linecap="round"/>' +
+      '<g fill="#f3d77a"><ellipse cx="-14" cy="-42" rx="10" ry="4.500"/><ellipse cx="6" cy="-42" rx="10" ry="4.500"/><ellipse cx="-4" cy="-50" rx="10" ry="4.500"/></g><ellipse cx="0" cy="-62" rx="13" ry="7.500" fill="#f8f5ec"/><path d="M9 -64q8-10 4-18" stroke="#f8f5ec" stroke-width="5.500" fill="none" stroke-linecap="round"/><path d="M12 -84l9 2-8 4z" fill="#e88a2a"/></g></g></g>';
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'toll', storyTitle: 'The Keeper Gives No Change', id: 'crow', no: 'V', title: 'Cock-Crow',
+    go: 'Go out to the gate',
+    intro: [
+      'A nail for the pedlar, so that he had &ldquo;found a nail&rdquo; and the needle went home. A cheese for Bryony&rsquo;s egg. The egg and the needle for the scarf. The scarf, which is not food, for the feather. A cheese for the knight&rsquo;s supper, because he would not bargain <i>until</i> he had supped; and the feather for the bird. One thing for one thing, seven times.',
+      'It has stopped raining. It is the middle of the night. Over the gate of Stickle Bridge the Keeper&rsquo;s lamp is burning, as Clause 5 says that it shall.',
+      'Bugle sits on the gatepost in his hood, as heavy as a small loaf, and knows nothing about any of it.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"catch":["28992e40"]},
+    sound: ['candle', { root: 50, bpm: 60, drop: ['mel'], beds: [['night', 0.5]], then: ['morning', { root: 50, bpm: 70, beds: [['birds', 0.5]] }] }],      /* midnight by the river; a cock crows here, so no small bright notes; and then the morning */
+    hints: hints, onBegin: begin
+  });
+
+  step = ER.flag('w-step') || 0;
+
+  function hints() {
+    if (step === 0) return ['bugle', [
+      'Bugle is sitting on the gatepost, under the lamp, with his hood on. Bryony told you what happens when it comes off.',
+      'Click on Bugle to lift his hood.'
+    ]];
+    if (step === 1) return ['receipt', [
+      'The Keeper says that it is only a receipt. He said the same thing about the house book. Read every line before you touch the pen.',
+      'Two of the three sentences are fair. The third has a small word in it that sets a clock running. What happens to your cart, your goose and your cheeses: and when?',
+      'Look at the last sentence. For how long are your things your own? One small word in it sets the limit: and after that limit, they are not yours. Put your finger on that word.'
+    ]];
+    return null;
+  }
+  function isBusy() { return busy; }
+  function bugle(m) { $('#bugle').setAttribute('data-m', m); }
+  function paint() {
+    sc.classList.toggle('out', step >= 1); sc.classList.toggle('open', step >= 1); sc.classList.toggle('gone', step >= 1);
+    bugle(step >= 1 ? 'b' : 'h');
+    $('#bugle').setAttribute('class', 'hot' + (step === 0 && !busy ? ' ready' : ''));
+    ER.pips(Math.min(step, 2), 2);
+  }
+  function begin() {
+    if (step >= 1) { sc.classList.add('quick'); setTimeout(function () { sc.classList.remove('quick'); }, 400); }
+    paint();
+    if (step >= 2) { $('#f-you').style.display = 'none'; dawn(true); return; }
+    if (step === 1) { ER.say('The gate is open, the lamp is burning, and the Keeper is holding out a pen. Click on him when you are ready.'); return; }
+    busy = true;
+    ER.narrate([
+      'Midnight, or near it. The gate is shut. The lamp makes one yellow room in the dark, and you are standing in it.',
+      'Behind you the door of the toll-house opens. Four people come out and stand very quietly along the wall, the way people stand when they do not want to hope too hard.'
+    ], function () { busy = false; paint(); });
+  }
+
+  /* ---------- things at the gate ---------- */
+  TOLL.thing('#lampV', 'lamp', function () { return step >= 3 ? 'The lamp is out, because the sun is up. That is what Clause 5 says, and the Keeper wrote it himself.' : 'The Keeper&rsquo;s lamp, burning as Clause 5 says that it shall: until the sun is up. The sun will not be up for six hours.'; }, isBusy);
+  TOLL.thing('#folk', null, 'Four people who are trying very hard not to hope. Sir Osric has saddled his horse, in case. Wickett has his box on his back, in case.', isBusy);
+  TOLL.thing('#house', 'toll-house', 'The toll-house. Somebody has left the soup on the fire, and five bowls unwashed. The house book has an opinion about that.', isBusy);
+  TOLL.thing('#moonG', null, 'A thin moon. It is a long way from morning, whatever anybody is about to say.', isBusy);
+  $('#bugle').addEventListener('click', function () {
+    if (busy) return;
+    if (step >= 1) { ER.say('Bugle, on the gatepost, looking at the lamp. He is waiting for somebody to thank him for the sunrise.'); return; }
+    crow();
+  });
+  $('#troll').addEventListener('click', function () {
+    if (busy) return;
+    if (step === 1) { openReceipt(); return; }
+    ER.say('The Keeper, under his lamp, with his hands in his pockets. &ldquo;Good morning,&rdquo; he says. He has said it to everybody. He seems to like the sound of it.');
+  });
+
+  /* ---------- cock-crow ---------- */
+  function crow() {
+    busy = true; paint(); ER.sfx.click(); bugle('b');
+    ER.narrate([
+      'You lift the hood. Bugle blinks. He looks at the lamp. He looks at it for a long moment, the way a small bird looks at a very large mistake.'
+    ], function () {
+      bugle('c'); TOLL.sfx.crow(); $('#crowT').setAttribute('class', 'on'); sc.classList.add('crowed');
+      setTimeout(function () {
+        bugle('b');
+        ER.narrate([
+          'Then he fills his chest, and tells Stickle Water, both its banks and most of Overwater that the sun is up.',
+          'The hatch bangs open. The Keeper looks out, with a pen behind his ear. He looks at the bird. He looks at the black sky. He looks, for some time, at you.',
+          '&ldquo;I heard a cock crow,&rdquo; he says. &ldquo;Clause 2.&rdquo; He takes out a watch the size of a saucepan lid, and writes the time in his book. &ldquo;It is day. Good morning.&rdquo;'
+        ], function () {
+          sc.classList.add('out');
+          setTimeout(function () { sc.classList.add('open'); TOLL.sfx.gate(); }, 900);
+          setTimeout(function () {
+            ER.narrate([
+              'He comes out, and lifts the bar, and the gate of Stickle Bridge swings open in the middle of the night.',
+              'Then he stands in the gateway, as he has stood every morning for three hundred years. He holds out his hand. He opens his mouth. And he looks up at his own lamp, burning over his head; and he shuts his mouth again, and puts his hand in his pocket.',
+              '&ldquo;Clause 11,&rdquo; he says. &ldquo;The first traveller across each day.&rdquo; Mistress Tamsel picks up her bundle. She walks through the gate that she has looked at for nine years, and stops in front of him. &ldquo;Good morning, Keeper.&rdquo; &ldquo;Good morning, Mistress Tamsel,&rdquo; says the Keeper. &ldquo;It is not. But the Charter says that it is.&rdquo;'
+            ], function () {
+              ER.$$('#folk .fig').forEach(function (f) { f.classList.add('go'); });
+              ER.narrate([
+                'Wickett goes next, with his box on his back after all. Then Bryony, with Duchess under her arm. Then Sir Osric, leading his horse and wearing his feather; and on the far side Bryony is waiting for him with her hand out.',
+                '&ldquo;You have crossed the bridge,&rdquo; she says. &ldquo;One penny.&rdquo; Sir Osric has no penny. He looks back at the bird on the gatepost; he looks at the girl; and he bows, which makes a noise like a dropped tray. &ldquo;Then the hawk is yours again. I never could teach him anything.&rdquo;',
+                'That leaves you, a cart and a goose. &ldquo;You paid,&rdquo; says the Keeper. &ldquo;You are the only one who did. You will want a receipt.&rdquo; He writes for some time, turns the day-book round, and holds out the pen. &ldquo;Sign. It is only a receipt.&rdquo;'
+              ], function () { step = 1; ER.flag('w-step', 1); busy = false; ER.pips(1, 2); $('#bugle').setAttribute('class', 'hot'); openReceipt(); });
+            });
+          }, 2400);
+        });
+      }, 2500);
+    });
+  }
+
+  /* ---------- it is only a receipt ---------- */
+  function openReceipt() {
+    var box = ER.el('div', 'rc'), done = false, pk, hs = ER.flag('h-st'), n = hs && hs.inv && hs.inv.cheese ? hs.inv.cheese : 7;
+    box.innerHTML = '<div class="rc-page"><h4>Stickle Bridge: a receipt</h4><div class="rc-body">' +
+      '<p>Received of the bearer, before the lamp was lit: one sixpence. Change given: none.</p>' +
+      '<p>The bearer may cross this bridge tonight with one cart, one goose and ' + (NUM[n] || n) + ' cheeses, and the Keeper shall ask for nothing more.</p>' +
+      '<p>The cart, the goose and the cheeses belong to the bearer until the bearer signs below.</p></div>' +
+      '<div class="rc-sign"><span>Signed</span><button type="button" class="rc-pen" id="rc-sign">sign here</button></div></div>' +
+      '<div class="rc-side"><p class="rc-how">Read it before you sign it. If there is a word in it that you do not like, put your finger on that word.</p><p class="pmsg"></p></div>';
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    ER.glossIn(box, '.rc-body p');
+    ER.$$('.rc-body .w', box).forEach(function (w) { w.classList.add('wk-skip'); });      /* a dotted word is there to be looked up: clicking it is not a guess */
+    var SAYW = {
+      none: '&ldquo;None. Line VII. You knew about that one when you paid.&rdquo;',
+      may: '&ldquo;&lsquo;May cross.&rsquo; You may. Nobody is making you.&rdquo;',
+      shall: '&ldquo;&lsquo;Shall ask for nothing more.&rsquo; That is a promise, and it is mine. The hook is not there.&rdquo;',
+      nothing: '&ldquo;&lsquo;Shall ask for nothing more.&rsquo; That is a promise, and it is mine. The hook is not there.&rdquo;',
+      tonight: '&ldquo;Tonight is when you are crossing. Tomorrow will be another day, and another toll. That is fair.&rdquo;',
+      sixpence: '&ldquo;You did pay a sixpence. I was there.&rdquo;',
+      before: '&ldquo;Before the lamp was lit: and so it was. I took nothing by lamplight. I never have.&rdquo;',
+      bearer: '&ldquo;The bearer is you: the one who carries the paper. Yes, they belong to you. For how long? Read on to the end of the line.&rdquo;',
+      below: '&ldquo;Close. Which little word, a little earlier, sets the clock?&rdquo;',
+      '*': '&ldquo;That word is doing no harm to anybody,&rdquo; says the Keeper. &ldquo;Read on.&rdquo;'
+    };
+    pk = WK.pick(box.querySelector('.rc-body'), { key: 'catch', sound: false,
+      onRight: function (w, node) {
+        if (done) return;
+        done = true; node.classList.add('rc-hit'); pk.destroy(); ER.sfx.ok();
+        step = 2; ER.flag('w-step', 2); ER.pips(2, 2);
+        TOLL.learn(['until', 'receipt']);
+        msg('&ldquo;' + node.textContent.charAt(0).toUpperCase() + node.textContent.slice(1) + ',&rdquo; you say. &ldquo;They are mine until I sign. And after that?&rdquo;');
+        setTimeout(function () { ER.closeAll(); signed(); }, 2800);
+      },
+      onWrong: function (w, node) {
+        if (done) return;
+        TOLL.miss(); TOLL.sfx.hm(); msg(SAYW[w] || SAYW['*']);
+      } });
+    box.querySelector('#rc-sign').addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (done) return;
+      TOLL.miss(); TOLL.sfx.hm();
+      msg('&ldquo;Ah,&rdquo; says the Keeper, and he sounds truly sorry. He takes the pen back. &ldquo;You signed my house book in the rain, without reading it, and you have five soup bowls to wash. Read first. <i>Then</i> sign.&rdquo;');
+    });
+    msg('The Keeper holds the day-book steady with one finger. His face shows nothing at all, which on that face is a great deal of nothing.');
+    ER.open('ov-lock', box, function () { if (step === 1) ER.say('The Keeper is still holding out the pen. Click on him when you are ready.'); });
+  }
+  function signed() {
+    busy = true; TOLL.sfx.tear();
+    ER.narrate([
+      'The Keeper looks at you over both pairs of spectacles for a long moment. Then he tears the page out of the day-book, very neatly, folds it twice, and eats it.',
+      '&ldquo;I wanted to know whether it would last,&rdquo; he says. &ldquo;Reading. With most people it wears off by morning.&rdquo; He writes again: four words, this time. RECEIVED SIXPENCE. OWED NOTHING. You read it twice. Then you sign.'
+    ], function () {
+      $('#f-you').classList.add('go'); TOLL.sfx.pen();
+      ER.narrate([
+        'You cross Stickle Bridge a little after midnight, with your cheeses, one goose and a receipt. Behind you the Keeper stands under his lamp with his hands in his pockets, asking nobody for anything.',
+        'You are first into the square at Overwater by four hours. You have the best place in the fair, and every cheese is sold before noon. Mabel is admired by everybody, and sold to nobody.'
+      ], function () { dawn(false); });
+    });
+  }
+
+  /* ---------- the proper morning ---------- */
+  function dawn(quick) {
+    busy = true; sc.classList.add('dawn');
+    try { if (ER.track) ER.track.play(['morning', { root: 50, bpm: 70, beds: [['birds', 0.5]] }]); } catch (e) {}
+    if (quick && step >= 3) { busy = false; finish(); return; }
+    setTimeout(function () {
+      ER.narrate([
+        'The sun came up at the proper time. The Keeper put out his lamp, unlocked his strongbox, and found that there was nobody left to count.',
+        'He cannot mend the hole. Clause 12: not one word of the Charter shall be changed. So he has made a bargain, in writing, with Bryony Thistledown: one penny for every night on which her cockerel does <i>not</i> crow at Stickle Bridge. She read it twice before she signed it. She says that it is fair.',
+        'But on some nights, when a traveller comes late and in real trouble, and asks properly, people say that a very large hand lifts the cover off a basket under the lamp. Nothing in the Charter says that the Keeper must. Nothing in it says that he may not.',
+        'Mistress Tamsel was back within the week. Nine years of a place gives you a taste for it. But this time she read the house book before she signed it; and now the Keeper washes the soup bowls on Tuesdays.',
+        'And the board at the gate still says what it has always said, in letters a foot high: THE KEEPER GIVES NO CHANGE. &ldquo;Not one word has changed,&rdquo; he says, to anybody who asks. &ldquo;It has only been read.&rdquo;'
+      ], function () { busy = false; step = 3; ER.flag('w-step', 3); finish(); TOLL.solved(true); });
+    }, quick ? 600 : 5200);
+  }
+  function finish() {
+    var st = ER.state(), mins = TOLL.minutes(), hn = ER.hintsUsed(), pb = TOLL.pebbles();
+    $('#d-time').textContent = 'The night took you ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+    $('#d-jar').textContent = pb ? 'The Keeper’s jar holds ' + pb + (pb === 1 ? ' pebble: one mistake.' : ' pebbles: one for each mistake.') : 'The Keeper’s jar is empty. He has looked twice.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' papers and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('w-task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>The Keeper Gives No Change &middot; a bargain of your own</h4><h3>One thing for one thing</h3>' +
+      '<label for="r1">Write a bargain between two people: you and a friend, a knight and a poultry-girl, or you and the Keeper. Four or five clauses, 50 to 80 words. Use <b>may</b>, <b>shall</b> or <b>must</b>, <b>unless</b> and <b>until</b>. Then give it to somebody else, and ask them to find the hole in it.</label><textarea id="r1"></textarea>' +
+      '<div class="count"></div><label for="r2">Signed (read it first)</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('w-task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

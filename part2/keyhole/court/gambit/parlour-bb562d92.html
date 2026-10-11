@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Mayor&rsquo;s Parlour · Move Sixteen</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-court.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="gambit.css">
+<style>
+  body{--bg:#1b2733;--accent:#a9d3ea;--font-display:'Cinzel',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(20,29,40,.97);--tc-ink:#eef1ee;--cap-bg:rgba(20,29,40,.93);--panel:#18222d;--face-bg:#39493f;--q-ink:#bcd6e6;--fade:#0b1118;--hud-bg:rgba(20,29,40,.8)}
+  #coals{animation:coal 2.6s steps(1,end) infinite}
+  @keyframes coal{0%{opacity:.95}35%{opacity:.7}60%{opacity:1}80%{opacity:.8}}
+  #glow{animation:glow 2.6s steps(1,end) infinite}
+  @keyframes glow{0%{opacity:.5}35%{opacity:.36}60%{opacity:.55}80%{opacity:.42}}
+
+  /* six questions written on the stairs, and the Chair's place cards */
+  .qz{width:min(1160px,96vw);display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+  .qz-pad{position:relative;background:#eef3f6 repeating-linear-gradient(transparent 0 30px,rgba(60,110,170,.2) 30px 31px);padding:20px 24px 10px 30px;border-top:16px solid #2b2f36;box-shadow:0 22px 60px rgba(0,0,0,.6);transform:rotate(-.3deg)}
+  .qz-pad:before{content:'';position:absolute;left:0;right:0;top:-10px;height:8px;background:radial-gradient(circle,#c9ccd0 3px,transparent 4px) 6px 0/22px 8px repeat-x}
+  .qz-q{position:relative;margin:0 0 9px;padding-left:26px}
+  .qz-q>i{position:absolute;left:0;top:28px;font-style:normal;font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:#6b7480}
+  .qz-q s{display:block;font-family:'Caveat',cursive;font-weight:700;font-size:19px;line-height:22px;color:#1f3a8a;text-decoration:line-through;text-decoration-color:#55585f;opacity:.75}
+  .qz-q s.none{text-decoration:none;color:#6b7480;font-size:17.5px}
+  .qz-q p{margin:0;display:flex;align-items:center;gap:9px;font-family:'Caveat',cursive;font-weight:700;font-size:25px;line-height:38px;color:#3a3f4a}
+  .qz-slot{flex:none;min-width:150px;height:36px;border:1.500px dashed #7a8696;border-radius:3px;display:grid;place-items:center;background:rgba(255,255,255,.5)}
+  .qz-q.ok .qz-slot{border:0;background:none;min-width:0}
+  .qz-q.ok:after{content:'\2713';position:absolute;left:-2px;top:22px;font-family:'Caveat',cursive;font-weight:700;font-size:30px;color:#1f5a3a}
+  .qz-q.ok>i{display:none}
+  .qz-q.hid{display:none}
+  .qz-card{padding:5px 13px 3px;background:#fbf6e6;border:1.500px solid #c9a24a;box-shadow:0 3px 7px rgba(0,0,0,.35),inset 0 0 0 2px #fbf6e6,inset 0 0 0 3px #e6cf8a;font-family:'Cormorant SC',serif;font-weight:700;font-size:18px;letter-spacing:.08em;line-height:1.2;color:#3d3046;white-space:nowrap}
+  .qz-q.ok .qz-card{cursor:default;box-shadow:none;border-color:#1f5a3a}
+  .qz-side h6{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:400;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#bcd6e6}
+  .qz-tray{display:flex;flex-wrap:wrap;gap:9px;min-height:132px;align-content:flex-start;padding:12px;background:rgba(8,13,20,.72);border:1px dashed rgba(169,211,234,.5)}
+  .qz .pmsg{margin-top:12px;min-height:236px;font-size:17.5px;line-height:1.34}
+  .qz .pmsg em{display:block;font-style:normal;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#a9d3ea;margin:6px 0 1px}
+  .qz .btn{margin-top:10px;width:100%}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86aac6"/><stop offset="1" stop-color="#6c8fab"/></linearGradient>
+  <linearGradient id="mahG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a3324"/><stop offset="1" stop-color="#4f1e14"/></linearGradient>
+  <linearGradient id="topG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8c3d2a"/><stop offset=".5" stop-color="#b05a3c"/><stop offset="1" stop-color="#8c3d2a"/></linearGradient>
+  <linearGradient id="duskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#31486e"/><stop offset="1" stop-color="#c98a62"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a26"/><stop offset=".3" stop-color="#e6c873"/><stop offset=".55" stop-color="#b08a35"/><stop offset=".8" stop-color="#f0d98f"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="curtG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7b1f2a"/><stop offset=".5" stop-color="#a83242"/><stop offset="1" stop-color="#6a1822"/></linearGradient>
+  <radialGradient id="fireG" cx="50%" cy="70%" r="60%"><stop offset="0" stop-color="#ffd27a"/><stop offset=".5" stop-color="#f08a3a"/><stop offset="1" stop-color="#7a1f10"/></radialGradient>
+  <radialGradient id="glowG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffb060" stop-opacity=".6"/><stop offset="1" stop-color="#ffb060" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="42%" r="82%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".68" stop-color="#08101a" stop-opacity=".16"/><stop offset="1" stop-color="#050a12" stop-opacity=".74"/></radialGradient>
+  <pattern id="rug" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="#c8b79c"/><path d="M30 8l12 22-12 22-12-22z" fill="none" stroke="#a8906c" stroke-width="2.500"/><circle cx="0" cy="0" r="4" fill="#a8906c"/><circle cx="60" cy="0" r="4" fill="#a8906c"/><circle cx="0" cy="60" r="4" fill="#a8906c"/><circle cx="60" cy="60" r="4" fill="#a8906c"/></pattern>
+</defs>
+
+<!-- blue walls, white plaster -->
+<rect x="-1000" y="-400" width="3600" height="1010" fill="url(#wallG)"/>
+<rect x="-1000" y="-400" width="3600" height="436" fill="#f4f6f4"/><path d="M-1000 36h3600" stroke="#cfd6d6" stroke-width="6"/><g id="dentils" fill="#dfe5e4"></g>
+<g id="plaster" fill="none" stroke="#f4f6f4" stroke-width="5"></g>
+<rect x="-1000" y="560" width="3600" height="52" fill="#f4f6f4"/><path d="M-1000 560h3600" stroke="#cfd6d6" stroke-width="4"/>
+<rect x="-1000" y="610" width="3600" height="800" fill="url(#rug)"/>
+
+<!-- the fire, the stopped clock, and Alderman Brindlow in a bigger frame -->
+<g id="portrait" class="hot"><rect x="150" y="60" width="220" height="170" fill="url(#brassG)"/><rect x="164" y="74" width="192" height="142" fill="#22262b"/><ellipse cx="260" cy="126" rx="26" ry="32" fill="#d9b092"/><path d="M204 216q6-58 56-60t56 60z" fill="#8f1d2c"/><path d="M226 172q34 34 68 0" stroke="url(#brassG)" stroke-width="7" fill="none"/></g>
+<g id="fire" class="hot"><rect x="96" y="286" width="328" height="290" fill="#f4f6f4"/><rect x="84" y="268" width="352" height="26" fill="#e3e9e8"/><rect x="150" y="350" width="220" height="226" fill="#17181a"/>
+  <ellipse id="glow" cx="260" cy="520" rx="210" ry="120" fill="url(#glowG)" pointer-events="none"/>
+  <g id="coals"><path d="M176 576q10-62 84-62t84 62z" fill="url(#fireG)"/><g fill="#2a1410"><circle cx="212" cy="560" r="16"/><circle cx="252" cy="552" r="19"/><circle cx="296" cy="560" r="17"/><circle cx="234" cy="572" r="13"/><circle cx="276" cy="572" r="13"/></g></g>
+  <path d="M140 576h240v12h-240z" fill="url(#brassG)"/><g stroke="#dfe5e4" stroke-width="3"><path d="M116 300v262M404 300v262"/></g></g>
+<g id="mclock" class="hot"><path d="M226 268v-62a34 34 0 0 1 68 0v62z" fill="#dff0f4" opacity=".55" stroke="#f4f6f4" stroke-width="2"/><rect x="238" y="250" width="44" height="18" fill="url(#brassG)"/><circle cx="260" cy="226" r="22" fill="url(#brassG)"/><circle cx="260" cy="226" r="15" fill="#fbf8ec"/>
+  <path d="M260 226V216" stroke="#1c1d1f" stroke-width="3" stroke-linecap="round" transform="rotate(220 260 226)"/><path d="M260 226V213" stroke="#1c1d1f" stroke-width="2" stroke-linecap="round" transform="rotate(120 260 226)"/>
+  <rect x="130" y="238" width="10" height="30" fill="url(#brassG)"/><rect x="380" y="238" width="10" height="30" fill="url(#brassG)"/><rect x="131" y="212" width="8" height="28" fill="#fbf8ec"/><rect x="381" y="212" width="8" height="28" fill="#fbf8ec"/></g>
+
+<!-- the window, the curtains, the Mayor's chain -->
+<g id="window" class="hot"><rect x="1236" y="86" width="228" height="420" fill="#f4f6f4"/><rect x="1250" y="100" width="200" height="392" fill="url(#duskG)"/><path d="M1350 100v392M1250 230h200M1250 362h200" stroke="#f4f6f4" stroke-width="7"/>
+  <path d="M1206 70h288v30h-288z" fill="url(#brassG)"/><path d="M1214 100q34 220-10 470h70q-22-240 10-470zM1486 100q-34 220 10 470h-70q22-240-10-470z" fill="url(#curtG)"/></g>
+<g id="chain" class="hot"><rect x="1500" y="250" width="160" height="320" fill="#5a2a1c"/><rect x="1512" y="262" width="150" height="230" fill="#dff0f4" opacity=".4"/><path d="M1540 290q46 150 92 0" stroke="url(#brassG)" stroke-width="9" fill="none" stroke-dasharray="14 6"/><circle cx="1586" cy="412" r="20" fill="url(#brassG)"/></g>
+<g id="lights"><path d="M800 -20v60" stroke="url(#brassG)" stroke-width="6"/><path d="M700 70q100-50 200 0" stroke="url(#brassG)" stroke-width="6" fill="none"/><g fill="#fff6d8"><circle cx="700" cy="78" r="14"/><circle cx="800" cy="56" r="14"/><circle cx="900" cy="78" r="14"/></g><circle cx="800" cy="70" r="150" fill="url(#glowG)" opacity=".35" pointer-events="none"/></g>
+
+<!-- Mrs Hargreave, by the fire -->
+<path d="M400 548q-10-150 80-156t84 156v112h-164z" fill="#2f4f3f"/><path d="M418 548q-6-124 62-130t66 130" fill="none" stroke="#e7c477" stroke-width="3" stroke-dasharray="3 12"/>
+<g id="harg" class="hot"><rect x="400" y="400" width="170" height="210" fill="#000" opacity="0"/><use href="#ch-hargreave" x="388" y="376" width="188" height="244"/></g>
+
+<!-- the committee -->
+<g id="quayle" class="hot"><rect x="650" y="300" width="180" height="230" fill="#000" opacity="0"/><use href="#ch-quayle" x="640" y="286" width="204" height="265"/></g>
+<g id="rahman" class="hot"><rect x="870" y="296" width="180" height="230" fill="#000" opacity="0"/><use href="#ch-rahman" x="858" y="280" width="208" height="270"/></g>
+<g id="tloxley" class="hot"><rect x="1090" y="300" width="180" height="230" fill="#000" opacity="0"/><use href="#ch-loxley" x="1078" y="286" width="204" height="265"/></g>
+<path d="M626 540h754l30 26h-814z" fill="url(#topG)"/><rect x="596" y="566" width="814" height="96" fill="url(#mahG)"/><path d="M596 566h814" stroke="#c9785a" stroke-width="3"/>
+<g stroke="#3a140c" stroke-width="3" fill="none"><rect x="616" y="582" width="242" height="64"/><rect x="880" y="582" width="246" height="64"/><rect x="1148" y="582" width="242" height="64"/></g>
+<g id="plates"><path d="M700 556l8-22h72l8 22z" fill="#fbf6e6"/><text x="744" y="551" class="cT" font-size="12" fill="#3d3046">MR QUAYLE</text><path d="M918 556l8-22h72l8 22z" fill="#fbf6e6"/><text x="962" y="551" class="cT" font-size="13" fill="#3d3046">CHAIR</text><path d="M1136 556l8-22h72l8 22z" fill="#fbf6e6"/><text x="1180" y="551" class="cT" font-size="12" fill="#3d3046">MR LOXLEY</text></g>
+<g id="mints" class="hot"><rect x="1030" y="536" width="54" height="16" rx="4" fill="#dfe5e4"/><rect x="1030" y="530" width="54" height="10" rx="4" fill="#f4f6f4"/><text x="1057" y="548" class="sT" font-size="8" fill="#2f6a8a" letter-spacing="1">EXTRA STRONG</text></g>
+<g><path d="M1248 552v-30h22v30z" fill="#dff0f4" opacity=".8"/><path d="M1248 536h22v16h-22z" fill="#a9d3ea" opacity=".8"/><path d="M1296 552l4-26h60l4 26z" fill="#fbf9ef"/><path d="M1306 536h48M1304 544h40" stroke="#9a9c94" stroke-width="2"/></g>
+
+<!-- Maeve, in the Mayor's second-best chair -->
+<path d="M1396 520q-10-150 80-156t84 156v160h-164z" fill="#7b1f2a"/><path d="M1414 520q-6-124 62-130t66 130" fill="none" stroke="#e7c477" stroke-width="3" stroke-dasharray="3 12"/>
+<g id="maeve" class="hot"><rect x="1396" y="420" width="170" height="220" fill="#000" opacity="0"/><use href="#ch-maeve" x="1388" y="404" width="184" height="240"/></g>
+
+<!-- your own end of things -->
+<path d="M280 760h1040l180 240h-1400z" fill="url(#topG)"/><path d="M280 760h1040" stroke="#d98a66" stroke-width="5"/>
+<g id="pad" class="hot"><g transform="rotate(-5 560 836)"><path d="M440 782h230l14 110h-258z" fill="#eef3f6"/><path d="M440 782h230l2 12h-234z" fill="#2b2f36"/><g stroke="#1f3a8a" stroke-width="2.600"><path d="M452 812h200M450 830h180M448 848h206M446 866h160M444 882h190"/></g><path d="M448 812h210M446 848h214" stroke="#55585f" stroke-width="1.500"/></g></g>
+<g id="qcard" class="hot"><g transform="rotate(6 1000 834)"><path d="M896 784h210l10 104h-230z" fill="#fbf6e6" stroke="#c9a24a" stroke-width="4"/><path d="M930 806h144" stroke="#3d3046" stroke-width="5"/><g stroke="#6b6453" stroke-width="2.400"><path d="M908 826h188M906 842h170M904 858h192M902 874h150"/></g></g></g>
+<g transform="rotate(-18 760 850)"><rect x="720" y="846" width="90" height="7" fill="#e8b923"/><path d="M810 846l12 3.500-12 3.500z" fill="#e9c9a4"/></g>
+<g id="rollup"><rect x="1150" y="800" width="150" height="22" rx="11" fill="#fdfdfb"/><ellipse cx="1300" cy="811" rx="6" ry="11" fill="#e2dccb"/><path d="M1160 811h120" stroke="#d8382a" stroke-width="2" stroke-dasharray="10 26"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1760" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Follow the committee into the corridor</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="gambit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, qzBox = null;
+
+  /* the cornice, and the white panels on the blue wall */
+  (function () {
+    var s = '', i;
+    for (i = -40; i < 100; i++) s += '<rect x="' + (i * 26) + '" y="20" width="14" height="14"/>';
+    $('#dentils').innerHTML = s; s = '';
+    [[470, 150], [660, 400], [1100, 100]].forEach(function (p) { s += '<rect x="' + p[0] + '" y="80" width="' + p[1] + '" height="440"/><rect x="' + (p[0] + 16) + '" y="96" width="' + (p[1] - 32) + '" height="408" stroke-width="2"/>'; });
+    s += '<rect x="-200" y="80" width="230" height="440"/><rect x="1700" y="80" width="300" height="440"/>';
+    $('#plaster').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'court', story: 'gambit', storyTitle: 'Move Sixteen', id: 'parlour', no: 'III', title: 'The Mayor&rsquo;s Parlour',
+    go: 'Knock, and go in',
+    intro: [
+      'The till roll gave you the time of everything, because a chess clock is two clocks and only one of them is ever running. Add up what has gone from both, and you have the time of day. For a White move you had to take Black&rsquo;s number from the line above, because Black had not yet moved.',
+      'So Maeve played her 16th move, the one with the queen, at five past three, after nineteen minutes at the board. She signed out at seven minutes past. Mr Pettifer saw a telephone at about ten past. Tunde did not answer until seventeen minutes past.',
+      'Whatever was in her hand in that corridor, the queen had already gone. You have the till roll in your pocket, held with Miss Ferrars&rsquo;s paper clip, and you have written six questions on the way up the stairs.'
+    ],
+    exit: {"next":"corridor","w":{"c24b4666":"70eb8f6d"}}, tags: {"q1":["e58d8e7b"],"q2":["71bb00d3"],"q3":["ff976544"],"q4":["ff550f34"],"q5":["c08a3b5a"],"q6":["20d3a5c1"],"q7":["239bfd87"]},
+    sound: ['bench', { root: 50, bpm: 56, drop: ['mel', 'ost'], beds: [['fire', 0.35]] }],      /* the quietest room in the building: a coal fire, and a clock that stopped in 1953 */
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('p-file') || null;
+
+  var QCARD = '<h4>How We Ask Questions at This Table</h4>' +
+    '<p><b class="t">YOUR OWN WITNESS.</b> This is <b class="t">EXAMINATION-IN-CHIEF</b>. Ask <b class="t">OPEN QUESTIONS</b>: the kind that begin with one of Mr Kipling&rsquo;s six honest serving-men.</p>' +
+    '<p class="six">&ldquo;Their names are What and Why and When<br>And How and Where and Who.&rdquo;</p>' +
+    '<p>The answer is then hers, in her own words, and it may be something that you did not know.</p>' +
+    '<p>A <b class="t">LEADING QUESTION</b> carries its answer inside it: &ldquo;You went home at six, didn&rsquo;t you?&rdquo; All that she can add is yes. We have then heard you, and not her; and an answer that you put into your own witness&rsquo;s mouth is worth very little.</p>' +
+    '<p><b class="t">THE OTHER SIDE&rsquo;S WITNESS.</b> This is <b class="t">CROSS-EXAMINATION</b>. Now you MAY lead, and you should: &ldquo;You were twenty metres away, weren&rsquo;t you?&rdquo; He is not your friend, and he will not agree just to please you, so his yes is worth having. Ask him an open question and he will make a speech.</p>';
+
+  /* [what you wrote on the stairs, the rest of the question when it is asked properly, her answer, what happens then] */
+  var QS = [
+    ['Your telephone was in the box at the Congress Desk, wasn&rsquo;t it?', 'was your telephone during the game?',
+      'In the box at the Congress Desk. Envelope fourteen. I gave it in at ten to two, switched off, and I have not had it back yet.'],
+    ['You left the hall three times, didn&rsquo;t you?', 'did you leave the hall during the game?',
+      'Three times. I signed Mr Pettifer&rsquo;s sheet every time: out, and in.'],
+    ['You only went out when it was Tunde&rsquo;s turn to move, didn&rsquo;t you?', 'did you leave your board?',
+      'When I had just moved. Every time. You go when it is the other person&rsquo;s turn, because then it is his clock that is running, and not yours.'],
+    ['You went out to fill your water bottle, didn&rsquo;t you?', 'did you go out?',
+      'The first time, for water. The second time, for the toilet. The third time, for water again: it is hot in that hall, and I had just sat for nineteen minutes over one move.'],
+    ['The third time, you filled your bottle and came straight back, didn&rsquo;t you?', 'did you do in the corridor, the third time?',
+      'I filled my bottle at the fountain. Then something buzzed on the windowsill, next to me. It was a telephone. Nobody was there. I picked it up, and the screen lit, and there was a dog on it. I thought: somebody is going to get into trouble for this. So I took it to the desk. Nobody has asked me about that until now. They only asked me where MY telephone was.',
+      '<i>Nobody at the table moves. Your pad says that she filled her bottle and came straight back.</i> &ldquo;That,&rdquo; says Dr Rahman, &ldquo;is why we ask them open. Your question had an answer in it, and it was the wrong answer. Go on. Your pad cannot help you now.&rdquo;'],
+    ['', 'telephone was it?',
+      'I don&rsquo;t know. Not mine: mine is in envelope fourteen. It was black, the glass was cracked at one corner, and the dog was brown and white. I gave it to the lady at the desk, and she wrote it in a red book.',
+      '<i>Mr Quayle writes RED BOOK and draws a line under it.</i>'],
+    ['Nobody helped you to find the move with the queen, did they?', 'did you find the move with the queen?',
+      'I didn&rsquo;t find it. A man called Paul Morphy found it, in Paris, in 1858. It is on page 41 of my library book, and I have played that game through about forty times. This afternoon Tunde made the same moves as the people in the book, one after another. On move 16 I knew what came next, and I didn&rsquo;t believe it. So I counted every piece on the board, twice. That was the nineteen minutes.']
+  ];
+  var CARDS = [['what', 'WHAT'], ['howmany', 'HOW MANY TIMES'], ['why', 'WHY'], ['who', 'WHO'], ['when', 'WHEN'], ['whose', 'WHOSE'], ['how', 'HOW'], ['howlong', 'HOW LONG'], ['where', 'WHERE']];
+  var FITS = { 2: ['when', 'why', 'how', 'howlong', 'where'], 3: ['why', 'howmany', 'how', 'howlong', 'where'], 4: ['when', 'howmany', 'how', 'howlong', 'where'], 7: ['when', 'where', 'why'] };
+  var NOTTHAT = {
+    2: 'That is a fair question, and it fits the line. But look at the one that you crossed out: &ldquo;You left the hall THREE TIMES, didn&rsquo;t you?&rdquo; The answer hidden in it was a number. Ask for the number.',
+    3: 'It fits the line. It does not fit your pad. What you crossed out was: &ldquo;You only went out WHEN IT WAS TUNDE&rsquo;S TURN, didn&rsquo;t you?&rdquo; Take the answer out of that. What is left to ask for: a reason, a number, or a moment?',
+    4: 'It fits the line, and it is not the question on your pad. You had written &ldquo;TO FILL YOUR WATER BOTTLE&rdquo;. Is that a moment, a number, or a reason?',
+    7: 'You may want to know that as well. But your pad said: &ldquo;NOBODY HELPED YOU, did they?&rdquo; What this committee needs is the WAY she found it, in her own words. Which of the serving-men asks for the way a thing is done?'
+  };
+  function label(k) { return CARDS.filter(function (c) { return c[0] === k; })[0][1]; }
+  function refuse(n, k) {
+    if (n === 6 && k === 'what') return '&ldquo;What telephone was it?&rdquo; She has just told us what it was: black, and buzzing. This committee would like to know something else about it. So, I think, would Mr Pettifer.';
+    if (n === 6 && k === 'who') return '&ldquo;Who telephone was it?&rdquo; Nearly. Who has a cousin on that tray who is better with telephones.';
+    if (FITS[n] && FITS[n].indexOf(k) >= 0) return NOTTHAT[n];
+    return 'Dr Rahman holds up one finger. &ldquo;Say it to yourself before you say it to her. &lsquo;' + label(k).charAt(0) + label(k).slice(1).toLowerCase() + ' ' + QS[n - 1][1] + '&rsquo; That is not a question. It is an accident.&rdquo;';
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The committee has gone to look at the corridor. Follow them: the button is at the bottom of the screen.']];
+    if (!ER.flag('p-card')) return ['card', ['Dr Rahman has stopped your first question. There is a cream card with a gold edge on the table in front of you, on the right. Read it.']];
+    if (!qzBox) return ['pad', ['Your pad is on the table in front of you, on the left, with the six questions that you wrote on the stairs. Click it.']];
+    return ['open', [
+      'Every question on your pad is a leading question: it carries its answer inside it. Find that answer first. In &ldquo;You went out to fill your water bottle, didn&rsquo;t you?&rdquo; it is everything between &ldquo;out&rdquo; and the comma.',
+      'Now ask for that answer without giving it. A place wants WHERE. A moment wants WHEN. A reason wants WHY. A number of times wants HOW MANY TIMES. A thing that was done wants WHAT, and the way it was done wants HOW.',
+      'Three lines on the pad are nearly the same: &ldquo;&hellip; did you leave the hall&rdquo;, &ldquo;&hellip; did you leave your board&rdquo;, &ldquo;&hellip; did you go out&rdquo;. Several cards fit each of them. Only the question that you crossed out tells you which card belongs on which line.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#go').classList.toggle('on', !!nextFile);
+    $('#qcard').classList.toggle('ready', !nextFile && !ER.flag('p-card'));
+    $('#pad').classList.toggle('ready', !nextFile && !!ER.flag('p-card'));
+    ER.pips(nextFile ? 7 : (ER.flag('p-done') || []).length, 7);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The Mayor&rsquo;s Parlour is empty. The committee has gone to look at a corridor.'); return; }
+    if (ER.flag('p-in')) { ER.say('The Mayor&rsquo;s Parlour. Maeve is waiting for your next question.'); return; }
+    busy = true; ER.flag('p-in', 1);
+    ER.narrate([
+      'The Mayor&rsquo;s Parlour is the best room in the building, and it knows it: blue walls, a coal fire, a long table that somebody polishes, and a gilt clock that stopped in 1953.',
+      'Three people sit behind the table. Dr Rahman is in the middle, with Mr Quayle and his pencil on one side of her, and Mr Loxley and his beard on the other. Mrs Hargreave has a chair by the fire. Maeve has a chair that is much too big for her.',
+      '&ldquo;This is not a court,&rdquo; says Dr Rahman, &ldquo;so nobody stood up when I came in, which is a pity. Mrs Hargreave says that this player used a telephone. It is for Mrs Hargreave to show it, and Mr Pettifer is her witness. He will wait in the corridor until he is called. I want his own evidence, not his answer to somebody else&rsquo;s.&rdquo;',
+      '&ldquo;It is Maeve&rsquo;s appeal, so we shall hear Maeve first. Her friend will ask her questions.&rdquo; She looks at you. You look at your pad.',
+      '&ldquo;Your telephone was in the box at the Congress Desk, wasn&rsquo;t it?&rdquo; you say. &ldquo;Yes,&rdquo; says Maeve.',
+      'Dr Rahman takes off her glasses. &ldquo;I have now heard YOU tell me where the telephone was. I have heard HER say one word. There is a card on the table in front of you. Read it, and then begin again.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the room ---------- */
+  $('#qcard').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: QCARD, cls: 'gilt', clue: { id: 'qcard', title: 'The Chair’s card: how we ask questions', kind: 'On the table in the Parlour' },
+      done: function () { ER.flag('p-card', 1); paint(); GB.learn(['examination-in-chief', 'cross-examination', 'open question', 'leading question', 'witness']); } });
+  });
+  $('#pad').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Your pad. Six leading questions, crossed out, and seven open ones in pencil.'); return; }
+    if (!ER.flag('p-card')) { ER.say('Your six questions. Dr Rahman is still holding her glasses in her hand. She is looking at the cream card, and then at you.'); return; }
+    openPad();
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  GB.thing('#rahman', null, 'Dr Rahman, in the chair. She was a doctor in Brindlow for most of her life, and she has heard a great many people explain that it was not their fault.', isBusy);
+  GB.thing('#quayle', null, 'Mr Quayle writes down everything that is said, in pencil, in very small letters. He has spent the day with the Under-9s, and he has the look of a man who has been let out.', isBusy);
+  GB.thing('#tloxley', null, 'Mr Loxley, of the bookstall. &ldquo;No relation,&rdquo; he said, as he sat down. &ldquo;I have checked. Twice, since half past three.&rdquo;', isBusy);
+  GB.thing('#harg', null, 'Mrs Hargreave, by the fire. For the first time today, nobody is asking her to decide anything.', isBusy);
+  GB.thing('#maeve', null, 'Maeve&rsquo;s feet do not reach the carpet. She has put her water bottle under the chair, where it always goes.', isBusy);
+  GB.thing('#fire', null, 'A coal fire. The caretaker lights it for mayors and for the Appeals Committee, and for nobody else.', isBusy);
+  GB.thing('#mclock', null, 'A gilt clock, under a glass dome. It stopped at twenty past seven in 1953, and the council has been meaning to see to it ever since.', isBusy);
+  GB.thing('#portrait', null, 'Alderman Josiah Brindlow again, in a bigger frame.', isBusy);
+  GB.thing('#chain', null, 'The Mayor&rsquo;s chain, in a glass case. Thirty-eight gold links: one for every mayor, until the gold ran out.', isBusy);
+  GB.thing('#window', null, 'It is getting dark outside. Round five begins at a quarter to five.', isBusy);
+  GB.thing('#mints', null, 'A tin of peppermints at Dr Rahman&rsquo;s right hand. EXTRA STRONG. She has not opened it yet.', isBusy);
+
+  /* ---------- the pad ---------- */
+  function openPad() {
+    var box = ER.el('div', 'qz'), got = ER.flag('p-done') || [], lines = ER.flag('p-lines') || [], done = false, s = '<div class="qz-pad">';
+    var NUM = ['1', '2', '3', '4', '5', '+', '6'];          /* six questions were written on the stairs; the seventh line is the one that nobody planned */
+    function lineName(n) { return NUM[n - 1] === '+' ? 'The new line' : 'Line ' + NUM[n - 1]; }
+    QS.forEach(function (q, i) {
+      s += '<div class="qz-q' + (i === 5 ? ' hid' : '') + '" data-n="' + (i + 1) + '"><i>' + NUM[i] + '</i>' + (q[0] ? '<s>' + q[0] + '</s>' : '<s class="none">(not on your pad: you did not know that there was one)</s>') +
+        '<p><span class="qz-slot"></span><span>' + q[1] + '</span></p></div>';
+    });
+    s += '</div><div class="qz-side"><h6>The Chair&rsquo;s place cards</h6><div class="qz-tray"></div><button type="button" class="btn" id="qz-go">Ask her</button><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    var tray = box.querySelector('.qz-tray'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#qz-go');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function Q(n) { return box.querySelector('.qz-q[data-n="' + n + '"]'); }
+    CARDS.forEach(function (c) { var d = ER.el('div', 'qz-card dnd-item', c[1]); d.setAttribute('data-k', c[0]); tray.appendChild(d); });
+    function lockIn(n, k) { var q = Q(n), card = box.querySelector('.qz-card[data-k="' + k + '"]'); q.querySelector('.qz-slot').appendChild(card); q.classList.add('ok'); card.classList.remove('dnd-item'); }
+    function show() {
+      got.forEach(function (k, i) { lockIn(i + 1, k); });
+      if (got.length >= 5) Q(6).classList.remove('hid');
+      box.setAttribute('data-q', got.length);
+      go.textContent = got.length ? 'Ask her the next one' : 'Ask her';
+    }
+    ER.dnd(box, { item: '.qz-card.dnd-item', slot: '.qz-q:not(.ok) .qz-slot', home: tray, lock: function () { return done; }, change: function () { GB.sfx.card(); } });
+    go.addEventListener('click', function () {
+      var n = got.length + 1, q = Q(n), card = q.querySelector('.qz-card'), k, file, text;
+      if (done) return;
+      if (!card) { msg(lineName(n) + ' on your pad has no first word yet. A question cannot begin with a gap.'); return; }
+      k = card.getAttribute('data-k');
+      if (!ER.check('q' + n, k)) {
+        GB.bump('p-tries'); GB.sfx.hm(); tray.appendChild(card);
+        msg(refuse(n, k));
+        return;
+      }
+      text = label(k).charAt(0) + label(k).slice(1).toLowerCase() + ' ' + QS[n - 1][1];
+      got.push(k); ER.flag('p-done', got);
+      lines.push('<p class="q">' + text + '</p><p>' + QS[n - 1][2] + '</p>'); ER.flag('p-lines', lines);
+      show(); paint(); if (n === 5) GB.sfx.buzz(); else GB.sfx.pencil();          /* the telephone on the windowsill: only an echo of her answer, and nothing depends on hearing it */
+      msg('<em>You</em>' + text + '<em>Maeve</em>' + QS[n - 1][2] + (QS[n - 1][3] ? '<br><br>' + QS[n - 1][3] : ''));
+      if (got.length < 7) return;
+      file = ER.exitOk([got.join('+')]);
+      if (!file) { msg('The pencil has broken. Something is wrong with this lock: tell your teacher.'); return; }
+      done = true; nextFile = file; ER.flag('p-file', file); GB.done('parlour'); go.disabled = true;
+      ER.addClue('chief', 'Maeve’s evidence, in her own words', '<h4>Maeve Loxley &middot; examination-in-chief</h4>' + lines.join(''), 'said', 'Said at the table');
+      setTimeout(function () {
+        ER.closeAll(); GB.solved(); paint(); busy = true;
+        ER.narrate([
+          'Mr Loxley holds out his hand for the score sheet and reads down it with one finger. &ldquo;Knight f3, d6, d4, Bishop g4&hellip; Chair, I know this game. So does everybody who has ever opened a chess book: Paul Morphy against a duke and a count, in a box at the opera in Paris. I sell it downstairs for three pounds fifty.&rdquo;',
+          '&ldquo;Players graded 1180 do not find such moves,&rdquo; he reads, from the pink slip. &ldquo;Quite right. Morphy found it. She remembered it. That is what the book is for.&rdquo;',
+          '&ldquo;Then there is the matter of a black telephone with a dog on it,&rdquo; says Dr Rahman. &ldquo;Mr Quayle, be so kind as to go down and ask Miss Ferrars for her red book. I am told that it lives beside the cash box.&rdquo;',
+          'Mrs Hargreave has not written anything for some time. &ldquo;I never asked her,&rdquo; she says, to the fire. &ldquo;I told her.&rdquo; &ldquo;Yes,&rdquo; says Dr Rahman, quite kindly. &ldquo;That is why there is a Rule 9.&rdquo;',
+          '&ldquo;We have heard one side. Mr Pettifer has been sitting in that corridor for a quarter of an hour, and it is the corridor that I want to see. He can show us where he stood. Bring your papers.&rdquo;'
+        ], function () { busy = false; });
+      }, 5200);
+    });
+    show();
+    msg(got.length ? 'Maeve is waiting for the next question. <i>Put a card at the front of ' + lineName(got.length + 1).toLowerCase() + ', and ask it.</i>'
+      : 'Six leading questions, and Dr Rahman has run her pencil through every one. <b>Ask each of them again as an open question:</b> put one of her place cards at the front of the line. <i>Drag a card, or click the card and then the gap. You ask them in order, one at a time.</i>');
+    qzBox = box;
+    ER.open('ov-lock', box, function () { qzBox = null; });
+  }
+})();
+</script>
+</body>
+</html>

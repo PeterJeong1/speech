@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Judging · A Smell of Vinegar</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-forensic.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="fair.css">
+<style>
+  body{--bg:#d9dfd2;--accent:#b3261c;--font-display:'Patrick Hand',cursive;--font-ui:'Barlow Condensed',sans-serif;--font-body:'Libre Baskerville',serif;
+    --tc-bg:rgba(246,242,230,.97);--tc-ink:#22211c;--cap-bg:rgba(250,247,238,.96);--cap-ink:#22211c;--panel:#f6f2e6;--panel-ink:#22211c;--face-bg:#cfd9df;--q-ink:#17324d;--fade:#f6f2e6;
+    --hud-bg:rgba(250,247,238,.86);--hud-ink:#22211c;--hud-line:rgba(34,33,28,.3);--ov-bg:rgba(40,38,30,.6)}
+  .tc-room{letter-spacing:.01em;font-size:clamp(44px,6.4vw,84px)}
+  .tc-theme{color:#b3261c}
+  .tk-role{color:#b3261c}
+  .hbtn.hnt{border-color:#b3261c;color:#b3261c}
+  .ov-x{background:rgba(250,247,238,.9);color:#22211c;border-color:rgba(34,33,28,.4)}
+  .pmsg{color:#f6f2e6}
+  .sB{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-anchor:middle}
+  .sK{font-family:'Permanent Marker',cursive;text-anchor:middle}
+  .sH{font-family:'Patrick Hand',cursive;text-anchor:middle}
+  .mote{animation:mote 10s linear infinite;opacity:0}
+  .mote.m2{animation-delay:-3.300s}.mote.m3{animation-delay:-6.600s}
+  @keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.8}100%{transform:translate(70px,-160px);opacity:0}}
+  #lava{display:none}
+  #scene.erupt #lava{display:block}
+  #lava circle{animation:lava 1.5s ease-out infinite}
+  #lava circle:nth-child(2n){animation-duration:1.900s;animation-delay:-.600s}
+  #lava circle:nth-child(3n){animation-duration:1.200s;animation-delay:-.300s}
+  @keyframes lava{0%{transform:translate(0,0);opacity:1}100%{transform:translate(var(--dx,10px),-110px);opacity:0}}
+  #scale.ready{animation:nudge 1.500s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+  .hot:hover{filter:brightness(1.07)}
+
+  /* the hook */
+  .hk{width:min(1000px,95vw);display:grid;grid-template-columns:380px 1fr;gap:20px;-webkit-user-select:none;user-select:none}
+  .hk-l{background:#f6f2e6;padding:12px 16px 14px;box-shadow:0 26px 70px rgba(0,0,0,.5)}
+  .hk-l svg{display:block;width:100%;height:auto}
+  .hk-bag{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:-6px;padding:14px 8px 12px;background:#2a5aa0;border-radius:6px 6px 26px 26px;box-shadow:inset 0 8px 0 #1d3f73}
+  .hk-slot{height:100px;border:2px dashed rgba(255,255,255,.4);border-radius:5px;display:grid;place-items:center}
+  .hk-r{background:#b89a6a linear-gradient(170deg,rgba(255,255,255,.2),rgba(90,60,20,.25));padding:14px 16px 12px;box-shadow:0 26px 70px rgba(0,0,0,.5);display:flex;flex-direction:column}
+  .hk-r h5{margin:0 0 8px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.24em;text-transform:uppercase;color:#3a2a14}
+  .hk-home{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;min-height:210px}
+  .it{width:72px;min-height:84px;padding:4px 2px 3px;background:#fbf8ea;border:1px solid #8a6a3a;border-radius:5px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.500px;line-height:1.15;color:#22211c;box-shadow:0 3px 7px rgba(0,0,0,.3)}
+  .it svg{display:block;width:44px;height:44px;margin:0 auto 1px}
+  .it b{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13.500px;line-height:1.05;letter-spacing:.03em}
+  .hk .pmsg{margin-top:12px;color:#22211c;min-height:66px}
+  .hk .pmsg b{color:#b3261c}
+  .hk .btn{--accent:#22211c;align-self:flex-end;margin-top:8px}
+  .hk .btn:hover:not([disabled]){color:#f6f2e6}
+
+  /* the card at the end */
+  .done{position:fixed;right:2.2vw;top:62px;z-index:34;width:min(500px,94vw);max-height:calc(100vh - 80px);overflow:auto;padding:18px 26px 14px;display:none;background:#fbf8ee;color:#22211c;border-top:10px solid #17324d;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+  .done.on{display:block}
+  .okstamp{display:inline-block;padding:3px 14px 0;border:4px solid #b3261c;color:#b3261c;font-family:'Stardos Stencil',serif;font-weight:700;font-size:26px;letter-spacing:.14em;transform:rotate(-3deg);margin-bottom:8px}
+  .done h6{margin:10px 0 5px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;letter-spacing:.26em;text-transform:uppercase;color:#17324d}
+  .done p{margin:0 0 3px;font-family:'IBM Plex Mono',monospace;font-size:13.500px;line-height:1.4}
+  .done ol{margin:0;padding-left:20px;font-family:'Libre Baskerville',serif;font-size:13.200px;line-height:1.42}
+  .done li{margin:0 0 4px}
+  .done .row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+  .done .btn{--accent:#17324d;font-size:14px;padding:7px 13px}
+  .done .btn:hover:not([disabled]){color:#fbf8ee}
+  .done small{display:block;margin-top:9px;font-family:'IBM Plex Mono',monospace;font-size:12px;opacity:.75;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+  .rp{width:min(780px,94vw);max-height:84vh;overflow:auto;background:#fbfaf2;color:#1b2440;padding:22px 34px 18px;box-shadow:0 26px 70px rgba(0,0,0,.5);-webkit-user-select:text;user-select:text;border-left:16px solid #1f5c4a}
+  .rp h4{margin:0 0 3px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;letter-spacing:.26em;text-transform:uppercase;color:#1f5c4a}
+  .rp h3{margin:0 0 8px;font-family:'Patrick Hand',cursive;font-weight:normal;font-size:30px;line-height:1.1}
+  .rp p,.rp label{display:block;font-family:'Libre Baskerville',serif;font-size:15px;line-height:1.5;margin:0 0 6px;color:#22211c}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Patrick Hand',cursive;font-size:22px;line-height:30px;color:#1b2440;background:#fff repeating-linear-gradient(transparent 0 29px,#b9c7d6 29px 30px);border:1px solid #9aa7b5;padding:0 12px;border-radius:0;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:184px}
+  .rp input[type=text]{height:32px}
+  .rp .count{font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:.14em;text-transform:uppercase;opacity:.7;text-align:right;margin-top:3px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .rp .foot span{flex:1;font-family:'IBM Plex Mono',monospace;font-size:12.500px;opacity:.75}
+  .rp .btn{--accent:#1f5c4a}.rp .btn:hover:not([disabled]){color:#fbfaf2}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible}
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6ead9"/><stop offset="1" stop-color="#cdd6c2"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9a66b"/><stop offset=".5" stop-color="#d9b87c"/><stop offset="1" stop-color="#a8854e"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fc4ea"/><stop offset="1" stop-color="#e3f2fb"/></linearGradient>
+  <linearGradient id="sunG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3b8" stop-opacity=".5"/><stop offset="1" stop-color="#fff3b8" stop-opacity="0"/></linearGradient>
+  <linearGradient id="volG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a3a26"/><stop offset=".5" stop-color="#b3522f"/><stop offset="1" stop-color="#6b3020"/></linearGradient>
+  <linearGradient id="banG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1b3f61"/><stop offset="1" stop-color="#14304a"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#3a2a00" stop-opacity=".08"/><stop offset="1" stop-color="#2a1a00" stop-opacity=".42"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="960" fill="url(#wallG)"/>
+<g id="wins" class="hot"></g>
+<rect x="-1000" y="436" width="3600" height="124" fill="#a88a5e"/><rect x="-1000" y="430" width="3600" height="8" fill="#8a6f46"/><g stroke="#8f744c" stroke-width="3" id="panels"></g>
+<g id="banner" class="hot"><path d="M400 262q400 26 800 0" stroke="#8a8f93" stroke-width="2" fill="none"/><g id="bunt"></g>
+  <rect x="430" y="282" width="740" height="54" fill="#fbf6e6"/><rect x="430" y="282" width="740" height="54" fill="none" stroke="#17324d" stroke-width="4"/>
+  <text x="800" y="318" class="sB" font-size="26" fill="#17324d" letter-spacing="2.500">BRACKENFOLD SCHOOL · SCIENCE FAIR · JUDGING FRIDAY 9.00</text></g>
+<g id="clock" class="hot"><circle cx="1330" cy="330" r="36" fill="#5a4630"/><circle cx="1330" cy="330" r="30" fill="#fdfdf8"/><g stroke="#1c1d22" stroke-width="3"><path d="M1330 304v6M1330 350v6M1304 330h6M1350 330h6"/></g>
+  <path d="M1330 330l-15 8" stroke="#1c1d22" stroke-width="5" stroke-linecap="round"/><path d="M1330 330l21 12" stroke="#1c1d22" stroke-width="3" stroke-linecap="round"/><circle cx="1330" cy="330" r="3.500" fill="#b3261c"/></g>
+<g id="maindoor" class="hot"><rect x="26" y="292" width="176" height="268" fill="#5a4630"/><rect x="36" y="302" width="76" height="258" fill="#3d7a5a"/><rect x="116" y="302" width="76" height="258" fill="#3d7a5a"/><rect x="50" y="322" width="48" height="76" fill="#cfe6f5"/><rect x="130" y="322" width="48" height="76" fill="#cfe6f5"/><rect x="98" y="430" width="8" height="46" rx="3" fill="#c9ced3"/><rect x="122" y="430" width="8" height="46" rx="3" fill="#c9ced3"/></g>
+<g id="sidedoor"><rect x="1168" y="352" width="112" height="208" fill="#5a4630"/><rect x="1178" y="362" width="92" height="198" fill="#8a6a42"/><rect x="1196" y="380" width="56" height="62" fill="#cfe6f5"/><rect x="1172" y="324" width="104" height="22" fill="#fdfdf8"/><text x="1224" y="340" class="sB" font-size="14" fill="#1c1d22" letter-spacing="1.500">MUSIC CORRIDOR</text></g>
+
+<rect x="-1000" y="560" width="3600" height="800" fill="url(#floorG)"/>
+<g id="boards" stroke="#8f6a3a" stroke-width="2" opacity=".45"></g>
+<g id="rays" pointer-events="none"></g>
+<g fill="#fff6c8"><circle class="mote" cx="430" cy="620" r="3"/><circle class="mote m2" cx="900" cy="700" r="2.500"/><circle class="mote m3" cx="660" cy="560" r="2.500"/><circle class="mote m2" cx="1120" cy="640" r="3"/></g>
+<g id="backrow"></g>
+
+<!-- Mrs Shrike, by the door -->
+<g id="shrike" class="hot" transform="translate(150 800)">
+  <ellipse cx="0" cy="2" rx="44" ry="7" fill="#000" opacity=".18"/>
+  <path d="M-16 0v-80h12v80zM4 0v-80h12v80z" fill="#d9c7b4"/><path d="M-20 0h18v6h-22zM2 0h18v6h-18z" fill="#111"/><path d="M-28 -78h56l-4 -66h-48z" fill="#2c2c33"/>
+  <path d="M-34 -134q-5 -80 34 -85t34 85z" fill="#a32a2a"/><path d="M-7 -217l7 26 7-26z" fill="#f3efe4"/><path d="M-32 -190q-12 32 -2 60M32 -190q12 32 2 60" stroke="#a32a2a" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <rect x="-6" y="-230" width="12" height="14" fill="#e0c2a8"/><circle cx="0" cy="-244" r="20" fill="#ead0b6"/><path d="M-20 -248q2 -23 20 -23t20 23q-9 -11 -20 -11t-20 11z" fill="#b9ad98"/><circle cx="0" cy="-270" r="9" fill="#b9ad98"/>
+  <path d="M-11 -243h7M4 -244h7" stroke="#3b4a55" stroke-width="2.200"/><path d="M-5 -232h10" stroke="#8a3a3a" stroke-width="1.800"/>
+</g>
+
+<!-- Table 6 -->
+<g id="t6">
+  <g id="bots3" class="hot"></g>
+  <path d="M300 628h240l14 22H286z" fill="#d9bd8c"/><rect x="286" y="650" width="268" height="12" fill="#a88a5e"/><path d="M300 662v130M540 662v130" stroke="#7d8a86" stroke-width="7"/>
+  <g id="volcano" class="hot"><path d="M366 628q30 -20 52 -98q8 -14 22 -14t22 14q22 78 52 98z" fill="url(#volG)"/><path d="M420 530q20 12 40 0q-6 -10 -20 -10t-20 10z" fill="#2a120a"/>
+    <rect x="392" y="606" width="96" height="24" fill="#fdf6c9" transform="rotate(-3 440 618)"/><text x="440" y="625" class="sK" font-size="17" fill="#16171c" transform="rotate(-3 440 618)">MOUNT OTIS</text></g>
+  <g id="lava" fill="#e0452b" pointer-events="none"><circle cx="440" cy="524" r="9" style="--dx:-26px"/><circle cx="436" cy="522" r="7" style="--dx:18px"/><circle cx="444" cy="524" r="11" style="--dx:-6px"/><circle cx="440" cy="520" r="6" style="--dx:34px"/><circle cx="438" cy="524" r="8" style="--dx:-40px"/><circle cx="442" cy="522" r="10" style="--dx:8px"/><circle cx="440" cy="524" r="7" style="--dx:-16px"/>
+    <path d="M420 530q-10 40 -30 70q20 6 34 -4q6 14 22 10q4 -20 30 -18q-18 -30 -22 -58z" fill="#e0452b"/><path d="M430 540q-4 24 -14 40M452 540q2 26 12 44" stroke="#ff8a6a" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+  <rect x="316" y="592" width="42" height="36" rx="4" fill="#f1f1ec"/><rect x="313" y="586" width="48" height="10" rx="3" fill="#2a5aa0"/>
+</g>
+<g id="otis" class="hot" transform="translate(236 836)">
+  <ellipse cx="0" cy="2" rx="40" ry="7" fill="#000" opacity=".18"/><path d="M-16 0v-76h13v76zM3 0v-76h13v76z" fill="#2c2c33"/><path d="M-22 0h20v7h-24zM2 0h20v7h-20z" fill="#e9eef0"/>
+  <path d="M-30 -70q-6 -84 30 -90t30 90z" fill="#6f7780"/><path d="M-28 -130q-14 26 -4 56M28 -130q16 20 6 52" stroke="#6f7780" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M-30 -112q8 6 12 0" stroke="#c2452f" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <circle cx="0" cy="-180" r="22" fill="#f0cfae"/><path d="M-22 -182q0 -25 22 -25t22 25q-8 -12 -22 -12t-22 12z" fill="#6b4226"/><path d="M-12 -206l-3 -10 8 6 3 -11 6 10 5 -10 3 12 8 -6 -3 12" fill="#6b4226"/>
+  <path d="M-10 -178h7M3 -178h7" stroke="#3a2a1c" stroke-width="2.400"/><path d="M-7 -167q7 5 14 0" stroke="#8c4a3c" stroke-width="2.200" fill="none"/>
+</g>
+
+<!-- Table 7: the bridge, where it fell, inside a ring of yellow tape -->
+<g id="powder" class="hot"><path d="M650 800q40 -22 110 -18q60 -12 120 2q60 6 84 30q16 28 -30 44q-70 20 -160 14q-90 4 -128 -26q-22 -26 4 -46z" fill="#f4f1e6" opacity=".9"/>
+  <path d="M634 792q180 -50 370 0q44 56 -36 92q-150 30 -302 0q-74 -34 -32 -92z" fill="none" stroke="#f0b429" stroke-width="9"/><path d="M634 792q180 -50 370 0q44 56 -36 92q-150 30 -302 0q-74 -34 -32 -92z" fill="none" stroke="#16171c" stroke-width="9" stroke-dasharray="14 22"/></g>
+<g id="t7">
+  <path d="M610 628h140l10 22H600z" fill="#d9bd8c"/><rect x="600" y="650" width="160" height="12" fill="#a88a5e"/><path d="M612 662v130M748 662v130" stroke="#7d8a86" stroke-width="7"/>
+  <path d="M870 628h140l10 22H860z" fill="#d9bd8c"/><rect x="860" y="650" width="160" height="12" fill="#a88a5e"/><path d="M872 662v130M1008 662v130" stroke="#7d8a86" stroke-width="7"/>
+  <g id="wreck" class="hot" stroke="#d9a93a" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M690 620L756 632L800 742M690 606L760 616L812 730M690 620L690 606M712 624L716 610M734 628L740 612M756 632L760 616M768 660L778 650M780 692L792 680M792 722L804 712M716 610L734 628M740 612L756 632M778 650L780 692M792 680L792 722"/>
+    <path d="M936 620L872 632L836 748M936 606L868 616L824 738M936 620L936 606M912 624L908 610M890 628L886 612M872 632L868 616M858 664L848 654M846 700L836 688M908 610L890 628M886 612L872 632M848 654L846 700"/>
+    <path d="M770 828l44 8M830 800l30 22M880 842l-40 10M748 850l30 -14M902 812l22 16M800 866l36 -6" stroke-width="2.500"/>
+    <rect x="680" y="632" width="76" height="8" fill="#15171a" stroke="none"/><rect x="872" y="632" width="76" height="8" fill="#15171a" stroke="none"/></g>
+  <g id="easel" class="hot"><path d="M962 640l14 -150M1048 640l-14 -150" stroke="#6b4a2a" stroke-width="5"/><rect x="952" y="484" width="106" height="132" fill="#fdfdf8" stroke="#8a8676" stroke-width="2"/>
+    <text x="1005" y="512" class="sH" font-size="15" fill="#1b2440">IT BROKE AT</text><text id="pkg" x="1005" y="552" class="sH" font-size="34" fill="#b3261c">? kg</text><g stroke="#1b2440" stroke-width="1.600"><path d="M966 572h78M966 584h78M966 596h56"/></g></g>
+</g>
+<!-- Annika -->
+<g id="annika" class="hot" transform="translate(574 822)">
+  <ellipse cx="0" cy="2" rx="44" ry="7" fill="#000" opacity=".18"/><path d="M-15 0v-70h12v70zM3 0v-70h12v70z" fill="#1e2538"/><path d="M-20 0h18v6h-22zM2 0h18v6h-18z" fill="#111"/>
+  <path d="M-34 -62q-6 -112 34 -118t34 118z" fill="#2c3550"/><path d="M-20 -176q20 16 40 0l-4 26q-16 10 -32 0z" fill="#d9a22b"/><path d="M-30 -150q-12 34 -4 70M30 -150q12 34 4 70" stroke="#2c3550" stroke-width="13" fill="none" stroke-linecap="round"/>
+  <path d="M-36 -160q-18 10 -18 50v36h20z" fill="#59616a"/>
+  <circle cx="0" cy="-200" r="21" fill="#f6dcc6"/><path d="M-21 -202q0 -24 21 -24t21 24q-8 -12 -21 -12t-21 12z" fill="#e2c275"/><path d="M19 -204q12 12 8 30l-4 10q6 8 0 18l-5 10" stroke="#e2c275" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 -134l8 2" stroke="#b3261c" stroke-width="4" stroke-linecap="round"/>
+  <path d="M-10 -200h7M3 -200h7" stroke="#49657a" stroke-width="2.400"/><path d="M-6 -188h12" stroke="#a8584a" stroke-width="2"/>
+</g>
+
+<!-- Table 8, and the balance beside it -->
+<g id="t8" class="hot">
+  <path d="M1070 628h220l12 22H1058z" fill="#d9bd8c"/><rect x="1058" y="650" width="244" height="12" fill="#a88a5e"/><path d="M1072 662v130M1288 662v130" stroke="#7d8a86" stroke-width="7"/>
+  <path d="M1082 520h92v108h-92z" fill="#f6e3c8"/><text x="1128" y="544" class="sK" font-size="11" fill="#8a3f26">WHY DO</text><text x="1128" y="558" class="sK" font-size="11" fill="#8a3f26">CAKES RISE?</text><path d="M1094 614V574l16 10 16 -22 16 8 16 -26v70z" fill="none" stroke="#17324d" stroke-width="2.500"/>
+  <rect x="1186" y="606" width="42" height="22" rx="3" fill="#c9ced3"/><path d="M1188 606q19 -12 38 0" fill="#d9a560"/><rect x="1236" y="606" width="42" height="22" rx="3" fill="#c9ced3"/><path d="M1238 606q19 -26 38 0" fill="#e0b070"/>
+</g>
+<g id="scale" class="hot"><path d="M1090 880V600h70" stroke="#59616a" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M1056 884h70" stroke="#59616a" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="1160" cy="652" r="38" fill="#fdfdf8" stroke="#2a3136" stroke-width="6"/><path d="M1160 652l-18 -22" stroke="#b3261c" stroke-width="4" stroke-linecap="round"/><circle cx="1160" cy="652" r="4" fill="#2a3136"/><path d="M1160 690v30q0 12 12 12" stroke="#aab2b8" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M1128 742q-6 34 4 60h76q10 -26 4 -60z" fill="#2a5aa0"/><path d="M1140 742q10 -24 30 -24t30 24" stroke="#1d3f73" stroke-width="5" fill="none"/></g>
+
+<!-- the laboratory's stand, and Dr Novak with her clipboard -->
+<g id="rollup" class="hot"><rect x="1474" y="372" width="118" height="520" fill="url(#banG)"/><rect x="1474" y="372" width="118" height="8" fill="#aab2b8"/><rect x="1466" y="888" width="134" height="10" rx="3" fill="#aab2b8"/>
+  <text x="1533" y="412" class="sB" font-size="17" fill="#f0b429" letter-spacing="2">FORENSIC</text><text x="1533" y="432" class="sB" font-size="17" fill="#f0b429" letter-spacing="2">LABORATORY</text>
+  <g fill="none" stroke="#dfe9f2" stroke-width="2.200" opacity=".9"><ellipse cx="1533" cy="520" rx="8" ry="10"/><ellipse cx="1533" cy="520" rx="18" ry="22"/><ellipse cx="1533" cy="520" rx="28" ry="34"/><path d="M1495 520q0 -48 38 -48t38 48M1495 520v44M1571 520v44M1507 556q26 18 52 0M1500 574q33 22 66 0"/></g>
+  <text x="1533" y="640" class="sB" font-size="21" fill="#fff" letter-spacing="1">EVERY</text><text x="1533" y="666" class="sB" font-size="21" fill="#fff" letter-spacing="1">CONTACT</text><text x="1533" y="692" class="sB" font-size="21" fill="#fff" letter-spacing="1">LEAVES</text><text x="1533" y="718" class="sB" font-size="21" fill="#f0b429" letter-spacing="1">A TRACE</text></g>
+<g id="novak" class="hot" transform="translate(1380 850)">
+  <ellipse cx="0" cy="2" rx="50" ry="8" fill="#000" opacity=".2"/><path d="M-20 0v-96h16v96zM4 0v-96h16v96z" fill="#2c3540"/><path d="M-24 0h22v7h-26zM2 0h22v7h-22z" fill="#111"/>
+  <path d="M-40 -88q-7 -138 40 -146t40 146z" fill="#27415e"/><path d="M-9 -232l9 32 9-32z" fill="#eef1f0"/><path d="M-6 -222l5 76M6 -222l-5 76" stroke="#b3261c" stroke-width="2.800"/>
+  <path d="M-36 -196q-16 36 0 70l34 -16" stroke="#27415e" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="-14" y="-170" width="46" height="60" rx="3" fill="#8a6a3a" transform="rotate(-8 9 -140)"/><rect x="-9" y="-160" width="36" height="46" fill="#fdfdf8" transform="rotate(-8 9 -140)"/>
+  <rect x="-8" y="-250" width="16" height="18" fill="#d6ae86"/><circle cx="0" cy="-268" r="26" fill="#e4c19c"/>
+  <path d="M-28 -263q-3 -35 28 -35t28 35q3 16 -6 22q5 -26 -5 -40q-17 -10 -34 0q-10 14 -5 40q-9 -6 -6 -22z" fill="#46464b"/>
+  <circle cx="-9" cy="-266" r="8" fill="none" stroke="#15171a" stroke-width="2.200"/><circle cx="9" cy="-266" r="8" fill="none" stroke="#15171a" stroke-width="2.200"/><path d="M-1 -266h2" stroke="#15171a" stroke-width="2.200"/><path d="M-7 -251q7 5 14 0" stroke="#8c4a3c" stroke-width="2.200" fill="none"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">CASE CLOSED</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <h6>What you now know</h6>
+  <ol>
+    <li>A fingerprint is mostly sweat, left by the ridges of the skin. Fine powder sticks to it and shows it up.</li>
+    <li>There are three patterns: an arch has no delta, a loop has one and a whorl has two. Loops are the commonest and arches the rarest.</li>
+    <li>A pattern can rule a person out. It can never say who. For that you compare ridge details: ridge endings, bifurcations and islands, one at a time.</li>
+    <li>Each test answers one question. Vinegar makes bicarbonate of soda fizz. Iodine turns starch blue-black. Salt crystals are cubes. Sugar melts and goes brown.</li>
+    <li>Black ink is a mixture of dyes. Water carries each dye up the paper at its own speed, and so pulls the mixture apart: chromatography.</li>
+    <li>Rf = distance moved by the dye ÷ distance moved by the solvent. The same ink in the same solvent always gives the same Rf values, however long the strip is.</li>
+    <li>Evidence does not lie. But it can be read too fast, so ask what else it could mean.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Tell a friend</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the shelf</button></div>
+  <small>A Smell of Vinegar &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="fair.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, hook = null, told = {};
+
+  /* windows, sun, floorboards, bunting, the back row, three bottles in a row */
+  (function () {
+    var s = '', r = '', i, x, y, COL = ['#d9452b', '#f0b429', '#2a7ad0', '#3da35a', '#fdfdf8'];
+    for (i = 0; i < 6; i++) {
+      x = 130 + i * 240;
+      s += '<rect x="' + (x - 8) + '" y="32" width="166" height="216" fill="#8a6f46"/><rect x="' + x + '" y="40" width="150" height="200" fill="url(#skyG)"/>' +
+        (i % 2 ? '<path d="M' + (x + 16) + ' 120q20 -24 44 -8q22 -18 40 4q22 0 22 16h-110q-6 -8 4 -12z" fill="#fff" opacity=".85"/>' : '<path d="M' + (x + 40) + ' 190q16 -18 34 -6q18 -12 30 4q16 0 16 12h-84q-4 -6 4 -10z" fill="#fff" opacity=".8"/>') +
+        '<path d="M' + (x + 75) + ' 40v200M' + x + ' 140h150" stroke="#8a6f46" stroke-width="6"/>';
+      if (i < 5) r += '<path d="M' + x + ' 240h150l' + (260 - i * 30) + ' 700h-360z" fill="url(#sunG)" opacity="' + (0.55 - i * 0.07) + '"/>';
+    }
+    $('#wins').innerHTML = s; $('#rays').innerHTML = r; s = '';
+    for (i = -4; i < 20; i++) s += '<path d="M' + (i * 140 + 40) + ' 438v122"/>';
+    $('#panels').innerHTML = s; s = '';
+    for (i = -18; i <= 18; i++) s += '<path d="M' + (800 + i * 62) + ' 560L' + (800 + i * 250) + ' 1300"/>';
+    [596, 648, 722, 826].forEach(function (yy) { s += '<path d="M-600 ' + yy + 'H2200"/>'; });
+    $('#boards').innerHTML = s; s = '';
+    for (i = 0; i < 19; i++) { x = 420 + i * 40; y = 262 + 13 * Math.sin(Math.PI * (i + 0.5) / 19.5); s += '<path d="M' + x + ' ' + y.toFixed(1) + 'h30l-15 24z" fill="' + COL[i % 5] + '"/>'; }
+    $('#bunt').innerHTML = s; s = '';
+    [[290, 'OOBLECK', '#3da35a', 'ob'], [490, 'A CRYSTAL GARDEN', '#2a7ad0', 'cr'], [690, 'WHY IS THE SKY BLUE?', '#8a5ab0', 'sk'], [890, 'SNAILS: A TIME TRIAL', '#b08a4a', 'sn']].forEach(function (t) {
+      x = t[0];
+      s += '<g class="hot bk" data-k="' + t[3] + '"><rect x="' + x + '" y="536" width="160" height="10" fill="#a88a5e"/><path d="M' + (x + 8) + ' 546v22M' + (x + 152) + ' 546v22" stroke="#7d8a86" stroke-width="5"/>' +
+        '<path d="M' + (x + 30) + ' 460h100v76h-100z" fill="' + t[2] + '"/><path d="M' + (x + 30) + ' 460l-18 10v70l18 -4zM' + (x + 130) + ' 460l18 10v70l-18 -4z" fill="' + t[2] + '" opacity=".7"/>' +
+        '<rect x="' + (x + 38) + '" y="468" width="84" height="16" fill="#fdfdf8"/><text x="' + (x + 80) + '" y="480" class="sB" font-size="9.500" fill="#1c1d22">' + t[1] + '</text>' +
+        '<g stroke="#fdfdf8" stroke-width="2" opacity=".7"><path d="M' + (x + 40) + ' 496h80M' + (x + 40) + ' 506h80M' + (x + 40) + ' 516h56"/></g></g>';
+    });
+    $('#backrow').innerHTML = s; s = '';
+    [[330, 1], [364, 2], [398, 5]].forEach(function (b) {
+      x = b[0];
+      s += '<path d="M' + (x - 11) + ' 792v-52q0 -10 6 -14v-12h10v12q6 4 6 14v52z" fill="#5a3a1e"/><rect x="' + (x - 5) + '" y="708" width="10" height="7" fill="#a33a2a"/><rect x="' + (x - 11) + '" y="752" width="22" height="24" fill="#f0d24a"/>' +
+        '<circle cx="' + x + '" cy="738" r="7" fill="#fdfdf8"/><text x="' + x + '" y="742.500" class="sK" font-size="11" fill="#16171c">' + b[1] + '</text>';
+    });
+    $('#bots3').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'forensic', story: 'fair', storyTitle: 'A Smell of Vinegar', id: 'judging', no: 'V', title: 'The Judging',
+    go: 'Friday morning',
+    intro: [
+      'P4 and P5 lay side by side, so you looked for a hand with an arch next to a whorl. Three hands in the box had one. On two of them a detail that should have been there was missing, and then another: two real differences rule a finger out. On the third, all six agreed: the same kind of detail, the same number of ridges out from the core. Card 4, right middle finger.',
+      'Dr Novak signed. Then you opened the envelope. Number 4: A. Lindqvist, Year 9, Table 7. (The two hands that you ruled out belonged to J. Castell and, as it turned out, to Mrs Shrike, who had made a card on Thursday afternoon to set an example.)',
+      'The white whorl on the bridge&rsquo;s board was the same card&rsquo;s left thumb. The only fingers on pen 3 were card 4&rsquo;s too. Nobody had taken that pen out of her tin.',
+      'Mrs Shrike read the three reports twice, standing up. She did not sign her letter. At ten the caretaker locked the hall, and Otis went home with his father.',
+      'It is now twenty past eight on Friday morning. The judges come round at nine.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"load":["ba07d9f4"]},
+    sound: ['morning', { root: 52, bpm: 72 }],      /* the same hall with the sun in it: a major key */
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('e-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('e-told', told); return true; }
+  function isBusy() { return busy; }
+  function hints() {
+    if (ER.flag('e-done')) return null;
+    if (hook && hook.parentNode) return ['hook', [
+      'What was hanging from the bridge when it broke? Annika has just told you. Carry those things, and only those, into the blue bag.',
+      'She counted one to six with Otis&rsquo;s bottles, and then she took one bag off the twins&rsquo; table. Which bag split? The balance will add it all up for you.'
+    ]];
+    if (!told.annika) return ['annika', ['A girl with a long fair plait is waiting at Table 7, in the middle of the hall. She has something to say.']];
+    return ['scale', ['Dr Novak has hung a spring balance on a stand beside Table 8, with Annika&rsquo;s blue bag on its hook. Click it.']];
+  }
+
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    FAIR.mine('finger', 'Card 4', '<p>P5, the white whorl from bottle 3: six ringed details, and all six on card 4, right middle finger. Two other hands had an arch beside a whorl: both ruled out.</p>' +
+      '<p>Card 4 is A. Lindqvist, Table 7.</p><p>P6, the white whorl on the board: her left thumb. Pen 3: her fingers, and nobody else&rsquo;s.</p>', true);
+    if (ER.flag('e-done')) { busy = false; finish(true); return; }
+    if (told.in) { busy = false; if (told.annika && !ER.flag('e-lock')) $('#scale').classList.add('ready'); ER.say('The hall, with the sun in it. Twenty past eight.'); return; }
+    tell('in');
+    ER.narrate([
+      'The same hall, with the sun in it. Somebody has swept the floor, all but one place. The bridge has not been touched: its pieces lie where they fell, inside a ring of Dr Novak&rsquo;s yellow tape.',
+      'Otis is at his table already, lining up the bottles that are not in evidence bags. There are three.',
+      'And at Table 7, with her coat still on and a rucksack over one shoulder, a girl with a long fair plait is waiting. She stands very straight when she sees Dr Novak.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- Annika ---------- */
+  $('#annika').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Annika Lindqvist', role: 'Year 9 · Table 7, the Spaghetti Bridge', face: window.FACE('annika'),
+      lines: [
+        { note: 'She has a speech ready. You can see her holding on to the first line of it.', a: '&ldquo;I came in early to tell the Head of Science. But everybody is here. So I&rsquo;ll tell everybody. Otis didn&rsquo;t touch my bridge. I broke it.&rdquo;' },
+        { q: 'How?', a: 'On Wednesday somebody&rsquo;s bag fell on it on the bus. One joint cracked: joint fourteen, near the middle. I glued it that night. But a mended joint isn&rsquo;t the same as a joint, is it? And my board says fifteen kilograms. In front of the judges. In front of everybody.' },
+        { a: 'So after orchestra I came back in through the music corridor. I only wanted to know. I hung my bag on it, the way I do at home, and I put in the heaviest things I could find. Otis&rsquo;s bottles. About two kilograms each. One, two, three, and it held. Four, five, six, and it held.' },
+        { a: 'Then I took the flour off the twins&rsquo; table. I was lowering it in. I hadn&rsquo;t even let go.</p><p>She opens the rucksack and takes out a paper bag, split from top to bottom. SELF-RAISING FLOUR, 1.5 kg.</p><p>&ldquo;There was flour everywhere. One of the bottles cracked, and the floor started to fizz. I thought: well, that&rsquo;s about right.&rdquo;' },
+        { q: 'And the note?', a: 'I put everything back. I wrote SORRY, because I was, and that I&rsquo;d explain. I tore the paper out of my own logbook. It was on my own table, on top of my own bridge. I never thought I had to put my name on it.' },
+        { q: 'Why didn&rsquo;t you tell somebody last night?', a: 'There wasn&rsquo;t anybody! Then we went to my gran&rsquo;s. We always go on Thursdays, and her phone only works in the garden. I didn&rsquo;t know anybody thought it was Otis until I saw the van this morning, and the yellow tape.' },
+        { note: 'She turns round to Table 6.', a: '&ldquo;Otis. I&rsquo;m sorry about your vinegar. I&rsquo;ll buy you a new bottle.&rdquo;</p><p>&ldquo;It&rsquo;s fine,&rdquo; says Otis, who has gone as red as his volcano. &ldquo;It&rsquo;s evidence now. That&rsquo;s better than vinegar.&rdquo;' }
+      ],
+      clue: { id: 'annika', title: 'Annika Lindqvist, at Table 7', kind: 'What she said' },
+      done: function (seen) {
+        if (!seen || !tell('annika')) return;
+        busy = true;
+        ER.narrate([
+          'Mrs Shrike has heard all of it from the door. She comes down the hall quite slowly. &ldquo;I had a letter ready,&rdquo; she says. &ldquo;It was a very good letter. It was about the wrong child.&rdquo; She looks at Otis. &ldquo;Mr Brice. I owe you an apology, and you shall have it in writing.&rdquo;',
+          '&ldquo;Nothing in this hall told a lie on Thursday night,&rdquo; says Dr Novak. &ldquo;The floor fizzed. The print was a whorl. The note said sorry. The boy signed out last. Every word of it was true. It was only read too fast.&rdquo;',
+          'Annika is looking at the pieces of her bridge. &ldquo;I can&rsquo;t show it now,&rdquo; she says.',
+          '&ldquo;You can,&rdquo; says Dr Novak. &ldquo;You have a result. Most people need thirty years to learn how to write one down when it is not the one they wanted. What did it break at?&rdquo;',
+          '&ldquo;I don&rsquo;t know. I never added it up.&rdquo;',
+          '&ldquo;Then my colleague will,&rdquo; says Dr Novak, and hangs a spring balance on a stand.'
+        ], function () { busy = false; $('#scale').classList.add('ready'); });
+      }
+    });
+  });
+
+  /* ---------- things in the hall ---------- */
+  FAIR.thing('#wreck', null, 'The bridge, where it fell. Joint fourteen is the one with the whiter glue. It let go first, and everything else followed it.', isBusy);
+  FAIR.thing('#powder', 'tape', 'Self-raising flour, inside a ring of yellow tape. Nobody has swept here. It is not a mess any more: it is a result.', isBusy);
+  FAIR.thing('#bots3', null, 'Bottles 1, 2 and 5, in a row, labels to the front. The other three are in evidence bags, and Otis is rather proud of that.', isBusy);
+  FAIR.thing('#volcano', null, function () { return ER.flag('e-done') ? 'MOUNT OTIS, in full eruption, exactly on time.' : 'MOUNT OTIS. Dry, painted, and loaded. It goes off at nine.'; }, isBusy);
+  FAIR.thing('#t8', null, 'Table 8. The Castell twins have brought a new bag of self-raising flour. They have written DO NOT BORROW on it.', isBusy);
+  FAIR.thing('#rollup', null, '&ldquo;Every contact leaves a trace.&rdquo; Including, it turns out, the owner&rsquo;s.', isBusy);
+  FAIR.thing('#banner', null, 'JUDGING FRIDAY 9.00. That is forty minutes from now.', isBusy);
+  FAIR.thing('#clock', null, function () { return ER.flag('e-done') ? 'Nine o&rsquo;clock.' : 'Twenty past eight.'; }, isBusy);
+  FAIR.thing('#wins', null, 'Blue sky. It rained itself out in the night.', isBusy);
+  FAIR.thing('#maindoor', null, 'The main door, with its sheet and its pen on a string. Somebody has pinned a second sheet by the music corridor this morning.', isBusy);
+  FAIR.thing('#easel', null, function () { return ER.flag('e-lock') ? 'IT BROKE AT 13.5 kg. Joint 14, mended on Wednesday. Here is why that was not enough.' : 'A clean sheet on an easel, and Annika&rsquo;s fine black pen. IT BROKE AT: and then a gap.'; }, isBusy);
+  ER.$$('.bk').forEach(function (g) {
+    var L = { ob: 'Table 9: OOBLECK. Somebody small is already up to the elbows in it.', cr: 'Table 12: A CRYSTAL GARDEN. Salt in cubes, sugar on a string.', sk: 'Table 10: WHY IS THE SKY BLUE? Today, at least, it is.', sn: 'Table 13: SNAILS, A TIME TRIAL. The snails are back, and in no hurry.' };
+    g.addEventListener('click', function () { if (!busy) ER.say(L[g.getAttribute('data-k')]); });
+  });
+  $('#otis').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(told.annika ? '&ldquo;Three bottles is plenty,&rdquo; says Otis. &ldquo;I did the sums. Do you want to see the sums?&rdquo;' : 'Otis is lining up his bottles, labels to the front. He has not seen who is standing at Table 7.');
+  });
+  $('#shrike').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(told.annika ? '&ldquo;I telephoned his father at seven,&rdquo; says Mrs Shrike. &ldquo;And I have ordered a clipboard for the side door.&rdquo;' : 'Mrs Shrike is standing by the main door. She has not said good morning to anybody yet.');
+  });
+  $('#novak').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(told.annika ? '&ldquo;Read it slowly,&rdquo; says Dr Novak. &ldquo;That is all I ever do.&rdquo;' : '&ldquo;Go and listen to her,&rdquo; says Dr Novak. &ldquo;She has come in early to say something, and it is not easy to say.&rdquo;');
+  });
+  $('#scale').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('e-lock')) { ER.say('Thirteen and a half kilograms. Six bottles, and one bag of flour.'); return; }
+    if (!told.annika) { ER.say('A stand, a hook and a spring balance. Nobody has said what it is for yet.'); return; }
+    openHook();
+  });
+
+  /* ---------- what was hanging from the bridge? ---------- */
+  var ICON = {
+    v: '<svg viewBox="0 0 44 44"><path d="M16 42V22q0 -6 4 -8V6h4v8q4 2 4 8v20z" fill="#5a3a1e"/><rect x="19" y="3" width="6" height="4" fill="#a33a2a"/><rect x="16" y="24" width="12" height="11" fill="#f0d24a"/></svg>',
+    bag: '<svg viewBox="0 0 44 44"><path d="M10 42l2 -30h20l2 30z" fill="#fdfdf8" stroke="#8a8676" stroke-width="1.500"/><path d="M12 12l4 -6h12l4 6" fill="#e9e6dc" stroke="#8a8676" stroke-width="1.500"/><rect x="14" y="20" width="16" height="12" fill="COL"/></svg>',
+    tub: '<svg viewBox="0 0 44 44"><rect x="9" y="14" width="26" height="26" rx="4" fill="#f1f1ec" stroke="#8a8676" stroke-width="1.500"/><rect x="7" y="9" width="30" height="7" rx="2" fill="COL"/><rect x="13" y="22" width="18" height="10" fill="COL"/></svg>'
+  };
+  var THINGS = [['v', 'v', 'vinegar', '2 litres', 2], ['v', 'v', 'vinegar', '2 litres', 2], ['v', 'v', 'vinegar', '2 litres', 2], ['v', 'v', 'vinegar', '2 litres', 2], ['v', 'v', 'vinegar', '2 litres', 2], ['v', 'v', 'vinegar', '2 litres', 2],
+    ['pf', 'bag:#b3261c', 'plain flour', '1.5 kg', 1.5], ['sr', 'bag:#2a5aa0', 'self-raising flour', '1.5 kg', 1.5], ['su', 'bag:#3da35a', 'caster sugar', '1 kg', 1], ['sa', 'tub:#8a8f93', 'salt', '750 g', 0.75], ['bic', 'tub:#2a5aa0', 'bicarbonate', '1 kg', 1]];
+  function openHook() {
+    if (!hook) {
+      hook = ER.el('div', 'hk');
+      var s = '<div class="hk-l"><svg viewBox="0 0 300 190"><path d="M150 0v22" stroke="#59616a" stroke-width="8"/><circle cx="150" cy="96" r="72" fill="#fdfdf8" stroke="#2a3136" stroke-width="8"/>', i, a;
+      for (i = 0; i <= 20; i++) { a = (-210 + i * 12) * Math.PI / 180; s += '<path d="M' + (150 + Math.cos(a) * 62).toFixed(1) + ' ' + (96 + Math.sin(a) * 62).toFixed(1) + 'L' + (150 + Math.cos(a) * (i % 5 ? 55 : 48)).toFixed(1) + ' ' + (96 + Math.sin(a) * (i % 5 ? 55 : 48)).toFixed(1) + '" stroke="#2a3136" stroke-width="' + (i % 5 ? 1.5 : 3) + '"/>' + (i % 5 ? '' : '<text x="' + (150 + Math.cos(a) * 36).toFixed(1) + '" y="' + (101 + Math.sin(a) * 36).toFixed(1) + '" font-family="IBM Plex Mono,monospace" font-size="13" fill="#2a3136" text-anchor="middle">' + i + '</text>'); }
+      s += '<path id="hk-n" d="M150 96L150 40" stroke="#b3261c" stroke-width="4" stroke-linecap="round" style="transition:transform .5s;transform-origin:150px 96px"/><circle cx="150" cy="96" r="6" fill="#2a3136"/><text x="150" y="150" font-family="Barlow Condensed,sans-serif" font-size="12" fill="#59616a" text-anchor="middle" letter-spacing="2">KILOGRAMS</text>' +
+        '<path d="M150 168v22" stroke="#aab2b8" stroke-width="7"/></svg><div class="hk-bag"></div></div>' +
+        '<div class="hk-r"><h5>On the tables</h5><div class="hk-home"></div><p class="pmsg"></p><button type="button" class="btn" id="hk-go">Write it on the poster</button></div>';
+      hook.innerHTML = s;
+      var bag = hook.querySelector('.hk-bag'), home = hook.querySelector('.hk-home'), m = hook.querySelector('.pmsg'), needle = hook.querySelector('#hk-n');
+      for (i = 0; i < 8; i++) bag.appendChild(ER.el('div', 'hk-slot'));
+      THINGS.forEach(function (t) {
+        var ic = t[1].split(':'), d = ER.el('div', 'it dnd-item', ICON[ic[0]].replace(/COL/g, ic[1] || '') + '<b>' + t[2] + '</b>' + t[3]);
+        d.setAttribute('data-k', t[0]); d.setAttribute('data-w', t[4]); home.appendChild(d);
+      });
+      function load() { var w = 0; ER.$$('.hk-bag .it', hook).forEach(function (n) { w += +n.getAttribute('data-w'); }); return w; }
+      function show() {
+        var w = load();
+        needle.style.transform = 'rotate(' + (-120 + Math.min(20, w) * 12) + 'deg)';
+        hook.setAttribute('data-kg', w);
+        m.innerHTML = ER.gloss(w ? 'The needle swings round to <b>' + w + ' kg</b>.' : 'An empty bag on a hook. The needle is at nought.');
+      }
+      ER.dnd(hook, { item: '.it', slot: '.hk-slot', home: home, change: show, lock: function () { return !!ER.flag('e-lock'); } });
+      hook.querySelector('#hk-go').addEventListener('click', function () {
+        var ks = ER.$$('.hk-bag .it', hook).map(function (n) { return n.getAttribute('data-k'); }), nv = ks.filter(function (k) { return k === 'v'; }).length, rest = ks.filter(function (k) { return k !== 'v'; }).sort(), code = 'v' + nv + (rest.length ? '+' + rest.join('+') : '');
+        if (ER.flag('e-lock')) return;
+        if (!ks.length) { m.innerHTML = ER.gloss('There is nothing in the bag. Carry things from the right into the bag on the left, or click a thing and then a space in the bag.'); return; }
+        if (!ER.check('load', code)) {
+          ER.sfx.no();
+          m.innerHTML = ER.gloss(rest.indexOf('bic') >= 0 ? '&ldquo;Not my tub,&rdquo; says Otis. &ldquo;It still had its seal on. Ask Dr Novak. She weighed it.&rdquo;' :
+            nv < 6 ? '&ldquo;All six bottles had white fingers on them,&rdquo; says Dr Novak. &ldquo;Every one of them was in that bag.&rdquo;' :
+            rest.indexOf('sr') < 0 ? '&ldquo;And the flour,&rdquo; says Annika. &ldquo;The bag that split. It was the last thing I put in.&rdquo;' :
+            '&ldquo;I only took one bag off the twins&rsquo; table,&rdquo; says Annika. &ldquo;The rest never moved. And the powder on the floor was only one kind.&rdquo;');
+          return;
+        }
+        ER.flag('e-lock', 1); $('#scale').classList.remove('ready'); $('#pkg').textContent = load() + ' kg'; FAIR.solved();
+        m.innerHTML = ER.gloss('Six bottles at about two kilograms, and a kilogram and a half of flour. <b>' + load() + ' kg</b>. Annika looks at the needle for a long time. &ldquo;It was supposed to be fifteen,&rdquo; she says. Then she takes the top off her pen.');
+        setTimeout(function () { ER.closeAll(); ending(); }, 4200);
+      });
+      show();
+    }
+    ER.open('ov-lock', hook);
+  }
+
+  /* ---------- nine o'clock ---------- */
+  function ending() {
+    busy = true;
+    ER.narrate([
+      'She writes it on the clean sheet in her small straight writing, and pins it over the old board. IT BROKE AT 13.5 kg. Underneath: Joint 14. Mended on Wednesday. Here is why that was not enough.',
+      'At nine the judges come round. Mount Otis goes off exactly on time, for the first time in its life, with three bottles instead of six. Three turns out to be plenty.',
+      'The shield goes to Table 9, for a bowl of cornflour and water that nobody had wrecked, tested or doubted.',
+      'Dr Novak stops for a long time at Table 7, and writes something on a card. When she has gone, Annika turns it over. It says: &ldquo;A placement, in July? Bring the logbook. M.N.&rdquo;',
+      'On the way out you pass the laboratory&rsquo;s banner. Every contact leaves a trace. Including, it turns out, the owner&rsquo;s.'
+    ], function () { busy = false; ER.flag('e-done', 1); finish(false); });
+    setTimeout(function () { $('#scene').classList.add('erupt'); FAIR.sfx.whoosh(); }, 9000);
+  }
+  function finish(quick) {
+    var st = ER.state(), mins = FAIR.minutesPlayed(), hn = ER.hintsUsed();
+    $('#scene').classList.add('erupt'); $('#pkg').textContent = '13.5 kg';
+    $('#d-time').textContent = 'From the hall to the envelope: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+    if (quick) ER.say('Nine o&rsquo;clock, and Mount Otis is erupting on time.');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>A Smell of Vinegar &middot; in your own words</h4><h3>Tell a friend</h3>' +
+      '<p>A friend of yours was not at the fair, and does not believe a word of it. Choose ONE of these and explain it, aloud or in writing, in 60 to 90 words. Use: first, then, because, so.</p>' +
+      '<p><b>A</b> How you could tell that the white powder was not Otis&rsquo;s bicarbonate.<br><b>B</b> How you found out which pen wrote the note.<br><b>C</b> Why a whorl on the board did not prove that it was Otis, and what did prove whose finger it was.</p>' +
+      '<textarea id="r1"></textarea><div class="count"></div><label for="r2">Name</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

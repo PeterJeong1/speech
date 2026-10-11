@@ -1,0 +1,169 @@
+/* A Quarter Past Four - what every room of the story shares: the court's kinds of paper, a green-baize skin for the
+   notebook, the hints and the word tags, and a few small parts. Each room sets its own palette on <body>. */
+
+/* ---- shared bits ---- */
+.tc-theme{font-family:'Oswald',sans-serif}
+.tc-room{font-family:'Cormorant Garamond',serif;font-weight:700;letter-spacing:.01em}
+.tc-text{font-family:'EB Garamond',Georgia,serif}
+.cap{font-family:'EB Garamond',Georgia,serif}
+.tk-name{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:29px;letter-spacing:.01em}
+.tk-text{font-family:'EB Garamond',Georgia,serif}
+.gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:1px solid var(--accent,#d9b25a);
+  color:var(--accent,#d9b25a);background:var(--hud-bg,rgba(12,18,15,.92));font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.18em;
+  text-transform:uppercase;border-radius:3px}
+.gobtn.on{display:block}
+.gobtn:hover{background:var(--accent,#d9b25a);color:#14110b}
+.pmsg{min-height:54px;margin:0;font-family:'EB Garamond',Georgia,serif;font-size:18.5px;line-height:1.36;color:#f1ecdf}
+.pmsg b{color:#e7c477;font-weight:600}
+.pmsg i{color:#cfd8cf}
+.sT{font-family:'Oswald',sans-serif;font-weight:600;text-anchor:middle}
+.cT{font-family:'Cormorant SC','Cormorant Garamond',serif;font-weight:700;text-anchor:middle}
+.rain path{stroke:#dfeaf0;stroke-width:2;stroke-linecap:round;stroke-dasharray:26 60;animation:rain 1.1s linear infinite;opacity:.5}
+.rain path:nth-child(2n){animation-duration:1.5s;opacity:.35}
+.rain path:nth-child(3n){animation-duration:.9s;stroke-dasharray:18 74}
+@keyframes rain{to{stroke-dashoffset:-86}}
+
+/* ---- the court's paper ---- */
+.doc b.t{font-weight:700;letter-spacing:.04em}
+.doc .pen{font-family:'Caveat',cursive;font-weight:700;font-size:1.32em;line-height:1;color:#39507e}
+.doc .sig{font-family:'Homemade Apple',cursive;font-size:17px;color:#1d2a52;line-height:1.4}
+/* the daily list, pinned to the green board */
+.doc.daily{width:min(800px,94vw);padding:30px 36px 24px;background:#fbf8ec linear-gradient(174deg,rgba(255,255,255,.5),rgba(150,130,80,.12));
+  font-family:'Courier Prime',monospace;font-size:15.5px;line-height:1.38;color:#1c1d1f;transform:rotate(-.4deg)}
+.doc.daily:before,.doc.daily:after{content:'';position:absolute;top:10px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f7e7ae,#8a6a26)}
+.doc.daily:before{left:12px}.doc.daily:after{right:12px}
+.doc.daily h4{margin:0;text-align:center;font-family:'Cormorant SC',serif;font-weight:700;font-size:27px;letter-spacing:.14em;line-height:1.1}
+.doc.daily h5{margin:2px 0 12px;text-align:center;font-family:'Courier Prime',monospace;font-weight:400;font-size:15px;letter-spacing:.16em;text-transform:uppercase;
+  border-bottom:3px double #1c1d1f;padding-bottom:10px}
+.doc.daily h6{margin:12px 0 4px;font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;letter-spacing:.06em;background:#1c1d1f;color:#fbf8ec;padding:4px 10px 2px}
+.doc.daily table{width:100%;border-collapse:collapse}
+.doc.daily td{padding:5px 8px 3px 0;vertical-align:top;border-bottom:1px dotted #8f8873}
+.doc.daily td:first-child{width:60px;font-weight:700}
+.doc.daily td:nth-child(3){width:110px;font-size:13.5px;color:#55523f}
+.doc.daily td:last-child{width:170px;padding-right:0}
+.doc.daily p{margin:12px 0 0;font-size:13.5px;letter-spacing:.06em;text-align:center}
+/* Mr Makepeace's book: typed on his own machine, with his pencil in the margin */
+.doc.usher{width:min(740px,94vw);padding:22px 36px 20px 62px;background:#f6f0dc repeating-linear-gradient(transparent 0 24px,rgba(70,100,150,.13) 24px 25px);
+  font-family:'Special Elite','Courier New',monospace;font-size:15.5px;line-height:25px;color:#24211b;border-left:0;
+  box-shadow:0 26px 70px rgba(0,0,0,.6),inset 44px 0 0 #f6f0dc,inset 46px 0 0 rgba(200,90,90,.5)}
+.doc.usher:before{content:'';position:absolute;left:14px;top:22px;bottom:22px;width:14px;
+  background:radial-gradient(circle,#2a2a2a 5px,transparent 6px) 0 0/14px 50px repeat-y}
+.doc.usher h4{margin:0 0 0;font-family:'Cormorant SC',serif;font-weight:700;font-size:24px;line-height:25px;letter-spacing:.08em;color:#1f3a2c}
+.doc.usher h5{margin:0 0 12px;font-family:'Special Elite',monospace;font-weight:400;font-size:13px;line-height:25px;letter-spacing:.12em;text-transform:uppercase;color:#6b6453}
+.doc.usher p{margin:0 0 9px}
+.doc.usher p:last-child{margin-bottom:0}
+.doc.usher .pen{font-size:1.5em;color:#5a6270}
+/* your phone */
+.doc.phone{width:min(450px,92vw);padding:38px 18px 20px;background:#0e1114;border:10px solid #23272c;border-radius:34px;font-family:'Outfit',Arial,sans-serif;font-weight:400;
+  font-size:15.5px;line-height:1.32;color:#eef2f4}
+.doc.phone:before{content:'';position:absolute;left:50%;top:14px;width:70px;height:8px;margin-left:-35px;border-radius:4px;background:#23272c}
+.doc.phone h4{margin:0 0 12px;text-align:center;font-family:'Outfit',sans-serif;font-weight:600;font-size:17px;border-bottom:1px solid #2c3238;padding-bottom:10px}
+.doc.phone h4 small{display:block;font-weight:300;font-size:12px;letter-spacing:.08em;opacity:.6}
+.doc.phone p{margin:0 0 7px;padding:7px 13px 7px;background:#262c33;border-radius:15px 15px 15px 3px;max-width:94%}
+.doc.phone p.me{margin-left:auto;background:#2f6a4a;border-radius:15px 15px 3px 15px}
+.doc.phone p small{display:inline-block;font-size:11px;opacity:.55;letter-spacing:.06em;margin-right:8px}
+.doc.phone .w:hover{color:#e7c477}
+/* the claim form: a real one is as plain as this */
+.doc.n1{width:min(700px,94vw);padding:22px 30px 22px;background:#fdfdfb;font-family:'Outfit',Arial,sans-serif;font-weight:300;font-size:15px;line-height:1.38;color:#1b1c1f}
+.doc.n1 h4{margin:0 0 10px;display:flex;justify-content:space-between;align-items:flex-end;font-weight:600;font-size:27px;border-bottom:4px solid #1b1c1f;padding-bottom:6px}
+.doc.n1 h4 small{font-weight:400;font-size:13px;text-align:right;line-height:1.35}
+.doc.n1 .bx{margin:0 0 8px;border:1.5px solid #1b1c1f;padding:6px 10px 6px}
+.doc.n1 .bx small{display:block;font-weight:600;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1px}
+.doc.n1 .bx>span,.doc.n1 .bx li{font-family:'Courier Prime',monospace;font-size:15.5px;line-height:1.36}
+.doc.n1 .bx>span.sig{font-family:'Homemade Apple',cursive;font-size:16px}
+.doc.n1 .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.doc.n1 ol{margin:0;padding-left:26px}
+.doc.n1 .sig{font-size:16px}
+/* Ms Nair's card: laminated, and in the front of every file */
+.doc.crib{width:min(700px,94vw);padding:24px 30px 20px;background:#fffef8 linear-gradient(118deg,rgba(255,255,255,0) 30%,rgba(190,220,255,.3) 46%,rgba(255,255,255,0) 60%);border-radius:16px;
+  border:1px solid #cfd3d6;font-family:'Tinos',Georgia,serif;font-size:16.5px;line-height:1.36;color:#1c1d22;transform:rotate(.5deg)}
+.doc.crib h4{margin:0 0 10px;display:flex;justify-content:space-between;align-items:baseline;font-family:'Oswald',sans-serif;font-weight:600;font-size:21px;letter-spacing:.12em;color:#8f2947;
+  border-bottom:3px solid #d4577c;padding-bottom:6px}
+.doc.crib h4 small{font-family:'Caveat',cursive;font-weight:700;font-size:20px;letter-spacing:0;color:#39507e}
+.doc.crib ol{margin:0;padding-left:24px}
+.doc.crib li{margin:0 0 7px;padding-left:4px}
+.doc.crib li::marker{font-family:'Oswald',sans-serif;font-weight:600;color:#8f2947}
+.doc.crib .scale{float:right;width:150px;height:auto;margin:2px 0 2px 14px}
+.doc.crib .pen{font-size:1.28em}
+/* a witness statement, typed the way they all are */
+.doc.wstmt{width:min(640px,94vw);padding:28px 40px 24px;background:#fdfdfb;font-family:'Tinos','Times New Roman',serif;font-size:16.5px;line-height:1.4;color:#1b1c1f}
+.doc.wstmt h4{margin:0;text-align:right;font-family:'Tinos',serif;font-size:13.5px;line-height:1.35}
+.doc.wstmt h5{margin:8px 0 12px;text-align:center;font-family:'Tinos',serif;font-weight:700;font-size:16px;line-height:1.3;border-top:1px solid #1b1c1f;border-bottom:1px solid #1b1c1f;padding:7px 0 6px}
+.doc.wstmt ol{margin:0;padding-left:28px}
+.doc.wstmt li{margin:0 0 7px;padding-left:4px}
+.doc.wstmt .tru{margin:10px 0 0;font-style:italic;font-size:15px;border-top:1px solid #9b9b95;padding-top:8px}
+/* the aerodrome's record: green-barred paper out of a machine */
+.doc.wx{width:min(720px,94vw);padding:24px 30px 20px;background:#f7faf3 repeating-linear-gradient(transparent 0 26px,rgba(90,160,110,.16) 26px 52px);
+  font-family:'Courier Prime',monospace;font-size:15px;line-height:26px;color:#18211c;border-left:16px solid #e9efe6;border-right:16px solid #e9efe6}
+.doc.wx h4{margin:0;font-family:'Courier Prime',monospace;font-weight:700;font-size:17px;line-height:26px;letter-spacing:.1em}
+.doc.wx h5{margin:0 0 0;font-family:'Courier Prime',monospace;font-weight:400;font-size:14px;line-height:26px;letter-spacing:.06em}
+.doc.wx table{width:100%;border-collapse:collapse;margin:0}
+.doc.wx th,.doc.wx td{padding:0 6px;height:26px;text-align:left;font-weight:400;white-space:nowrap}
+.doc.wx th{font-weight:700;border-bottom:2px solid #18211c}
+.doc.wx td.n,.doc.wx th.n{text-align:right}
+.doc.wx p{margin:0}
+.doc.wx .key{margin-top:26px;font-size:14px;line-height:26px}
+.doc.wx .stampd{position:absolute;right:34px;top:20px;padding:3px 10px 0;border:3px solid #2f5f8f;color:#2f5f8f;font-family:'Stardos Stencil',serif;font-weight:700;font-size:15px;letter-spacing:.14em;
+  transform:rotate(5deg);opacity:.8;line-height:1.4}
+/* Foxton & Daughter's bill: the yellow copy */
+.doc.bill{width:min(640px,94vw);padding:22px 30px 20px;background:#fdf3b4 linear-gradient(170deg,rgba(255,255,255,.45),rgba(200,160,40,.16));font-family:'Caveat',cursive;font-weight:700;
+  font-size:22px;line-height:1.16;color:#2b3f86;transform:rotate(.7deg)}
+.doc.bill h4{margin:0;display:flex;justify-content:space-between;align-items:flex-end;font-family:'Oswald',sans-serif;font-weight:600;font-size:23px;letter-spacing:.1em;color:#1c1b18;line-height:1.1}
+.doc.bill h4 small{font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;letter-spacing:.06em;color:#b3261c}
+.doc.bill h5{margin:2px 0 8px;font-family:'Oswald',sans-serif;font-weight:400;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:#1c1b18;border-bottom:2px solid #1c1b18;padding-bottom:7px}
+.doc.bill table{width:100%;border-collapse:collapse}
+.doc.bill td{padding:3px 8px 1px 0;border-bottom:1px solid rgba(43,63,134,.3);vertical-align:bottom}
+.doc.bill td:last-child{text-align:right;white-space:nowrap;padding-right:0;width:90px}
+.doc.bill tr.tot td{border-bottom:0;border-top:3px double #2b3f86;font-size:27px;padding-top:6px}
+.doc.bill p{margin:6px 0 0}
+.doc.bill .paid{display:inline-block;margin-top:4px;padding:2px 12px 0;border:3px solid #b3261c;color:#b3261c;font-family:'Stardos Stencil',serif;font-weight:700;font-size:18px;letter-spacing:.14em;transform:rotate(-4deg)}
+/* the photograph, as it is kept in the notebook */
+.doc.photo{width:min(760px,94vw);padding:16px 16px 14px;background:#f4f1e8;font-family:'EB Garamond',serif;font-size:17px;line-height:1.36;color:#22211c}
+.doc.photo svg{display:block;width:100%;height:auto}
+.doc.photo h4{margin:10px 4px 4px;font-family:'Courier Prime',monospace;font-weight:700;font-size:14.5px;letter-spacing:.06em}
+.doc.photo ul{margin:0 4px;padding-left:20px}
+.doc.photo li{margin:0 0 2px}
+/* the note in the lid of the stamp box */
+.doc.lid{width:min(640px,94vw);padding:24px 32px 22px;background:#e9dcc0 linear-gradient(170deg,rgba(255,255,255,.4),rgba(120,82,30,.2));font-family:'Tinos',serif;font-size:17px;line-height:1.38;color:#2a2318;
+  border:10px solid #6b4a2a;border-radius:4px}
+.doc.lid h4{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;letter-spacing:.14em;color:#6b2030}
+.doc.lid p{margin:0 0 8px}
+.doc.lid b.st{display:inline-block;padding:1px 8px 0;border:2px solid;font-family:'Stardos Stencil',serif;font-weight:700;font-size:15px;letter-spacing:.1em;transform:rotate(-1.5deg);margin-right:4px}
+.doc.lid b.must{color:#8f1d2c}.doc.lid b.might{color:#2f5f8f}.doc.lid b.cannot{color:#1c1b18}
+.doc.lid .pen{font-size:1.3em}
+/* what you worked out, on a yellow pad */
+.doc.mine{width:min(600px,94vw);padding:30px 34px 30px 60px;background:#fff7c2 repeating-linear-gradient(transparent 0 31px,rgba(60,100,170,.2) 31px 32px);font-family:'Caveat',cursive;font-weight:700;
+  font-size:25px;line-height:32px;color:#27365f;box-shadow:0 26px 70px rgba(0,0,0,.6),inset 44px 0 0 #fff7c2,inset 46px 0 0 rgba(200,70,70,.5);transform:rotate(-.6deg)}
+.doc.mine h4{margin:0 0 0;font-size:29px;font-weight:700;line-height:32px;text-decoration:underline}
+.doc.mine p{margin:0}
+/* what was said in court */
+.doc.said{width:min(640px,94vw);padding:28px 38px 26px;background:#fbf8ec;font-family:'Tinos',serif;font-size:17.5px;line-height:1.42;color:#1c1d1f;border-left:8px solid #d4577c}
+.doc.said h4{margin:0 0 12px;font-family:'Oswald',sans-serif;font-weight:500;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#8f2947}
+.doc.said p{margin:0 0 9px}
+.doc.said p b{font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#6b6453;margin-right:6px}
+.doc.said p.j{font-style:italic}
+.doc.statement{background:#fbf8ec;font-family:'EB Garamond',Georgia,serif;font-size:19px;border-left:8px solid #1f4a37}
+.doc.statement h4{color:#1f4a37}
+
+/* ---- the notebook: green baize, brass studs, court paper inside ---- */
+.nb{background:#173427 linear-gradient(150deg,#21503a,#11261c);border:1px solid #0b1a13;border-radius:4px;color:#ece5cf;
+  box-shadow:0 30px 90px rgba(0,0,0,.75),inset 0 0 0 5px #0e2219,inset 0 0 0 6px rgba(201,162,74,.5)}
+.nb-tabs{border-bottom-color:rgba(201,162,74,.4)}
+.nb-tabs button{font-family:'Cormorant SC',serif;font-weight:700;font-size:19px;letter-spacing:.14em;color:#b9c9b6}
+.nb-tabs button.on{background:#f4efdf;color:#173427;border-color:rgba(201,162,74,.6)}
+.nb-list{border-right-color:rgba(201,162,74,.4)}
+.nb-list button{font-family:'EB Garamond',serif;font-size:17.5px;color:#ece5cf}
+.nb-list button.on{background:#f4efdf;color:#173427}
+.nb-view{background:#0e2219}
+.nb-words{background:#f4efdf;color:#22211c}
+.nb-words b{font-family:'Tinos',serif;font-weight:700;font-size:18px}
+.nb-words span{font-family:'EB Garamond',serif;font-size:17px;color:#55503f}
+.nb-ko{border-color:#8f8873;color:#55503f}
+.nb-ko.on{background:#173427;color:#f4efdf;border-color:#173427}
+.wtip,.wtag{background:#f4efdf;color:#22211c;border-radius:2px;box-shadow:0 10px 26px rgba(0,0,0,.55),inset 5px 0 0 #d4577c}
+.wtag{padding-left:20px}.wtag:before{display:none}.wtip{padding-left:19px}
+.wtip b,.wtag b{font-family:'Tinos',serif;font-weight:700;font-size:18px}
+.hintbox{background:#f4efdf;color:#22211c;border-top:6px solid #d4577c;border-radius:2px}
+.hintbox h6{color:#8f2947}
+.hintbox p i{background:#1f4a37;color:#f4efdf}
+.toast{font-family:'Oswald',sans-serif;background:rgba(12,22,17,.95)}

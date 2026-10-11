@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Bakehouse · Warm in the Middle</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-forensic.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="cake.css">
+<style>
+  body{--bg:#0d1417;--accent:#9fdcee;--font-display:'Barlow Condensed',sans-serif;--font-ui:'Barlow Condensed',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(10,16,19,.96);--tc-ink:#e9f1f3;--cap-bg:rgba(10,16,19,.94);--panel:#141d22;--face-bg:#22343c;--q-ink:#9fdcee;--fade:#05090b;--hud-bg:rgba(10,16,19,.8)}
+  .tc-room{font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:clamp(38px,5.6vw,72px)}
+  .tk-name{font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .sB{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-anchor:middle}
+  .sM{font-family:'IBM Plex Mono',monospace;font-weight:500;text-anchor:middle}
+  .sC{font-family:'Caveat',cursive;text-anchor:middle}
+  .sE{font-family:'Special Elite',monospace;text-anchor:middle}
+  #tube1{animation:tube 9s steps(1,end) infinite}
+  @keyframes tube{0%{opacity:1}63%{opacity:.7}64%{opacity:1}66%{opacity:.82}67%{opacity:1}}
+  #pilot{animation:pilot 2.300s steps(2,end) infinite}
+  @keyframes pilot{50%{opacity:.5}}
+  .steam{animation:steam 5s linear infinite;opacity:0}
+  .steam.s2{animation-delay:-2.500s}
+  @keyframes steam{0%{transform:translateY(0);opacity:0}25%{opacity:.5}100%{transform:translateY(-70px);opacity:0}}
+  #rack.ready{animation:rk 1.600s steps(1,end) infinite}
+  @keyframes rk{50%{filter:brightness(1.25)}}
+
+  /* the graph */
+  .bn #gclick{cursor:crosshair}
+  .bn #axis{cursor:pointer}
+  .bn #trace.free{cursor:grab}
+  .bn #trace.free.on{cursor:grabbing}
+  .bn .dot{transition:fill .4s}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="wt" width="72" height="48" patternUnits="userSpaceOnUse"><rect width="72" height="48" fill="#e6ebe8"/><path d="M0 1H72M1 0V48" stroke="#bfc8c4" stroke-width="2"/><path d="M6 6h30" stroke="#fff" stroke-width="2" opacity=".6"/></pattern>
+  <linearGradient id="steelG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe6e9"/><stop offset="1" stop-color="#a3aeb4"/></linearGradient>
+  <linearGradient id="ovenG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#17181b"/><stop offset=".5" stop-color="#26282c"/><stop offset="1" stop-color="#17181b"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6c873"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="coldG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dff4ff" stop-opacity=".34"/><stop offset="1" stop-color="#dff4ff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d7870"/><stop offset="1" stop-color="#a39c92"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#04090c" stop-opacity=".3"/><stop offset="1" stop-color="#020507" stop-opacity=".9"/></radialGradient>
+</defs>
+
+<!-- white tiles, a green band, two strip lights -->
+<rect x="-1000" y="-400" width="3600" height="1002" fill="url(#wt)"/>
+<rect x="-1000" y="426" width="3600" height="26" fill="#2f5a4c"/><rect x="-1000" y="-400" width="3600" height="424" fill="#3a444a"/>
+<g id="tube1"><rect x="330" y="30" width="430" height="14" rx="7" fill="#f4fdff"/><path d="M330 44h430l60 300h-550z" fill="url(#coldG)" pointer-events="none"/></g>
+<rect x="960" y="30" width="430" height="14" rx="7" fill="#f4fdff"/><path d="M960 44h430l60 300h-550z" fill="url(#coldG)" pointer-events="none"/>
+<g fill="#2a3136"><rect x="320" y="24" width="18" height="26"/><rect x="752" y="24" width="18" height="26"/><rect x="950" y="24" width="18" height="26"/><rect x="1382" y="24" width="18" height="26"/></g>
+
+<!-- the big oven, and the little one -->
+<g id="oven" class="hot"><rect x="430" y="-400" width="44" height="560" fill="#2a2d31"/><rect x="60" y="146" width="460" height="458" fill="url(#ovenG)"/><rect x="60" y="146" width="460" height="14" fill="#3a3d42"/>
+  <text x="290" y="194" class="sB" font-size="34" fill="#3d4046" stroke="#55585e" stroke-width="1" letter-spacing="10">WHITLOW</text><text x="290" y="212" class="sB" font-size="13" fill="#55585e" letter-spacing="6">1961</text>
+  <g><rect x="90" y="226" width="400" height="150" rx="6" fill="#101113" stroke="#3a3d42" stroke-width="4"/><rect x="130" y="250" width="320" height="56" rx="4" fill="#07080a" stroke="#2a2d31" stroke-width="3"/><rect x="170" y="336" width="240" height="14" rx="7" fill="url(#brassG)"/></g>
+  <g><rect x="90" y="406" width="400" height="150" rx="6" fill="#101113" stroke="#3a3d42" stroke-width="4"/><rect x="130" y="430" width="320" height="56" rx="4" fill="#07080a" stroke="#2a2d31" stroke-width="3"/><rect x="170" y="516" width="240" height="14" rx="7" fill="url(#brassG)"/></g>
+  <g fill="#55585e"><circle cx="76" cy="230" r="4"/><circle cx="76" cy="390" r="4"/><circle cx="76" cy="560" r="4"/><circle cx="504" cy="230" r="4"/><circle cx="504" cy="390" r="4"/><circle cx="504" cy="560" r="4"/></g></g>
+<g id="little" class="hot"><path d="M560 562v42M690 562v42" stroke="#59626a" stroke-width="10"/><rect x="546" y="372" width="158" height="192" rx="8" fill="#e3ddc8"/><rect x="546" y="372" width="158" height="46" rx="8" fill="#cfc8b0"/>
+  <circle cx="586" cy="396" r="15" fill="#1c1d20"/><path d="M586 396l8 -9" stroke="#f4f1e6" stroke-width="3" stroke-linecap="round"/><circle cx="664" cy="396" r="6" fill="#8a2a20"/>
+  <rect x="560" y="430" width="130" height="118" rx="5" fill="#1c1d20"/><rect x="578" y="446" width="94" height="40" rx="3" fill="#0a0b0c"/><rect x="590" y="508" width="70" height="10" rx="5" fill="#c9ced3"/><rect id="pilot" x="566" y="540" width="118" height="4" fill="#f0a030" opacity=".8"/></g>
+<g id="timer" class="hot"><circle cx="624" cy="352" r="19" fill="#c63a2a"/><path d="M612 336q12 -10 24 0q-12 4 -24 0z" fill="#3d7a3a"/><path d="M624 352v-12" stroke="#fdf6e6" stroke-width="2.500"/><circle cx="624" cy="352" r="3" fill="#fdf6e6"/></g>
+
+<!-- on the wall over the table -->
+<g id="tubs" class="hot"><rect x="752" y="232" width="456" height="10" fill="#8a949b"/><path d="M770 242v16M1190 242v16" stroke="#6b757c" stroke-width="6"/>
+  <g><rect x="780" y="178" width="62" height="54" rx="4" fill="#fdfdfb"/><rect x="776" y="170" width="70" height="12" rx="3" fill="#b3261c"/><rect x="786" y="194" width="50" height="26" fill="#f6e3e0"/><text x="811" y="205" class="sB" font-size="8.500" fill="#1c1d22">CREAM OF</text><text x="811" y="215" class="sB" font-size="8.500" fill="#1c1d22">TARTAR</text></g>
+  <g><rect x="856" y="178" width="62" height="54" rx="4" fill="#fdfdfb"/><rect x="852" y="170" width="70" height="12" rx="3" fill="#2a5aa0"/><rect x="862" y="194" width="50" height="26" fill="#e0e8f6"/><text x="887" y="205" class="sB" font-size="8.500" fill="#1c1d22">BICARB.</text><text x="887" y="215" class="sB" font-size="8.500" fill="#1c1d22">OF SODA</text></g>
+  <rect x="940" y="188" width="40" height="44" rx="3" fill="#d9a441"/><rect x="996" y="174" width="30" height="58" rx="4" fill="#6b3d1a"/><rect x="1002" y="164" width="18" height="12" fill="#1c1d22"/><rect x="1044" y="196" width="70" height="36" rx="3" fill="#c9d1d6"/><rect x="1130" y="182" width="52" height="50" rx="4" fill="#7a9a6a"/></g>
+<g id="bcard" class="hot"><rect x="930" y="298" width="64" height="80" fill="#cdb98c" transform="rotate(3 962 338)"/><rect x="868" y="296" width="64" height="80" fill="#d6c294" transform="rotate(-2 900 336)"/>
+  <rect x="788" y="286" width="84" height="104" fill="#e3cfa3"/><circle cx="830" cy="293" r="4" fill="#8a949b"/><text x="830" y="314" class="sE" font-size="10.500" fill="#2a2016">6-INCH</text><text x="830" y="326" class="sE" font-size="10.500" fill="#2a2016">SPONGE</text>
+  <g stroke="#2a2016" stroke-width="1.300"><path d="M798 338h64M798 348h64M798 358h64M798 368h64"/></g><text x="842" y="384" class="sC" font-size="13" fill="#1d2a5a">A.W.</text>
+  <text x="900" y="322" class="sE" font-size="10" fill="#2a2016" transform="rotate(-2 900 336)">8-INCH</text><text x="962" y="324" class="sE" font-size="10" fill="#2a2016" transform="rotate(3 962 338)">10-INCH</text></g>
+<g id="thermo" class="hot"><rect x="1040" y="282" width="30" height="116" rx="5" fill="#b08a55"/><rect x="1051" y="292" width="8" height="84" rx="4" fill="#f4f1e6"/><rect x="1053" y="336" width="4" height="40" fill="#c63a2a"/><circle cx="1055" cy="384" r="8" fill="#c63a2a"/><g stroke="#3a2a14" stroke-width="1"><path d="M1044 300h5M1044 312h5M1044 324h5M1044 336h5M1044 348h5M1044 360h5"/></g></g>
+<g id="clock" class="hot"><circle cx="1140" cy="330" r="42" fill="#2a3136"/><circle cx="1140" cy="330" r="36" fill="#fdfdf8"/><g stroke="#1c1d22" stroke-width="3"><path d="M1140 298v7M1140 355v7M1108 330h7M1165 330h7"/></g>
+  <path d="M1140 330l-14 -14" stroke="#1c1d22" stroke-width="5" stroke-linecap="round"/><path d="M1140 330v27" stroke="#1c1d22" stroke-width="3" stroke-linecap="round"/><circle cx="1140" cy="330" r="3.500" fill="#b3261c"/></g>
+
+<!-- the sink, the soda, the way out to the passage -->
+<g id="arch" class="hot"><path d="M1524 602V300q0 -56 56 -56h60v358z" fill="#2a2018"/><circle cx="1590" cy="330" r="80" fill="#ffd98a" opacity=".16"/><path d="M1540 602q30 -14 60 -8v8z" fill="#f4f1e8" opacity=".85"/></g>
+<!-- the floor: mopped, with one dry place -->
+<rect x="-1000" y="600" width="3600" height="800" fill="url(#floorG)"/><g id="grid" stroke="#6b665e" stroke-width="2" opacity=".55"></g>
+<path d="M760 640L1620 618L1900 1300H520z" fill="#3f4a50" opacity=".42"/><g stroke="#dff4ff" stroke-width="5" stroke-linecap="round" opacity=".22"><path d="M860 700h120M1260 742h170M800 820h200M1300 860h180"/></g>
+<g id="dry" class="hot"><path d="M930 690h260l44 96H886z" fill="#a8a198"/><path d="M930 690h260l44 96H886z" fill="none" stroke="#8a847b" stroke-width="2" stroke-dasharray="3 5"/>
+  <g fill="none" stroke="#6b665e" stroke-width="2.500"><ellipse cx="944" cy="700" rx="9" ry="4"/><ellipse cx="1178" cy="700" rx="9" ry="4"/><ellipse cx="906" cy="776" rx="11" ry="5"/><ellipse cx="1214" cy="776" rx="11" ry="5"/></g></g>
+<g fill="#f4f1e8" opacity=".7"><ellipse cx="1556" cy="640" rx="13" ry="5" transform="rotate(-20 1556 640)"/><ellipse cx="1500" cy="668" rx="12" ry="5" transform="rotate(-24 1500 668)" opacity=".7"/><ellipse cx="1452" cy="652" rx="11" ry="4" transform="rotate(-20 1452 652)" opacity=".4"/></g>
+
+<g id="sink" class="hot"><rect x="1290" y="560" width="34" height="88" fill="#8a6f5a"/><rect x="1456" y="560" width="34" height="88" fill="#8a6f5a"/><path d="M1290 648h34M1456 648h34" stroke="#5a4636" stroke-width="4"/>
+  <path d="M1390 352v48M1366 400h48" stroke="#8f9aa1" stroke-width="10" stroke-linecap="round"/><path d="M1390 400v26q0 14 -16 14" stroke="#8f9aa1" stroke-width="10" fill="none" stroke-linecap="round"/><circle cx="1364" cy="392" r="9" fill="#b3261c"/><circle cx="1416" cy="392" r="9" fill="#2a5aa0"/>
+  <rect x="1274" y="470" width="232" height="94" rx="8" fill="#f7f7f3" stroke="#9aa5ab" stroke-width="3"/><rect x="1274" y="470" width="232" height="15" rx="6" fill="#fff" stroke="#9aa5ab" stroke-width="2"/><rect x="1290" y="490" width="200" height="62" rx="5" fill="#cfd6d4"/></g>
+<g id="soda" class="hot"><path d="M1340 650l6 -66h72l6 66z" fill="#3d6fa8"/><path d="M1346 584l8 -12h56l8 12z" fill="#2a5082"/><rect x="1352" y="602" width="60" height="34" fill="#fdfdfb"/><text x="1382" y="616" class="sB" font-size="10.500" fill="#1c2a44">SODA</text><text x="1382" y="629" class="sB" font-size="10.500" fill="#1c2a44">CRYSTALS</text><path d="M1400 576l18 -16" stroke="#c9ced3" stroke-width="6" stroke-linecap="round"/></g>
+
+<!-- the steel table, the rack, the manual -->
+<path d="M734 606v166M1196 606v166" stroke="#7d8a92" stroke-width="10"/><rect x="730" y="700" width="470" height="8" fill="#8a969d"/>
+<path d="M730 560h470l24 32H706z" fill="url(#steelG)"/><rect x="706" y="592" width="518" height="14" fill="#8a969d"/>
+<g id="rack" class="hot"><path d="M756 560h216M766 552h196" stroke="#6f7b82" stroke-width="3"/><g stroke="#6f7b82" stroke-width="2"><path d="M780 552v8M810 552v8M840 552v8M870 552v8M900 552v8M930 552v8"/></g>
+  <path d="M796 518v34h112v-34" fill="#b9c2c8" stroke="#7d8a92" stroke-width="3"/><path d="M800 520q52 -26 104 0v4H800z" fill="#e3b565"/><path d="M800 520q52 -26 104 0" fill="none" stroke="#c4914a" stroke-width="3"/>
+  <rect x="916" y="528" width="50" height="26" fill="#ffe98a" transform="rotate(-4 941 541)"/><text x="941" y="539" class="sM" font-size="7.500" fill="#3a2a14" transform="rotate(-4 941 541)">10.00 pm</text><text x="941" y="549" class="sM" font-size="7.500" fill="#3a2a14" transform="rotate(-4 941 541)">38 °C</text></g>
+<g id="manual" class="hot"><path d="M990 566l8 -28h54l4 28z" fill="#f6f2e6"/><path d="M1056 566l-4 -28h54l8 28z" fill="#efe9d8"/><path d="M1052 538l4 28" stroke="#1f1c16" stroke-width="3"/><g stroke="#8a8676" stroke-width="1.300"><path d="M1004 546h40M1002 552h44M1000 558h46M1062 546h40M1064 552h42M1066 558h44"/></g></g>
+
+<!-- the bucket by the sink -->
+<g id="bucket" class="hot"><path d="M1262 758L1336 428" stroke="#b08a55" stroke-width="9" stroke-linecap="round"/><ellipse cx="1262" cy="836" rx="48" ry="9" fill="#000" opacity=".3"/>
+  <path d="M1218 752l10 82q34 10 68 0l10 -82z" fill="#aab2b8"/><path d="M1228 782q34 9 68 0M1232 812q30 8 60 0" stroke="#7d8a92" stroke-width="3" fill="none"/><ellipse cx="1262" cy="752" rx="44" ry="10" fill="#6b757c"/><ellipse cx="1262" cy="754" rx="38" ry="7" fill="#8f999c"/>
+  <path d="M1218 752q-12 -44 44 -46q56 2 44 46" fill="none" stroke="#7d8a92" stroke-width="4"/>
+  <path class="steam" d="M1248 744q-8 -10 0 -20t0 -20" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path class="steam s2" d="M1274 744q8 -10 0 -20t0 -20" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+
+<!-- Mr Whitlow, Dr Novak, Chika -->
+<g id="whitlow" class="hot" transform="translate(330 858)"></g>
+<g id="novak" class="hot" transform="translate(1136 874)"></g>
+<g id="chika" class="hot" transform="translate(1486 850) scale(.94)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go out to the passage</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="cake.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  (function () {
+    var s = '', i;
+    for (i = -22; i <= 22; i++) s += '<path d="M' + (800 + i * 70) + ' 600L' + (800 + i * 250) + ' 1300"/>';
+    [628, 664, 712, 776, 860, 980].forEach(function (y) { s += '<path d="M-800 ' + y + 'H2400"/>'; });
+    $('#grid').innerHTML = s;
+    $('#whitlow').innerHTML = CAKE.fig('whitlow'); $('#novak').innerHTML = CAKE.fig('novak'); $('#chika').innerHTML = CAKE.fig('chika');
+  })();
+
+  ER.init({
+    theme: 'forensic', story: 'cake', storyTitle: 'Warm in the Middle', id: 'bake', no: 'II', title: 'The Bakehouse',
+    go: 'Through the bead curtain',
+    intro: [
+      'Seven tubes went into the rack. Universal indicator gave each of them a colour and a number: lemon juice 2, vinegar 3 and cream of tartar 4, all acids; tap water 7, neutral; bicarbonate of soda 8, soap 10 and soda crystals 11, all alkalis. The two white tubs were the right way round.',
+      'Then the icing did the rest, because red cabbage is an indicator too, with colours of its own. Bicarbonate turned a square of Thursday&rsquo;s icing blue. Soda crystals, which are washing soda, turned it green: the green of the stain. And the flake from the cake was green on top and lilac underneath, so whatever did it came from outside, after the cake was iced.',
+      'Washing soda in water, splashed on from low down, tonight. Mr Whitlow has stopped saying that Chika mixed the icing wrong. He now says that she knocked a bucket.',
+      'The bakehouse is through the bead curtain behind the counter. It is half past ten.'
+    ],
+    exit: {"next":"store","w":{"4a3afdd5":"476838fb"}}, tags: {},
+    sound: ['lab', { root: 46, bpm: 66, drop: ['mel'], beds: [['hum', 0.5]] }],      /* a cold room under a strip light, and a graph to read: slow, low, no tune */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#rack').classList.toggle('ready', !!(told.manual && told.bcard && !nextFile));
+    ER.pips((told.manual ? 1 : 0) + (told.bcard ? 1 : 0) + Math.min(2, (ER.flag('b-st') || 0) > 1 ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['The graph is signed: nine o&rsquo;clock. Somebody walked through the flour in the passage. Go and look.']];
+    if (bench && bench.isOpen()) return [['probe', [
+      'Take the probe by its square head and push the point into the sponge. Watch the number on it change as it goes in.',
+      'The outside of a cake cools first, so near the edge the probe reads low. The old card says where to measure: in the MIDDLE. Half way along, and half way down.'
+    ]], ['plot', [
+      'Each label is a time and a temperature. Go along the bottom of the graph to the time, then straight up to the temperature, and click there. The small box at the top of the paper says where your pointer is.',
+      'The first label says 10.00 pm and 38 °C. The second says 10.30 pm and 28 °C. Two dots.'
+    ]], ['card', [
+      'The tracing paper has a scale of its own along the top: minutes out of the oven. Put each line of the old card on it: so many minutes along, so many degrees up.',
+      '&ldquo;Out of the oven&rdquo; is 0 minutes. &ldquo;After 1 hour 20&rdquo; is 80 minutes, and &ldquo;after 2 hours&rdquo; is 120.',
+      'Five crosses: 0 and 98, 20 and 68, 40 and 50, 80 and 31, 120 and 23. Use the tracing paper&rsquo;s own scale, not the clock times under it.'
+    ]], ['slide', [
+      'The curve is the right shape, but it is lying in the wrong place. Take hold of the tracing paper and slide it sideways, until the curve runs through both of your dots.',
+      'When both dots turn green, look at the 0 on the tracing paper. The clock time under that 0 is the time the sponge left the oven. Click that time on the bottom line of the graph, and sign.',
+      'Not seven o&rsquo;clock: that is where the straight line pointed. A hot cake cools fast at first, so the curve climbs back to 98° in much less time than the line does.'
+    ]]][bench.stage()];
+    if (!told.manual || !told.bcard) return ['read', [
+      'Two papers before you touch the sponge. Dr Novak&rsquo;s field manual is lying open on the steel table, and three brown cards are pinned to the wall above the rack.',
+      'The manual says how a hot thing cools. The front card says how this size of cake cools, in numbers. You will need both of them.'
+    ]];
+    return ['rack', ['The sponge is on a wire rack on the steel table, with Dr Novak&rsquo;s yellow label beside it. Click it.']];
+  }
+
+  function begin() {
+    paint();
+    CAKE.mine('finding', 'Finding 1', '<p>The two white tubs are the right way round: cream of tartar 4 (acid), bicarbonate of soda 8 (alkali).</p><p>Bicarbonate turns the red-cabbage icing BLUE. Soda crystals (washing soda, pH 11) turn it GREEN.</p>' +
+      '<p>The stain is green. The flake is lilac underneath.</p><p>So: washing soda in water, splashed on from outside, tonight. Not mixed in on Thursday.</p>', true);
+    if (nextFile) { busy = false; showGo(); ER.say('The graph is signed. Out of the oven at nine.'); return; }
+    if (told.in) { busy = false; ER.say('The bakehouse, half past ten. The strip light hums.'); return; }
+    tell('in');
+    ER.narrate([
+      'White tiles, a steel table, two black ovens, and a strip light that hums. It is colder in here than in the shop. The thermometer on the wall says 18 °C.',
+      'The bucket is by the sink, with a mop standing in it. Dr Novak dips a strip of paper in the grey water and holds it against her card. &ldquo;Eleven,&rdquo; she says. &ldquo;And an open bag of soda crystals under the sink. There is your green.&rdquo;',
+      'The floor between the sink and the middle of the room has been mopped, and is not dry yet. In the middle of the wet part there is a dry place the shape of a trolley.',
+      '&ldquo;And there,&rdquo; says Mr Whitlow, pointing, &ldquo;is the other thing.&rdquo; On a wire rack sits a small round tin with a sponge in it. Stuck to the rack is Dr Novak&rsquo;s label: 10.00 pm, 38 °C.',
+      '&ldquo;A sponge. In my ovens, after hours. The tin was too hot to hold when I got here.&rdquo; He looks at Chika, who has stopped in the doorway. &ldquo;She says she isn&rsquo;t allowed to light the big oven. Well. Nobody ever said anything about the little one.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- papers ---------- */
+  var DIAG = '<svg viewBox="0 0 210 190"><path d="M30 14V160H200" fill="none" stroke="#221f1a" stroke-width="2"/><path d="M30 132H200" stroke="#7a705c" stroke-width="1.200" stroke-dasharray="4 4"/>' +
+    '<path d="M92 20C100 86 124 118 198 128" fill="none" stroke="#b3261c" stroke-width="3"/><path d="M36 20L178 124" stroke="#221f1a" stroke-width="1.600" stroke-dasharray="6 4"/>' +
+    '<circle cx="148" cy="113" r="4.500" fill="#221f1a"/><circle cx="174" cy="122" r="4.500" fill="#221f1a"/><path d="M30 20h70" stroke="#7a705c" stroke-width="1" stroke-dasharray="2 3"/>' +
+    '<text x="24" y="24" font-family="Patrick Hand,cursive" font-size="13" fill="#221f1a" text-anchor="end">hot</text><text x="196" y="146" font-family="Patrick Hand,cursive" font-size="13" fill="#7a705c" text-anchor="end">the room</text>' +
+    '<text x="116" y="176" font-family="Patrick Hand,cursive" font-size="14" fill="#221f1a" text-anchor="middle">time</text><text x="130" y="56" font-family="Patrick Hand,cursive" font-size="14" fill="#b3261c">the curve:</text><text x="130" y="72" font-family="Patrick Hand,cursive" font-size="14" fill="#b3261c">what happened</text>' +
+    '<text x="34" y="70" font-family="Patrick Hand,cursive" font-size="14" fill="#221f1a">the line:</text><text x="34" y="86" font-family="Patrick Hand,cursive" font-size="14" fill="#221f1a">too early</text>' +
+    '<path d="M36 164v10M92 164v10" stroke="#221f1a" stroke-width="1.500"/></svg>';
+  var MANUAL = '<h4>Field manual &middot; Time</h4><h3>Hot things and the clock</h3><div class="two"><div>' +
+    '<p>A hot thing in a cool room gives its heat to the air. How fast? That depends on <b>how much hotter it is than the room</b>.</p>' +
+    '<p>A cake at 98° in a room at 18° is 80° too hot, and it cools quickly. An hour later it may be only 20° too hot, and then it cools four times more slowly. So the line on the graph is a <b>cooling curve</b>: steep at first, then flatter and flatter, until it comes down to <b>room temperature</b> and stops.</p>' +
+    '<p>That makes a clock. Measure the temperature in the middle of the thing (the middle cools last). Find that temperature on the curve for a thing of the same size and kind. Read off how long it has been cooling.</p></div>' + DIAG + '</div>' +
+    '<p class="rule">Never join two readings with a straight line and run it backwards. The thing cooled faster when it was hotter, so a straight line always puts the start too early.</p><p class="pg">31</p>';
+  $('#manual').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: MANUAL, cls: 'manual', clue: { id: 'manual31', title: 'Hot things and the clock', kind: 'Field manual, page 31' }, done: function () {
+      CAKE.terms(['cooling curve', 'temperature', 'room temperature', 'graph', 'probe']);
+      if (tell('manual')) { paint(); ER.say('Fast at first, then slower and slower. And never a straight line run backwards.'); }
+    } });
+  });
+  var BCARD = '<h4>6-INCH SPONGE</h4><p>In its tin, on the rack. Bakehouse at 18°.<br>Thermometer in the MIDDLE of the cake.</p><table>' +
+    '<tr><td>out of the oven</td><td>98°</td></tr><tr><td>after 20 minutes</td><td>68°</td></tr><tr><td>after 40 minutes</td><td>50°</td></tr><tr><td>after 1 hour 20</td><td>31°</td></tr><tr><td>after 2 hours</td><td>23°</td></tr></table>' +
+    '<p class="hand">Do not ice it before two hours.<br>Do not hurry it. A.W. 1974</p>';
+  $('#bcard').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BCARD, cls: 'bcard', clue: { id: 'bcard', title: 'A cooling card: the 6-inch sponge', kind: 'Pinned over the rack' }, done: function () {
+      if (tell('bcard')) { paint(); ER.say('&ldquo;Dad&rsquo;s cooling cards,&rdquo; says Mr Whitlow. &ldquo;He measured everything. There is one for every size of tin: six-inch, eight-inch, ten. Not that we sell a six-inch cake. I don&rsquo;t know why we keep the tin.&rdquo;'); }
+    } });
+  });
+
+  /* ---------- things in the bakehouse ---------- */
+  CAKE.thing('#bucket', 'bucket', 'A steel bucket of grey water, with a string mop standing in it. The water is still warmer than your hand. Whoever filled it never emptied it.', isBusy);
+  CAKE.thing('#soda', null, 'Under the sink: a blue bag of SODA CRYSTALS, open, with a scoop left in it. For floors, drains and burnt pans, the bag says. In small letters: washing soda.', isBusy);
+  CAKE.thing('#sink', 'tap', 'A deep white sink with two taps. The red one runs hot enough to make you pull your hand away.', isBusy);
+  CAKE.thing('#dry', null, 'A dry place on a damp floor, and four small rings where the wheels stood. Somebody mopped right round the trolley, wringing the mop out as they went. The green is on the side of the cake that faced the sink.', isBusy);
+  CAKE.thing('#oven', null, 'The big oven is stone cold. WHITLOW, say the iron letters over its doors, and under them, smaller: 1961.', isBusy);
+  CAKE.thing('#little', null, 'The little oven: an old cream thing with a dial where the others have buttons. Nobody uses it. Its door is still warm to the back of your hand.', isBusy);
+  CAKE.thing('#timer', 'timer', 'A kitchen timer in the shape of a tomato, standing at 0. It has rung, and nobody has wound it up again.', isBusy);
+  CAKE.thing('#thermo', 'thermometer', 'The thermometer on the wall: 18 °C. A bakehouse at night, with the ovens off, is not a warm place.', isBusy);
+  CAKE.thing('#clock', null, 'Half past ten. Thirty minutes since Dr Novak pushed her thermometer into that sponge.', isBusy);
+  CAKE.thing('#tubs', null, 'The baking shelf. CREAM OF TARTAR with a red lid, BICARBONATE OF SODA with a blue one, side by side, exactly where they always are.', isBusy);
+  CAKE.thing('#arch', null, 'The way out to the passage, where the flour is kept. A few white footmarks come in from it across the tiles, and stop where the floor has been mopped.', isBusy);
+  $('#whitlow').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;Nine,&rdquo; says Mr Whitlow. &ldquo;I was in the bath at nine.&rdquo;' : '&ldquo;Thirty-eight when you came in, Doctor,&rdquo; says Mr Whitlow. &ldquo;You wrote it down. What is it now? I can tell you when it was baked without any graph paper.&rdquo;');
+  });
+  $('#chika').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? 'Chika is holding the white box open now, and looking into it as if to check that the flowers are still there.' : '&ldquo;I didn&rsquo;t bake that,&rdquo; says Chika from the doorway. &ldquo;And if I had, I wouldn&rsquo;t have left it on the rack for him to find.&rdquo;');
+  });
+  $('#novak').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;Nine o&rsquo;clock,&rdquo; says Dr Novak. &ldquo;Now the flour.&rdquo;' : told.manual && told.bcard ? '&ldquo;One reading is a temperature,&rdquo; says Dr Novak. &ldquo;Two readings, half an hour apart, are the beginning of a clock. Go and take the second.&rdquo;' : '&ldquo;Page 31,&rdquo; says Dr Novak. &ldquo;It is open on the table. And somebody has pinned exactly what we need to the wall, fifty years ago.&rdquo;');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#rack').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The sponge, with two holes in it now, and a graph that says nine o&rsquo;clock.'); return; }
+    if (!told.manual) { ER.say('&ldquo;Not yet,&rdquo; says Dr Novak. &ldquo;Page 31 first. It is open on the table beside you.&rdquo;'); return; }
+    if (!told.bcard) { ER.say('&ldquo;One more thing to read,&rdquo; says Dr Novak. &ldquo;The brown card on the wall, the one at the front. Somebody in this bakehouse once measured exactly what we need.&rdquo;'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the probe, the graph paper, the tracing paper ---------- */
+  function makeBench() {
+    var X0 = 400, PXM = 2.1, Y0 = 520, PXT = 5, ROOM = 18;
+    var READ = [[210, 38, '10.00 pm'], [240, 28, '10.30 pm']];                  /* minutes after half past six, and degrees: what the two labels say */
+    var CARD = [[0, 98, 'out of the oven'], [20, 68, 'after 20 minutes'], [40, 50, 'after 40 minutes'], [80, 31, 'after 1 hour 20'], [120, 23, 'after 2 hours']];
+    var st = ER.flag('b-st') || 0, got = ER.flag('b-got') || [0, 0], cgot = ER.flag('b-cg') || [0, 0, 0, 0, 0], ox = ER.flag('b-ox') || 526, ans = ER.flag('b-ans') || '', wait = false, misses = 0;
+    var box = ER.el('div', 'bn', '<svg viewBox="0 0 1000 600"></svg><div class="bn-foot"><p class="bmsg"></p><button type="button" class="btn" id="g-go">Sign the graph</button></div>');
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.bmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function gx(m) { return X0 + m * PXM; }
+    function gy(t) { return Y0 - (t - 10) * PXT; }
+    function clockOf(m) { var tot = 18 * 60 + 30 + m, h = Math.floor(tot / 60) - 12, mm = tot % 60; return h + '.' + (mm < 10 ? '0' : '') + mm; }
+    function curve(m) { return ROOM + 80 * Math.pow(2, -m / 30); }        /* the old card's five numbers all lie on this */
+    function keep() { ER.flag('b-st', st); ER.flag('b-got', got); ER.flag('b-cg', cgot); ER.flag('b-ox', ox); ER.flag('b-ans', ans); paint(); }
+    function draw() {
+      var s = '<rect width="1000" height="600" fill="#c3ccd1"/><g stroke="#b3bdc3" stroke-width="2"><path d="M0 60h1000M0 180h1000M0 300h1000M0 420h1000M0 540h1000"/></g>', i, m, t, x, y, d;
+      /* the clock, the room */
+      s += '<circle cx="62" cy="62" r="46" fill="#2a3136"/><circle cx="62" cy="62" r="40" fill="#fdfdf8"/><g stroke="#1c1d22" stroke-width="3"><path d="M62 26v8M62 90v8M26 62h8M90 62h8"/></g><path d="M62 62l-16 -16" stroke="#1c1d22" stroke-width="5" stroke-linecap="round"/><path d="M62 62v30" stroke="#1c1d22" stroke-width="3" stroke-linecap="round"/><circle cx="62" cy="62" r="4" fill="#b3261c"/>' +
+        '<text x="124" y="56" class="tM" font-size="30" fill="#1c2a30">10.30 pm</text><text x="124" y="84" class="tB" font-size="16" fill="#3d5560" letter-spacing="2">THE BAKEHOUSE: 18 °C</text>';
+      /* the sponge, cut away so that the middle can be seen */
+      s += '<text x="20" y="136" class="tH" font-size="18" fill="#3d5560">the tin, cut open: seen from the side</text>' +
+        '<path d="M40 338h262M52 348h238" stroke="#6f7b82" stroke-width="4"/><g stroke="#6f7b82" stroke-width="3"><path d="M70 338v10M110 338v10M150 338v10M190 338v10M230 338v10M270 338v10"/></g>' +
+        '<path d="M58 240v96h224v-96" fill="#aeb8be" stroke="#7d8a92" stroke-width="5"/><path d="M66 250q104 -52 208 0v80H66z" fill="#e8c179"/><path d="M66 250q104 -52 208 0" fill="none" stroke="#c4914a" stroke-width="6"/>' +
+        '<g fill="#d3a85c"><circle cx="100" cy="280" r="3"/><circle cx="140" cy="262" r="2.500"/><circle cx="210" cy="300" r="3"/><circle cx="236" cy="270" r="2.500"/><circle cx="120" cy="310" r="2.500"/><circle cx="182" cy="246" r="2"/><circle cx="250" cy="312" r="2"/><circle cx="88" cy="316" r="2"/></g>';
+      /* the two labels */
+      s += '<g transform="rotate(-3 90 386)"><rect x="24" y="362" width="132" height="48" fill="#ffe98a"/><text x="90" y="382" class="tM" font-size="14" fill="#3a2a14" text-anchor="middle">10.00 pm · 38 °C</text><text x="90" y="402" class="tH" font-size="16" fill="#3a2a14" text-anchor="middle">M.N.</text></g>' +
+        '<g id="lab2" transform="rotate(2 246 386)" style="display:' + (st ? '' : 'none') + '"><rect x="180" y="362" width="132" height="48" fill="#ffe98a"/><text x="246" y="382" class="tM" font-size="14" fill="#3a2a14" text-anchor="middle">10.30 pm · 28 °C</text><text x="246" y="402" class="tH" font-size="16" fill="#3a2a14" text-anchor="middle">you</text></g>';
+      /* the old card */
+      s += '<rect x="20" y="426" width="296" height="164" fill="#e3cfa3"/><circle cx="168" cy="435" r="4.500" fill="#8a949b"/><text x="34" y="456" class="tE" font-size="14" fill="#2a2016">6-INCH SPONGE, IN THE MIDDLE</text><path d="M34 462h268" stroke="#2a2016" stroke-width="1.500"/>';
+      CARD.forEach(function (c, k) {
+        s += '<text x="34" y="' + (483 + k * 22) + '" class="tE" font-size="14" fill="#2a2016">' + c[2] + '</text><text x="296" y="' + (485 + k * 22) + '" class="tC" font-size="22" fill="#1d2a5a" text-anchor="end">' + c[1] + '°</text>' +
+          '<text id="ck' + k + '" x="250" y="' + (484 + k * 22) + '" class="tH" font-size="17" fill="#1f7a3a" text-anchor="end">' + (cgot[k] ? '✓' : '') + '</text>';
+      });
+      /* the graph paper on its board */
+      s += '<rect x="340" y="6" width="654" height="588" rx="6" fill="#6b4a32"/><rect x="350" y="14" width="634" height="572" fill="#fbfaf2"/><rect x="630" y="2" width="76" height="20" rx="4" fill="#aab2b8"/>';
+      for (m = 0; m <= 270; m += 10) s += '<path d="M' + gx(m).toFixed(1) + ' ' + gy(100) + 'V' + gy(10) + '" stroke="#7fb0c9" stroke-width="' + (m % 30 ? 0.7 : 1.5) + '" opacity="' + (m % 30 ? 0.55 : 0.8) + '"/>';
+      for (t = 10; t <= 100; t += 5) s += '<path d="M' + gx(0) + ' ' + gy(t) + 'H' + gx(270) + '" stroke="#7fb0c9" stroke-width="' + (t % 10 ? 0.7 : 1.5) + '" opacity="' + (t % 10 ? 0.55 : 0.8) + '"/>';
+      s += '<path d="M' + gx(0) + ' ' + gy(100) + 'V' + gy(10) + 'H' + gx(270) + '" fill="none" stroke="#1c2a30" stroke-width="2.500"/>';
+      for (t = 10; t <= 100; t += 10) s += '<text x="' + (gx(0) - 8) + '" y="' + (gy(t) + 5) + '" class="tM" font-size="13" fill="#1c2a30" text-anchor="end">' + t + '</text>';
+      for (m = 0; m <= 270; m += 30) s += '<text x="' + (m === 270 ? gx(m) + 14 : gx(m)) + '" y="' + (Y0 + 20) + '" class="tM" font-size="13" fill="#1c2a30" text-anchor="' + (m === 270 ? 'end' : 'middle') + '">' + clockOf(m) + '</text><path d="M' + gx(m) + ' ' + Y0 + 'v6" stroke="#1c2a30" stroke-width="2"/>';
+      s += '<text x="' + (gx(0) - 8) + '" y="60" class="tB" font-size="15" fill="#1c2a30" text-anchor="end" letter-spacing="1">°C</text><text x="' + gx(100) + '" y="574" class="tB" font-size="15" fill="#1c2a30" text-anchor="middle" letter-spacing="3">THE CLOCK, FRIDAY EVENING</text>' +
+        '<path d="M' + gx(0) + ' ' + gy(ROOM) + 'H' + gx(270) + '" stroke="#8a8676" stroke-width="1.500" stroke-dasharray="7 5"/><text x="' + (gx(0) + 8) + '" y="' + (gy(ROOM) + 16) + '" class="tH" font-size="15" fill="#6b6453">the room: 18°</text>' +
+        '<rect x="766" y="554" width="210" height="26" rx="3" fill="#1c2a30"/><text id="rd" x="871" y="572" class="tM" font-size="14" fill="#9fdcee" text-anchor="middle"></text>';
+      /* the straight line, the two dots */
+      s += '<g id="line" style="display:' + (st > 1 ? '' : 'none') + '"><path d="M' + gx(READ[1][0]) + ' ' + gy(READ[1][1]) + 'L' + gx(30) + ' ' + gy(98) + '" stroke="#1c2a30" stroke-width="2" stroke-dasharray="9 6"/>' +
+        '<circle cx="' + gx(30) + '" cy="' + gy(98) + '" r="6" fill="none" stroke="#1c2a30" stroke-width="2"/><text x="' + (gx(30) + 12) + '" y="' + (gy(98) - 8) + '" class="tK" font-size="15" fill="#1c2a30">98° at 7.00?  G.W.</text></g>';
+      s += '<rect id="gclick" x="' + gx(0) + '" y="' + gy(100) + '" width="' + (gx(270) - gx(0)) + '" height="' + (gy(10) - gy(100)) + '" fill="#000" opacity="0"/><rect id="axis" x="' + (gx(0) - 6) + '" y="' + (Y0 + 2) + '" width="' + (gx(270) - gx(0) + 12) + '" height="26" fill="#000" opacity="0"/>';
+      /* the tracing paper */
+      s += '<g id="trace" style="display:' + (st > 1 ? '' : 'none') + '"' + (st > 2 ? ' class="free"' : ' pointer-events="none"') + '><rect x="-16" y="20" width="' + (160 * PXM + 40) + '" height="482" fill="#fff6d8" fill-opacity=".42" stroke="#a8824a" stroke-width="1.500" stroke-dasharray="10 5"/>' +
+        '<path d="M0 58V' + (Y0 + 2) + '" stroke="#8a3a1c" stroke-width="1.500" stroke-dasharray="3 4"/><path d="M0 58h' + (160 * PXM) + '" stroke="#8a3a1c" stroke-width="2"/><path d="M-7 ' + (Y0 - 12) + 'l7 12 7 -12z" fill="#8a3a1c"/>';
+      for (m = 0; m <= 160; m += 20) s += '<path d="M' + (m * PXM) + ' 52v12" stroke="#8a3a1c" stroke-width="2"/><text x="' + (m * PXM) + '" y="47" class="tM" font-size="12.500" fill="#8a3a1c" text-anchor="middle">' + m + '</text>';
+      for (m = 10; m <= 150; m += 20) s += '<path d="M' + (m * PXM) + ' 55v6" stroke="#8a3a1c" stroke-width="1.200"/>';
+      s += '<text x="' + (96 * PXM) + '" y="33" class="tH" font-size="15.500" fill="#8a3a1c" text-anchor="middle">minutes out of the oven</text><g id="cpts"></g><path id="cpath" d="" fill="none" stroke="#b3261c" stroke-width="3" stroke-linecap="round"/></g>';
+      s += '<g id="dots"></g><g id="flag"></g>';
+      /* the probe */
+      s += '<g class="tool" id="prb"><rect x="-30" y="-150" width="60" height="156" fill="#000" opacity="0"/><path d="M0 0v-116" stroke="#dfe6e9" stroke-width="5" stroke-linecap="round"/><path d="M0 0v-116" stroke="#8a969d" stroke-width="1.500"/><rect x="-29" y="-146" width="58" height="32" rx="5" fill="#1c2a30"/><rect x="-24" y="-141" width="48" height="22" rx="2" fill="#0e1a12"/><text id="pv" x="0" y="-124" class="tM" font-size="15" fill="#8dfc9d" text-anchor="middle">18.0</text></g>';
+      svg.innerHTML = s;
+      dots(); cpts(); flag(); place();
+    }
+    function dots() {
+      var s = '', S = (ox - X0) / PXM;
+      READ.forEach(function (r, k) {
+        if (!got[k]) return;
+        var fit = st > 2 && cgot.every(function (v) { return v; }) && Math.abs(curve(r[0] - S) - r[1]) < 0.7 && r[0] - S >= 0;
+        s += '<circle class="dot" cx="' + gx(r[0]) + '" cy="' + gy(r[1]) + '" r="7" fill="' + (fit ? '#1f9a3a' : '#1c2a30') + '" stroke="#fbfaf2" stroke-width="2"/><text x="' + (gx(r[0]) + (k ? -12 : 11)) + '" y="' + (gy(r[1]) + (k ? 24 : -9)) + '" class="tM" font-size="13" fill="#1c2a30"' + (k ? ' text-anchor="end"' : '') + '>' + r[2].replace(' pm', '') + ', ' + r[1] + '°</text>';
+      });
+      svg.querySelector('#dots').innerHTML = s;
+    }
+    function cpts() {
+      var s = '', d = '', m;
+      CARD.forEach(function (c, k) { if (cgot[k]) s += '<path d="M' + (c[0] * PXM - 6) + ' ' + (gy(c[1]) - 6) + 'l12 12M' + (c[0] * PXM + 6) + ' ' + (gy(c[1]) - 6) + 'l-12 12" stroke="#8a3a1c" stroke-width="3" stroke-linecap="round"/>'; });
+      svg.querySelector('#cpts').innerHTML = s;
+      if (cgot.every(function (v) { return v; })) for (m = 0; m <= 160; m += 4) d += (m ? 'L' : 'M') + (m * PXM).toFixed(1) + ' ' + gy(curve(m)).toFixed(1);
+      svg.querySelector('#cpath').setAttribute('d', d);
+    }
+    function flag() {
+      var g = svg.querySelector('#flag'), m, x;
+      if (!ans) { g.innerHTML = ''; return; }
+      m = (parseInt(ans, 10) + 12) * 60 + parseInt(ans.split('.')[1], 10) - (18 * 60 + 30); x = gx(m);
+      g.innerHTML = '<path d="M' + x + ' ' + (Y0 + 2) + 'v-34" stroke="#b3261c" stroke-width="3"/><path d="M' + x + ' ' + (Y0 - 32) + 'h' + (x > 800 ? -150 : 150) + 'v22h' + (x > 800 ? 150 : -150) + 'z" fill="#b3261c"/><text x="' + (x + (x > 800 ? -75 : 75)) + '" y="' + (Y0 - 16) + '" class="tB" font-size="14" fill="#fff" text-anchor="middle" letter-spacing="1">OUT OF THE OVEN: ' + ans + '</text>';
+    }
+    function place() { svg.querySelector('#trace').setAttribute('transform', 'translate(' + ox + ' 0)'); }
+    function fitted() { var S = (ox - X0) / PXM; return READ.every(function (r) { return r[0] - S >= 0 && Math.abs(curve(r[0] - S) - r[1]) < 0.7; }); }
+    function wire() {
+      var pv, prb, tr = svg.querySelector('#trace'), rd = svg.querySelector('#rd');
+      function at(e) { var p = ER.pt(svg, e); return { m: (p.x - X0) / PXM, t: 10 + (Y0 - p.y) / PXT, x: p.x, y: p.y }; }
+      function show(e) {
+        var a = at(e), mm;
+        if (a.m < -1 || a.m > 271 || a.t < 9 || a.t > 101) { rd.textContent = ''; return; }
+        if (st === 2) { mm = Math.round((a.x - ox) / PXM / 5) * 5; rd.textContent = (mm < 0 || mm > 160 ? '-' : mm + ' min') + ' · ' + Math.round(a.t) + ' °C'; }
+        else rd.textContent = clockOf(Math.round(CAKE.clamp(a.m, 0, 270) / 5) * 5) + ' pm · ' + Math.round(a.t) + ' °C';
+      }
+      svg.addEventListener('pointermove', show);
+      svg.querySelector('#gclick').addEventListener('click', function (e) {
+        var a = at(e), k, hit = -1, mm, tt;
+        if (wait || nextFile) return;
+        if (st === 0) { msg('Nothing to put on the graph yet but Dr Novak&rsquo;s reading. Take the second one first: push the probe into the sponge.'); return; }
+        if (st === 1) {
+          READ.forEach(function (r, i) { if (Math.abs(a.m - r[0]) < 4 && Math.abs(a.t - r[1]) < 2.4) hit = i; });
+          if (hit < 0) { ER.sfx.no(); msg('That is ' + clockOf(Math.round(a.m / 5) * 5) + ' pm and ' + Math.round(a.t) + ' °C. Neither label says that. Along the bottom to the time, then straight up to the temperature.'); return; }
+          if (got[hit]) { msg('That reading is on the paper already.'); return; }
+          got[hit] = 1; CAKE.sfx.dot(); dots();
+          if (got[0] && got[1]) theLine(); else { keep(); msg(READ[hit][2] + ', ' + READ[hit][1] + ' °C: on the paper. Now the other label.'); }
+          return;
+        }
+        if (st === 2) {
+          mm = (a.x - ox) / PXM;
+          CARD.forEach(function (c, i) { if (Math.abs(mm - c[0]) < 4.5 && Math.abs(a.t - c[1]) < 2.6) hit = i; });
+          if (hit < 0) {
+            ER.sfx.no(); misses++; tt = Math.round(mm / 5) * 5;
+            msg(tt < 0 || tt > 160 ? 'That is off the tracing paper. Its scale runs along the top, from 0 to 160 minutes.' : 'On the tracing paper that is ' + tt + ' minutes and ' + Math.round(a.t) + ' °C. The card has no such line.' + (misses > 3 ? ' Use the red-brown scale along the top of the tracing paper, not the clock times underneath it.' : ''));
+            return;
+          }
+          if (cgot[hit]) { msg('That line of the card has its cross already.'); return; }
+          cgot[hit] = 1; CAKE.sfx.pencil(); cpts(); svg.querySelector('#ck' + hit).textContent = '✓';
+          if (cgot.every(function (v) { return v; })) theCurve(); else { keep(); msg('A cross for &ldquo;' + CARD[hit][2] + ', ' + CARD[hit][1] + '°&rdquo;. ' + cgot.filter(function (v) { return !v; }).length + ' more.'); }
+          return;
+        }
+        msg('Take hold of the tracing paper and slide it. When the curve fits, click the time on the bottom line of the graph.');
+      });
+      svg.querySelector('#axis').addEventListener('click', function (e) {
+        var a = at(e), m5 = Math.round(a.m / 5) * 5;
+        if (wait || nextFile) return;
+        if (st < 3) { msg(st < 2 ? 'The bottom line is the clock. You will mark a time on it at the end. First the readings.' : 'Not yet. First put the old card on the tracing paper: five crosses.'); return; }
+        ans = clockOf(X_clamp(m5)); keep(); flag(); CAKE.sfx.dot();
+        msg('A red flag on the bottom line at <b>' + ans + ' pm</b>. If that is your answer, sign the graph.');
+      });
+      /* the tracing paper slides sideways, five minutes at a time */
+      var grabX = 0, startOx = 0;
+      ER.drag(tr, {
+        start: function (e) { if (st < 3 || wait || nextFile) return false; grabX = ER.pt(svg, e).x; startOx = ox; },
+        move: function (e) {
+          var nx = startOx + ER.pt(svg, e).x - grabX, was = ox;
+          ox = X0 + Math.round(CAKE.clamp((nx - X0) / PXM, 0, 230) / 5) * 5 * PXM;
+          if (ox !== was) { place(); dots(); CAKE.sfx.slide(); }
+        },
+        end: function () {
+          var S = (ox - X0) / PXM, d = curve(READ[0][0] - S) - READ[0][1];
+          keep();
+          if (fitted()) { CAKE.sfx.dot(); msg('<b>Both dots are on the curve.</b> Now look at the 0 of the tracing paper, and at the clock time straight below it. Click that time on the bottom line of the graph.'); }
+          else msg(READ[0][0] - S < 0 ? 'Now the curve starts after ten o&rsquo;clock, when the sponge was already on the rack with a thermometer in it. Slide it back, to the left.' : d > 0 ? 'The curve runs above your dots. It says the sponge was hotter at ten than it really was: it has started too late. Slide it to the left.' : 'The curve runs below your dots. It has started too early. Slide it to the right.');
+        }
+      });
+      /* the probe */
+      pv = svg.querySelector('#pv');
+      function reading(p) {
+        var dx = (p.x - 170) / 104, dy = (p.y - 290) / 44, d = Math.sqrt(dx * dx + dy * dy);
+        if (p.x < 66 || p.x > 274 || p.y < 232 || p.y > 330 || (p.y < 250 && Math.abs(p.x - 170) > 60 + (p.y - 232) * 2.5)) return { t: ROOM, d: 9 };
+        return { t: d <= 0.3 ? 28 : 28 - Math.min(1, (d - 0.3) / 0.7) * 6, d: d };
+      }
+      prb = CAKE.tool(svg, svg.querySelector('#prb'), { x: 308, y: 262 }, {
+        start: function () { return !wait && !nextFile; },
+        move: function (p) { pv.textContent = reading(p).t.toFixed(1); },
+        end: function (p) {
+          var r = reading(p);
+          if (r.d > 8) { pv.textContent = ROOM.toFixed(1); msg('That is the air of the bakehouse: 18 °C. The point of the probe has to go into the sponge.'); return; }
+          if (r.d > 0.3) { msg('The probe says <b>' + r.t.toFixed(1) + ' °C</b>. But that is not the middle of the cake. The outside cools first, and the old card was measured in the middle: half way along, half way down.'); return; }
+          prb.set(170, 290); pv.textContent = '28.0'; CAKE.sfx.dot();
+          if (st === 0) {
+            st = 1; keep(); svg.querySelector('#lab2').style.display = '';
+            msg('In the middle of the sponge: <b>28.0 °C</b>, at half past ten. Dr Novak hands you a second label to write. &ldquo;Ten degrees in half an hour,&rdquo; says Mr Whitlow. &ldquo;I can do that sum.&rdquo; &ldquo;On the paper first,&rdquo; says Dr Novak. Put both readings on the graph: along to the time, up to the temperature.');
+          } else msg('In the middle of the sponge: 28.0 °C. You have that already.');
+        }
+      }, [30, 150, 334, 334]);
+      if (st > 0) { prb.set(170, 290); pv.textContent = '28.0'; }
+    }
+    function X_clamp(m) { return CAKE.clamp(m, 0, 270); }
+    function theLine() {
+      st = 2; keep(); wait = true;
+      svg.querySelector('#line').style.display = '';
+      try { ER.mood('tense'); } catch (e) {}
+      msg('Mr Whitlow lays the edge of a cake board through your two dots and runs a floury finger back along it. &ldquo;Ten degrees in half an hour. A sponge comes out at ninety-eight, so that is sixty degrees more: three hours before ten o&rsquo;clock. <b>Seven.</b> And she was here until half past.&rdquo; Nobody looks at Chika.');
+      setTimeout(function () {
+        wait = false; var tr = svg.querySelector('#trace'); tr.style.display = '';
+        msg('Dr Novak lays a sheet of tracing paper over the graph. &ldquo;That is a straight line, Mr Whitlow. Your father measured this cake. Let us see whether he found a straight line.&rdquo; Put the five lines of the old card on the tracing paper. It has its own scale along the top: minutes out of the oven.');
+      }, 5200);
+    }
+    function theCurve() {
+      st = 3; keep();
+      var tr = svg.querySelector('#trace'); tr.removeAttribute('pointer-events'); tr.setAttribute('class', 'free');
+      msg('Five crosses, and no ruler will go through them. Dr Novak joins them with a pencil: steep at first, then flatter and flatter. &ldquo;A six-inch sponge cools along this curve whenever it starts,&rdquo; she says. &ldquo;So slide it. Find the one place where it runs through both of our dots.&rdquo;');
+    }
+    box.querySelector('#g-go').addEventListener('click', function () {
+      var file, lineAt = clockOf(Math.round(READ[0][0] - (98 - READ[0][1]) / ((READ[0][1] - READ[1][1]) / (READ[1][0] - READ[0][0]))));
+      if (wait || nextFile) return;
+      if (st < 3 || !ans) { msg(st === 0 ? 'There is nothing on the graph to sign. Start with the probe.' : st === 1 ? 'Two readings go on the graph before anybody signs it.' : st === 2 ? 'Mr Whitlow has his straight line. Dr Novak has not signed it. Put the old card on the tracing paper first.' : 'Mark the time on the bottom line of the graph first: click on the clock time at which the sponge left the oven.'); return; }
+      file = ER.exitOk([ans]);
+      if (!file) {
+        ER.sfx.no();
+        msg(ans === lineAt ? '&ldquo;Seven o&rsquo;clock is where the straight line points,&rdquo; says Dr Novak. &ldquo;But a hot cake cools fast at first and slowly afterwards. Look at the curve: how long does it really take to come down from 98?&rdquo;' :
+          !fitted() ? '&ldquo;The tracing paper is your clock,&rdquo; says Dr Novak, &ldquo;and it is not set yet. Slide it until both dots lie on the curve. Then read the time under its 0.&rdquo;' :
+          '&ldquo;Both dots are on the curve: good,&rdquo; says Dr Novak. &ldquo;Now follow the 0 of the tracing paper straight down to the clock. That is not where your flag is.&rdquo;');
+        return;
+      }
+      wait = true; nextFile = file; ER.flag('b-file', file);
+      var s0 = ER.state(); s0.done = s0.done || {}; s0.done.bake = 1; ER.persist(true);
+      CAKE.sfx.stamp(); msg('<b>Nine o&rsquo;clock.</b> Dr Novak writes it on the graph, draws a ring round it, and signs under your name.');
+      setTimeout(function () {
+        ER.closeAll(); CAKE.solved(); paint(); busy = true;
+        try { ER.mood('calm'); } catch (e) {}
+        ER.narrate([
+          '&ldquo;Nine,&rdquo; says Mr Whitlow. &ldquo;Not seven.&rdquo; He looks at his cake board as if it had let him down.',
+          '&ldquo;Your line was honest about the last half hour,&rdquo; says Dr Novak, &ldquo;and wrong about every minute before it. Miss Abara. Where were you at nine o&rsquo;clock?&rdquo;',
+          '&ldquo;At the college. Wiring wisteria, with nineteen other people and a register.&rdquo; Chika opens the white box at last. Inside, on tissue paper, lies a spray of sugar flowers, pale lilac, as fine as the real thing.',
+          'Mr Whitlow looks at them for longer than he means to. &ldquo;Then who,&rdquo; he says, &ldquo;was baking a sponge in my bakehouse at nine o&rsquo;clock at night?&rdquo;',
+          '&ldquo;Somebody who walked through your flour,&rdquo; says Dr Novak, and picks up her case.'
+        ], function () { busy = false; showGo(); });
+      }, 2800);
+    });
+    draw(); wire();
+    msg(st === 0 ? 'On the left: the sponge in its tin, cut away so that you can see inside, and a probe thermometer. On the right: graph paper, with the clock along the bottom. Take the probe by its head and push the point into the sponge.' :
+      st === 1 ? 'Two labels, two readings. Put both of them on the graph: along to the time, up to the temperature.' :
+      st === 2 ? 'Put the five lines of the old card on the tracing paper. It has its own scale along the top: minutes out of the oven.' :
+      'Slide the tracing paper until the curve runs through both dots. Then click the time under its 0 on the bottom line of the graph.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return st; }
+    };
+  }
+})();
+</script>
+</body>
+</html>
