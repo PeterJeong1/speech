@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Second Floor · Room 13 Is Not on the Plan</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="story.css">
+<style>
+  body{--bg:#0b0f0c;--accent:#eef3c2;--font-display:'Special Elite',monospace;--font-ui:'Special Elite',monospace;
+    --tc-bg:rgba(8,12,9,.94);--cap-bg:rgba(9,13,10,.94);--panel:#141a15;--q-ink:#c9d2a8;--fade:#040705;--hud-bg:rgba(6,10,7,.72)}
+  .tc-room{letter-spacing:.04em;font-size:clamp(34px,5.2vw,70px)}
+  .hbtn,.chip{letter-spacing:.09em;padding-top:3px}
+  body.feel .stage,body.feel .stage .hot{cursor:none}
+  /* a caption must not get between the player's hand and the wall: only its dotted words take the mouse */
+  .cap:not(.seq){pointer-events:none}
+  .cap:not(.seq) .w{pointer-events:auto}
+  .sgn{font-family:'Oswald',sans-serif;font-weight:600;fill:#23221d;text-anchor:middle}
+  .brassN{font-family:'Cinzel',serif;font-weight:700;font-size:56px;fill:#8a6a1f;stroke:#3a2a08;stroke-width:1.5;text-anchor:middle}
+  .dndT{font-family:'Special Elite',monospace;font-size:12.5px;fill:#5a2a22;text-anchor:middle}
+  #dim{animation:flick 8s steps(1,end) infinite}
+  @keyframes flick{0%,33%,35.5%,37%,70%,71.5%,100%{opacity:0}34%,36.2%,70.8%{opacity:.42}}
+  #glow,#bulbOn{animation:flick2 8s steps(1,end) infinite}
+  @keyframes flick2{0%,33%,35.5%,37%,70%,71.5%,100%{opacity:1}34%,36.2%,70.8%{opacity:.22}}
+  body.cold #dim{animation:none;opacity:0}
+  body.cold #glow,body.cold #bulbOn{animation:none;opacity:.07}
+  #under,#spill,#coldGlow,#ray,#dim2{transition:opacity 1.4s}
+  #moth{transform-origin:800px 198px;animation:moth 3.4s linear infinite}
+  @keyframes moth{to{transform:rotate(360deg)}}
+  #steam{animation:steam 3.4s ease-in-out infinite}
+  @keyframes steam{0%,100%{opacity:.14;transform:translateY(0)}50%{opacity:.4;transform:translateY(-9px)}}
+  #card{animation:ng 2.6s ease-in-out infinite}
+  @keyframes ng{50%{filter:brightness(1.3)}}
+  .strip .grab{pointer-events:none}
+  #strips.loose .grab{pointer-events:auto;cursor:grab}
+  .ear{opacity:0;transition:opacity .7s}
+  #strips.loose .ear{opacity:1}
+  #knob13{transform-origin:880px 486px;transition:transform 1.1s}
+  #knob13.turn{transform:rotate(80deg)}
+  #flood{transition:opacity 1.2s}
+  .heap{opacity:0;transition:opacity .5s}
+  .heap.on{opacity:1}
+
+  /* your hand, and what it feels */
+  #hand{position:fixed;z-index:6;width:40px;height:50px;display:none;pointer-events:none;--hc:#f1c7a4}
+  #hand svg{width:100%;height:100%;display:block;overflow:visible}
+  #hand rect{fill:var(--hc);stroke:rgba(10,14,12,.62);stroke-width:1.4;transition:fill .3s}
+  #feel{position:absolute;left:48px;top:8px;white-space:nowrap;padding:5px 11px 2px;background:rgba(6,10,8,.86);border:1px solid rgba(238,243,194,.5);color:#eef3c2;
+    font-family:'Special Elite',monospace;font-size:19px;line-height:1.1;opacity:0;transition:opacity .25s}
+  #feel.on{opacity:1}
+  #feel.c{color:#bfe6ff;border-color:rgba(191,230,255,.65)}
+  .puff{position:fixed;z-index:5;width:28px;height:28px;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,rgba(235,245,255,.5),rgba(235,245,255,0) 70%);animation:puff 1.9s ease-out forwards}
+  @keyframes puff{from{transform:translate(0,0) scale(.6);opacity:.9}to{transform:translate(-18px,-48px) scale(2.3);opacity:0}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="wpE" width="64" height="96" patternUnits="userSpaceOnUse">
+    <rect width="64" height="96" fill="#b6bfa8"/><rect width="12" height="96" fill="#a9b39c"/><rect x="32" width="2" height="96" fill="#a9b39c"/>
+    <g fill="#a68e86"><circle cx="48" cy="26" r="4.5"/><circle cx="48" cy="74" r="4.5"/></g>
+    <g stroke="#8f9b83" stroke-width="2" fill="none"><path d="M48 31q-7 8 0 16M48 79q7 8 0 16"/></g>
+  </pattern>
+  <pattern id="wpS" width="64" height="96" patternUnits="userSpaceOnUse" patternTransform="translate(8 15)">
+    <rect width="64" height="96" fill="#b3bca5"/><rect width="12" height="96" fill="#a7b19a"/><rect x="32" width="2" height="96" fill="#a7b19a"/>
+    <g fill="#a68e86"><circle cx="48" cy="26" r="4.5"/><circle cx="48" cy="74" r="4.5"/></g>
+    <g stroke="#8f9b83" stroke-width="2" fill="none"><path d="M48 31q-7 8 0 16M48 79q7 8 0 16"/></g>
+  </pattern>
+  <linearGradient id="wallL" gradientUnits="userSpaceOnUse" x1="520" y1="0" x2="-120" y2="0"><stop offset="0" stop-color="#a7b19a"/><stop offset=".5" stop-color="#7c8672"/><stop offset="1" stop-color="#4b5343"/></linearGradient>
+  <linearGradient id="wallR" gradientUnits="userSpaceOnUse" x1="1080" y1="0" x2="1720" y2="0"><stop offset="0" stop-color="#a7b19a"/><stop offset=".5" stop-color="#7c8672"/><stop offset="1" stop-color="#4b5343"/></linearGradient>
+  <linearGradient id="lowL" gradientUnits="userSpaceOnUse" x1="520" y1="0" x2="-120" y2="0"><stop offset="0" stop-color="#66705d"/><stop offset="1" stop-color="#30372c"/></linearGradient>
+  <linearGradient id="lowR" gradientUnits="userSpaceOnUse" x1="1080" y1="0" x2="1720" y2="0"><stop offset="0" stop-color="#66705d"/><stop offset="1" stop-color="#30372c"/></linearGradient>
+  <linearGradient id="doorL" gradientUnits="userSpaceOnUse" x1="520" y1="0" x2="60" y2="0"><stop offset="0" stop-color="#54432f"/><stop offset="1" stop-color="#2a2118"/></linearGradient>
+  <linearGradient id="doorR" gradientUnits="userSpaceOnUse" x1="1080" y1="0" x2="1540" y2="0"><stop offset="0" stop-color="#54432f"/><stop offset="1" stop-color="#2a2118"/></linearGradient>
+  <linearGradient id="ceilG" gradientUnits="userSpaceOnUse" x1="0" y1="150" x2="0" y2="-180"><stop offset="0" stop-color="#c6c4ad"/><stop offset="1" stop-color="#66655a"/></linearGradient>
+  <linearGradient id="floorG" gradientUnits="userSpaceOnUse" x1="0" y1="690" x2="0" y2="900"><stop offset="0" stop-color="#3c3629"/><stop offset="1" stop-color="#1a1711"/></linearGradient>
+  <linearGradient id="runG" gradientUnits="userSpaceOnUse" x1="0" y1="690" x2="0" y2="900"><stop offset="0" stop-color="#27483f"/><stop offset="1" stop-color="#122620"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="paleG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bcc3b8"/><stop offset=".6" stop-color="#a2aa9f"/><stop offset="1" stop-color="#899187"/></linearGradient>
+  <radialGradient id="glowG"><stop offset="0" stop-color="#fbffd6" stop-opacity=".62"/><stop offset=".3" stop-color="#eef3b8" stop-opacity=".18"/><stop offset="1" stop-color="#eef3b8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="coldG"><stop offset="0" stop-color="#dff6ff" stop-opacity=".5"/><stop offset="1" stop-color="#dff6ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vigG" gradientUnits="userSpaceOnUse" cx="800" cy="330" r="1020"><stop offset="0" stop-color="#040806" stop-opacity="0"/><stop offset=".42" stop-color="#040806" stop-opacity=".34"/><stop offset=".8" stop-color="#040806" stop-opacity=".9"/><stop offset="1" stop-color="#040806" stop-opacity=".96"/></radialGradient>
+  <g id="clips"></g>
+</defs>
+
+<!-- ceiling, floor, the two side walls -->
+<rect x="-1400" y="-600" width="4400" height="2100" fill="#3a4136"/>
+<path d="M520 150H1080L1858-600H-258Z" fill="url(#ceilG)"/>
+<path d="M520 690H1080L1920 1500H-320Z" fill="url(#floorG)"/>
+<path d="M520 150V690L-320 1500H-1400V-600H-258Z" fill="url(#wallL)"/>
+<path d="M1080 150V690L1920 1500H3000V-600H1858Z" fill="url(#wallR)"/>
+<g id="sideL"></g><g id="sideR"></g>
+<g id="boards" stroke="#221e17" stroke-width="2"></g>
+<path d="M640 690H960L1440 1500H160Z" fill="url(#runG)"/>
+<g id="runner"></g>
+<g stroke="#8c8a78" stroke-width="1.6" fill="none" opacity=".7"><path d="M700 150l-30-60 18-40M940 150l40-70-10-50M610 60l80-22"/></g>
+
+<!-- the wall at the end of the corridor -->
+<rect x="520" y="150" width="560" height="540" fill="url(#wpE)"/>
+<rect x="520" y="150" width="560" height="76" fill="#3d4436" opacity=".16"/>
+<rect x="520" y="226" width="560" height="9" fill="#7f8873"/><rect x="520" y="226" width="560" height="2.5" fill="#a3ac96"/>
+<rect x="520" y="506" width="560" height="184" fill="#6a7462"/>
+<rect x="520" y="498" width="560" height="12" fill="#59624f"/><rect x="520" y="498" width="560" height="3" fill="#7d8672"/>
+<rect x="520" y="660" width="560" height="30" fill="#30362d"/>
+<g fill="#59624f" opacity=".22"><ellipse cx="604" cy="282" rx="60" ry="34"/><ellipse cx="1010" cy="440" rx="50" ry="74"/><ellipse cx="640" cy="470" rx="34" ry="50"/></g>
+<path d="M520 150h46l-30 22q-12 8-16 26z" fill="#dcd9c6"/><path d="M536 172q-12 8-16 26" stroke="#6f7767" stroke-width="2" fill="none"/>
+<path d="M1080 372l-22 10 8 30 14 6z" fill="#dcd9c6"/>
+<g stroke="#e9ecdf" stroke-width="1" fill="none" opacity=".4"><path d="M520 150l64 34M520 150l40 62M520 150l12 76M534 174q16-4 24-18M528 196q26-8 44-34M526 214q34-10 54-44"/></g>
+
+<!-- a wall light that does not work, and a fern that has given up -->
+<g id="sconce" class="hot"><rect x="588" y="318" width="16" height="34" rx="3" fill="url(#brassG)"/><path d="M596 330q0-26 22-26" stroke="#8b6d28" stroke-width="5" fill="none"/><path d="M604 304h30l-6-30h-18z" fill="#cfd3c0" opacity=".9"/></g>
+<g id="fern" class="hot">
+  <path d="M570 690l8-120h36l8 120zM574 572h44" fill="#3a2a1e" stroke="#2a1d14" stroke-width="3"/>
+  <path d="M572 568h48l-6 -40h-36z" fill="#8a5a3c"/>
+  <g stroke="#6e6a3c" stroke-width="4" fill="none" stroke-linecap="round"><path d="M596 530q-30-40-66-20M596 530q30-50 60-16M596 530q-6-50-34-70M596 530q16-44 44-54M596 530q-44-6-58 30"/></g>
+  <g stroke="#8a8048" stroke-width="2" fill="none" stroke-linecap="round"><path d="M560 510l-6 10M548 506l-8 8M620 500l8 8M634 504l6 10M574 480l-10 2M580 494l-10 4M620 484l10-2"/></g>
+</g>
+
+<!-- the plan in its frame -->
+<g id="planFrame" class="hot">
+  <rect x="948" y="296" width="110" height="86" fill="#2b2118"/><rect x="956" y="304" width="94" height="70" fill="#f6f4ea"/>
+  <g stroke="#1d1d1b" stroke-width="1.6" fill="none"><rect x="962" y="314" width="68" height="46"/><path d="M962 332h68M962 342h68M982 314v18M1002 314v18M1014 314v18M984 342v18M996 342v18M1012 342v18"/></g>
+  <circle cx="1027" cy="337" r="3" fill="#b3261c"/>
+  <path d="M960 306l40 60" stroke="#fff" stroke-width="5" opacity=".35"/>
+</g>
+<g id="exting" class="hot"><rect x="1012" y="604" width="30" height="80" rx="9" fill="#a3281f"/><rect x="1020" y="590" width="14" height="16" fill="#1c1c1c"/><path d="M1034 596q14 2 12 30" stroke="#1c1c1c" stroke-width="4" fill="none"/><rect x="1014" y="630" width="26" height="16" fill="#e9e6da"/></g>
+<g id="signs" pointer-events="none"></g>
+
+<!-- the door that is not on the plan -->
+<g id="d13">
+  <rect x="690" y="250" width="220" height="440" fill="#4a5248"/>
+  <rect x="700" y="262" width="200" height="428" fill="url(#paleG)"/>
+  <g fill="#6f776c" opacity=".3"><ellipse cx="742" cy="596" rx="42" ry="84"/><ellipse cx="868" cy="366" rx="26" ry="68"/></g>
+  <g fill="none" stroke="#798176" stroke-width="3"><rect x="718" y="284" width="74" height="156"/><rect x="808" y="284" width="74" height="156"/><rect x="718" y="466" width="74" height="200"/><rect x="808" y="466" width="74" height="200"/></g>
+  <g stroke="#454b44" stroke-width="1.6" fill="none"><path d="M730 262l14 58-10 40 16 70M852 690l-10-70 14-50-8-60M790 462l-20 30 8 24"/></g>
+  <g fill="#cdd3c8"><path d="M822 590l14 4-6 14-10-6zM760 420l10-6 6 12-12 4zM846 644l12 6-10 10zM728 300l9 2-3 9zM744 500l8-4 4 9z"/></g>
+  <text x="774" y="388" class="brassN">1</text>
+  <text x="824" y="388" class="brassN" transform="rotate(17 824 366)">3</text>
+  <circle cx="824" cy="336" r="2.6" fill="#3a2a08"/>
+  <rect x="873" y="516" width="14" height="30" rx="3" fill="#8a7a44"/><circle cx="880" cy="527" r="3.4" fill="#0b0f0d"/><path d="M878 528h4l1.600 10h-7.200z" fill="#0b0f0d"/>
+  <g id="knob13"><circle cx="880" cy="486" r="11.500" fill="#8a7a44"/><circle cx="877" cy="483" r="4.500" fill="#b8a866" opacity=".8"/><path d="M880 476v7" stroke="#4a3d18" stroke-width="2.200"/></g>
+  <g id="dnd13" class="hot" transform="rotate(-7 880 486)">
+    <path d="M880 494l-26 16" stroke="#c9c9c0" stroke-width="1.500"/>
+    <rect x="778" y="508" width="88" height="42" fill="#e9e6da"/><text x="822" y="526" class="dndT">DO NOT</text><text x="822" y="541" class="dndT">DISTURB</text>
+  </g>
+  <rect id="under" x="700" y="684" width="200" height="6" fill="#e6fbff" opacity="0"/>
+</g>
+<g id="strips"></g>
+<g id="seams" stroke="#7d8672" stroke-width="1.5" opacity=".4" fill="none" pointer-events="none"><path d="M690 690V240H910V690"/></g>
+<g pointer-events="none" fill="#dedbc8" stroke="#a9a691" stroke-width="1.5">
+  <path class="heap" d="M700 706q14-22 40-10 20-16 34 6l-10 12h-58z"/><path class="heap" d="M760 712q10-26 44-12 22-10 26 12l-14 8h-50z"/>
+  <path class="heap" d="M826 706q18-20 40-6 20-8 24 12l-16 8h-44z"/><path class="heap" d="M724 718q30-14 60 0 30-12 62 2l-20 10h-90z"/>
+</g>
+<g id="ray" opacity="0" pointer-events="none"><path d="M880 527L770 900H834Z" fill="#dff6ff" opacity=".13"/><circle cx="880" cy="527" r="5" fill="#f1fcff"/></g>
+<g id="frost" opacity="0" pointer-events="none" stroke="#f1fcff" fill="none" stroke-linecap="round">
+  <circle cx="880" cy="527" r="40" stroke-width="2"/><circle cx="880" cy="527" r="24" stroke-width="1.200" opacity=".7"/>
+  <path stroke-width="1.600" d="M880 475v-18M880 579v18M828 527h-18M932 527h18M843 490l-13-13M917 490l13-13M843 564l-13 13M917 564l13 13M880 463l-6-6M880 463l6-6M822 527l-6-6M822 527l-6 6M938 527l6-6M938 527l6 6M880 591l-6 6M880 591l6 6"/>
+</g>
+<rect id="flood" x="700" y="262" width="200" height="428" fill="#eaf9ff" opacity="0" pointer-events="none"/>
+
+<!-- the bulb -->
+<ellipse cx="800" cy="54" rx="44" ry="9" fill="#d9d7c2"/><path d="M800 54V172" stroke="#14140f" stroke-width="3"/><rect x="792" y="170" width="16" height="13" fill="#2b2b24"/>
+<g id="bulb" class="hot"><rect x="770" y="160" width="60" height="70" fill="transparent"/><ellipse cx="800" cy="198" rx="13" ry="17" fill="#4b4b3c"/><ellipse id="bulbOn" cx="800" cy="198" rx="13" ry="17" fill="#fcffe2"/></g>
+<circle id="glow" cx="800" cy="198" r="390" fill="url(#glowG)" pointer-events="none"/>
+<g id="moth" pointer-events="none"><path d="M800 164l-5-4 1 6zM800 164l5-4-1 6z" fill="#d9d2b8"/></g>
+
+<!-- Wilf's tray, on the carpet -->
+<g id="tray" class="hot">
+  <ellipse cx="800" cy="858" rx="160" ry="30" fill="#000" opacity=".4"/>
+  <ellipse cx="800" cy="850" rx="156" ry="30" fill="#8c9599"/><ellipse cx="800" cy="848" rx="140" ry="24" fill="#aab3b7"/><ellipse cx="800" cy="848" rx="140" ry="24" fill="none" stroke="#6f777b" stroke-width="2"/>
+  <ellipse cx="748" cy="848" rx="52" ry="12" fill="#eef2f5"/><ellipse cx="748" cy="848" rx="52" ry="12" fill="none" stroke="#c3ccd3" stroke-width="2"/>
+  <path d="M716 842v-34h60v34q-30 12-60 0z" fill="#2c5b9b"/><path d="M776 814q20 2 18 16t-18 10" stroke="#2c5b9b" stroke-width="7" fill="none"/>
+  <ellipse cx="746" cy="808" rx="30" ry="7" fill="#e9f0f7"/><ellipse cx="746" cy="808" rx="25" ry="5" fill="#5a3520"/>
+  <path d="M722 828h48" stroke="#e9f0f7" stroke-width="3" opacity=".8"/>
+  <g fill="#fbfbf6" stroke="#c9ccc4" stroke-width="1.200"><rect x="786" y="842" width="13" height="10" transform="rotate(-12 792 847)"/><rect x="772" y="848" width="13" height="10" transform="rotate(9 778 853)"/></g>
+  <path d="M836 852l64-12" stroke="#d6dde0" stroke-width="5" stroke-linecap="round"/><ellipse cx="832" cy="853" rx="11" ry="6" fill="#d6dde0"/>
+  <path id="steam" d="M738 798q-10-16 0-30t0-28M754 796q9-14 0-26" stroke="#eef2f5" stroke-width="4" fill="none" stroke-linecap="round" opacity=".25"/>
+</g>
+<g id="card" class="hot" transform="rotate(-9 880 820)">
+  <rect x="846" y="786" width="76" height="52" fill="#e8d5a4"/><circle cx="854" cy="812" r="3.200" fill="#2a2420"/>
+  <g stroke="#3a3226" stroke-width="2" stroke-linecap="round"><path d="M864 798h48M864 808h44M864 818h48M864 828h30"/></g>
+</g>
+
+<rect x="-1400" y="-600" width="4400" height="2100" fill="url(#vigG)" pointer-events="none"/>
+<rect id="dim" x="-1400" y="-600" width="4400" height="2100" fill="#050a08" opacity="0" pointer-events="none"/>
+<path id="dim2" d="M-1400-600H3000V1500H-1400ZM690 250H910V690H690Z" fill-rule="evenodd" fill="#040806" opacity="0" pointer-events="none"/>
+<path id="spill" d="M700 690H900L1010 830H590Z" fill="#dff6ff" opacity="0" pointer-events="none"/>
+<ellipse id="coldGlow" cx="800" cy="700" rx="330" ry="150" fill="url(#coldG)" opacity="0" pointer-events="none"/>
+</svg>
+</div>
+<div id="hand"><svg viewBox="0 0 40 50"><rect x="13" y="0" width="7" height="27" rx="3.500"/><rect x="20.500" y="2" width="7" height="25" rx="3.500"/><rect x="28" y="6" width="6.500" height="22" rx="3.200"/><rect x="2" y="18" width="7" height="19" rx="3.500" transform="rotate(-28 5 34)"/><rect x="9" y="20" width="26" height="29" rx="9"/></svg><span id="feel"></span></div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), busy = false, searching = false, found = false, revealed = false, cardRead = false, nextFile = null;
+  var VX = 800, VY = 420, HW = 280, HH = 270, ZE = 6, KX = 880, KY = 527;
+  var STR = [], SX = 690, SW = 55, ST = 240, SB = 690;
+
+  /* ---------- a corridor in perspective: d is metres in front of the end wall, h is height (0 floor, 1 ceiling) ---------- */
+  function K(d) { return ZE / (ZE - d); }
+  function P(side, d, h) { var k = K(d); return [VX + side * HW * k, VY + HH * k * (1 - 2 * h)]; }
+  function W(side, d, h) { var p = P(side, d, h); return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }
+  function quad(side, d1, d2, h1, h2, fill, extra) {
+    return '<path d="M' + W(side, d1, h1) + 'L' + W(side, d2, h1) + 'L' + W(side, d2, h2) + 'L' + W(side, d1, h2) + 'Z" fill="' + fill + '"' + (extra || '') + '/>';
+  }
+  function onWall(side, d, h) {                       /* a transform that lays flat lettering on a side wall */
+    var k = K(d), kd = ZE / ((ZE - d) * (ZE - d)), p = P(side, d, h);
+    return 'matrix(' + (1.4 * kd).toFixed(3) + ' ' + (side * 1.35 * kd * (1 - 2 * h)).toFixed(3) + ' 0 ' + k.toFixed(3) + ' ' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + ')';
+  }
+  function door(side, d1, d2, id) {
+    var s = '', g = side < 0 ? 'L' : 'R', kp = P(side, d1 + 0.1, 0.37), kk = K(d1 + 0.1);
+    s += quad(side, d1 - 0.09, d2 + 0.09, 0, 0.8, '#241d16');
+    s += quad(side, d1, d2, 0, 0.765, 'url(#door' + g + ')');
+    [[0.07, 0.31], [0.37, 0.71]].forEach(function (r) {
+      [[0.1, 0.45], [0.55, 0.9]].forEach(function (c) {
+        s += quad(side, d1 + (d2 - d1) * c[0], d1 + (d2 - d1) * c[1], r[0], r[1], 'none', ' stroke="#1b150f" stroke-width="2.5"');
+      });
+    });
+    s += '<circle cx="' + kp[0].toFixed(1) + '" cy="' + kp[1].toFixed(1) + '" r="' + (5.5 * kk).toFixed(1) + '" fill="url(#brassG)"/>';
+    s += quad(side, d1 - 0.09, d2 + 0.09, 0, 0.8, 'transparent', ' class="hot sdoor" data-k="' + id + '"');
+    return s;
+  }
+  function sign(side, d, text, hh) {                  /* a small sign that sticks out from the wall and faces down the corridor */
+    var p = P(side, d, hh || 0.885), k = K(d), w = 44 * k, h = 25 * k, x0 = side < 0 ? p[0] + 2 * k : p[0] - w - 2 * k;
+    return '<path d="M' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + 'h' + (-side * 6 * k).toFixed(1) + '" stroke="#1c1c18" stroke-width="' + (3 * k).toFixed(1) + '"/>' +
+      '<rect x="' + x0.toFixed(1) + '" y="' + (p[1] - h / 2).toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="2" fill="#e6e3d2" stroke="#23221d" stroke-width="1.5"/>' +
+      '<text class="sgn" x="' + (x0 + w / 2).toFixed(1) + '" y="' + (p[1] + (text.length > 2 ? 4.5 : 6.5) * k).toFixed(1) + '" font-size="' + ((text.length > 2 ? 11.5 : 17) * k).toFixed(1) + '">' + text + '</text>';
+  }
+  function side(sd) {
+    var s = '', g = sd < 0 ? 'L' : 'R', D = 5.3, d, k;
+    s += quad(sd, 0, D, 0, 0.34, 'url(#low' + g + ')');
+    for (d = 0.25; d < 5; d += 0.3) { k = K(d); s += '<path d="M' + W(sd, d, 0.356) + 'L' + W(sd, d, 0.845) + '" stroke="#95a089" stroke-width="' + (1.7 * k).toFixed(1) + '" opacity=".5"/>'; }
+    s += quad(sd, 0, D, 0.33, 0.356, '#4f5848') + quad(sd, 0, D, 0, 0.055, '#2b3028') + quad(sd, 0, D, 0.845, 0.866, '#7b846f');
+    return s;
+  }
+  (function () {
+    var s, x, d, k, y, y2, i;
+    s = side(-1) + door(-1, 0.45, 1.35, 'r14') + door(-1, 2.2, 3.1, 'bath') + sign(-1, 2.1, 'BATH');
+    s += '<g transform="' + onWall(-1, 1.78, 0.7) + '"><rect x="-9" y="-14" width="18" height="34" rx="3" fill="#8b6d28"/><path d="M-16-14h32l-7-34h-18z" fill="#c9cdb9" opacity=".85"/></g>';
+    $('#sideL').innerHTML = s;
+    $('#signs').innerHTML = sign(-1, 0.36, '14', 0.79) + sign(1, 0.36, '16', 0.79);
+    s = side(1) + door(1, 0.45, 1.35, 'r16') + door(1, 2.2, 3.1, 'r15') + sign(1, 2.1, '15');
+    s += '<g transform="' + onWall(1, 1.78, 0.7) + '"><rect x="-9" y="-14" width="18" height="34" rx="3" fill="#8b6d28"/><path d="M-16-14h32l-7-34h-18z" fill="#c9cdb9" opacity=".85"/></g>';
+    s += '<g transform="' + onWall(1, 2.36, 0.33) + '"><path d="M0-8V4" stroke="#c9c9c0" stroke-width="1.5"/><rect x="-22" y="4" width="44" height="26" fill="#e9e6da"/><path d="M-14 13h28M-14 21h20" stroke="#8c2f24" stroke-width="2.5"/></g>';
+    $('#sideR').innerHTML = s; s = '';
+    for (x = 520; x <= 1080; x += 28) { if (x > 648 && x < 952) continue; s += '<path d="M' + x + ' 690L' + (VX + (x - VX) * 4) + ' 1500"/>'; }
+    $('#boards').innerHTML = s;
+    s = '<path d="M662 690L248 1500M938 690L1352 1500" stroke="#a48a3a" stroke-width="5" fill="none"/><path d="M676 690L304 1500M924 690L1296 1500" stroke="#a48a3a" stroke-width="1.5" fill="none" opacity=".8"/>';
+    for (d = 0.35; d < 3.9; d += 0.62) {
+      k = K(d); y = VY + HH * K(d - 0.16); y2 = VY + HH * K(d + 0.16);
+      s += '<path d="M800 ' + y.toFixed(1) + 'L' + (800 + 34 * k).toFixed(1) + ' ' + ((y + y2) / 2).toFixed(1) + 'L800 ' + y2.toFixed(1) + 'L' + (800 - 34 * k).toFixed(1) + ' ' + ((y + y2) / 2).toFixed(1) + 'Z" fill="none" stroke="#a48a3a" stroke-width="' + (1.6 * k).toFixed(1) + '" opacity=".75"/>' +
+        '<circle cx="800" cy="' + ((y + y2) / 2).toFixed(1) + '" r="' + (4 * k).toFixed(1) + '" fill="#7d2c33"/>';
+    }
+    $('#runner').innerHTML = s;
+    /* four strips of wallpaper over the door */
+    s = ''; d = '';
+    for (i = 0; i < 4; i++) {
+      x = SX + i * SW;
+      d += '<clipPath id="sc' + i + '"><rect x="' + (x - 0.6) + '" y="' + ST + '" width="' + (SW + 1.2) + '" height="' + (SB - ST) + '"/></clipPath>';
+      s += '<g class="strip"><g clip-path="url(#sc' + i + ')">' +
+        '<rect x="' + (x - 1) + '" y="' + ST + '" width="' + (SW + 2) + '" height="258" fill="url(#wpS)"/>' +
+        '<rect x="' + (x - 1) + '" y="498" width="' + (SW + 2) + '" height="12" fill="#59624f"/><rect x="' + (x - 1) + '" y="498" width="' + (SW + 2) + '" height="3" fill="#7d8672"/>' +
+        '<rect x="' + (x - 1) + '" y="510" width="' + (SW + 2) + '" height="150" fill="#6a7462"/><rect x="' + (x - 1) + '" y="660" width="' + (SW + 2) + '" height="30" fill="#30362d"/>' +
+        (i === 3 ? '<g id="hole" opacity="0"><path d="M880 509l9 6 8-3-3 10 7 7-9 3-2 9-9-5-9 6-1-10-9-4 7-6-3-9 9 2z" fill="#0c100d"/><ellipse cx="880" cy="527" rx="5" ry="7" fill="#f1fcff"/></g>' : '') +
+        '</g><path class="curl" d="" fill="#e4e1cd" stroke="rgba(0,0,0,.28)" stroke-width="1.5"/>' +
+        '<path class="ear" d="M' + (x + SW - 17) + ' ' + ST + 'h17v17z" fill="#e4e1cd" stroke="rgba(0,0,0,.3)" stroke-width="1.2"/>' +
+        '<rect class="grab" x="' + x + '" y="' + ST + '" width="' + SW + '" height="' + (SB - ST) + '" fill="transparent"/></g>';
+    }
+    $('#clips').innerHTML = d; $('#strips').innerHTML = s;
+    ER.$$('.strip').forEach(function (g, j) {
+      STR.push({ g: g, clip: $('#sc' + j + ' rect'), curl: g.querySelector('.curl'), grab: g.querySelector('.grab'), p: 0, gone: false });
+    });
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'room13', storyTitle: 'Room 13 Is Not on the Plan', id: 'second', no: 'II', title: 'The Second Floor',
+    go: 'Walk to the end of the corridor',
+    intro: [
+      'The room at the end of the corridor. On the builder&rsquo;s plan it has a door, two windows, and a number that somebody covered with ink.',
+      '&ldquo;She&rsquo;ll want her cocoa,&rdquo; says Wilf. He makes it himself, the way she used to have it: the blue cup, and two sugars on the saucer. He puts the tray into your hands and works the lift from the lobby. He does not get in.',
+      'The second floor is colder than the lobby. Much colder. Wilf has put a card on the tray.'
+    ],
+    exit: {"next":"thirteen","w":{"4b0ac8bb":"039ff30e"}}, tags: {},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var CARD = '<h4>The second floor at night</h4>' +
+    '<p>1. The bathroom door is cold. That is only the pipes.</p>' +
+    '<p>2. Room 16 is colder than the bathroom. That is only the window. It has not shut since 1990.</p>' +
+    '<p>3. Her door is colder than Room 16. It is the coldest thing in this hotel, and it always was.</p>' +
+    '<p>Use your hand. Wallpaper is thin.</p><p>W. T.</p>';
+  var PLAN = R13.plan({ print: ['11', '12', 'BATH', '14', 'LINEN', '15', '16', null], you: true }) +
+    '<p>In case of fire, use the stairs. Do not use the lift.</p>';
+
+  function hints() {
+    if (revealed) return ['knock', [
+      'It is a door, and somebody is at home. What do you do before you go into somebody&rsquo;s room?',
+      'Click on the door to knock.'
+    ]];
+    if (found) return ['peel', [
+      'The wallpaper is loose now, and there is a door under it.',
+      'Take hold of the paper near the top and drag it down to the floor. There are four strips, side by side.'
+    ]];
+    if (!cardRead) return ['card', [
+      'You put the tray down on the carpet. Something is leaning against the cup.',
+      'Click on Wilf&rsquo;s card, at the bottom of the screen, and read it.'
+    ]];
+    return ['cold', [
+      'Wilf&rsquo;s card names three cold places. The mouse is your hand: move it slowly over the walls and the doors. The small word beside your hand tells you what it feels.',
+      '&ldquo;Colder&rdquo; means you are getting nearer to a cold place. But the three places are not the same. One is cold, one is colder, and one is the coldest. Which one is hers?',
+      'Her door is colder than the bathroom and colder than Room 16. Look at the builder&rsquo;s plan in your Notebook: where did her room use to be? Move your hand over that wall until you find its coldest spot. Then keep your hand still.'
+    ]];
+  }
+  function pips() { ER.pips((cardRead ? 1 : 0) + (found ? 1 : 0) + (revealed ? 1 : 0), 3); }
+  function begin() {
+    R13.wind(0.045); pips();
+    ER.narrate([
+      'The end of the corridor. On the old plan there is a door here.',
+      'There is no door. There is a wall, some very old wallpaper, and a new plan in a frame.',
+      'You put the tray down on the carpet. Wilf&rsquo;s card is leaning against the cup.'
+    ], function () { searching = true; document.body.classList.add('feel'); setTimeout(creak, 9000); });
+  }
+  function creak() { if (!found && !ER.isOpen()) ER.sfx.creak(); if (!found) setTimeout(creak, 17000 + Math.random() * 9000); }
+
+  /* ---------- things to look at ---------- */
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+    });
+  }
+  thing('#bulb', 'bulb', 'One bare bulb for the whole corridor. It flickers when it thinks nobody is looking.');
+  thing('#sconce', null, 'A wall light. It has not worked for years.');
+  thing('#fern', 'fern', 'A fern on a tall stand. It died some time ago, and nobody has told it.');
+  thing('#exting', 'fire extinguisher', null);
+  thing('#tray', 'tray', 'Wilf&rsquo;s tray: the blue cup, the cocoa, and two sugar lumps on the saucer. The cocoa is still hot.');
+  var DOORS = {
+    r14: 'Room 14. Behind the door, somebody is snoring.',
+    bath: 'The bathroom. Hot water from seven until nine. It is after nine.',
+    r15: 'Room 15. Somebody has hung a card on the handle, and gone to sleep.',
+    r16: 'Room 16. Nobody is staying in it tonight. Its window does not shut.'
+  };
+  ER.$$('.sdoor').forEach(function (n) {
+    n.addEventListener('click', function () { if (!busy) ER.say(DOORS[n.getAttribute('data-k')]); });
+  });
+  $('#planFrame').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: PLAN, cls: 'plan78', clue: { id: 'plan78', title: 'The plan on the wall, 1978', kind: 'Plan' },
+      done: function () { ER.say('On this plan the corridor stops at a wall. On the builder&rsquo;s plan it does not.'); } });
+  });
+  $('#card').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'wcard', clue: { id: 'card', title: 'Wilf’s card', kind: 'Card' },
+      done: function () {
+        if (cardRead) return;
+        cardRead = true; pips();
+        if (!found) ER.say('The mouse is your hand. Move it slowly over the walls and the doors, and read the small word beside it.', 6500);
+      } });
+  });
+
+  /* ---------- the lock: find the coldest place with your hand ---------- */
+  var WELLS = [{ id: 'bath', x: 300, y: 520, dep: 3.5, r: 120, core: 46 }, { id: 'r16', x: 1132, y: 724, dep: 5.5, r: 115, core: 40 },
+               { id: 'wall', x: KX, y: KY, dep: 6, r: 250, core: 34 }];
+  var hand = $('#hand'), feelEl = $('#feel'), px = 800, py = 620, cx = 0, cy = 0, lastMove = 0, refT = null, feelT = 0, curWell = null, breathAt = 0, seen = false;
+  function temp(x, y) {
+    var t = 15, i, w, dx, dy;
+    for (i = 0; i < WELLS.length; i++) { w = WELLS[i]; dx = x - w.x; dy = y - w.y; t -= w.dep * Math.exp(-(dx * dx + dy * dy) / (2 * w.r * w.r)); }
+    dx = x - KX; dy = y - KY; t -= 5 * Math.exp(-(dx * dx + dy * dy) / (2 * 58 * 58));
+    dx = x - 800; dy = y - 198; t += 2 * Math.exp(-(dx * dx + dy * dy) / (2 * 150 * 150));
+    return t;
+  }
+  function tint(t) {
+    var a = Math.max(0, Math.min(1, (15 - t) / 11), 0), w = [241, 199, 164], c = [150, 212, 255];
+    return 'rgb(' + [0, 1, 2].map(function (i) { return Math.round(w[i] + (c[i] - w[i]) * a); }).join(',') + ')';
+  }
+  function paused() { return busy || !searching || ER.isOpen() || !!document.querySelector('.capshade.on') || !!document.querySelector('.tc'); }
+  function feel(word, cold) {
+    feelEl.textContent = word; feelEl.className = 'on' + (cold ? ' c' : '');
+    clearTimeout(feelT); feelT = setTimeout(function () { feelEl.className = cold ? 'c' : ''; }, 1500);
+  }
+  function puff() {
+    var b = ER.el('div', 'puff'); b.style.left = (cx - 44 + Math.random() * 16) + 'px'; b.style.top = (cy + 6 + Math.random() * 12) + 'px';
+    document.body.appendChild(b); setTimeout(function () { if (b.parentNode) b.parentNode.removeChild(b); }, 2000);
+  }
+  document.addEventListener('pointermove', function (e) {
+    if (!searching) return;
+    var on = e.target && e.target.closest && e.target.closest('.stage') && !paused(), p;
+    hand.style.display = on ? 'block' : 'none';
+    cx = e.clientX; cy = e.clientY;
+    hand.style.left = (cx - 16) + 'px'; hand.style.top = (cy - 1) + 'px';
+    p = ER.pt(svg, e);
+    if (Math.abs(p.x - px) + Math.abs(p.y - py) > 7) lastMove = Date.now();
+    px = p.x; py = p.y; seen = true;
+  });
+  setInterval(function () {
+    if (paused() || !seen) return;
+    var t = temp(px, py), now = Date.now(), w = null, i;
+    hand.style.setProperty('--hc', tint(t));
+    if (refT === null) refT = t;
+    if (t <= refT - 0.7) { feel('colder', true); refT = t; }
+    else if (t >= refT + 0.7) { feel('warmer', false); refT = t; }
+    for (i = 0; i < WELLS.length; i++) if (Math.abs(px - WELLS[i].x) < WELLS[i].core && Math.abs(py - WELLS[i].y) < WELLS[i].core) w = WELLS[i];
+    if (w !== curWell) { curWell = w; if (w) { w.held = false; arrive(w); } }
+    if (w && !w.held && now - lastMove > 1300) { w.held = true; hold(w); }
+    if (t < 8.2 && now - breathAt > 1500) { breathAt = now; puff(); }
+  }, 160);
+  var ARRIVE = {
+    bath: 'Cold. Behind the bathroom door, the old pipes are knocking.',
+    r16: 'Colder than the bathroom. A draught is coming under the door of Room 16.',
+    wall: 'Colder than Room 16. Colder than anything else in the hotel. Your breath is white. Keep your hand just there.'
+  };
+  var HOLD = {
+    bath: 'It is cold here, but it is not the coldest place. Wilf&rsquo;s card says that something is colder than the bathroom.',
+    r16: 'Colder than the bathroom, yes. But it is only a draught from a window. The card says that her door is colder than this.'
+  };
+  function arrive(w) {
+    var now = Date.now();
+    if (w.said && now - w.said < 6000) return;
+    w.said = now; ER.say(ARRIVE[w.id], 5200);
+    if (w.id === 'wall') { feel('the coldest', true); ER.sfx.glass(); }
+  }
+  function hold(w) {
+    var file = ER.exitOk([w.id]);
+    if (file) { foundIt(file); return; }
+    ER.sfx.no(); ER.say(HOLD[w.id] || 'Nothing here.', 6500);
+  }
+  function foundIt(file) {
+    found = true; searching = false; busy = true; nextFile = file; pips();
+    var st = ER.state(); st.done = st.done || {}; st.done.second = 1; ER.flag('second', 1);
+    hand.style.display = 'none'; document.body.classList.remove('feel');
+    R13.frost(); ER.sfx.ok();
+    $('#frost').setAttribute('opacity', 1);
+    try { $('#frost').animate([{ opacity: 0 }, { opacity: 1 }], { duration: 900 }); } catch (e) {}
+    setTimeout(function () { $('#hole').setAttribute('opacity', 1); $('#ray').setAttribute('opacity', 1); R13.tear(); }, 900);
+    setTimeout(function () {
+      ER.narrate([
+        'Your finger goes straight through the wallpaper. Behind it there is a small hole: a keyhole. A thin, cold light is coming out of it.',
+        'All round your hand, the old paper has come away from the wall. It is ready to tear.'
+      ], function () {
+        busy = false; $('#strips').classList.add('loose'); $('#frost').setAttribute('opacity', 0.35);
+        ER.say('The paper is loose. Take hold of it and pull it down.', 5000);
+      });
+    }, 1700);
+  }
+
+  /* ---------- tearing the wallpaper off, strip by strip ---------- */
+  function setStrip(i, p) {
+    var s = STR[i], y = ST + p * (SB - ST), x = SX + i * SW;
+    s.p = p;
+    s.clip.setAttribute('y', y.toFixed(1)); s.clip.setAttribute('height', Math.max(0, SB - y).toFixed(1));
+    s.curl.setAttribute('d', p > 0.002 && p < 0.999 ? 'M' + x + ' ' + y.toFixed(1) + 'l9 7 9-9 10 8 9-7 9 6 9-5v19q-28 11-55 0z' : '');
+  }
+  function fall(i) {
+    var s = STR[i], t0 = Date.now(), p0 = s.p;
+    if (s.gone) return;
+    s.gone = true; R13.tear(); setTimeout(R13.tear, 110);
+    (function step() {
+      var a = Math.min(1, (Date.now() - t0) / 260);
+      setStrip(i, p0 + (1 - p0) * a);
+      if (a < 1) { requestAnimationFrame(step); return; }
+      s.g.style.display = 'none';
+      var n = STR.filter(function (q) { return q.gone; }).length;
+      ER.$$('.heap')[n - 1].classList.add('on');
+      $('#under').setAttribute('opacity', n / 4); $('#spill').setAttribute('opacity', 0.05 * n);
+      if (n === STR.length) setTimeout(reveal, 500);
+    })();
+  }
+  STR.forEach(function (s, i) {
+    var lastSnd = 0;
+    ER.drag(s.grab, {
+      start: function () { if (!found || revealed || busy || s.gone) return false; },
+      move: function (e) {
+        if (s.gone) return;
+        var p = Math.max(s.p, Math.min(1, (ER.pt(svg, e).y - ST) / (SB - ST)));
+        if (p > s.p + 0.004) { setStrip(i, p); if (Date.now() - lastSnd > 90) { lastSnd = Date.now(); R13.tear(); } }
+        if (p >= 0.97) fall(i);
+      },
+      end: function (e, moved) {
+        if (s.gone) return;
+        if (s.p > 0.5) fall(i);
+        else if (!moved) ER.say('The paper is loose at the top. Take hold of it there and drag it down to the floor.');
+      }
+    });
+  });
+  function reveal() {
+    revealed = true; busy = true; pips();
+    $('#seams').style.display = 'none'; $('#frost').setAttribute('opacity', 0);
+    document.body.classList.add('cold'); $('#dim2').setAttribute('opacity', 0.6); $('#coldGlow').setAttribute('opacity', 0.8); $('#spill').setAttribute('opacity', 0.2);
+    ER.sfx.tick(); R13.windTo(0.07);
+    ER.narrate([
+      'A door. The paint is pale, and it is peeling. There is a brass 1, and a brass 3 that hangs crooked, by one screw.',
+      'A card hangs on the handle: DO NOT DISTURB. Under the door there is a line of cold light.',
+      'Somebody is at home.'
+    ], function () { busy = false; $('#d13').classList.add('hot'); });
+  }
+  $('#dnd13').addEventListener('click', function (e) {
+    if (!revealed || busy) return;
+    e.stopPropagation(); ER.sfx.paper();
+    ER.say('You turn the card over. On the back, in small, straight letters: EXCEPT WITH COCOA.');
+  });
+  $('#d13').addEventListener('click', function () {
+    if (!revealed || busy || !nextFile) return;
+    busy = true;
+    R13.knock(); setTimeout(R13.knock, 420); setTimeout(R13.knock, 840);
+    ER.say('You knock three times. Nothing. Then, very slowly, the handle begins to turn.', 7000);
+    setTimeout(function () { $('#knob13').classList.add('turn'); ER.sfx.click(); }, 2400);
+    setTimeout(function () { ER.sfx.creak(); $('#flood').setAttribute('opacity', 0.9); }, 3600);
+    setTimeout(function () { ER.leave(nextFile); }, 4300);
+  });
+})();
+</script>
+</body>
+</html>

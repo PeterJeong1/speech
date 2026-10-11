@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Back Room · Lots and Lots of People</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="apollo.css">
+<style>
+  body{--bg:#0d1412;--accent:#f2b23a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(9,13,12,.96);--tc-ink:#ece6d4;--cap-bg:rgba(9,14,13,.94);--panel:#141d1b;--face-bg:#1d2a27;--q-ink:#e9c477;--fade:#050807;--hud-bg:rgba(9,14,13,.8);
+    --lamp:#7be08a;--lamp2:#e9f3e6;--crt:#8dfca4}
+  body.bang{--lamp:#ffb23a;--lamp2:#ff5a3c}
+  .lb{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.18em}
+  .dg{font-family:'IBM Plex Mono',monospace;font-weight:600;text-anchor:middle}
+  .hw{font-family:'Architects Daughter',cursive;text-anchor:middle}
+  .lmp{fill:var(--lamp)}
+  .lmp2{fill:var(--lamp2)}
+  .bl{animation:bl 2.3s steps(1,end) infinite}
+  .bl.b2{animation-duration:3.1s;animation-delay:-1.2s}
+  .bl.b3{animation-duration:1.7s;animation-delay:-.6s}
+  body.bang .bl{animation-duration:.9s}
+  @keyframes bl{50%{opacity:.25}}
+  .crtl{stroke:var(--crt);animation:crt 5s steps(1,end) infinite}
+  @keyframes crt{0%{opacity:1}46%{opacity:.7}48%{opacity:1}80%{opacity:.82}82%{opacity:1}}
+  .pen{animation:pen 1.3s ease-in-out infinite alternate}
+  .pen.p2{animation-duration:.9s}
+  @keyframes pen{from{transform:translateX(-5px)}to{transform:translateX(6px)}}
+  body.bang .pen.p2{animation:pen2 .35s ease-in-out infinite alternate}
+  @keyframes pen2{from{transform:translateX(-26px)}to{transform:translateX(-18px)}}
+  #snow{display:none;animation:snow .5s steps(4,end) infinite}
+  body.tvoff #snow{display:block}
+  body.tvoff #tvpic{display:none}
+  @keyframes snow{0%{transform:translate(0,0)}25%{transform:translate(-7px,5px)}50%{transform:translate(6px,-4px)}75%{transform:translate(-3px,-6px)}}
+  #spill{display:none}
+  body.bang #spill{display:block}
+  #cupOnTable{display:block}
+  #pages{display:none}
+  body.pages #pages{display:block;animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+  #log.ready #logpaper{animation:nudge 1.6s ease-in-out infinite}
+
+  /* the log: the typed page, Mr Voss's five tabs, and then the stamp */
+  .lg{display:grid;grid-template-columns:minmax(0,650px) 330px;gap:22px;width:min(1010px,96vw);align-items:start}
+  .lg-page{position:relative;padding:12px 16px 12px 14px;background:#f6f3e8 linear-gradient(176deg,rgba(255,255,255,.5),rgba(120,110,70,.1));color:#22231e;font-family:'Courier Prime',monospace;font-size:14px;line-height:1.26;
+    box-shadow:0 22px 50px rgba(0,0,0,.6)}
+  .lg-page h5{margin:0 0 2px;display:flex;justify-content:space-between;font-size:13px;font-weight:700;letter-spacing:.1em;border-bottom:2px solid #22231e;padding-bottom:5px}
+  .lg-page h6{margin:4px 0 5px 46px;font-family:'Architects Daughter',cursive;font-weight:normal;font-size:14.5px;color:#55585c}
+  .lg-stain{position:absolute;right:26px;top:6px;width:118px;height:112px;border-radius:50%;border:9px solid rgba(120,74,30,.26);box-shadow:inset 0 0 14px rgba(120,74,30,.18);pointer-events:none;transform:rotate(-8deg) scaleY(.92)}
+  .tl{position:relative;display:grid;grid-template-columns:100px 40px 1fr;padding:2px 6px 2px 46px;border-radius:3px}
+  .tl b{font-weight:700}
+  .tl .t{color:#4a4a40;white-space:nowrap}
+  .tl.open{cursor:pointer}
+  .tl.open:hover{background:rgba(242,178,58,.22)}
+  .lg-cut{height:9px;margin:2px 6px 2px 46px;border-top:1px dashed #a39c84}
+  .tab{position:relative;display:flex;gap:9px;align-items:center;margin:0 0 9px;padding:7px 22px 6px 9px;background:#ffe98a;color:#22231e;font-family:'Architects Daughter',cursive;font-size:15.5px;line-height:1.15;
+    box-shadow:0 3px 6px rgba(0,0,0,.45);clip-path:polygon(0 0,100% 0,calc(100% - 13px) 50%,100% 100%,0 100%)}
+  .tab i{flex:0 0 24px;width:24px;height:24px;border-radius:50%;background:#22231e;color:#ffe98a;font-style:normal;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;line-height:24px;text-align:center}
+  .tab.held{outline:3px solid #f2b23a;outline-offset:2px}
+  .tab.ok{background:#bfe3b4;cursor:default}
+  .tl .tab{position:absolute;left:1px;top:1px;margin:0;padding:2px 13px 2px 3px;gap:0}
+  .tl .tab.fly{position:fixed}
+  .tl .tab span{display:none}
+  .tl .tab i{flex-basis:20px;width:20px;height:20px;line-height:20px;font-size:12.5px}
+  .lg-tray{min-height:150px;padding:10px 10px 2px;border:1px dashed rgba(255,255,255,.3);border-radius:4px}
+  .lg-side h6{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:#c9c3ae}
+  .lg-side .btn{display:block;width:100%;margin:10px 0 12px}
+  .lg-side .pmsg{font-size:16.5px}
+  .lg-ink{position:absolute;right:20px;top:42px;display:none}
+  .lg.stamped .lg-ink{display:block}
+  @media (max-width:900px){.lg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22302d"/><stop offset=".7" stop-color="#1b2725"/><stop offset="1" stop-color="#141d1b"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3330"/><stop offset="1" stop-color="#121816"/></linearGradient>
+  <linearGradient id="conG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9b3a6"/><stop offset="1" stop-color="#6f7a70"/></linearGradient>
+  <linearGradient id="conD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d887d"/><stop offset="1" stop-color="#4c564e"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8e979b"/><stop offset=".35" stop-color="#e3e8ea"/><stop offset=".6" stop-color="#aab2b6"/><stop offset="1" stop-color="#6c7478"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9b49f"/><stop offset="1" stop-color="#8d8873"/></linearGradient>
+  <radialGradient id="glowG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#b8ffc9" stop-opacity=".2"/><stop offset="1" stop-color="#b8ffc9" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#000a06" stop-opacity=".2"/><stop offset="1" stop-color="#000402" stop-opacity=".8"/></radialGradient>
+  <pattern id="tile" width="120" height="120" patternUnits="userSpaceOnUse" patternTransform="skewX(-18)"><path d="M0 0V120M0 0H120" stroke="#0e1412" stroke-width="3" fill="none"/></pattern>
+  <pattern id="ctile" width="80" height="40" patternUnits="userSpaceOnUse"><rect width="80" height="40" fill="#2b3936"/><path d="M0 0H80M0 0V40" stroke="#1d2927" stroke-width="2"/><circle cx="20" cy="14" r="1.4" fill="#1d2927"/><circle cx="52" cy="26" r="1.4" fill="#1d2927"/><circle cx="64" cy="10" r="1.4" fill="#1d2927"/></pattern>
+  <pattern id="snowP" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#8d9391"/><rect x="1" y="2" width="4" height="2" fill="#e9ecea"/><rect x="8" y="6" width="3" height="2" fill="#2a2e2d"/><rect x="4" y="10" width="5" height="2" fill="#d2d6d4"/><rect x="10" y="0" width="3" height="2" fill="#3b403e"/></pattern>
+  <g id="conU">
+    <path d="M0 240h150v230H0z" fill="url(#conD)"/><path d="M0 240h150" stroke="#3d463f" stroke-width="3"/>
+    <path d="M6 120h138l6 120H0z" fill="url(#conG)"/><path d="M6 120h138" stroke="#cfd6cb" stroke-width="3"/>
+    <rect x="22" y="134" width="106" height="74" rx="9" fill="#0a100d"/><rect x="28" y="140" width="94" height="62" rx="6" fill="#0f1b14"/>
+    <rect x="0" y="330" width="150" height="5" fill="#3d463f"/><rect x="58" y="352" width="34" height="8" rx="3" fill="#3d463f"/>
+  </g>
+</defs>
+
+<!-- ceiling, wall, floor -->
+<rect x="-1000" y="-400" width="3600" height="462" fill="url(#ctile)"/>
+<rect x="-1000" y="60" width="3600" height="650" fill="url(#wallG)"/>
+<rect x="-1000" y="56" width="3600" height="8" fill="#0f1614"/>
+<rect x="-1000" y="690" width="3600" height="16" fill="#0f1614"/>
+<rect x="-1000" y="704" width="3600" height="620" fill="url(#floorG)"/><rect x="-1000" y="704" width="3600" height="620" fill="url(#tile)"/>
+<g fill="#f3f7ee" opacity=".9"><rect x="200" y="-6" width="300" height="20" rx="4"/><rect x="900" y="-6" width="300" height="20" rx="4"/></g>
+
+<!-- the two clocks -->
+<g id="clocks" class="hot">
+  <rect x="520" y="84" width="500" height="126" rx="6" fill="#0a0d0c"/><rect x="520" y="84" width="500" height="126" rx="6" fill="none" stroke="#4c564e" stroke-width="5"/>
+  <rect x="540" y="124" width="250" height="66" rx="3" fill="#1a0806"/><rect x="812" y="124" width="188" height="66" rx="3" fill="#1a0806"/>
+  <text x="665" y="113" class="lb" font-size="15" fill="#c9c3ae">MISSION TIME</text><text x="906" y="113" class="lb" font-size="15" fill="#c9c3ae">HOUSTON</text>
+  <text id="ckM" x="665" y="174" class="dg" font-size="44" fill="#ff5a3c">055:46:11</text><text id="ckH" x="906" y="174" class="dg" font-size="44" fill="#ff5a3c">20:59:11</text>
+</g>
+
+<!-- a calendar, with Saturday ringed -->
+<g id="cal" class="hot"><rect x="130" y="150" width="120" height="150" fill="#f1ead6" transform="rotate(-1.5 190 225)"/><g transform="rotate(-1.5 190 225)"><rect x="130" y="150" width="120" height="34" fill="#8c2f24"/>
+  <text x="190" y="174" class="lb" font-size="15" fill="#f1ead6">APRIL 1970</text><g id="calD" font-family="'IBM Plex Mono',monospace" font-size="11" fill="#22231e" text-anchor="middle"></g>
+  <circle cx="237" cy="234" r="9" fill="none" stroke="#8c2f24" stroke-width="2.5"/></g></g>
+
+<!-- three consoles, and Mr Voss at the middle one -->
+<g id="consoles" class="hot">
+  <use href="#conU" x="40" y="230"/><use href="#conU" x="196" y="230"/><use href="#conU" x="352" y="230"/>
+  <g id="crt"></g><g id="lamps"></g>
+  <ellipse cx="271" cy="402" rx="150" ry="70" fill="url(#glowG)" pointer-events="none"/>
+</g>
+<g id="voss" class="hot">
+  <ellipse cx="272" cy="716" rx="76" ry="12" fill="#000" opacity=".35"/>
+  <path d="M236 706v-50M308 706v-50" stroke="#3d463f" stroke-width="8"/><rect x="222" y="560" width="100" height="102" rx="10" fill="#33403c"/>
+  <path d="M216 640q-6-112 56-116t56 116z" fill="#f1eee4"/><path d="M228 560q-22 30-14 70M316 560q22 30 14 70" stroke="#f1eee4" stroke-width="20" fill="none" stroke-linecap="round"/>
+  <rect x="259" y="498" width="26" height="30" fill="#d9ad8c"/><ellipse cx="243" cy="482" rx="6" ry="10" fill="#d9ad8c"/><ellipse cx="301" cy="482" rx="6" ry="10" fill="#d9ad8c"/>
+  <path d="M244 478q0-34 28-34t28 34v14q-4 16-28 16t-28-16z" fill="#8f9291"/><path d="M252 466q20-12 40 0M250 480q22-10 44 0M252 494q20-8 40 0" stroke="#a5a8a7" stroke-width="2" fill="none"/><path d="M246 500q26 12 52 0v6q-26 12-52 0z" fill="#d9ad8c"/>
+  <path d="M240 480q-2-42 32-42t32 42" stroke="#0c0e0e" stroke-width="5" fill="none"/><rect x="232" y="470" width="12" height="24" rx="5" fill="#0c0e0e"/><rect x="300" y="470" width="12" height="24" rx="5" fill="#0c0e0e"/>
+</g>
+
+<!-- the strip-chart recorder -->
+<g id="strip" class="hot">
+  <path d="M606 706v-110M714 706v-110" stroke="#4c564e" stroke-width="8"/><rect x="590" y="430" width="140" height="170" rx="6" fill="url(#conG)"/><rect x="590" y="430" width="140" height="170" rx="6" fill="none" stroke="#3d463f" stroke-width="3"/>
+  <rect x="606" y="446" width="108" height="250" fill="#f6f3e8"/><g stroke="#c9d6c4" stroke-width="1"><path d="M633 446v250M660 446v250M687 446v250M606 480h108M606 520h108M606 560h108M606 600h108M606 640h108M606 680h108"/></g>
+  <path d="M634 696q6-30-4-60t6-60 2-60 0-66" stroke="#1d2a52" stroke-width="2.2" fill="none"/><path d="M688 696q-6-36 4-70t-6-56 4-60-2-60" stroke="#b3261c" stroke-width="2.2" fill="none"/>
+  <g class="pen"><path d="M634 446v-10" stroke="#1d2a52" stroke-width="4"/><circle cx="634" cy="446" r="4" fill="#1d2a52"/></g><g class="pen p2"><path d="M688 446v-10" stroke="#b3261c" stroke-width="4"/><circle cx="688" cy="446" r="4" fill="#b3261c"/></g>
+  <rect x="598" y="424" width="124" height="14" rx="3" fill="#3d463f"/>
+</g>
+
+<!-- the shelf: the television and the speaker, which is held on with grey tape -->
+<rect x="1030" y="352" width="330" height="12" fill="#4c564e"/><path d="M1050 364l-12 40M1340 364l12 40" stroke="#3d463f" stroke-width="6"/>
+<g id="tv" class="hot"><rect x="1044" y="212" width="190" height="140" rx="10" fill="#2c3331"/><rect x="1058" y="224" width="130" height="104" rx="14" fill="#0b0f0e"/>
+  <g id="tvpic"><rect x="1064" y="230" width="118" height="92" rx="10" fill="#9aa19e"/><path d="M1064 300q30-26 60-10t58-16v38q0 10-10 10h-98q-10 0-10-10z" fill="#5f6664"/><circle cx="1108" cy="266" r="14" fill="#e3e7e5"/><path d="M1090 312q4-34 18-34t18 34z" fill="#e3e7e5"/><rect x="1140" y="246" width="26" height="34" rx="3" fill="#2a2e2d"/><path d="M1146 254h14M1146 262h14M1146 270h10" stroke="#9aa19e" stroke-width="2"/></g>
+  <g clip-path="url(#tvC)"><rect id="snow" x="1050" y="216" width="150" height="124" fill="url(#snowP)"/></g>
+  <g fill="#8e979b"><circle cx="1211" cy="246" r="9"/><circle cx="1211" cy="276" r="9"/></g><path d="M1211 240v8M1206 276h10" stroke="#2c3331" stroke-width="3"/><rect x="1198" y="300" width="26" height="30" fill="#1b201f"/><path d="M1200 306h22M1200 312h22M1200 318h22M1200 324h22" stroke="#4c564e" stroke-width="2"/></g>
+<clipPath id="tvC"><rect x="1064" y="230" width="118" height="92" rx="10"/></clipPath>
+<g id="squawk" class="hot"><rect x="1254" y="258" width="92" height="94" rx="5" fill="#59645f"/><rect x="1254" y="258" width="92" height="94" rx="5" fill="none" stroke="#2c3331" stroke-width="3"/>
+  <circle cx="1300" cy="298" r="30" fill="#1b201f"/><g stroke="#59645f" stroke-width="3"><path d="M1274 286h52M1271 298h58M1274 310h52M1284 276h32M1284 320h32"/></g><circle cx="1332" cy="340" r="4" class="lmp bl b2"/>
+  <path d="M1244 268l34-14l4 10l-34 14z" fill="#aab0b2"/><path d="M1322 362l34-12l4 10l-34 12z" fill="#aab0b2"/><path d="M1246 346l26 14l-4 8l-26-14z" fill="#9aa0a2"/></g>
+
+<!-- the table with the urn -->
+<g id="urn" class="hot">
+  <ellipse cx="1190" cy="712" rx="170" ry="12" fill="#000" opacity=".3"/>
+  <rect x="1040" y="570" width="300" height="16" fill="#7b5a36"/><path d="M1056 586v118M1324 586v118" stroke="#5a4226" stroke-width="10"/>
+  <rect x="1086" y="440" width="76" height="126" rx="8" fill="url(#steelG)"/><ellipse cx="1124" cy="440" rx="38" ry="9" fill="#cfd6d8"/><rect x="1108" y="424" width="32" height="12" rx="5" fill="#2c3331"/>
+  <path d="M1086 470q-16 0-16 20t16 20M1162 470q16 0 16 20t-16 20" stroke="#2c3331" stroke-width="6" fill="none"/><rect x="1116" y="540" width="16" height="22" fill="#2c3331"/><path d="M1124 562v10" stroke="#2c3331" stroke-width="6"/><circle cx="1146" cy="548" r="5" fill="#ff5a3c" class="bl"/>
+  <g id="cupOnTable"><path d="M1200 540h34l-4 30h-26z" fill="#f1ead6"/><path d="M1234 546q12 0 10 10t-12 8" stroke="#f1ead6" stroke-width="4" fill="none"/><path d="M1252 546h30l-4 24h-22z" fill="#e3ddc9"/><ellipse cx="1300" cy="566" rx="16" ry="5" fill="#f1ead6"/><path d="M1206 548h22" stroke="#8c6a45" stroke-width="2"/></g>
+</g>
+
+<!-- the tube by the door, and the card taped up beside it -->
+<g id="tubeS" class="hot">
+  <rect x="1470" y="-400" width="50" height="880" fill="url(#steelG)"/><g stroke="#6c7478" stroke-width="3"><path d="M1470 180h50M1470 330h50"/></g>
+  <rect x="1454" y="470" width="82" height="110" rx="8" fill="#59645f"/><rect x="1454" y="470" width="82" height="110" rx="8" fill="none" stroke="#2c3331" stroke-width="3"/><rect x="1466" y="484" width="58" height="70" rx="5" fill="#0c0f0e"/>
+  <circle cx="1495" cy="566" r="5" class="lmp bl b3"/>
+  <path d="M1440 590h110l-10 40h-90z" fill="none" stroke="#8e979b" stroke-width="4"/><path d="M1452 600h86M1456 612h78M1460 624h70" stroke="#8e979b" stroke-width="2"/>
+  <g id="pages"><rect x="1460" y="574" width="70" height="36" fill="#f6f3e8" transform="rotate(-6 1495 592)"/><g stroke="#55585c" stroke-width="2" transform="rotate(-6 1495 592)"><path d="M1468 584h54M1468 592h54M1468 600h40"/></g></g>
+</g>
+<g id="card" class="hot"><rect x="1352" y="404" width="96" height="124" fill="#fbf8ee" transform="rotate(2 1400 466)"/><g transform="rotate(2 1400 466)"><rect x="1352" y="404" width="96" height="5" fill="#b3261c"/>
+  <text x="1400" y="430" class="hw" font-size="13" fill="#22231e">NEW HERE?</text><text x="1400" y="446" class="hw" font-size="13" fill="#8c2f24">READ THIS</text>
+  <g stroke="#9db3cf" stroke-width="1.5"><path d="M1362 460h76M1362 472h76M1362 484h76M1362 496h76M1362 508h60"/></g><path d="M1346 398l22 10l-4 8l-22-10zM1432 398l22-8l4 8l-22 8z" fill="#aab0b2"/></g></g>
+
+<!-- your own table, at the front -->
+<g transform="translate(0 -52)">
+<path d="M330 812h940L1760 1500H-160z" fill="url(#deskG)"/><path d="M330 812h940" stroke="#d9d4bf" stroke-width="4"/>
+<g id="rule" class="hot"><rect x="410" y="846" width="200" height="26" rx="2" fill="#f7f3ea" stroke="#6b6552" stroke-width="2" transform="rotate(-5 510 859)"/><g transform="rotate(-5 510 859)"><path d="M410 859h200" stroke="#6b6552" stroke-width="1.5"/><g id="ruleT" stroke="#22231e" stroke-width="1.3"></g>
+  <rect x="520" y="841" width="22" height="36" rx="2" fill="#dff3ff" fill-opacity=".5" stroke="#22231e" stroke-width="2"/><path d="M531 841v36" stroke="#b3261c" stroke-width="1.5"/></g></g>
+<g id="log" class="hot">
+  <rect x="676" y="822" width="250" height="110" rx="4" fill="#7b5a36" transform="rotate(3 800 870)"/>
+  <g transform="rotate(3 800 870)"><g id="logpaper"><rect x="688" y="830" width="226" height="100" fill="#f6f3e8"/><g stroke="#9db3cf" stroke-width="1.5"><path d="M698 856h206M698 872h206M698 888h206M698 904h206M698 920h206"/></g>
+    <text x="801" y="848" class="lb" font-size="13" fill="#22231e">LOG</text>
+    <g id="spill"><ellipse cx="866" cy="884" rx="38" ry="26" fill="#8c5a2a" opacity=".32"/><ellipse cx="866" cy="884" rx="38" ry="26" fill="none" stroke="#6b3f1a" stroke-width="3" opacity=".4"/><ellipse cx="820" cy="906" rx="12" ry="7" fill="#8c5a2a" opacity=".3"/></g></g></g>
+  <rect x="756" y="812" width="90" height="20" rx="5" fill="url(#steelG)" transform="rotate(3 800 870)"/>
+  <g id="stampM"><rect x="960" y="836" width="84" height="52" rx="6" fill="#2c3030"/><rect x="972" y="820" width="60" height="22" rx="4" fill="#4a5050"/><rect x="990" y="800" width="24" height="24" rx="6" fill="#8c2f24"/><rect x="968" y="886" width="68" height="8" fill="#1b1d1d"/></g>
+  <path d="M1080 880l96-30" stroke="#d9a22b" stroke-width="7" stroke-linecap="round"/><path d="M1176 850l12-4" stroke="#22231e" stroke-width="5" stroke-linecap="round"/>
+</g>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Take the log down the hall</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="apollo.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, stage = 0, nextFile = null, lgBox = null, inLock = false, part = 'flags', t0 = Date.now(), base = 0, cap = 0;
+
+  /* console screens and lamps, the calendar, the slide rule */
+  (function () {
+    var s = '', c, r, i, x, y, COL = ['lmp', 'lmp2', 'lmp', 'lmp'], DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    for (c = 0; c < 3; c++) {
+      x = 40 + c * 156;
+      for (r = 0; r < 5; r++) s += '<path class="crtl" d="M' + (x + 36) + ' ' + (378 + r * 11) + 'h' + (30 + ((c * 7 + r * 13) % 48)) + '" stroke-width="2.4" fill="none"/>';
+    }
+    $('#crt').innerHTML = s; s = '';
+    for (c = 0; c < 3; c++) for (r = 0; r < 3; r++) for (i = 0; i < 7; i++) {
+      x = 40 + c * 156 + 16 + i * 18; y = 486 + r * 22;
+      s += '<rect x="' + x + '" y="' + y + '" width="13" height="13" rx="2" class="' + COL[(c + r + i) % 4] + ((c * 3 + r * 5 + i * 2) % 5 === 0 ? ' bl' + ((i % 3) ? ' b' + (1 + i % 3) : '') : '') + '" opacity="' + ((c + r * 2 + i) % 3 ? '.9' : '.45') + '"/>';
+    }
+    $('#lamps').innerHTML = s; s = '';
+    for (i = 0; i < 7; i++) s += '<text x="' + (141 + i * 16) + '" y="200">' + DAYS[i] + '</text>';
+    for (i = 1; i <= 30; i++) { c = (i + 2) % 7; r = Math.floor((i + 2) / 7); s += '<text x="' + (141 + c * 16) + '" y="' + (220 + r * 17) + '">' + i + '</text>'; }     /* 1 April 1970 was a Wednesday */
+    $('#calD').innerHTML = s; s = '';
+    for (i = 0; i < 20; i++) s += '<path d="M' + (418 + i * 10) + ' 848v' + (i % 5 ? 5 : 9) + 'M' + (418 + i * 10) + ' 870v-' + (i % 4 ? 4 : 8) + '"/>';
+    $('#ruleT').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'history', story: 'apollo', storyTitle: 'Lots and Lots of People', id: 'backroom', no: 'I', title: 'The Back Room',
+    go: 'Lift the lid', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'The Archive keeps one box for each day that mattered. This one is grey, and heavier than it looks. The label says: HOUSTON, TEXAS. APRIL 1970. You lift the lid, and there is nothing inside but paper.',
+      'Then it is Monday 13 April 1970, a minute before nine in the evening, and you are nineteen years old. You are a co-op student: half the year at college, half the year at work here, at the Manned Spacecraft Center. You have been here for three weeks.',
+      'Two hundred thousand miles away, three men are on their way to the Moon in Apollo 13. This is one of the back rooms of Mission Control, where people sit and work things out for the men at the front. Your job here is paper.'
+    ],
+    exit: {"next":"chart","w":{"7f869e33":"745c03b2"}}, tags: {"f1":["d0c2c2b8"],"f2":["c8538861"],"f3":["df25b0a8"],"f4":["984cd1a0"],"f5":["61ac5ebf"],"st":["da3968be"]},
+    sound: ['archive', { root: 50, bpm: 58, drop: ['mel'], beds: [['hum', 0.6]] }],
+    hints: hints, onBegin: begin
+  });
+  stage = ER.flag('b-stage') || 0; nextFile = ER.flag('b-file') || null;
+
+  /* ---------- the two clocks: the spacecraft's, and the wall's. Lift-off was at 13:13:00 on Saturday ---------- */
+  var BASE = [[55, 46, 11, 280], [55, 52, 50, 140], [55, 55, 20, 150], [56, 17, 0, 600], [56, 17, 0, 600], [56, 28, 0, 900]];
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function setClock(i) { base = BASE[i][0] * 3600 + BASE[i][1] * 60 + BASE[i][2]; cap = BASE[i][3]; t0 = Date.now(); tick(); }
+  function tick() {
+    var g = base + Math.min(cap, Math.floor((Date.now() - t0) / 1000)), h = g + 13 * 3600 + 13 * 60, hd = h % 86400;
+    $('#ckM').textContent = (g >= 360000 ? '' : '0') + Math.floor(g / 3600) + ':' + two(Math.floor(g / 60) % 60) + ':' + two(g % 60);
+    $('#ckH').textContent = two(Math.floor(hd / 3600)) + ':' + two(Math.floor(hd / 60) % 60) + ':' + two(hd % 60);
+  }
+  setInterval(tick, 1000);
+
+  /* ---------- the papers ---------- */
+  var CARD = '<h4>New in this room? Read this</h4>' +
+    '<p>The <b>AIR-TO-GROUND</b> is everything that is said between the spacecraft and the ground. The typists put it on paper, and every line begins in the same way: first the time, then who is speaking.</p>' +
+    '<svg viewBox="0 0 560 96"><rect x="1" y="1" width="558" height="94" fill="#f1ead6" stroke="#22231e" stroke-width="1.5"/>' +
+    '<g font-family="\'Courier Prime\',monospace" font-size="19" font-weight="700" fill="#22231e"><text x="24" y="38">01</text><text x="74" y="38">00</text><text x="124" y="38">00</text><text x="174" y="38">00</text></g>' +
+    '<g font-family="\'Architects Daughter\',cursive" font-size="14" fill="#3b4a6b"><text x="18" y="64">days</text><text x="66" y="64">hours</text><text x="118" y="64">min</text><text x="168" y="64">sec</text><text x="18" y="84">since lift-off: MISSION TIME</text></g>' +
+    '<path d="M222 32h60M272 24l12 8l-12 8" stroke="#b3261c" stroke-width="2.5" fill="none"/><text x="252" y="20" font-family="\'Architects Daughter\',cursive" font-size="13" fill="#b3261c" text-anchor="middle">+ 13:13 Sat.</text>' +
+    '<text x="300" y="38" font-family="\'Courier Prime\',monospace" font-size="19" font-weight="700" fill="#8c2f24">SUNDAY 13:13</text><text x="300" y="64" font-family="\'Architects Daughter\',cursive" font-size="14" fill="#3b4a6b">the clock on OUR wall:</text><text x="300" y="84" font-family="\'Architects Daughter\',cursive" font-size="14" fill="#3b4a6b">HOUSTON TIME</text></svg>' +
+    '<p><b>THE TIME</b> is four pairs of figures: days, hours, minutes and seconds since lift-off. That is mission time. A spacecraft has no Monday and no night. It has only the clock that started when the rocket left the ground: on Saturday 11 April, at 13:13 by the clock on our wall.</p>' +
+    '<p><b>WHO IS SPEAKING</b><br>CDR&nbsp; the commander, Jim Lovell<br>CMP&nbsp; the command module pilot, Jack Swigert<br>LMP&nbsp; the lunar module pilot, Fred Haise<br>CC&nbsp;&nbsp; the CAPCOM: one astronaut in Houston, and the only person on the ground who talks to the crew</p>' +
+    '<p class="by">This building runs on OUR clock. Learn to turn their time into ours.&nbsp; H. Voss</p>';
+  var ROWS = [
+    ['02 07 52 58', 'CC', '13, we&rsquo;ve got one more item for you, when you get a chance. We&rsquo;d like you to stir up your cryo tanks.', 'a'],
+    ['02 07 53 12', 'CMP', 'Okay. Stand by.', 'b'],
+    null,
+    ['02 07 55 20', 'CMP', 'Okay, Houston, we&rsquo;ve had a problem here.', 'c'],
+    ['02 07 55 28', 'CC', 'This is Houston. Say again, please.', 'd'],
+    ['02 07 55 35', 'CDR', 'Houston, we&rsquo;ve had a problem. We&rsquo;ve had a MAIN B BUS UNDERVOLT.', 'e'],
+    ['02 07 55 42', 'CC', 'Roger. MAIN B UNDERVOLT.', 'f'],
+    ['02 07 55 58', 'CC', 'Okay, stand by, 13. We&rsquo;re looking at it.', 'g'],
+    ['02 07 56 10', 'LMP', 'Okay. Right now, Houston, the voltage is - is looking good. And we had a pretty large bang associated with the CAUTION AND WARNING there.', 'h'],
+    ['02 07 57 04', 'LMP', 'That jolt must have rocked the sensor on - see now - O2 QUANTITY 2. It was oscillating down around 20 to 60 percent. Now it&rsquo;s full-scale high again.', 'i'],
+    ['02 07 58 25', 'LMP', 'Yes. We got a MAIN BUS A UNDERVOLT now, too, showing.', 'j'],
+    ['02 07 58 33', 'LMP', 'It&rsquo;s reading about 25-1/2, MAIN B is reading zip right now.', 'k'],
+    null,
+    ['02 08 08 57', 'CDR', 'And, Jack, our O2 quantity number 2 tank is reading zero. Did you get that?', 'l'],
+    ['02 08 09 04', 'CC', 'O2 QUANTITY number 2 is zero.', 'm'],
+    ['02 08 09 07', 'CDR', '&hellip; it looks to me, looking out the hatch, that we are venting something. We are venting something out into the - into space.', 'n'],
+    ['02 08 09 22', 'CC', 'Roger. We copy your venting.', 'o'],
+    ['02 08 09 29', 'CDR', 'It&rsquo;s a gas of some sort.', 'p']
+  ];
+  var NOTE = 'Cut down to the lines that matter to this room. A dotted line = lines left out. H.V.';
+  var TABS = [null, 'THE CREW TELL US. (The first time.)', 'HEARD AND FELT. Not a meter.', 'THE CREW BLAME THE GAUGE, not the tank.', 'THE OTHER HALF OF THE POWER goes too.', 'SEEN BY EYE. Not a meter.'];
+  var WHY = {
+    '1:e': 'That is the commander saying it <b>again</b>, because Houston asked him to. Who said it first? Read the letters on the left.',
+    '1:a': 'That is Houston talking to <b>them</b>. CC is our own man. I asked when the crew told <b>us</b>.',
+    '1:h': 'By then we had been told. Go back up the page.',
+    '2:c': 'There they say that there is a problem. They do not say what they heard. Find the line with the noise in it.',
+    '2:e': 'There they say that there is a problem. They do not say what they heard. Find the line with the noise in it.',
+    '2:n': 'That one they <b>saw</b>. This tab is for what they heard and felt.',
+    '2:i': 'A jolt, yes. But in that line he is talking about an instrument. A minute earlier he told us what he heard.',
+    '3:l': 'There the commander <b>believes</b> the gauge: he reads it out and asks if we got it. I want the line where a man says that the instrument itself has been knocked.',
+    '3:h': '&ldquo;Looking good&rdquo; is a meter that he believes. For about two minutes.',
+    '3:m': 'That is Houston repeating a number. Nobody is blaming anything.',
+    '4:e': 'That is the first half: Main B. There are two main lines of power in that ship. I want the moment when the other one follows.',
+    '4:f': 'That is the first half: Main B. There are two main lines of power in that ship. I want the moment when the other one follows.',
+    '4:k': 'Close. That line gives the numbers. The line before it gives the news.',
+    '5:p': '&ldquo;A gas of some sort&rdquo; is what he thinks it is. I want the line where he says how he knows.',
+    '5:h': 'A bang is heard, not seen.',
+    '5:l': 'Reading zero is a meter. What does he see with nothing but his own two eyes?',
+    '5:o': 'That is Houston, and Houston can see nothing from here.'
+  };
+
+  function hints() {
+    if (nextFile) return ['go', ['Mr Voss has told you where to take the log. Use the button at the bottom of the screen.']];
+    if (inLock && part === 'stamp') return ['stamp', [
+      'The stamp wants the time on the wall of this room, not the time in the spacecraft. The card by the tube says when the spacecraft&rsquo;s clock started.',
+      'In mission time the first pair of figures is days, the next is hours, then minutes. Lift-off was on Saturday at 13:13. Add the days first.',
+      'Two days after Saturday is Monday. Then take 13:13 and add seven hours and fifty-five minutes: add the minutes, carry one hour, and then add the hours.'
+    ]];
+    if (inLock) return ['flags', [
+      'Read each tab as a question, and answer it with one line of the page. The letters after the time say who is speaking. The card by the tube says which letters are which.',
+      'Two tabs say NOT A METER. One of those things was heard and felt. The other was seen. And one tab wants the place where a man says that the instrument itself has been knocked.',
+      'The crew tell Houston twice, because Houston asks them to say it again: the tab wants the first time. And the ship has two main lines of power, called B and A. Find the line where the second one goes.'
+    ]];
+    if (stage >= 3) return ['open', ['The log is the clipboard on your own table, at the bottom of the screen. The typed pages are with it now.']];
+    if (stage === 2) return ['tube', ['Paper comes into this room through the steel tube by the door, on the right. Something has just arrived in the basket.']];
+    return ['look', [
+      'Two clocks hang on the wall, and a card is taped up beside the tube by the door. Read the card: you will need it later.',
+      'Mr Voss asked you for something. It is on the table under the television.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function setStage(n) { stage = n; ER.flag('b-stage', n); paint(); }
+  function paint() {
+    document.body.classList.toggle('tvoff', stage >= 1 || !!ER.flag('b-tv'));
+    document.body.classList.toggle('bang', stage >= 2);
+    document.body.classList.toggle('pages', stage === 2);
+    $('#log').classList.toggle('ready', stage === 3 && !nextFile);
+    $('#cupOnTable').style.display = stage >= 2 ? 'none' : 'block';
+    ER.pips(nextFile ? 2 : stage >= 3 ? 1 : 0, 2);
+    if (nextFile) $('#go').classList.add('on');
+  }
+
+  function begin() {
+    setClock(stage >= 3 ? (nextFile ? 5 : 4) : stage === 2 ? 3 : stage === 1 ? 1 : 0);
+    paint();
+    if (stage >= 2) AP.mood('tense');
+    if (ER.flag('b-in')) { busy = false; ER.say(stage >= 2 ? 'The back room. Nobody has sat down.' : 'The back room. Mr Voss is still waiting for his coffee.'); return; }
+    ER.flag('b-in', 1);
+    AP.learn('command module', 'lunar module');
+    ER.narrate([
+      'A room with no windows, three consoles and one coffee urn. On the small television, the evening&rsquo;s broadcast from the spacecraft is just ending. The commander is speaking.',
+      AP.said('Lovell', '&hellip; this is the crew of Apollo 13 wishing everybody there a nice evening, and we&rsquo;re just about ready to close out our inspection of Aquarius and get back for a pleasant evening in Odyssey. Good night.'),
+      'Mr Voss, who runs this room, does not turn round. &ldquo;Aquarius is the lunar module: the one that lands on the Moon. Odyssey is the command module: the one that comes home. Learn the names, co-op.&rdquo;',
+      '&ldquo;The log is yours tonight. Time first, then what was said. Never why. Why is for people who are paid more than you and me. And bring me a coffee.&rdquo;'
+    ], function () { busy = false; ER.flag('b-tv', 1); paint(); });
+  }
+
+  /* ---------- nine o'clock ---------- */
+  function coffee() {
+    if (busy) return;
+    if (stage >= 1) { ER.say(stage >= 2 ? 'The urn. Nobody has thought about coffee for some time.' : 'The urn has been on since Saturday.'); return; }
+    busy = true; setStage(1); setClock(1); AP.sfx.squawk();
+    ER.narrate([
+      'The urn has been on since Saturday, and the coffee comes out like paint. While you fill the cup, the speaker on the shelf clicks. It is the CAPCOM, Jack Lousma, talking to the crew.',
+      AP.said('Houston', '13, we&rsquo;ve got one more item for you, when you get a chance. We&rsquo;d like you to stir up your cryo tanks.'),
+      AP.said('Swigert', 'Okay. Stand by.'),
+      '&ldquo;The oxygen and the hydrogen, in the tanks at the back,&rdquo; says Voss. &ldquo;Every so often the crew stir them with a fan, so that the gauges read true. They have done it before. It is nothing.&rdquo;',
+      'You are half way across the room with his cup when the speaker clicks again.'
+    ], function () {
+      setClock(2); AP.sfx.squawk();
+      ER.narrate([
+        AP.said('Swigert', 'Okay, Houston, we&rsquo;ve had a problem here.'),
+        AP.said('Houston', 'This is Houston. Say again, please.'),
+        AP.said('Lovell', 'Houston, we&rsquo;ve had a problem. We&rsquo;ve had a MAIN B BUS UNDERVOLT.')
+      ], function () {
+        setStage(2); AP.mood('tense'); ER.sfx.clunk(); AP.learn('undervolt');
+        ER.narrate([
+          'The cup goes over the log. Nobody notices, and that includes you.',
+          'On every console, the lamps have changed colour. Voss has both hands flat on the desk. &ldquo;Write,&rdquo; he says, very quietly. &ldquo;Time first.&rdquo;',
+          'So for twenty minutes you write down what the speaker says, and the time off the wall, and nothing else. Nobody in the room sits down.',
+          'At half past nine the tube by the door coughs, and something drops into the basket.'
+        ], function () { busy = false; setClock(3); AP.sfx.tube(); });
+      });
+    });
+  }
+  $('#urn').addEventListener('click', function (e) { if (busy) return; ER.wordAt(e.clientX, e.clientY, 'urn'); coffee(); });
+
+  function pages() {
+    if (busy) return;
+    if (stage < 2) { ER.say('The tube by the door. Paper comes in and goes out through it, in a brass carrier, on a wind that somebody in the basement makes. The basket is empty.'); return; }
+    ER.read({ html: AP.page(1, NOTE, ROWS), cls: 'tscript', clue: { id: 'page1', title: 'Air-to-ground, page 1', kind: 'Typed transcript' }, done: function () {
+      AP.learn('transcript', 'air-to-ground', 'gauge', 'venting');
+      if (stage !== 2) return;
+      busy = true; setStage(3); setClock(4);
+      ER.narrate([
+        'The first typed pages of the air-to-ground. Voss has already been at them with a pair of scissors.',
+        '&ldquo;Your log is a page of wet coffee,&rdquo; he says. &ldquo;Do it again from the typing. In an hour every engineer in this building will want to know what happened, and in what order.&rdquo;',
+        'He writes on five yellow tabs and drops them on your table. &ldquo;Five things. Put each tab on the line where it happened. Then stamp the first one with the time on <em>our</em> clock.&rdquo;'
+      ], function () { busy = false; });
+    } });
+  }
+  $('#tubeS').addEventListener('click', function (e) { if (busy) return; ER.wordAt(e.clientX, e.clientY, 'pneumatic tube'); pages(); });
+
+  /* ---------- things in the room ---------- */
+  $('#card').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'cardp', clue: { id: 'card1', title: 'Mr Voss’s card: their time and ours', kind: 'Card by the tube' }, done: function () { AP.learn('mission time', 'lift-off', 'CAPCOM'); } });
+  });
+  AP.thing('#clocks', null, function () {
+    AP.learn('mission time');
+    return 'Two clocks. MISSION TIME started from nothing when the rocket left the ground. HOUSTON is the time on your own wrist. They never agree, and they never drift apart.';
+  }, isBusy);
+  AP.thing('#cal', null, 'April 1970. Somebody has ringed Saturday the 11th: lift-off, at thirteen minutes past one in the afternoon. In this building they write that as 13:13.', isBusy);
+  AP.thing('#consoles', 'console', function () { return stage >= 2 ? 'Three consoles. Every lamp that was green or white is now amber or red.' : 'Three consoles, each with a small screen of numbers. Green and white lamps. A quiet night.'; }, isBusy);
+  AP.thing('#voss', null, function () { return stage >= 2 ? 'Mr Voss. He is listening to three things at once, and not one of them is you.' : 'Mr Voss, in a white shirt and a headset. He has not been home since Saturday.'; }, isBusy);
+  AP.thing('#strip', 'strip chart', function () { return stage >= 2 ? 'Two pens on a roll of paper. The red one has gone hard over to one side and is shaking there.' : 'Two pens draw two lines on a roll of paper that never stops moving. Tonight both lines are almost straight.'; }, isBusy);
+  AP.thing('#tv', null, function () { return stage >= 1 || ER.flag('b-tv') ? 'The broadcast is over. The television shows snow.' : 'A black-and-white picture from inside the spacecraft.'; }, isBusy);
+  AP.thing('#squawk', 'speaker', 'The speaker on the shelf gives this room the air-to-ground: every word between Houston and the spacecraft. It is held on with grey tape. &ldquo;Grey tape holds this whole building together,&rdquo; says Voss.', isBusy);
+  AP.thing('#rule', 'slide rule', 'A slide rule: two rulers that slide past each other, for multiplying and dividing. Every engineer in the building carries one.', isBusy);
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; AP.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+  $('#log').addEventListener('click', function (e) {
+    if (busy) return;
+    if (nextFile) { ER.say('The log. Five tabs, one red stamp, and a coffee stain that will never come out.'); return; }
+    if (stage < 2) { ER.wordAt(e.clientX, e.clientY, 'clipboard'); ER.say('Tonight&rsquo;s log, on its clipboard, and a time stamp beside it. The page is empty. A quiet flight makes a short log.'); return; }
+    if (stage === 2) { ER.say('Your log is under a cup of coffee. Something has just come up the tube by the door.'); return; }
+    openLog();
+  });
+
+  /* ---------- the log ---------- */
+  function build() {
+    var box = ER.el('div', 'lg'), s, msgEl, tray, goBtn, done = {};
+    s = '<div class="lg-page"><div class="lg-stain"></div><span class="stp-ink lg-ink"></span><h5><span>APOLLO 13 AIR-TO-GROUND VOICE</span><span>Page 1</span></h5><h6><!--nogloss-->' + NOTE + '<!--/nogloss--></h6>';
+    ROWS.forEach(function (r) {
+      s += r ? '<div class="tl open" data-id="' + r[3] + '"><span class="t">' + r[0] + '</span><b>' + r[1] + '</b><span class="x">' + r[2] + '</span></div>' : '<div class="lg-cut"></div>';
+    });
+    s += '</div><div class="lg-side"><h6>Mr Voss&rsquo;s five tabs</h6><div class="lg-tray">';
+    TABS.forEach(function (t, i) { if (t) s += '<div class="tab dnd-item" data-n="' + i + '"><i>' + i + '</i><span>' + t + '</span></div>'; });
+    s += '</div><button type="button" class="btn lg-go" disabled>Hand the log to Mr Voss</button><div class="lg-stamp"></div><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    ER.glossIn(box, '.x');
+    msgEl = box.querySelector('.pmsg'); tray = box.querySelector('.lg-tray'); goBtn = box.querySelector('.lg-go');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function placed() { return ER.$$('.tl .tab', box).length; }
+    ER.dnd(box, { item: '.tab:not(.ok)', slot: '.tl.open', home: tray, lock: function () { return part !== 'flags'; }, change: function () { AP.sfx.pin(); goBtn.disabled = placed() < 5; box.setAttribute('data-placed', placed()); } });
+    goBtn.addEventListener('click', function () {
+      var wrong = [], first = '', n, tab, row, id;
+      if (part !== 'flags' || placed() < 5) return;
+      for (n = 1; n <= 5; n++) {
+        tab = box.querySelector('.tab[data-n="' + n + '"]'); row = tab.parentNode; id = row.getAttribute('data-id');
+        if (tab.classList.contains('ok')) continue;
+        if (ER.check('f' + n, id)) { tab.classList.add('ok'); tab.classList.remove('dnd-item'); row.classList.remove('open'); done[n] = id; }
+        else { wrong.push(n); if (!first) first = WHY[n + ':' + id] || ('Tab ' + n + ' is on the wrong line. Read the tab again, word by word, and then read who is speaking.'); tray.appendChild(tab); }
+      }
+      box.setAttribute('data-ok', Object.keys(done).length);
+      if (wrong.length) {
+        AP.slip(); ER.sfx.no(); goBtn.disabled = true;
+        msg('Voss reads down the page with his finger, and hands it back. &ldquo;' + first + '&rdquo;' + (wrong.length > 1 ? ' He pulls off ' + (wrong.length === 2 ? 'one more tab' : (wrong.length - 1) + ' more tabs') + ' as well.' : '') + ' The tabs that are right stay where they are.');
+        return;
+      }
+      part = 'stamp'; ER.sfx.ok(); goBtn.style.display = 'none'; tray.style.display = 'none'; box.querySelector('.lg-side h6').textContent = 'The time stamp';
+      box.querySelector('.lg-stamp').appendChild(AP.stamp({ onStamp: stamped }));
+      msg('&ldquo;Five out of five,&rdquo; says Voss. &ldquo;Now the stamp. Tab 1 only: when did the crew tell us, by the clock on <b>our</b> wall? The day, the hour, the minute.&rdquo;');
+      function stamped(key, day, hh, mm) {
+        var file, t;
+        if (part !== 'stamp') return;
+        if (ER.check('st', key)) {
+          file = ER.exitOk([[done[1], done[2], done[3], done[4], done[5]].join('-') + '|' + key]);
+          if (!file) { msg('The stamp comes down, and nothing happens. Something is wrong: tell your teacher.'); return; }
+          part = 'done'; AP.sfx.stamp(); box.classList.add('stamped'); box.querySelector('.lg-ink').textContent = AP.ink(day, hh, mm);
+          nextFile = file; ER.flag('b-file', file); ER.flag('b-ink', AP.ink(day, hh, mm)); ER.flag('b-rows', done);
+          var st = ER.state(); st.done = st.done || {}; st.done.backroom = 1; ER.flag('b-out', 1);
+          msg('The stamp comes down in red ink. Voss looks at it, and then at the clock, and nods once.');
+          setTimeout(function () { ER.closeAll(); after(); }, 2300);
+          return;
+        }
+        AP.slip(); ER.sfx.no(); ER.shake(box.querySelector('.stp'));
+        if (hh > 23) t = 'There is no such hour, not even in this building.';
+        else if (hh === 7 && mm === 55) t = 'That is <b>their</b> clock, with the days left off. I asked for ours: the other one on the wall.';
+        else if (day < 2) t = 'Lift-off was on Saturday. Look at the first pair of figures in the mission time: how many whole days have gone by since then?';
+        else if (day > 2) t = 'Too many days. The first pair of figures is the days since lift-off, and lift-off was on Saturday.';
+        else t = 'The right day. Now the hours and the minutes: start from 13:13, and add what their clock says. Do the minutes first, and carry.';
+        msg('Voss puts his hand over the page before the stamp can come down. &ldquo;' + t + '&rdquo;');
+      }
+    });
+    msg('The typed page, with your coffee on it. Drag each of the five tabs to the line where that thing happened, or click a tab and then a line. Nothing is judged until all five are on the page.');
+    return box;
+  }
+  function openLog() {
+    if (!lgBox) lgBox = build();
+    inLock = true;
+    ER.open('ov-lock', lgBox, function () { inLock = false; });
+  }
+  /* a line's time on the wall clock, worked out from its mission time (lift-off was at 13:13) */
+  function wall(id) {
+    var r = ROWS.filter(function (x) { return x && x[3] === id; })[0], a, s;
+    if (!r) return '';
+    a = r[0].split(' ').map(Number); s = (a[1] + 13) * 3600 + (a[2] + 13) * 60 + a[3];
+    return two(Math.floor(s / 3600) % 24) + ':' + two(Math.floor(s / 60) % 60);
+  }
+  function after() {
+    var rows = ER.flag('b-rows') || {}, note = '<p>Stamped: <b>' + (ER.flag('b-ink') || '') + '</b></p>', n;
+    busy = true; setClock(5); paint();
+    for (n = 1; n <= 5; n++) if (rows[n]) note += '<p><b>' + wall(rows[n]) + '</b> ' + TABS[n] + '</p>';
+    AP.mine('log1', 'The log, Monday night', note + '<p>Their clock + 13:13 from Saturday = ours.</p>', true);
+    ER.narrate([
+      'Voss reads the log from the top, with his finger. He stops at the last tab.',
+      '&ldquo;Fourteen minutes,&rdquo; he says. &ldquo;From the first word to the window. For fourteen minutes a man could still hope that it was only the gauges. Nobody ever saw a bad gauge out of a window.&rdquo;',
+      'Some time tonight, in the worst of it, the flight director, Gene Kranz, said one thing to every console at once. You heard it on the loop, and you wrote it on the back of your hand.',
+      AP.said('Kranz', 'Let&rsquo;s solve the problem but let&rsquo;s not make it any worse by guessing.'),
+      '&ldquo;Time first, then what. Never why,&rdquo; says Voss. &ldquo;I told you that. Now the flight director has told you too.&rdquo;'
+    ], function () {
+      AP.learn('flight director'); AP.sfx.squawk();
+      AP.mine('loop', 'Written on the back of your hand', '<p>Gene Kranz, flight director, on the loop, Monday night:</p><p><span class="said">&ldquo;Let&rsquo;s solve the problem but let&rsquo;s not make it any worse by guessing.&rdquo;</span></p>', true);
+      ER.narrate([
+        'At nineteen minutes to ten the speaker clicks. It is Lousma again, and he is not talking to this room. All the same, everybody in it looks up.',
+        AP.said('Houston', 'Okay, 13. We&rsquo;ve got lots and lots of people working on this &hellip;'),
+        'You look round. Nobody has gone home. All the way down the hall, every door is open and every light is on. You are one of the lots and lots.',
+        '&ldquo;Take that log down the hall to the big wall chart,&rdquo; says Voss. &ldquo;Mrs Halloran is there. Odyssey is running out of things, and I want to know which.&rdquo;'
+      ], function () { busy = false; paint(); });
+    });
+  }
+})();
+</script>
+</body>
+</html>

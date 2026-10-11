@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Lobby · Room 13 Is Not on the Plan</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="story.css">
+<style>
+  body{--bg:#0a1a1d;--accent:#f3b27a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;
+    --tc-bg:rgba(7,20,23,.93);--cap-bg:rgba(8,22,25,.94);--panel:#11282b;--face-bg:#1f3a38;--q-ink:#e9bd95;--fade:#030b0d;--hud-bg:rgba(6,18,20,.72)}
+  .tc-room{letter-spacing:.02em;font-size:clamp(40px,6vw,84px)}
+  .sign{font-family:'Abril Fatface',serif;font-size:40px;letter-spacing:6px;fill:url(#goldG);text-anchor:middle}
+  .num{font-family:'Oswald',sans-serif;font-weight:600;font-size:9px;fill:#3a2a08;text-anchor:middle}
+  .pnum{font-family:'Oswald',sans-serif;font-weight:600;font-size:7.5px;fill:#3a2a08;text-anchor:middle}
+  .ind{font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;fill:#d9b56a;text-anchor:middle}
+  .plq{font-family:'Abril Fatface',serif;font-size:19px;letter-spacing:5px;fill:#3a2a08;text-anchor:middle}
+  .chalk{font-family:'Caveat',cursive;font-weight:700;font-size:30px;fill:#efe9dc;opacity:.86;text-anchor:middle}
+  .tiny{font-family:'Special Elite',monospace;font-size:7px;fill:#3a3226;text-anchor:middle}
+  body.rung .flag13{animation:sway 1.7s ease-in-out infinite alternate}
+  body.ringing .flag13{animation:wag .17s ease-in-out infinite alternate}
+  @keyframes sway{from{transform:rotate(-9deg)}to{transform:rotate(9deg)}}
+  @keyframes wag{from{transform:rotate(-34deg)}to{transform:rotate(34deg)}}
+  #sbell{transform-origin:478px 178px}
+  body.ringing #sbell{animation:shk .08s linear infinite alternate}
+  @keyframes shk{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+  #lampGlow{animation:lg 5s steps(4) infinite}
+  @keyframes lg{50%{opacity:.86}}
+  #note{animation:ng 2.6s ease-in-out infinite}
+  #box.ready{animation:ng 2.2s ease-in-out infinite}
+  @keyframes ng{50%{filter:brightness(1.3)}}
+  #cageLamp{animation:cl 7s steps(1,end) infinite}
+  @keyframes cl{0%,61%,64%,100%{opacity:.55}62.5%{opacity:.2}}
+  #gate{transform-origin:74px 0;transition:transform 1.3s ease-in-out}
+  body.up #gate{transform:scaleX(.16)}
+  #liftPtr{transform-origin:195px 136px;transform:rotate(-58deg);transition:transform 2.6s ease-in-out}
+  body.up #liftPtr{transform:rotate(58deg)}
+  #steamW{animation:stm 3.6s ease-in-out infinite}
+  @keyframes stm{0%,100%{opacity:.12;transform:translateY(0)}50%{opacity:.32;transform:translateY(-7px)}}
+
+  /* the box that was not burned: the old guide, the builder's plan, and its fallen labels */
+  .pp{display:grid;grid-template-columns:386px minmax(0,744px);gap:22px;align-items:start;justify-content:center;width:min(1180px,96vw)}
+  .pp .doc.guide{width:auto;max-height:none;overflow:visible;transform:rotate(-.7deg);font-size:18px;padding:26px 30px 22px}
+  .pp-r{padding:14px 14px 12px;background:#5b4226 linear-gradient(160deg,#6d5030,#463019);border:1px solid #2c1d0f;
+    box-shadow:0 26px 70px rgba(0,0,0,.65),inset 0 0 0 3px rgba(255,220,160,.08)}
+  .pp-say{margin:0 2px 10px;font-family:'EB Garamond',Georgia,serif;font-size:19px;line-height:1.35;color:#f3e7cf}
+  .pp-plan{position:relative;box-shadow:0 6px 18px rgba(0,0,0,.5);border:6px solid #e9e2cf}
+  .pp-plan svg{display:block;width:100%;height:auto}
+  .pslot{position:absolute;width:11.8%;height:9%;border:1.5px dashed rgba(232,241,251,.75);border-radius:2px;background:rgba(232,241,251,.06)}
+  .pslot.bad{border-color:#ffb199;background:rgba(255,120,90,.16)}
+  .lab{display:inline-block;min-width:72px;padding:7px 8px 3px;background:#f6efd9;color:#27231d;font-family:'Special Elite','Courier New',monospace;
+    font-size:21px;line-height:1.1;text-align:center;box-shadow:0 3px 0 #b9ad8c,0 5px 10px rgba(0,0,0,.4)}
+  .lab.w{font-size:17px;padding-top:9px;padding-bottom:5px}
+  .pp-tray .lab:nth-child(odd){transform:rotate(-2deg)}.pp-tray .lab:nth-child(even){transform:rotate(1.5deg)}
+  .pslot .lab{display:grid;place-items:center;min-width:0;width:100%;height:100%;padding:3px 0 0;box-shadow:0 2px 5px rgba(0,0,0,.45);font-size:19px}
+  .pslot .lab.w{font-size:14.5px}
+  .pp-tray{display:flex;flex-wrap:wrap;gap:11px;align-content:flex-start;min-height:62px;margin-top:12px;padding:12px;border-radius:3px;
+    background:rgba(20,12,4,.34);border:1px dashed rgba(255,225,170,.3)}
+  .pp-foot{display:flex;align-items:center;gap:14px;margin-top:10px}
+  .pp-msg{flex:1;min-height:26px;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:19px;color:#ffd9a8}
+  .pp .btn{background:rgba(20,12,4,.4)}
+  @media (max-width:900px){.pp{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="wp" width="84" height="84" patternUnits="userSpaceOnUse">
+    <rect width="84" height="84" fill="#123a40"/>
+    <g fill="none" stroke="#1b4e55" stroke-width="2.5">
+      <path d="M0 84A42 42 0 0 1 84 84M14 84A28 28 0 0 1 70 84M28 84A14 14 0 0 1 56 84"/>
+      <path d="M-42 42A42 42 0 0 1 42 42M-28 42A28 28 0 0 1 28 42M-14 42A14 14 0 0 1 14 42"/>
+      <path d="M42 42A42 42 0 0 1 126 42M56 42A28 28 0 0 1 112 42M70 42A14 14 0 0 1 98 42"/>
+    </g>
+    <g fill="#a8853a" opacity=".5"><circle cx="42" cy="84" r="2.6"/><circle cx="42" cy="0" r="2.6"/><circle cx="0" cy="42" r="2.6"/><circle cx="84" cy="42" r="2.6"/></g>
+  </pattern>
+  <pattern id="carpet" width="96" height="64" patternUnits="userSpaceOnUse">
+    <rect width="96" height="64" fill="#4a1520"/>
+    <path d="M48 6l34 26-34 26-34-26z" fill="#5c1c28"/><path d="M48 18l18 14-18 14-18-14z" fill="none" stroke="#b08a3e" stroke-width="1.5" opacity=".7"/>
+    <circle cx="0" cy="0" r="4" fill="#b08a3e" opacity=".55"/><circle cx="96" cy="0" r="4" fill="#b08a3e" opacity=".55"/><circle cx="0" cy="64" r="4" fill="#b08a3e" opacity=".55"/><circle cx="96" cy="64" r="4" fill="#b08a3e" opacity=".55"/>
+  </pattern>
+  <linearGradient id="goldG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3dc9a"/><stop offset=".55" stop-color="#c9a24a"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f2717"/><stop offset=".5" stop-color="#6f3a22"/><stop offset="1" stop-color="#472213"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b2416"/><stop offset="1" stop-color="#22140c"/></linearGradient>
+  <linearGradient id="leatherG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#193a30"/><stop offset=".5" stop-color="#2a5a4a"/><stop offset="1" stop-color="#16332a"/></linearGradient>
+  <linearGradient id="shadeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d98a7c"/><stop offset="1" stop-color="#b0584f"/></linearGradient>
+  <linearGradient id="crateG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a7646"/><stop offset="1" stop-color="#6f5230"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffd9a8" stop-opacity=".8"/><stop offset=".3" stop-color="#ffb37a" stop-opacity=".26"/><stop offset="1" stop-color="#ff9d6a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="poolG"><stop offset="0" stop-color="#ffe6b8" stop-opacity=".2"/><stop offset="1" stop-color="#ffe6b8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="48%" cy="46%" r="72%"><stop offset="0" stop-color="#020809" stop-opacity="0"/><stop offset=".55" stop-color="#020809" stop-opacity=".3"/><stop offset="1" stop-color="#020809" stop-opacity=".9"/></radialGradient>
+  <radialGradient id="dial"><stop offset="0" stop-color="#fbf3dc"/><stop offset="1" stop-color="#d9caa2"/></radialGradient>
+</defs>
+
+<!-- wall, panelling, carpet -->
+<rect x="-1000" width="3600" height="524" fill="url(#wp)"/>
+<rect x="-1000" width="3600" height="84" fill="#081b1e"/><rect x="-1000" y="84" width="3600" height="12" fill="#2b1a12"/><rect x="-1000" y="84" width="3600" height="2.5" fill="#a8853a" opacity=".6"/>
+<ellipse cx="770" cy="330" rx="760" ry="330" fill="url(#poolG)"/>
+<rect x="-1000" y="524" width="3600" height="224" fill="#28170f"/>
+<g id="panels" fill="none" stroke="#3c2416" stroke-width="3"></g>
+<rect x="-1000" y="512" width="3600" height="16" fill="#4a2e1c"/><rect x="-1000" y="512" width="3600" height="3" fill="#6b4630"/>
+<rect x="-1000" y="746" width="3600" height="18" fill="#170d08"/>
+<rect x="-1000" y="764" width="3600" height="136" fill="url(#carpet)"/>
+<rect x="-1000" y="764" width="3600" height="12" fill="#000" opacity=".5"/>
+
+<!-- the lift -->
+<g id="lift" class="hot">
+  <path d="M131 138A64 64 0 0 1 259 138Z" fill="#1e140d" stroke="#a8853a" stroke-width="2.5"/>
+  <text class="ind" x="149" y="131">G</text><text class="ind" x="195" y="99">1</text><text class="ind" x="241" y="131">2</text>
+  <path id="liftPtr" d="M195 136V90" stroke="#f3b27a" stroke-width="3.5" stroke-linecap="round"/><circle cx="195" cy="136" r="5.5" fill="#a8853a"/>
+  <rect x="56" y="150" width="278" height="614" fill="#1e140d"/>
+  <rect x="56" y="150" width="278" height="614" fill="none" stroke="#a8853a" stroke-width="2.5"/>
+  <rect x="74" y="170" width="242" height="594" fill="#061012"/>
+  <rect x="84" y="182" width="222" height="582" fill="#17302f"/>
+  <path d="M140 228V764M195 228V764M250 228V764" stroke="#0f2325" stroke-width="3"/>
+  <rect x="84" y="182" width="222" height="46" fill="#0b1b1d"/>
+  <ellipse id="cageLamp" cx="195" cy="208" rx="40" ry="7" fill="#ffe6b0" opacity=".55"/>
+  <rect x="84" y="468" width="222" height="7" fill="#a8853a" opacity=".6"/>
+  <rect x="84" y="704" width="222" height="60" fill="#0b1b1d"/>
+  <g id="gate" fill="none" stroke="#a07e34" stroke-width="3"></g>
+  <rect x="346" y="418" width="24" height="46" rx="3" fill="url(#brassG)"/><circle cx="358" cy="441" r="6" fill="#2a1c0c"/>
+</g>
+
+<!-- clock -->
+<g id="clock" class="hot">
+  <circle cx="392" cy="262" r="50" fill="#3a2315"/><circle cx="392" cy="262" r="46" fill="none" stroke="#a8853a" stroke-width="1.5"/>
+  <circle cx="392" cy="262" r="41" fill="url(#dial)"/>
+  <g id="cticks" stroke="#2a2018" stroke-width="2.6" stroke-linecap="round"></g>
+  <path id="hh" d="M392 262V238" stroke="#1b140f" stroke-width="5" stroke-linecap="round"/>
+  <path id="mh" d="M392 262V227" stroke="#1b140f" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="392" cy="262" r="4" fill="#1b140f"/>
+</g>
+
+<!-- the name of the place -->
+<text x="770" y="150" class="sign">THE SWAN HOTEL</text>
+
+<!-- the bell board -->
+<g id="board" class="hot">
+  <rect x="446" y="176" width="348" height="190" rx="4" fill="#3a2315"/><rect x="446" y="176" width="348" height="5" rx="2" fill="#5a3a26"/>
+  <rect x="458" y="188" width="324" height="166" fill="#0f2a27"/>
+  <g id="bells"></g>
+  <path d="M470 196l56 150M492 196l28 74" stroke="#fff" stroke-width="7" opacity=".05"/>
+</g>
+<g id="sbell" pointer-events="none">
+  <path d="M478 178q-14-18 0-28t14 10" stroke="#8a744a" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M481 150q16-8 24 8l-26 10z" fill="url(#brassG)"/><circle cx="505" cy="162" r="3" fill="#7d5f1d"/>
+</g>
+
+<!-- keys and letters -->
+<g id="rack" class="hot">
+  <rect x="832" y="182" width="248" height="268" rx="3" fill="#3a2315"/>
+  <g id="holes"></g>
+</g>
+<g id="notice" class="hot">
+  <rect x="1098" y="238" width="72" height="92" fill="#3a2315"/><rect x="1105" y="245" width="58" height="78" fill="#efe6cc"/>
+  <text x="1134" y="262" class="tiny">GUESTS</text>
+  <g stroke="#5b5346" stroke-width="1.8"><path d="M1112 272h44M1112 282h44M1112 292h36M1112 302h44M1112 312h26"/></g>
+</g>
+
+<!-- the desk -->
+<circle id="lampGlow" cx="468" cy="462" r="300" fill="url(#lampG)" pointer-events="none"/>
+<g>
+  <rect x="430" y="582" width="624" height="182" fill="url(#deskG)"/>
+  <g fill="none" stroke="#3f1e10" stroke-width="3"><rect x="446" y="600" width="134" height="146"/><rect x="596" y="600" width="134" height="146"/><rect x="754" y="600" width="134" height="146"/><rect x="904" y="600" width="134" height="146"/></g>
+  <g fill="none" stroke="#7d4a2e" stroke-width="1.5" opacity=".7"><rect x="456" y="610" width="114" height="126"/><rect x="606" y="610" width="114" height="126"/><rect x="764" y="610" width="114" height="126"/><rect x="914" y="610" width="114" height="126"/></g>
+  <rect x="662" y="634" width="160" height="38" rx="2" fill="url(#brassG)"/><text x="742" y="660" class="plq">RECEPTION</text>
+  <rect x="408" y="552" width="668" height="30" rx="3" fill="#6b3b22"/><rect x="408" y="552" width="668" height="6" rx="3" fill="#8f5636"/>
+</g>
+<!-- lamp -->
+<ellipse cx="468" cy="551" rx="30" ry="6" fill="url(#brassG)"/><path d="M468 550V468" stroke="url(#brassG)" stroke-width="8"/><circle cx="468" cy="512" r="9" fill="url(#brassG)"/>
+<path d="M426 470l18-52h48l18 52z" fill="url(#shadeG)"/><path d="M426 470h84" stroke="#ffe2c2" stroke-width="3.5"/>
+<path d="M430 472v10M440 472v10M450 472v10M460 472v10M470 472v10M480 472v10M490 472v10M500 472v10" stroke="#b0584f" stroke-width="2.5"/>
+<g id="note" class="hot" transform="rotate(8 530 552)">
+  <rect x="500" y="482" width="62" height="70" fill="#fbf7ea"/>
+  <g stroke="#3b4a7a" stroke-width="2" stroke-linecap="round"><path d="M508 496h34M508 508h46M508 518h42M508 528h46M508 538h30"/></g>
+</g>
+<g id="deskbell" class="hot">
+  <rect x="592" y="514" width="60" height="42" fill="transparent"/>
+  <ellipse cx="622" cy="551" rx="24" ry="5" fill="#7d5f1d"/><path d="M601 550q0-24 21-24t21 24z" fill="url(#brassG)"/><rect x="618" y="519" width="8" height="8" rx="2" fill="#7d5f1d"/>
+  <path d="M609 544q0-12 9-15" stroke="#fff3c4" stroke-width="2.5" fill="none" opacity=".7" stroke-linecap="round"/>
+</g>
+<g id="register" class="hot">
+  <path d="M672 552l16-30h54v30zM742 552v-30h54l16 30z" fill="#f1e8d0"/><path d="M742 522v30" stroke="#b9ad8c" stroke-width="2"/>
+  <path d="M668 552h148" stroke="#5a1c24" stroke-width="5"/>
+  <g stroke="#8c8572" stroke-width="1.5"><path d="M692 530h42M688 537h46M684 544h50M750 530h42M750 537h46M750 544h50"/></g>
+  <path d="M800 520l34-22" stroke="#1c1c22" stroke-width="4" stroke-linecap="round"/><path d="M800 520l-5 6 8-2z" fill="#c79b3b"/>
+</g>
+<g id="torch" class="hot">
+  <rect x="868" y="534" width="62" height="18" rx="7" fill="#22262b"/><rect x="876" y="534" width="8" height="18" fill="#3a4047"/>
+  <path d="M930 532h20l8-5v30l-8-5h-20z" fill="#9aa3a8"/><ellipse cx="958" cy="542" rx="4" ry="15" fill="#e6eef0"/>
+  <rect x="896" y="530" width="14" height="5" rx="2" fill="#b3261c"/>
+</g>
+
+<!-- the box that was not burned -->
+<g id="box" class="hot">
+  <rect x="1084" y="700" width="100" height="64" fill="url(#crateG)"/><path d="M1084 732h100" stroke="#553c20" stroke-width="2.5"/>
+  <rect x="1084" y="700" width="13" height="64" fill="#62472a"/><rect x="1171" y="700" width="13" height="64" fill="#62472a"/>
+  <path d="M1078 700h112l-6-14h-100z" fill="#a98652"/><path d="M1078 700h112" stroke="#553c20" stroke-width="2.5"/>
+  <text x="1134" y="727" class="chalk" transform="rotate(-4 1134 720)">BURN</text>
+  <path d="M1112 748q22 14 44 0" stroke="#d9c7a3" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- Wilf in the porter's chair -->
+<g id="wilf" class="hot">
+  <ellipse cx="1320" cy="768" rx="150" ry="10" fill="#000" opacity=".4"/>
+  <path d="M1196 764V430q0-128 124-128t124 128V764Z" fill="url(#leatherG)"/>
+  <path d="M1222 764V440q0-102 98-102t98 102V764Z" fill="#0f221d"/>
+  <g id="studs" fill="#b8923a"></g>
+  <rect x="1222" y="668" width="196" height="96" fill="#17332b"/><rect x="1210" y="652" width="220" height="22" rx="9" fill="#24503f"/>
+  <rect x="1264" y="664" width="48" height="88" fill="#23232b"/><rect x="1330" y="664" width="48" height="88" fill="#23232b"/>
+  <ellipse cx="1284" cy="755" rx="34" ry="10" fill="#8f2c26"/><ellipse cx="1358" cy="755" rx="34" ry="10" fill="#8f2c26"/>
+  <path d="M1262 751h44M1336 751h44" stroke="#e2c47a" stroke-width="2"/>
+  <path d="M1250 598h140l8 74h-156z" fill="#6d2430"/>
+  <rect x="1232" y="596" width="30" height="76" rx="14" fill="#efe9dc" transform="rotate(10 1247 634)"/>
+  <rect x="1378" y="596" width="30" height="76" rx="14" fill="#efe9dc" transform="rotate(-10 1393 634)"/>
+  <path d="M1258 624h124l10 60h-144z" fill="#ece5d2"/><path d="M1320 624v60" stroke="#b9b29c" stroke-width="1.5"/>
+  <g stroke="#8c8572" stroke-width="1.5"><path d="M1266 636h44M1264 644h46M1262 652h48M1260 660h30"/></g>
+  <rect x="1332" y="634" width="42" height="42" fill="#fbf8ee" stroke="#27231d" stroke-width="1.5"/>
+  <path d="M1346 634v42M1360 634v42M1332 648h42M1332 662h42" stroke="#27231d" stroke-width="1"/>
+  <g fill="#27231d"><rect x="1346" y="634" width="14" height="14"/><rect x="1332" y="662" width="14" height="14"/><rect x="1360" y="648" width="14" height="14"/></g>
+  <circle cx="1256" cy="668" r="12" fill="#e3b79c"/><circle cx="1384" cy="666" r="12" fill="#e3b79c"/>
+  <path d="M1378 668l18-34" stroke="#d9a22b" stroke-width="4" stroke-linecap="round"/><path d="M1396 634l3-6" stroke="#27231d" stroke-width="3" stroke-linecap="round"/>
+  <use href="#ch-wilf" x="1238" y="398" width="164" height="213"/>
+</g>
+<!-- his mug, on the floor by the chair -->
+<g pointer-events="none"><path d="M1452 764v-30h30v30z" fill="#e9e3d2"/><path d="M1482 740q14 2 10 14t-10 4" stroke="#e9e3d2" stroke-width="5" fill="none"/><ellipse cx="1467" cy="734" rx="15" ry="4" fill="#5a3a22"/>
+  <path id="steamW" d="M1462 726q-8-12 0-22t0-20M1474 724q8-10 0-20" stroke="#e9e3d2" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".2"/></g>
+
+<!-- palm -->
+<g id="palm" class="hot">
+  <g fill="none" stroke-linecap="round">
+    <path d="M1540 690Q1530 560 1470 470" stroke="#1f4a33" stroke-width="7"/><path d="M1540 690Q1546 540 1600 440" stroke="#235239" stroke-width="7"/>
+    <path d="M1540 690Q1520 600 1440 580" stroke="#1b412d" stroke-width="7"/><path d="M1540 690Q1570 590 1650 560" stroke="#1f4a33" stroke-width="7"/><path d="M1540 690Q1540 560 1536 420" stroke="#2a5c40" stroke-width="7"/>
+  </g>
+  <g fill="#245238"><path d="M1470 470q30-4 44 26-32 6-44-26zM1486 500q30 0 40 30-30 4-40-30zM1600 440q-30 2-40 34 30 2 40-34zM1590 478q-28 6-34 36 28-2 34-36zM1440 580q24-16 50 4-26 16-50-4zM1650 560q-26-12-50 8 26 14 50-8zM1536 420q-20 22-8 52 22-20 8-52zM1538 470q-20 22-8 52 22-20 8-52z"/></g>
+  <path d="M1496 690h88l-10 74h-68z" fill="url(#brassG)"/><path d="M1496 690h88" stroke="#7d5f1d" stroke-width="4"/>
+</g>
+
+<rect x="-1000" width="3600" height="900" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, talked = false, boxOpen = false, solved = false, ringT = 0, rungOnce = false;
+  var placed = [null, null, null, null, null, null, null, null];
+  var TRAY = ['15', 'bath', '12', 'linen', '16', '13', '11', '14'];
+
+  /* panelling, lift gate, clock face, bell board, pigeonholes, studs on the chair */
+  (function () {
+    var s = '', x, i, j, r, c, n, y, k = 0, an, OUT = { 3: 1, 7: 1, 14: 1 }, MAIL = { 5: 1, 10: 1 };
+    for (x = -980; x < 2600; x += 190) s += '<rect x="' + (x + 16) + '" y="548" width="158" height="176"/><rect x="' + (x + 30) + '" y="562" width="130" height="148" opacity=".5"/>';
+    $('#panels').innerHTML = s; s = '';
+    function zig(x0, dir) { var d = 'M' + x0 + ' 170', q; for (q = 0; q < 14; q++) d += 'l' + ((q & 1 ? -dir : dir) * 22) + ' 42.4'; return '<path d="' + d + '"/>'; }
+    for (j = 0; j < 6; j++) s += zig(74 + 44 * j, 1);
+    for (j = 0; j < 5; j++) s += zig(118 + 44 * j, -1);
+    s += '<path d="M74 170V764M316 170V764" stroke-width="5"/><rect x="298" y="430" width="8" height="70" rx="3" fill="#c79b3b" stroke="none"/>';
+    $('#gate').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { an = i * Math.PI / 6; s += '<path d="M' + (392 + Math.sin(an) * 33).toFixed(1) + ' ' + (262 - Math.cos(an) * 33).toFixed(1) + 'L' + (392 + Math.sin(an) * 38).toFixed(1) + ' ' + (262 - Math.cos(an) * 38).toFixed(1) + '"/>'; }
+    $('#cticks').innerHTML = s; s = '';
+    /* sixteen bells; the last row has one with no number under it */
+    for (r = 0; r < 2; r++) for (i = 0; i < 8; i++) {
+      x = 482 + i * 39.4; y = 232 + r * 70; n = r * 8 + i + 1; if (r === 1 && i === 4) n = 0;
+      s += '<circle cx="' + x + '" cy="' + y + '" r="15.5" fill="url(#brassG)"/><circle cx="' + x + '" cy="' + y + '" r="12.5" fill="#f1ead6"/>' +
+        '<g' + (n ? '' : ' class="flag13" style="transform-origin:' + x + 'px ' + (y - 9) + 'px"') + '><path d="M' + x + ' ' + (y - 9) + 'V' + (y + 3) + '" stroke="#3a2a18" stroke-width="1.6"/>' +
+        '<circle cx="' + x + '" cy="' + (y + 5) + '" r="4.2" fill="' + (n ? '#8c2f24' : '#d2452f') + '"/></g><circle cx="' + x + '" cy="' + (y - 9) + '" r="1.7" fill="#3a2a18"/>';
+      if (n) s += '<rect x="' + (x - 13) + '" y="' + (y + 21) + '" width="26" height="13" rx="1.5" fill="url(#brassG)"/><text x="' + x + '" y="' + (y + 31.4) + '" class="num">' + n + '</text>';
+      else s += '<rect x="' + (x - 13) + '" y="' + (y + 21) + '" width="26" height="13" fill="#1b4a44"/><circle cx="' + (x - 9) + '" cy="' + (y + 27.5) + '" r="1.4" fill="#04100e"/><circle cx="' + (x + 9) + '" cy="' + (y + 27.5) + '" r="1.4" fill="#04100e"/>';
+    }
+    $('#bells').innerHTML = s; s = '';
+    /* a pigeonhole and a key for every room */
+    for (r = 0; r < 4; r++) for (c = 0; c < 4; c++) {
+      k++; n = (r === 3 && c === 0) ? 0 : k; x = 842 + c * 58; y = 192 + r * 63;
+      s += '<rect x="' + x + '" y="' + y + '" width="54" height="58" fill="#120b07"/><rect x="' + x + '" y="' + (y + 50) + '" width="54" height="8" fill="#2a1a10"/>';
+      if (n) s += '<rect x="' + (x + 3) + '" y="' + (y + 3) + '" width="20" height="10" rx="1" fill="url(#brassG)"/><text x="' + (x + 13) + '" y="' + (y + 11) + '" class="pnum">' + n + '</text>';
+      else s += '<rect x="' + (x + 3) + '" y="' + (y + 3) + '" width="20" height="10" rx="1" fill="#2a1a10"/>';
+      if (n && !OUT[n]) s += '<circle cx="' + (x + 39) + '" cy="' + (y + 10) + '" r="2" fill="#c79b3b"/><circle cx="' + (x + 39) + '" cy="' + (y + 18) + '" r="4.5" fill="none" stroke="#c79b3b" stroke-width="2.5"/>' +
+        '<path d="M' + (x + 39) + ' ' + (y + 23) + 'v18m0-6h5m-5 5h4" stroke="#b8923a" stroke-width="2.5" fill="none" stroke-linecap="round"/>';
+      if (MAIL[n] || !n) s += '<g transform="rotate(-9 ' + (x + 18) + ' ' + (y + 40) + ')"><rect x="' + (x + 5) + '" y="' + (y + 30) + '" width="28" height="19" fill="' + (n ? '#efe9dc' : '#d6c086') + '"/>' +
+        '<path d="M' + (x + 5) + ' ' + (y + 30) + 'l14 10 14-10" stroke="' + (n ? '#b9b29c' : '#9a854f') + '" stroke-width="1.2" fill="none"/></g>';
+    }
+    $('#holes').innerHTML = s; s = '';
+    for (i = 0; i <= 14; i++) { an = Math.PI * (1 - i / 14); s += '<circle cx="' + (1320 + Math.cos(an) * 111).toFixed(1) + '" cy="' + (430 - Math.sin(an) * 115).toFixed(1) + '" r="3"/>'; }
+    for (y = 470; y < 750; y += 40) s += '<circle cx="1209" cy="' + y + '" r="3"/><circle cx="1431" cy="' + y + '" r="3"/>';
+    $('#studs').innerHTML = s;
+  })();
+  function setClock(min) {
+    $('#hh').setAttribute('transform', 'rotate(' + (min / 2) + ' 392 262)');
+    $('#mh').setAttribute('transform', 'rotate(' + ((min % 60) * 6) + ' 392 262)');
+  }
+  setClock(548);
+
+  ER.init({
+    theme: 'ghost', story: 'room13', storyTitle: 'Room 13 Is Not on the Plan', id: 'lobby', no: 'I', title: 'The Lobby',
+    go: 'Wait by the desk',
+    intro: [
+      'Your aunt Viv bought the Swan Hotel in the spring. It has fifteen rooms, a lift that complains, and a night porter called Wilf who came with the building.',
+      'It also has a bell. Every night at ten past nine a bell rings behind the desk. It is the bell for Room 13.',
+      'There is no Room 13. Aunt Viv has looked at the plan. She has counted the doors. Twice.',
+      'Tonight she has gone to bed early with a headache. She has left you a torch and a note. It is eight minutes past nine.'
+    ],
+    exit: {"next":"second","w":{"6c6e4058":"32fe2509"}}, tags: {"p0":["0dbd54cc"],"p1":["a8d304e0"],"p2":["838f9ecc"],"p3":["bd985e11"],"p4":["cab344eb"],"p5":["48e3714c"],"p6":["b57a5674"],"p7":["95c6310a"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var NOTE = '<h4>Gone to bed. Headache.</h4>' +
+    '<p>1. If the bell for 13 rings, do NOT go and look. There is no Room 13. I have looked at the plan on every floor. I have counted the doors. Twice.</p>' +
+    '<p>2. Wilf says it is &ldquo;only Miss Moss&rdquo;. Do not ask Wilf about Miss Moss. He will tell you.</p>' +
+    '<p>3. The torch is for power cuts. It is not for adventures.</p>' +
+    '<p>Aunt Viv</p>';
+  var GUIDE = '<h4>The Swan Hotel</h4><h5>A Guide for Guests &middot; 1936</h5>' +
+    '<h6>Finding your room: the second floor</h6>' +
+    '<p>Come out of the lift. The stairs are on your right, and the corridor is in front of you.</p>' +
+    '<p>Room 11 is the first door on your left. Room 12 is next to it.</p>' +
+    '<p>The linen cupboard is opposite Room 12.</p>' +
+    '<p>The bathroom is between Room 12 and Room 14. There is hot water from seven until nine.</p>' +
+    '<p>Room 16 is opposite Room 14.</p>' +
+    '<p>Room 15 is between the linen cupboard and Room 16.</p>' +
+    '<p>Room <span class="ink"></span> is at the end of the corridor. It has two windows, and it is the quietest room in the hotel.</p>' +
+    '<p class="small">Guests are asked not to ring for the porter after ten.</p>';
+
+  function hints() {
+    if (solved) return null;
+    if (!talked) return ['wilf', [
+      'A bell is ringing for a room that is not there. One person in this lobby is not surprised at all. Click on him.',
+      'Listen to Wilf to the very end: keep clicking Next. Aunt Viv&rsquo;s note is on the desk, beside the lamp. Read that too.'
+    ]];
+    if (!boxOpen) return ['box', [
+      'Wilf told you about a box that he did not burn. Where did he say it was?',
+      'The wooden box is on the floor at the end of the desk, next to Wilf&rsquo;s chair. Click on it.'
+    ]];
+    return ['plan', [
+      'Read the old guide beside the plan. Each sentence tells you where one or two labels go. Begin at the lift, like a guest.',
+      'You come out of the lift and walk along the corridor. &ldquo;On your left&rdquo; is the top side of this plan. &ldquo;Opposite&rdquo; means across the corridor. &ldquo;Next to&rdquo; and &ldquo;between&rdquo; mean on the same side.',
+      'Put Room 11 and Room 12 in first. Then the linen cupboard, the bathroom and Room 14. Then Room 16 and Room 15. Now one label is left, and one room. Somebody covered that number in the guide with ink.'
+    ]];
+  }
+  function pips() { ER.pips((talked ? 1 : 0) + (boxOpen ? 1 : 0) + (solved ? 1 : 0), 3); }
+  function begin() {
+    ER.amb.hum(true); pips();
+    ER.narrate([
+      'The lobby of the Swan Hotel. The guests are in bed. Wilf is in his chair with the crossword.',
+      'A note is standing against the lamp on the desk. It is in Aunt Viv&rsquo;s handwriting.'
+    ], function () { ringT = setTimeout(function () { ring(true); }, 2600); });
+  }
+
+  /* ten past nine */
+  function ring(first) {
+    if (solved) return;
+    if (ER.isOpen() || document.querySelector('.capshade.on') || busy) { ringT = setTimeout(function () { ring(first); }, 1600); return; }
+    setClock(550); rungOnce = true;
+    document.body.classList.add('rung', 'ringing'); R13.bell(first ? 1 : 0.5);
+    setTimeout(function () { if (first) R13.bell(0.8); }, 1300);
+    setTimeout(function () { document.body.classList.remove('ringing'); }, first ? 3600 : 1500);
+    if (first) ER.say('Ten past nine. Behind the desk, a small bell begins to ring. Wilf does not look up. &ldquo;Thirteen,&rdquo; he says.', 7500);
+    ringT = setTimeout(function () { ring(false); }, 34000);
+  }
+
+  function thing(sel, word, line) {
+    $(sel).addEventListener('click', function (e) {
+      if (busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(typeof line === 'function' ? line() : line);
+    });
+  }
+  thing('#lift', 'lift', 'The lift. It is older than Wilf, and it only goes up when he works the lever.');
+  thing('#clock', null, function () { return rungOnce ? 'Ten past nine. The clock is never wrong about that.' : 'Nearly ten past nine.'; });
+  thing('#board', 'bell board', 'Sixteen bells, in two rows. Fifteen of them have a number. Under the last one there is a clean square of wood, and two small holes.');
+  thing('#rack', 'pigeonhole', 'A key and a pigeonhole for every room. One pigeonhole has no number. There is a letter in it, for Miss W. Moss. The stamp is from 1977.');
+  thing('#notice', null, 'A notice in a frame: GUESTS ARE ASKED NOT TO RING FOR THE PORTER AFTER TEN.');
+  thing('#register', 'register', 'The hotel register. Three guests tonight, and all three are asleep.');
+  thing('#torch', 'torch', 'Aunt Viv&rsquo;s torch. For power cuts, not for adventures.');
+  thing('#palm', 'palm', 'A palm in a brass pot. Nobody can remember who bought it.');
+  $('#deskbell').addEventListener('click', function (e) {
+    if (busy) return;
+    R13.tone({ f: 1760, dur: 0.9, peak: 0.12 }); R13.tone({ f: 3520, dur: 0.5, peak: 0.04 });
+    ER.wordAt(e.clientX, e.clientY, 'desk bell'); ER.say('Ding. Wilf looks at you over his newspaper. &ldquo;I&rsquo;m here,&rdquo; he says. &ldquo;I&rsquo;m always here.&rdquo;');
+  });
+  $('#note').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: NOTE, cls: 'hand', clue: { id: 'dot', title: 'Aunt Viv’s note', kind: 'Note' } });
+  });
+  $('#wilf').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.wilf;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('wilf'),
+      lines: [
+        'That&rsquo;s her. Ten past nine. You could set your watch by it.',
+        'Wilf Tully, night porter. I came to the Swan in 1974, as the kitchen boy. I was sixteen.',
+        { q: 'Whose bell is it?', a: 'Room 13. Miss Moss. She came for a weekend in 1949 and stayed for twenty-eight years. She used to teach arithmetic. She never checked out. You understand me.' },
+        'Every night at ten past nine she used to ring for her cocoa, and I used to carry it up. Two sugars on the saucer, the blue cup, on the table by her bed. Never after ten. She never broke a rule in her life.',
+        'Then, one night in 1977, the bell didn&rsquo;t ring. The year after, Mr Cray shut the room up. Guests didn&rsquo;t like the number, he said. He took the 13 off the door and off that board. He had the door papered over and a new plan drawn. Then he told us there had never been a Room 13.',
+        'The bell started again the same week. Ten past nine, every night, for nearly fifty years. Nobody answers it. You can&rsquo;t take cocoa to a room that isn&rsquo;t on the plan.',
+        { q: 'Can I go up and look?', a: 'On your own? In the dark? Then you show me that you know exactly where you&rsquo;re going. There&rsquo;s a box at the end of the desk. Mr Cray told me to burn it in 1978. I&rsquo;m a slow worker.' },
+        'The builder&rsquo;s old plan is in that box, and the guide we used to give the guests. All the labels have come off the plan. Put them back. Show me her room, and I&rsquo;ll work the lift for you. I won&rsquo;t come up. I went up once.'
+      ],
+      clue: { id: 'wilf', title: 'Wilf Tully, in the lobby' },
+      done: function (seen) {
+        if (!seen || talked) return;
+        talked = true; pips(); $('#box').classList.add('ready');
+        ER.say('The box is on the floor at the end of the desk. Somebody has chalked BURN on it.');
+      }
+    });
+  });
+  $('#box').addEventListener('click', function (e) {
+    if (busy) return;
+    if (!talked) { ER.wordAt(e.clientX, e.clientY, 'chalk'); ER.say('A wooden box at the end of the desk. Somebody has chalked BURN on the side. Nobody has burned it.'); return; }
+    openPlan();
+  });
+
+  /* ---------- the lock: put the labels back on the builder's plan ---------- */
+  function openPlan() {
+    var box = ER.el('div', 'pp'), s = '', i, c, tray, msg, plan;
+    for (i = 0; i < R13.SLOTS.length; i++) {
+      c = R13.SLOTS[i];
+      s += '<div class="pslot" data-i="' + i + '" style="left:' + ((c[0] - 45) / 7.6).toFixed(2) + '%;top:' + ((c[1] - 19.5) / 4.3).toFixed(2) + '%"></div>';
+    }
+    box.innerHTML = '<div class="doc guide">' + ER.gloss(GUIDE) + '</div>' +
+      '<div class="pp-r"><p class="pp-say">The builder&rsquo;s plan of the second floor. Every label has come unstuck and fallen to the bottom of the box. Put each one back in its room.</p>' +
+      '<div class="pp-plan">' + R13.plan({ old: true }) + s + '</div><div class="pp-tray"></div>' +
+      '<div class="pp-foot"><div class="pp-msg"></div><button type="button" class="btn">Show it to Wilf</button></div></div>';
+    ER.glossIn(box, '.pp-say');
+    tray = box.querySelector('.pp-tray'); msg = box.querySelector('.pp-msg'); plan = box.querySelector('.pp-plan');
+    TRAY.forEach(function (id) {
+      var l = ER.el('span', 'lab dnd-item' + (id.length > 2 ? ' w' : '')), at = placed.indexOf(id);
+      l.textContent = R13.NAME[id]; l.setAttribute('data-id', id);
+      (at >= 0 ? plan.querySelector('.pslot[data-i="' + at + '"]') : tray).appendChild(l);
+    });
+    function readSlots() { placed = ER.$$('.pslot', box).map(function (n) { var l = n.querySelector('.lab'); return l ? l.getAttribute('data-id') : null; }); }
+    ER.dnd(box, { item: '.lab', slot: '.pslot', home: tray, lock: function () { return solved; },
+      change: function () { readSlots(); msg.textContent = ''; } });
+    box.querySelector('.btn').addEventListener('click', function () {
+      if (solved) return;
+      readSlots();
+      if (placed.indexOf(null) >= 0) { msg.textContent = 'Some labels are still lying in the box.'; ER.shake(tray); return; }
+      var n = 0, file; placed.forEach(function (id, j) { if (ER.check('p' + j, id)) n++; });
+      file = n === placed.length ? ER.exitOk([placed.join('-')]) : null;
+      if (!file) {
+        ER.sfx.no(); ER.shake(plan);
+        msg.textContent = '“Not yet,” says Wilf. “' + n + ' of the 8 are where they used to be.”';
+        return;
+      }
+      done(file, msg);
+    });
+    if (!boxOpen) { boxOpen = true; pips(); ER.addClue('guide', 'A Guide for Guests, 1936', GUIDE, 'guide', 'Hotel booklet'); }
+    $('#box').classList.remove('ready');
+    ER.open('ov-lock', box);
+  }
+  function done(file, msg) {
+    solved = true; busy = true; clearTimeout(ringT); pips();
+    var st = ER.state(); st.done = st.done || {}; st.done.lobby = 1; ER.flag('lobby', 1);
+    ER.sfx.ok();
+    msg.style.color = '#c9f0c0'; msg.textContent = 'Wilf puts on his glasses and looks at the plan for a long time.';
+    ER.addClue('plan36', 'The builder’s plan, 1936', R13.plan({ old: true, labels: placed }) +
+      '<p>The builder&rsquo;s plan of the second floor, with its labels back in place.</p>', 'bp', 'Plan');
+    setTimeout(function () {
+      ER.closeAll();
+      ER.narrate([
+        '&ldquo;That&rsquo;s it,&rdquo; says Wilf at last. &ldquo;That&rsquo;s where I used to take the tray. I had forgotten how far it was.&rdquo;',
+        'Behind him the bell rings once more. It sounds like somebody who has been very patient.'
+      ], function () {
+        document.body.classList.add('up', 'ringing'); R13.bell(0.7); ER.sfx.chain();
+        setTimeout(function () { ER.leave(file); }, 1500);
+      });
+    }, 2100);
+  }
+})();
+</script>
+</body>
+</html>

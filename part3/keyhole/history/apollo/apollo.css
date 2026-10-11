@@ -1,0 +1,124 @@
+/* Lots and Lots of People - what every room of the story shares: the kinds of paper in the building,
+   the time stamp, and a grey-cloth skin (the archive box) for the notebook and the hints.
+   Each room sets its own palette on <body>. */
+
+.tc-theme{font-family:'Oswald',sans-serif}
+.tc-room{font-family:'Abril Fatface','Libre Caslon Text',serif;letter-spacing:.02em}
+.tc-text{font-family:'Libre Caslon Text',Georgia,serif;font-size:clamp(17px,1.42vw,21px);line-height:1.58}
+.cap{font-family:'Libre Caslon Text',Georgia,serif;font-size:clamp(17px,1.4vw,21px);line-height:1.5}
+.cap .said{font-family:'Courier Prime',monospace;font-weight:700;font-size:.96em}
+.tk-name{font-family:'Libre Caslon Text',serif;font-weight:700;letter-spacing:.01em}
+.tk-text{font-family:'Libre Caslon Text',Georgia,serif;font-size:clamp(17px,1.34vw,20.5px)}
+.gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:1px solid var(--accent,#f2b23a);
+  color:var(--accent,#f2b23a);background:var(--hud-bg,rgba(10,12,10,.92));font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.18em;
+  text-transform:uppercase;border-radius:3px;white-space:nowrap}
+.gobtn.on{display:block}
+.gobtn:hover{background:var(--accent,#f2b23a);color:#111}
+.pmsg{min-height:60px;margin:0;font-family:'Libre Caslon Text',Georgia,serif;font-size:17px;line-height:1.4;color:#f1ecdf}
+.pmsg b{color:var(--accent,#f2b23a);font-weight:normal}
+.pmsg .said{font-family:'Courier Prime',monospace;font-weight:700}
+
+/* ---- the paper of the building ---- */
+/* the air-to-ground, typed */
+.doc.tscript{width:min(780px,94vw);padding:22px 30px 24px;background:#f6f3e8 linear-gradient(176deg,rgba(255,255,255,.5),rgba(120,110,70,.1));color:#22231e;
+  font-family:'Courier Prime',monospace;font-size:15.5px;line-height:1.36;transform:rotate(-.3deg)}
+.doc.tscript h4{margin:0 0 3px;display:flex;justify-content:space-between;font-family:'Courier Prime',monospace;font-weight:700;font-size:14px;letter-spacing:.1em;
+  border-bottom:2px solid #22231e;padding-bottom:6px}
+.doc.tscript h5{margin:5px 0 9px;font-family:'Architects Daughter',cursive;font-weight:normal;font-size:15.5px;color:#55585c;transform:rotate(-.6deg)}
+.ts{width:100%;border-collapse:collapse}
+.ts td{padding:2.5px 0;vertical-align:top}
+.ts .t{width:112px;white-space:nowrap;color:#4a4a40}
+.ts .s{width:46px;font-weight:700}
+.ts tr.cut td{padding:0;height:13px;border-top:1px dashed #a39c84;font-size:0}
+.ts tr.cut td:before{content:''}
+.ts .pn{display:block;font-family:'Architects Daughter',cursive;font-size:15px;line-height:1.2;color:#4a5a7a}
+/* a card that somebody wrote out to teach the new people: ruled, with a red line */
+.doc.cardp{width:min(640px,93vw);padding:20px 30px 22px;background:#fbf8ee;color:#22231e;font-family:'Courier Prime',monospace;font-size:16px;line-height:1.42;
+  border-top:3px solid #b3261c;box-shadow:0 26px 70px rgba(0,0,0,.6),inset 0 31px 0 -29px rgba(179,38,28,.0);transform:rotate(.4deg)}
+.doc.cardp h4{margin:0 0 9px;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:#22231e;
+  border-bottom:1px solid #9db3cf;padding-bottom:7px}
+.doc.cardp p{margin:0 0 8px}
+.doc.cardp b{font-weight:700}
+.doc.cardp .by{margin:8px 0 0;font-family:'Architects Daughter',cursive;font-size:16px;color:#3b4a6b}
+.doc.cardp svg{display:block;width:100%;height:auto;margin:6px 0 8px}
+.doc.cardp .rule{font-family:'Architects Daughter',cursive;font-size:18px;line-height:1.3;color:#8c2f24}
+/* the wall chart: a blueprint */
+.doc.wall{width:min(930px,95vw);padding:18px 26px 20px;background:#1d3f6e;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(#234a7e,#17345c);
+  background-size:26px 26px,26px 26px,auto;color:#e8f0ff;font-family:'Architects Daughter',cursive;font-size:16px;line-height:1.36;border:8px solid #d9d3bf}
+.doc.wall h4{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:500;font-size:17px;letter-spacing:.3em;text-transform:uppercase;color:#fff}
+.doc.wall svg{display:block;width:100%;height:auto;margin:0 0 8px}
+.doc.wall .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.doc.wall .cols div{border-top:1px solid rgba(255,255,255,.55);padding-top:6px}
+.doc.wall h6{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:500;font-size:14px;letter-spacing:.16em;color:#ffd97a}
+.doc.wall p{margin:0 0 7px}
+.doc.wall .fc{margin:9px 0 0;padding:8px 12px 7px;border:1px dashed rgba(255,255,255,.7);font-size:16.5px}
+.doc.wall .w:hover{color:#ffd97a}
+/* slips in pencil, from the consoles */
+.doc.pencil{width:min(600px,93vw);padding:20px 26px 22px;background:#fffdf2;color:#35373a;font-family:'Architects Daughter',cursive;font-size:18px;line-height:1.3}
+.doc.pencil h4{margin:0 0 10px;font-family:'Caveat',cursive;font-weight:700;font-size:25px;line-height:1.1;color:#1d2a52}
+.doc.pencil p{margin:0 0 9px;padding:8px 12px 6px;border:1px solid #b9b39c;background:#fbf7e2;box-shadow:1px 2px 3px rgba(0,0,0,.18)}
+.doc.pencil p b{display:block;font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.2em;color:#8c2f24}
+/* a list on a clipboard */
+.doc.clip{width:min(620px,93vw);padding:44px 30px 22px;background:#f6f3e8;color:#22231e;font-family:'Courier Prime',monospace;font-size:15.5px;line-height:1.4;
+  border-top:0;box-shadow:0 26px 70px rgba(0,0,0,.6),inset 0 26px 0 #7b5a36}
+.doc.clip:before{content:'';position:absolute;left:50%;top:6px;width:120px;height:26px;margin-left:-60px;border-radius:4px;background:linear-gradient(#d9dde0,#8e9499);box-shadow:0 2px 3px rgba(0,0,0,.5)}
+.doc.clip h4{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;letter-spacing:.16em;text-transform:uppercase;border-bottom:2px solid #22231e;padding-bottom:6px}
+.doc.clip p{margin:0 0 7px}
+.doc.clip ul{margin:0 0 8px;padding:0 0 0 18px}
+.doc.clip li{margin:0 0 3px}
+.doc.clip .no{color:#8c2f24;font-weight:700}
+/* your own notes: a page from a reporter's pad */
+.doc.mine{width:min(560px,92vw);padding:30px 30px 24px;background:#f1f4e6;color:#1d2a52;font-family:'Caveat',cursive;font-size:25px;line-height:1.16;
+  box-shadow:0 26px 70px rgba(0,0,0,.6),inset 0 12px 0 #c9cdb8;background-image:radial-gradient(circle at 12px 6px,#3a3d33 4px,transparent 5px);background-size:26px 12px;background-repeat:repeat-x}
+.doc.mine h4{margin:0 0 8px;font-family:'Caveat',cursive;font-weight:700;font-size:28px;text-decoration:underline;color:#1d2a52}
+.doc.mine p{margin:0 0 8px}
+.doc.mine b{color:#8c2f24;font-weight:700}
+.doc.statement{background:#f3eedd;font-family:'Libre Caslon Text',Georgia,serif;font-size:18px;border-left:6px solid #6f766f}
+.doc.statement h4{color:#4c524c}
+.doc .said{font-family:'Courier Prime',monospace;font-weight:700}
+
+/* ---- the time stamp (rooms I and V) ---- */
+.stp{width:330px;padding:14px 16px 16px;border-radius:10px;background:#2c3030 linear-gradient(#4a5050,#222626);box-shadow:0 14px 30px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.18);color:#e9e2cf}
+.stp h6{margin:0 0 10px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.26em;text-transform:uppercase;text-align:center;color:#c9c3ae}
+.stp-wheels{display:flex;justify-content:center;align-items:center;gap:5px;padding:8px 6px;border-radius:6px;background:#0c0e0e;box-shadow:inset 0 3px 8px #000}
+.stp-w{display:flex;flex-direction:column;align-items:center}
+.stp-w button{width:100%;height:21px;font-size:12px;line-height:21px;color:#9aa19a}
+.stp-w button:hover{color:#f2b23a}
+.stp-w b{display:block;min-width:36px;padding:5px 5px 3px;border-radius:3px;background:#f1ead6 linear-gradient(#d9d2bd,#f6f1e0 45%,#d9d2bd);color:#8c2f24;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:25px;line-height:1.05;text-align:center}
+.stp-w.day b{min-width:96px;font-size:21px;padding-top:7px;padding-bottom:5px}
+.stp-colon{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:24px;color:#f1ead6;padding:0 1px}
+.stp .btn{display:block;width:100%;margin-top:12px;--accent:#f2b23a}
+.stp-ink{display:inline-block;padding:3px 10px 1px;border:2px solid #8c2f24;color:#8c2f24;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;letter-spacing:.06em;transform:rotate(-3deg);white-space:nowrap}
+
+/* in the notebook every paper lies flat and takes the width there is */
+.nb .nb-view .doc{width:100%;max-height:none;transform:none}
+.nb .nb-view .doc.wall{font-size:14.5px}
+.nb .nb-view .doc.wall .cols{gap:10px}
+
+/* ---- the notebook: an archive box, grey cloth outside and cream paper inside ---- */
+.nb{background:#6f766f;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,rgba(0,0,0,.05) 1px 3px),linear-gradient(150deg,#858c84,#5d645d);border:1px solid #3d433d;border-radius:5px;color:#f1ead6;
+  box-shadow:0 30px 90px rgba(0,0,0,.75),inset 0 0 0 5px #4a504a}
+.nb-tabs{border-bottom-color:#3d433d}
+.nb-tabs button{font-family:'Oswald',sans-serif;color:#d9d3bf}
+.nb-tabs button.on{background:#f1ead6;color:#22231e;border-color:#a8935a}
+.nb-list{border-right-color:#3d433d}
+.nb-list button{font-family:'Libre Caslon Text',serif;font-size:16.5px;color:#f1ead6}
+.nb-list button.on{background:#f1ead6;color:#22231e}
+.nb-view{background:#3f453f}
+.nb-empty{font-family:'Libre Caslon Text',serif}
+.nb-words{background:#f1ead6;color:#22231e}
+.nb-words b{font-family:'Courier Prime',monospace;font-weight:700}
+.nb-words span{font-family:'Libre Caslon Text',serif;font-size:16.5px;line-height:1.32;color:#4a473e}
+.nb-ko{border-color:#a8935a;color:#6b6552}
+.nb-ko.on{background:#22231e;color:#f1ead6;border-color:#22231e}
+.wtip,.wtag{background:#f1ead6;color:#22231e;border-radius:2px;box-shadow:0 10px 26px rgba(0,0,0,.6),inset 5px 0 0 #a8935a}
+.wtag{padding-left:20px}
+.wtag:before{display:none}
+.wtip{padding-left:19px}
+.wtip b,.wtag b{font-family:'Courier Prime',monospace;font-weight:700;font-size:18px}
+.wtip span,.wtag span{font-family:'Libre Caslon Text',serif;font-size:16px;line-height:1.32;color:#4a473e}
+.hintbox{background:#fbf8ee;color:#22231e;border-top:5px solid #b3261c;border-radius:2px}
+.hintbox h6{font-family:'Oswald',sans-serif;color:#8c2f24}
+.hintbox p{font-family:'Libre Caslon Text',Georgia,serif;font-size:17px;line-height:1.4}
+.hintbox p.hint-none{font-size:15.5px}
+.toast{font-family:'Oswald',sans-serif;background:rgba(14,16,14,.94)}

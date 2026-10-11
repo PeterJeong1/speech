@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Saloon · Come at Once</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="carpathia.css">
+<style>
+  body{--bg:#2a140e;--accent:#e7c873;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(34,16,11,.96);--tc-ink:#f6eedc;--cap-bg:rgba(38,18,12,.95);--panel:#2c1a14;--face-bg:#efe6d0;--q-ink:#f0d48a;--fade:#140806;--hud-bg:rgba(38,18,12,.84)}
+  .lb{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.14em}
+  .glow{animation:gl 6s steps(1,end) infinite}
+  .glow.g2{animation-delay:-2.2s}
+  @keyframes gl{0%{opacity:1}74%{opacity:.86}76%{opacity:1}}
+  #stew{animation:walk 9s ease-in-out infinite alternate}
+  @keyframes walk{from{transform:translateX(0)}to{transform:translateX(250px)}}
+  #door4.ready #post{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+  #wisps{display:none}
+  body.done #wisps{display:block;animation:gl 2.4s steps(1,end) infinite}
+  #piles2{display:none}
+  body.done #piles2{display:block}
+
+  /* the door of the saloon: who is waiting, where they go, and what the captain said */
+  .sd{display:grid;grid-template-columns:minmax(0,610px) 392px;gap:18px;width:min(1024px,97vw);align-items:start}
+  .sd-plan{display:block;width:100%;height:auto;background:#f1e9d2;border:9px solid #8a6a26;box-shadow:0 16px 40px rgba(0,0,0,.55),inset 0 0 0 2px #5a4016;-webkit-user-select:none;user-select:none}
+  .sd-plan .z rect{fill:rgba(255,255,255,.6);stroke:#5a4b33;stroke-width:1.2;cursor:pointer}
+  .sd-plan .z:hover rect{fill:#ffe98a}
+  .sd-plan .z.got rect{fill:#d7e8c9}
+  .sd-plan .z text{font-family:'Oswald',sans-serif;font-weight:500;font-size:10.5px;letter-spacing:.07em;fill:#2a2418;text-anchor:middle;pointer-events:none}
+  .sd-plan .z .sub{font-family:'Libre Caslon Text',serif;font-style:italic;font-weight:400;font-size:9.5px;letter-spacing:0;fill:#6b5f48}
+  .sd-plan .z .tk{fill:#8c2f24;stroke:none}
+  .sd.pick .sd-plan .z rect{stroke:#8c2f24;stroke-width:1.8}
+  .sd-rail{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px;min-height:124px}
+  .sd-c{position:relative;display:block;padding:9px 11px 8px;background:#fbf8ee;color:#22231e;text-align:left;border-top:5px solid #8c2f24;box-shadow:0 8px 18px rgba(0,0,0,.45);font-family:'Libre Caslon Text',serif;font-size:13.2px;line-height:1.3}
+  .sd-c b{display:block;margin-bottom:3px;font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;color:#8c2f24;line-height:1.2}
+  .sd-c i{position:absolute;right:7px;top:5px;font-style:normal;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.08em;color:#6b6552}
+  .sd-c:hover{background:#fff}
+  .sd-c.sel{outline:3px solid #e7c873;outline-offset:2px;background:#fff}
+  .sd-c.none{background:none;box-shadow:none;border-top:5px solid transparent;color:rgba(255,255,255,.4);font-style:italic;cursor:default}
+  .sd .pmsg{margin-top:10px;min-height:86px;font-size:15.2px;line-height:1.36}
+  .sd-side .doc.orders{width:auto;max-height:none;transform:none;padding:10px 14px 10px 30px;font-size:13.2px;line-height:20px;background:#f6f1df repeating-linear-gradient(transparent 0 19px,rgba(90,120,170,.2) 19px 20px);box-shadow:0 14px 30px rgba(0,0,0,.5),inset 22px 0 0 -20px rgba(179,38,28,.55)}
+  .sd-side .doc.orders h4{font-size:14.5px;line-height:20px}
+  .sd-side .doc.orders h5{font-size:12.5px;line-height:20px}
+  .sd-side .doc.orders b{font-size:12px}
+  .sd-count{margin:8px 0 0;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#d9c9a8;text-align:right}
+  @media (max-width:900px){.sd{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6efdc"/><stop offset="1" stop-color="#e3d6b8"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e3a0"/><stop offset=".5" stop-color="#c9a23a"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="mahG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a3a22"/><stop offset="1" stop-color="#4a1f12"/></linearGradient>
+  <linearGradient id="silverG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8e979b"/><stop offset=".4" stop-color="#f3f6f7"/><stop offset=".7" stop-color="#aab2b6"/><stop offset="1" stop-color="#6c7478"/></linearGradient>
+  <radialGradient id="globeG" cx="50%" cy="40%" r="60%"><stop offset="0" stop-color="#fffbe6"/><stop offset="1" stop-color="#ffe7a0"/></radialGradient>
+  <radialGradient id="haloG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff3c0" stop-opacity=".6"/><stop offset="1" stop-color="#fff3c0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="82%"><stop offset="0" stop-color="#2a140e" stop-opacity="0"/><stop offset=".7" stop-color="#2a140e" stop-opacity=".12"/><stop offset="1" stop-color="#1a0a06" stop-opacity=".66"/></radialGradient>
+  <pattern id="carpet" width="90" height="60" patternUnits="userSpaceOnUse" patternTransform="skewX(-28)"><rect width="90" height="60" fill="#7d2219"/><path d="M45 8l22 22l-22 22l-22-22z" fill="none" stroke="#c9a23a" stroke-width="2" opacity=".5"/><circle cx="0" cy="0" r="4" fill="#c9a23a" opacity=".45"/><circle cx="90" cy="0" r="4" fill="#c9a23a" opacity=".45"/><circle cx="0" cy="60" r="4" fill="#c9a23a" opacity=".45"/><circle cx="90" cy="60" r="4" fill="#c9a23a" opacity=".45"/></pattern>
+  <g id="pile"><rect x="0" y="-20" width="96" height="20" rx="5" fill="#b8b4a8"/><rect x="2" y="-38" width="92" height="19" rx="5" fill="#c9c5b8"/><rect x="4" y="-55" width="88" height="18" rx="5" fill="#b8b4a8"/><rect x="6" y="-71" width="84" height="17" rx="5" fill="#d3cfc3"/><g stroke="#8c2f24" stroke-width="3"><path d="M10 -10h76M12 -28h72M14 -46h68M16 -62h64"/></g></g>
+  <g id="lightU"><path d="M0 -400V56" stroke="#8a6a26" stroke-width="5"/><path d="M-70 78q70-44 140 0" stroke="url(#brassG)" stroke-width="7" fill="none"/><circle cx="0" cy="110" r="90" fill="url(#haloG)" class="glow"/>
+    <circle cx="-70" cy="96" r="20" fill="url(#globeG)"/><circle cx="0" cy="74" r="22" fill="url(#globeG)"/><circle cx="70" cy="96" r="20" fill="url(#globeG)"/><g fill="url(#brassG)"><rect x="-76" y="72" width="12" height="8"/><rect x="-6" y="48" width="12" height="8"/><rect x="64" y="72" width="12" height="8"/></g></g>
+  <g id="chairU"><path d="M-8 150V70" stroke="#3a3d40" stroke-width="12"/><ellipse cx="0" cy="152" rx="34" ry="8" fill="#2a2d30"/><rect x="-44" y="-8" width="88" height="84" rx="16" fill="url(#mahG)"/><rect x="-32" y="4" width="64" height="60" rx="10" fill="#8f2a20"/><g fill="#c9a23a"><circle cx="-18" cy="20" r="3"/><circle cx="18" cy="20" r="3"/><circle cx="-18" cy="48" r="3"/><circle cx="18" cy="48" r="3"/><circle cx="0" cy="34" r="3"/></g></g>
+</defs>
+
+<!-- ceiling, wall, carpet -->
+<rect x="-1000" y="-400" width="3600" height="520" fill="#f8f3e4"/><g stroke="#d9cfb4" stroke-width="5"><path d="M-1000 50H2600M-1000 112H2600"/></g>
+<rect x="-1000" y="116" width="3600" height="460" fill="url(#wallG)"/>
+<g stroke="#c9a23a" stroke-width="2.5" fill="none" opacity=".8"><path d="M-1000 136H2600M-1000 436H2600M-1000 452H2600"/><rect x="664" y="158" width="660" height="260"/><rect x="1348" y="158" width="660" height="260"/><rect x="-360" y="158" width="380" height="260"/></g>
+<rect x="-1000" y="560" width="3600" height="18" fill="#5a2d1a"/>
+<rect x="-1000" y="576" width="3600" height="760" fill="url(#carpet)"/>
+
+<!-- the electric lights -->
+<use href="#lightU" x="520"/><use href="#lightU" x="1010"/><use href="#lightU" x="1470"/>
+
+<!-- the door, and the place where you stand -->
+<g id="door4" class="hot">
+  <rect x="44" y="140" width="290" height="440" rx="4" fill="url(#mahG)"/><rect x="66" y="162" width="246" height="418" fill="#141f24"/>
+  <circle cx="189" cy="220" r="60" fill="url(#haloG)" opacity=".5"/><circle cx="189" cy="218" r="12" fill="url(#globeG)"/><rect x="183" y="162" width="12" height="44" fill="url(#brassG)"/>
+  <path d="M66 162l-52 22v420l52-24z" fill="#6b3320"/><path d="M312 162l52 22v420l-52-24z" fill="#6b3320"/><g fill="none" stroke="#c9a23a" stroke-width="2"><path d="M24 206l32-12v340l-32 12zM322 194l32 12v340l-32-12z"/></g>
+  <g id="post"><path d="M356 640V480" stroke="url(#brassG)" stroke-width="10"/><circle cx="356" cy="472" r="13" fill="url(#brassG)"/><ellipse cx="356" cy="642" rx="26" ry="7" fill="#8a6a26"/><path d="M356 500q-110 70-306 26" stroke="#8f2a20" stroke-width="9" fill="none" stroke-linecap="round"/></g>
+</g>
+
+<!-- the ship, drawn from the side, in a brass frame -->
+<g id="plan" class="hot"><rect x="388" y="196" width="250" height="150" fill="url(#brassG)"/><rect x="398" y="206" width="230" height="130" fill="#f6f1df"/>
+  <path d="M414 296h194l-10 24h-170z" fill="#22231e"/><rect x="446" y="278" width="126" height="18" fill="#fff" stroke="#22231e" stroke-width="1.5"/><rect x="496" y="246" width="20" height="32" fill="#b3261c"/><rect x="496" y="246" width="20" height="8" fill="#22231e"/>
+  <g stroke="#22231e" stroke-width="2"><path d="M430 296v-62M470 278v-50M548 278v-50M590 296v-62"/></g><path d="M430 236L590 236" stroke="#22231e" stroke-width=".8"/><path d="M406 322h214" stroke="#6f97b8" stroke-width="2"/></g>
+
+<!-- portholes, the clock, the radiator -->
+<g id="ports" class="hot"><g fill="url(#brassG)"><circle cx="780" cy="270" r="50"/><circle cx="1010" cy="270" r="50"/><circle cx="1240" cy="270" r="50"/></g><g fill="#070b12"><circle cx="780" cy="270" r="37"/><circle cx="1010" cy="270" r="37"/><circle cx="1240" cy="270" r="37"/></g>
+  <g fill="#e9eef2"><circle cx="770" cy="258" r="1.5"/><circle cx="794" cy="278" r="1.2"/><circle cx="1002" cy="262" r="1.4"/><circle cx="1022" cy="284" r="1.1"/><circle cx="1232" cy="280" r="1.4"/><circle cx="1252" cy="258" r="1.2"/></g>
+  <g fill="#8f2a20"><path d="M716 206h54q-10 60-44 96h-10zM844 206h-54q10 60 44 96h10zM946 206h54q-10 60-44 96h-10zM1074 206h-54q10 60 44 96h10zM1176 206h54q-10 60-44 96h-10zM1304 206h-54q10 60 44 96h10z"/></g>
+  <g stroke="url(#brassG)" stroke-width="6"><path d="M706 204h148M936 204h148M1166 204h148"/></g></g>
+<g id="clock4" class="hot"><circle cx="1126" cy="176" r="34" fill="url(#brassG)"/><circle cx="1126" cy="176" r="27" fill="#fffdf4"/><g stroke="#22231e" stroke-width="2.5"><path d="M1126 152v5M1126 195v5M1102 176h5M1145 176h5"/></g>
+  <path id="h4" d="M1126 176V162" stroke="#22231e" stroke-width="4" stroke-linecap="round" transform="rotate(60 1126 176)"/><path id="m4" d="M1126 176V155" stroke="#22231e" stroke-width="2.4" stroke-linecap="round"/><circle cx="1126" cy="176" r="3" fill="#8c2f24"/></g>
+<g id="rad" class="hot"><rect x="930" y="468" width="160" height="96" rx="6" fill="#d9cfb4"/><g fill="#efe6d0" stroke="#b9ad8c" stroke-width="2"><rect x="938" y="474" width="16" height="86" rx="7"/><rect x="958" y="474" width="16" height="86" rx="7"/><rect x="978" y="474" width="16" height="86" rx="7"/><rect x="998" y="474" width="16" height="86" rx="7"/><rect x="1018" y="474" width="16" height="86" rx="7"/><rect x="1038" y="474" width="16" height="86" rx="7"/><rect x="1058" y="474" width="16" height="86" rx="7"/></g><circle cx="1086" cy="482" r="7" fill="url(#brassG)"/></g>
+
+<!-- the sideboard, and three silver urns -->
+<g id="urns" class="hot">
+  <rect x="1310" y="470" width="360" height="110" fill="url(#mahG)"/><rect x="1300" y="456" width="380" height="18" fill="#fbf8ee"/><path d="M1300 474h380v14q-190 16-380 0z" fill="#f1ead8"/>
+  <g id="wisps" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"><path d="M1352 356q-12-18 0-34t0-34M1444 350q-12-18 0-34t0-34M1536 356q-12-18 0-34t0-34"/></g>
+  <g><path d="M1322 456q-6-70 30-78t30 78z" fill="url(#silverG)"/><ellipse cx="1352" cy="380" rx="24" ry="7" fill="#dfe5e7"/><circle cx="1352" cy="368" r="6" fill="url(#silverG)"/><rect x="1346" y="440" width="12" height="14" fill="#6c7478"/>
+    <path d="M1412 456q-8-80 32-88t32 88z" fill="url(#silverG)"/><ellipse cx="1444" cy="370" rx="27" ry="8" fill="#dfe5e7"/><circle cx="1444" cy="357" r="7" fill="url(#silverG)"/><rect x="1438" y="440" width="12" height="14" fill="#6c7478"/>
+    <path d="M1506 456q-6-70 30-78t30 78z" fill="url(#silverG)"/><ellipse cx="1536" cy="380" rx="24" ry="7" fill="#dfe5e7"/><circle cx="1536" cy="368" r="6" fill="url(#silverG)"/><rect x="1530" y="440" width="12" height="14" fill="#6c7478"/></g>
+</g>
+
+<!-- the far table, and a steward who never stops walking -->
+<g id="stew" class="hot"><path d="M470 590q-6-110 10-150q8-22 26-22t26 22q16 40 10 150z" fill="#f4f1e8"/><circle cx="506" cy="400" r="22" fill="#d7a583"/><path d="M484 396q0-26 22-26t22 26q-22-10-44 0z" fill="#3a2a1c"/><rect x="474" y="450" width="74" height="44" rx="6" fill="#b8b4a8"/><path d="M474 464h74M474 478h74" stroke="#8c2f24" stroke-width="3"/><path d="M480 520h52" stroke="#22231e" stroke-width="4"/></g>
+<g id="tableB"><path d="M400 592h720l34 34H366z" fill="url(#mahG)"/><path d="M400 592h720" stroke="#a45a3a" stroke-width="3"/><rect x="366" y="626" width="788" height="12" fill="#3a1a0e"/>
+  <use href="#pile" x="470" y="604"/><use href="#pile" x="700" y="604"/><use href="#pile" x="930" y="604"/></g>
+
+<!-- Mrs Latham, with her list; the English doctor, with his bag -->
+<g id="latham" class="hot">
+  <ellipse cx="1210" cy="792" rx="84" ry="12" fill="#000" opacity=".3"/>
+  <path d="M1140 790q-4-190 30-270h80q34 80 30 270z" fill="#191a1f"/><path d="M1170 520q40-20 80 0l-6 60q-34 14-68 0z" fill="#191a1f"/>
+  <path d="M1178 560h64l14 200h-92z" fill="#f7f4ec"/><path d="M1178 560h64" stroke="#d9d4c6" stroke-width="3"/><path d="M1184 520q26 16 52 0l-4 42h-44z" fill="#f7f4ec"/>
+  <rect x="1198" y="468" width="24" height="34" fill="#e6c2a4"/>
+  <path d="M1178 448q0-44 32-44t32 44v16q-4 24-32 24t-32-24z" fill="#efcdb0"/><path d="M1174 452q-4-52 36-54q40 2 36 54q-6-28-36-30t-36 30z" fill="#9c8a78"/><path d="M1184 412q26-22 52 0q-26-8-52 0z" fill="#f7f4ec"/><circle cx="1210" cy="392" r="14" fill="#8f7d6c"/>
+  <circle cx="1199" cy="452" r="2.4" fill="#1b1512"/><circle cx="1221" cy="452" r="2.4" fill="#1b1512"/><path d="M1200 472q10 4 20 0" stroke="#9a4a40" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M1246 540q40 30 34 76" stroke="#191a1f" stroke-width="22" fill="none" stroke-linecap="round"/><path d="M1172 540q-30 34-10 70" stroke="#191a1f" stroke-width="22" fill="none" stroke-linecap="round"/>
+  <rect x="1150" y="596" width="62" height="80" fill="#fbf8ee" transform="rotate(-8 1181 636)"/><g stroke="#55585c" stroke-width="2" transform="rotate(-8 1181 636)"><path d="M1158 612h46M1158 624h40M1158 636h46M1158 648h34M1158 660h44"/></g>
+</g>
+<g id="doctor" class="hot">
+  <ellipse cx="1470" cy="800" rx="110" ry="12" fill="#000" opacity=".3"/>
+  <path d="M1416 796q-8-200 16-270q10-30 38-30t38 30q24 70 16 270z" fill="#22262e"/><path d="M1452 500l18 50l18-50z" fill="#f7f4ec"/><path d="M1470 520v30" stroke="#22262e" stroke-width="5"/>
+  <rect x="1458" y="460" width="24" height="34" fill="#d7a583"/><path d="M1440 440q0-42 30-42t30 42v14q-4 24-30 24t-30-24z" fill="#e3b796"/><path d="M1438 436q-2-44 32-44t32 44q-8-22-32-22t-32 22z" fill="#8f9291"/>
+  <path d="M1446 468q24 14 48 0q-4 16-24 16t-24-16z" fill="#8f9291"/><circle cx="1460" cy="444" r="2.3" fill="#1b1512"/><circle cx="1480" cy="444" r="2.3" fill="#1b1512"/>
+  <path d="M1430 540q-34 50-20 110" stroke="#22262e" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="1408" cy="654" r="11" fill="#d7a583"/>
+  <path d="M1340 690h270l26 36h-322z" fill="#fbf8ee"/><rect x="1314" y="726" width="322" height="12" fill="#e6dfc9"/><path d="M1400 738v60M1560 738v60" stroke="#4a1f12" stroke-width="12"/>
+  <path d="M1362 690q-6-52 40-56h56q46 4 40 56z" fill="#3a2412"/><path d="M1392 636q38-30 76 0" stroke="#3a2412" stroke-width="7" fill="none"/><rect x="1418" y="652" width="24" height="12" rx="3" fill="url(#brassG)"/>
+  <g fill="url(#silverG)"><rect x="1520" y="676" width="60" height="6" rx="3"/><rect x="1530" y="664" width="50" height="6" rx="3"/></g><rect x="1586" y="656" width="18" height="34" rx="4" fill="#7a3a22"/><rect x="1586" y="656" width="18" height="9" rx="4" fill="#fbf8ee"/>
+</g>
+
+<!-- the near table: blankets where the tablecloth was -->
+<g id="tableA" class="hot">
+  <path d="M250 720h810l60 70H190z" fill="url(#mahG)"/><path d="M250 720h810" stroke="#a45a3a" stroke-width="4"/><rect x="190" y="790" width="930" height="18" fill="#3a1a0e"/>
+  <path d="M250 808v120M1060 808v120" stroke="#3a3d40" stroke-width="18"/>
+  <use href="#pile" x="300" y="752"/><use href="#pile" x="540" y="756"/><use href="#pile" x="780" y="752"/><g id="piles2"><use href="#pile" x="420" y="780"/><use href="#pile" x="900" y="782"/></g>
+  <use href="#chairU" x="400" y="822"/><use href="#chairU" x="650" y="822"/><use href="#chairU" x="900" y="822"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the bridge</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="carpathia.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, sdBox = null, inLock = false;
+
+  ER.init({
+    theme: 'history', story: 'carpathia', storyTitle: 'Come at Once', id: 'saloon', no: 'IV', title: 'The Saloon',
+    go: 'Knock', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'Six valves took their steam from the same boilers as the engines. Four of them the captain&rsquo;s own list needed: the dynamos for his electric lights, the forward winches, the galley for the soup, and the steering engine, without which there is no ship. So the two that you shut were the cabin heating and the hot water. Then came the line on Mr Rudd&rsquo;s slate. Four hours&rsquo; run filled fifty-eight miles exactly at 14&frac12; knots, which was all that the bridge had promised. At 17 knots it took three hours, a quarter and two five-minutes: 3 hours 25 minutes. And 12.35 with 3.25 added to it is four o&rsquo;clock.',
+      'It is now two o&rsquo;clock. At a quarter to two Mr Cottam went forward to the bridge once more, with the last words that he has had from the Titanic: ' + CP.said('Come quick; our engine room is filling up to the boilers.') + ' The captain&rsquo;s answer went back at once: all our boats are ready, and we are coming as hard as we can come, with a double watch in the engine room. Mr Cottam has had no answer to that.',
+      'Nobody has told the passengers, and nobody is going to: the captain wants them asleep. But on the saloon deck every light is burning, and behind the doors of the first-class dining saloon somebody is counting blankets aloud.'
+    ],
+    exit: {"next":"daybreak","w":{"fadbc350":"8a784f1b","ad5d3f1b":"e1382c21","f21f7818":"6a154bfb","fc9164ce":"1b3d4146","a155a3f7":"52ff602d","dc11869b":"f4ee6a1f","f5d62ad8":"a4b2594f","b3c6ee97":"774f492b"}}, tags: {"ash":["bb0b8fc2"],"doc":["e7fcde6a"],"cof":["cbdc5e40","c53abc29"],"car":["a49e028a"],"bla-g":["4792cf86"],"bla-s":["e6e7aeca","2a51df0e","52176f9b","5500381f"],"bla-b":["0eb1f1ad"],"cha":["cc1df255"],"ste":["6e01518a"],"gen":["fe4dcd30"],"pur":["4c3d4d04"]},
+    sound: ['archive', { root: 53, bpm: 58, drop: ['ost'], beds: [['hum', 0.35]] }],
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('d-file') || null;
+
+  function hints() {
+    if (nextFile) return ['go', ['Mrs Latham has sent you back to the bridge. Use the button at the bottom of the screen.']];
+    if (inLock) return ['door', [
+      'Click one of the three that are waiting, and then click the part of the ship where the captain&rsquo;s list sends it. The list is on the right: every answer is in it.',
+      'Some things cannot be done until another thing has been done. If something comes back to you, ask what must happen first.',
+      'The coffee is for our own men: the soup, coffee and tea in the saloons are for later. Blankets go to three different kinds of place. And the ash bags are for somebody who is too small to climb a ladder.'
+    ]];
+    return ['look', [
+      'Mrs Latham has told you where to stand: at the door, on the left, by the brass post and the red rope.',
+      'If you want to know more first, ask Mrs Latham. She is in the middle of the room, with a list.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    document.body.classList.toggle('done', !!nextFile);
+    $('#door4').classList.toggle('ready', !nextFile && !!ER.flag('d-in'));
+    $('#m4').setAttribute('transform', 'rotate(' + (nextFile ? 180 : 0) + ' 1126 176)'); $('#h4').setAttribute('transform', 'rotate(' + (nextFile ? 75 : 60) + ' 1126 176)');
+    ER.pips(nextFile ? 9 : (ER.flag('d-done') || []).length, 9);
+    if (nextFile) $('#go').classList.add('on');
+  }
+
+  function begin() {
+    paint();
+    CP.need('orders', 'The captain’s orders', CP.ORDERS, 'orders', 'Page from the night order book');
+    if (ER.flag('d-in')) { busy = false; ER.say(nextFile ? 'The saloon. It does not look like a place where anybody ever ate dinner.' : 'The saloon. Mrs Latham looks at the door, and then at you.'); return; }
+    CP.learn('saloon', 'steward');
+    ER.narrate([
+      'The first-class dining saloon: white paint, gold lines, and long tables with chairs that are screwed to the deck, so that they cannot slide in bad weather. Tonight the cloths are off the tables, and there is a pile of blankets where each cloth was.',
+      'In the middle of it all stands a stewardess in a black dress, with a list. She does not raise her voice. Everybody near her is walking fast.',
+      '&ldquo;You are from the bridge. Good: then you can read. I am Mrs Latham. How long have I got?&rdquo;',
+      '&ldquo;Until four o&rsquo;clock,&rdquo; you say. &ldquo;If the engines give her seventeen knots.&rdquo;',
+      '&ldquo;Two hours, then.&rdquo; Mrs Latham writes it down. &ldquo;I have known breakfasts that were harder. Stand by that door with your captain&rsquo;s list. In the next half hour everything on this ship is coming through it, and every bit of it will ask you where it goes.&rdquo;'
+    ], function () { busy = false; ER.flag('d-in', 1); paint(); });
+  }
+
+  /* ---------- things in the room ---------- */
+  CP.thing('#rad', 'radiator', 'Stone cold. You know why. Nobody has told Mrs Latham yet, and you are not going to be the one.', isBusy);
+  CP.thing('#doctor', null, 'The English doctor, Dr McGee, laying out his bag on the captain&rsquo;s table. By the captain&rsquo;s orders he stays here, in the first-class dining room.', isBusy);
+  CP.thing('#tableA', null, 'Blankets. Mrs Latham has counted them twice, and the number was the same both times, so she believes it.', isBusy);
+  CP.thing('#tableB', null, 'More blankets, and more coming.', isBusy);
+  CP.thing('#stew', null, 'A steward, with as many blankets as one man can carry. He has not sat down since one o&rsquo;clock.', isBusy);
+  CP.thing('#urns', 'urn', function () { return nextFile ? 'Soup, coffee and tea. You can smell all three from here.' : 'Three silver urns, cold and empty. The galley has the soup on.'; }, isBusy);
+  CP.thing('#plan', 'plan', 'The ship, drawn from the side, in a brass frame: every deck of her. It hangs here so that first-class passengers can find the smoke room.', isBusy);
+  CP.thing('#ports', 'porthole', 'Black glass. The stars outside are hard and bright, and the sea is as flat as this table.', isBusy);
+  CP.thing('#clock4', null, function () { return nextFile ? 'Half past two.' : 'Two o&rsquo;clock.'; }, isBusy);
+  $('#latham').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mrs Latham', role: 'stewardess, first class', face: FACE('latham'),
+      lines: [
+        { note: 'She answers while she counts, and she does not lose her place.' },
+        { q: 'How many people are coming?', a: '&ldquo;Nobody can tell me. She is the biggest ship there is, and they say that she carries more than two thousand. So I am making ready for two thousand. If only ten of them need me, I shall be delighted to look foolish.&rdquo;' },
+        { q: 'Why is everybody so quiet?', a: '&ldquo;Captain&rsquo;s orders, and the best one on the list. Order, discipline and quietness. Seven hundred and forty of our own are asleep below. If they wake, they will come up to help, and I have no time to be helped.&rdquo;' },
+        { q: 'What if a passenger does wake up?', a: '&ldquo;There is a steward in every alleyway for that. Anybody who asks is told that there is nothing wrong with this ship, which is true, and is sent back to his cabin. Politely. But firmly.&rdquo;' },
+        { q: 'Why three doctors, in three rooms?', a: '&ldquo;We carry three, an English one, an Italian one and a Hungarian one, because that is what our passengers speak. Tonight each of them has a dining room of his own. People who have been in open boats on a night like this want three things, I am told, and in this order. To be warm. To be dry. And to hear that somebody has written their name down.&rdquo;' }
+      ],
+      clue: { id: 'lat1', title: 'Mrs Latham, in the saloon', kind: 'What she said' }, last: 'Back to the door',
+      done: function () {}
+    });
+  });
+  $('#door4').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The door. Nothing is waiting at it. For the first time in half an hour, nobody is asking you anything.'); return; }
+    openDoor();
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; CP.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+
+  /* ---------- the door ---------- */
+  var ZONES = [
+    ['B', 152, 72, 64, 36, 'BRIDGE', ''], ['A', 220, 72, 230, 36, 'BOAT DECK', 'our own men, at the boats'],
+    ['F', 152, 112, 140, 36, 'SMOKE ROOM AND LIBRARY', ''], ['G', 296, 112, 154, 36, 'PASSENGERS&rsquo; CABINS', 'first and second class'],
+    ['C', 104, 156, 170, 40, 'FIRST-CLASS DINING SALOON', 'you are here'], ['J', 278, 156, 66, 40, 'GALLEY', ''], ['D', 348, 156, 158, 40, 'SECOND-CLASS DINING ROOM', ''],
+    ['H', 60, 202, 150, 40, 'GANGWAY DOORS', 'in the ship&rsquo;s side'], ['E', 214, 202, 156, 40, 'THIRD-CLASS DINING HALL', ''], ['I', 374, 202, 170, 40, 'STEERAGE', 'our own third class, below'],
+    ['K', 172, 248, 260, 40, 'ENGINE ROOM AND STOKEHOLD', '']
+  ];
+  var ARR = [
+    ['ash', 'A seaman, with an armful of grey bags', '&ldquo;Bosun says these come up to you, miss.&rdquo; They are canvas ash bags, from the stokehold.', 1],
+    ['doc', 'The Hungarian doctor, with his bag', 'He bows, and waits to be told where he is wanted.', 1],
+    ['cof', 'Two urns of coffee, hot', '&ldquo;First of forty,&rdquo; says the cook&rsquo;s boy. &ldquo;Who gets these?&rdquo;', 1],
+    ['car', 'The carpenter', 'He has a spanner as long as his arm, and a list of his own. &ldquo;Where do you want me first?&rdquo;', 1],
+    ['bla', 'Blankets: three stewards, loaded', '&ldquo;Where do you want them?&rdquo; Three loads. Not all in one place.', 3],
+    ['cha', 'A dining chair, with four ropes tied to it', 'The steward who is carrying it does not know why either.', 1],
+    ['ste', 'Two of our own steerage passengers', 'A man in a long coat, with a small girl by the hand. They heard the boats being moved, and they have come up to see whether they ought to be frightened.', 1],
+    ['gen', 'A first-class gentleman, in a dressing gown', 'One of ours. His radiator is cold, there are feet on the deck over his head, and he would like to speak to somebody.', 1],
+    ['pur', 'The assistant purser&rsquo;s clerk', 'A ledger under his arm, three pencils behind his ear. &ldquo;I am to take names. Nobody has said where.&rdquo;', 1]
+  ];
+  var WRONG = {
+    'ash:C': 'They are not staying in my saloon. Think who cannot climb a rope ladder, and is too small for a chair.', 'ash:K': 'They came from there. Tonight they have other work.',
+    'doc:C': 'The English doctor is in here already, and the two of them would only bow at each other all night. The list has a room for each.', 'doc:D': 'That is the Italian doctor&rsquo;s room.',
+    'cof:C': 'For people who are still two hours away? It would be stone cold. Read who the coffee is for.', 'cof:D': 'For people who are still two hours away? It would be stone cold. Read who the coffee is for.', 'cof:E': 'For people who are still two hours away? It would be stone cold. Read who the coffee is for.', 'cof:J': 'It has just come from the galley.',
+    'car:C': 'I have no work for a spanner in here. What on the captain&rsquo;s list has to be opened?', 'car:A': 'The seamen have the boats in hand. What on the captain&rsquo;s list has to be opened?', 'car:K': 'The engineers have spanners of their own.',
+    'cha:C': 'We have chairs. This one has ropes on it. What is a chair with ropes for?', 'cha:D': 'We have chairs. This one has ropes on it. What is a chair with ropes for?', 'cha:E': 'We have chairs. This one has ropes on it. What is a chair with ropes for?',
+    'ste:E': 'The third-class dining hall is the very place where the captain does not want them. In two hours it is a hospital.', 'ste:A': 'Off the deck, the list says.', 'ste:C': 'In first class? Tonight I should not mind. But the captain wants them kept together, and below.',
+    'gen:C': 'If one of them sits down in here, forty will. Read what the list says about our own passengers.', 'gen:A': 'On deck is the last place for him.', 'gen:B': 'He would like that very much. The captain would not.', 'gen:F': 'The smoke room is being made into beds.',
+    'pur:C': 'He may sit in here and take the names of my stewards, if he likes. Where will the people come on board?', 'pur:B': 'The captain knows his own name.'
+  };
+  function buildDoor() {
+    var box = ER.el('div', 'sd'), s, msgEl, queue = ARR.map(function (a) { return a[0]; }), done = ER.flag('d-done') || [], sent = ER.flag('d-sent') || {}, left = {}, sel = null, open = !!ER.flag('d-open');
+    ARR.forEach(function (a) { left[a[0]] = a[3] - ((sent[a[0]] || []).length); });
+    s = '<div class="sd-main"><svg class="sd-plan" viewBox="0 0 600 306" xmlns="http://www.w3.org/2000/svg">' +
+      '<path d="M22 150q20 110 60 150h440q44-44 60-150z" fill="#e3d6b8" stroke="#5a4b33" stroke-width="2"/><rect x="146" y="66" width="310" height="86" fill="#f6f1df" stroke="#5a4b33" stroke-width="2"/>' +
+      '<rect x="286" y="10" width="40" height="56" fill="#b3261c" stroke="#5a4b33" stroke-width="1.5"/><rect x="286" y="10" width="40" height="13" fill="#22231e"/>' +
+      '<g stroke="#5a4b33" stroke-width="2.5"><path d="M70 150V8M196 66V8M410 66V8M536 150V8"/></g><path d="M70 12H536" stroke="#5a4b33" stroke-width=".9"/>' +
+      '<g fill="#fff" stroke="#5a4b33" stroke-width="1.2"><path d="M226 60q14 8 28 0zM262 60q14 8 28 0zM334 60q14 8 28 0zM370 60q14 8 28 0zM406 60q14 8 28 0z"/></g>' +
+      '<g fill="#5a4b33"><rect x="34" y="214" width="20" height="16"/><rect x="548" y="214" width="20" height="16"/></g><path d="M0 300h600" stroke="#6f97b8" stroke-width="3"/>';
+    ZONES.forEach(function (z) {
+      s += '<g class="z" data-z="' + z[0] + '"><rect x="' + z[1] + '" y="' + z[2] + '" width="' + z[3] + '" height="' + z[4] + '" rx="2"/><text x="' + (z[1] + z[3] / 2) + '" y="' + (z[2] + (z[6] ? z[4] / 2 - 2 : z[4] / 2 + 4)) + '">' + z[5] + '</text>' +
+        (z[6] ? '<text class="sub" x="' + (z[1] + z[3] / 2) + '" y="' + (z[2] + z[4] / 2 + 11) + '">' + z[6] + '</text>' : '') + '<g class="tks"></g></g>';
+    });
+    s += '</svg><div class="sd-rail"></div><p class="pmsg"></p></div><div class="sd-side"><div class="doc orders">' + ER.gloss(CP.ORDERS) + '</div><p class="sd-count"></p></div>';
+    box.innerHTML = s; msgEl = box.querySelector('.pmsg');
+    function q(x) { return box.querySelector(x); }
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function zname(z) { var r = ZONES.filter(function (x) { return x[0] === z; })[0]; return r ? r[5].toLowerCase().replace(/&rsquo;/g, '’') : ''; }
+    function arr(id) { return ARR.filter(function (a) { return a[0] === id; })[0]; }
+    function waiting() { return queue.filter(function (id) { return left[id] > 0; }).slice(0, 3); }
+    function tokens() {
+      ER.$$('.z', box).forEach(function (g) {
+        var z = g.getAttribute('data-z'), r = ZONES.filter(function (x) { return x[0] === z; })[0], n = 0, t = '';
+        Object.keys(sent).forEach(function (id) { (sent[id] || []).forEach(function (zz) { if (zz === z) n++; }); });
+        for (var i = 0; i < n; i++) t += '<circle class="tk" cx="' + (r[1] + 8 + (i % 3) * 9) + '" cy="' + (r[2] + 7 + Math.floor(i / 3) * 9) + '" r="3.2"/>';
+        g.querySelector('.tks').innerHTML = t; g.classList.toggle('got', n > 0);
+      });
+    }
+    function rail() {
+      var w = waiting(), h = '';
+      w.forEach(function (id) { var a = arr(id); h += '<button type="button" class="sd-c' + (sel === id ? ' sel' : '') + '" data-id="' + id + '"><b>' + a[1] + '</b>' + a[2] + (a[3] > 1 ? '<i>' + left[id] + ' left</i>' : '') + '</button>'; });
+      while (w.length < 3) { h += '<span class="sd-c none">' + (w.length ? '' : 'Nobody is waiting.') + '</span>'; w.push(''); }
+      q('.sd-rail').innerHTML = ER.gloss(h);
+      ER.$$('.sd-c[data-id]', box).forEach(function (b) { b.addEventListener('click', function () { sel = b.getAttribute('data-id'); CP.sfx.key(); rail(); }); });
+      box.classList.toggle('pick', !!sel);
+      q('.sd-count').textContent = 'Sent on their way: ' + done.length + ' of ' + ARR.length;
+      box.setAttribute('data-wait', waiting().join(' ')); box.setAttribute('data-done', done.join(' '));
+    }
+    function keep() { ER.flag('d-done', done); ER.flag('d-sent', sent); paint(); }
+    function right(id, z) {
+      var zn = zname(z), n;
+      sent[id] = (sent[id] || []).concat([z]); left[id]--;
+      if (left[id] <= 0) done.push(id);
+      if (id === 'car') { open = true; ER.flag('d-open', 1); }
+      CP.sfx.step(); sel = left[id] > 0 ? id : null; keep(); tokens(); rail();
+      if (id === 'ash') return '&ldquo;For the children,&rdquo; says Mrs Latham, reading over your shoulder. &ldquo;A small child cannot climb a rope ladder, and would slip out of the chair. So: into a bag, and up the side, hauled by two men.&rdquo; The seaman carries them down to the ' + zn + '.';
+      if (id === 'doc') return 'A steward takes him away to the ' + zn + '. One doctor to each dining room: that is three rooms where somebody can be looked after at once.';
+      if (id === 'cof') return '&ldquo;Our own men first,&rdquo; says Mrs Latham. &ldquo;They have been called out of their bunks, and they will be on their feet until morning.&rdquo; The urns go off to the ' + zn + '.';
+      if (id === 'car') return '&ldquo;Now,&rdquo; says Mrs Latham. &ldquo;Nothing can be hung at a door that is still bolted.&rdquo; The carpenter goes down to the ' + zn + ', and you can hear his spanner from here.';
+      if (id === 'cha') return '&ldquo;For anybody who is hurt, or too cold to hold on to a rope,&rdquo; says Mrs Latham. &ldquo;They sit in it, and the men haul.&rdquo; The chair goes down to the ' + zn + '.';
+      if (id === 'ste') return 'A steerage steward takes them down again, very gently. Mrs Latham gives the little girl a biscuit out of her apron pocket, which is not on the captain&rsquo;s list.';
+      if (id === 'gen') return '&ldquo;There is nothing wrong with this ship, sir,&rdquo; says Mrs Latham, which is true. The alleyway steward walks him back to his cabin as politely as a man can be walked.';
+      if (id === 'pur') return '&ldquo;Where they come over the side,&rdquo; says Mrs Latham. &ldquo;Christian names and surnames, as each one comes. And spell them back.&rdquo; The clerk goes down to the ' + zn + '.';
+      n = left[id];
+      return 'One load goes to the ' + zn + '. ' + (n ? '&ldquo;And the ' + (n === 1 ? 'last one' : 'other two') + '?&rdquo; says Mrs Latham.' : '&ldquo;Gangways, saloons, boats,&rdquo; says Mrs Latham. &ldquo;So that there is a blanket wherever a cold person may be.&rdquo;');
+    }
+    function send(z) {
+      var id = sel, ok, t, cat;
+      if (!id || left[id] <= 0) { msg('Click one of those who are waiting first, and then the part of the ship.'); return; }
+      if (id === 'bla') {
+        cat = ER.check('bla-g', z) ? 'g' : ER.check('bla-s', z) ? 's' : ER.check('bla-b', z) ? 'b' : '';
+        ok = !!cat;
+        if (ok && (sent.bla || []).some(function (zz) { return (ER.check('bla-g', zz) ? 'g' : ER.check('bla-s', zz) ? 's' : 'b') === cat; })) {
+          CP.slip(); ER.sfx.no(); msg('&ldquo;There are blankets there already,&rdquo; says Mrs Latham. &ldquo;The list names three different kinds of place.&rdquo;'); return;
+        }
+      } else ok = ER.check(id, z);
+      if (ok && (id === 'ash' || id === 'cha') && !open) {
+        CP.slip(); ER.sfx.no(); queue.splice(queue.indexOf(id), 1); queue.push(id); sel = null; rail();
+        msg('Two minutes later ' + (id === 'ash' ? 'the seaman is back, with the bags still over his shoulder' : 'the steward is back, with the chair') + '. &ldquo;The doors are still bolted, miss.&rdquo; Mrs Latham looks at you. &ldquo;One thing before another. Who opens them?&rdquo;'); return;
+      }
+      if (ok) { ER.sfx.ok(); msg(right(id, z)); if (done.length === ARR.length) finish(); return; }
+      CP.slip(); ER.sfx.no();
+      t = WRONG[id + ':' + z] || (id === 'bla' ? 'Nobody there is going to need one. The list names three kinds of place for blankets, and that is not one of them.' : 'Not there. It is all in the list, if the list is read.');
+      msg('Mrs Latham puts out one hand, and whatever it was stops. &ldquo;' + t + '&rdquo;');
+    }
+    ER.$$('.z', box).forEach(function (g) { g.addEventListener('click', function () { send(g.getAttribute('data-z')); }); });
+    function finish() {
+      var b = (sent.bla || []).slice().sort(function (x, y) { var o = function (zz) { return ER.check('bla-g', zz) ? 0 : ER.check('bla-s', zz) ? 1 : 2; }; return o(x) - o(y); });
+      var c = ['ash', 'doc', 'cof', 'car'].map(function (id) { return sent[id][0]; }).concat([b.join('+')]).concat(['cha', 'ste', 'gen', 'pur'].map(function (id) { return sent[id][0]; })).join('-');
+      var file = ER.exitOk([c]);
+      if (!file) { msg('The rail is empty, and nothing happens. Something is wrong: tell your teacher.'); return; }
+      nextFile = file; ER.flag('d-file', file);
+      var st = ER.state(); st.done = st.done || {}; st.done.saloon = 1; ER.persist(true);
+      setTimeout(function () { msg('The rail by the door is empty. Mrs Latham looks at her list, and then, for the first time tonight, at the clock.'); }, 2600);
+      setTimeout(function () { ER.closeAll(); after(); }, 5600);
+    }
+    tokens(); rail();
+    box.first = function () { msg('&ldquo;One at a time,&rdquo; says Mrs Latham. &ldquo;And if a thing cannot be done yet, send it back and do another.&rdquo;<br><br>Click one of those who are waiting. Then click the part of the ship where the captain&rsquo;s list sends them.'); };
+    return box;
+  }
+  function openDoor() {
+    if (!sdBox) sdBox = buildDoor();
+    sdBox.first(); inLock = true;
+    ER.open('ov-lock', sdBox, function () { inLock = false; });
+  }
+  function after() {
+    busy = true; inLock = false; paint();
+    CP.learn('gangway', 'purser', 'steerage');
+    CP.mine('ready', 'At the saloon door', '<p>First the carpenter, to open the gangway doors. Nothing can be hung at a bolted door.</p><p>Coffee: for our own men. Soup, coffee and tea: for the saloons, later.</p><p>Blankets: gangways, saloons, boats.</p><p>Ash bags: for the children. A chair on ropes: for anybody who cannot climb.</p><p>Our own passengers: back to their cabins, or kept below.</p>', true);
+    ER.narrate([
+      'By half past two the saloon does not look like a place where anybody ever ate dinner. There are blankets on every table. At the end of the room there are soup, coffee and tea, and the smell of all three. The English doctor has laid out his instruments as carefully as a man laying a table.',
+      'Mrs Latham walks down the room once, touching things. &ldquo;Two thousand,&rdquo; she says, to nobody. &ldquo;And one saloon.&rdquo;',
+      'Then she sees you. &ldquo;Go up, and tell Mr Sinclair that the hotel side is ready whenever his ship is.&rdquo; She looks at you a little longer. &ldquo;You read well, messenger. Thank you.&rdquo;'
+    ], function () { busy = false; paint(); });
+  }
+})();
+</script>
+</body>
+</html>

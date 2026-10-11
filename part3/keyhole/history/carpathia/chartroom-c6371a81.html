@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Chart Room · Come at Once</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="carpathia.css">
+<style>
+  body{--bg:#070c10;--accent:#9fd6b0;--font-display:'Libre Caslon Text',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(6,10,13,.96);--tc-ink:#e6eee9;--cap-bg:rgba(7,12,15,.94);--panel:#101a1c;--face-bg:#111a24;--q-ink:#a9d9b8;--fade:#030607;--hud-bg:rgba(7,12,15,.8)}
+  .tc-room{font-style:italic;font-weight:400}
+  .lb{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.14em}
+  .hw{font-family:'Architects Daughter',cursive;text-anchor:middle}
+  .tw{animation:tw 3.4s steps(1,end) infinite}
+  .tw.t2{animation-duration:4.7s;animation-delay:-1.3s}
+  .tw.t3{animation-duration:2.6s;animation-delay:-.8s}
+  @keyframes tw{50%{opacity:.35}}
+  #stars{animation:drift 90s linear infinite}
+  @keyframes drift{from{transform:translateX(0)}to{transform:translateX(-200px)}}
+  body.turn #stars{animation:swing 7s ease-out 1}
+  @keyframes swing{from{transform:translateX(620px)}to{transform:translateX(0)}}
+  #cone2{animation:lamp 8s steps(1,end) infinite}
+  @keyframes lamp{0%{opacity:1}70%{opacity:.88}72%{opacity:1}}
+  #chart.ready #sheet{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+  #chalked{display:none}
+  body.done #chalked{display:block}
+
+  /* the chart, and the slate beside it */
+  .ch{display:grid;grid-template-columns:minmax(0,700px) 292px;gap:18px;width:min(1010px,97vw);align-items:start}
+  .ch-svg{display:block;width:100%;height:auto;background:#efe7cf;box-shadow:0 18px 44px rgba(0,0,0,.6);touch-action:none;-webkit-user-select:none;user-select:none}
+  .ch-svg text{font-family:'Libre Caslon Text',serif;fill:#3b3324}
+  .ch-svg .sc{font-size:10.5px}
+  .ch-svg .snd{font-size:9.5px;font-style:italic;fill:#8a7f66}
+  .ch-svg .ttl{font-size:15px;font-style:italic;letter-spacing:.2em;fill:#6b5f48}
+  .ch-svg .rn{font-size:8.5px;text-anchor:middle;fill:#5a4b33}
+  .ch-svg .rl{font-size:14px;font-weight:700;text-anchor:middle;fill:#5a4b33}
+  .ch-svg .tag{font-family:'Architects Daughter',cursive;font-size:13px;fill:#1d2a4a}
+  .ch-pin{cursor:grab}
+  .ch-pin.on{cursor:grabbing}
+  .ch-pin.fix{cursor:default}
+  #ch-rule,#ch-div{cursor:grab}
+  #ch-rule.on,#ch-div.on{cursor:grabbing}
+  #ch-ring{cursor:crosshair}
+  .ch-slate{padding:13px 16px 12px;background:#22282b linear-gradient(140deg,rgba(255,255,255,.07),rgba(0,0,0,.2));color:#e9e6dc;font-family:'Caveat',cursive;font-size:24px;line-height:1.16;border:10px solid #6b4a2a;border-radius:3px;box-shadow:0 14px 30px rgba(0,0,0,.55)}
+  .ch-slate p{margin:0 0 5px}
+  .ch-slate b{font-weight:700;color:#ffd97a}
+  .ch-slate .s1{font-size:20px;color:#b9b6ac}
+  .ch-slate .row{display:none;align-items:center;flex-wrap:wrap;gap:5px;margin-top:9px;padding-top:8px;border-top:1px dashed rgba(255,255,255,.3)}
+  .ch-slate .row.on{display:flex}
+  .ch-slate .row .lbl{flex:0 0 100%;font-size:21px;color:#b9b6ac}
+  .ch-slate button{min-width:30px;height:30px;padding:0 6px;border:1px solid rgba(255,255,255,.45);border-radius:3px;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.04em;color:#e9e6dc}
+  .ch-slate button:hover{border-color:#ffd97a;color:#ffd97a}
+  .ch-slate button.big{min-width:38px;font-family:'Caveat',cursive;font-weight:700;font-size:26px;line-height:1;color:#ffd97a}
+  .ch-slate .v{display:inline-block;min-width:38px;text-align:center;font-weight:700;font-size:30px;line-height:1;color:#ffd97a}
+  .ch-slate .dg{margin-left:-7px;font-weight:700;font-size:26px;line-height:1;color:#ffd97a}
+  .ch-slate .row.ok button{display:none}
+  .ch-slate .row.ok .v{min-width:0}
+  .ch-slate .row.ok .dg{margin-left:-4px;margin-right:4px}
+  .ch-slate .row.ok .v,.ch-slate .row.ok .lt,.ch-slate .row.ok .dg{color:#bfe8b4}
+  .ch-slate .lt{font-weight:700;font-size:28px;color:#ffd97a;display:none}
+  .ch-slate .row.ok .lt{display:inline}
+  .ch-side .btn{display:block;width:100%;margin:12px 0 10px}
+  .ch-side .pmsg{font-size:15.8px;line-height:1.38}
+  @media (max-width:900px){.ch{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#14221f"/><stop offset=".7" stop-color="#0f1a18"/><stop offset="1" stop-color="#0a1211"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#131b1c"/><stop offset="1" stop-color="#05090a"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc92"/><stop offset=".5" stop-color="#c39a3c"/><stop offset="1" stop-color="#7d5f1e"/></linearGradient>
+  <linearGradient id="teakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c3d22"/><stop offset="1" stop-color="#2f1d0f"/></linearGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#03060c"/><stop offset="1" stop-color="#0a1626"/></linearGradient>
+  <radialGradient id="coneG" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#f4ffe9" stop-opacity=".6"/><stop offset=".55" stop-color="#d9f3d0" stop-opacity=".16"/><stop offset="1" stop-color="#d9f3d0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="poolG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fffdf0" stop-opacity=".5"/><stop offset="1" stop-color="#fffdf0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="56%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#010405" stop-opacity=".35"/><stop offset="1" stop-color="#000203" stop-opacity=".9"/></radialGradient>
+  <clipPath id="winC"><rect x="420" y="130" width="230" height="200"/><rect x="685" y="130" width="230" height="200"/><rect x="950" y="130" width="230" height="200"/></clipPath>
+  <pattern id="panel" width="240" height="600" patternUnits="userSpaceOnUse"><path d="M0 0V600" stroke="#081110" stroke-width="4"/><path d="M5 0V600" stroke="#1d302b" stroke-width="1.5"/></pattern>
+</defs>
+
+<!-- ceiling, wall, floor -->
+<rect x="-1000" y="-400" width="3600" height="480" fill="#0b1413"/>
+<rect x="-1000" y="76" width="3600" height="600" fill="url(#wallG)"/><rect x="-1000" y="76" width="3600" height="600" fill="url(#panel)"/>
+<rect x="-1000" y="70" width="3600" height="12" fill="#060b0a"/>
+<rect x="-1000" y="668" width="3600" height="700" fill="url(#floorG)"/>
+
+<!-- the forward windows: black sea, and stars that have just swung right round -->
+<g id="win" class="hot">
+  <rect x="400" y="110" width="800" height="240" rx="6" fill="#060b0a"/>
+  <g clip-path="url(#winC)">
+    <rect x="400" y="110" width="800" height="240" fill="url(#nightG)"/>
+    <g id="stars" fill="#e9eef2">
+      <circle cx="440" cy="160" r="1.8" class="tw"/><circle cx="486" cy="214" r="1.2"/><circle cx="530" cy="150" r="1.5" class="tw t2"/><circle cx="588" cy="238" r="1.3"/><circle cx="624" cy="176" r="2" class="tw t3"/><circle cx="700" cy="148" r="1.2"/><circle cx="744" cy="222" r="1.6" class="tw"/><circle cx="798" cy="170" r="1.2"/><circle cx="850" cy="250" r="1.3" class="tw t2"/><circle cx="888" cy="156" r="2.4"/><circle cx="966" cy="204" r="1.4" class="tw t3"/><circle cx="1010" cy="148" r="1.2"/><circle cx="1060" cy="238" r="1.7" class="tw"/><circle cx="1110" cy="180" r="1.3"/><circle cx="1160" cy="150" r="1.6" class="tw t2"/>
+      <circle cx="1240" cy="200" r="1.5"/><circle cx="1300" cy="160" r="1.3" class="tw"/><circle cx="1370" cy="230" r="1.7"/><circle cx="1440" cy="170" r="1.2" class="tw t3"/><circle cx="1520" cy="210" r="1.6"/><circle cx="360" cy="190" r="1.4"/><circle cx="290" cy="240" r="1.2" class="tw t2"/><circle cx="220" cy="160" r="1.7"/>
+      <circle cx="470" cy="262" r="1"/><circle cx="660" cy="270" r="1.1"/><circle cx="920" cy="268" r="1"/><circle cx="1130" cy="262" r="1.1"/><circle cx="780" cy="258" r="1"/>
+    </g>
+    <rect x="400" y="282" width="800" height="70" fill="#04080f"/><path d="M400 282h800" stroke="#122033" stroke-width="2"/>
+  </g>
+  <g fill="none" stroke="#2a1a0e" stroke-width="10"><rect x="420" y="130" width="230" height="200"/><rect x="685" y="130" width="230" height="200"/><rect x="950" y="130" width="230" height="200"/></g>
+  <g fill="none" stroke="#5c3d22" stroke-width="3"><rect x="420" y="130" width="230" height="200"/><rect x="685" y="130" width="230" height="200"/><rect x="950" y="130" width="230" height="200"/></g>
+</g>
+
+<!-- the clock, the barometer, the chronometer in its box -->
+<g id="clock" class="hot"><circle cx="1300" cy="200" r="46" fill="url(#brassG)"/><circle cx="1300" cy="200" r="37" fill="#f1ede0"/><g stroke="#22231e" stroke-width="3"><path d="M1300 167v7M1300 226v7M1267 200h7M1326 200h7"/></g>
+  <path id="hh2" d="M1300 200V180" stroke="#22231e" stroke-width="5" stroke-linecap="round" transform="rotate(27 1300 200)"/><path id="mh2" d="M1300 200V170" stroke="#22231e" stroke-width="3" stroke-linecap="round" transform="rotate(330 1300 200)"/><circle cx="1300" cy="200" r="4" fill="#8c2f24"/></g>
+<g id="baro" class="hot"><circle cx="1440" cy="250" r="40" fill="url(#brassG)"/><circle cx="1440" cy="250" r="31" fill="#e9e4d2"/><path d="M1440 250l16-20" stroke="#1d2a4a" stroke-width="3" stroke-linecap="round"/><path d="M1416 236a28 28 0 0 1 48 0" fill="none" stroke="#22231e" stroke-width="1.5" stroke-dasharray="2 4"/><circle cx="1440" cy="250" r="3.5" fill="#22231e"/></g>
+<g id="chrono" class="hot"><rect x="1330" y="470" width="240" height="14" fill="#2f1d0f"/><path d="M1350 484l-10 40M1550 484l10 40" stroke="#2f1d0f" stroke-width="7"/>
+  <rect x="1372" y="388" width="150" height="84" rx="4" fill="url(#teakG)"/><path d="M1372 388l22-46h150l-22 46z" fill="#3d2816"/><ellipse cx="1457" cy="366" rx="46" ry="14" fill="#f1ede0"/><ellipse cx="1457" cy="366" rx="46" ry="14" fill="none" stroke="url(#brassG)" stroke-width="5"/><path d="M1457 366l14-6M1457 366l-20-4" stroke="#22231e" stroke-width="2"/>
+  <rect x="1432" y="420" width="50" height="12" rx="3" fill="url(#brassG)"/></g>
+
+<!-- Sinclair's two cards, and the slate by the door -->
+<g id="cardA" class="hot"><rect x="96" y="210" width="150" height="124" fill="#dfe6e4" transform="rotate(-2 171 272)"/><g transform="rotate(-2 171 272)"><rect x="96" y="210" width="150" height="6" fill="#1d2a4a"/>
+  <text x="171" y="240" class="lb" font-size="14" fill="#1d2a4a">A POSITION</text><g stroke="#8ba0a6" stroke-width="1.5" fill="none"><rect x="116" y="254" width="70" height="56"/><path d="M116 282h70M151 254v56"/></g><circle cx="166" cy="292" r="4" fill="#8c2f24"/><g stroke="#55585c" stroke-width="2"><path d="M196 262h36M196 276h30M196 290h36M196 304h24"/></g><circle cx="171" cy="214" r="4.5" fill="#22231e"/></g></g>
+<g id="cardB" class="hot"><rect x="262" y="218" width="150" height="124" fill="#dfe6e4" transform="rotate(1.6 337 280)"/><g transform="rotate(1.6 337 280)"><rect x="262" y="218" width="150" height="6" fill="#1d2a4a"/>
+  <text x="337" y="248" class="lb" font-size="13" fill="#1d2a4a">COURSE &amp; DISTANCE</text><circle cx="300" cy="294" r="26" fill="none" stroke="#8ba0a6" stroke-width="1.5"/><path d="M300 294l14-22M300 268v-6M300 326v-6M268 294h6M326 294h6" stroke="#1d2a4a" stroke-width="2"/><g stroke="#55585c" stroke-width="2"><path d="M344 270h54M344 284h46M344 298h54M344 312h36"/></g><circle cx="337" cy="222" r="4.5" fill="#22231e"/></g></g>
+<g id="slate" class="hot"><path d="M172 392v-22M300 392v-22" stroke="#6b6552" stroke-width="2"/><circle cx="236" cy="366" r="5" fill="url(#brassG)"/><path d="M172 370L236 366L300 370" stroke="#6b6552" stroke-width="2" fill="none"/>
+  <rect x="118" y="392" width="236" height="150" rx="4" fill="#6b4a2a"/><rect x="130" y="404" width="212" height="126" fill="#22282b"/>
+  <g font-family="'Caveat',cursive" fill="#e9e6dc"><text x="142" y="430" font-size="19">12.35 A.M. TURNED</text><text x="142" y="456" font-size="19">US 41.10 N 49.13 W</text><text x="142" y="486" font-size="19" fill="#9aa19a">COURSE</text><text x="142" y="514" font-size="19" fill="#9aa19a">DISTANCE</text></g>
+  <g id="chalked" font-family="'Caveat',cursive" font-weight="700" fill="#ffd97a"><text id="chk1" x="216" y="486" font-size="22"></text><text id="chk2" x="232" y="514" font-size="22"></text></g></g>
+
+<!-- the lamp -->
+<path d="M800 -400V396" stroke="#060b0a" stroke-width="5" pointer-events="none"/>
+<polygon id="cone2" points="748,430 852,430 1330,760 270,760" fill="url(#coneG)" pointer-events="none"/>
+<path d="M736 434q64-70 128 0z" fill="#2f6b4c"/><path d="M736 434h128" stroke="#060b0a" stroke-width="5"/><ellipse cx="800" cy="438" rx="22" ry="8" fill="#f4ffe9"/>
+
+<!-- Sinclair, at the end of the table -->
+<g id="sinclair" class="hot" transform="translate(184 0)">
+  <ellipse cx="236" cy="800" rx="90" ry="12" fill="#000" opacity=".45"/>
+  <path d="M170 800q-10-190 16-262q12-36 50-38t50 38q26 72 16 262z" fill="#16203a"/><path d="M186 572q50 34 100 0" stroke="#253556" stroke-width="9" fill="none"/>
+  <rect x="222" y="462" width="28" height="34" fill="#c18d68"/>
+  <path d="M202 438q0-46 34-46t34 46v16q-4 24-34 24t-34-24z" fill="#cf9c76"/><path d="M202 452q4 38 34 46q30-8 34-46q-6 20-34 20t-34-20z" fill="#c9ccd0"/>
+  <path d="M194 422q42-24 84 0l-2 9q-40-16-80 0z" fill="#0c1220"/><path d="M202 418q0-32 34-32t34 32q-34-12-68 0z" fill="#1b2740"/>
+  <circle cx="224" cy="438" r="2.6" fill="#1b1512"/><circle cx="248" cy="438" r="2.6" fill="#1b1512"/>
+  <g fill="none" stroke="#c9a23a" stroke-width="2"><circle cx="224" cy="439" r="9"/><circle cx="248" cy="439" r="9"/><path d="M233 439h6"/></g>
+  <path d="M286 560q60 40 110 62" stroke="#16203a" stroke-width="24" fill="none" stroke-linecap="round"/><circle cx="398" cy="624" r="13" fill="#c18d68"/>
+</g>
+
+<!-- the chart table -->
+<g id="table">
+  <path d="M300 660h1040l150 660H140z" fill="url(#teakG)"/><path d="M300 660h1040" stroke="#8a6238" stroke-width="5"/>
+  <ellipse cx="800" cy="720" rx="420" ry="90" fill="url(#poolG)" pointer-events="none"/>
+</g>
+<g id="chart" class="hot">
+  <g id="sheet"><path d="M420 668h700l90 190H330z" fill="#efe7cf"/><path d="M420 668h700l90 190H330z" fill="none" stroke="#b9ad8c" stroke-width="3"/>
+    <g stroke="#b7ab8b" stroke-width="1.5" fill="none"><path d="M560 668l-52 190M700 668l-18 190M840 668l18 190M980 668l52 190M394 720h752M368 776h804M344 830h852"/></g>
+    <ellipse cx="560" cy="790" rx="52" ry="24" fill="none" stroke="#6b5f48" stroke-width="2"/><path d="M560 766v48M508 790h104" stroke="#6b5f48" stroke-width="1.5"/>
+    <ellipse cx="1010" cy="716" rx="34" ry="13" fill="none" stroke="#9a6a3a" stroke-width="5" opacity=".35"/></g>
+  <g transform="rotate(-14 900 760)"><rect x="760" y="742" width="290" height="16" rx="3" fill="url(#brassG)"/><rect x="760" y="768" width="290" height="16" rx="3" fill="url(#brassG)"/><path d="M820 758l24 10M970 758l24 10" stroke="#7d5f1e" stroke-width="6"/></g>
+  <path d="M640 838l40-120l40 120" stroke="url(#brassG)" stroke-width="7" fill="none" stroke-linejoin="round"/><circle cx="680" cy="716" r="9" fill="url(#brassG)"/><path d="M640 838l-2 10M720 838l2 10" stroke="#3a3d40" stroke-width="3"/>
+  <path d="M1080 800l110-26" stroke="#d9a22b" stroke-width="6" stroke-linecap="round"/><path d="M1190 774l12-3" stroke="#22231e" stroke-width="5" stroke-linecap="round"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go below to the engine room</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="carpathia.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, chBox = null, inLock = false, lockStage = 0;
+
+  ER.init({
+    theme: 'history', story: 'carpathia', storyTitle: 'Come at Once', id: 'chartroom', no: 'II', title: 'The Chart Room',
+    go: 'Go in', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'On Sinclair&rsquo;s test you sent MPA, because those are the Carpathia&rsquo;s three letters, and then RD, which is how one operator tells another &ldquo;received&rdquo;. Then the real thing came. Whoever signs after DE is the one who is sending: so the ship in trouble was MGY, the Titanic, and MKC was only her sister, the Olympic, whom she was calling. A figure is five marks, and where the crackle had taken a mark out of one line, the other line had it: 41.46 N, 50.14 W. And the long sign with no gaps in it was the new distress call, SOS.',
+      'It is now five minutes to one. Under your feet the deck is shaking as it has never shaken before, and the whole ship has turned round. At midnight the Pole Star was on your left hand. Now it is ahead of you, on the right.',
+      'The chart room is behind the wheelhouse: one green lamp, one wide table. The captain worked out his course in here while he was still dressing, and he has gone to give his orders. Quartermaster Sinclair has the slate to write up. He does not write what he has not seen proved.'
+    ],
+    exit: {"next":"engines","w":{"3970768c":"5d85cf3a"}}, tags: {"a-lat":["1cf898dd"],"a-lon":["bf02c845"],"b-lat":["68f3d499"],"b-lon":["0cd24a2d"],"crs":["6c888aec"],"dist":["07d1e84d"]},
+    sound: ['archive', { root: 48, bpm: 56, mood: 'tense', drop: ['mel'], beds: [['sea', 0.5]] }],
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('c-file') || null; lockStage = ER.flag('c-st') || 0;
+
+  var CARD_A = '<h4>A position</h4>' +
+    '<p>A <b>POSITION</b> is two numbers and two letters.</p>' +
+    '<p><b>LATITUDE</b> says how far north you are from the Equator. On a chart it is read on the scales at the two <b>SIDES</b>, and it grows as you go <b>UP</b>.</p>' +
+    '<p><b>LONGITUDE</b> says how far west you are from Greenwich. It is read on the scales at the <b>TOP</b> and the <b>BOTTOM</b>, and in this ocean it grows as you go <b>LEFT</b>.</p>' +
+    '<svg viewBox="0 0 560 140"><rect x="80" y="14" width="210" height="96" fill="rgba(255,255,255,.5)" stroke="#1d2a4a" stroke-width="1.5"/>' +
+    '<g stroke="#1d2a4a" stroke-width="1.2"><path d="M80 30h-6M80 46h-9M80 62h-6M80 78h-6M80 94h-6M115 110v6M150 110v6M185 110v9M220 110v6M255 110v6"/></g>' +
+    '<path d="M80 62h140v48" stroke="#8c2f24" stroke-width="1.5" stroke-dasharray="4 4" fill="none"/><circle cx="220" cy="62" r="5" fill="#8c2f24"/>' +
+    '<g font-family="\'Courier Prime\',monospace" font-weight="700" font-size="14" fill="#1d2a4a"><text x="72" y="19" text-anchor="end">42&deg;</text><text x="72" y="114" text-anchor="end">41&deg;</text><text x="80" y="134" text-anchor="middle">50&deg;</text><text x="290" y="134" text-anchor="middle">49&deg;</text></g>' +
+    '<g font-family="\'Courier Prime\',monospace" font-weight="700" font-size="14" fill="#8c2f24"><text x="70" y="66" text-anchor="end">41&deg; 30&prime;</text><text x="220" y="134" text-anchor="middle">49&deg; 20&prime;</text></g>' +
+    '<g font-family="\'Architects Daughter\',cursive" font-size="14" fill="#1d2a4a"><text x="310" y="34">The red dot is at</text><text x="310" y="84">By wireless that is sent as</text></g>' +
+    '<g font-family="\'Courier Prime\',monospace" font-weight="700" font-size="16" fill="#8c2f24"><text x="310" y="56">41&deg; 30&prime; N, 49&deg; 20&prime; W</text><text x="310" y="106">41.30 N  49.20 W</text></g></svg>' +
+    '<p>Both are counted in degrees (&deg;) and minutes (&prime;). There are <b>SIXTY</b> minutes in a degree, as there are in an hour.</p>' +
+    '<p>The wireless men save time and write <span class="fig">41.30 N</span>. That dot is no decimal point. It means 41 degrees 30 minutes: half way from 41 to 42. Read it as a decimal, and you are twelve miles out.</p><p class="by">S.</p>';
+  var CARD_B = '<h4>A course and a distance</h4>' +
+    '<p><b>COURSE.</b> Lay the brass rule from where you <b>ARE</b> to where you are <b>GOING</b>. Walk it across the chart, never letting it turn, until its edge lies through the very middle of the compass rose. Read the ring at the end that points where you are going. The other end is only the way back.</p>' +
+    '<svg viewBox="0 0 560 126"><circle cx="90" cy="64" r="50" fill="rgba(255,255,255,.5)" stroke="#1d2a4a" stroke-width="1.5"/><g stroke="#1d2a4a" stroke-width="1.5"><path d="M90 14v8M90 106v8M40 64h8M132 64h8"/></g>' +
+    '<path d="M90 64l25-43.300" stroke="#8c2f24" stroke-width="2.5"/><path d="M115 20.700l-9.500 5.500l8.500 5z" fill="#8c2f24"/><path d="M90 64l-25 43.300" stroke="#8c2f24" stroke-width="1.5" stroke-dasharray="4 4"/>' +
+    '<g font-family="\'Architects Daughter\',cursive" font-size="13" fill="#1d2a4a"><text x="90" y="11" text-anchor="middle">N</text><text x="90" y="125" text-anchor="middle">S</text><text x="32" y="69" text-anchor="end">W</text><text x="148" y="69">E</text></g>' +
+    '<g font-family="\'Courier Prime\',monospace" font-weight="700" font-size="15" fill="#8c2f24"><text x="126" y="26">N 30&deg; E: going</text></g><g font-family="\'Courier Prime\',monospace" font-weight="700" font-size="14" fill="#6b6552"><text x="160" y="110">S 30&deg; W: the way back</text></g>' +
+    '<path d="M430 10v110" stroke="#1d2a4a" stroke-width="2"/><g stroke="#1d2a4a" stroke-width="1.2"><path d="M430 20h10M430 36h6M430 52h6M430 68h6M430 84h6M430 100h10"/></g>' +
+    '<path d="M430 36L372 60L430 84" stroke="#b08a35" stroke-width="4" fill="none" stroke-linejoin="round"/><circle cx="372" cy="60" r="5" fill="#b08a35"/>' +
+    '<g font-family="\'Architects Daughter\',cursive" font-size="13" fill="#1d2a4a"><text x="446" y="64">3 minutes at the</text><text x="446" y="82">side = 3 sea miles</text></g></svg>' +
+    '<p>A course is named from north or from south. <span class="fig">N 30&deg; E</span> means: start from north, and turn 30 degrees towards the east.</p>' +
+    '<p><b>DISTANCE.</b> Open the dividers from one position to the other. Carry them to the scale at the <b>SIDE</b> of the chart, never to the bottom. One minute of latitude is one sea mile, anywhere in the world. A minute of longitude is a whole mile only at the Equator: up here the lines have crowded together, and it is about three quarters of one.</p><p class="by">S.</p>';
+  var SLATE = '<h4>The chart-room slate</h4><p>12.35 A.M. TURNED.</p><p>OUR POSITION <b>41.10 N, 49.13 W</b></p><p>(as the captain wrote it on a slip for Mr Cottam to send)</p><p>COURSE: &nbsp; DISTANCE:</p>';
+
+  function hints() {
+    if (nextFile) return ['go', ['Sinclair has told you where to go. Use the button at the bottom of the screen.']];
+    if (inLock && lockStage === 0) return ['pins', [
+      '41.46 N means 41 degrees and 46 minutes. Find the line marked 41&deg; 40&prime; at the side of the chart, and count six small marks up from it.',
+      'Longitude grows to the LEFT here. For 50&deg; 14&prime; W, find the line marked 50&deg; 10&prime; at the bottom, and count four small marks to the left of it.',
+      'While you hold a pin, two thin red lines run from it to the scales. Move the pin until each line touches the right small mark. Our own ship is ten minutes above 41&deg;, and thirteen minutes to the left of 49&deg;.'
+    ]];
+    if (inLock && lockStage === 1) return ['course', [
+      'Drag the brass rule towards the compass rose. It cannot turn. Let it go when its lower edge runs through the very middle of the rose.',
+      'The edge cuts the ring in two places. One of them is the way to her, and the other is the way back. Is she north of us or south of us? East or west?',
+      'Click the ring where the edge crosses it, and read the number there. Then set the two letters on the slate: the first says whether you start from north or from south, the second which way you turn.'
+    ]];
+    if (inLock) return ['dist', [
+      'Drag the dividers to a scale at the edge of the chart. Which edge does Sinclair&rsquo;s second card tell you to use?',
+      'At the side of the chart the lower point of the dividers rests on 41&deg;. Count the minutes up to the other point: every long mark is ten.'
+    ]];
+    if (ER.flag('c-a') && ER.flag('c-b') && ER.flag('c-s')) return ['open', ['Sinclair&rsquo;s old chart is spread out on the table, under the lamp.']];
+    return ['look', [
+      'Two cards are pinned to the wall on the left, and a slate hangs under them. You need all three before you touch the chart.',
+      'Our own position is on the slate. Hers is on your own paper, in your notebook.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function crsText() { return (ER.flag('c-crs') || '').toUpperCase().replace(/-/g, ' '); }
+  function paint() {
+    document.body.classList.toggle('done', !!nextFile);
+    $('#chart').classList.toggle('ready', !nextFile && !!(ER.flag('c-a') && ER.flag('c-b') && ER.flag('c-s')));
+    if (nextFile) { $('#chk1').textContent = crsText(); $('#chk2').textContent = (ER.flag('c-dist') || '') + ' MILES'; $('#go').classList.add('on'); }
+    $('#hh2').setAttribute('transform', 'rotate(' + (nextFile ? 34 : 27.5) + ' 1300 200)');      /* five to one; then eight minutes past */
+    $('#mh2').setAttribute('transform', 'rotate(' + (nextFile ? 48 : 330) + ' 1300 200)');
+    ER.pips(nextFile ? 3 : lockStage, 3);
+  }
+
+  function begin() {
+    paint();
+    CP.need('code', 'The Morse code', CP.CODE, 'card', 'Card on the wall');
+    CP.need('heard', 'What she sent', '<h4>What she sent</h4><p>Calling: <b>MGY</b>, the Titanic.</p><p>She wants: <b>MKC</b>, the Olympic, her sister.</p><p>Her calls: <b>CQD</b> and <b>SOS</b>.</p><p>Her position: <b>41.46 N, 50.14 W</b>.</p><p>The one who signs after DE is the one who is sending.</p>', 'mine', 'Your notes');
+    if (ER.flag('c-in')) { busy = false; ER.say(nextFile ? 'The chart room. The course and the distance are on the slate.' : 'The chart room. Sinclair is waiting, with his hand on the chart.'); return; }
+    document.body.classList.add('turn');
+    CP.learn('chart', 'position');
+    ER.narrate([
+      'Long drawers full of charts, a brass clock, a barometer, and a table with a lamp over it. Through the forward windows there is nothing to see but black water and stars.',
+      'Sinclair unrolls an old chart of his own, as soft as cloth, with the rings of many teacups on it. &ldquo;The officers have the ship&rsquo;s chart, and they are welcome to it. This one is mine. Boys learn on it.&rdquo;',
+      '&ldquo;I know what the captain made it: the course, and how far. I heard him give it to the man at the wheel. I am not going to tell you. You are going to tell me.&rdquo;',
+      '&ldquo;Our own position is on the slate. Hers is on your paper. And before you touch my chart, you will read my two cards.&rdquo;'
+    ], function () { busy = false; ER.flag('c-in', 1); });
+  }
+
+  /* ---------- things in the room ---------- */
+  $('#cardA').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD_A, cls: 'qm', clue: { id: 'pos', title: 'Sinclair’s card: a position', kind: 'Card on the wall' }, done: function () { CP.learn('latitude', 'longitude', 'degree', 'minute'); ER.flag('c-a', 1); paint(); } });
+  });
+  $('#cardB').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD_B, cls: 'qm', clue: { id: 'crs', title: 'Sinclair’s card: a course and a distance', kind: 'Card on the wall' }, done: function () { CP.learn('course', 'compass rose', 'dividers', 'nautical mile'); ER.flag('c-b', 1); paint(); } });
+  });
+  $('#slate').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'slate');
+    if (nextFile) { ER.say('The slate. ' + crsText() + ', ' + (ER.flag('c-dist') || '') + ' MILES, in chalk figures as tall as your hand.'); return; }
+    ER.read({ html: SLATE, cls: 'slatep', clue: { id: 'slate', title: 'The chart-room slate', kind: 'Chalk on a slate' }, done: function () { ER.flag('c-s', 1); paint(); } });
+  });
+  CP.thing('#win', null, 'Black water, and stars right down to the edge of it. Somewhere ahead, under those stars, is latitude 41.46.', isBusy);
+  CP.thing('#clock', null, function () { return nextFile ? 'Ten past one, nearly.' : 'Five minutes to one.'; }, isBusy);
+  CP.thing('#baro', 'barometer', 'High, and steady. A fine, clear, freezing night.', isBusy);
+  CP.thing('#chrono', 'chronometer', 'The chronometer, in its box. It keeps the time of Greenwich, in England, and nobody ever alters it. With that clock and the sun, the officers find the ship&rsquo;s longitude.', isBusy);
+  $('#sinclair').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Quartermaster Sinclair', role: 'forty years at sea', face: FACE('sinclair'),
+      lines: [
+        { note: 'He has put on a pair of steel spectacles to look at the chart. They make him look like somebody&rsquo;s grandfather, which he is.' },
+        { q: 'How does the captain know where we are?', a: '&ldquo;At noon the officers take the sun, and that gives a position that nobody can argue with. Since noon we have steered one course at one speed, and a line over the stern counts the miles. I read it myself at midnight. Noon, a course, so many miles: that is where we are.&rdquo;' },
+        { q: 'And how does he know where she is?', a: '&ldquo;He does not. He knows where she <em>says</em> she is, which came through the air as dots and was written down by one young man with a pencil. That is all we have. So we shall steer for it, and we shall look out of the window as well.&rdquo;' },
+        { q: 'Why do you not trust the wireless?', a: '&ldquo;I trust a thing that I can put my thumb on. A star. A lighthouse. The bottom of the sea, on the end of a lead line. I shall believe in wireless on the day that it brings a ship alongside.&rdquo; He looks at the black windows. &ldquo;Tonight would be a good night for it.&rdquo;' },
+        { q: 'What does &ldquo;true&rdquo; mean, after a course?', a: '&ldquo;That it is measured from the real north of the world, as the chart is drawn. A compass needle points a little to one side of that, and the officers allow for it. On my chart you need only the rose.&rdquo;' }
+      ],
+      clue: { id: 'sin1', title: 'Sinclair, in the chart room', kind: 'What he said' }, last: 'Back to the chart',
+      done: function () {}
+    });
+  });
+  $('#chart').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Sinclair&rsquo;s old chart, with two new pin holes in it and one pencil line.'); return; }
+    if (!ER.flag('c-a') || !ER.flag('c-b')) { ER.say('&ldquo;Hands off,&rdquo; says Sinclair. &ldquo;My two cards first. They are on the wall, on your left.&rdquo;'); return; }
+    if (!ER.flag('c-s')) { ER.say('&ldquo;And where are <em>we</em>, Buzzer?&rdquo; says Sinclair. &ldquo;It is on the slate, under the cards.&rdquo;'); return; }
+    openChart();
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; CP.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+
+  /* ---------- the chart ---------- */
+  var LONW = 3034, LATN = 2522, X0 = 64, Y0 = 30, PX = 6, PY = 8, X1 = X0 + 98 * PX, Y1 = Y0 + 64 * PY, RC = [244, 414], RR = 112;
+  var GIVEN = { a: ['41.10', '49.13'], b: ['41.46', '50.14'] };       /* what is written on the slate and on your own paper: the numbers to plot */
+  function lon2x(m) { return X0 + (LONW - m) * PX; }
+  function lat2y(m) { return Y0 + (LATN - m) * PY; }
+  function dm(m) { return ('0' + Math.floor(m / 60)).slice(-2) + ('0' + (m % 60)).slice(-2); }
+  function chartSvg() {
+    var s = '', m, x, y, len, d, a, q, i;
+    s += '<rect x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="' + (Y1 - Y0) + '" fill="#f4eeda" stroke="#3b3324" stroke-width="1.6"/>';
+    s += '<g stroke="#b9ad8c" stroke-width="1" fill="none">';
+    for (m = 2460; m <= 2520; m += 10) s += '<path d="M' + X0 + ' ' + lat2y(m) + 'H' + X1 + '"/>';
+    for (m = 2940; m <= 3030; m += 10) s += '<path d="M' + lon2x(m) + ' ' + Y0 + 'V' + Y1 + '"/>';
+    s += '</g><g stroke="#3b3324" stroke-width="1" fill="none">';
+    for (m = 2458; m <= 2522; m++) { y = lat2y(m); len = m % 10 === 0 ? 12 : m % 5 === 0 ? 8 : 5; s += '<path d="M' + X0 + ' ' + y + 'h-' + len + 'M' + X1 + ' ' + y + 'h' + len + '"/>'; }
+    for (m = 2936; m <= 3034; m++) { x = lon2x(m); len = m % 10 === 0 ? 12 : m % 5 === 0 ? 8 : 5; s += '<path d="M' + x + ' ' + Y1 + 'v' + len + 'M' + x + ' ' + Y0 + 'v-' + len + '"/>'; }
+    s += '</g>';
+    for (m = 2460; m <= 2520; m += 10) { y = lat2y(m) + 3.5; s += '<text class="sc" x="' + (X0 - 16) + '" y="' + y + '" text-anchor="end">' + Math.floor(m / 60) + '&deg; ' + ('0' + m % 60).slice(-2) + '&prime;</text><text class="sc" x="' + (X1 + 15) + '" y="' + y + '">' + ('0' + m % 60).slice(-2) + '&prime;</text>'; }
+    for (m = 2940; m <= 3030; m += 10) s += '<text class="sc" x="' + lon2x(m) + '" y="' + (Y1 + 26) + '" text-anchor="middle">' + Math.floor(m / 60) + '&deg; ' + ('0' + m % 60).slice(-2) + '&prime;</text>';
+    s += '<text class="sc" x="' + (X0 - 16) + '" y="' + (Y1 + 26) + '" text-anchor="end" font-style="italic">W.</text><text class="sc" x="14" y="20" font-style="italic">N.</text>';
+    /* the title, soundings in fathoms, and the rings of Sinclair's tea */
+    s += '<text class="ttl" x="372" y="62" text-anchor="middle">NORTH ATLANTIC OCEAN</text><text class="snd" x="372" y="78" text-anchor="middle">soundings in fathoms</text>';
+    [[310, 120, '2140'], [448, 176, '2260'], [330, 236, '2085'], [520, 300, '2410'], [430, 396, '2530'], [596, 250, '2330'], [466, 500, '2620'], [110, 250, '1990'], [612, 520, '2700'], [392, 300, '2190'], [104, 96, '1870'], [560, 120, '2290']].forEach(function (p) { s += '<text class="snd" x="' + p[0] + '" y="' + p[1] + '">' + p[2] + '</text>'; });
+    s += '<ellipse cx="470" cy="236" rx="46" ry="42" fill="none" stroke="#9a6a3a" stroke-width="5" opacity=".16"/><ellipse cx="150" cy="490" rx="40" ry="36" fill="none" stroke="#9a6a3a" stroke-width="4" opacity=".13"/><path d="M372 30V542" stroke="#cfc4a4" stroke-width="2" opacity=".6"/>';
+    /* the compass rose: numbered from north and from south */
+    s += '<g id="ch-rose"><circle cx="' + RC[0] + '" cy="' + RC[1] + '" r="' + RR + '" fill="rgba(244,238,218,.55)" stroke="#5a4b33" stroke-width="1.4"/><circle cx="' + RC[0] + '" cy="' + RC[1] + '" r="' + (RR - 26) + '" fill="none" stroke="#5a4b33" stroke-width=".8"/><g stroke="#5a4b33" stroke-width="1">';
+    for (d = 0; d < 360; d += 2) { a = d * Math.PI / 180; len = d % 10 === 0 ? 10 : 5; s += '<path d="M' + (RC[0] + RR * Math.sin(a)).toFixed(1) + ' ' + (RC[1] - RR * Math.cos(a)).toFixed(1) + 'L' + (RC[0] + (RR - len) * Math.sin(a)).toFixed(1) + ' ' + (RC[1] - (RR - len) * Math.cos(a)).toFixed(1) + '"/>'; }
+    s += '</g>';
+    for (d = 0; d < 360; d += 10) {
+      a = d * Math.PI / 180; q = d <= 90 ? d : d <= 180 ? 180 - d : d <= 270 ? d - 180 : 360 - d;
+      if (d % 90 === 0) s += '<text class="rl" x="' + (RC[0] + (RR - 19) * Math.sin(a)).toFixed(1) + '" y="' + (RC[1] - (RR - 19) * Math.cos(a) + 5).toFixed(1) + '">' + 'NESW'.charAt(d / 90) + '</text>';
+      else s += '<text class="rn" x="' + (RC[0] + (RR - 17) * Math.sin(a)).toFixed(1) + '" y="' + (RC[1] - (RR - 17) * Math.cos(a) + 3).toFixed(1) + '">' + q + '</text>';
+    }
+    s += '<g stroke="#5a4b33" stroke-width=".8" fill="none">';
+    for (i = 0; i < 8; i++) { a = i * Math.PI / 4; s += '<path d="M' + RC[0] + ' ' + RC[1] + 'L' + (RC[0] + (i % 2 ? 46 : 80) * Math.sin(a)).toFixed(1) + ' ' + (RC[1] - (i % 2 ? 46 : 80) * Math.cos(a)).toFixed(1) + '"/>'; }
+    s += '</g><circle cx="' + RC[0] + '" cy="' + RC[1] + '" r="2.6" fill="#5a4b33"/></g>';
+    /* the dish that the pins lie in */
+    s += '<ellipse cx="596" cy="70" rx="46" ry="20" fill="#b08a35" opacity=".9"/><ellipse cx="596" cy="67" rx="40" ry="15" fill="#7d5f1e"/>';
+    s += '<g id="ch-guide" stroke="#b3261c" stroke-width="1" stroke-dasharray="5 4" fill="none"></g><path id="ch-line" d="" stroke="#3a3d40" stroke-width="1.6" fill="none"/>';
+    s += '<g id="ch-rule" style="display:none"></g><g id="ch-cut" pointer-events="none"></g>';
+    s += '<circle id="ch-ring" cx="' + RC[0] + '" cy="' + RC[1] + '" r="' + (RR - 4) + '" fill="none" stroke="#000" stroke-opacity="0" stroke-width="30" pointer-events="stroke" style="display:none"/><g id="ch-div" style="display:none"></g>';
+    s += '<g class="ch-pin" data-p="a"><circle r="15" fill="transparent"/><circle r="7" fill="#d9b860" stroke="#6f531a" stroke-width="2"/><circle r="2" fill="#22231e"/><text class="tag" x="11" y="-9">us</text></g>';
+    s += '<g class="ch-pin" data-p="b"><circle r="15" fill="transparent"/><circle r="7" fill="#c8402f" stroke="#6f1d14" stroke-width="2"/><path d="M-4 0h8M0 -4v8" stroke="#fff" stroke-width="1.5"/><text class="tag" x="11" y="-9">her</text></g>';
+    return '<svg class="ch-svg" viewBox="0 0 700 580" xmlns="http://www.w3.org/2000/svg">' + s + '</svg>';
+  }
+  function buildChart() {
+    var box = ER.el('div', 'ch'), svg, msgEl, goB, pins = { a: { x: 582, y: 66, on: false }, b: { x: 612, y: 68, on: false } }, last = 'a';
+    var crs = { ns: '', n: null, ew: '' }, dist = 0, A, B, U, N, ruleOff = [0, 0], ruleOn = false, dv = { mode: 'free', c: null };
+    box.innerHTML = chartSvg() + '<div class="ch-side"><div class="ch-slate"><p class="s1">12.35 A.M. &middot; TURNED</p><p>HER &nbsp;<b>' + GIVEN.b[0] + ' N &nbsp;' + GIVEN.b[1] + ' W</b></p><p>US &nbsp;&nbsp;<b>' + GIVEN.a[0] + ' N &nbsp;' + GIVEN.a[1] + ' W</b></p>' +
+      '<div class="row r-crs"><span class="lbl">COURSE</span><button type="button" class="big b-ns">?</button><span class="lt l-ns"></span><button type="button" class="b-mi">&minus;</button><span class="v v-n">__</span><span class="dg">&deg;</span><button type="button" class="b-pl">+</button><button type="button" class="big b-ew">?</button><span class="lt l-ew"></span></div>' +
+      '<div class="row r-dst"><span class="lbl">DISTANCE, IN MILES</span><button type="button" class="b-m10">&minus;10</button><button type="button" class="b-m1">&minus;1</button><span class="v v-d">__</span><button type="button" class="b-p1">+1</button><button type="button" class="b-p10">+10</button></div></div>' +
+      '<button type="button" class="btn ch-go">Call Sinclair</button><p class="pmsg"></p></div>';
+    svg = box.querySelector('svg'); msgEl = box.querySelector('.pmsg'); goB = box.querySelector('.ch-go');
+    function q(s) { return box.querySelector(s); }
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function pinEl(k) { return q('.ch-pin[data-p="' + k + '"]'); }
+    function latOf(p) { return Math.round(LATN - (p.y - Y0) / PY); }
+    function lonOf(p) { return Math.round(LONW - (p.x - X0) / PX); }
+    function drawPins() {
+      ['a', 'b'].forEach(function (k) { pinEl(k).setAttribute('transform', 'translate(' + pins[k].x + ' ' + pins[k].y + ')'); });
+      box.setAttribute('data-a', pins.a.on ? dm(latOf(pins.a)) + '-' + dm(lonOf(pins.a)) : ''); box.setAttribute('data-b', pins.b.on ? dm(latOf(pins.b)) + '-' + dm(lonOf(pins.b)) : '');
+      goB.disabled = lockStage === 0 && !(pins.a.on && pins.b.on);
+    }
+    function guide(p) { q('#ch-guide').innerHTML = p ? '<path d="M' + X0 + ' ' + p.y + 'H' + X1 + 'M' + p.x + ' ' + Y0 + 'V' + Y1 + '"/><g stroke-dasharray="none" stroke-width="2.5"><path d="M' + (X0 - 13) + ' ' + p.y + 'h13M' + X1 + ' ' + p.y + 'h13M' + p.x + ' ' + Y1 + 'v13M' + p.x + ' ' + (Y0 - 13) + 'v13"/></g>' : ''; }
+    function place(k, x, y) {
+      var p = pins[k];
+      p.x = Math.max(X0, Math.min(X1, X0 + Math.round((x - X0) / PX) * PX)); p.y = Math.max(Y0, Math.min(Y1, Y0 + Math.round((y - Y0) / PY) * PY)); p.on = true; last = k;
+      drawPins();
+    }
+    ['a', 'b'].forEach(function (k) {
+      ER.drag(pinEl(k), {
+        start: function () { return lockStage === 0; },
+        move: function (e) { var pt = ER.pt(svg, e); place(k, pt.x, pt.y); guide(pins[k]); },
+        end: function () { guide(null); CP.sfx.pin(); }
+      });
+    });
+    document.addEventListener('keydown', function (e) {
+      var d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key], p = pins[last];
+      if (!d || !inLock || lockStage !== 0 || !p.on || !document.body.contains(box) || ER.$('.ov-top.on')) return;
+      e.preventDefault(); place(last, p.x + d[0] * PX, p.y + d[1] * PY);
+    });
+
+    /* ----- the brass rule ----- */
+    function geom() {
+      var dx, dy, len;
+      A = [pins.a.x, pins.a.y]; B = [pins.b.x, pins.b.y]; dx = B[0] - A[0]; dy = B[1] - A[1]; len = Math.sqrt(dx * dx + dy * dy) || 1;
+      U = [dx / len, dy / len]; N = [-U[1], U[0]];
+      if ((RC[0] - A[0]) * N[0] + (RC[1] - A[1]) * N[1] < 0) N = [-N[0], -N[1]];           /* N points from the pencil line towards the rose */
+      return len;
+    }
+    function pt(m, along, off) { return (m[0] + U[0] * along + N[0] * off).toFixed(1) + ' ' + (m[1] + U[1] * along + N[1] * off).toFixed(1); }
+    function drawRule() {
+      var m = [(A[0] + B[0]) / 2 + ruleOff[0], (A[1] + B[1]) / 2 + ruleOff[1]], L = 250, g = q('#ch-rule'), s, t, c1, c2;
+      s = '<path d="M' + pt(m, -L, 0) + 'L' + pt(m, L, 0) + 'L' + pt(m, L, -13) + 'L' + pt(m, -L, -13) + 'z" fill="#d9b860" fill-opacity=".9" stroke="#6f531a" stroke-width="1.2"/>' +
+        '<path d="M' + pt(m, -L, -27) + 'L' + pt(m, L, -27) + 'L' + pt(m, L, -40) + 'L' + pt(m, -L, -40) + 'z" fill="#d9b860" fill-opacity=".9" stroke="#6f531a" stroke-width="1.2"/>' +
+        '<path d="M' + pt(m, -150, -8) + 'L' + pt(m, -110, -32) + 'M' + pt(m, 110, -8) + 'L' + pt(m, 150, -32) + '" stroke="#8a6a26" stroke-width="6" stroke-linecap="round"/>' +
+        '<path d="M' + pt(m, -L - 20, -60) + 'L' + pt(m, L + 20, -60) + 'L' + pt(m, L + 20, 14) + 'L' + pt(m, -L - 20, 14) + 'z" fill="transparent"/>';
+      g.innerHTML = s; g.style.display = '';
+      t = q('#ch-cut');
+      if (ruleOn) {
+        c1 = [RC[0] + U[0] * RR, RC[1] + U[1] * RR]; c2 = [RC[0] - U[0] * RR, RC[1] - U[1] * RR];
+        t.innerHTML = '<circle cx="' + c1[0].toFixed(1) + '" cy="' + c1[1].toFixed(1) + '" r="7" fill="none" stroke="#b3261c" stroke-width="2"/><circle cx="' + c2[0].toFixed(1) + '" cy="' + c2[1].toFixed(1) + '" r="7" fill="none" stroke="#b3261c" stroke-width="2"/>';
+      } else t.innerHTML = '';
+      q('#ch-ring').style.display = ruleOn ? '' : 'none';
+      box.setAttribute('data-rule', ruleOn ? '1' : '0');
+    }
+    (function () {
+      var g = q('#ch-rule'), from, base;
+      ER.drag(g, {
+        start: function (e) { if (lockStage !== 1) return false; from = ER.pt(svg, e); base = ruleOff.slice(); },
+        move: function (e) {
+          var p = ER.pt(svg, e), m, d;
+          ruleOff = [base[0] + p.x - from.x, base[1] + p.y - from.y];
+          m = [(A[0] + B[0]) / 2 + ruleOff[0], (A[1] + B[1]) / 2 + ruleOff[1]];
+          d = (RC[0] - m[0]) * N[0] + (RC[1] - m[1]) * N[1];                 /* how far the lower edge still is from the middle of the rose */
+          ruleOn = Math.abs(d) < 8;
+          if (ruleOn) ruleOff = [ruleOff[0] + N[0] * d, ruleOff[1] + N[1] * d];
+          drawRule();
+        },
+        end: function () { if (ruleOn) { CP.sfx.brass(); msg('The edge of the rule lies through the middle of the rose, and cuts the ring in two places. Click the ring where the edge crosses it, and then set the two letters.'); } else CP.sfx.rule(); }
+      });
+    })();
+    q('#ch-ring').addEventListener('click', function (e) {
+      var p = ER.pt(svg, e), th, n;
+      if (lockStage !== 1 || !ruleOn) return;
+      th = Math.atan2(p.x - RC[0], -(p.y - RC[1])) * 180 / Math.PI;         /* the bearing of the click: 0 is north, 90 east */
+      n = Math.abs(th) <= 90 ? Math.abs(th) : 180 - Math.abs(th);
+      crs.n = Math.round(n); CP.sfx.pencil(); drawCrs();
+    });
+    function drawCrs() {
+      q('.b-ns').textContent = crs.ns || '?'; q('.b-ew').textContent = crs.ew || '?'; q('.v-n').textContent = crs.n == null ? '__' : crs.n;
+      q('.l-ns').textContent = crs.ns; q('.l-ew').textContent = crs.ew;
+      box.setAttribute('data-crs', (crs.ns + '-' + (crs.n == null ? '' : crs.n) + '-' + crs.ew).toLowerCase());
+    }
+    q('.b-ns').addEventListener('click', function () { crs.ns = crs.ns === 'N' ? 'S' : 'N'; CP.sfx.chalk(); drawCrs(); });
+    q('.b-ew').addEventListener('click', function () { crs.ew = crs.ew === 'W' ? 'E' : 'W'; CP.sfx.chalk(); drawCrs(); });
+    function bump(d) { if (!ruleOn) { msg('&ldquo;The rule first,&rdquo; says Sinclair. &ldquo;A course that is read anywhere but through the middle of the rose is a guess.&rdquo;'); return; } crs.n = Math.max(0, Math.min(90, (crs.n == null ? 0 : crs.n) + d)); drawCrs(); }
+    q('.b-mi').addEventListener('click', function () { bump(-1); });
+    q('.b-pl').addEventListener('click', function () { bump(1); });
+
+    /* ----- the dividers ----- */
+    function span() { return Math.sqrt((B[0] - A[0]) * (B[0] - A[0]) + (B[1] - A[1]) * (B[1] - A[1])); }
+    function drawDiv() {
+      var g = q('#ch-div'), sp = span(), p1, p2, h, c = dv.c, y0;
+      if (dv.mode === 'lat') { y0 = lat2y(2460); p1 = [dv.x, y0]; p2 = [dv.x, y0 - sp]; h = [dv.x + (dv.x > 300 ? -110 : 110), y0 - sp / 2]; }
+      else if (dv.mode === 'lon') { p1 = [lon2x(2940), dv.y]; p2 = [p1[0] - sp, dv.y]; h = [p1[0] - sp / 2, dv.y + (dv.y > 300 ? -110 : 110)]; }
+      else { p1 = [c[0] - U[0] * sp / 2, c[1] - U[1] * sp / 2]; p2 = [c[0] + U[0] * sp / 2, c[1] + U[1] * sp / 2]; h = [c[0] - N[0] * 110, c[1] - N[1] * 110]; }
+      g.innerHTML = '<path d="M' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + 'L' + h[0].toFixed(1) + ' ' + h[1].toFixed(1) + 'L' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1) + '" stroke="transparent" stroke-width="30" fill="none"/>' +
+        '<path d="M' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + 'L' + h[0].toFixed(1) + ' ' + h[1].toFixed(1) + 'L' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1) + '" stroke="#b08a35" stroke-width="5" fill="none" stroke-linejoin="round"/>' +
+        '<path d="M' + p1[0].toFixed(1) + ' ' + p1[1].toFixed(1) + 'L' + h[0].toFixed(1) + ' ' + h[1].toFixed(1) + 'L' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1) + '" stroke="#f3e2a4" stroke-width="1.2" fill="none"/>' +
+        '<circle cx="' + h[0].toFixed(1) + '" cy="' + h[1].toFixed(1) + '" r="8" fill="#d9b860" stroke="#6f531a" stroke-width="2"/><circle cx="' + p1[0].toFixed(1) + '" cy="' + p1[1].toFixed(1) + '" r="2.6" fill="#22231e"/><circle cx="' + p2[0].toFixed(1) + '" cy="' + p2[1].toFixed(1) + '" r="2.6" fill="#22231e"/>';
+      g.style.display = '';
+      box.setAttribute('data-div', dv.mode);
+    }
+    (function () {
+      var g = q('#ch-div');
+      ER.drag(g, {
+        start: function () { return lockStage === 2; },
+        move: function (e) { var p = ER.pt(svg, e); dv.mode = 'free'; dv.c = [p.x, p.y]; drawDiv(); },
+        end: function (e) {
+          var p = ER.pt(svg, e);
+          if (p.x > X1 - 80) { dv.mode = 'lat'; dv.x = X1; } else if (p.x < X0 + 80) { dv.mode = 'lat'; dv.x = X0; }
+          else if (p.y > Y1 - 70) { dv.mode = 'lon'; dv.y = Y1; } else if (p.y < Y0 + 70) { dv.mode = 'lon'; dv.y = Y0; }
+          else { dv.mode = 'free'; dv.c = [p.x, p.y]; }
+          drawDiv(); if (dv.mode !== 'free') CP.sfx.pin();
+        }
+      });
+    })();
+    function drawDist() { q('.v-d').textContent = dist || '__'; box.setAttribute('data-dist', dist); }
+    [['.b-m10', -10], ['.b-m1', -1], ['.b-p1', 1], ['.b-p10', 10]].forEach(function (b) { q(b[0]).addEventListener('click', function () { dist = Math.max(0, Math.min(150, dist + b[1])); CP.sfx.chalk(); drawDist(); }); });
+
+    /* ----- what Sinclair says ----- */
+    function near(n) { return ['n', 's'].some(function (a) { return ['e', 'w'].some(function (b) { return ER.check('crs', a + '-' + n + '-' + b); }); }); }
+    function crsWords() { return (crs.ns === 'S' ? 'South ' : 'North ') + CP.num(crs.n) + (crs.ew === 'E' ? ' east' : ' west'); }
+    function trapLat(g) { return [Math.floor(+g) * 60 + Math.floor((+g % 1) * 60), Math.floor(+g) * 60 + Math.ceil((+g % 1) * 60)]; }
+    function judgePins() {
+      var v = { a: [dm(latOf(pins.a)), dm(lonOf(pins.a))], b: [dm(latOf(pins.b)), dm(lonOf(pins.b))] }, ok = {}, t = '';
+      ['a', 'b'].forEach(function (k) { ok[k] = [ER.check(k + '-lat', v[k][0]), ER.check(k + '-lon', v[k][1])]; });
+      if (ok.a[0] && ok.a[1] && ok.b[0] && ok.b[1]) return true;
+      CP.slip(); ER.sfx.no();
+      if (ER.check('b-lat', v.a[0]) && ER.check('b-lon', v.a[1])) t = 'You have us where she is. The brass pin is this ship, and the red one is the Titanic.';
+      else ['a', 'b'].some(function (k) {
+        var who = k === 'a' ? 'our own' : 'her', p = pins[k], g = GIVEN[k], la = latOf(p), lo = lonOf(p), deg = Math.floor(+g[1]) * 60, mn = Math.round((+g[1] % 1) * 100);
+        if (ok[k][0] && ok[k][1]) return false;
+        if (!ok[k][0] && trapLat(g[0]).indexOf(la) >= 0) t = 'You have put ' + who + ' latitude at ' + g[0].replace('.', ' and ') + ' hundredths. There are sixty minutes in a degree, not a hundred. That dot is no decimal point: read my first card again.';
+        else if (!ok[k][1] && trapLat(g[1]).indexOf(lo) >= 0) t = 'You have read ' + who + ' longitude as a decimal. ' + g[1] + ' W is ' + Math.floor(+g[1]) + ' degrees and ' + mn + ' minutes, and there are sixty minutes in a degree.';
+        else if (!ok[k][1] && lo === deg - mn) t = 'West is to the left on this chart, and the numbers grow as you go left. You have counted ' + who + ' ' + mn + ' minutes to the right of the ' + Math.floor(+g[1]) + ' line.';
+        else if (ok[k][0]) t = (k === 'a' ? 'Our' : 'Her') + ' latitude I believe. ' + (k === 'a' ? 'Our' : 'Her') + ' longitude I do not. Count the small marks along the bottom of the chart: each one is a minute, and every tenth one is long.';
+        else if (ok[k][1]) t = (k === 'a' ? 'Our' : 'Her') + ' longitude I believe. ' + (k === 'a' ? 'Our' : 'Her') + ' latitude I do not. Count the small marks up the side of the chart: each one is a minute.';
+        else t = 'Neither number is right for ' + (k === 'a' ? 'this ship' : 'the Titanic') + '. One at a time: first up the side for the latitude, and then along the bottom for the longitude.';
+        return true;
+      });
+      msg('Sinclair bends over the chart, and then straightens up. &ldquo;' + t + '&rdquo;');
+      return false;
+    }
+    function toStage(n, quiet) {
+      lockStage = n; ER.flag('c-st', n); geom();
+      ['a', 'b'].forEach(function (k) { pinEl(k).classList.toggle('fix', n > 0); });
+      q('#ch-line').setAttribute('d', n > 0 ? 'M' + A[0] + ' ' + A[1] + 'L' + B[0] + ' ' + B[1] : '');
+      q('.r-crs').classList.toggle('on', n >= 1); q('.r-crs').classList.toggle('ok', n >= 2);
+      q('.r-dst').classList.toggle('on', n >= 2);
+      q('#ch-rule').style.display = 'none'; q('#ch-div').style.display = 'none'; q('#ch-cut').innerHTML = ''; q('#ch-ring').style.display = 'none';
+      if (n === 1) { ruleOff = [0, 0]; ruleOn = false; drawRule(); goB.textContent = 'That is the course'; }
+      if (n === 2) { dv.mode = 'free'; dv.c = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2]; drawDiv(); goB.textContent = 'That is the distance'; }
+      goB.disabled = false; drawCrs(); drawDist(); paint();
+      if (quiet) return;
+      if (n === 1) msg('&ldquo;That is where we are, and that is where she is. ' + CP.cap(CP.num(Math.abs(latOf(pins.b) - latOf(pins.a)))) + ' minutes of latitude between you, so ' + CP.num(Math.abs(latOf(pins.b) - latOf(pins.a))) + ' miles to the north of us, and a good many more to the west.&rdquo; He lays his brass rule along the two pins, and you draw the line. &ldquo;Now walk the rule to the rose. It will not turn.&rdquo;<br><br>Drag the rule.');
+      if (n === 2) msg('&ldquo;' + crsWords() + '.&rdquo; Sinclair looks at you over his spectacles. &ldquo;True. So the captain made it. Now: how far?&rdquo; He opens the dividers from one pin to the other.<br><br>Drag the dividers to a scale. Then set the miles on the slate.');
+    }
+    goB.addEventListener('click', function () {
+      var c, t, file, n;
+      if (lockStage === 0) {
+        if (!pins.a.on || !pins.b.on) return;
+        if (judgePins()) { ER.sfx.ok(); ER.flag('c-pa', [pins.a.x, pins.a.y]); ER.flag('c-pb', [pins.b.x, pins.b.y]); toStage(1); }
+        return;
+      }
+      if (lockStage === 1) {
+        if (!ruleOn) { msg('&ldquo;The rule is not through the middle of the rose yet,&rdquo; says Sinclair. &ldquo;A course that is read anywhere else is a guess.&rdquo;'); return; }
+        if (!crs.ns || !crs.ew || crs.n == null) { msg('&ldquo;A course is two letters and a number,&rdquo; says Sinclair. &ldquo;I have not got all three.&rdquo;'); return; }
+        c = (crs.ns + '-' + crs.n + '-' + crs.ew).toLowerCase();
+        if (ER.check('crs', c)) { ER.sfx.ok(); ER.flag('c-crs', c); toStage(2); return; }
+        CP.slip(); ER.sfx.no(); n = crs.n;
+        if (near(n) && crs.ns === 'S' && crs.ew === 'E') t = 'South ' + n + ' east is the way from her to us. Turn it round. We are going to her.';
+        else if (near(n)) t = 'The number I believe. The letters I do not. Look at your two pins: is she north of us, or south? East of us, or west?';
+        else if ([1, 2, 3, 4].some(function (d) { return near(n - d) || near(n + d); })) t = 'Near. But one degree wrong is a mile wrong in every sixty. Look again at where the edge cuts the ring: the small marks are two degrees apart.';
+        else t = 'That is not where the edge of my rule cuts the ring. Click the ring at the crossing, and read the number that is printed nearest to it.';
+        msg('Sinclair shakes his head. &ldquo;' + t + '&rdquo;'); return;
+      }
+      if (dv.mode === 'free') { msg('&ldquo;Dividers in the middle of the sea measure nothing,&rdquo; says Sinclair. &ldquo;Carry them to a scale.&rdquo;'); return; }
+      if (!dist) { msg('&ldquo;How many miles? Set it on the slate.&rdquo;'); return; }
+      if (dv.mode === 'lon') { CP.slip(); ER.sfx.no(); msg('&ldquo;' + dist + '? Then you have measured along the ' + (dv.y > 300 ? 'bottom' : 'top') + ' of the chart. Up here a minute of longitude is only three quarters of a mile. My second card says which scale to use.&rdquo;'); return; }
+      if (!ER.check('dist', String(dist))) { CP.slip(); ER.sfx.no(); msg('&ldquo;' + dist + '? Count again. The lower point is on 41 degrees. Each small mark is one minute, and every tenth mark is long.&rdquo;'); return; }
+      c = [dm(latOf(pins.a)) + '-' + dm(lonOf(pins.a)), dm(latOf(pins.b)) + '-' + dm(lonOf(pins.b)), ER.flag('c-crs'), dist].join('|');
+      file = ER.exitOk([c]);
+      if (!file) { msg('Sinclair looks at the chart, and nothing happens. Something is wrong: tell your teacher.'); return; }
+      nextFile = file; ER.flag('c-file', file); ER.flag('c-dist', dist); lockStage = 3; ER.flag('c-st', 3);
+      var st = ER.state(); st.done = st.done || {}; st.done.chartroom = 1; ER.persist(true);
+      ER.sfx.ok(); goB.disabled = true; q('.r-dst').classList.add('ok'); CP.sfx.chalk();
+      msg('&ldquo;' + CP.cap(CP.num(dist)) + ' miles.&rdquo; Sinclair chalks it on the slate under the course, in figures as tall as your hand. &ldquo;The captain&rsquo;s own figures. He had them before he had finished dressing. You took rather longer, and you had me to lean on.&rdquo;');
+      setTimeout(function () { ER.closeAll(); after(); }, 3000);
+    });
+
+    /* a page that was reloaded half way goes on from where it was */
+    (function () {
+      var pa = ER.flag('c-pa'), pb = ER.flag('c-pb'), c = (ER.flag('c-crs') || '').split('-');
+      if (lockStage >= 1 && pa && pb) { pins.a = { x: pa[0], y: pa[1], on: true }; pins.b = { x: pb[0], y: pb[1], on: true }; } else lockStage = 0;
+      if (lockStage >= 2 && c.length === 3) { crs = { ns: c[0].toUpperCase(), n: +c[1], ew: c[2].toUpperCase() }; } else if (lockStage >= 2) lockStage = 1;
+      drawPins();
+      if (lockStage >= 1) toStage(Math.min(lockStage, 2), true);
+    })();
+    box.first = function () {
+      if (lockStage === 0) msg('Sinclair&rsquo;s old chart. &ldquo;Two pins, in the dish. The brass one is us. The red one is her. Put each of them where it belongs, and then call me.&rdquo;<br><br>Drag a pin on to the chart. While you hold it, two red lines run from it to the scales. (The arrow keys move the last pin by one minute.)');
+      else if (lockStage === 1) msg('&ldquo;Walk the rule to the rose,&rdquo; says Sinclair. &ldquo;It will not turn.&rdquo; Drag the rule.');
+      else msg('&ldquo;Now: how far?&rdquo; Drag the dividers to a scale. Then set the miles on the slate.');
+    };
+    return box;
+  }
+  function openChart() {
+    if (!chBox) chBox = buildChart();
+    chBox.first(); inLock = true;
+    ER.open('ov-lock', chBox, function () { inLock = false; });
+  }
+
+  function after() {
+    var d = ER.flag('c-dist') || 0;
+    busy = true; inLock = false; paint();
+    CP.mine('plot', 'On Sinclair’s chart', '<p>Us: <b>' + GIVEN.a[0] + ' N, ' + GIVEN.a[1] + ' W</b>.</p><p>Her: <b>' + GIVEN.b[0] + ' N, ' + GIVEN.b[1] + ' W</b>. (No decimal points: degrees and minutes.)</p><p>Course: <b>' + crsText() + '</b>, true. The other end of the rule was only the way back.</p><p>Distance: <b>' + d + ' miles</b>, read at the SIDE of the chart, where a minute is a mile.</p>', true);
+    ER.narrate([
+      'Sinclair blows the chalk off his fingers. &ldquo;' + CP.cap(CP.num(d)) + ' miles. On my chart it is the length of my hand. For this ship it is four hours.&rdquo;',
+      'The chief engineer has been up to the bridge already, and gone down again at a run. The captain has told him to call out another watch of stokers, and to make all possible speed.',
+      'Now the captain is in his cabin, next door, with the purser, the chief steward and the English doctor, and the orders are coming out of that door faster than Sinclair can write.',
+      'He writes them down all the same, on a page of the night order book. Then he tears the page out and gives it to you. &ldquo;Read that as you go. You are going to be asked about it all night.&rdquo;'
+    ], function () {
+      ER.read({ html: CP.ORDERS, cls: 'orders', clue: { id: 'orders', title: 'The captain’s orders', kind: 'Page from the night order book' }, done: function () {
+        ER.narrate([
+          '&ldquo;The bridge has told the Titanic: four hours,&rdquo; says Sinclair. &ldquo;Go below to the engine room and find Mr Rudd. Ask him what the engines say to that.&rdquo;',
+          '&ldquo;And bring me the answer in hours and minutes, Buzzer. Not in engineer.&rdquo;'
+        ], function () { busy = false; paint(); });
+      } });
+    });
+  }
+})();
+</script>
+</body>
+</html>

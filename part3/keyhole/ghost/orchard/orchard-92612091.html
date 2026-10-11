@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Orchard · Your Place Is Laid</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="orchard.css">
+<style>
+  body{--bg:#0e1420;--accent:#f0b56a;--font-display:'Rock Salt',cursive;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(12,18,30,.96);--tc-ink:#e9e6da;--cap-bg:rgba(11,16,27,.95);--panel:#141c2a;--face-bg:#2c3a34;--q-ink:#f0b56a;--fade:#05080e;--hud-bg:rgba(11,16,27,.8)}
+  .tc-room{font-size:clamp(34px,4.6vw,62px);line-height:1.5}
+  .star{animation:tw 5s ease-in-out infinite}
+  .star.s2{animation-delay:-1.900s}.star.s3{animation-delay:-3.300s}
+  @keyframes tw{50%{opacity:.2}}
+  #lant{animation:lant 4.4s steps(1,end) infinite}
+  @keyframes lant{0%{opacity:1}55%{opacity:.86}59%{opacity:1}}
+  #bellamy.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.4)}}
+  .tree.at .mark{display:block}
+  .mark,.tree .yr{display:none}
+  .tree.seen .yr{display:block}
+  #winlit,#winglow{display:none}
+  #scene.lit #winlit,#scene.lit #winglow{display:block}
+  #winglow{animation:lant 5.200s steps(1,end) infinite}
+
+  /* at the foot of one tree: what is round it, the label on its wire, and her letter in your hand */
+  .ot{width:min(1170px,96vw);display:flex;gap:16px;align-items:flex-start;-webkit-user-select:none;user-select:none}
+  .ot-view{flex:1 1 0;position:relative;background:#0e1420;border:3px solid #05080e;box-shadow:0 22px 60px rgba(0,0,0,.6)}
+  .ot-view svg{display:block;width:100%;height:auto}
+  .ot-view .hot:hover{filter:brightness(1.35)}
+  .lead{position:absolute;right:14px;bottom:14px;padding:16px 16px 8px;text-align:center;font-family:'Stardos Stencil',serif;font-weight:700;font-size:15px;letter-spacing:.06em;line-height:1.25;color:#1c2224;
+    background:linear-gradient(160deg,#c9cfcc,#8f9794 60%,#6f7775);border:1px solid #4f5755;border-radius:3px;box-shadow:0 4px 9px rgba(0,0,0,.6);transform:rotate(-3deg);pointer-events:none}
+  .lead:before{content:'';position:absolute;left:50%;top:5px;width:7px;height:7px;margin-left:-3.500px;border-radius:50%;background:#0e1420}
+  .lead small{display:block;font-size:17px;letter-spacing:.14em}
+  .ot-side{flex:0 0 432px}
+  .ot-side .doc.han{width:auto;max-height:none;font-size:19.5px;line-height:1.16;padding:14px 20px 10px;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+  .ot-side .doc.han p{margin:0}
+  .ot .pmsg{font-size:17.5px;line-height:1.34;min-height:112px;margin-top:10px}
+  .ot .row{display:flex;gap:8px;margin-top:8px}
+  .ot .row .btn{background:rgba(0,0,0,.42);font-size:13px;padding:9px 14px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18203a"/><stop offset=".6" stop-color="#3a3f62"/><stop offset=".86" stop-color="#9a6a62"/><stop offset="1" stop-color="#e2a05a"/></linearGradient>
+  <linearGradient id="grassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#35503c"/><stop offset=".45" stop-color="#253a30"/><stop offset="1" stop-color="#0e1a18"/></linearGradient>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f8a86"/><stop offset="1" stop-color="#4f4c50"/></linearGradient>
+  <linearGradient id="houseG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a4038"/><stop offset="1" stop-color="#1f1a18"/></linearGradient>
+  <radialGradient id="lantG"><stop offset="0" stop-color="#ffe9b0" stop-opacity=".9"/><stop offset=".3" stop-color="#f0b56a" stop-opacity=".3"/><stop offset="1" stop-color="#f0b56a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="52%" cy="44%" r="84%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#04070e" stop-opacity=".2"/><stop offset="1" stop-color="#02040a" stop-opacity=".84"/></radialGradient>
+</defs>
+
+<!-- the last of the light, the church on the hill, the far orchard beyond the bee wall -->
+<rect x="-1000" y="-400" width="3600" height="560" fill="url(#skyG)"/>
+<g id="stars" fill="#eef2f8"></g>
+<path d="M-1000 164V140Q-300 110 300 132T1200 120Q1700 108 2600 140V164Z" fill="#161d2a"/><path d="M1238 124v-34h18v34zM1256 112l24 -10 24 10v14h-48z" fill="#161d2a"/>
+<rect x="-1000" y="158" width="3600" height="1182" fill="url(#grassG)"/>
+<g id="farrows" class="hot"></g>
+<g id="wall" class="hot"><rect x="-1000" y="290" width="3600" height="28" fill="url(#wallG)"/><rect x="-1000" y="286" width="3600" height="7" fill="#a9a4a0"/><g id="boles"></g></g>
+
+<!-- the hedge on the house side, the wicket by the pump; the lane gate at the top end -->
+<path d="M-1000 250H150Q196 330 170 420Q150 520 214 640L230 1340H-1000Z" fill="#16241e"/>
+<g id="pump" class="hot"><rect x="92" y="420" width="16" height="84" fill="#2f3a44"/><path d="M100 420v-26M100 396q36 -6 44 22" stroke="#2f3a44" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M92 450h-22v10h22z" fill="#2f3a44"/><rect x="56" y="494" width="64" height="16" rx="3" fill="#5f5c60"/></g>
+<g id="wicket" class="hot"><rect x="160" y="424" width="80" height="84" fill="#000" opacity="0"/><path d="M168 506V430M232 506V430" stroke="#6f6a5c" stroke-width="9"/><path d="M168 446h64M168 488h64M168 488l64 -42" stroke="#8f8a78" stroke-width="6" fill="none"/><g stroke="#8f8a78" stroke-width="5"><path d="M184 506v-70M200 506v-76M216 506v-70"/></g>
+  <g stroke="#2f4a36" stroke-width="5" stroke-linecap="round" fill="none"><path d="M176 510q-6 -30 6 -52M196 510q4 -36 -4 -60M214 510q8 -24 0 -44M228 510q-2 -20 8 -36"/></g><path d="M170 468l60 4" stroke="#b9bcb6" stroke-width="2" stroke-dasharray="4 3"/></g>
+<path d="M2600 250H1560Q1520 340 1548 430L1500 1340H2600Z" fill="#16241e"/><path d="M1560 250Q1520 340 1548 430L1600 520V250Z" fill="#4a4648"/>
+<g id="lanegate" class="hot"><rect x="1436" y="418" width="116" height="90" fill="#000" opacity="0"/><path d="M1444 506V424M1544 506V424" stroke="#9aa2a8" stroke-width="7"/><g stroke="#b9c2c8" stroke-width="4.500"><path d="M1444 434h100M1444 450h100M1444 466h100M1444 482h100M1444 498h100"/></g><path d="M1444 498l100 -64" stroke="#b9c2c8" stroke-width="4"/><circle cx="1538" cy="462" r="4" fill="#e9eef0"/></g>
+
+<!-- the old row, and in front of it the row that George planted -->
+<g id="hrow"></g>
+<g id="prow"></g>
+
+<!-- the corner of the house: slates, a chimney, the kitchen window -->
+<path d="M-1000 690L300 690L250 742H-1000Z" fill="#2a2c34"/><rect x="40" y="620" width="58" height="76" fill="#3a3430"/><rect x="34" y="612" width="70" height="12" fill="#4a4440"/>
+<rect x="-1000" y="742" width="1250" height="600" fill="url(#houseG)"/><path d="M250 742V1340" stroke="#0c0a0a" stroke-width="5"/>
+<circle id="winglow" cx="130" cy="812" r="200" fill="url(#lantG)" pointer-events="none"/>
+<g id="win" class="hot"><rect x="64" y="762" width="132" height="104" fill="#0a0d12"/><rect id="winlit" x="64" y="762" width="132" height="104" fill="#f2c56a"/><g stroke="#56504a" stroke-width="6" fill="none"><rect x="64" y="762" width="132" height="104"/><path d="M108 762v104M152 762v104M64 814h132"/></g><rect x="56" y="866" width="148" height="10" fill="#6b655c"/></g>
+
+<!-- the living, with one lantern between them -->
+<circle id="lant" cx="1420" cy="640" r="250" fill="url(#lantG)" pointer-events="none"/>
+<g id="fair" class="hot" transform="translate(1340 812) scale(1.060)"></g>
+<g id="bellamy" class="hot" transform="translate(1440 760) scale(1.040)"></g>
+<g id="lumley" class="hot" transform="translate(1512 838) scale(1.080)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Take it in at the back door</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="orchard.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, ot = null, told = {};
+
+  /* the two rows on the house side of the bee wall, each from the pump end: [id, row, x, what is stamped on the lead label, the year on it, fruit] */
+  var TREES = [
+    ['h1', 'h', 300, 'BLENHEIM ORANGE', '1895', 'gold'], ['h2', 'h', 470, 'TOM PUTT', '1898', 'few'], ['h3', 'h', 640, 'WORCESTER PEARMAIN', '1905', 'none'], ['h4', 'h', 810, 'ASHMEAD&rsquo;S KERNEL', '1907', 'russet'],
+    ['h5', 'h', 980, 'WORCESTER PEARMAIN', '1905', 'red'], ['h6', 'h', 1150, 'BRAMLEY&rsquo;S SEEDLING', '1910', 'green'], ['h7', 'h', 1320, 'KINGSTON BLACK', '1912', 'dark'],
+    ['p1', 'p', 385, 'BRAMLEY&rsquo;S SEEDLING', '1953', 'green'], ['p2', 'p', 555, 'BRAMLEY&rsquo;S SEEDLING', '1953', 'green'], ['p3', 'p', 725, 'BRAMLEY&rsquo;S SEEDLING', '1953', 'green'],
+    ['p4', 'p', 895, 'BRAMLEY&rsquo;S SEEDLING', '1953', 'green'], ['p5', 'p', 1065, 'BRAMLEY&rsquo;S SEEDLING', '1953', 'green']
+  ];
+  var FRUIT = { gold: '#d9a23a', few: '#b8603a', russet: '#a98a4a', red: '#c23a2a', green: '#8fa84a', dark: '#7a2a34' };
+
+  var OBOOK = '<h4>ORCHARD BOOK. A. Oakes, Sweetings.</h4>' +
+    '<p class="a">Winter 1894. Set seven crab stocks in a row along the garden side, from the gate to the top hedge. To be grafted one at a time, as there is cause.</p>' +
+    '<p class="a">1895 March. Grafted the first: Blenheim Orange. The year I married.</p><p class="a">1898. Tom Putt.</p>' +
+    '<p class="a">1905 March. Two with Worcester Pearmain, off the one branch, in case one should fail. Both took.</p>' +
+    '<p class="a">1907. Ashmead&rsquo;s Kernel. &nbsp; 1910. Bramley&rsquo;s Seedling. &nbsp; 1912. Kingston Black, for the cider. The row is full.</p>' +
+    '<small>in another hand: G. O.</small><p class="g"><b>1947.</b> The Council has made up the lane. Cut a gate into it at the top end of the Home Row, for the lorry. The wicket by the pump to stay.</p>' +
+    '<p class="g"><b>1953.</b> Planted five Bramleys in the paddock, between the house and the Home Row. They pay. The old sorts do not.</p>' +
+    '<small>in another hand: D. O.</small><p class="d">1998. Wired the wicket shut. Nobody comes that way now.</p>' +
+    '<p class="d">2018. The Worcester at the lane end was red all over, and the other one had not an apple on it. They take it in turns, year and year about.</p>';
+  /* the part of Hannah's letter that is about the orchard */
+  var WAY = '<p>Go in at the orchard gate and take the row nearest the house. Pass two trees. The third is yours: one of the two that he grafted the spring you were born, and the nearer to the gate. Do not look under it: George mows there. Go round behind it, so that it stands between you and the kitchen window, and walk straight on as far as the bee wall, and no further. At the foot of the wall lie three flat stones. It is under the one between the other two. You will need no spade.</p>';
+
+  function T(id) { for (var i = 0; i < TREES.length; i++) if (TREES[i][0] === id) return TREES[i]; return null; }
+  /* is there another tree in the same row with the same label? */
+  function twin(t) { return TREES.some(function (o) { return o !== t && o[1] === t[1] && o[3] === t[3] && o[4] === t[4]; }); }
+
+  (function () {
+    var s = '', i, x, y;
+    for (i = 0; i < 34; i++) s += '<circle class="star' + (i % 3 === 1 ? ' s2' : i % 3 === 2 ? ' s3' : '') + '" cx="' + ((i * 419) % 2300 - 350) + '" cy="' + ((i * 67) % 150 - 60) + '" r="' + (1 + (i % 3) * 0.500) + '" opacity="' + (i % 2 ? 0.9 : 0.55) + '"/>';
+    $('#stars').innerHTML = s; s = '<rect x="-1000" y="162" width="3600" height="124" fill="#000" opacity="0"/>';
+    for (i = 0; i < 17; i++) { x = 40 + i * 98; s += '<path d="M' + x + ' 214v-22" stroke="#101a18" stroke-width="5"/><circle cx="' + x + '" cy="184" r="23" fill="#17261f"/>'; }
+    for (i = 0; i < 15; i++) { x = 86 + i * 112; s += '<path d="M' + x + ' 268v-28" stroke="#101a18" stroke-width="6"/><circle cx="' + x + '" cy="230" r="30" fill="#1c2e25"/><circle cx="' + (x - 9) + '" cy="222" r="15" fill="#22382c"/>'; }
+    $('#farrows').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) { x = 44 + i * 170; s += '<path d="M' + x + ' 318v-13q10 -11 20 0v13z" fill="#15161c"/>'; }
+    for (i = -8; i < 40; i++) s += '<path d="M' + (i * 58) + ' 293v11M' + (i * 58 + 30) + ' 304v14" stroke="#3a383c" stroke-width="2"/>';
+    $('#boles').innerHTML = s + '<path d="M-1000 304H2600" stroke="#3a383c" stroke-width="2"/>';
+    function tree(t) {
+      var p = t[1] === 'p', x = t[2], b = p ? 738 : 478, k = p ? 1.280 : 1, n = +t[0].charAt(1), col = FRUIT[t[5]], g = '', j, a, r, cy = b - 122 * k, lean = ((n * 7) % 5 - 2) * 3, dots = t[5] === 'none' ? 0 : t[5] === 'red' ? 22 : t[5] === 'few' ? 3 : 8;
+      g += '<g id="t-' + t[0] + '" class="tree hot" data-id="' + t[0] + '">';
+      g += '<ellipse class="mark" cx="' + x + '" cy="' + (b + 4) + '" rx="' + OY.num(74 * k) + '" ry="' + OY.num(15 * k) + '" fill="none" stroke="#f0b56a" stroke-width="3" stroke-dasharray="9 7"/>';
+      g += '<ellipse cx="' + x + '" cy="' + (b + 3) + '" rx="' + OY.num(60 * k) + '" ry="' + OY.num(11 * k) + '" fill="#0a1210" opacity=".5"/>';
+      g += '<path d="M' + OY.num(x - 10 * k) + ' ' + b + 'Q' + OY.num(x - 4 * k + lean) + ' ' + OY.num(b - 40 * k) + ' ' + OY.num(x - 9 * k + lean) + ' ' + OY.num(b - 84 * k) + 'h' + OY.num(18 * k) + 'Q' + OY.num(x + 6 * k + lean) + ' ' + OY.num(b - 40 * k) + ' ' + OY.num(x + 11 * k) + ' ' + b + 'Z" fill="#17120f"/>';
+      g += '<rect x="' + OY.num(x + 7 * k) + '" y="' + OY.num(b - 50 * k) + '" width="' + OY.num(11 * k) + '" height="' + OY.num(8 * k) + '" fill="#aab2b0" transform="rotate(8 ' + x + ' ' + b + ')"/>';
+      [[0, 0, 56], [-40, 14, 40], [42, 12, 42], [-18, -30, 38], [24, -28, 36]].forEach(function (c, q) {
+        g += '<circle cx="' + OY.num(x + lean + c[0] * k) + '" cy="' + OY.num(cy + c[1] * k) + '" r="' + OY.num(c[2] * k) + '" fill="' + (q > 2 ? '#2a4434' : q ? '#213a2c' : '#1c3226') + '"/>';
+      });
+      for (j = 0; j < dots; j++) {
+        a = (j * 137.500 + n * 40) * Math.PI / 180; r = (18 + (j * 29) % 52) * k;
+        g += '<circle cx="' + OY.num(x + lean + Math.cos(a) * r * 1.250) + '" cy="' + OY.num(cy + Math.sin(a) * r * 0.800) + '" r="' + OY.num((t[5] === 'green' ? 4.200 : 3.300) * k) + '" fill="' + col + '"/>';
+      }
+      if (t[5] === 'red') for (j = 0; j < 9; j++) g += '<circle cx="' + OY.num(x - 54 + j * 13.500 + (j % 2) * 4) + '" cy="' + OY.num(b + 2 + (j % 3) * 4) + '" r="3" fill="#a8301f"/>';
+      g += '<text class="yr fS" x="' + OY.num(x + 22 * k) + '" y="' + OY.num(b - 34 * k) + '" font-size="' + OY.num(15 * k) + '" font-weight="700" fill="#d9dcd2" opacity=".9">' + t[4] + '</text>';
+      return g + '</g>';
+    }
+    $('#hrow').innerHTML = TREES.filter(function (t) { return t[1] === 'h'; }).map(tree).join('');
+    $('#prow').innerHTML = TREES.filter(function (t) { return t[1] === 'p'; }).map(tree).join('');
+    $('#bellamy').innerHTML = OY.who('bellamy', { extra: '<path d="M40 -116v26" stroke="#15130f" stroke-width="3"/><rect x="29" y="-90" width="22" height="30" rx="4" fill="#15130f"/><rect x="33" y="-86" width="14" height="20" fill="#ffe9b0"/>' });
+    $('#fair').innerHTML = OY.who('fair', { hold: true, extra: '<rect x="-17" y="-176" width="34" height="24" fill="#f1e8cf" transform="rotate(-6 0 -164)"/>' });
+    $('#lumley').innerHTML = OY.who('lumley', { extra: '<rect x="18" y="-176" width="50" height="62" rx="2" fill="#8f959a"/><rect x="18" y="-176" width="50" height="14" fill="#6f757a"/>' });
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'orchard', storyTitle: 'Your Place Is Laid', id: 'orchard', no: 'IV', title: 'The Orchard',
+    go: 'Go in at the lane gate',
+    intro: [
+      'The Winterbournes went on to the sheet first: Edward and Mary at the head, their son Abel with his daughter Ellen under him, Hannah beside her Amos, and Esther, the younger sister, beside Silas the postmaster, her &ldquo;late husband&rdquo;. Ellen was born in 1903 and lived at Sweetings, and she was still only &ldquo;his girl&rdquo;: Uncle Abel&rsquo;s.',
+      'That left one place among Hannah&rsquo;s children with no stone to fill it, between Catherine and George. The card for it had to be made: Edward, christened for Grandfather Winterbourne, and born in May 1905, because he was nineteen at Michaelmas 1924.',
+      'Then his granddaughter was standing behind you. Ned Oakes went to New Zealand in 1931, planted apples, and never told anybody what rent he had gone for. It is ten to seven. The sun has gone down behind the church, and Mrs Bellamy is waiting at the top of the lane with a lantern.'
+    ],
+    exit: {"next":"supper","w":{"197643e6":"9c06aa83"}}, tags: {"tree":["42506e49"]},
+    sound: ['hush', { root: 43, bpm: 50, drop: ['bass'], beds: [['night', 0.5], ['wind', 0.35]] }],      /* dusk out of doors: the slow tune low down, crickets in the long grass, a little wind */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('o-file') || null; told = ER.flag('o-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('o-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    var at = ER.flag('o-at'), seen = ER.flag('o-seen') || [];
+    ER.$$('.tree').forEach(function (n) { n.classList.toggle('seen', seen.indexOf(n.getAttribute('data-id')) >= 0); });
+    $('#bellamy').classList.toggle('ready', !told.bellamy);
+    ER.$$('.tree').forEach(function (n) { n.classList.toggle('at', !!at && n.getAttribute('data-id') === at); });
+    $('#scene').classList.toggle('lit', !!nextFile);
+    ER.pips((told.bellamy ? 1 : 0) + (ER.flag('o-stage') ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['She says: bring it in at the back door. The button is at the bottom of the screen.']];
+    if (!told.bellamy) return ['bellamy', [
+      'Mrs Bellamy has the lantern, and Amos&rsquo;s orchard book. Hear her first.',
+      'Click Mrs Bellamy: the one holding the lantern, on the right, by the steel gate.'
+    ]];
+    if (ER.flag('o-stage')) return ['spot', [
+      'You are at his tree. Now take the next four things in her letter one at a time: not under it; round behind it; as far as the wall; at the foot of the wall.',
+      'The three flat stones lie at the foot of the bee wall, on the far side of the tree from the house. She wants the one that has a stone on each side of it.'
+    ]];
+    return ['tree', [
+      'Walk up to every tree in the two rows on this side of the wall, and read its lead label: click a tree. Then read Amos&rsquo;s orchard book, in your notebook. What is in this orchard tonight that was not in it in May 1931?',
+      '&ldquo;The row nearest the house&rdquo;: when were the Bramleys in the paddock planted? &ldquo;Go in at the orchard gate&rdquo;: when was the gate into the lane cut? Hannah wrote in 1931. So which row did she mean, and which gate?',
+      'Stand at the old wicket by the pump, where Ned would have come in from the field path, and go along the old row: pass two trees, and stop at the third. Its label should have on it the year he was born, and so should the label of one other tree in that row.'
+    ]];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The tin is in Ms Fairweather&rsquo;s hands, and there is a light in the kitchen window.'); return; }
+    if (told.in) { busy = false; ER.say('The orchard at Sweetings, at dusk.'); return; }
+    tell('in');
+    ER.narrate([
+      'The orchard at Sweetings, at dusk. Mrs Bellamy has brought you round by the lane, to the steel gate at the top end. She has a lantern, because a torch, she says, is no use to read by.',
+      'On this side of the bee wall there are two rows of old trees. The grass is long and wet, and it is full of apples.',
+      'Ms Fairweather has the letter in her hand. She is not reading it. She is looking down the rows towards the house, as you look at a place that you have been told about.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the living ---------- */
+  $('#bellamy').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Mrs Bellamy is looking at the kitchen window. &ldquo;I locked that door myself,&rdquo; she says. &ldquo;I am only mentioning it.&rdquo;'); return; }
+    if (told.bellamy) { ER.say('&ldquo;Walk up to any tree you like,&rdquo; says Mrs Bellamy. &ldquo;I shall bring the light. And the orchard book is in your notebook, if you want to know what was here when.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mrs Bellamy', role: 'with a lantern, and Amos’s orchard book', face: window.FACE('bellamy'),
+      lines: [
+        { note: 'She holds the lantern up, so that the nearest lead label shines.', a: '&ldquo;We have come round by the lane, because the wicket by the pump has been wired shut since before my time. Everybody comes in at this gate now.&rdquo;' },
+        { a: 'Every tree in the two near rows has a lead label on a wire: the sort of apple, and the year it was grafted. Amos did not put names on his trees. He put years. Walk up to any tree you like, and I shall bring the light.' },
+        { q: 'Which tree is his?', a: 'That is her business, not mine, and it is all in her letter. But here is Amos&rsquo;s orchard book. George wrote in it after him, and Miss Dora after George. If you want to know what was planted when, and what was built when, it is in there.' },
+        { a: 'And I shall tell you one thing for nothing. An apple tree does not move. Everything round it does.' }
+      ],
+      clue: { id: 'bellamy2', title: 'Mrs Bellamy, in the orchard', kind: 'What she said' },
+      done: function (seen) {
+        if (!seen || !tell('bellamy')) return;
+        paint();
+        ER.read({ html: OBOOK, cls: 'obook', clue: { id: 'obook', title: 'Amos’s orchard book', kind: 'From Mrs Bellamy' }, done: function () { OY.terms(['crab stock', 'wicket', 'paddock']); ER.say('Two rows of trees, and a lead label on every one. Click a tree to walk up to it.'); } });
+      }
+    });
+  });
+  $('#fair').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? 'Ms Fairweather is holding the tin flat in both hands, as you would carry a plate. She has not opened it.' :
+      '&ldquo;&lsquo;One of the two that he grafted the spring you were born&rsquo;,&rdquo; says Ms Fairweather. &ldquo;Two. Growers do that: a spare, off the same branch. If both of them take, you have twins.&rdquo;');
+  });
+  $('#lumley').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;I shall not put that window in my notes either,&rdquo; says Miss Lumley.' :
+      '&ldquo;I have the date of that letter on a slip in my pocket,&rdquo; says Miss Lumley. &ldquo;I mention it because dates are the only thing that I am good for in an orchard.&rdquo;');
+  });
+
+  /* ---------- the orchard ---------- */
+  OY.thing('#wicket', 'wicket', 'The old wicket gate, by the pump. It has been wired shut, and the nettles have grown up through the bars. The path from the kitchen door comes straight to it.', isBusy);
+  OY.thing('#pump', 'pump', 'The pump: iron, with a long handle, and a stone trough under it. It has been dry for years.', isBusy);
+  OY.thing('#lanegate', null, 'The gate into the lane: five bars of grey steel, and a bolt that still shines. You came in by it. The lane beyond has tar on it.', isBusy);
+  OY.thing('#wall', 'bee wall', 'The bee wall: a low stone wall with small arched cupboards in it, where the straw hives stood out of the rain. It runs the whole length of the orchard, behind the old row.', isBusy);
+  OY.thing('#farrows', null, 'The far orchard, on the other side of the bee wall: cider trees, older than Amos. Her letter says no further than the wall.', isBusy);
+  OY.thing('#win', null, function () { return nextFile ? 'The kitchen window, with a low yellow light in it. Nobody is in the house.' : 'The kitchen window, dark. From there you can see the whole length of both near rows.'; }, isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  ER.$$('.tree').forEach(function (n) {
+    n.addEventListener('click', function () {
+      if (busy) return;
+      if (nextFile) { ER.say('Lead labels, wet grass, and windfalls. The light in the kitchen window is steadier than a lantern.'); return; }
+      if (!told.bellamy) { ER.say('It is too dark to read a lead label without a light, and Mrs Bellamy has the light. She has something to say first.'); return; }
+      if (!ot) ot = makeSpot();
+      OY.sfx.grass(); ot.open(ER.flag('o-stage') ? ER.flag('o-at') : n.getAttribute('data-id'));
+    });
+  });
+
+  /* ---------- at the foot of a tree ---------- */
+  function makeSpot() {
+    var SPOT = {
+      under: '&ldquo;&lsquo;Do not look under it: George mows there&rsquo;,&rdquo; reads Ms Fairweather. &ldquo;She was not a woman who said a thing twice.&rdquo;',
+      hollow: 'A hollow in the trunk, full of dry leaves and one very old wasps&rsquo; nest. &ldquo;Round behind it,&rdquo; says Ms Fairweather, &ldquo;and as far as the wall.&rdquo;',
+      front: 'Three flat stones in the grass, on the kitchen side of the tree: they were stepping stones once. Anybody at the kitchen window could watch you lift one. She says to go round behind the tree.',
+      left: 'You lift the stone. Under it there is flat black earth, one worm, and nothing else. &ldquo;The one between the other two,&rdquo; says Ms Fairweather.',
+      right: 'You lift the stone. Under it there is flat black earth, a great many woodlice, and nothing else. &ldquo;The one between the other two,&rdquo; says Ms Fairweather.',
+      bole: 'A bee bole: a small arched cupboard in the wall, where a straw hive once stood. It is empty. And it is in the wall, not at the foot of it.',
+      over: '&ldquo;&lsquo;As far as the bee wall, and no further&rsquo;,&rdquo; reads Ms Fairweather. &ldquo;You have gone further.&rdquo;'
+    };
+    var box = ER.el('div', 'ot'), cur = null, wait = false;
+    box.innerHTML = '<div class="ot-view"><div class="ot-svg"></div><div class="lead"></div></div><div class="ot-side"><div class="doc han">' + ER.gloss(WAY) + '</div><p class="pmsg"></p>' +
+      '<div class="row"><button type="button" class="btn" id="o-yes">This is his tree</button><button type="button" class="btn" id="o-no">Look at another tree</button></div></div>';
+    var view = box.querySelector('.ot-svg'), lead = box.querySelector('.lead'), msgEl = box.querySelector('.pmsg'), row = box.querySelector('.row');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw(t) {
+      var p = t[1] === 'p', s = '<svg viewBox="0 0 700 470" xmlns="http://www.w3.org/2000/svg"><rect width="700" height="470" fill="#22382c"/>', i, a, r, n = +t[0].charAt(1);
+      if (p) {
+        s += '<rect width="700" height="150" fill="#1a2c24"/>';
+        for (i = 0; i < 4; i++) s += '<path d="M' + (90 + i * 180) + ' 150v-70" stroke="#100c0a" stroke-width="16"/><circle cx="' + (90 + i * 180) + '" cy="60" r="74" fill="#16261e"/>';
+      } else {
+        s += '<g class="hot" data-s="over"><rect width="700" height="66" fill="#16241e"/>';
+        for (i = 0; i < 6; i++) s += '<circle cx="' + (50 + i * 126) + '" cy="26" r="34" fill="#101c18"/>';
+        s += '</g><rect y="62" width="700" height="70" fill="#6f6a68"/><rect y="58" width="700" height="10" fill="#9a9590"/><g stroke="#4a4648" stroke-width="2">';
+        for (i = 0; i < 14; i++) s += '<path d="M' + (i * 54 + 10) + ' 68v22M' + (i * 54 + 36) + ' 90v22M' + (i * 54 + 14) + ' 112v20"/>';
+        s += '<path d="M0 90H700M0 112H700"/></g>';
+        s += '<g class="hot" data-s="bole"><path d="M96 132v-34q30 -30 60 0v34z" fill="#14151a"/><path d="M96 132v-34q30 -30 60 0v34" fill="none" stroke="#9a9590" stroke-width="4"/><path d="M546 132v-34q30 -30 60 0v34z" fill="#14151a"/><path d="M546 132v-34q30 -30 60 0v34" fill="none" stroke="#9a9590" stroke-width="4"/></g>';
+        [['left', 252], ['mid', 350], ['right', 448]].forEach(function (q) {
+          s += '<g class="hot" data-s="' + q[0] + '"><ellipse cx="' + q[1] + '" cy="153" rx="44" ry="13" fill="#0e1a16"/><ellipse cx="' + q[1] + '" cy="149" rx="44" ry="13" fill="#8f8a86"/><path d="M' + (q[1] - 26) + ' 147q26 -6 52 0" stroke="#aaa5a0" stroke-width="2" fill="none"/></g>';
+        });
+      }
+      s += '<g class="hot" data-s="under"><ellipse cx="350" cy="438" rx="120" ry="24" fill="#1a2c22"/><g stroke="#2f4a38" stroke-width="2"><path d="M252 440l6 -10M280 448l5 -11M420 448l-5 -11M448 440l-6 -10M310 452l3 -10M392 452l-3 -10"/></g></g>';
+      s += '<g class="hot" data-s="front"><ellipse cx="60" cy="446" rx="36" ry="11" fill="#7d7874"/><ellipse cx="132" cy="458" rx="32" ry="9" fill="#8a8580"/><ellipse cx="196" cy="447" rx="32" ry="10" fill="#7d7874"/></g>';
+      s += '<path d="M326 440Q338 400 330 360h44Q364 400 378 440Z" fill="#17120f"/><path d="M340 436q6 -30 2 -70M362 436q-4 -34 0 -70" stroke="#2a221c" stroke-width="2" fill="none"/>';
+      s += '<g class="hot" data-s="hollow"><ellipse cx="352" cy="408" rx="9" ry="13" fill="#050403"/><ellipse cx="352" cy="408" rx="12" ry="16" fill="none" stroke="#2a221c" stroke-width="3"/></g>';
+      [[0, 0, 108], [-78, 22, 70], [82, 20, 72], [-34, -42, 62], [44, -40, 60]].forEach(function (c, q) { s += '<circle cx="' + (350 + c[0]) + '" cy="' + (270 + c[1]) + '" r="' + c[2] + '" fill="' + (q > 2 ? '#2a4434' : q ? '#213a2c' : '#1c3226') + '"/>'; });
+      if (t[5] !== 'none') for (i = 0; i < (t[5] === 'red' ? 34 : t[5] === 'few' ? 4 : 13); i++) {
+        a = (i * 137.500 + n * 40) * Math.PI / 180; r = 20 + (i * 31) % 96;
+        s += '<circle cx="' + OY.num(350 + Math.cos(a) * r * 1.200) + '" cy="' + OY.num(266 + Math.sin(a) * r * 0.820) + '" r="' + (t[5] === 'green' ? 7 : 5.500) + '" fill="' + FRUIT[t[5]] + '"/>';
+      }
+      if (t[5] === 'red') for (i = 0; i < 12; i++) s += '<circle cx="' + (212 + i * 25 + (i % 2) * 7) + '" cy="' + (428 + (i % 3) * 7) + '" r="5" fill="#a8301f"/>';
+      return s + '</svg>';
+    }
+    function describe(t) {
+      var lab = '<b>' + t[3] + ', ' + t[4] + '</b>';
+      if (t[1] === 'p') return 'Mrs Bellamy holds the lantern to the label: ' + lab + '. A big tree, heavy with green apples. Behind it there is no wall: there is another row of trees.';
+      return 'Mrs Bellamy holds the lantern to the label: ' + lab + '. Behind the tree is the bee wall. ' +
+        (t[5] === 'red' ? 'The tree is red with apples, and so is the grass under it.' : t[5] === 'none' ? 'There is not an apple on this tree, nor under it.' : t[5] === 'few' ? 'Most of its apples have fallen already.' : 'There are apples on it that nobody has picked.');
+    }
+    function stage2() {
+      row.style.display = 'none';
+      msg('Ms Fairweather puts her hand flat on the trunk, and keeps it there. &ldquo;Pass two, and the third,&rdquo; she says. &ldquo;So this is you.' + (T(cur)[5] === 'none' ? ' And not an apple on you: it is your year for resting.' : '') + '&rdquo;<br><b>Now do exactly what the letter says next. Click the place in the picture.</b>');
+    }
+    function show(id) {
+      var t = T(id), seen = ER.flag('o-seen') || []; cur = id;
+      if (seen.indexOf(id) < 0) { seen.push(id); ER.flag('o-seen', seen); paint(); }
+      view.innerHTML = draw(t); lead.innerHTML = t[3] + '<small>' + t[4] + '</small>'; box.setAttribute('data-tree', id);
+      if (ER.flag('o-stage')) stage2(); else { row.style.display = ''; msg(describe(t)); }
+    }
+    box.querySelector('#o-no').addEventListener('click', function () { ER.close(); });
+    box.querySelector('#o-yes').addEventListener('click', function () {
+      var t = T(cur);
+      if (wait || ER.flag('o-stage')) return;
+      if (ER.check('tree', cur)) { ER.flag('o-stage', 1); ER.flag('o-at', cur); OY.solved(true); paint(); stage2(); return; }
+      ER.sfx.no();
+      msg(t[1] === 'p' ? 'Ms Fairweather looks at the label, and then at the letter. &ldquo;Planted in ' + t[4] + ',&rdquo; she says. &ldquo;I know a seventy-year-old Bramley when I see one. When did she write this? This tree was not here to be passed.&rdquo;' :
+        twin(t) ? 'Ms Fairweather reads the label twice. &ldquo;' + t[3] + ', ' + t[4] + '. That is the year, and this is one of the two. And it is the third from the gate that we came in at.&rdquo; She looks back at the steel gate. &ldquo;Which is a very new sort of gate, for a letter as old as this one.&rdquo;' :
+        'Mrs Bellamy holds the lantern closer. &ldquo;' + t[3] + ', ' + t[4] + '. He grafted this one in ' + t[4] + '. Was that the spring her boy was born?&rdquo;');
+    });
+    view.addEventListener('click', function (e) {
+      var g = e.target.closest ? e.target.closest('.hot') : null, sp, file;
+      if (!g || wait || nextFile) return;
+      if (!ER.flag('o-stage')) { msg(describe(T(cur)) + '<br><b>First make sure of the tree. Is this the one? Then say so.</b>'); return; }
+      sp = g.getAttribute('data-s');
+      file = ER.exit([cur + '>' + sp], { wait: true, quiet: true });
+      if (!file) { if (sp === 'left' || sp === 'right') OY.sfx.stone(); else ER.sfx.no(); msg(SPOT[sp] || 'Nothing.'); return; }
+      wait = true; nextFile = file; ER.flag('o-file', file); OY.sfx.stone();
+      msg('The stone comes up as if it had been waiting to be asked.');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true; OY.sfx.tin();
+        ER.narrate([
+          'Under the stone, in a nest of dry moss, there is a flat tin that once held mustard. The lid has been sealed all the way round with candle wax.',
+          'Ms Fairweather holds it in both hands. Something slides inside it: paper, and not much of it. &ldquo;She says to bring it in at the back door,&rdquo; she says. &ldquo;She doesn&rsquo;t say to open it under a tree.&rdquo;',
+          'Mrs Bellamy is not looking at the tin. She is looking past you, towards the house.',
+          'There is a light in the kitchen window: low and yellow, the colour of an oil lamp. The electricity at Sweetings was turned off last year.',
+          '&ldquo;That will be the table laid, then,&rdquo; says Mrs Bellamy. &ldquo;It is a little early tonight.&rdquo;'
+        ], function () {
+          busy = false;
+          OY.mine('found', 'Under the stone', '<p>A flat mustard tin, sealed all round with candle wax.</p><p>Found behind the tree with the label <b>' + T(cur)[3] + ', ' + T(cur)[4] + '</b>, under a flat stone at the foot of the bee wall.</p><p>Not opened. She says: bring it in at the back door.</p>', true);
+          showGo();
+        });
+      }, 2400);
+    });
+    return {
+      open: function (id) { show(id); ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

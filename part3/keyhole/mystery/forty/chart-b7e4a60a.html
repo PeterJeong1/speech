@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Chart Room · Forty Minutes of Dark</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<style>
+  body{--bg:#010203;--accent:#bfe6ef;--font-display:'Cinzel',serif;--font-ui:'Oswald',sans-serif;
+    --tc-bg:rgba(1,2,3,.95);--cap-bg:rgba(3,7,10,.93);--panel:#0e1518;--face-bg:#3b3550;--q-ink:#8fb7c2;--fade:#000;
+    --hud-bg:rgba(2,5,7,.7)}
+  body.torch .stage{cursor:none}
+  .tc-room{font-weight:500;letter-spacing:.08em}
+  .plateT{font-family:'Cinzel',serif;font-weight:700;font-size:11px;letter-spacing:1.5px;fill:#4a360c;text-anchor:middle}
+  .typeT{font-family:'Special Elite',monospace;font-size:9px;fill:#2b2620}
+  .sfxt{font-family:'EB Garamond',serif;font-style:italic;font-size:26px;fill:#d9e6ea;opacity:0;pointer-events:none;text-anchor:middle}
+  #dark{position:fixed;top:0;right:0;bottom:0;left:0;z-index:4;pointer-events:none;
+    background:radial-gradient(circle var(--r,190px) at var(--x,50%) var(--y,52%),rgba(1,2,3,0) 0,rgba(1,2,3,0) 50%,rgba(1,2,3,.62) 78%,rgba(1,2,3,.975) 100%)}
+  #dark.off{background:#010203}
+  .wristT{position:fixed;z-index:5;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:26px;color:#d9e6ea;opacity:0;
+    pointer-events:none;transform:translate(-50%,-50%)}
+  #steam{animation:steam 3.4s ease-in-out infinite}
+  @keyframes steam{0%,100%{opacity:.18;transform:translateY(0)}50%{opacity:.4;transform:translateY(-10px)}}
+  #gas{animation:gas .9s ease-in-out infinite alternate}
+  @keyframes gas{from{opacity:.55}to{opacity:.8}}
+  .torchbtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;
+    border:1px solid #bfe6ef;color:#bfe6ef;background:rgba(2,6,8,.86);font-family:'Oswald',sans-serif;font-size:16px;
+    letter-spacing:.18em;text-transform:uppercase;border-radius:3px}
+  .torchbtn.on{display:block}
+  .torchbtn:hover{background:#bfe6ef;color:#04090b}
+  /* PC Marsh's notebook: build the sentence */
+  .mq{width:min(780px,94vw);background:#f3ecd6 repeating-linear-gradient(transparent 0 47px,#d3c9ad 47px 48px);color:#1c1c22;
+    padding:28px 34px 26px;border-left:26px solid #1c2742;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .mq-say{font-family:'EB Garamond',Georgia,serif;font-size:21px;line-height:1.45;color:#3a362e;margin:0 0 20px;background:#f3ecd6;padding-bottom:6px}
+  .mq-line{font-family:'Caveat',cursive;font-size:35px;line-height:48px;font-weight:700;color:#1d2a4a}
+  .slot{display:inline-block;min-width:112px;height:44px;vertical-align:bottom;border-bottom:3px solid #1d2a4a;margin:0 5px 4px;text-align:center}
+  .tray{display:flex;flex-wrap:wrap;align-content:flex-start;gap:10px;margin:26px 0 8px;min-height:118px;padding:12px;background:#e6dcc0;border-radius:4px;border:1px dashed #b3a682}
+  .tile{font-family:'Special Elite',monospace;font-size:21px;line-height:1;padding:9px 14px 6px;background:#fffdf4;border:1px solid #b9ad8c;
+    box-shadow:0 3px 0 #b9ad8c;border-radius:3px;display:inline-block;color:#27231d}
+  .slot .tile{box-shadow:none;border-color:transparent;background:transparent;font-family:'Caveat',cursive;font-size:35px;font-weight:700;
+    padding:0 6px;line-height:44px;color:#8c2f24}
+  .mq-foot{display:flex;align-items:center;gap:16px;margin-top:12px;background:#f3ecd6}
+  .mq-msg{flex:1;min-height:28px;font-family:'EB Garamond',Georgia,serif;font-size:20px;font-style:italic;color:#8c2f24}
+  .mq .btn{--accent:#1c2742}
+  .mq .btn:hover:not([disabled]){color:#f3ecd6}
+</style>
+</head>
+<body class="torch">
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4b45"/><stop offset="1" stop-color="#2e3d38"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a2d1a"/><stop offset=".5" stop-color="#6b4226"/><stop offset="1" stop-color="#452a18"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfeaf0" stop-opacity=".22"/><stop offset=".5" stop-color="#cfeaf0" stop-opacity=".05"/><stop offset="1" stop-color="#cfeaf0" stop-opacity=".16"/></linearGradient>
+  <linearGradient id="sheetG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3dfd2"/><stop offset="1" stop-color="#b3ad9d"/></linearGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1522"/><stop offset="1" stop-color="#14283a"/></linearGradient>
+  <radialGradient id="gasG"><stop offset="0" stop-color="#8fd0ff" stop-opacity=".9"/><stop offset="1" stop-color="#3a7bd5" stop-opacity="0"/></radialGradient>
+  <radialGradient id="warmG"><stop offset="0" stop-color="#fff0c8" stop-opacity=".16"/><stop offset="1" stop-color="#fff0c8" stop-opacity="0"/></radialGradient>
+</defs>
+
+<!-- room -->
+<rect x="-1000" width="3600" height="720" fill="url(#wallG)"/>
+<rect x="-1000" y="112" width="3600" height="12" fill="#1f2a27"/>
+<rect x="-1000" y="520" width="3600" height="200" fill="#26332f"/><rect x="-1000" y="514" width="3600" height="12" fill="#1c2623"/>
+<rect x="-1000" y="712" width="3600" height="20" fill="#18201e"/>
+<rect x="-1000" y="732" width="3600" height="168" fill="#3d2d20"/>
+<g stroke="#2a1e15" stroke-width="3"><path d="M-1000 772H2600M-1000 824H2600M-1000 888H2600M120 732l-90 168M460 732l-50 168M800 732v168M1140 732l50 168M1480 732l90 168"/></g>
+
+<!-- kitchen door, ajar -->
+<g id="kitchen" class="hot">
+  <rect x="36" y="232" width="190" height="500" fill="#1c2623"/>
+  <rect x="50" y="246" width="118" height="486" fill="#05080a"/>
+  <rect x="60" y="560" width="96" height="14" fill="#2b2f33"/><rect x="66" y="574" width="84" height="158" fill="#20242a"/>
+  <ellipse id="gas" cx="108" cy="560" rx="54" ry="20" fill="url(#gasG)"/>
+  <path d="M84 558v-34q0-14 24-14t24 14v34z" fill="#8f979c"/><path d="M132 524q16 2 18 14" stroke="#8f979c" stroke-width="6" fill="none"/><rect x="100" y="500" width="16" height="10" rx="4" fill="#6b7377"/>
+  <path id="steam" d="M100 494q-12-18 0-34t0-34M118 492q10-16 0-30" stroke="#dfe8ea" stroke-width="5" fill="none" stroke-linecap="round" opacity=".3"/>
+  <rect x="62" y="330" width="92" height="8" fill="#3a3028"/>
+  <g fill="#e8e3d6"><rect x="70" y="316" width="44" height="5"/><rect x="70" y="309" width="44" height="5"/><rect x="70" y="302" width="44" height="5"/><rect x="70" y="295" width="44" height="5"/></g>
+  <rect x="122" y="298" width="28" height="32" rx="3" fill="#a23a2c"/>
+  <path d="M168 246l52 16v470l-52 0z" fill="#b9b3a2"/><circle cx="182" cy="500" r="7" fill="url(#brassG)"/>
+</g>
+
+<!-- window -->
+<g id="window" class="hot">
+  <rect x="262" y="150" width="232" height="336" fill="#c2bcab"/>
+  <rect x="276" y="164" width="204" height="308" fill="url(#nightG)"/>
+  <rect id="winFlash" x="276" y="164" width="204" height="308" fill="#dbe8ff" opacity="0"/>
+  <g stroke="#7f9db3" stroke-width="2" opacity=".5" stroke-linecap="round"><path d="M300 180l-8 40M340 210l-8 46M400 176l-8 40M450 230l-8 50M320 300l-8 46M380 330l-8 44M440 360l-8 50M300 400l-8 40M410 420l-8 40"/></g>
+  <path d="M276 318h204M378 164v308" stroke="#c2bcab" stroke-width="10"/>
+  <rect x="252" y="486" width="252" height="16" fill="#aaa493"/>
+</g>
+
+<!-- framed charts -->
+<g id="charts" class="hot">
+  <rect x="540" y="190" width="120" height="150" fill="#3a2418"/><rect x="550" y="200" width="100" height="130" fill="#d9cfae"/>
+  <path d="M556 250q18-26 34-8t26-12 28 14v80h-88z" fill="#bfae7c"/><circle cx="628" cy="304" r="12" fill="none" stroke="#7a6a3e" stroke-width="2"/><path d="M628 290v28M614 304h28" stroke="#7a6a3e" stroke-width="2"/>
+  <rect x="730" y="150" width="180" height="120" fill="#3a2418"/><rect x="740" y="160" width="160" height="100" fill="#d9cfae"/>
+  <path d="M740 214q30-30 56-10t40-18 64 16v58H740z" fill="#bfae7c"/><path d="M752 176h60M752 186h40" stroke="#7a6a3e" stroke-width="2"/>
+</g>
+
+<!-- shelf of ship models under their sheets -->
+<g id="shelf" class="hot">
+  <rect x="1130" y="330" width="420" height="12" fill="#3a2418"/><path d="M1150 342v26M1530 342v26" stroke="#3a2418" stroke-width="8"/>
+  <g fill="url(#sheetG)"><path d="M1150 330q4-70 50-92 6-8 12 0 46 24 50 92z"/><path d="M1290 330q6-52 54-64 50 12 56 64z"/><path d="M1422 330q2-84 54-108 8-6 12 2 44 26 48 106z"/></g>
+  <g stroke="#9c9686" stroke-width="2" fill="none"><path d="M1206 240q-8 40-6 90M1344 268q-4 30 0 62M1482 226q-10 50-4 104"/></g>
+</g>
+
+<!-- Ruth's notice -->
+<g id="rnotice" class="hot">
+  <rect x="1000" y="322" width="108" height="134" fill="#3a2418"/><rect x="1008" y="330" width="92" height="118" fill="#efe5cc"/>
+  <text x="1016" y="348" class="typeT" font-size="11">STAFF</text>
+  <g stroke="#5b5346" stroke-width="2"><path d="M1016 362h76M1016 374h70M1016 386h76M1016 398h58M1016 410h76M1016 422h64M1016 436h40"/></g>
+</g>
+
+<!-- the dust sheet on the floor -->
+<g id="sheet" class="hot">
+  <path d="M430 742q-6-50 40-62 20-34 62-22 30-26 64-6 44-6 54 34 30 6 22 30l12 26z" fill="url(#sheetG)"/>
+  <g stroke="#9c9686" stroke-width="2.500" fill="none" stroke-linecap="round"><path d="M472 682q10 30 4 56M536 660q14 36 8 78M600 656q10 40 30 80M650 690q-6 20 6 46"/></g>
+  <path d="M640 716q14-2 22 10l-26 16z" fill="#d6d1c3"/>
+</g>
+
+<!-- the glass case -->
+<g id="case">
+  <rect x="668" y="626" width="26" height="80" fill="url(#woodG)"/><rect x="906" y="626" width="26" height="80" fill="url(#woodG)"/>
+  <rect x="650" y="560" width="300" height="26" fill="url(#woodG)"/><rect x="662" y="586" width="276" height="42" fill="#4a2d1a"/>
+  <g id="plate" class="hot"><rect x="716" y="592" width="168" height="30" rx="2" fill="url(#brassG)"/><text x="800" y="611" class="plateT">MARINE CHRONOMETER</text></g>
+  <g id="cushion" class="hot">
+    <rect x="684" y="334" width="232" height="226" fill="#0d1416"/>
+    <path d="M708 548q0-36 92-36t92 36z" fill="#1f2f66"/><path d="M708 548q0-26 92-26t92 26" fill="none" stroke="#31458a" stroke-width="3"/>
+    <rect x="764" y="520" width="72" height="20" rx="2" fill="#16224c"/>
+    <rect x="684" y="334" width="232" height="226" fill="url(#glassG)"/>
+    <path d="M700 350l60 150M720 350l30 76" stroke="#fff" stroke-width="3" opacity=".12"/>
+  </g>
+  <rect x="680" y="330" width="240" height="230" fill="none" stroke="#7a5527" stroke-width="9"/>
+  <path d="M920 334l74 20v196l-74 12z" fill="url(#glassG)" stroke="#7a5527" stroke-width="6" stroke-linejoin="round"/>
+  <g id="lock" class="hot"><rect x="968" y="420" width="34" height="62" fill="transparent"/><rect x="978" y="432" width="16" height="36" rx="3" fill="url(#brassG)"/><circle cx="986" cy="446" r="3" fill="#150f06"/><path d="M984 447h4l1.500 9h-7z" fill="#150f06"/></g>
+  <g id="foot" class="hot"><rect x="650" y="696" width="64" height="44" fill="transparent"/><circle cx="681" cy="718" r="15" fill="url(#brassG)"/><rect x="666" y="702" width="30" height="7" fill="#8b6d28"/></g>
+  <circle cx="919" cy="718" r="15" fill="url(#brassG)"/><rect x="904" y="702" width="30" height="7" fill="#8b6d28"/>
+</g>
+
+<!-- the bench, and Mrs Sorley -->
+<g id="ida" class="hot">
+  <rect x="1130" y="556" width="410" height="16" fill="url(#woodG)"/><g fill="#4a2d1a"><rect x="1150" y="572" width="14" height="70"/><rect x="1230" y="572" width="14" height="70"/><rect x="1430" y="572" width="14" height="70"/><rect x="1510" y="572" width="14" height="70"/></g>
+  <rect x="1130" y="640" width="410" height="22" fill="url(#woodG)"/><rect x="1146" y="662" width="20" height="70" fill="#4a2d1a"/><rect x="1504" y="662" width="20" height="70" fill="#4a2d1a"/>
+  <rect x="1264" y="688" width="26" height="42" fill="#cbb9a6"/><rect x="1330" y="688" width="26" height="42" fill="#cbb9a6"/>
+  <rect x="1254" y="726" width="42" height="13" rx="5" fill="#17131a"/><rect x="1322" y="726" width="42" height="13" rx="5" fill="#17131a"/>
+  <path d="M1242 580h136l12 112h-160z" fill="#7b68a6"/>
+  <g fill="#6f5d99"><rect x="1232" y="556" width="28" height="66" rx="13" transform="rotate(-16 1246 589)"/><rect x="1360" y="556" width="28" height="66" rx="13" transform="rotate(16 1374 589)"/></g>
+  <rect x="1276" y="600" width="72" height="46" rx="7" fill="#5a3a22"/><path d="M1292 600q20-22 40 0" stroke="#5a3a22" stroke-width="6" fill="none"/><circle cx="1312" cy="622" r="4.500" fill="url(#brassG)"/>
+  <circle cx="1272" cy="612" r="11" fill="#f2d0b9"/><circle cx="1352" cy="612" r="11" fill="#f2d0b9"/>
+  <rect x="1260" y="598" width="20" height="7" rx="3" fill="#d8b150"/>
+  <use href="#ch-ida" x="1235" y="388" width="150" height="195"/>
+</g>
+
+<!-- the dark, and the torch -->
+<circle id="warm" cx="800" cy="470" r="210" fill="url(#warmG)" pointer-events="none"/>
+</svg>
+</div>
+<div id="dark"></div><div id="wrist" class="wristT">tick</div>
+<button type="button" class="torchbtn" id="tbtn">Switch off the torch</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, svg = $('#scene'), warm = $('#warm'), dark = $('#dark'), tbtn = $('#tbtn');
+  var found = {}, need = ['ida', 'notice', 'lock', 'foot'], stage = 0, off = false, stillStart = 0, stillT = 0, lastPos = null, lastWarn = 0,
+      offAt = 0, flashT = 0, busy = false, lockOpen = false;
+
+  ER.init({
+    theme: 'mystery', story: 'forty', storyTitle: 'Forty Minutes of Dark', id: 'chart', no: 'III', title: 'The Chart Room',
+    go: 'Switch on the torch',
+    intro: [
+      'The key marked TICK turns. As the door swings open, the storm takes the lights again.',
+      'Somewhere behind you PC Marsh says a word that will not go in his notebook. Then he puts his torch into your hand.',
+      'The Chart Room is very quiet.'
+    ],
+    exit: {"next":"cellar","w":{"d74f747a":"6908d0b5","d558c1c1":"e8643c2b","132cbe9e":"e90be7c1","2e2766ee":"d0811f54","a2134d09":"1d2ac23f"}}, tags: {"false":["dd412c2b","2cdb4f47","42f6c545","f8e527a9","59ce95ca","6a73ae81","281b252a","30838cd3"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var RNOTICE = '<h4>Staff. At closing</h4>' +
+    '<p>1. Wind the chronometer at six. Curator only.</p>' +
+    '<p>2. Lock the case.</p>' +
+    '<p>3. Cover it with its dust sheet.</p>' +
+    '<p>4. Tuck the corner of the sheet under the brass foot, or the draught will have it off by morning.</p>' +
+    '<p>No exceptions.</p><p>R. Okafor</p>';
+  var PLATE = '<h4>Marine Chronometer</h4><p>London, 1868</p>' +
+    '<p>Carried round Cape Horn eleven times<br>by Captain Joseph Harland of Pellam</p>' +
+    '<p>Wound every evening at six</p><p>Lent by T. Harland, 1961</p>';
+
+  function hints() {
+    if (stage === 0) {
+      var miss = [];
+      if (!found.ida) miss.push('the person on the bench (listen until she has finished)');
+      if (!found.notice) miss.push('the notice on the wall');
+      if (!found.lock) miss.push('the lock on the glass door');
+      if (!found.foot) miss.push('one of the brass feet under the case');
+      return ['find', [
+        'The mouse is your torch. There are four things to find in this room. The dots beside the room&rsquo;s name show how many you have.',
+        'You still need: ' + miss.join('; ') + '.',
+        'Mrs Sorley is on the right. The notice hangs between the glass case and the bench. The lock is the small brass plate on the edge of the open glass door. The foot is at the bottom left of the case, beside the heap of cloth.'
+      ]];
+    }
+    if (stage === 1) return ['still', [
+      'Mrs Sorley asked you to do two things. What were they?',
+      'First, click the button at the bottom to switch the torch off.',
+      'Now do nothing at all. Take your hand off the mouse and wait for about seven seconds.'
+    ]];
+    if (stage === 3) return ['sentence', [
+      'At eight o&rsquo;clock Mrs Sorley sat down next to the case. What could she hear? What should she have heard?',
+      'The clock was not there at eight. The lights went out at ten past eight. Which came first?',
+      'The sentence needs four words. It begins with &ldquo;had&rdquo;, and it ends with a word that means &ldquo;earlier than&rdquo;.'
+    ]];
+    return null;
+  }
+  function begin() {
+    ER.amb.rain(0.03); ER.pips(0, need.length);
+    flashT = setTimeout(flash, 7000);
+    ER.narrate(['A glass case. A bench. Somebody is sitting on the bench.']);
+  }
+
+  /* the torch follows the mouse */
+  function aim(e) {
+    if (off) return;
+    var p = ER.pt(svg, e);
+    dark.style.setProperty('--x', e.clientX + 'px'); dark.style.setProperty('--y', e.clientY + 'px');
+    warm.setAttribute('cx', p.x); warm.setAttribute('cy', p.y);
+  }
+  function sizeBeam() { var m = svg.getScreenCTM(); if (m) dark.style.setProperty('--r', Math.round(200 * m.a) + 'px'); }
+  window.addEventListener('resize', sizeBeam); sizeBeam();
+  document.addEventListener('pointermove', aim);
+  document.addEventListener('pointerdown', aim);
+
+  function flash() {
+    if (!off && !busy) {
+      try {
+        dark.animate([{ opacity: 1 }, { opacity: 0.5, offset: 0.1 }, { opacity: 0.94, offset: 0.25 }, { opacity: 0.56, offset: 0.4 }, { opacity: 1 }], { duration: 800 });
+        $('#winFlash').animate([{ opacity: 0 }, { opacity: 0.9, offset: 0.1 }, { opacity: 0.1, offset: 0.25 }, { opacity: 0.8, offset: 0.4 }, { opacity: 0 }], { duration: 800 });
+      } catch (e) {}
+      setTimeout(ER.sfx.thunder, 500);
+    }
+    flashT = setTimeout(flash, 9000 + Math.random() * 6000);
+  }
+
+  function got(k) {
+    if (found[k]) return;
+    found[k] = 1;
+    var n = need.filter(function (x) { return found[x]; }).length;
+    ER.pips(n, need.length);
+    if (n === need.length && stage === 0) { stage = 1; setTimeout(askToListen, 1400); }
+  }
+  function thing(sel, word, line, key) {
+    $(sel).addEventListener('click', function (e) {
+      if (off || busy) return;
+      if (word) ER.wordAt(e.clientX, e.clientY, word);
+      if (line) ER.say(line);
+      if (key) got(key);
+    });
+  }
+  thing('#window', null, 'The window. It was painted shut years ago, and the paint is not broken.');
+  thing('#kitchen', 'kettle', 'The kitchen. A kettle, a tin of biscuits, a pile of clean plates. Not one plate has been used tonight.');
+  thing('#shelf', 'dust sheet', 'Ship models under their dust sheets. Every corner is tucked in.');
+  thing('#charts', 'chart', null);
+  thing('#cushion', null, 'Blue velvet, with a square mark where the box has stood since 1961. The case is empty.');
+  thing('#sheet', 'dust sheet', 'The dust sheet, lying where it fell. Dry. Not torn.');
+  thing('#lock', 'keyhole', 'The lock of the glass door. Not one scratch on the brass or inside the keyhole. And it is not locked now: the door moves when you touch it.', 'lock');
+  thing('#foot', null, 'A brass foot. The corner of the sheet is lying beside it. Nothing is tucked under anything.', 'foot');
+  $('#plate').addEventListener('click', function () {
+    if (off || busy) return;
+    ER.read({ html: PLATE, cls: 'plate', clue: { id: 'plate', title: 'Brass plate on the case', kind: 'Museum label' } });
+  });
+  $('#rnotice').addEventListener('click', function () {
+    if (off || busy) return;
+    ER.read({ html: RNOTICE, cls: 'typed', clue: { id: 'rnotice', title: 'Notice beside the case', kind: 'Museum notice' }, done: function () { got('notice'); } });
+  });
+  $('#ida').addEventListener('click', function () {
+    if (off || busy) return;
+    var c = CAST.ida;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('ida'),
+      lines: [
+        'Is that the detective? I am Ida Sorley. I would get up, but I have been told to stay where I am twice tonight, and the second time I mean to do it.',
+        'Joseph Harland was my great-grandfather. He carried that clock round Cape Horn eleven times. My grandfather lent it to this museum in 1961, when I was eleven. I wanted to see it once more before it went.',
+        'Ruth gave me tea upstairs. About eight I came down to wait on this bench. It was very quiet in here. Only the rain on the window. I could hear my own wristwatch. I thought, how thick that sheet must be.',
+        { a: 'Then the lights went, and Ruth called down that I must stay where I was.', note: '' },
+        { note: 'Mrs Sorley does not speak for some time.', a: 'I didn&rsquo;t quite stay where I was. After twenty minutes or so I thought, nobody will know. I have a little torch on my keys. I only meant to lift the corner of the sheet, but it wasn&rsquo;t caught on anything. It slid straight off onto the floor. The glass door moved when I touched it. And there was nothing inside.' },
+        'I sat down again. Who would they blame? The old woman whose family wants it back. So I said nothing. I am sorry.'
+      ],
+      clue: { id: 'ida1', title: 'Ida Sorley, in the Chart Room' },
+      done: function (seen) { if (seen) got('ida'); }
+    });
+  });
+
+  /* Mrs Sorley's test: switch the torch off, keep still, and listen */
+  function askToListen() {
+    if (ER.isOpen()) { setTimeout(askToListen, 1200); return; }
+    ER.narrate([
+      '&ldquo;Before you go,&rdquo; says Mrs Sorley, &ldquo;sit down a moment. Switch that torch off and keep quite still. I want you to hear something.&rdquo;'
+    ], function () { tbtn.classList.add('on'); });
+  }
+  tbtn.addEventListener('click', function () { if (busy) return; if (stage === 3) { openLock(); return; } if (off) torchOn(); else torchOff(); });
+  function torchOff() {
+    off = true; offAt = stillStart = Date.now(); lastPos = null;
+    dark.classList.add('off'); warm.setAttribute('opacity', 0);
+    document.body.classList.remove('torch');
+    tbtn.textContent = 'Switch the torch on';
+    ER.say('Darkness. Keep quite still, and listen.', 3200);
+    stillT = setInterval(stillTick, 250);
+  }
+  function torchOn() {
+    off = false; clearInterval(stillT);
+    dark.classList.remove('off'); warm.setAttribute('opacity', 1);
+    document.body.classList.add('torch');
+    tbtn.textContent = 'Switch off the torch';
+  }
+  function fidget() {
+    if (!off || Date.now() - offAt < 900) return;
+    stillStart = Date.now();
+    if (Date.now() - lastWarn > 2600) { lastWarn = Date.now(); ER.say('Keep still.', 1500); }
+  }
+  document.addEventListener('pointermove', function (e) {
+    if (!off) return;
+    if (!lastPos) { lastPos = [e.clientX, e.clientY]; return; }
+    if (Math.abs(e.clientX - lastPos[0]) + Math.abs(e.clientY - lastPos[1]) > 12) { lastPos = [e.clientX, e.clientY]; fidget(); }
+  });
+  document.addEventListener('keydown', fidget);
+  var lastTick = 0;
+  function stillTick() {
+    var t = Date.now() - stillStart;
+    if (t > 1800 && Date.now() - lastTick > 950) {
+      lastTick = Date.now(); ER.sfx.tick(0.5);
+      var w = $('#wrist'), m = svg.getScreenCTM();
+      if (m) { w.style.left = (m.e + 1262 * m.a) + 'px'; w.style.top = (m.f + 590 * m.d) + 'px'; }
+      try { w.animate([{ opacity: 0 }, { opacity: 0.55, offset: 0.25 }, { opacity: 0 }], { duration: 800 }); } catch (e) {}
+    }
+    if (t >= 6500) heard();
+  }
+  function heard() {
+    clearInterval(stillT); stage = 2; busy = true; tbtn.classList.remove('on');
+    ER.narrate([
+      'Rain on the glass. And, very small and very near, a wristwatch.',
+      '&ldquo;That is all I could hear at eight o&rsquo;clock,&rdquo; says Mrs Sorley. &ldquo;I sat down here, beside a clock that ticks twice a second, and I heard my own watch. I thought, how thick that sheet must be.&rdquo;',
+      'You switch the torch back on. PC Marsh is standing in the doorway with his pencil ready.'
+    ], function () { torchOn(); busy = false; stage = 3; tbtn.textContent = 'PC Marsh is waiting'; tbtn.classList.add('on'); openLock(); });
+  }
+
+  /* the lock: say what it means, in one sentence */
+  function openLock() {
+    var box = ER.el('div', 'mq');
+    box.innerHTML = '<p class="mq-say">PC Marsh turns to a clean page. &ldquo;She heard her own watch at eight. The lights did not go out until ten past. So what do I write down?&rdquo;</p>' +
+      '<div class="mq-line">The chronometer <span class="slot"></span><span class="slot"></span><span class="slot"></span><span class="slot"></span> the lights went out.</div>' +
+      '<div class="tray"></div>' +
+      '<div class="mq-foot"><div class="mq-msg"></div><button type="button" class="btn">Write it down</button></div>';
+    var tray = box.querySelector('.tray'), msg = box.querySelector('.mq-msg');
+    ['still', 'had', 'before', 'not', 'gone', 'was', 'when', 'already', 'after', 'there'].forEach(function (w) {
+      var t = ER.el('span', 'tile dnd-item'); t.textContent = w; tray.appendChild(t);
+    });
+    ER.glossIn(box, '.mq-say');
+    ER.dnd(box, { item: '.tile', slot: '.slot', home: tray, lock: function () { return lockOpen; }, change: function () { msg.textContent = ''; } });
+    box.querySelector('.btn').addEventListener('click', function () {
+      if (lockOpen) return;
+      var ws = ER.$$('.slot', box).map(function (s) { var t = s.querySelector('.tile'); return t ? t.textContent : ''; });
+      if (ws.indexOf('') >= 0) { msg.textContent = 'The sentence still has a hole in it.'; ER.shake(box); return; }
+      var s = ws.join(' ');
+      if (ER.exit([s], { delay: 5200 })) {
+        lockOpen = true; busy = true; clearTimeout(flashT); tbtn.classList.remove('on');
+        msg.style.color = '#2f6b45'; msg.textContent = 'PC Marsh writes it down, slowly.';
+        setTimeout(function () { ER.closeAll(); ER.say('PC Marsh reads it back to himself twice. Then he looks up at the dark ceiling. &ldquo;Somebody ought to go and find those fuses,&rdquo; he says.', 5000); }, 1500);
+        return;
+      }
+      ER.sfx.no(); ER.shake(box);
+      msg.textContent = ER.check('false', s)
+        ? '“Then why could she hear her own watch?” says PC Marsh.'
+        : 'PC Marsh frowns at the page. “I can’t write that. Try it another way.”';
+    });
+    ER.open('ov-lock', box);
+  }
+})();
+</script>
+</body>
+</html>

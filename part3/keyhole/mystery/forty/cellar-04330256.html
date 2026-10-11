@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Cellar · Forty Minutes of Dark</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<style>
+  body{--bg:#0b0d0b;--accent:#f0c53a;--font-display:'Stardos Stencil',serif;--font-ui:'Oswald',sans-serif;
+    --tc-bg:rgba(8,10,8,.93);--cap-bg:rgba(10,12,10,.93);--panel:#171a16;--face-bg:#4b3b2c;--q-ink:#c2b06a;--fade:#040504}
+  .tc-room{font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .st1{font-family:'Stardos Stencil',serif;font-weight:700;fill:#22170c;text-anchor:middle;opacity:.86}
+  .dgr{font-family:'Oswald',sans-serif;font-weight:700;font-size:24px;letter-spacing:5px;fill:#b3261c;text-anchor:middle}
+  .dgr2{font-family:'Oswald',sans-serif;font-weight:500;font-size:11px;letter-spacing:2px;fill:#1a1a1a;text-anchor:middle}
+  #dark{transition:opacity 1.6s}
+  #bulbGlow,#bulbOn,#doorLight{transition:opacity 1.2s}
+  #flameG{animation:fl 1.7s ease-in-out infinite;transform-origin:1195px 604px}
+  @keyframes fl{0%,100%{transform:scale(1,1)}30%{transform:scale(.9,1.12)}60%{transform:scale(1.08,.92)}}
+  #drop{animation:drop 2.9s cubic-bezier(.6,0,1,.6) infinite}
+  @keyframes drop{0%{transform:translateY(0);opacity:0}8%{opacity:.9}70%{transform:translateY(590px);opacity:.9}72%,100%{transform:translateY(590px);opacity:0}}
+  .rip{animation:rip 2.9s linear infinite;transform-box:fill-box;transform-origin:center;opacity:0}
+  @keyframes rip{0%,68%{transform:scale(.2);opacity:0}72%{opacity:.7}100%{transform:scale(1.5);opacity:0}}
+  #cabinet{animation:cab 3.2s steps(3) infinite}
+  #cabinet.done{animation:none}
+  @keyframes cab{50%{filter:brightness(1.25)}}
+  .gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:1px solid #f0c53a;
+    color:#f0c53a;background:rgba(10,12,10,.88);font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.18em;text-transform:uppercase;border-radius:3px}
+  .gobtn.on{display:block}
+  .gobtn:hover{background:#f0c53a;color:#0b0d0b}
+
+  /* padlock */
+  .pl{width:min(580px,94vw);background:#272c28;border:1px solid #4d5a52;padding:26px 30px 30px;color:#e8e3d4;box-shadow:0 26px 70px rgba(0,0,0,.7);text-align:center}
+  .pl-tag{position:relative;background:#f3ecd4;font-family:'Caveat',cursive;font-size:26px;line-height:1.25;color:#1d2a4a;padding:14px 18px 14px 40px;
+    transform:rotate(-1.5deg);margin:0 auto 6px;text-align:left;box-shadow:0 6px 16px rgba(0,0,0,.5)}
+  .pl-tag:before{content:'';position:absolute;left:14px;top:50%;width:11px;height:11px;margin-top:-6px;border-radius:50%;background:#272c28;box-shadow:inset 0 0 0 2px #8b7a52}
+  .pl-body{display:inline-block;position:relative;margin-top:78px;padding:20px 22px;border-radius:16px;background:linear-gradient(135deg,#e2c467,#a37f2c 60%,#7d5f1d);
+    box-shadow:0 8px 20px rgba(0,0,0,.55),inset 0 2px 0 rgba(255,245,200,.5)}
+  .pl-sh{position:absolute;left:50%;top:-64px;width:124px;height:80px;margin-left:-62px;border:15px solid #9aa2a5;border-bottom:0;border-radius:62px 62px 0 0;
+    transition:transform .35s;transform-origin:100% 100%}
+  .pl.open .pl-sh{transform:translateY(-14px) rotate(-22deg)}
+  .wh{display:inline-block;width:64px;height:88px;margin:0 5px;background:#12100b;color:#f5df98;font-family:'Oswald',sans-serif;font-weight:500;font-size:54px;
+    line-height:88px;border-radius:7px;cursor:ns-resize;touch-action:none;box-shadow:inset 0 12px 14px rgba(0,0,0,.85),inset 0 -12px 14px rgba(0,0,0,.85)}
+  .pl-foot{margin-top:22px;display:flex;align-items:center;gap:14px}
+  .pl-msg{flex:1;text-align:left;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:19px;min-height:26px;color:#e6c98a}
+  .pl-help{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.5;margin-top:12px}
+
+  /* fuse board */
+  .fb{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:24px;width:min(1000px,96vw);background:#3d4841;border:3px solid #202622;padding:24px;
+    box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 2px #55635a}
+  .fb h5{grid-column:1/3;margin:0;font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;letter-spacing:.3em;color:#f1eee2;background:#b3261c;padding:6px 14px;justify-self:start;text-transform:uppercase}
+  .fb-board{background:#1a211d;padding:22px 8px 18px;display:flex;justify-content:space-around;border-radius:4px;box-shadow:inset 0 0 0 2px #0d1210;align-self:start}
+  .sw{width:104px;text-align:center}
+  .sw-lamp{width:16px;height:16px;border-radius:50%;margin:0 auto 12px;background:#33271a;box-shadow:inset 0 0 0 2px #140f09}
+  .sw.on .sw-lamp{background:#ffcf5a;box-shadow:0 0 16px #ffcf5a}
+  .sw-slot{position:relative;width:34px;height:156px;margin:0 auto;background:#090d0b;border-radius:17px;box-shadow:inset 0 0 0 3px #2a332e}
+  .sw-knob{position:absolute;left:-14px;top:5px;width:62px;height:46px;border-radius:10px;background:linear-gradient(#444,#0f0f0f);cursor:grab;touch-action:none;
+    box-shadow:0 5px 9px rgba(0,0,0,.65),inset 0 2px 0 rgba(255,255,255,.22);transition:top .14s}
+  .sw.on .sw-knob{top:105px}
+  .sw-knob.on{transition:none;cursor:grabbing}
+  .sw-label{margin-top:14px;background:#f1eee2;color:#14110d;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.07em;padding:5px 2px;
+    border-radius:2px;box-shadow:inset 0 0 0 2px #14110d}
+  .fb-card{background:#f6efd9;font-family:'Caveat',cursive;font-size:23px;line-height:1.22;color:#1d2a4a;padding:16px 18px;transform:rotate(1.2deg);
+    box-shadow:0 8px 18px rgba(0,0,0,.5);align-self:start}
+  .fb-card h6{margin:0 0 8px;font-size:27px;text-decoration:underline}
+  .fb-card p{margin:0 0 9px}
+  .fb-msg{grid-column:1/3;min-height:26px;font-family:'EB Garamond',Georgia,serif;font-style:italic;font-size:19px;color:#f1eee2}
+  .fb.pop{animation:popf .5s}
+  @keyframes popf{0%{filter:brightness(4) saturate(0)}30%{filter:brightness(.3)}100%{filter:none}}
+  @media (max-width:760px){.fb{grid-template-columns:1fr}.fb h5,.fb-msg{grid-column:1}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="stone" width="150" height="90" patternUnits="userSpaceOnUse">
+    <rect width="150" height="90" fill="#272b27"/>
+    <rect x="2" y="2" width="96" height="41" fill="#4a514a"/><rect x="102" y="2" width="46" height="41" fill="#434a43"/>
+    <rect x="-48" y="47" width="96" height="41" fill="#464d46"/><rect x="52" y="47" width="96" height="41" fill="#50574f"/>
+  </pattern>
+  <pattern id="flag" width="220" height="72" patternUnits="userSpaceOnUse">
+    <rect width="220" height="72" fill="#1d201d"/>
+    <rect x="2" y="2" width="130" height="32" fill="#353a35"/><rect x="136" y="2" width="82" height="32" fill="#2f342f"/>
+    <rect x="-60" y="38" width="106" height="32" fill="#323732"/><rect x="50" y="38" width="166" height="32" fill="#393e39"/>
+  </pattern>
+  <linearGradient id="crateG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a98349"/><stop offset="1" stop-color="#7d5c33"/></linearGradient>
+  <linearGradient id="stairG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3d433d"/><stop offset="1" stop-color="#575e56"/></linearGradient>
+  <linearGradient id="metalG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#47554c"/><stop offset=".5" stop-color="#5d6d62"/><stop offset="1" stop-color="#3f4b43"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <radialGradient id="candleDark" gradientUnits="userSpaceOnUse" cx="1195" cy="600" r="1150"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".2" stop-color="#000" stop-opacity=".32"/><stop offset=".5" stop-color="#000" stop-opacity=".84"/><stop offset="1" stop-color="#000" stop-opacity=".96"/></radialGradient>
+  <radialGradient id="candleGlow"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".6"/><stop offset=".3" stop-color="#ff9d3c" stop-opacity=".18"/><stop offset="1" stop-color="#ff9d3c" stop-opacity="0"/></radialGradient>
+  <radialGradient id="bulbG"><stop offset="0" stop-color="#fff3c0" stop-opacity=".85"/><stop offset=".25" stop-color="#ffe59a" stop-opacity=".3"/><stop offset="1" stop-color="#ffe59a" stop-opacity="0"/></radialGradient>
+  <filter id="mossB" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="26"/></filter>
+</defs>
+
+<!-- vault -->
+<rect x="-1000" width="3600" height="770" fill="url(#stone)"/>
+<g filter="url(#mossB)" opacity=".5"><ellipse cx="420" cy="640" rx="200" ry="70" fill="#4d6a3a"/><ellipse cx="1260" cy="700" rx="260" ry="60" fill="#4d6a3a"/><ellipse cx="900" cy="170" rx="300" ry="50" fill="#0c0f0c"/></g>
+<path d="M-1000 0H2600V132Q800 36-1000 132Z" fill="#101310"/>
+<rect x="-1000" y="760" width="3600" height="140" fill="url(#flag)"/><rect x="-1000" y="758" width="3600" height="8" fill="#0d0f0d"/>
+
+<!-- pipe and its drip -->
+<path d="M-1000 150H1280v60" stroke="#3a2a22" stroke-width="16" fill="none"/><g fill="#2a1e18"><rect x="350" y="140" width="22" height="20"/><rect x="760" y="140" width="22" height="20"/><rect x="1120" y="140" width="22" height="20"/></g>
+<path id="drop" d="M566 160q-6 10 0 14t0-14z" fill="#9fc3d1" stroke="#9fc3d1" stroke-width="4"/>
+<ellipse cx="566" cy="782" rx="86" ry="13" fill="#1b2a2d" opacity=".9"/>
+<g fill="none" stroke="#7da3b0" stroke-width="2"><ellipse class="rip" cx="566" cy="782" rx="34" ry="6"/></g>
+
+<!-- steps up to the hall -->
+<g id="stairs" class="hot">
+  <rect x="-1000" y="0" width="1000" height="900" fill="#151815"/>
+  <rect x="0" y="150" width="96" height="212" fill="#060706"/>
+  <rect id="doorLight" x="0" y="150" width="96" height="212" fill="#f6c56b" opacity="0"/>
+  <g id="steps"></g>
+  <path d="M30 300Q240 470 452 700" stroke="#8a744a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M30 300v62M452 700v60" stroke="#3a2a1c" stroke-width="9"/>
+</g>
+
+<!-- bulb -->
+<path d="M800 96V168" stroke="#0c0e0c" stroke-width="4"/><rect x="792" y="166" width="16" height="14" fill="#2b2b28"/>
+<ellipse cx="800" cy="196" rx="15" ry="19" fill="#3d3d34"/>
+<circle id="bulbGlow" cx="800" cy="200" r="620" fill="url(#bulbG)" opacity="0" pointer-events="none"/>
+<ellipse id="bulbOn" cx="800" cy="196" rx="15" ry="19" fill="#fff6cf" opacity="0"/>
+
+<!-- crates -->
+<g id="crates" class="hot"></g>
+<g id="clip" class="hot">
+  <path d="M900 276v24" stroke="#1a1a1a" stroke-width="3"/><circle cx="900" cy="274" r="5" fill="#1a1a1a"/>
+  <rect x="852" y="298" width="96" height="128" rx="3" fill="#6b4a2a"/><rect x="860" y="312" width="80" height="106" fill="#efe6cf"/>
+  <rect x="880" y="292" width="40" height="16" rx="3" fill="#8f979c"/>
+  <g stroke="#5b5346" stroke-width="2"><path d="M868 328h64M868 340h64M868 352h64M868 364h64M868 376h64M868 388h64M868 402h40"/></g>
+</g>
+
+<!-- Dennis Pym, on a crate, in no hurry -->
+<g id="pym" class="hot">
+  <rect x="960" y="654" width="184" height="106" fill="url(#crateG)"/><path d="M960 690h184M960 726h184" stroke="#5b4124" stroke-width="2.500"/>
+  <rect x="960" y="654" width="16" height="106" fill="#6b4d2b"/><rect x="1128" y="654" width="16" height="106" fill="#6b4d2b"/>
+  <rect x="1000" y="674" width="36" height="76" fill="#40332a"/><rect x="1070" y="674" width="36" height="76" fill="#40332a"/>
+  <rect x="990" y="744" width="52" height="18" rx="5" fill="#16110d"/><rect x="1062" y="744" width="52" height="18" rx="5" fill="#16110d"/>
+  <rect x="986" y="636" width="134" height="42" rx="8" fill="#4a3b30"/>
+  <rect x="962" y="566" width="30" height="92" rx="14" fill="#e9e0ca" transform="rotate(9 977 612)"/>
+  <rect x="1104" y="556" width="30" height="74" rx="14" fill="#e9e0ca" transform="rotate(-24 1119 593)"/>
+  <circle cx="972" cy="662" r="12" fill="#dcae8e"/>
+  <rect x="1126" y="556" width="28" height="64" rx="7" fill="#9aa3a8"/><rect x="1130" y="544" width="20" height="16" rx="4" fill="#6f777b"/><path d="M1130 574h20M1130 600h20" stroke="#7b8388" stroke-width="2"/>
+  <circle cx="1136" cy="604" r="12" fill="#dcae8e"/>
+  <use href="#ch-pym" x="972" y="442" width="160" height="208"/>
+</g>
+
+<!-- candle in a bottle -->
+<rect x="1152" y="696" width="92" height="64" fill="url(#crateG)"/><path d="M1152 728h92" stroke="#5b4124" stroke-width="2.500"/>
+<circle cx="1195" cy="600" r="330" fill="url(#candleGlow)" pointer-events="none"/>
+<path d="M1182 696v-36q0-8 6-12v-18h14v18q6 4 6 12v36z" fill="#243b2c"/><rect x="1190" y="606" width="10" height="26" fill="#f1ece0"/>
+<path id="flameG" d="M1195 580q-9 12-9 19a9 9 0 0 0 18 0q0-7-9-19z" fill="#ffd66b"/><path d="M1195 590q-4 6-4 10a4 4 0 0 0 8 0q0-4-4-10z" fill="#fff6d8"/>
+
+<!-- the fuse cabinet -->
+<g fill="#2a322d"><rect x="1330" y="60" width="14" height="130"/><rect x="1470" y="60" width="14" height="130"/></g>
+<rect x="1322" y="112" width="170" height="54" fill="#f1eee2" stroke="#1a1a1a" stroke-width="3"/><text x="1407" y="141" class="dgr">DANGER</text><text x="1407" y="157" class="dgr2">240 VOLTS · KEEP SHUT</text>
+<g id="cabinet" class="hot">
+  <rect x="1270" y="190" width="280" height="340" rx="6" fill="url(#metalG)"/><rect x="1282" y="202" width="256" height="316" rx="3" fill="none" stroke="#2c3630" stroke-width="4"/>
+  <g fill="#2c3630"><circle cx="1292" cy="212" r="4"/><circle cx="1528" cy="212" r="4"/><circle cx="1292" cy="508" r="4"/><circle cx="1528" cy="508" r="4"/></g>
+  <rect x="1500" y="336" width="38" height="20" rx="3" fill="#2c3630"/>
+  <g id="plock">
+    <path d="M1508 360v-14q0-12 12-12t12 12v14" stroke="#9aa2a5" stroke-width="6" fill="none"/>
+    <rect x="1500" y="358" width="40" height="36" rx="6" fill="url(#brassG)"/>
+    <path d="M1512 394q-10 30 4 50" stroke="#8b7a52" stroke-width="2" fill="none"/>
+    <rect x="1490" y="440" width="54" height="34" fill="#f3ecd4" transform="rotate(-8 1517 457)"/>
+  </g>
+  <g id="cabOpen" opacity="0">
+    <rect x="1282" y="202" width="256" height="316" fill="#141a17"/>
+    <g fill="#0a0d0b"><rect x="1310" y="250" width="16" height="120" rx="8"/><rect x="1356" y="250" width="16" height="120" rx="8"/><rect x="1402" y="250" width="16" height="120" rx="8"/><rect x="1448" y="250" width="16" height="120" rx="8"/><rect x="1494" y="250" width="16" height="120" rx="8"/></g>
+    <g id="minis" fill="#2a2a2a"></g>
+    <rect x="1300" y="410" width="220" height="14" fill="#f1eee2"/>
+    <rect x="1320" y="440" width="120" height="60" fill="#f6efd9" transform="rotate(3 1380 470)"/>
+  </g>
+</g>
+
+<rect id="dark" x="-1000" y="-200" width="3600" height="1300" fill="url(#candleDark)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the office</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script>
+(function () {
+  var $ = ER.$, done = { pym: 0, lock: 0, light: 0 }, nextFile = null, busy = false, seq = [], dripT = 0;
+
+  /* steps and crates */
+  (function () {
+    var s = '', i, y;
+    for (i = 0; i < 10; i++) {
+      y = 362 + i * 40;
+      s += '<rect x="' + (i * 46) + '" y="' + y + '" width="47" height="' + (760 - y) + '" fill="url(#stairG)"/>' +
+           '<rect x="' + (i * 46) + '" y="' + y + '" width="47" height="6" fill="#737b72"/>';
+    }
+    $('#steps').innerHTML = s; s = '';
+    [[462, 640, 150, 120, 'PM 05', 'ROPES'], [618, 640, 160, 120, 'PM 08', 'DIVING HELMET'], [784, 652, 130, 108, 'PM 02', 'CHARTS G-M'],
+     [488, 530, 160, 110, 'PM 06', 'LAMPS'], [654, 536, 150, 104, 'PM 10', 'SHIP’S BELL'], [542, 438, 140, 92, 'PM 03', 'MODELS']].forEach(function (c) {
+      var x = c[0], y2 = c[1], w = c[2], h = c[3];
+      s += '<rect x="' + x + '" y="' + y2 + '" width="' + w + '" height="' + h + '" fill="url(#crateG)"/>' +
+        '<path d="M' + x + ' ' + (y2 + h / 3) + 'h' + w + 'M' + x + ' ' + (y2 + 2 * h / 3) + 'h' + w + '" stroke="#5b4124" stroke-width="2.5"/>' +
+        '<rect x="' + x + '" y="' + y2 + '" width="15" height="' + h + '" fill="#6b4d2b"/><rect x="' + (x + w - 15) + '" y="' + y2 + '" width="15" height="' + h + '" fill="#6b4d2b"/>' +
+        '<text x="' + (x + w / 2) + '" y="' + (y2 + h / 2 - 2) + '" class="st1" font-size="27">' + c[4] + '</text>' +
+        '<text x="' + (x + w / 2) + '" y="' + (y2 + h / 2 + 22) + '" class="st1" font-size="14">' + c[5] + '</text>';
+    });
+    $('#crates').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'mystery', story: 'forty', storyTitle: 'Forty Minutes of Dark', id: 'cellar', no: 'IV', title: 'The Cellar',
+    go: 'Go down',
+    intro: [
+      '&ldquo;Then nobody needed the dark,&rdquo; says PC Marsh, and writes it down. The chronometer was gone before the lights ever went out. Nobody&rsquo;s story about the dark matters now.',
+      'But the lights are still out, and the fuse box is in the cellar. So is the caretaker.',
+      'Twelve stone steps, and a drip that finds the back of your neck on the seventh.'
+    ],
+    exit: {"next":"office","w":{"23118df1":"535f532b"}}, tags: {"padlock":["663361f9"]},
+    hints: hints,
+    onBegin: begin
+  });
+
+  var LIST = '<h4>Pellam Museum: crates for the City</h4><table>' +
+    '<tr><td>PM 01</td><td>Charts A&ndash;F</td><td>12 kg</td></tr><tr><td>PM 02</td><td>Charts G&ndash;M</td><td>11 kg</td></tr>' +
+    '<tr><td>PM 03</td><td>Ship models, small</td><td>9 kg</td></tr><tr><td>PM 04</td><td>Ship models, large</td><td>21 kg</td></tr>' +
+    '<tr><td>PM 05</td><td>Ropes and knots</td><td>18 kg</td></tr><tr><td>PM 06</td><td>Ship&rsquo;s lamps</td><td>16 kg</td></tr>' +
+    '<tr><td>PM 07</td><td>Compasses</td><td>8 kg</td></tr><tr><td>PM 08</td><td>Diving helmet</td><td>23 kg</td></tr>' +
+    '<tr class="hl"><td>PM 09</td><td>Anchor chain</td><td>64 kg TWO MEN</td></tr><tr><td>PM 10</td><td>Ship&rsquo;s bell</td><td>30 kg</td></tr>' +
+    '<tr><td>PM 11&ndash;22</td><td>Books, papers, pictures</td><td>6&ndash;15 kg each</td></tr></table>' +
+    '<p>&nbsp;</p><p>22 crates, sealed and listed. D. Pym.</p>' +
+    '<p>NOT IN A CRATE: the chronometer. The City Museum will collect it themselves at 8 a.m. tomorrow.</p>';
+  var TAG = 'If I forget again: my years in this building, then the crate that nearly finished me tonight. D.';
+  var CARD = '<h6>Order matters</h6><p>Get it wrong and the lot blows again.</p><p>1. The cellar first, or you will break your neck down here.</p>' +
+    '<p>2. Never the kitchen before the hall.</p><p>3. The Chart Room straight after the hall.</p><p>4. The office last. Ruth can wait.</p><p>D.P.</p>';
+
+  function hints() {
+    if (done.light) return ['go', ['The lights are on. Use the button at the bottom, or click on the stone steps, to go up to the office.']];
+    if (done.lock) return ['fuses', [
+      'Read Dennis&rsquo;s card beside the switches. It has four rules, and only one order obeys them all.',
+      'Rule 1 gives you the first switch. Rule 4 gives you the last. That leaves only three for the middle.',
+      '&ldquo;Straight after&rdquo; means with nothing between them, so the hall and the Chart Room go together, in that order. The kitchen cannot come before the hall. So where must the kitchen go?'
+    ]];
+    if (!done.pym) return ['pym', [
+      'Somebody down here knows this cellar better than anybody. Click on him, and listen to the end.',
+      'After that, look at the grey cabinet on the wall. That is the fuse box.'
+    ]];
+    return ['padlock', [
+      'The grey cabinet on the wall is the fuse box. Click on it and read the label tied to the lock.',
+      'The label asks for two things: Dennis&rsquo;s years in this building, and the number of one crate. He told you both. His words are in your Notebook.',
+      'How many years has Dennis had the keys? That gives you two of the numbers. Which crate was so heavy that it needed two men? That is the third. Drag each wheel up or down.'
+    ]];
+  }
+  function begin() {
+    ER.amb.rain(0.012); pips();
+    dripT = setInterval(function () { ER.sfx.drip(); }, 2900);
+    ER.narrate(['It smells of tar and wet rope down here. A man is sitting on a crate with a candle and a flask, in no hurry at all.']);
+  }
+  function pips() { ER.pips(done.pym + done.lock + done.light, 3); }
+
+  $('#crates').addEventListener('click', function (e) { if (busy) return; ER.wordAt(e.clientX, e.clientY, 'crate'); ER.say('Twenty-two crates, sealed and listed. Nobody has opened one tonight.'); });
+  $('#clip').addEventListener('click', function () { if (busy) return; ER.read({ html: LIST, cls: 'list', clue: { id: 'crates', title: 'Crate list', kind: 'Museum paper' } }); });
+  $('#stairs').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.leave(nextFile); return; }
+    ER.say('The steps back up to the hall. It is too dark to go anywhere until somebody finds the fuses.');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#pym').addEventListener('click', function () {
+    if (busy) return;
+    var c = CAST.pym;
+    ER.talk({
+      who: c.who, role: c.role, face: FACE('pym'),
+      lines: [
+        'Mind the puddle. Dennis Pym. Thirty-one years I&rsquo;ve had the keys to this place. Every door but that glass one. Tomorrow I hand them in. Ruth keeps hers till the end of the month, for the paperwork.',
+        'I was up and down these steps all evening with crates. Quarter past seven I went through the Chart Room to the kitchen for my flask, and the clock was going under its sheet, same as ever. You stop noticing it, and then you notice it.',
+        'About twenty to eight Ruth sent the lad down to help me with crate nine. I hadn&rsquo;t asked for anybody. But crate nine is the anchor chain and weighs what you&rsquo;d think, so I didn&rsquo;t argue. Ten minutes it took the two of us to get it up these steps.',
+        'Ruth was in the hall when we came out, by the tall clock, with a packet of biscuits in her hand. &ldquo;Mind the door frame,&rdquo; she says. Twenty years, and she still thinks I&rsquo;ll hit the door frame.',
+        { q: 'Did you notice anything strange tonight?', a: 'Only that tall clock. I wind it Mondays. It&rsquo;s gone tock, tock, tock since before I was born. Tonight, when I stood next to it getting my breath back, it sounded like it had a stone in its shoe. I thought, even the clock knows we&rsquo;re finished.' },
+        'I was still in the hall when the old lady came down, about eight. I held the Chart Room door for her and came back to my crates.',
+        { q: 'And when the lights went out?', a: 'I was down here. I felt my way to the fuse box. Nobody saw me.' },
+        { q: 'The whole harbour was dark. Why stay forty minutes at a fuse box?', a: 'All right. The fuses took two minutes. Then I sat in my chair. It&rsquo;s my last night. I&rsquo;m allowed to sit in my chair.' },
+        { q: 'And the whistle in your coat pocket?', a: 'Thirty-one years. I wanted one thing.' },
+        'The fuse box is over there. It&rsquo;s locked, and I&rsquo;ve forgotten the number again. I wrote myself a note. It&rsquo;s tied to the lock.'
+      ],
+      clue: { id: 'pym', title: 'Dennis Pym, in the cellar' },
+      done: function (seen) { if (seen && !done.pym) { done.pym = 1; pips(); } }
+    });
+  });
+  $('#cabinet').addEventListener('click', function () { if (busy || done.light) return; if (done.lock) openBoard(); else openPadlock(); });
+
+  /* the padlock: three wheels */
+  function openPadlock() {
+    var box = ER.el('div', 'pl'), d = [0, 0, 0];
+    box.innerHTML = '<div class="pl-tag"></div><div class="pl-body"><div class="pl-sh"></div><span class="wh">0</span><span class="wh">0</span><span class="wh">0</span></div>' +
+      '<div class="pl-help">drag a wheel up or down</div><div class="pl-foot"><div class="pl-msg"></div><button type="button" class="btn">Pull it open</button></div>';
+    box.querySelector('.pl-tag').innerHTML = ER.gloss(TAG);
+    var msg = box.querySelector('.pl-msg');
+    ER.$$('.wh', box).forEach(function (w, i) {
+      var y0 = 0, start = 0;
+      function set(v) { d[i] = ((v % 10) + 10) % 10; w.textContent = d[i]; }
+      ER.drag(w, {
+        start: function (e) { if (done.lock) return false; y0 = e.clientY; start = d[i]; },
+        move: function (e) { var n = start + Math.round((y0 - e.clientY) / 26); if (((n % 10) + 10) % 10 !== d[i]) { set(n); ER.sfx.click(); } },
+        end: function (e, moved) {
+          if (moved) return;
+          var r = w.getBoundingClientRect(); set(d[i] + (e.clientY < r.top + r.height / 2 ? 1 : -1)); ER.sfx.click();
+        }
+      });
+    });
+    box.querySelector('.btn').addEventListener('click', function () {
+      if (done.lock) return;
+      if (ER.check('padlock', d.join(''))) {
+        done.lock = 1; pips(); box.classList.add('open'); ER.sfx.clunk(); msg.textContent = 'The lock drops open.';
+        $('#plock').setAttribute('opacity', 0); $('#cabOpen').setAttribute('opacity', 1);
+        setTimeout(function () { ER.closeAll(); openBoard(); }, 1500);
+      } else {
+        ER.sfx.chain(); ER.shake(box.querySelector('.pl-body'));
+        msg.textContent = 'It rattles. It does not open.';
+      }
+    });
+    ER.open('ov-lock', box);
+  }
+
+  /* the fuse board: five switches, and only one order works */
+  var SW = [['kitchen', 'Kitchen'], ['office', 'Office'], ['cellar', 'Cellar'], ['chart', 'Chart Room'], ['hall', 'Hall']];
+  function openBoard() {
+    var box = ER.el('div', 'fb'), board, msg;
+    box.innerHTML = '<h5>Mains</h5><div class="fb-board"></div><div class="fb-card">' + ER.gloss(CARD) + '</div><div class="fb-msg">Five switches, all off. Pull one down to switch it on.</div>';
+    board = box.querySelector('.fb-board'); msg = box.querySelector('.fb-msg');
+    SW.forEach(function (s) {
+      var n = ER.el('div', 'sw', '<div class="sw-lamp"></div><div class="sw-slot"><div class="sw-knob"></div></div><div class="sw-label"></div>');
+      n.setAttribute('data-id', s[0]); n.querySelector('.sw-label').textContent = s[1].toUpperCase(); board.appendChild(n);
+      var knob = n.querySelector('.sw-knob'), y0 = 0;
+      function on() {
+        if (n.classList.contains('on') || done.light) return;
+        n.classList.add('on'); seq.push(s[0]); ER.sfx.clunk();
+        msg.textContent = seq.length + ' of 5 on.';
+        if (seq.length === 5) setTimeout(judge, 700);
+      }
+      ER.drag(knob, {
+        start: function (e) { if (n.classList.contains('on') || done.light) return false; y0 = e.clientY; },
+        move: function (e) { knob.style.top = Math.max(5, Math.min(105, 5 + e.clientY - y0)) + 'px'; },
+        end: function (e, moved) { var far = (e.clientY - y0) > 45; knob.style.top = ''; if (far || !moved) on(); }
+      });
+    });
+    seq.forEach(function (id) { box.querySelector('.sw[data-id=' + id + ']').classList.add('on'); });
+    function judge() {
+      var f = ER.exitOk([seq.join('>')]);
+      if (f) return lightsOn(f, box, msg);
+      seq = []; ER.sfx.pop(); box.classList.remove('pop'); void box.offsetWidth; box.classList.add('pop');
+      ER.$$('.sw', box).forEach(function (n) { n.classList.remove('on'); });
+      msg.textContent = 'A blue flash, a bang, and all five jump back up. “Read the card,” says Dennis, without getting up.';
+    }
+    ER.open('ov-lock', box);
+  }
+  function lightsOn(file, box, msg) {
+    done.light = 1; pips(); nextFile = file; busy = true;
+    var st = ER.state(); st.done = st.done || {}; st.done.cellar = 1;
+    msg.textContent = 'One by one, the lamps come on.';
+    ER.sfx.ok(); ER.amb.hum(true);
+    setTimeout(function () {
+      ER.closeAll();
+      $('#dark').setAttribute('opacity', 0.14); $('#bulbGlow').setAttribute('opacity', 1); $('#bulbOn').setAttribute('opacity', 1);
+      $('#doorLight').setAttribute('opacity', 0.85); $('#cabinet').classList.add('done');
+      ER.narrate([
+        '&ldquo;There,&rdquo; says Dennis Pym. &ldquo;Thirty-one years, and it still does as it&rsquo;s told.&rdquo;',
+        'Upstairs, somebody cheers. PC Marsh shouts down the steps that they are all waiting for you in the office.'
+      ], function () { busy = false; $('#go').classList.add('on'); });
+    }, 1300);
+  }
+  /* tiny switches in the scene, just for looks */
+  (function () {
+    var s = '', i;
+    for (i = 0; i < 5; i++) s += '<rect x="' + (1304 + i * 46) + '" y="252" width="28" height="22" rx="5"/>';
+    $('#minis').innerHTML = s;
+  })();
+})();
+</script>
+</body>
+</html>

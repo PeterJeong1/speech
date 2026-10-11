@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lantern Quay · When the Tide Serves</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ferry.css">
+<style>
+  body{--bg:#0b1519;--accent:#f3a55a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(9,18,21,.95);--tc-ink:#f1e8d6;--cap-bg:rgba(9,18,21,.94);--panel:#12232a;--face-bg:#1f3a34;--q-ink:#f3c48a;--fade:#04090b;--hud-bg:rgba(8,16,19,.76)}
+  .tc-room{font-size:clamp(44px,6.4vw,88px)}
+  #glow{animation:glow 5.3s steps(1,end) infinite}
+  @keyframes glow{0%{opacity:1}47%{opacity:.86}49%{opacity:1}82%{opacity:.92}84%{opacity:1}}
+  .fog{animation:drift 46s steps(60,end) infinite}
+  .fog.f2{animation-duration:63s;animation-direction:reverse}
+  .fog.f3{animation-duration:80s}
+  @keyframes drift{0%{transform:translateX(-160px)}50%{transform:translateX(160px)}100%{transform:translateX(-160px)}}
+  #lant{animation:lant 2.9s steps(1,end) infinite}
+  @keyframes lant{50%{opacity:.7}}
+  #puff{opacity:0}
+  #scene.blow #puff{animation:puff 2.8s ease-out}
+  @keyframes puff{0%{opacity:0;transform:translate(0,0)}15%{opacity:.85}100%{opacity:0;transform:translate(-50px,-34px)}}
+  #purser.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.3)}}
+  .seen .tick{display:block}
+  .tick{display:none}
+
+  /* the tally: one line of the list on each label, one card for each window and each place at the rail */
+  .tl{width:min(1120px,96vw);display:grid;grid-template-columns:262px 1fr;gap:14px;-webkit-user-select:none;user-select:none}
+  .tl-l{background:#fdfdfa;border-top:10px solid #1f4a3d;padding:9px 11px 10px;color:#1c2428;box-shadow:0 22px 60px rgba(0,0,0,.6)}
+  .tl-l h5{margin:0 0 7px;font-family:'Outfit',sans-serif;font-weight:700;font-size:12.5px;line-height:1.3;letter-spacing:.12em;color:#1f4a3d}
+  .tl-tray{display:flex;flex-direction:column;gap:6px;min-height:398px;padding:6px;background:#eef1ee;border:1px dashed #9fb0aa}
+  .lb{display:block;position:relative;padding:5px 9px 3px 27px;background:#e8d5a4 linear-gradient(175deg,rgba(255,250,225,.5),rgba(130,90,30,.16));color:#23211c;border-radius:2px 10px 10px 2px;box-shadow:0 2px 0 #b79c5e,0 4px 8px rgba(0,0,0,.3)}
+  .lb:before{content:'';position:absolute;left:9px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#1b1712;box-shadow:0 0 0 2.5px #b79c5e}
+  .lb b{display:block;font-family:'Special Elite',monospace;font-weight:normal;font-size:15.5px;line-height:1.2}
+  .lb i{display:block;font-style:normal;font-family:'Outfit',sans-serif;font-size:11.5px;line-height:1.25;color:#5a5346}
+  .tl-key{margin:8px 2px 0;font-family:'Outfit',sans-serif;font-size:11.5px;line-height:1.5;color:#4d5a5e}
+  .tl-r{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-content:start}
+  .hd{display:flex;flex-direction:column;padding:8px 10px 9px;color:#1d2b4a;background:#f6f3e6 linear-gradient(175deg,rgba(255,255,255,.5),rgba(120,140,150,.14));box-shadow:0 10px 26px rgba(0,0,0,.5)}
+  .hd h6{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:500;font-size:11.5px;letter-spacing:.16em;color:#8c2f24}
+  .hd p{flex:1;margin:0 0 4px;font-family:'Architects Daughter',cursive;font-size:14.5px;line-height:1.34}
+  .hk{position:relative;min-height:46px;margin-top:5px;border:1.5px dashed #9aa7a5;border-radius:3px;background:rgba(31,74,61,.06)}
+  .hk:after{content:attr(data-cap);position:absolute;left:8px;top:13px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7d8a88;pointer-events:none}
+  .hk.full:after{display:none}
+  .hk .lb{box-shadow:0 2px 5px rgba(0,0,0,.35)}
+  .hd.bad{outline:3px solid #d2452f;outline-offset:1px}
+  .tl .wk-foot{grid-column:1/3;margin-top:0}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070f12"/><stop offset=".6" stop-color="#14242a"/><stop offset="1" stop-color="#22353a"/></linearGradient>
+  <linearGradient id="hullG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#245244"/><stop offset="1" stop-color="#12302a"/></linearGradient>
+  <linearGradient id="houseG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6dcc0"/><stop offset="1" stop-color="#c2b796"/></linearGradient>
+  <linearGradient id="quayG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4244"/><stop offset="1" stop-color="#14191a"/></linearGradient>
+  <linearGradient id="winG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe2a0"/><stop offset="1" stop-color="#f3b866"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffc98a" stop-opacity=".95"/><stop offset=".18" stop-color="#f3a55a" stop-opacity=".5"/><stop offset=".55" stop-color="#e0843a" stop-opacity=".16"/><stop offset="1" stop-color="#e0843a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="whiteG"><stop offset="0" stop-color="#f4fbfb" stop-opacity=".9"/><stop offset=".3" stop-color="#cfe3e6" stop-opacity=".3"/><stop offset="1" stop-color="#cfe3e6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="fogG"><stop offset="0" stop-color="#b9cdd0" stop-opacity=".26"/><stop offset=".6" stop-color="#b9cdd0" stop-opacity=".12"/><stop offset="1" stop-color="#b9cdd0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="76%"><stop offset="0" stop-color="#02070a" stop-opacity="0"/><stop offset=".6" stop-color="#02070a" stop-opacity=".3"/><stop offset="1" stop-color="#02070a" stop-opacity=".9"/></radialGradient>
+  <clipPath id="c1"><rect x="500" y="460" width="92" height="70" rx="6"/></clipPath><clipPath id="c2"><rect x="612" y="460" width="92" height="70" rx="6"/></clipPath>
+  <clipPath id="c3"><rect x="724" y="460" width="92" height="70" rx="6"/></clipPath><clipPath id="c4"><rect x="836" y="460" width="92" height="70" rx="6"/></clipPath>
+  <clipPath id="c5"><rect x="948" y="460" width="92" height="70" rx="6"/></clipPath>
+</defs>
+
+<!-- the night, the fog, the water -->
+<rect x="-1000" y="-400" width="3600" height="1100" fill="url(#skyG)"/>
+<rect x="-1000" y="640" width="3600" height="80" fill="#0a1619"/>
+<g id="ripples" stroke="#f3b866" stroke-linecap="round" opacity=".35"></g>
+
+<!-- m.v. Curlew, alongside -->
+<g id="ship">
+  <path d="M800 432V236M770 282h60" stroke="#b9ad8c" stroke-width="5" fill="none"/>
+  <circle cx="800" cy="238" r="46" fill="url(#whiteG)"/><circle cx="800" cy="238" r="5" fill="#fff"/>
+  <g id="funnel" class="hot"><rect x="640" y="318" width="72" height="116" fill="#d9b06a"/><rect x="640" y="318" width="72" height="14" fill="#15181a"/><rect x="640" y="344" width="72" height="20" fill="#1f4a3d"/><rect x="640" y="318" width="10" height="116" fill="#000" opacity=".16"/>
+    <path d="M628 392v-34h8" stroke="#c9a24a" stroke-width="6" fill="none"/><rect x="622" y="346" width="12" height="14" rx="2" fill="#c9a24a"/></g>
+  <ellipse id="puff" cx="616" cy="340" rx="30" ry="15" fill="#e9f0f0" pointer-events="none"/>
+  <g id="house" class="hot"><rect x="880" y="352" width="172" height="84" fill="url(#houseG)"/><rect x="872" y="344" width="188" height="10" fill="#1f4a3d"/>
+    <g fill="#0c1a1e"><rect x="894" y="366" width="42" height="38" rx="3"/><rect x="944" y="366" width="42" height="38" rx="3"/><rect x="994" y="366" width="42" height="38" rx="3"/></g>
+    <rect x="894" y="366" width="142" height="38" fill="#c9302a" opacity=".12"/><path d="M960 404q0 -24 12 -26q12 2 12 26z" fill="#060d0f"/><circle cx="972" cy="374" r="7" fill="#060d0f"/><path d="M963 370h18" stroke="#060d0f" stroke-width="5"/></g>
+  <rect x="470" y="436" width="600" height="128" fill="url(#houseG)"/><rect x="460" y="428" width="620" height="10" fill="#1f4a3d"/><rect x="470" y="548" width="600" height="16" fill="#a89d7a"/>
+  <g fill="url(#winG)" stroke="#6b5a2e" stroke-width="4"><rect x="500" y="460" width="92" height="70" rx="6"/><rect x="612" y="460" width="92" height="70" rx="6"/><rect x="724" y="460" width="92" height="70" rx="6"/><rect x="836" y="460" width="92" height="70" rx="6"/><rect x="948" y="460" width="92" height="70" rx="6"/></g>
+  <g id="wins"></g>
+  <path d="M148 560q-8 54 26 100H1244q76 -44 118 -128l-22 6H1070v26H148z" fill="url(#hullG)"/>
+  <path d="M152 584H1300" stroke="#e6dcc0" stroke-width="5"/><path d="M1070 538h270l22 -6" stroke="#e6dcc0" stroke-width="4" fill="none"/>
+  <g id="name" class="hot"><rect x="1120" y="594" width="170" height="44" fill="transparent"/><text x="1205" y="626" class="fS" font-size="34" font-weight="700" text-anchor="middle" fill="#e6dcc0" letter-spacing="5">CURLEW</text></g>
+  <path d="M160 562H470" stroke="#8f8468" stroke-width="5"/>
+  <path d="M176 562V468" stroke="#b9ad8c" stroke-width="4"/><circle cx="176" cy="462" r="40" fill="url(#whiteG)"/><circle cx="176" cy="462" r="5" fill="#fff"/>
+  <path d="M158 562L128 474" stroke="#b9ad8c" stroke-width="3.500"/><path d="M130 480q14 30 6 58q-12 -4 -18 -24q4 -20 12 -34z" fill="#a3241a"/><path d="M130 480q6 12 6 24l-10 -6z" fill="#1d2f4a"/>
+</g>
+
+<!-- four on the after deck -->
+<g id="h-stern" class="hot" transform="translate(214 562) scale(.42)"></g>
+<g id="h-dougie" class="hot" transform="translate(280 562) scale(.42)"></g>
+<g id="h-lionel" class="hot" transform="translate(348 562) scale(.42)"></g>
+<circle id="lant" cx="368" cy="496" r="26" fill="url(#lampG)" pointer-events="none"/>
+<g id="h-door" class="hot" transform="translate(410 562) scale(.42)"></g>
+<g id="rail" pointer-events="none" stroke="#e6dcc0" fill="none"><path d="M164 506H426M164 534H426" stroke-width="3.500"/><path d="M166 562V506M210 562V506M254 562V506M298 562V506M342 562V506M386 562V506M426 562V500M466 562V500" stroke-width="3"/></g>
+<g id="buoy" class="hot"><circle cx="236" cy="536" r="17" fill="none" stroke="#f1ede2" stroke-width="9"/><path d="M236 519v9M236 544v9M219 536h9M244 536h9" stroke="#c9302a" stroke-width="9"/></g>
+
+<!-- fog in front of her -->
+<g pointer-events="none"><ellipse class="fog" cx="520" cy="330" rx="860" ry="120" fill="url(#fogG)"/><ellipse class="fog f2" cx="1100" cy="490" rx="900" ry="130" fill="url(#fogG)"/><ellipse class="fog f3" cx="440" cy="630" rx="950" ry="90" fill="url(#fogG)"/></g>
+
+<!-- the quay: wet stone, two bollards, a lamp, the board -->
+<rect x="-1000" y="690" width="3600" height="700" fill="url(#quayG)"/><rect x="-1000" y="690" width="3600" height="10" fill="#565f61"/>
+<g id="stones" stroke="#0f1415" stroke-width="2" opacity=".7"></g>
+<ellipse cx="1420" cy="800" rx="330" ry="70" fill="#f3a55a" opacity=".13" pointer-events="none"/>
+<g id="ropes" fill="none" stroke="#c9b98c" stroke-width="5" stroke-linecap="round"><path d="M250 672q-50 -40 -84 -96"/><path d="M1090 672q100 -40 230 -124"/></g>
+<g fill="#15191a"><path d="M228 700v-22q0 -14 22 -14t22 14v22z"/><rect x="220" y="664" width="60" height="9" rx="4"/><path d="M1068 700v-22q0 -14 22 -14t22 14v22z"/><rect x="1060" y="664" width="60" height="9" rx="4"/></g>
+<g id="gang" class="hot"><path d="M428 562L470 562L640 706L560 706Z" fill="#6b5a3a"/><path d="M440 574l40 0M462 594l44 0M486 614l48 0M510 634l52 0M534 654l56 0M556 674l62 0" stroke="#4a3d26" stroke-width="3"/>
+  <path d="M428 562V520L560 664V706M470 562V520L640 664V706" stroke="#b9ad8c" stroke-width="3.500" fill="none"/><path d="M428 520L560 664M470 520L640 664" stroke="#e6dcc0" stroke-width="2.500" stroke-dasharray="2 5" fill="none"/></g>
+<g id="board" class="hot"><path d="M1136 868L1162 730M1426 868L1400 730" stroke="#15191a" stroke-width="9" stroke-linecap="round"/><rect x="1140" y="716" width="282" height="110" fill="#16302a" stroke="#e6dcc0" stroke-width="3"/>
+  <text x="1281" y="744" class="fO" font-size="15" font-weight="600" text-anchor="middle" fill="#e9bd7a" letter-spacing="4">MARRAM FERRIES</text>
+  <text x="1156" y="778" class="fT" font-size="25" fill="#f1ede2">21.40</text><text x="1240" y="777" class="fT" font-size="15.500" fill="#f1ede2">MARRAM (NEW SLIP)</text>
+  <text x="1156" y="806" class="fT" font-size="14" fill="#b9cdd0">LAST SAILING · ON TIME</text></g>
+<g id="lamp" class="hot"><rect x="1420" y="200" width="80" height="500" fill="#fff" opacity="0"/><path d="M1470 700V250q0 -34 -40 -34" stroke="#15191a" stroke-width="10" fill="none"/><path d="M1408 216h44l-8 34h-28z" fill="#15191a"/><rect x="1416" y="246" width="28" height="12" fill="#ffd9a8"/></g>
+<circle id="glow" cx="1430" cy="256" r="330" fill="url(#lampG)" pointer-events="none"/>
+
+<!-- the purser, at the foot of the gangway, with the list and the counter -->
+<g id="purser" class="hot" transform="translate(770 874) scale(1.220)"></g>
+<g id="counter" pointer-events="none" transform="translate(818 676)"><rect x="-4" y="-4" width="60" height="44" rx="9" fill="#000" opacity=".4"/><rect x="0" y="0" width="52" height="36" rx="8" fill="#c9ced3"/><rect x="8" y="7" width="36" height="22" rx="2" fill="#10151a"/><text id="cnum" x="26" y="25" class="fT" font-size="19" text-anchor="middle" fill="#f1ede2">0</text><circle cx="52" cy="6" r="6" fill="#8f959a"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Bring in the gangway</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="ferry.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, tally = null, heads = {}, told = {};
+
+  /* what can be seen through the five saloon windows; the four at the rail; the purser; ripples; the stones of the quay */
+  (function () {
+    var s = '', i, x, dk = '#3a2a18';
+    /* 1: a man asleep, and a small girl with her nose against the glass */
+    s += '<g clip-path="url(#c1)"><g id="h-dad" class="hot"><rect x="538" y="460" width="54" height="70" fill="#fff" opacity="0"/><g transform="rotate(14 566 500)"><path d="M540 540q0 -30 26 -32q26 2 26 32z" fill="#3d5a6a"/><circle cx="566" cy="492" r="15" fill="#c9a07e"/><path d="M551 488q2 -16 15 -16t15 16q-7 -7 -15 -7t-15 7z" fill="' + dk + '"/><ellipse cx="566" cy="501" rx="3" ry="4" fill="#5a2a22"/></g></g>' +
+      '<g id="h-posy" class="hot"><rect x="500" y="486" width="40" height="44" fill="#fff" opacity="0"/><path d="M506 534q0 -18 14 -18t14 18z" fill="#c9453a"/><circle cx="520" cy="508" r="10.500" fill="#f1d5bd"/><path d="M509 506q1 -12 11 -12t11 12q-5 -6 -11 -6t-11 6z" fill="#b4682a"/><path d="M509 508q-4 10 -2 20M531 508q4 10 2 20" stroke="#b4682a" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<circle cx="516" cy="509" r="1.500" fill="#2a2420"/><circle cx="524" cy="509" r="1.500" fill="#2a2420"/><circle cx="506" cy="524" r="3.500" fill="#f1d5bd"/><circle cx="534" cy="524" r="3.500" fill="#f1d5bd"/></g></g>';
+    /* 2: a large man and fourteen parcels */
+    s += '<g clip-path="url(#c2)"><g id="h-marek" class="hot"><rect x="612" y="460" width="92" height="70" fill="#fff" opacity="0"/><path d="M620 540q0 -32 28 -34q28 2 28 34z" fill="#e2731c"/><circle cx="648" cy="490" r="15" fill="#e3c09e"/><path d="M633 488q2 -17 15 -17t15 17q-7 -8 -15 -8t-15 8z" fill="#c9a24a"/>' +
+      '<g stroke="#5a4028" stroke-width="1.500"><rect x="676" y="504" width="28" height="26" fill="#b98d58"/><rect x="672" y="484" width="30" height="20" fill="#c9a06a"/><rect x="680" y="468" width="24" height="16" fill="#b98d58"/></g><path d="M690 504v26M687 484v20" stroke="#e9e3d2" stroke-width="3"/></g></g>';
+    /* 3: a cellist, and a cello with a seat of its own */
+    s += '<g clip-path="url(#c3)"><g id="h-cello" class="hot"><rect x="724" y="460" width="38" height="70" fill="#fff" opacity="0"/><path d="M738 540v-44q-10 -4 -10 -16q0 -14 14 -16q14 2 14 16q0 12 -10 16v44z" fill="#231a16"/><path d="M742 470q8 -6 2 -10" stroke="#3a2c26" stroke-width="3" fill="none"/></g>' +
+      '<g id="h-tess" class="hot"><rect x="762" y="460" width="54" height="70" fill="#fff" opacity="0"/><path d="M766 540q0 -30 24 -32q24 2 24 32z" fill="#5a2f52"/><circle cx="790" cy="492" r="14" fill="#8a5a3a"/><path d="M776 494q-3 -22 14 -22t14 22q-2 10 -4 14q2 -22 -10 -24q-12 2 -10 24q-2 -4 -4 -14z" fill="#15110f"/></g></g>';
+    /* 4: a man with binoculars, looking at the fog */
+    s += '<g clip-path="url(#c4)"><g id="h-julian" class="hot"><rect x="836" y="460" width="92" height="70" fill="#fff" opacity="0"/><path d="M856 540q0 -30 26 -32q26 2 26 32z" fill="#3f6a45"/><circle cx="882" cy="494" r="14" fill="#e3c09e"/><path d="M868 490q-1 -18 14 -18t14 18q-7 -5 -14 -5t-14 5z" fill="#3f6a45"/><circle cx="882" cy="468" r="5" fill="#e9c46a"/>' +
+      '<rect x="870" y="489" width="10" height="9" rx="2" fill="#15181a"/><rect x="884" y="489" width="10" height="9" rx="2" fill="#15181a"/><path d="M866 510q-2 -12 6 -14M898 510q2 -12 -6 -14" stroke="#3f6a45" stroke-width="6" fill="none"/></g></g>';
+    /* 5: the tea urn */
+    s += '<g clip-path="url(#c5)" id="urn" class="hot"><rect x="948" y="460" width="92" height="70" fill="#fff" opacity="0"/><rect x="976" y="484" width="34" height="46" rx="4" fill="#9aa1a7"/><rect x="972" y="478" width="42" height="8" rx="3" fill="#5c666e"/><path d="M1010 510h8v8" stroke="#5c666e" stroke-width="4" fill="none"/><path d="M986 474q-6 -8 0 -14M1000 474q6 -8 0 -14" stroke="#fff" stroke-width="3" fill="none" opacity=".6"/></g>';
+    $('#wins').innerHTML = s;
+    $('#h-stern').innerHTML = FY.who('elsie', { hold: true, shadow: 0, extra: '<rect x="-15" y="-166" width="30" height="22" fill="#b98d58"/><path d="M-15 -155h30M0 -166v22" stroke="#3a2a18" stroke-width="2"/>' });
+    $('#h-dougie').innerHTML = FY.who('dougie', { shadow: 0, extra: '<path d="M42 -116L50 0" stroke="#3a2a18" stroke-width="5" stroke-linecap="round"/>' });
+    $('#h-lionel').innerHTML = FY.who('lionel', { shadow: 0, extra: '<rect x="34" y="-176" width="24" height="34" rx="3" fill="#2a2f33"/><rect x="38" y="-170" width="16" height="24" fill="#ffd98a"/><path d="M38 -176q8 -14 16 0" fill="none" stroke="#2a2f33" stroke-width="4"/>' });
+    $('#h-door').innerHTML = FY.who('elsie', { shadow: 0, extra: '<rect x="30" y="-64" width="46" height="60" rx="4" fill="#6b4a2a"/><path d="M30 -44h46" stroke="#3a2414" stroke-width="3"/><path d="M44 -64q9 -14 18 0" fill="none" stroke="#3a2414" stroke-width="4"/>' });
+    $('#purser').innerHTML = FY.who('purser', { hold: true, extra: '<g transform="rotate(-8 0 -160)"><rect x="-27" y="-192" width="54" height="66" rx="3" fill="#6b4a2a"/><rect x="-22" y="-182" width="44" height="52" fill="#fdfdfa"/><path d="M-17 -172h34M-17 -164h34M-17 -156h34M-17 -148h34M-17 -140h24" stroke="#4d5a5e" stroke-width="2"/><rect x="-10" y="-196" width="20" height="9" rx="2" fill="#c9ced3"/></g>' });
+    s = '';
+    for (i = 0; i < 5; i++) { x = 512 + i * 112; s += '<path d="M' + x + ' 664q10 6 0 12t0 12M' + (x + 34) + ' 662q-10 7 0 13t0 13M' + (x + 62) + ' 666q8 5 0 10" stroke-width="5"/>'; }
+    $('#ripples').innerHTML = s; s = '';
+    for (i = 0; i < 30; i++) s += '<path d="M' + (-700 + i * 110) + ' 700v52M' + (-650 + i * 110) + ' 752v64M' + (-720 + i * 110) + ' 816v84"/>';
+    s += '<path d="M-1000 752H2600M-1000 816H2600"/>';
+    $('#stones').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'ferry', storyTitle: 'When the Tide Serves', id: 'quay', no: 'I', title: 'Lantern Quay',
+    go: 'Take the list',
+    intro: [
+      'It is half term, and you are spending the week on work experience with Marram Ferries. So far the work has been ropes, mops, and eleven ways of making tea. The boat is the <i>Curlew</i>: she was built in 1950, and this is her last Saturday. On Friday a new boat comes.',
+      'Tonight is Saturday 24 October. The last ferry of the night leaves Lantern Quay at 21.40 for the island of Marram, forty-five minutes away on the other side of the fog. The purser, Ms Pargeter, has a printed list with eight names on it. In her other hand she has a counter, and she has clicked it once for every passenger who came up the gangway.',
+      'The counter says nine. She has counted three times. &ldquo;Trainee,&rdquo; she says. &ldquo;You count.&rdquo;'
+    ],
+    exit: {"next":"saloon","w":{"e61e34e5":"3e94d5ad","874118f6":"fb1da111"}}, tags: {"dad":["0f6e80ca"],"posy":["a78267d1"],"marek":["c51edbf9"],"tess":["a238ecd0"],"julian":["140c48c7"],"dougie":["937bd498"],"lionel":["b0175382"],"door":["b5136c8d","5c8b1fd2"],"stern":["13054c22","662e906f"]},
+    sound: ['hush', { bpm: 50, drop: ['bass'], beds: [['sea', 0.5]] }],      /* a quay in fog: the whistle is blown here, so no low struck notes */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('q-file') || null; told = ER.flag('q-told') || {}; heads = ER.flag('q-heads') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('q-told', told); return true; }
+  function isBusy() { return busy; }
+  function nHeads() { return Object.keys(heads).length; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#cnum').textContent = nHeads();
+    $('#purser').classList.toggle('ready', nHeads() === 9 && !nextFile);
+    ER.pips(nextFile ? 10 : nHeads(), 10);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['Nine aboard, and the skipper is waiting. Bring in the gangway.']];
+    if (tally && tally.isOpen()) return ['tally', [
+      'Each label is one line of the list. Under the name are the purser&rsquo;s short forms, and the small print under the labels says what they stand for. Read what each person said, and hang the label that fits it.',
+      'Some people told you more than you asked. A seat for a cello is not a head. A child who is half price is a head, and so is her father, although he is asleep. Who has never paid? Who booked only this afternoon?',
+      'When seven labels are hung, one label is left and two people are left. Read their two answers side by side. Then hang the label on whichever of them you like, and show the purser.'
+    ]];
+    if (nHeads() < 9) return ['heads', [
+      'Go round the passengers. Click each person you can see: in the lit windows of the saloon, and on the after deck, at the back of the boat. The purser&rsquo;s counter goes up by one for each.',
+      'There are nine. Five are behind the saloon windows: look for a small one beside the man who is asleep. Four are on the after deck, and one of those is standing right at the stern, under the white lamp.'
+    ]];
+    return ['purser', ['You have nine heads, as the counter said. Ms Pargeter is at the foot of the gangway with the list. Click her.']];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('Eight names, nine heads. The skipper has his hand on the whistle.'); return; }
+    if (told.in) { busy = false; ER.say('Lantern Quay, a little before twenty to ten.'); return; }
+    tell('in');
+    ER.narrate([
+      'Lantern Quay, at twenty-nine minutes to ten. The fog came in with the dark, and the quay lamp has made itself a small orange room in it.',
+      'The <i>Curlew</i> lies alongside with her saloon lit and her engine turning over. She is seventy-six years old, green and cream, and the oldest working ferry on this coast. People on Marram would sooner swim than see her go.',
+      'Ms Pargeter has been her purser for six weeks. Before that she was on the big boats, where a list is a list. &ldquo;Eight names,&rdquo; she says. &ldquo;Nine clicks. A list is a promise: eight go on, eight come off. I do not sail with a sum that will not come out.&rdquo;',
+      '&ldquo;The scanner has died, like everything else on this boat in a fog. So go round them. Ask each one what they booked, and where they are bound. Do not ask for names: if somebody is not on my list, I am not going to tell them which name to give. Then we hang a name on every head.&rdquo;',
+      'She gives you the list. It is still warm from the printer in the ticket hut.'
+    ], function () { busy = false; ER.addClue('list', 'The passenger list, 21.40', LIST, 'plist', 'Marram Ferries'); });
+  }
+
+  /* ---------- the list ---------- */
+  var ROWS = [
+    ['anstey', 'ANSTEY, T.', 'AD', 'R', '2 seats: 1 passenger, 1 instrument'], ['brimble-r', 'BRIMBLE, R.', 'AD', 'RES', ''], ['brimble-p', 'BRIMBLE, P.', 'CH', 'RES', 'age 7'],
+    ['coombes', 'COOMBES, E.', 'AD', 'S', 'to be met'], ['mazur', 'MAZUR, M.', 'AD', 'R', 'freight: 14 parcels'], ['prowse', 'PROWSE, L.', 'AD', 'COMP', 'Marram Museum'],
+    ['rudge', 'RUDGE, D.', 'SNR', 'RES', ''], ['yeo', 'YEO, J.', 'AD', 'R', 'booked today, 14.02']
+  ];
+  var KEY = 'AD adult &middot; CH child under 16 &middot; SNR 65 and over<br>S single &middot; R return &middot; RES island resident &middot; COMP no charge';
+  var LIST = '<h4>MARRAM FERRIES<small>m.v. Curlew &middot; passenger list &middot; Saturday 24 October 2026 &middot; leaves Lantern Quay 21.40 &middot; arrives Marram (New Slip) 22.25</small></h4>' +
+    '<table><tr><th>NAME</th><th>TYPE</th><th>FARE</th><th>NOTES</th></tr>' + ROWS.map(function (r) { return '<tr><td>' + r[1] + '</td><td>' + r[2] + '</td><td>' + r[3] + '</td><td>' + r[4] + '</td></tr>'; }).join('') +
+    '</table><p class="tot">PASSENGERS: 8</p><p class="key">' + KEY + '</p>';
+
+  /* ---------- nine heads ---------- */
+  var HEADS = [
+    ['dad', 'A man asleep in the first window, with his head back and his mouth open. He does not answer. The purser&rsquo;s counter counts him all the same.'],
+    ['posy', 'A small girl with her nose against the glass. &ldquo;That&rsquo;s my dad. He&rsquo;s asleep: it&rsquo;s his best thing. We live on Marram. I&rsquo;m seven, so I&rsquo;m half price.&rdquo;'],
+    ['marek', 'A big man in an orange jacket, behind a wall of boxes. &ldquo;Fourteen parcels for the island, and one of me. I go back on Monday for fourteen more.&rdquo;'],
+    ['tess', 'A woman with one hand on a very large black case. &ldquo;I paid for two seats, and there is one of me. The other seat is for Boris. Boris is a cello: he is two hundred years old, and he hates the damp.&rdquo;'],
+    ['julian', 'A man in a green hat, looking at the fog through binoculars. &ldquo;I booked at two o&rsquo;clock this afternoon, the minute the bird was reported. I go back tomorrow, bird or no bird.&rdquo;'],
+    ['dougie', 'An old man at the rail, in a flat cap. &ldquo;I&rsquo;ve had an island card since before they put photographs on them. And I&rsquo;ve paid no full fare this century.&rdquo;'],
+    ['lionel', 'A man in a keeper&rsquo;s cap, holding up a lantern. &ldquo;Pay? The Keeper of the Lamp has never paid, madam. The Museum sees to all that.&rdquo;'],
+    ['door', 'A young woman in a headscarf and a long raincoat, just aboard and out of breath. &ldquo;A single. I&rsquo;m not coming back. I&rsquo;m being met. It&rsquo;s all on my phone, and my phone&rsquo;s dead. It&rsquo;s Coombes.&rdquo;'],
+    ['stern', 'A young woman in a headscarf and a long raincoat, right at the stern, with a small parcel. &ldquo;A single to Marram, please. I am to be met at the pier. Miss Coombes.&rdquo;']
+  ];
+  HEADS.forEach(function (h) {
+    $('#h-' + h[0]).addEventListener('click', function () {
+      if (busy) return;
+      if (!heads[h[0]]) {
+        heads[h[0]] = 1; ER.flag('q-heads', heads); FY.sfx.count(); paint();
+        if (nHeads() === 9) ER.toast('The counter says nine');
+      }
+      ER.say(h[1], 9500);
+    });
+  });
+  $('#h-cello').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'cello'); ER.say('The top of a cello case, taller than the woman beside it. The purser&rsquo;s counter does not count cellos, though you can see that she thought about it.');
+  });
+
+  /* ---------- things on the quay ---------- */
+  FY.thing('#urn', 'tea urn', 'The tea urn, steaming in the last window. Nobody is standing at it.', isBusy);
+  FY.thing('#lamp', null, 'The lamp that gives Lantern Quay its name: the fourth one to stand here, they say. In fog like this it lights itself and not much else.', isBusy);
+  FY.thing('#board', null, 'MARRAM (NEW SLIP), 21.40. LAST SAILING. ON TIME. The <i>Curlew</i> has not been late since anybody began writing it down.', isBusy);
+  FY.thing('#funnel', 'whistle', 'The funnel, and on the front of it a small brass whistle. In fog a ship that is moving must sound one long blast every two minutes, so that other ships know where she is.', isBusy);
+  FY.thing('#house', 'wheelhouse', 'The wheelhouse. Captain Skerritt is standing at the window with his arms folded. He has not looked at the counter, and he has not asked.', isBusy);
+  FY.thing('#name', null, 'CURLEW, in letters that have been painted over the same letters about forty times.', isBusy);
+  FY.thing('#buoy', 'lifebelt', 'A red and white ring on the rail, to throw to somebody in the water. The old hands call it a lifebelt.', isBusy);
+  FY.thing('#gang', 'gangway', 'The gangway: nine people have come up it tonight, and the purser clicked her counter for each of them. You watched her do it.', isBusy);
+  $('#go').addEventListener('click', function () {
+    if (!nextFile) return;
+    $('#go').classList.remove('on'); $('#scene').classList.add('blow'); FY.sfx.horn(1);
+    setTimeout(function () { ER.leave(nextFile); }, 1900);
+  });
+  $('#purser').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;The gangway, Trainee,&rdquo; says Ms Pargeter. &ldquo;I will find out which nine on the way over.&rdquo;'); return; }
+    if (nHeads() < 9) {
+      ER.say(nHeads() ? '&ldquo;That is ' + ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'][nHeads()] + ',&rdquo; says Ms Pargeter. &ldquo;My counter says nine. Keep going: the saloon windows, and the after deck.&rdquo;' :
+        '&ldquo;Do not look at me,&rdquo; says Ms Pargeter. &ldquo;I am crew. Look at them: the saloon windows, and the after deck.&rdquo;');
+      return;
+    }
+    if (!tally) tally = makeTally();
+    tally.open();
+  });
+
+  /* ---------- the tally: eight labels, nine heads ---------- */
+  function makeTally() {
+    var CARDS = [
+      ['SALOON &middot; first window', '&ldquo;That&rsquo;s my dad. He&rsquo;s asleep: it&rsquo;s his best thing. We live on Marram. I&rsquo;m seven, so I&rsquo;m half price.&rdquo;', [['dad', 'the man asleep'], ['posy', 'the small girl']]],
+      ['SALOON &middot; second window', '&ldquo;Fourteen parcels for the island, and one of me. I go back on Monday for fourteen more.&rdquo;', [['marek', 'the man with the parcels']]],
+      ['SALOON &middot; third window', '&ldquo;I paid for two seats, and there is one of me. The other seat is for Boris. Boris is a cello: he is two hundred years old, and he hates the damp.&rdquo;', [['tess', 'the woman with the cello']]],
+      ['SALOON &middot; fourth window', '&ldquo;I booked at two o&rsquo;clock this afternoon, the minute the bird was reported. I go back tomorrow, bird or no bird.&rdquo;', [['julian', 'the man with binoculars']]],
+      ['AFTER DECK &middot; at the rail', '&ldquo;I&rsquo;ve had an island card since before they put photographs on them. And I&rsquo;ve paid no full fare this century.&rdquo;', [['dougie', 'the old man']]],
+      ['AFTER DECK &middot; with a lantern', '&ldquo;Pay? The Keeper of the Lamp has never paid, madam. The Museum sees to all that.&rdquo;', [['lionel', 'the man with the lantern']]],
+      ['AFTER DECK &middot; by the gangway', '&ldquo;A single. I&rsquo;m not coming back. I&rsquo;m being met. It&rsquo;s all on my phone, and my phone&rsquo;s dead. It&rsquo;s Coombes.&rdquo;', [['door', 'headscarf, suitcase']]],
+      ['AFTER DECK &middot; at the stern', '&ldquo;A single to Marram, please. I am to be met at the pier. Miss Coombes.&rdquo;', [['stern', 'headscarf, parcel']]]
+    ];
+    var SLOTS = ['dad', 'posy', 'marek', 'tess', 'julian', 'dougie', 'lionel', 'door', 'stern'];
+    var WHY = {
+      dad: 'The small girl told you about him: he is her father, they live on Marram, and nobody is half price at his age. Two lines of my list go together, with one name.',
+      posy: 'She is seven, she is half price, and she lives on Marram. One line of my list says CH, and gives an age.',
+      marek: 'Fourteen parcels and one of him. Find the line with freight on it.',
+      tess: 'Two seats, and one of them is for a cello. I count heads, not instruments. Which line has two seats and one passenger?',
+      julian: 'He booked at two o&rsquo;clock this afternoon. My list says when a ticket was booked for one line only.',
+      dougie: 'An island card since before they had photographs, and no full fare this century. That is a resident, and it is a good deal more than sixty-five.',
+      lionel: 'He has never paid, and the Museum sees to it. One line of my list is no charge.',
+      door: 'A single, a grown woman, and somebody is meeting her. Only one line of my list says all three.',
+      stern: 'A single to Marram, a grown woman, to be met. Only one line of my list says all three.'
+    };
+    var hung = ER.flag('q-hung') || {}, wait = false, box = ER.el('div', 'tl'), s;
+    s = '<div class="tl-l"><h5>MARRAM FERRIES &middot; 21.40<br>ONE LABEL FOR EACH LINE OF THE LIST</h5><div class="tl-tray"></div><p class="tl-key">' + KEY + '</p></div><div class="tl-r">';
+    CARDS.forEach(function (c) {
+      s += '<div class="hd"><h6>' + c[0] + '</h6><p>' + c[1] + '</p>' + c[2].map(function (k) { return '<div class="hk" data-s="' + k[0] + '" data-cap="' + k[1] + '"></div>'; }).join('') + '</div>';
+    });
+    s += '</div><div class="wk-foot"><p class="pmsg"></p><button type="button" class="btn" id="t-go">Show the purser</button></div>';
+    box.innerHTML = s;
+    ER.glossIn(box, '.hd p');
+    var tray = box.querySelector('.tl-tray'), msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function slot(k) { return box.querySelector('.hk[data-s="' + k + '"]'); }
+    ROWS.forEach(function (r) {
+      var l = ER.el('span', 'lb dnd-item', '<b>' + r[1] + '</b><i>' + r[2] + ' &middot; ' + r[3] + (r[4] ? ' &middot; ' + r[4] : '') + '</i>'), at = null, k;
+      l.setAttribute('data-l', r[0]);
+      for (k in hung) if (hung[k] === r[0]) at = k;
+      (at && slot(at) ? slot(at) : tray).appendChild(l);
+    });
+    function read() {
+      hung = {};
+      SLOTS.forEach(function (k) { var l = slot(k).querySelector('.lb'); slot(k).classList.toggle('full', !!l); if (l) hung[k] = l.getAttribute('data-l'); });
+      ER.flag('q-hung', hung); box.setAttribute('data-hung', SLOTS.map(function (k) { return hung[k] || 'none'; }).join('|'));
+    }
+    ER.dnd(box, { item: '.lb', slot: '.hk', home: tray, lock: function () { return wait || !!nextFile; }, change: function () { read(); FY.sfx.label(); msg(''); } });
+    box.querySelector('#t-go').addEventListener('click', function () {
+      var left = tray.querySelectorAll('.lb').length, i, k, v, file, where;
+      if (wait || nextFile) return;
+      read();
+      if (left) { msg('&ldquo;' + (left === 8 ? 'Not one label hung' : left === 1 ? 'One label is still lying on the list' : left + ' labels are still lying on the list') + ',&rdquo; says Ms Pargeter. &ldquo;Every name on it belongs to somebody on this boat. I ticked them off as they came aboard.&rdquo;'); return; }
+      for (i = 0; i < SLOTS.length; i++) {
+        k = SLOTS[i]; v = hung[k] || 'none';
+        if (!ER.check(k, v)) {
+          ER.sfx.no(); FY.flash(slot(k).parentNode);
+          if (v === 'none') msg('&ldquo;You have left that one without a name,&rdquo; says Ms Pargeter. &ldquo;' + WHY[k] + '&rdquo;');
+          else {
+            msg('Ms Pargeter takes one label down again. &ldquo;' + (k === 'dad' && v === 'brimble-p' ? 'That label says CH, age 7. He is asleep, but he is not seven.' : k === 'posy' && v === 'brimble-r' ? 'That label says AD. She is seven and three quarters, and proud of it.' : WHY[k]) + '&rdquo;');
+            tray.appendChild(slot(k).querySelector('.lb')); read();
+          }
+          return;
+        }
+      }
+      file = ER.exit([SLOTS.map(function (k) { return hung[k] || 'none'; }).join('|')], { wait: true });
+      if (!file) { msg('The gangway will not move. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('q-file', file);
+      where = hung.door ? 'by the gangway' : 'at the stern';
+      FY.mine('tally', 'Eight names, nine heads', '<p>Anstey: one head and one cello. The Brimbles: two.</p><p>Mazur, Yeo, Rudge, Prowse: one each.</p><p>That is seven names on seven heads.</p>' +
+        '<p>COOMBES, E. (adult, single, to be met): TWO women say it is theirs. Same headscarf, same raincoat.</p><p>One by the gangway: suitcase, dead phone, no ticket to show.</p><p>One at the stern: small parcel, a bit of card in her glove.</p><p>Eight names. Nine heads.</p>', true);
+      msg('Ms Pargeter reads along the cards, and stops at the last two. &ldquo;Seven names on seven heads,&rdquo; she says. &ldquo;And then this.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          '&ldquo;One label, COOMBES, E., and two heads to hang it on,&rdquo; says Ms Pargeter. &ldquo;The same booking. The same name. The same coat, as far as I can see in this.&rdquo;',
+          'You hung the label on the one ' + where + '. It could just as well be the other way about. Each of them says that she is Miss Coombes, with a single, and that she is to be met. The list has one Miss Coombes.',
+          '&ldquo;One of them has a ticket: I saw a bit of card in her glove. The other has a dead telephone and a story.&rdquo; Ms Pargeter looks along the deck at the one with the suitcase. &ldquo;I know which of those I would put my money on.&rdquo;',
+          'Above you a window slides open in the wheelhouse. &ldquo;Twenty to ten, Purser,&rdquo; says Captain Skerritt, without any hurry. &ldquo;Is she coming, or is she not?&rdquo;',
+          '&ldquo;Nobody is being put ashore in this,&rdquo; says Ms Pargeter. &ldquo;We sail with nine, and I find out which nine on the way over. Bring in the gangway, Trainee.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 2800);
+    });
+    read();
+    msg(Object.keys(hung).length ? 'The list, with some of its labels hung. Drag a label on to the person it belongs to, or click the label and then the place under the card.' :
+      '&ldquo;There,&rdquo; says Ms Pargeter. &ldquo;Every line of my list on a luggage label, and everything they told you on a card. Hang each name where it belongs.&rdquo; Drag a label, or click it and then click the place.');
+    ER.addClue('heads', 'Nine heads: what each one said', '<h4>What they said at the gangway</h4>' + CARDS.map(function (c) { return '<p><b>' + c[0] + '</b>' + c[1] + '</p>'; }).join(''), 'pnote', 'The purser’s notes', true);
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

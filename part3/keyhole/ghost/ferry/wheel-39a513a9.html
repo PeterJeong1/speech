@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Wheelhouse · When the Tide Serves</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ferry.css">
+<style>
+  body{--bg:#060c0e;--accent:#7dffb0;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(5,11,13,.96);--tc-ink:#e3ece6;--cap-bg:rgba(5,11,13,.95);--panel:#0e191b;--face-bg:#0b1416;--q-ink:#8fe0b4;--fade:#020506;--hud-bg:rgba(5,11,13,.8)}
+  .tc-room{font-size:clamp(44px,6.4vw,88px)}
+  .hbtn b{color:#060c0e}
+  #sweep{transform-origin:330px 560px;animation:sweep 4s linear infinite}
+  @keyframes sweep{to{transform:rotate(360deg)}}
+  .fog{animation:drift 60s steps(60,end) infinite}
+  .fog.f2{animation-duration:84s;animation-direction:reverse}
+  @keyframes drift{0%{transform:translateX(-120px)}50%{transform:translateX(120px)}100%{transform:translateX(-120px)}}
+  #redglow{animation:red 5.6s steps(1,end) infinite}
+  @keyframes red{0%{opacity:1}71%{opacity:.86}73%{opacity:1}}
+  #log.ready,#tgraph.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.45)}}
+  #handle{cursor:grab}
+  #handle.on{cursor:grabbing}
+  #light{display:none}
+  #scene.rung #light{display:block;animation:lt 2.6s ease-in-out infinite}
+  @keyframes lt{50%{opacity:.45}}
+
+  /* the log: his grandfather's night, and tonight; beside it, the papers that both skippers had */
+  .lg{width:min(1120px,96vw);display:grid;grid-template-columns:minmax(0,1fr) 404px;gap:14px;align-items:start;-webkit-user-select:none;user-select:none}
+  .lg-book{background:#141a1c;padding:9px 9px 1px 24px;box-shadow:0 22px 60px rgba(0,0,0,.7)}
+  .lp{margin:0 0 8px;padding:11px 20px 12px;background:#f3ecd6 linear-gradient(176deg,rgba(255,255,255,.4),rgba(140,110,50,.14));color:#2a2218}
+  .lp h6{margin:0 0 3px;font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.2em;color:#8c2f24}
+  .lp p{margin:0}
+  .lp.old p{font-family:'Homemade Apple',cursive;font-size:14.5px;line-height:2.1;color:#2b2f48}
+  .lp.new p{font-family:'Caveat',cursive;font-size:24px;line-height:1.42;color:#30343a}
+  .gp{display:inline-block;min-width:96px;margin:0 3px;padding:0 9px;text-align:center;vertical-align:baseline;font-family:'Architects Daughter',cursive;font-size:17px;line-height:27px;color:#1d2b4a;
+    background:rgba(110,150,165,.34);border-bottom:2px solid #6b7f86;border-radius:12px 16px 10px 15px}
+  .lp.new .gp{font-size:19px;line-height:29px;background:rgba(233,189,122,.3);border-bottom:2px dashed #8a7a55;border-radius:3px}
+  .gp:hover{filter:brightness(.9)}
+  .gp.bad{background:rgba(216,67,42,.5)}
+  .lg.done .gp{cursor:default}
+  .pv{background:#0f1719;padding:8px;box-shadow:0 22px 60px rgba(0,0,0,.7)}
+  .pv-tabs{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+  .pv-tabs button{flex:1 1 auto;padding:6px 8px 4px;border:1px solid #47695f;border-radius:3px;font-family:'Oswald',sans-serif;font-weight:500;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#cfe6ea}
+  .pv-tabs button.on{background:#e9bd7a;color:#10201c;border-color:#e9bd7a}
+  .pv .doc{width:100%;max-height:none;box-shadow:none;transform:none}
+  .pv .doc.bill{font-size:15px;padding:14px 16px 12px}.pv .doc.bill h4{font-size:16.5px}.pv .doc.bill .big{font-size:18px}
+  .pv .doc.tcard{padding:14px 18px 12px}.pv .doc.lam{font-size:14.5px}
+  .pv .doc.brass{font-size:15.5px;padding:26px 24px 20px}.pv .doc.brass h4{font-size:19px}
+  .lg .wk-foot{grid-column:1/3;margin-top:0}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="fogW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2e34"/><stop offset="1" stop-color="#2f474d"/></linearGradient>
+  <radialGradient id="fogG"><stop offset="0" stop-color="#c6d8db" stop-opacity=".2"/><stop offset=".6" stop-color="#c6d8db" stop-opacity=".09"/><stop offset="1" stop-color="#c6d8db" stop-opacity="0"/></radialGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a1a"/><stop offset="1" stop-color="#1c130b"/></linearGradient>
+  <radialGradient id="greenG"><stop offset="0" stop-color="#7dffb0" stop-opacity=".5"/><stop offset=".5" stop-color="#3fae6a" stop-opacity=".14"/><stop offset="1" stop-color="#3fae6a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="redG"><stop offset="0" stop-color="#ff6a4a" stop-opacity=".75"/><stop offset=".4" stop-color="#c9302a" stop-opacity=".22"/><stop offset="1" stop-color="#c9302a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="warmG"><stop offset="0" stop-color="#ffd98a" stop-opacity=".9"/><stop offset=".4" stop-color="#f3a55a" stop-opacity=".25"/><stop offset="1" stop-color="#f3a55a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="78%"><stop offset="0" stop-color="#010405" stop-opacity="0"/><stop offset=".6" stop-color="#010405" stop-opacity=".3"/><stop offset="1" stop-color="#010405" stop-opacity=".92"/></radialGradient>
+  <clipPath id="panes"><rect x="170" y="112" width="386" height="290"/><rect x="607" y="112" width="386" height="290"/><rect x="1044" y="112" width="386" height="290"/></clipPath>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#0b1214"/>
+<!-- three windows, and nothing in them -->
+<g id="win" class="hot"><rect x="150" y="96" width="1300" height="324" fill="#1c130b"/><g fill="url(#fogW)"><rect x="170" y="112" width="386" height="290"/><rect x="607" y="112" width="386" height="290"/><rect x="1044" y="112" width="386" height="290"/></g>
+  <g clip-path="url(#panes)"><ellipse class="fog" cx="640" cy="200" rx="760" ry="90" fill="url(#fogG)"/><ellipse class="fog f2" cx="960" cy="320" rx="780" ry="90" fill="url(#fogG)"/>
+    <circle id="light" cx="1178" cy="318" r="34" fill="url(#warmG)"/></g></g>
+<rect x="150" y="414" width="1300" height="16" fill="#2a1d10"/>
+
+<!-- Standing Order No. 4, over the wheel since 1950 -->
+<g id="order" class="hot"><rect x="640" y="30" width="320" height="56" fill="url(#brassG)" stroke="#6f531a" stroke-width="2"/><g fill="#6f531a"><circle cx="650" cy="40" r="3"/><circle cx="950" cy="40" r="3"/><circle cx="650" cy="76" r="3"/><circle cx="950" cy="76" r="3"/></g>
+  <text x="800" y="54" class="fZ" font-size="15" font-weight="700" text-anchor="middle" fill="#3a2a08" letter-spacing="2">STANDING ORDER No. 4</text><path d="M680 66h240M700 76h200" stroke="#3a2a08" stroke-width="2.500" opacity=".7"/>
+  <rect x="742" y="88" width="116" height="14" fill="#f4f4f0" transform="rotate(-1.200 800 95)"/></g>
+
+<!-- the forms, the clock -->
+<g id="clock" class="hot"></g>
+<g id="forms" class="hot"><rect x="52" y="330" width="96" height="130" fill="#f4f1e4" transform="rotate(-3 100 395)"/><rect x="58" y="326" width="96" height="130" fill="#e9e4d2" transform="rotate(2 106 391)"/><rect x="56" y="322" width="96" height="130" fill="#f4f1e4"/><rect x="82" y="312" width="44" height="18" rx="4" fill="url(#brassG)"/>
+  <path d="M66 348h76" stroke="#1f4a3d" stroke-width="4"/><path d="M66 364h70M66 378h76M66 392h50M66 406h72M66 420h44" stroke="#5a5346" stroke-width="2.500"/></g>
+
+<!-- the console: radar, compass, wheel, telegraph -->
+<rect x="-1000" y="430" width="3600" height="200" fill="url(#woodG)"/><rect x="-1000" y="430" width="3600" height="6" fill="#4a3320"/>
+<g id="radar" class="hot"><circle cx="330" cy="560" r="108" fill="#15191a"/><circle cx="330" cy="560" r="92" fill="#06140c"/>
+  <g fill="none" stroke="#2f8a54" stroke-width="1.500" opacity=".7"><circle cx="330" cy="560" r="30"/><circle cx="330" cy="560" r="60"/><circle cx="330" cy="560" r="90"/><path d="M238 560h184M330 468v184"/></g>
+  <path d="M366 474q26 8 34 30l14 -4 2 8 -14 6q6 14 2 30l22 2v8l-24 -2q-4 26 -24 44q-10 -40 -8 -76q0 -30 -4 -46z" fill="#3fae6a" opacity=".75"/>
+  <path id="sweep" d="M330 560L330 468" stroke="#7dffb0" stroke-width="3" stroke-linecap="round" opacity=".85"/><circle cx="330" cy="560" r="4" fill="#7dffb0"/></g>
+<g id="compass" class="hot"><rect x="752" y="436" width="96" height="30" fill="#2a1d10"/><path d="M748 438q0 -56 52 -56t52 56z" fill="url(#brassG)"/><path d="M768 436q0 -34 32 -34t32 34z" fill="#fff3c8"/><path d="M800 404v30M784 414l32 18M816 414l-32 18" stroke="#3a2a08" stroke-width="2"/></g>
+<g id="wheel" class="hot"><circle cx="800" cy="660" r="126" fill="none" stroke="#6b4a2a" stroke-width="20"/><circle cx="800" cy="660" r="126" fill="none" stroke="#8f6a40" stroke-width="6"/>
+  <g id="spokes" stroke="#7d5a36" stroke-width="11" stroke-linecap="round"></g><circle cx="800" cy="660" r="26" fill="url(#brassG)"/><circle cx="800" cy="660" r="9" fill="#3a2a08"/></g>
+<g id="tgraph" class="hot"><path d="M1126 600h48l14 300h-76z" fill="url(#brassG)"/><path d="M1126 600h48" stroke="#6f531a" stroke-width="4"/>
+  <circle cx="1150" cy="500" r="112" fill="url(#brassG)"/><circle cx="1150" cy="500" r="98" fill="#f3ecd6"/><g id="dial"></g>
+  <g id="handle" transform="rotate(-52 1150 500)"><rect x="1128" y="356" width="44" height="160" fill="#fff" opacity="0"/><path d="M1150 500V384" stroke="#3a2a08" stroke-width="12" stroke-linecap="round"/><path d="M1150 500V384" stroke="#c79b3b" stroke-width="6" stroke-linecap="round"/><circle cx="1150" cy="374" r="16" fill="#6b4a2a"/><circle cx="1146" cy="370" r="5" fill="#b98d58"/></g>
+  <circle cx="1150" cy="500" r="15" fill="url(#brassG)"/><circle cx="1150" cy="500" r="5" fill="#3a2a08"/></g>
+
+<!-- the chart table, the red lamp, the log -->
+<rect x="1300" y="640" width="1300" height="26" fill="#4a3320"/><rect x="1300" y="666" width="1300" height="260" fill="#1c130b"/>
+<g id="log" class="hot"><rect x="1330" y="560" width="230" height="90" fill="#fff" opacity="0"/><path d="M1340 640l14 -62h200l14 62z" fill="#141a1c"/><path d="M1352 632l10 -48h86l-2 48zM1456 632l2 -48h86l10 48z" fill="#f3ecd6"/>
+  <path d="M1368 596h70M1366 606h72M1364 616h64M1466 596h70M1466 606h74M1468 616h60" stroke="#2b2f48" stroke-width="2.500" opacity=".7"/><path d="M1508 572l40 -22" stroke="#e9c93a" stroke-width="5" stroke-linecap="round"/></g>
+<path d="M1440 470V420M1410 470h60l-10 34h-40z" stroke="#15191a" stroke-width="6" fill="#2a1410"/><rect x="1424" y="502" width="32" height="8" fill="#ff6a4a"/>
+
+<!-- the skipper, the purser -->
+<g id="skipper" class="hot" transform="translate(598 892) scale(1.220)"></g>
+<g id="purser" class="hot" transform="translate(246 900) scale(1.160)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#04090b" opacity=".36" pointer-events="none"/>
+<circle cx="330" cy="560" r="240" fill="url(#greenG)" pointer-events="none"/>
+<circle id="redglow" cx="1440" cy="520" r="250" fill="url(#redG)" pointer-events="none"/>
+<circle cx="800" cy="420" r="90" fill="url(#warmG)" opacity=".4" pointer-events="none"/>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go down to the after deck</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="ferry.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, logbook = null, told = {}, stopWhistle = null;
+  var CX = 1150, CY = 500, POS = { fa: -78, ha: -52, sa: -26, stop: 0, sas: 26, has: 52, fas: 78 }, ang = -52;
+
+  (function () {
+    var s = '', i, a, k, LAB = { fa: 'FULL', ha: 'HALF', sa: 'SLOW', stop: 'STOP', sas: 'SLOW', has: 'HALF', fas: 'FULL' };
+    function pt(deg, r) { var q = deg * Math.PI / 180; return [(CX + Math.sin(q) * r), (CY - Math.cos(q) * r)]; }
+    for (i = 0; i < 8; i++) { a = i * 45 * Math.PI / 180; s += '<path d="M' + (800 + Math.cos(a) * 26).toFixed(1) + ' ' + (660 + Math.sin(a) * 26).toFixed(1) + 'L' + (800 + Math.cos(a) * 158).toFixed(1) + ' ' + (660 + Math.sin(a) * 158).toFixed(1) + '"/>'; }
+    $('#spokes').innerHTML = s; s = '';
+    [-91, -65, -39, -13, 13, 39, 65, 91].forEach(function (d) { var p = pt(d, 40), q = pt(d, 98); s += '<path d="M' + p[0].toFixed(1) + ' ' + p[1].toFixed(1) + 'L' + q[0].toFixed(1) + ' ' + q[1].toFixed(1) + '" stroke="#3a2a08" stroke-width="2"/>'; });
+    for (k in POS) { a = pt(POS[k], 72); s += '<text x="' + a[0].toFixed(1) + '" y="' + (a[1] + 4).toFixed(1) + '" class="fO" font-size="12.500" font-weight="600" text-anchor="middle" fill="' + (k === 'stop' ? '#c9302a' : '#1c2428') + '" transform="rotate(' + POS[k] + ' ' + a[0].toFixed(1) + ' ' + a[1].toFixed(1) + ')">' + LAB[k] + '</text>'; }
+    s += '<text x="1088" y="544" class="fO" font-size="13" font-weight="600" text-anchor="middle" fill="#1f4a3d" letter-spacing="2">AHEAD</text><text x="1212" y="544" class="fO" font-size="13" font-weight="600" text-anchor="middle" fill="#8c2f24" letter-spacing="2">ASTERN</text>';
+    $('#dial').innerHTML = s;
+    $('#clock').innerHTML = FY.clock(100, 220, 34, 10, 12, { rim: '#8a6a26', face: '#e6dcc0' });
+    $('#skipper').innerHTML = FY.who('skipper', { extra: '<path d="M34 -206q40 6 66 -30" stroke="#1a2a35" stroke-width="15" fill="none" stroke-linecap="round"/><circle cx="102" cy="-238" r="8" fill="#e3bf9c"/>' });
+    $('#purser').innerHTML = FY.who('purser', { hold: true, extra: '<g transform="rotate(5 0 -160)"><rect x="-26" y="-180" width="52" height="34" fill="#e9d9ae"/><path d="M-20 -170h40M-20 -162h40M-20 -154h26" stroke="#3b3f52" stroke-width="2"/></g>' });
+  })();
+  function setHandle(a) { ang = a; $('#handle').setAttribute('transform', 'rotate(' + a.toFixed(1) + ' ' + CX + ' ' + CY + ')'); }
+
+  ER.init({
+    theme: 'ghost', story: 'ferry', storyTitle: 'When the Tide Serves', id: 'wheel', no: 'IV', title: 'The Wheelhouse',
+    go: 'Climb to the wheelhouse',
+    intro: [
+      'Five lines in the purser&rsquo;s notebook could only be true of another year: tea at fourpence, half a crown for a single, no boat on a Sunday, a wire handed to the purser, an omnibus at the pier. Mr Rudge said the same things with <i>was</i>. Mr Prowse said them wrong. The Miss Coombes at the stern rail said <i>is</i>, and got every one of them right. So the label went to the Miss Coombes by the saloon door.',
+      'Behind the brass telegram box in the saloon there was a telegram form, in pencil, dated 24 October 1953 and never sent. Twelve words. The last two are WAIT and ELSIE.',
+      'It is twelve minutes past ten. The skipper has not been surprised by anything since the quay.'
+    ],
+    exit: {"next":"pier","w":{"5f8e8016":"d254c061"}}, tags: {"a1":["e1a89f68"],"a2":["c0007c47"],"a3":["55c14250"],"a4":["17551e70"],"b1":["f728dc91"],"b2":["c7f30496"],"b3":["db1bfb55"],"b4":["18f2a753"],"ring":["f053dca2"]},
+    sound: ['hush', { root: 40, bpm: 50, drop: ['bass', 'mel'], beds: [['hum', 0.5], ['sea', 0.3]] }],      /* dark and low: the whistle sounds, and the telegraph rings: no struck notes at all */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('w-file') || null; told = ER.flag('w-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('w-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#log').classList.toggle('ready', !!(told.skipper && !nextFile));
+    $('#tgraph').classList.toggle('ready', !!(nextFile && !told.rung));
+    $('#scene').classList.toggle('rung', !!told.rung);
+    ER.pips((told.skipper ? 1 : 0) + (nextFile ? 1 : 0) + (told.rung ? 1 : 0), 3);
+  }
+
+  function hints() {
+    if (told.rung) return ['go', ['There is a light ahead, and the engine is at slow. Go down to the after deck.']];
+    if (nextFile) return ['ring', [
+      'The skipper wants slow ahead. The engine-room telegraph is the brass dial with a handle, to the right of the wheel.',
+      'Take hold of the wooden knob at the end of the handle, and pull it round to SLOW on the AHEAD side: one place nearer to STOP than it is now.'
+    ]];
+    if (logbook && logbook.isOpen()) return ['log', [
+      'The top page is 24 October 1953, and sea water has taken four things out of it. Each grey patch is a gap: click it until it says what you want. The papers on the right are what both skippers had: click their names to turn them over.',
+      'Work in the order in which the night went. When did she leave, and how long is the passage? What did the tide board show at that hour? How long may she lie off? Then she had to wait, and come the whole way back.',
+      'Tonight is the same sum with new numbers. She left at 21.40. The order wants not less than 1.5 metres: find the first time on tonight&rsquo;s tide table that shows it. The wait is the time between the two. And thirty minutes is the most that the order allows.'
+    ]];
+    if (!told.skipper) return ['skipper', [
+      'Captain Skerritt is at the wheel. The purser has brought him the form. Hear what he has to say about it.',
+      'Click the skipper: the man with the white beard, to the left of the wheel.'
+    ]];
+    return ['book', [
+      'The skipper told you to read his grandfather&rsquo;s log. It is the open book on the chart table, under the red lamp, on the right.',
+      'The log is at the far right of the wheelhouse, with a yellow pencil lying across it. Click it.'
+    ]];
+  }
+
+  function begin() {
+    paint(); setHandle(told.rung ? POS.sa : POS.ha);
+    stopWhistle = FY.whistle(40000, 120000, 0.75);
+    if (told.rung) { busy = false; showGo(); ER.say('Slow ahead, and a small yellow light where no light ought to be.'); return; }
+    if (nextFile) { busy = false; ER.say('The sum says go. The skipper is waiting for slow ahead.'); return; }
+    if (told.in) { busy = false; ER.say('The wheelhouse, at twelve minutes past ten.'); return; }
+    tell('in');
+    ER.narrate([
+      'The wheelhouse is dark, so that the skipper can see out, though tonight there is nothing out there to see. A green radar screen, a compass in a brass bowl, and one small red lamp over the chart table.',
+      'Captain Skerritt has one hand on the wheel. He reads the telegram form by the red lamp, without taking it out of the purser&rsquo;s fingers, and he reads it only once.',
+      '&ldquo;So that is where it went,&rdquo; he says.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the skipper ---------- */
+  $('#skipper').addEventListener('click', function () {
+    if (busy) return;
+    if (told.rung) { ER.say('&ldquo;Go down and stand by the gangway, Trainee,&rdquo; says Captain Skerritt. &ldquo;She will want it out the moment we touch.&rdquo;'); return; }
+    if (nextFile) { ER.say('&ldquo;Slow ahead, Trainee,&rdquo; says Captain Skerritt. &ldquo;The telegraph is beside you.&rdquo;'); return; }
+    ER.talk({
+      who: 'Captain Skerritt', role: 'Master, m.v. Curlew', face: window.FACE('skerritt'),
+      lines: [
+        { note: 'He does not take his eyes off the fog.', a: '&ldquo;My grandfather had this boat from new. He was her master on the twenty-fourth of October, nineteen fifty-three. It is all in his log: the black book on the chart table. He kept a log as he kept his accounts.&rdquo;' },
+        { q: 'You knew about the ninth passenger.', a: 'I know that when the twenty-fourth of October is a Saturday, the last boat counts one over. Nineteen ninety-eight. Two thousand and nine. Fifteen. Twenty. There are four forms on that clip, two in my father&rsquo;s hand and two in mine, and all four say MISCOUNT. It was the only word that the form had room for.' },
+        { q: 'Who is she?', a: 'Elsie Coombes, of Harbour Row. She crossed on this boat in fifty-three with her sister&rsquo;s wedding ring, and the boat could not land her. After that she lived over in the town for forty-five years, with a window that looked at Marram, and she never once came home. She died in ninety-eight. In October of that year my father counted one over.' },
+        { q: 'What does she want?', a: 'To get in at the Old Pier. We have not used it since nineteen sixty-eight, when they built the New Slip. So every time she has crossed with us, we have carried her to the wrong place. I think she has stayed at that rail and gone back again with the boat. And this is the old boat&rsquo;s last twenty-fourth. There will not be another.' },
+        { q: 'Can we go to the Old Pier tonight?', a: 'That is not for me to say. It is for the tide to say, and for Standing Order Number Four, which has been screwed up over this wheel since 1950, and which nobody has ever taken down.' },
+        { a: 'Read my grandfather&rsquo;s night, and the tide that he had. The sea came in over that page once: put back what it took out. Then do the same sum for tonight, on my page. If your sum says go, Trainee, I will put her alongside.' }
+      ],
+      clue: { id: 'skipper', title: 'Captain Skerritt: the twenty-fourth', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('skipper')) { paint(); ER.say('The log is on the chart table, under the red lamp.'); } }
+    });
+  });
+  $('#purser').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(told.rung ? '&ldquo;I am going to need a bigger form,&rdquo; says Ms Pargeter.' : nextFile ? 'Ms Pargeter is reading Standing Order No. 4 for the third time, looking for a way out of it. There is none.' :
+      '&ldquo;I have a list of eight,&rdquo; says Ms Pargeter, to nobody in particular, &ldquo;a telegram from 1953, and a master who is not surprised. Do the sum, Trainee. I should like something on this boat to add up.&rdquo;');
+  });
+
+  /* ---------- papers ---------- */
+  var ORDER = '<h4>STANDING ORDER No. 4</h4><p>MARRAM OLD PIER</p><p>The vessel is not to go alongside with less than FIVE FEET of water on the tide board.</p>' +
+    '<p>If the tide does not serve, she may lie off for not more than THIRTY MINUTES. She is then to return to Lantern Quay.</p><p>By order of the Company, 1950.</p><span class="tape">5 FEET = 1.5 METRES</span>';
+  var BILL = '<h4>THE MARRAM STEAM PACKET COMPANY LTD.</h4><h5>TIME TABLE &middot; FROM 1st OCTOBER 1953</h5><p>m.v. &ldquo;CURLEW&rdquo; &middot; <b>PASSAGE: 45 MINUTES</b></p>' +
+    '<p><b>WEEKDAYS</b><br>Leave Lantern Quay 8.0 a.m. &middot; 11.30 a.m. &middot; 4.15 p.m. &middot; 6.30 p.m.<br>Leave Marram (Old Pier) 9.0 a.m. &middot; 12.45 p.m. &middot; 5.15 p.m. &middot; 7.30 p.m.</p>' +
+    '<p><b>SATURDAYS ONLY</b><br><span class="big">Leave Lantern Quay 9.15 p.m. &dagger;</span></p><p><b>NO SUNDAY SERVICE</b></p>' +
+    '<p class="note">&dagger; The 9.15 p.m. calls at Marram only when the tide serves. See Standing Order No. 4.</p>';
+  var TCARD = '<h4>MARRAM OLD PIER &middot; DEPTH ON THE TIDE BOARD</h4><p>Saturday 24th October 1953</p><table><tr><td>8 p.m.</td><td>4&frac12; ft</td></tr><tr><td>9 p.m.</td><td>2 ft</td></tr><tr><td>10 p.m. (low water)</td><td>1 ft</td></tr>' +
+    '<tr><td>11 p.m.</td><td>2 ft</td></tr><tr><td>Midnight</td><td>4&frac12; ft</td></tr><tr><td>1 a.m.</td><td>8 ft</td></tr></table><p class="pen">5 ft: not until after midnight.</p>';
+  var TT26 = '<h4>MARRAM FERRIES<small>Winter timetable from 28 September 2026 &middot; crossing time 45 minutes</small></h4>' +
+    '<p><b>Lantern Quay to Marram (New Slip)</b><br>Monday to Saturday: 07.30 &middot; 10.00 &middot; 13.00 &middot; 16.00 &middot; 18.30<br>Friday and Saturday also: <b>21.40</b></p><p><b>Sundays:</b> 10.00 &middot; 16.00</p>' +
+    '<p class="small">The New Slip can be used at any state of the tide. No sailings call at the Old Pier.</p>';
+  var TIDE26 = '<h4>MARRAM OLD PIER<small>depth on the tide board, in metres &middot; Saturday 24 October 2026</small></h4><table><tr><td>20.45 (low water)</td><td>0.5</td></tr><tr><td>21.45</td><td>0.8</td></tr><tr><td>22.00</td><td>0.9</td></tr>' +
+    '<tr><td>22.15</td><td>1.1</td></tr><tr><td>22.30</td><td>1.3</td></tr><tr><td>22.45</td><td>1.5</td></tr><tr><td>23.00</td><td>1.7</td></tr><tr><td>23.15</td><td>2.0</td></tr></table><p class="small">Rising. High water at 02.55.</p>';
+  var FORMS = [['1998', '11', '12', 'R. Skerritt'], ['2009', '9', '10', 'R. Skerritt'], ['2015', '14', '15', 'T. Skerritt'], ['2020', '4', '5', 'T. Skerritt']].map(function (f) {
+    return '<div><h4>MARRAM FERRIES &middot; FORM 12</h4><p>Sailing: Saturday 24 October ' + f[0] + ', last boat</p><p>On the list: <i>' + f[1] + '</i> &nbsp; Counted: <i>' + f[2] + '</i></p><p>Cause: <i>miscount</i></p><p>Master: <i>' + f[3] + '</i></p></div>';
+  }).join('');
+  $('#order').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: ORDER, cls: 'brass', clue: { id: 'order', title: 'Standing Order No. 4', kind: 'Over the wheel' }, done: function () {
+      FY.terms(['alongside', 'lie off', 'tide board']);
+      if (tell('order')) ER.say('Five feet of water, or thirty minutes and home. Somebody has stuck a strip of printed tape under it: 5 FEET = 1.5 METRES.');
+    } });
+  });
+  $('#forms').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: FORMS, cls: 'forms', clue: { id: 'forms', title: 'Four forms on a clip', kind: 'Form 12' }, done: function () {
+      if (tell('forms')) ER.say('Four last boats, in twenty-eight years, with one head too many. Every one of them sailed on a Saturday, and every one on the twenty-fourth of October.');
+    } });
+  });
+
+  /* ---------- things in the wheelhouse ---------- */
+  FY.thing('#win', null, function () { return told.rung ? 'Fog. And low down in it, a little to the right, one small yellow light, swinging.' : 'Fog, lit grey from above by the masthead light. The windows might as well be painted.'; }, isBusy);
+  FY.thing('#radar', null, 'The radar: a green picture of the shore of Marram. The long finger is the New Slip. The short one, nearer to us, is the Old Pier.', isBusy);
+  FY.thing('#compass', 'compass', 'The compass, in its brass bowl, with a small lamp inside. The skipper looks at it about as often as you look at your own feet.', isBusy);
+  FY.thing('#wheel', null, 'The wheel. Seventy-six years of hands have worn the varnish off the top spoke.', isBusy);
+  FY.thing('#clock', null, function () { return told.rung ? 'Twenty-five past ten.' : 'Twelve minutes past ten.'; }, isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile && told.rung) { if (stopWhistle) stopWhistle(); ER.leave(nextFile); } });
+  $('#log').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The two pages of the log, side by side. Ten o&rsquo;clock, one foot, thirty minutes, a quarter past eleven. And 22.25, 22.45, twenty minutes: go alongside.'); return; }
+    if (!told.skipper) { ER.say('A black book lies open on the chart table, under the red lamp: the log. One of its pages is brown with age, and has been wet. Hear the skipper first.'); return; }
+    if (!logbook) logbook = makeLog();
+    logbook.open();
+  });
+
+  /* ---------- the engine-room telegraph ---------- */
+  function nearest(a) { var best = 'ha', k; for (k in POS) if (Math.abs(POS[k] - a) < Math.abs(POS[best] - a)) best = k; return best; }
+  function rung(k) {
+    if (!ER.check('ring', k === 'sa' ? 'slow' : k)) {
+      ER.sfx.no(); setHandle(POS.ha);
+      ER.say(k === 'ha' ? '&ldquo;She is at half now,&rdquo; says the skipper. &ldquo;I asked for slow.&rdquo;' :
+        k === 'fa' ? '&ldquo;Full ahead, in this, at a stone pier?&rdquo; says the skipper. &ldquo;I should like to keep my ticket, Trainee. Slow.&rdquo;' :
+        k === 'stop' ? '&ldquo;Stop her out here, and the tide will take us where it likes,&rdquo; says the skipper. &ldquo;Slow ahead. She has to be moving to steer.&rdquo;' :
+        '&ldquo;That is astern, Trainee: backwards. Marram is the other way.&rdquo;');
+      return;
+    }
+    setHandle(POS.sa); FY.sfx.ring(); tell('rung'); paint(); busy = true;
+    ER.narrate([
+      'The handle goes over with two strokes of a gong, and far below, somebody you have never seen answers it. The engine drops to a mutter.',
+      'For a minute there is nothing but the fog going by. Then Captain Skerritt leans forward, and stops looking at the radar.',
+      'Low down in the fog, a little to the right, there is a light where no light has any business to be: a small yellow one, swinging, as if somebody were holding it up.',
+      '&ldquo;There she is,&rdquo; says the skipper, and he does not mean the pier. &ldquo;Go down to the deck, Trainee. Take that form with you. We shall lie off until a quarter to eleven, and then I am going in.&rdquo;'
+    ], function () { busy = false; showGo(); });
+  }
+  ER.drag($('#handle'), {
+    start: function () { if (busy || !nextFile || told.rung) return false; },
+    move: function (e) { var p = ER.pt($('#scene'), e); setHandle(FY.clamp(Math.atan2(p.x - CX, -(p.y - CY)) * 180 / Math.PI, -84, 84)); },
+    end: function (e, moved) { if (!moved) { ER.say('Take hold of the knob at the end of the handle, and pull it round the dial.'); return; } rung(nearest(ang)); }
+  });
+  $('#tgraph').addEventListener('click', function (e) {
+    if (busy || (nextFile && !told.rung)) return;
+    ER.wordAt(e.clientX, e.clientY, 'telegraph');
+    ER.say(told.rung ? 'SLOW AHEAD. Below your feet the engine is turning over as quietly as it knows how.' :
+      'The engine-room telegraph. Move the handle, and a gong rings down in the engine room, where the engineer does what the dial says. It stands at HALF AHEAD. Leave it there until the skipper asks.');
+  });
+
+  /* ---------- the log ---------- */
+  function makeLog() {
+    var GAPS = {
+      a1: [['9.45', '9.45'], ['10.00', '10.00'], ['10.15', '10.15'], ['10.30', '10.30']],
+      a2: [['1', '1 foot'], ['2', '2 feet'], ['4.5', '4&frac12; feet'], ['5', '5 feet']],
+      a3: [['15', '15 minutes'], ['30', '30 minutes'], ['45', '45 minutes'], ['120', '2 hours']],
+      a4: [['10.45', '10.45'], ['11.00', '11.00'], ['11.15', '11.15'], ['11.30', '11.30']],
+      b1: [['22.10', '22.10'], ['22.25', '22.25'], ['22.40', '22.40']],
+      b2: [['22.15', '22.15'], ['22.30', '22.30'], ['22.45', '22.45'], ['23.00', '23.00'], ['23.15', '23.15']],
+      b3: [['5', '5 minutes'], ['10', '10 minutes'], ['20', '20 minutes'], ['35', '35 minutes']],
+      b4: [['return', 'return to Lantern Quay'], ['slip', 'go on to the New Slip'], ['alongside', 'go alongside']]
+    };
+    var ORD = ['a1', 'a2', 'a3', 'a4', 'b1', 'b2', 'b3', 'b4'];
+    var WHY = {
+      a1: 'She left the quay at a quarter past nine. Look at my grandfather&rsquo;s time table for the length of the passage, and add it on.',
+      a2: 'He would have read the tide board through his glasses as she came up to the pier. Find that hour on the tide card for the night.',
+      a3: 'How long did Standing Order Number Four let him lie off? He was not a man to wait a minute more than it said, or a minute less.',
+      a4: 'He could not start for home until he had finished waiting. Take the time when he left the pier, and then add the passage again.',
+      b1: 'We left at 21.40, to the minute. It is the same water as his, and the same forty-five minutes.',
+      b2: 'One and a half metres. The order says NOT LESS THAN: so one and a half exactly will do. Run your finger down tonight&rsquo;s tide table to the first time that shows it.',
+      b3: 'From the time when we come up to the pier until the time when the water is there. Take one from the other.',
+      b4: 'Read the order again. If the tide does not serve within thirty minutes, she goes home. Does it serve within thirty minutes tonight?'
+    };
+    var SPECIAL = {
+      'a3:120': 'The water was two hours away and more, that is true. But the order does not ask how long the water will be. It says how long she MAY lie off.',
+      'a4:10.45': 'That is forty-five minutes after ten o&rsquo;clock. But he did not turn for home at ten. He waited first.',
+      'b2:22.30': 'At 22.30 the board shows 1.3. The order wants not less than 1.5.',
+      'b2:23.00': 'There is water enough at 23.00, and to spare. But is there no earlier time on the table when the board shows 1.5? NOT LESS THAN one and a half: one and a half will do.',
+      'b4:slip': 'The New Slip is where the timetable says we are going. It is not where she is going.'
+    };
+    var PAPERS = [['bill', 'Time table 1953', BILL, 'bill'], ['tcard', 'Tide card 1953', TCARD, 'tcard'], ['order', 'Standing Order 4', ORDER, 'brass'], ['tt26', 'Timetable 2026', TT26, 'lam'], ['tide26', 'Tide tonight', TIDE26, 'lam']];
+    var set = ER.flag('w-gaps') || {}, wait = false, box = ER.el('div', 'lg'), s;
+    function g(k) { return '<button type="button" class="gp" data-g="' + k + '"></button>'; }
+    s = '<div class="lg-book"><div class="lp old"><h6>m.v. CURLEW &middot; LOG &middot; SATURDAY 24th OCTOBER 1953</h6><p>Thick fog. Left Lantern Quay 9.15 p.m., fourteen passengers. Came up off Marram Old Pier at ' + g('a1') + ' p.m. Tide board showed ' + g('a2') +
+      '. Lay off ' + g('a3') + ', sounding whistle; no more water. Returned. Made fast at Lantern Quay ' + g('a4') + ' p.m. One passenger for Marram much distressed. She gave the purser a telegram for the shore. &mdash; J. Skerritt, Master.</p></div>' +
+      '<div class="lp new"><h6>m.v. CURLEW &middot; LOG &middot; SATURDAY 24 OCTOBER 2026</h6><p>Fog. Left Lantern Quay 21.40, eight passengers on the list. Course for the Old Pier: the same passage as to the Slip. Shall come up off the Old Pier at ' + g('b1') +
+      '. Tide board will show 1.5 m at ' + g('b2') + '. Lie off ' + g('b3') + '. Then: ' + g('b4') + '.</p></div></div>' +
+      '<div class="pv"><div class="pv-tabs">' + PAPERS.map(function (p) { return '<button type="button" data-p="' + p[0] + '">' + p[1] + '</button>'; }).join('') + '</div><div class="pv-view"></div></div>' +
+      '<div class="wk-foot"><p class="pmsg"></p><button type="button" class="btn" id="l-go">Show the skipper</button></div>';
+    box.innerHTML = s;
+    ER.glossIn(box, '.lp p');
+    var msgEl = box.querySelector('.pmsg'), view = box.querySelector('.pv-view');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function label(k) { var i, o = GAPS[k]; for (i = 0; i < o.length; i++) if (o[i][0] === set[k]) return o[i][1]; return '&middot; &middot; &middot;'; }
+    function draw() { ER.$$('.gp', box).forEach(function (n) { n.innerHTML = label(n.getAttribute('data-g')); }); box.setAttribute('data-set', ORD.map(function (k) { return set[k] || '-'; }).join('|')); }
+    function paper(id) {
+      PAPERS.forEach(function (p) { if (p[0] === id) view.innerHTML = '<div class="doc ' + p[3] + '">' + ER.gloss(p[2]) + '</div>'; });
+      ER.$$('.pv-tabs button', box).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-p') === id); });
+      box.setAttribute('data-paper', id);
+    }
+    ER.$$('.pv-tabs button', box).forEach(function (b) { b.addEventListener('click', function () { paper(b.getAttribute('data-p')); ER.sfx.paper(); }); });
+    ER.$$('.gp', box).forEach(function (n) {
+      n.addEventListener('click', function () {
+        var k = n.getAttribute('data-g'), o = GAPS[k], i, at = -1;
+        if (wait || nextFile) return;
+        for (i = 0; i < o.length; i++) if (o[i][0] === set[k]) at = i;
+        set[k] = o[(at + 1) % o.length][0]; ER.flag('w-gaps', set); FY.sfx.wheel(); draw(); msg('');
+      });
+    });
+    box.querySelector('#l-go').addEventListener('click', function () {
+      var i, k, n = 0, file;
+      if (wait || nextFile) return;
+      ORD.forEach(function (q) { if (set[q]) n++; });
+      if (n < 8) { msg('&ldquo;There are still ' + (n ? 'gaps' : 'eight gaps') + ' in my log,&rdquo; says Captain Skerritt. &ldquo;Four in his night, and four in mine. I do not go alongside a stone pier on half a sum.&rdquo;'); return; }
+      for (i = 0; i < ORD.length; i++) {
+        k = ORD[i];
+        if (!ER.check(k, set[k])) {
+          ER.sfx.no(); FY.flash(box.querySelector('.gp[data-g="' + k + '"]'), 'bad', 1100);
+          msg('Captain Skerritt puts a finger on one of your figures. &ldquo;' + (SPECIAL[k + ':' + set[k]] || WHY[k]) + '&rdquo;');
+          return;
+        }
+      }
+      file = ER.exit([ORD.map(function (q) { return set[q]; }).join('|')], { wait: true });
+      if (!file) { msg('The gangway is not where it should be. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('w-file', file); box.classList.add('done');
+      ER.addClue('logs', 'The log: two nights at the Old Pier', '<h4>24 OCTOBER 1953</h4><p class="old">Left Lantern Quay 9.15 p.m. Came up off Marram Old Pier at 10.00 p.m. Tide board showed 1 foot. Lay off 30 minutes; no more water. Returned. Made fast at Lantern Quay 11.15 p.m. One passenger for Marram much distressed. She gave the purser a telegram for the shore.</p>' +
+        '<h4>24 OCTOBER 2026</h4><p class="new">Left Lantern Quay 21.40. Shall come up off the Old Pier at 22.25. Tide board will show 1.5 m at 22.45. Lie off 20 minutes. Then: go alongside.</p>', 'logs', 'The ship’s log', true);
+      msg('&ldquo;Ten o&rsquo;clock, one foot of water, thirty minutes, and home at a quarter past eleven. That was his night,&rdquo; says Captain Skerritt. &ldquo;Twenty-five past ten, water at a quarter to eleven, twenty minutes. That is ours.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          '&ldquo;In fifty-three she wanted five feet and she had one,&rdquo; says Captain Skerritt. &ldquo;The water was not there till after midnight. He waited his half hour, as the order told him to, and he took her back. He could do nothing else.&rdquo;',
+          '&ldquo;Tonight the tide is nearly two hours further on. Not more than thirty minutes, says the order. Twenty is not more than thirty.&rdquo; He looks up at the brass plate. &ldquo;Seventy-three years, and it comes down to ten minutes.&rdquo;',
+          'Ms Pargeter has her list in her hand. &ldquo;We are due at the New Slip at 22.25. There will be people waiting.&rdquo;</p><p>&ldquo;There is one person waiting,&rdquo; says the skipper, &ldquo;and she is not at the New Slip. You shall have your eight ashore by five past eleven, Purser, and you may write it on any form you like.&rdquo;',
+          '&ldquo;Trainee. The telegraph is beside you. Ring down slow ahead for me. I want to see this pier before I touch it.&rdquo;'
+        ], function () { busy = false; paint(); });
+      }, 3200);
+    });
+    draw(); paper('bill');
+    msg(Object.keys(set).length ? 'The log, with some of its gaps filled. Click a gap to change what it says. The papers are on the right: click a name to turn one over.' :
+      'Two pages of the log, seventy-three years apart, and eight gaps. Click a gap until it says what you want. The papers that both skippers had are on the right: click a name to turn one over.');
+    [['bill', 'The time table of October 1953', BILL, 'bill', 'In the log'], ['tcard', 'The tide card for 24 October 1953', TCARD, 'tcard', 'In the log'], ['tt26', 'This winter’s timetable', TT26, 'lam', 'On the chart table'], ['tide26', 'Tonight’s tide at the Old Pier', TIDE26, 'lam', 'On the chart table'], ['order', 'Standing Order No. 4', ORDER, 'brass', 'Over the wheel']].forEach(function (c) { ER.addClue(c[0], c[1], c[2], c[3], c[4], true); });
+    FY.terms(['alongside', 'lie off', 'tide board', 'passage', 'low water']);
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

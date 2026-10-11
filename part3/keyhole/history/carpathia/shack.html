@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Wireless Shack · Come at Once</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="carpathia.css">
+<style>
+  body{--bg:#140d08;--accent:#e9b54a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(14,9,6,.96);--tc-ink:#f1e7d2;--cap-bg:rgba(16,10,6,.94);--panel:#21160e;--face-bg:#111a24;--q-ink:#e9c477;--fade:#070403;--hud-bg:rgba(16,10,6,.8)}
+  .lb{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.14em}
+  .tw{animation:tw 3.4s steps(1,end) infinite}
+  .tw.t2{animation-duration:4.7s;animation-delay:-1.3s}
+  .tw.t3{animation-duration:2.6s;animation-delay:-.8s}
+  @keyframes tw{50%{opacity:.35}}
+  #cone{animation:lamp 7s steps(1,end) infinite}
+  @keyframes lamp{0%{opacity:1}61%{opacity:.86}63%{opacity:1}88%{opacity:.92}90%{opacity:1}}
+  #spark,#flash{display:none}
+  body.tx #spark{display:block;animation:spk .11s steps(1,end) infinite}
+  body.tx #flash{display:block;animation:spk .11s steps(1,end) infinite}
+  @keyframes spk{50%{opacity:.2}}
+  #sinclair{display:none}
+  body.sin #sinclair{display:block}
+  #phones{display:none}
+  body.gone #cottam{display:none}
+  body.gone #phones{display:block}
+  body.gone.call #phones{animation:nudge 1.5s ease-in-out infinite}
+  body.back #cottam{display:block}
+  body.back #phones{display:none}
+  #buzz.ready #bboard{animation:nudge 1.5s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+
+  /* the buzzer test: the key, and Sinclair in the doorway */
+  .tx{display:grid;grid-template-columns:minmax(0,540px) 300px;gap:24px;width:min(880px,96vw);align-items:start}
+  .tx-face{width:150px;border:1px solid rgba(255,255,255,.2);margin-bottom:10px}
+  .tx-face svg{display:block;width:100%;height:auto}
+  .tx .pmsg{font-size:16.5px}
+  /* reading: your pad of marks, the card to read them by, and what you can tell the bridge */
+  .rd{display:grid;grid-template-columns:minmax(0,610px) 322px;gap:20px;width:min(960px,97vw);align-items:start}
+  .rd-pad{position:relative;padding:12px 16px 10px 44px;background:#f4f0df linear-gradient(177deg,rgba(255,255,255,.5),rgba(120,100,60,.12));color:#2f3a55;box-shadow:0 18px 40px rgba(0,0,0,.55);border-left:10px solid #3a2a1c}
+  .rd-pad h6{margin:0 0 4px;font-family:'Caveat',cursive;font-weight:700;font-size:23px;line-height:1;color:#2f3a55}
+  .rd-line{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:9px 13px;padding:7px 0 8px;border-top:1px solid rgba(90,120,170,.3);min-height:50px}
+  .rd-line:before{content:attr(data-n);position:absolute;left:-30px;top:5px;font-family:'Caveat',cursive;font-weight:700;font-size:24px;color:#8c2f24}
+  .rd-line .mk{height:16px}
+  .rd-line .mk.long{padding:3px 6px;margin:-3px -6px;border-radius:8px;background:rgba(140,47,36,.09)}
+  .rd-line .wd{display:inline-flex;align-items:center;gap:13px;flex:0 0 auto;margin-right:27px}
+  .rd-line .fast{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;margin-right:27px}
+  .rd-line .fast svg{width:104px;height:20px;display:block}
+  .rd-line .fast em{font-family:'Caveat',cursive;font-size:19px;font-style:normal;color:#6b7491;white-space:nowrap}
+  .rd-pad.live .mk i,.rd-pad.live .fast{opacity:0;animation:ink 70ms linear forwards}
+  @keyframes ink{to{opacity:1}}
+  .rd-again{position:absolute;right:10px;top:8px;font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#6b6552;border-bottom:1px solid #6b6552}
+  .rd-again:hover{color:#8c2f24;border-color:#8c2f24}
+  .rd-form{margin-top:12px;padding:11px 16px 12px;background:#fbf6d9;color:#22231e;border-top:8px solid #b3261c;box-shadow:0 14px 30px rgba(0,0,0,.5)}
+  .rd-form h6{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:#6b6552}
+  .rd-row{display:flex;align-items:center;gap:8px;margin:0 0 6px;font-family:'Courier Prime',monospace;font-weight:700;font-size:14.5px;letter-spacing:.03em}
+  .rd-row>span:first-child{flex:0 0 226px}
+  .rd-row em{font-family:'Courier Prime',monospace;font-style:normal;font-weight:700;font-size:17px;padding:0 3px}
+  .rd-f{display:inline-flex;gap:3px;padding:2px;border-radius:3px}
+  .rd-f.ok{background:#cfe6c4}
+  .rd-f.no{background:#f1c9c0}
+  .rd-c{width:27px;height:34px;border-bottom:2px solid #22231e;background:rgba(255,255,255,.55);font-family:'Caveat',cursive;font-weight:700;font-size:29px;line-height:32px;text-align:center;color:#1d2a52;text-transform:uppercase}
+  .rd-c.on{background:#ffe98a;outline:2px solid #b3261c}
+  .rd-f.ok .rd-c{border-bottom-color:#3d6b34;cursor:default}
+  .rd-form .btn{--accent:#22231e;margin-top:4px;font-size:13px;padding:8px 16px}
+  .rd-form .btn:hover:not([disabled]){color:#fbf6d9}
+  .rd-side .abc{background:#f8f3e2;border:1px solid #b9a877;box-shadow:0 14px 30px rgba(0,0,0,.5),inset 0 0 0 3px #f8f3e2,inset 0 0 0 4px #8c2f24;padding:9px 11px}
+  .rd-side .abc-k{cursor:pointer;border-radius:3px;padding:0 3px;width:100%;gap:6px}
+  .rd-side .abc-k .mk i.D{width:12px}
+  .rd-side .abc-k .mk i.d{width:5px}
+  .rd-side .abc-k:hover{background:#ffe98a}
+  .rd-side .pmsg{margin-top:12px;font-size:15.5px;line-height:1.38}
+  @media (max-width:900px){.tx,.rd{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#74512f"/><stop offset=".6" stop-color="#5d4025"/><stop offset="1" stop-color="#3f2a17"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b2716"/><stop offset="1" stop-color="#150d07"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc92"/><stop offset=".5" stop-color="#c39a3c"/><stop offset="1" stop-color="#7d5f1e"/></linearGradient>
+  <linearGradient id="mahG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a3d22"/><stop offset="1" stop-color="#4a2212"/></linearGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05080f"/><stop offset=".75" stop-color="#0a1322"/><stop offset="1" stop-color="#0d1a2c"/></linearGradient>
+  <radialGradient id="coneG" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#ffe7a0" stop-opacity=".5"/><stop offset=".6" stop-color="#ffd97a" stop-opacity=".14"/><stop offset="1" stop-color="#ffd97a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="lanG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd97a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd97a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="46%" cy="46%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#0a0502" stop-opacity=".28"/><stop offset="1" stop-color="#050201" stop-opacity=".86"/></radialGradient>
+  <pattern id="boards" width="58" height="200" patternUnits="userSpaceOnUse"><path d="M0 0V200" stroke="#2f1e10" stroke-width="3" opacity=".55"/><path d="M4 0V200" stroke="#8a6238" stroke-width="1" opacity=".35"/></pattern>
+  <pattern id="planks" width="150" height="120" patternUnits="userSpaceOnUse" patternTransform="skewX(-24)"><path d="M0 0V120" stroke="#0f0905" stroke-width="3"/></pattern>
+</defs>
+
+<!-- ceiling, wall, floor -->
+<rect x="-1000" y="-400" width="3600" height="500" fill="#24170d"/>
+<g fill="#1a1009"><rect x="-1000" y="70" width="3600" height="26"/><rect x="250" y="-400" width="26" height="480"/><rect x="820" y="-400" width="26" height="480"/><rect x="1380" y="-400" width="26" height="480"/></g>
+<rect x="-1000" y="96" width="3600" height="560" fill="url(#wallG)"/><rect x="-1000" y="96" width="3600" height="560" fill="url(#boards)"/>
+<rect x="-1000" y="640" width="3600" height="20" fill="#2a1a0e"/>
+<rect x="-1000" y="658" width="3600" height="700" fill="url(#floorG)"/><rect x="-1000" y="658" width="3600" height="700" fill="url(#planks)"/>
+
+<!-- the door, and the night outside it -->
+<g id="door" class="hot">
+  <rect x="62" y="140" width="252" height="520" fill="#2a1a0e"/>
+  <rect x="78" y="156" width="220" height="504" fill="url(#nightG)"/>
+  <g fill="#e9e6da"><circle cx="110" cy="190" r="1.8" class="tw"/><circle cx="150" cy="232" r="1.3"/><circle cx="196" cy="182" r="2" class="tw t2"/><circle cx="244" cy="214" r="1.4"/><circle cx="276" cy="176" r="1.6" class="tw t3"/><circle cx="128" cy="286" r="1.2"/><circle cx="224" cy="300" r="1.7" class="tw t2"/><circle cx="262" cy="270" r="1.1"/><circle cx="178" cy="342" r="1.4" class="tw"/><circle cx="100" cy="368" r="1.2"/><circle cx="284" cy="352" r="1.5" class="tw t3"/><circle cx="238" cy="398" r="1.2"/><circle cx="140" cy="420" r="1.5"/></g>
+  <rect x="78" y="452" width="220" height="208" fill="#060a12"/><path d="M78 452h220" stroke="#16263c" stroke-width="2"/>
+  <g stroke="#b9b3a2" stroke-width="5" fill="none" opacity=".75"><path d="M78 506h220M78 548h220"/><path d="M120 506v154M210 506v154"/></g>
+  <rect x="78" y="640" width="220" height="20" fill="#3a2616"/>
+  <path d="M-10 150l72-10v520l-72 24z" fill="#4a3220"/><path d="M-10 150l72-10" stroke="#74512f" stroke-width="3"/><circle cx="46" cy="410" r="9" fill="url(#brassG)"/>
+</g>
+<g id="sinclair" class="hot">
+  <ellipse cx="190" cy="662" rx="80" ry="10" fill="#000" opacity=".4"/>
+  <path d="M136 660q-8-180 14-250q10-34 44-36t44 36q22 70 14 250z" fill="#16203a"/>
+  <path d="M150 440q40 30 88 0" stroke="#253556" stroke-width="8" fill="none"/>
+  <rect x="182" y="340" width="24" height="30" fill="#c18d68"/>
+  <path d="M164 318q0-40 30-40t30 40v14q-4 22-30 22t-30-22z" fill="#cf9c76"/><path d="M164 330q4 34 30 40q26-6 30-40q-6 18-30 18t-30-18z" fill="#c9ccd0"/>
+  <path d="M158 304q36-20 72 0l-2 8q-34-14-68 0z" fill="#0c1220"/><path d="M164 300q0-28 30-28t30 28q-30-10-60 0z" fill="#1b2740"/>
+  <circle cx="183" cy="318" r="2.4" fill="#1b1512"/><circle cx="205" cy="318" r="2.4" fill="#1b1512"/>
+  <path d="M238 430q26 40 22 96" stroke="#16203a" stroke-width="22" fill="none" stroke-linecap="round"/>
+  <g transform="translate(262 560)"><circle cx="0" cy="0" r="70" fill="url(#lanG)"/><path d="M-12 -32q12-16 24 0" stroke="#c9a23a" stroke-width="3" fill="none"/><rect x="-15" y="-30" width="30" height="8" rx="2" fill="#a8842e"/><rect x="-13" y="-22" width="26" height="38" rx="3" fill="#ffe7a0"/><rect x="-13" y="-22" width="26" height="38" rx="3" fill="none" stroke="#a8842e" stroke-width="2.5"/><ellipse cx="0" cy="0" rx="5" ry="10" fill="#ffb23a"/><rect x="-16" y="16" width="32" height="8" rx="2" fill="#a8842e"/></g>
+</g>
+
+<!-- on the wall: the clock, the code card, the book of stations -->
+<g id="clock" class="hot"><circle cx="736" cy="170" r="50" fill="url(#brassG)"/><circle cx="736" cy="170" r="40" fill="#f4efdc"/>
+  <g stroke="#22231e" stroke-width="3"><path d="M736 134v8M736 198v8M700 170h8M764 170h8"/></g>
+  <path id="hh" d="M736 170V146" stroke="#22231e" stroke-width="5" stroke-linecap="round" transform="rotate(10 736 170)"/><path id="mh" d="M736 170V138" stroke="#22231e" stroke-width="3" stroke-linecap="round" transform="rotate(120 736 170)"/><circle cx="736" cy="170" r="4" fill="#8c2f24"/></g>
+<g id="card" class="hot"><rect x="372" y="196" width="170" height="214" fill="#f8f3e2" transform="rotate(-1.5 457 303)"/><g transform="rotate(-1.5 457 303)"><rect x="380" y="204" width="154" height="198" fill="none" stroke="#8c2f24" stroke-width="2.5"/>
+  <text x="457" y="232" class="lb" font-size="15" fill="#8c2f24">THE MORSE CODE</text>
+  <g fill="#22231e"><rect x="394" y="250" width="4" height="4"/><rect x="402" y="250" width="12" height="4"/><rect x="394" y="264" width="12" height="4"/><rect x="410" y="264" width="4" height="4"/><rect x="418" y="264" width="4" height="4"/><rect x="394" y="278" width="12" height="4"/><rect x="410" y="278" width="4" height="4"/><rect x="418" y="278" width="12" height="4"/><rect x="394" y="292" width="12" height="4"/><rect x="410" y="292" width="4" height="4"/><rect x="394" y="306" width="4" height="4"/><rect x="394" y="320" width="4" height="4"/><rect x="402" y="320" width="4" height="4"/><rect x="410" y="320" width="12" height="4"/>
+  <rect x="466" y="250" width="12" height="4"/><rect x="482" y="250" width="12" height="4"/><rect x="466" y="264" width="12" height="4"/><rect x="482" y="264" width="4" height="4"/><rect x="466" y="278" width="12" height="4"/><rect x="482" y="278" width="12" height="4"/><rect x="498" y="278" width="12" height="4"/><rect x="466" y="292" width="4" height="4"/><rect x="474" y="292" width="12" height="4"/><rect x="490" y="292" width="12" height="4"/><rect x="466" y="306" width="12" height="4"/><rect x="482" y="306" width="12" height="4"/><rect x="498" y="306" width="4" height="4"/><rect x="466" y="320" width="4" height="4"/><rect x="474" y="320" width="12" height="4"/></g>
+  <g stroke="#9c8b68" stroke-width="2"><path d="M394 346h126M394 358h126M394 370h126M394 382h90"/></g><circle cx="457" cy="204" r="5" fill="#b3261c"/></g></g>
+<g id="list" class="hot"><rect x="806" y="226" width="118" height="164" fill="#f3eede" transform="rotate(2 865 308)"/><g transform="rotate(2 865 308)"><rect x="806" y="226" width="12" height="164" fill="#1d2a4a"/>
+  <text x="872" y="254" class="lb" font-size="13" fill="#22231e">STATIONS</text><g stroke="#55585c" stroke-width="2"><path d="M830 274h80M830 290h70M830 306h80M830 322h60M830 338h80M830 354h70M830 370h76"/></g><circle cx="865" cy="232" r="4.5" fill="#22231e"/></g></g>
+
+<!-- the lamp over the bench -->
+<path d="M650 -400V236" stroke="#17100a" stroke-width="5"/>
+<polygon id="cone" points="606,270 694,270 1040,700 300,700" fill="url(#coneG)" pointer-events="none"/>
+<path d="M596 274q54-56 108 0z" fill="#2d5a44"/><path d="M596 274h108" stroke="#17100a" stroke-width="5"/><ellipse cx="650" cy="278" rx="20" ry="8" fill="#ffe7a0"/>
+
+<!-- the thick wire that comes down from the masts -->
+<path d="M1076 -400V200q0 30-10 60" stroke="#17100a" stroke-width="9" fill="none"/><ellipse cx="1076" cy="120" rx="15" ry="22" fill="#e9e2cf"/><ellipse cx="1076" cy="120" rx="15" ry="22" fill="none" stroke="#17100a" stroke-width="3"/>
+
+<!-- the bench and everything on it -->
+<g id="bench">
+  <path d="M352 580v170M1128 580v170" stroke="#3a2412" stroke-width="18"/>
+  <rect x="330" y="556" width="820" height="30" fill="#5a3a1f"/><rect x="330" y="548" width="820" height="12" fill="#2d4a3a"/><path d="M330 548h820" stroke="#4d7a60" stroke-width="2"/>
+  <rect x="330" y="586" width="820" height="60" fill="#4a3018"/><g fill="url(#brassG)"><circle cx="520" cy="616" r="7"/><circle cx="960" cy="616" r="7"/></g><path d="M740 586v60" stroke="#2f1e10" stroke-width="3"/>
+</g>
+<g id="tuner" class="hot"><rect x="356" y="430" width="150" height="118" rx="4" fill="url(#mahG)"/><rect x="356" y="430" width="150" height="16" fill="#141110"/>
+  <g fill="#141110"><circle cx="394" cy="486" r="22"/><circle cx="468" cy="486" r="22"/></g><g fill="url(#brassG)"><circle cx="394" cy="486" r="8"/><circle cx="468" cy="486" r="8"/></g>
+  <g stroke="#f1ead6" stroke-width="2"><path d="M394 464v-6M468 464v-6M372 486h-5M490 486h5"/></g><g fill="url(#brassG)"><circle cx="376" cy="528" r="5"/><circle cx="412" cy="528" r="5"/><circle cx="450" cy="528" r="5"/><circle cx="486" cy="528" r="5"/></g></g>
+<g id="pad" class="hot"><rect x="520" y="506" width="100" height="46" fill="transparent"/><path d="M536 524h78l-14 24h-78z" fill="#fbf6d9"/><path d="M536 524h78l-3 6h-78z" fill="#b3261c"/><g stroke="#9db3cf" stroke-width="1.5"><path d="M530 536h74M526 542h74"/></g><path d="M552 520l52 10" stroke="#d9a22b" stroke-width="5" stroke-linecap="round"/></g>
+<g id="det" class="hot"><rect x="876" y="420" width="150" height="128" rx="4" fill="url(#mahG)"/><rect x="888" y="434" width="126" height="76" rx="3" fill="#14110f"/>
+  <g fill="none" stroke="#c39a3c" stroke-width="4"><g><circle cx="920" cy="472" r="20"/><path d="M920 452v40M900 472h40"/><animateTransform attributeName="transform" type="rotate" from="0 920 472" to="360 920 472" dur="9s" repeatCount="indefinite"/></g>
+  <g><circle cx="982" cy="472" r="20"/><path d="M982 452v40M962 472h40"/><animateTransform attributeName="transform" type="rotate" from="0 982 472" to="360 982 472" dur="9s" repeatCount="indefinite"/></g></g>
+  <path d="M920 452h62M920 492h62" stroke="#d9d2bd" stroke-width="2"/><g fill="url(#brassG)"><circle cx="906" cy="530" r="6"/><circle cx="996" cy="530" r="6"/></g><rect x="938" y="522" width="26" height="14" rx="2" fill="#14110f"/></g>
+<g id="coil" class="hot"><rect x="1044" y="360" width="92" height="188" rx="4" fill="url(#mahG)"/><rect x="1044" y="360" width="92" height="14" fill="#2a130a"/>
+  <circle cx="1090" cy="430" r="28" fill="#0c0a09"/><circle cx="1090" cy="430" r="28" fill="none" stroke="#c39a3c" stroke-width="4"/>
+  <g fill="url(#brassG)"><circle cx="1074" cy="430" r="6"/><circle cx="1106" cy="430" r="6"/></g>
+  <path id="spark" d="M1080 430l5-6 4 9 5-8 3 5" stroke="#bfe4ff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <g stroke="#2a130a" stroke-width="3"><path d="M1056 490h68M1056 506h68M1056 522h68"/></g></g>
+<g id="phones" class="hot"><rect x="590" y="496" width="136" height="58" fill="transparent"/><path d="M612 540q46-52 92 0" stroke="#17120f" stroke-width="5" fill="none"/><ellipse cx="610" cy="540" rx="15" ry="9" fill="#17120f"/><ellipse cx="706" cy="540" rx="15" ry="9" fill="#17120f"/><ellipse cx="610" cy="538" rx="8" ry="4" fill="#3d332c"/><ellipse cx="706" cy="538" rx="8" ry="4" fill="#3d332c"/>
+  <path d="M720 540q60 4 160-10" stroke="#17120f" stroke-width="3" fill="none"/></g>
+
+<!-- his chair -->
+<g id="chair">
+  <ellipse cx="658" cy="776" rx="96" ry="12" fill="#000" opacity=".35"/>
+  <path d="M600 770V664M716 770V664" stroke="#2a1a0e" stroke-width="10"/><rect x="586" y="648" width="144" height="18" rx="5" fill="#3a2412"/>
+  <path d="M596 648V574q0-16 14-16M720 648V574q0-16-14-16" stroke="#3a2412" stroke-width="9" fill="none"/><path d="M604 586h108M604 616h108" stroke="#3a2412" stroke-width="8"/>
+</g>
+<!-- Mr Cottam, from behind, with the telephones on his head -->
+<g id="cottam" class="hot">
+  <path d="M588 656q-10-150 20-196q20-24 50-24t50 24q30 46 20 196z" fill="#efe9da"/>
+  <path d="M622 444q-8 100-4 212M694 444q8 100 4 212" stroke="#3b3027" stroke-width="7" fill="none"/><path d="M622 520q36 22 72 0" stroke="#3b3027" stroke-width="6" fill="none"/>
+  <path d="M704 470q46 30 60 62" stroke="#efe9da" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M612 470q-34 30-36 62" stroke="#efe9da" stroke-width="26" fill="none" stroke-linecap="round"/>
+  <rect x="646" y="410" width="24" height="30" fill="#d7a583"/>
+  <path d="M624 388q0-44 34-44t34 44v12q-4 22-34 22t-34-22z" fill="#3a2a1c"/><path d="M630 404q28 14 56 0v8q-28 14-56 0z" fill="#d7a583"/>
+  <ellipse cx="622" cy="392" rx="6" ry="11" fill="#d7a583"/><ellipse cx="694" cy="392" rx="6" ry="11" fill="#d7a583"/>
+  <path d="M620 388q0-52 38-52t38 52" stroke="#17120f" stroke-width="5" fill="none"/><ellipse cx="619" cy="392" rx="9" ry="14" fill="#17120f"/><ellipse cx="697" cy="392" rx="9" ry="14" fill="#17120f"/>
+  <path d="M700 404q40 60 180 120" stroke="#17120f" stroke-width="2.5" fill="none"/>
+</g>
+<g id="keyM" class="hot"><rect x="726" y="484" width="140" height="68" fill="transparent"/><rect x="742" y="528" width="118" height="20" rx="3" fill="#4a2212"/><path d="M752 510l100 8v8l-100-4z" fill="url(#brassG)"/><rect x="826" y="506" width="12" height="24" fill="#a8842e"/>
+  <ellipse cx="754" cy="500" rx="22" ry="8" fill="#141110"/><rect x="750" y="504" width="8" height="10" fill="#141110"/></g>
+
+<!-- his coat, his bunk, the porthole -->
+<g id="coat" class="hot"><circle cx="1212" cy="232" r="8" fill="url(#brassG)"/><path d="M1168 262q44-34 88 0l16 210h-120z" fill="#141c30"/><path d="M1212 244v228" stroke="#0c1220" stroke-width="3"/>
+  <g fill="url(#brassG)"><circle cx="1224" cy="300" r="5"/><circle cx="1226" cy="340" r="5"/><circle cx="1228" cy="380" r="5"/></g><path d="M1168 262l-22 150l22 12M1256 262l22 150l-22 12" fill="#18223a"/></g>
+<g id="port" class="hot"><circle cx="1452" cy="286" r="62" fill="url(#brassG)"/><circle cx="1452" cy="286" r="46" fill="#05080f"/>
+  <g fill="#e9e6da"><circle cx="1434" cy="270" r="1.8" class="tw"/><circle cx="1470" cy="262" r="1.3"/><circle cx="1462" cy="302" r="1.6" class="tw t2"/><circle cx="1428" cy="306" r="1.2"/><circle cx="1484" cy="290" r="1.2" class="tw t3"/></g>
+  <g fill="#7d5f1e"><circle cx="1452" cy="228" r="5"/><circle cx="1452" cy="344" r="5"/><circle cx="1394" cy="286" r="5"/><circle cx="1510" cy="286" r="5"/></g></g>
+<g id="bunk" class="hot">
+  <rect x="1296" y="470" width="420" height="190" fill="#4a3018"/><rect x="1296" y="470" width="420" height="14" fill="#74512f"/>
+  <rect x="1308" y="430" width="400" height="56" rx="10" fill="#e6e0cf"/><rect x="1316" y="412" width="120" height="44" rx="16" fill="#f4f0e4"/>
+  <path d="M1440 430h280v56h-280z" fill="#8f3a2c"/><path d="M1440 430l66 56h-66z" fill="#e6e0cf"/><path d="M1440 430l66 56" stroke="#6f2a20" stroke-width="3"/><path d="M1520 446h200M1520 462h200" stroke="#7a3024" stroke-width="3"/>
+  <path d="M1296 396h420" stroke="#c39a3c" stroke-width="5"/><path d="M1300 396q10 40 0 70" stroke="#2d5a44" stroke-width="22" fill="none"/>
+</g>
+
+<!-- your own buzzer, on the locker by the door -->
+<g id="buzz" class="hot">
+  <path d="M96 800h380l60 240H30z" fill="#3a2412"/><path d="M96 800h380" stroke="#74512f" stroke-width="5"/><rect x="250" y="850" width="60" height="24" rx="4" fill="url(#brassG)"/>
+  <g id="bboard"><path d="M170 760h250l22 38H148z" fill="#8a6238"/><path d="M148 798h294v12H148z" fill="#5a3a1f"/>
+    <rect x="186" y="770" width="74" height="12" rx="2" fill="url(#brassG)"/><ellipse cx="194" cy="764" rx="18" ry="7" fill="#141110"/>
+    <ellipse cx="312" cy="776" rx="26" ry="12" fill="#141110"/><ellipse cx="312" cy="772" rx="26" ry="12" fill="#2c2420"/><circle cx="312" cy="771" r="5" fill="url(#brassG)"/>
+    <rect x="364" y="744" width="38" height="44" rx="5" fill="#b3261c"/><rect x="364" y="744" width="38" height="12" rx="5" fill="#d9d2bd"/><rect x="378" y="736" width="10" height="10" fill="url(#brassG)"/>
+    <path d="M260 776h28M338 774q14-10 26-8" stroke="#141110" stroke-width="2.5" fill="none"/></g>
+</g>
+
+<rect id="flash" x="-1000" y="-400" width="3600" height="1720" fill="#9fd0ff" opacity=".1" pointer-events="none"/>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go forward with Sinclair</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="carpathia.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, stage = 0, nextFile = null, txBox = null, rdBox = null, inTx = false, inRd = false, stopHear = null;
+
+  ER.init({
+    theme: 'history', story: 'carpathia', storyTitle: 'Come at Once', id: 'shack', no: 'I', title: 'The Wireless Shack',
+    go: 'Lift the lid', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'The Archive keeps one box for each day that mattered. This one is small, and its corners are bound in brass. The label says: THE NORTH ATLANTIC. 15 APRIL 1912. You lift the lid. On top of the papers lies a piece of board with a small brass key screwed to it.',
+      'Then it is twenty past midnight on Monday 15 April 1912, and you are fifteen years old. You are the bridge messenger of the Carpathia, a Cunard liner three days out of New York and bound for the Mediterranean, with seven hundred and forty passengers asleep below. When the officer of the watch wants something fetched, he wants you.',
+      'Just now nobody wants anything. So you are where you always are when nobody wants anything: in the doorway of the wireless shack, right aft. It is one small room with one operator in it, Mr Cottam. He has taken his coat off to go to bed. He has not taken off the telephones.'
+    ],
+    exit: {"next":"chartroom","w":{"b642dfaf":"dcdb5168"}}, tags: {"tx1":["9fd19f81"],"tx2":["47f9e77d"],"who":["3f26680f"],"whom":["e94cb799"],"call":["096424cf"],"lat":["5f1724f1"],"lon":["37ef87c5"]},
+    sound: ['archive', { root: 50, bpm: 54, drop: ['mel', 'arp', 'ost'], beds: [['static', 0.55], ['sea', 0.35]] }],
+    hints: hints, onBegin: begin
+  });
+  stage = ER.flag('s-stage') || 0; nextFile = ER.flag('s-file') || null;
+
+  function setClock(h, m) {
+    $('#hh').setAttribute('transform', 'rotate(' + ((h % 12) * 30 + m / 2) + ' 736 170)');
+    $('#mh').setAttribute('transform', 'rotate(' + (m * 6) + ' 736 170)');
+  }
+  function isBusy() { return busy; }
+  function setStage(n) { stage = n; ER.flag('s-stage', n); paint(); }
+  function paint() {
+    var b = document.body.classList;
+    b.toggle('gone', stage >= 2); b.toggle('call', stage === 2 && !nextFile); b.toggle('back', !!ER.flag('s-back'));
+    b.toggle('sin', (stage === 1 && !!ER.flag('s-in') && !ER.flag('s-left')) || !!nextFile || (stage === 2 && !!ER.flag('s-sin')));
+    $('#buzz').classList.toggle('ready', stage === 1 && !!ER.flag('s-card'));
+    setClock(12, nextFile ? 52 : stage >= 2 ? 36 : 20);
+    ER.pips(nextFile ? 2 : stage >= 2 ? 1 : 0, 2);
+    if (nextFile) $('#go').classList.add('on');
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['Sinclair is waiting. Use the button at the bottom of the screen.']];
+    if (inRd) return ['read', [
+      'You do not have to read every mark. Find the small word DE in each line: on the card, DE means &ldquo;from&rdquo;. Then you know which three letters are the ship that is sending, and which are the ship that she wants.',
+      'A figure is always five marks. If the crackle has taken one of them, look at the same figure in the other line: she sent her position twice.',
+      'The very last sign on the third line has nine marks and no gaps in it. It is not a letter. Read the foot of the code card, where it says DISTRESS.'
+    ]];
+    if (inTx && (ER.flag('s-tx') || 1) === 1) return ['send1', [
+      'Find your own ship in the book of stations, on the wall to the right of the clock: three letters. Then find each of the three on the card.',
+      'A short touch of the key is a dot. For a dash, hold the key down until the first glass tube has filled past its white mark. Then let go, and wait until the second tube is full: that finishes the letter.',
+      'Your ship is the last one in the book. Her first letter is two dashes and nothing else. Wait after it before you begin the next letter.'
+    ]];
+    if (inTx) return ['send2', [
+      'The code card has a line of short signs that operators use to save time. One of them says that a message has come in safely.',
+      'It is two letters. Send them like any other two letters, with a gap between them.'
+    ]];
+    if (stage >= 2) return ['phones', ['Mr Cottam has run to the bridge. The thing that he was listening with is lying on the bench, under the lamp.']];
+    if (stage === 1 && ER.flag('s-card')) return ['buzz', ['Sinclair is waiting in the doorway. Your buzzer is on the locker at the front of the room, by the door.']];
+    return ['look', [
+      'Two papers are pinned to the wall, one on each side of the lamp. The larger one, on the left, is the Morse code. Read it: Sinclair will know if you guess.',
+      'The smaller paper, on the right of the clock, says which ship has which three letters. You will want that too.'
+    ]];
+  }
+
+  function begin() {
+    if (nextFile) ER.flag('s-back', 1);
+    paint();
+    if (stage >= 2) CP.mood('tense');
+    if (stage === 1 && ER.flag('s-tx') === 3) { alarm(); return; }          /* the page was reloaded while Sinclair was saying goodnight */
+    if (ER.flag('s-in')) { busy = false; ER.say(nextFile ? 'The wireless shack. Mr Cottam is at his key again.' : stage >= 2 ? 'The wireless shack. Mr Cottam&rsquo;s chair is empty.' : 'The wireless shack. Sinclair is still in the doorway.'); return; }
+    CP.learn('wireless', 'operator');
+    ER.narrate([
+      'A wooden room, warm, and not much bigger than a cupboard. On the bench there are brass and wire, and two small wheels that never stop turning. Everything that this ship hears from the rest of the world comes in through those wheels, as clicks in a pair of telephones.',
+      'Mr Cottam is twenty-one. He is the only wireless operator on board, so when he sleeps, the ship is deaf. He goes to his bunk at about midnight. But this afternoon he asked another ship a question, and he is giving her two more minutes to answer it.',
+      'Feet on the deck outside, and a lantern. Quartermaster Sinclair is on his way forward from the stern. He has been at sea for forty years, and for most of them there was no such thing as wireless.',
+      '&ldquo;Still here, Buzzer?&rdquo; He calls you that because of the thing on the locker: a key, a buzzer and a dry battery, screwed to a piece of board. It cost you two months&rsquo; pay in Liverpool. It sends nothing to anybody. It only buzzes.',
+      '&ldquo;I learnt that code with a lamp, before you were born,&rdquo; he says. &ldquo;Dots and dashes are dots and dashes. Read the man&rsquo;s card, there on the wall. Then send me the name of your own ship, and I shall tell you whether you are a messenger or a Marconi man.&rdquo;'
+    ], function () { busy = false; ER.flag('s-in', 1); setStage(1); });
+  }
+
+  /* ---------- things in the room ---------- */
+  $('#card').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CP.CODE, cls: 'card', clue: { id: 'code', title: 'The Morse code', kind: 'Card on the wall' }, done: function () { CP.learn('Morse code', 'dot', 'dash', 'distress call', 'CQD', 'SOS'); ER.flag('s-card', 1); paint(); } });
+  });
+  $('#list').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CP.CALLS, cls: 'calls', clue: { id: 'calls', title: 'The book of stations', kind: 'Printed list' }, done: function () { CP.learn('call sign'); } });
+  });
+  CP.thing('#det', 'magnetic detector', 'The receiver. A band of iron wire runs round two wheels for ever, driven by clockwork, and Mr Cottam winds it like a clock. When a signal comes in, the telephones click.', isBusy);
+  CP.thing('#tuner', null, 'A box with two black dials. Mr Cottam turns them a hair at a time, to pick one station out of the others.', isBusy);
+  CP.thing('#keyM', null, 'The sending key. When Mr Cottam presses it, a blue spark jumps in the box at the end of the bench, and every ship with a wireless for two hundred miles round can hear it. You have never touched that key. You are not going to.', isBusy);
+  CP.thing('#coil', null, 'The spark lives in here. Through the little round window it is blue-white, and it cracks like a whip.', isBusy);
+  CP.thing('#pad', null, function () { return nextFile ? 'Mr Cottam&rsquo;s pad. He is writing on it again, without looking down.' : stage >= 2 ? 'Mr Cottam&rsquo;s pad. The top sheet is gone: he wrote it very fast.' : 'Mr Cottam&rsquo;s pad and his pencil. He has been taking down messages that are meant for another ship. He will pass them on to her in the morning.'; }, isBusy);
+  CP.thing('#cottam', null, function () { return nextFile ? 'Mr Cottam, at his key. He does not look round.' : 'Mr Cottam, in his shirt sleeves, with the telephones on his head. He joined this ship in February. He does not turn round: he is listening.'; }, isBusy);
+  CP.thing('#clock', null, function () { return nextFile ? 'Eight minutes to one, by the shack clock.' : stage >= 2 ? 'Twenty-four minutes to one, by the shack clock.' : 'Twenty past twelve, by the shack clock. That is ship&rsquo;s time. The clocks in New York are nearly two hours behind it.'; }, isBusy);
+  CP.thing('#coat', null, 'His coat, on its hook. That is as far as he has got with going to bed.', isBusy);
+  CP.thing('#bunk', null, 'His bunk is in the same room as his instruments. The blanket is turned back. It has been turned back for half an hour.', isBusy);
+  CP.thing('#port', 'porthole', 'A round window, and stars. It is the clearest night that you have ever seen, and it is cold enough to hurt your teeth.', isBusy);
+  CP.thing('#door', null, 'The deck outside, the rail, and a black, flat sea. There is no moon.', isBusy);
+  $('#sinclair').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Chart room,&rdquo; says Sinclair. &ldquo;Now.&rdquo;'); return; }
+    if (stage === 1) { ER.say(ER.flag('s-card') ? '&ldquo;Well?&rdquo; says Sinclair. &ldquo;Your buzzer is on the locker. I have a log to write up.&rdquo;' : '&ldquo;The card first,&rdquo; says Sinclair. &ldquo;On the wall. I shall know if you guess.&rdquo;'); return; }
+    ER.say('Sinclair, with his lantern, out of breath.');
+  });
+  $('#buzz').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'buzzer');
+    if (stage !== 1) { ER.say(stage >= 2 ? 'Your buzzer. Nobody is asking for it now.' : 'Your buzzer.'); return; }
+    if (!ER.flag('s-card')) { ER.say('Your buzzer. Read Mr Cottam&rsquo;s card first, on the wall: Sinclair will know if you guess.'); return; }
+    openTx();
+  });
+  $('#phones').addEventListener('click', function (e) {
+    if (busy || stage < 2) return;
+    if (nextFile) return;
+    ER.wordAt(e.clientX, e.clientY, 'telephones');
+    openRd();
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; CP.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+
+  /* ---------- the buzzer test ---------- */
+  function spell(t) { return t.toUpperCase().split('').join(', '); }
+  function buildTx() {
+    var box = ER.el('div', 'tx'), msgEl, lock = false;
+    var ky = CP.keyer({ label: 'Send it to Sinclair', onSend: sent, lock: function () { return lock; } });
+    var side = ER.el('div', 'tx-side', '<div class="tx-face">' + FACE('sinclair') + '</div><h6 class="lk-h">Quartermaster Sinclair</h6><p class="pmsg"></p>');
+    box.appendChild(ky); box.appendChild(side); msgEl = side.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function ask() {
+      if ((ER.flag('s-tx') || 1) === 1) msg('Your buzzer, and Sinclair in the doorway with his arms folded. &ldquo;Your own ship. Her three letters are in the man&rsquo;s book of stations. Send.&rdquo;<br><br>Press the brass key with the mouse and hold it, or use the space bar. A short touch is a dot and a long one is a dash. Then wait: a pause finishes the letter.');
+      else msg('&ldquo;Now tell me that you have heard me,&rdquo; says Sinclair. &ldquo;Not in English. The way the Marconi men say it to each other.&rdquo;');
+    }
+    function sent(t) {
+      var step = ER.flag('s-tx') || 1, said = t ? '&ldquo;I read ' + spell(t).replace(/\?/g, 'something that is no letter') + '.' : '&ldquo;I read nothing.';
+      if (!t) { msg(said + ' Touch the key.&rdquo;'); return; }
+      if (step === 1) {
+        if (ER.check('tx1', t)) {
+          ER.flag('s-t1', t); ER.flag('s-tx', 2); ER.sfx.ok(); ky.kyClear();
+          msg('&ldquo;' + spell(t) + ',&rdquo; says Sinclair. &ldquo;Carpathia. So it can spell.&rdquo; He rubs his beard. &ldquo;Now tell me that you have heard me. Not in English. The way the Marconi men say it to each other.&rdquo;');
+          return;
+        }
+        CP.slip(); ER.sfx.no(); ER.shake(ky.querySelector('.ky-strip'));
+        if (t.indexOf('?') >= 0) msg(said + ' One of those signs is on no card. Count the dots and the dashes again, and do not stop in the middle of a letter.&rdquo;');
+        else if (t.length < 3) msg(said + ' Three letters, I said. If two of them ran together, you did not wait long enough between them.&rdquo;');
+        else if (t.length > 3) msg(said + ' Three letters, and no more. If one letter came out as two, you waited too long in the middle of it.&rdquo;');
+        else msg(said + ' That is not this ship. Look at the card again, and mind which sign comes first.&rdquo;');
+        ky.kyClear(); return;
+      }
+      if (ER.check('tx2', t)) {
+        ER.flag('s-t2', t); ER.flag('s-tx', 3); lock = true; ER.sfx.ok();
+        msg('&ldquo;' + spell(t) + '. Received.&rdquo; Sinclair very nearly smiles.');
+        setTimeout(function () { ER.closeAll(); alarm(); }, 2100);
+        return;
+      }
+      CP.slip(); ER.sfx.no(); ER.shake(ky.querySelector('.ky-strip'));
+      if (t === 'k') msg(said + ' That means &lsquo;go on&rsquo;. I have not asked you to go on. I asked whether you had heard me.&rdquo;');
+      else if (t === 'om') msg(said + ' Old man. I am old, and I am a man, and that is no answer.&rdquo;');
+      else if (t.indexOf('?') >= 0) msg(said + ' Half of that is no letter at all.&rdquo;');
+      else msg(said + ' That may mean something in Liverpool. It is not on the man&rsquo;s card. Read his short signs again.&rdquo;');
+      ky.kyClear();
+    }
+    box.ask = ask;
+    return box;
+  }
+  function openTx() {
+    if (!txBox) txBox = buildTx();
+    txBox.ask(); inTx = true;
+    ER.open('ov-lock', txBox, function () { inTx = false; });
+  }
+
+  /* ---------- twenty-five past twelve ---------- */
+  function spark(ms) { document.body.classList.add('tx'); CP.sfx.spark(4); setTimeout(function () { document.body.classList.remove('tx'); }, ms || 900); }
+  function alarm() {
+    busy = true;
+    ER.narrate([
+      '&ldquo;It buzzes,&rdquo; says Sinclair. &ldquo;I will give it that. I shall believe in wireless on the day that it brings a ship alongside.&rdquo; He picks up his lantern. &ldquo;Do not keep Mr Cottam from his bed.&rdquo;'
+    ], function () {
+      ER.flag('s-left', 1); paint(); CP.sfx.step();
+      ER.narrate([
+        'He goes forward. Mr Cottam has not heard a word of all this. He is listening to the big station at Cape Cod, which is sending one message after another for a single ship: the new White Star liner, the Titanic. She does not seem to be taking them.',
+        'So Mr Cottam does a friendly thing. He puts his hand on the key, and asks the Titanic&rsquo;s operator whether he knows that Cape Cod has a batch of messages for him.'
+      ], heard);
+    });
+    function heard() {
+      spark(1100);
+      ER.narrate([
+        'The answer comes at once. You cannot hear it. You can see it: his pencil stops, and then it writes very fast.',
+        'He sends one short question: is he to tell the captain? One word comes back. ' + CP.said('Yes.'),
+        'Then the telephones are on the bench, and he is out of the door and running forward along the dark deck in his shirt sleeves.',
+        'The shack is empty. It is never empty. On the bench, under the lamp, the telephones go on whispering to nobody.'
+      ], function () { CP.mood('tense'); busy = false; setStage(2); });
+    }
+  }
+
+  /* ---------- listening: what the telephones say, as marks. (Only marks are written here: the page does not know what they spell.) ---------- */
+  var HEARD = [
+    ['-.-.', '--.-', '-..', '/', '-..', '.', '/', '--', '--.', '-.--', '/', '*', '/', '....-', '.----', '....-', '-...~', '/', '-.', '/', '.....', '~----', '.----', '....-', '/', '.--'],
+    ['-.-.', '--.-', '-..', '/', '-..', '.', '/', '--', '--.', '-.--', '/', '*', '/', '....-', '.~---', '....-', '-....', '/', '-.', '/', '.....', '-----', '.----', '....~', '/', '.--'],
+    ['--', '-.-', '-.-.', '/', '--', '-.-', '-.-.', '/', '-..', '.', '/', '--', '--.', '-.--', '/', '...---...']
+  ];
+  var FIELDS = [['who', 3, 'a'], ['whom', 3, 'a'], ['c1', 3, 'a'], ['c2', 3, 'a'], ['lat', 4, 'n'], ['lon', 4, 'n']];
+  function buildRd() {
+    var box = ER.el('div', 'rd'), t = 600, plan = [], s, cells = [], cur = 0, done = {}, msgEl, goB, padEl;
+    s = '<div class="rd-main"><div class="rd-pad"><h6>What the telephones said, as near as I could write it</h6><button type="button" class="rd-again">Listen again</button>';
+    HEARD.forEach(function (line, i) {
+      var c = CP.copy(line, 42, t);
+      s += '<div class="rd-line" data-n="' + (i + 1) + '"><!--nogloss-->' + c.html + '<!--/nogloss--></div>'; plan = plan.concat(c.plan); t = c.ms + 800;
+    });
+    s += '</div><div class="rd-form"><h6>For the bridge</h6>' +
+      '<div class="rd-row"><span>WHO IS CALLING?</span>' + field('who', 3) + '</div>' +
+      '<div class="rd-row"><span>WHOM DOES SHE WANT?</span>' + field('whom', 3) + '</div>' +
+      '<div class="rd-row"><span>WHAT CALLS DOES SHE MAKE?</span>' + field('c1', 3) + '<em>and</em>' + field('c2', 3) + '</div>' +
+      '<div class="rd-row"><span>WHERE IS SHE?</span>' + field('lat', 4) + '<em>N</em>' + field('lon', 4) + '<em>W</em></div>' +
+      '<button type="button" class="btn rd-go" disabled>That is all I can read</button></div></div>' +
+      '<div class="rd-side"><h6 class="lk-h">Mr Cottam&rsquo;s card</h6>' + CP.abc(true) + '<p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    function field(id, n) { var h = '<span class="rd-f" data-f="' + id + '">', i; for (i = 0; i < n; i++) h += '<button type="button" class="rd-c" data-f="' + id + '" data-i="' + i + '"></button>' + (n === 4 && i === 1 ? '<em>.</em>' : ''); return h + '</span>'; }
+    cells = ER.$$('.rd-c', box); msgEl = box.querySelector('.pmsg'); goB = box.querySelector('.rd-go'); padEl = box.querySelector('.rd-pad');
+    function msg(x) { msgEl.innerHTML = ER.gloss(x); }
+    function kind(c) { return c.getAttribute('data-f') === 'lat' || c.getAttribute('data-f') === 'lon' ? 'n' : 'a'; }
+    function open(c) { return !done[c.getAttribute('data-f')]; }
+    function focus(i) { cur = Math.max(0, Math.min(cells.length - 1, i)); cells.forEach(function (c, j) { c.classList.toggle('on', j === cur && open(c)); }); }
+    function step(d) { var i = cur + d; while (i >= 0 && i < cells.length && !open(cells[i])) i += d; if (i >= 0 && i < cells.length) focus(i); }
+    function val(id) { return cells.filter(function (c) { return c.getAttribute('data-f') === id; }).map(function (c) { return c.textContent || ' '; }).join('').toLowerCase(); }
+    function full() { return cells.every(function (c) { return !!c.textContent; }); }
+    function put(ch) {
+      var c = cells[cur];
+      if (!c || !open(c) || inRd !== true) return;
+      if ((kind(c) === 'n') !== /[0-9]/.test(ch)) { ER.shake(c); msg(kind(c) === 'n' ? 'A position is made of figures. That box wants a figure.' : 'That box wants a letter.'); return; }
+      c.textContent = ch.toUpperCase(); CP.sfx.pencil(); box.querySelectorAll('.rd-f.no').forEach(function (f) { f.classList.remove('no'); });
+      goB.disabled = !full(); box.setAttribute('data-full', full() ? '1' : '0'); step(1);
+    }
+    function rub() { var c = cells[cur]; if (c && open(c) && c.textContent) { c.textContent = ''; } else { step(-1); c = cells[cur]; if (c && open(c)) c.textContent = ''; } goB.disabled = true; }
+    cells.forEach(function (c, i) { c.addEventListener('click', function () { if (open(c)) focus(i); }); });
+    ER.$$('.abc-k', box).forEach(function (b) { b.addEventListener('click', function () { put(b.getAttribute('data-k')); }); });
+    document.addEventListener('keydown', function (e) {
+      var k = '';
+      if (!inRd || !document.body.contains(box) || ER.$('.ov-top.on') || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.key && e.key.length === 1 && /[a-z0-9]/i.test(e.key)) k = e.key.toLowerCase();
+      else if (/^Key[A-Z]$/.test(e.code || '')) k = e.code.charAt(3).toLowerCase();      /* Korean input is on: read the key itself */
+      else if (/^(Digit|Numpad)[0-9]$/.test(e.code || '')) k = e.code.slice(-1);
+      if (k) { e.preventDefault(); put(k); return; }
+      if (e.key === 'Backspace' || e.key === 'Delete') { e.preventDefault(); rub(); }
+      else if (e.key === 'ArrowLeft') step(-1); else if (e.key === 'ArrowRight') step(1);
+      else if (e.key === 'Enter' && !goB.disabled) judge();
+    });
+    function play() { if (stopHear) stopHear(); padEl.classList.remove('live'); void padEl.offsetWidth; padEl.classList.add('live'); stopHear = CP.hear(plan, 640); }
+    box.querySelector('.rd-again').addEventListener('click', play);
+    function mark(id, ok) {
+      var f = box.querySelector('.rd-f[data-f="' + id + '"]');
+      f.classList.toggle('ok', ok); f.classList.toggle('no', !ok);
+      if (ok) done[id] = 1;
+    }
+    function judge() {
+      var v = {}, bad = [], first = '', pre = '', call, cOk, U = function (x) { return x.toUpperCase(); };
+      if (!full()) return;
+      FIELDS.forEach(function (f) { v[f[0]] = val(f[0]); });
+      if (!ER.flag('s-sin')) { ER.flag('s-sin', 1); paint(); pre = 'A lantern in the doorway: Sinclair, out of breath, which you have never seen before. &ldquo;The captain has turned her right round. All hands are called. What have you got there?&rdquo; He reads your paper by the lantern.<br><br>'; }
+      if (ER.check('who', v.who)) mark('who', true);
+      else { mark('who', false); bad.push('who'); first = ER.check('whom', v.who) ? '&ldquo;' + U(v.who) + ' is the ship that she is calling, not the ship that calls. Look at the card: DE means &lsquo;from&rsquo;. The one who is sending signs after it.&rdquo;' : '&ldquo;' + U(v.who) + '? That is in no book of stations. Read the three signs after DE again, one sign at a time.&rdquo;'; }
+      if (ER.check('whom', v.whom)) mark('whom', true);
+      else { mark('whom', false); bad.push('whom'); first = first || (ER.check('who', v.whom) ? '&ldquo;You have the same ship twice. She is not calling herself. Whom does she name before the DE, on the last line?&rdquo;' : '&ldquo;' + U(v.whom) + '? I know no such ship. The one that she wants comes first on the last line, and she names it twice over.&rdquo;'); }
+      call = [v.c1, v.c2].sort().join('+'); cOk = ER.check('call', call);
+      mark('c1', cOk); mark('c2', cOk);
+      if (!cOk) { bad.push('call'); first = first || (v.c1 === v.c2 ? '&ldquo;The same call twice? She makes two different ones. The second is the long sign at the very end, with no gaps in it. The foot of the card says what that is.&rdquo;' : '&ldquo;She makes two calls. One is the three letters that begin your first line. The other is the long sign at the very end: it has no gaps, so it is not three letters at all. The foot of the card says what it is.&rdquo;'); }
+      ['lat', 'lon'].forEach(function (id) {
+        if (ER.check(id, v[id])) { mark(id, true); return; }
+        mark(id, false); bad.push(id);
+        first = first || '&ldquo;' + (id === 'lat' ? 'Latitude ' : 'Longitude ') + v[id].slice(0, 2) + '.' + v[id].slice(2) + '. That is not what Mr Cottam told the bridge. One of your figures is a guess. A figure is always five marks: where the crackle took a mark out of one line, the other line has it.&rdquo;';
+      });
+      box.setAttribute('data-bad', bad.join(' '));
+      if (bad.length) {
+        CP.slip(); ER.sfx.no(); goB.disabled = true;
+        cells.forEach(function (c) { if (open(c)) c.textContent = ''; });
+        msg(pre + first + (bad.length > 1 ? ' He hands the paper back. That is not the only thing wrong with it.' : ' He hands the paper back.') + ' What is right stays as it is.');
+        focus(cells.findIndex ? cells.findIndex(open) : 0);
+        return;
+      }
+      var file = ER.exitOk([(ER.flag('s-t1') || '') + '-' + (ER.flag('s-t2') || '') + '|' + [v.who, v.whom, call, v.lat, v.lon].join('-')]);
+      if (!file) { msg('Sinclair reads it, and nothing happens. Something is wrong: tell your teacher.'); return; }
+      nextFile = file; ER.flag('s-file', file); ER.flag('s-read', v);
+      var st = ER.state(); st.done = st.done || {}; st.done.shack = 1; ER.persist(true);
+      ER.sfx.ok(); goB.disabled = true; inRd = 'done';
+      msg(pre + 'Sinclair reads it twice. &ldquo;' + U(v.who) + ',&rdquo; he says slowly. &ldquo;I heard the words on the bridge. I had not seen them in dots.&rdquo;');
+      setTimeout(function () { ER.closeAll(); after(); }, 2600);
+    }
+    goB.addEventListener('click', judge);
+    box.play = play;
+    box.first = function () { msg('You hold one telephone to your ear and write down what you hear, as marks. It is one ship, calling again and again. Some of it is too fast for you, and the crackle has taken some marks away.<br><br>Read your marks with the code card. Then write down what the bridge will want to know: click a box, and type or click a letter on the card.'); focus(0); };
+    return box;
+  }
+  function openRd() {
+    var fresh = !rdBox;
+    if (!rdBox) rdBox = buildRd();
+    inRd = true;
+    ER.open('ov-lock', rdBox, function () { if (inRd === true) inRd = false; if (stopHear) { stopHear(); stopHear = null; } });
+    if (fresh) { rdBox.first(); rdBox.play(); }
+  }
+  function fmt(p) { return p ? p.slice(0, 2) + '.' + p.slice(2) : ''; }
+  function after() {
+    var v = ER.flag('s-read') || {}, U = function (x) { return (x || '').toUpperCase(); };
+    busy = true; inRd = false; paint();
+    CP.mine('heard', 'What she sent', '<p>Calling: <b>' + U(v.who) + '</b>, the Titanic.</p><p>She wants: <b>' + U(v.whom) + '</b>, the Olympic, her sister.</p><p>Her calls: <b>' + U(v.c1) + '</b> and <b>' + U(v.c2) + '</b>.</p><p>Her position: <b>' + fmt(v.lat) + ' N, ' + fmt(v.lon) + ' W</b>.</p><p>The one who signs after DE is the one who is sending.</p>', true);
+    ER.narrate([
+      '&ldquo;So it is the Titanic,&rdquo; says Sinclair. &ldquo;The biggest ship in the world, on her first voyage. And she is calling her own sister, with a call that I had never heard of until tonight.&rdquo; He gives you back your paper. &ldquo;The same position that Mr Cottam took to the bridge. Good. I like a thing to arrive by two roads.&rdquo;',
+      '&ldquo;The captain was told at twenty-five minutes to one. He ordered the ship turned round before he asked one question. Then he asked Mr Cottam if he was absolutely sure that it was the Titanic. He asked him twice.&rdquo;',
+      'Mr Cottam comes back along the deck at a run, with a small slip of paper in his hand: the captain has written this ship&rsquo;s own position on it. He drops into his chair and puts the telephones on.'
+    ], function () {
+      ER.flag('s-back', 1); paint(); spark(1300);
+      ER.read({
+        html: '<h4>The sheet that he tore off his pad</h4><p>' + CP.said('Come at once. We have struck a berg. It&rsquo;s a C.Q.D. O.M. Position ' + fmt(v.lat) + ' N. ' + fmt(v.lon) + ' W.') + '</p><p class="hw">The Titanic to the Carpathia. This is what Mr Cottam took to the bridge. (O.M. is &ldquo;old man&rdquo;.)</p>',
+        cls: 'padp', clue: { id: 'come', title: 'The Titanic to the Carpathia', kind: 'Sheet off the pad' },
+        done: function () {
+          ER.narrate([
+            'The blue spark cracks: this ship&rsquo;s position, going out. The answer to it is one word. ' + CP.said('Received.'),
+            'Mr Cottam does not look round. He will not sleep tonight. Until this is over, that key is the only voice the Carpathia has.',
+            '&ldquo;Bring your paper,&rdquo; says Sinclair. &ldquo;Chart room. If you are going to carry that position round my ship all night, you are going to know where it is.&rdquo;'
+          ], function () { busy = false; paint(); });
+        }
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

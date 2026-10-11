@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Lighting Box · The Understudy</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="understudy.css">
+<style>
+  body{--bg:#0c1014;--accent:#63d2b8;--font-display:'Alfa Slab One',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(10,14,17,.95);--tc-ink:#eef1ea;--cap-bg:rgba(10,14,17,.93);--panel:#141a1f;--face-bg:#10151a;--q-ink:#9fe0d0;--fade:#05080a;--hud-bg:rgba(10,14,17,.8)}
+  .tc-room{letter-spacing:.02em;font-size:clamp(32px,4.8vw,62px)}
+  .led{font-family:'Oswald',sans-serif;font-weight:600;fill:#7dffb0;letter-spacing:1.5px}
+  .num{font-family:'Oswald',sans-serif;font-size:11px;fill:#6f7a84;text-anchor:middle}
+  .gotxt{font-family:'Alfa Slab One',serif;font-size:21px;fill:#06200f;text-anchor:middle}
+  .blink{animation:blink 2.7s steps(1,end) infinite}
+  .blink.b{animation-duration:3.9s;animation-delay:-1.2s}.blink.c{animation-duration:5.1s;animation-delay:-2.8s}
+  @keyframes blink{0%{opacity:1}55%{opacity:.25}75%{opacity:1}}
+  .bob{animation:bob 4.4s ease-in-out infinite alternate}
+  .bob.b{animation-duration:5.6s;animation-delay:-2s}.bob.c{animation-duration:3.7s;animation-delay:-1s}
+  @keyframes bob{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+  #pellow{animation:walk 16s ease-in-out infinite alternate}
+  @keyframes walk{from{transform:translate(0,0)}to{transform:translate(0,26px)}}
+  .flick{animation:flick 3.9s steps(1,end) infinite}
+  @keyframes flick{0%{opacity:.95}27%{opacity:.84}48%{opacity:1}71%{opacity:.9}}
+  #sheet.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.25)}}
+
+  /* the cue sheet, and the three windows of the desk */
+  .bx.lx{width:min(1180px,96vw)}
+  .lx-two{display:grid;grid-template-columns:1fr 440px;gap:0 18px;align-items:start}
+  .lx-two .doc{width:100%;max-height:none;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .lx-desk{background:#14181d linear-gradient(160deg,rgba(255,255,255,.05),rgba(0,0,0,.25));border:1px solid #2c343c;border-radius:6px;padding:14px 18px 16px;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .lx-desk h5{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.26em;text-transform:uppercase;color:#63d2b8}
+  .lx-row{display:grid;grid-template-columns:1fr auto 50px;align-items:center;gap:0 12px;padding:9px 0;border-bottom:1px solid #2c343c}
+  .lx-row b{display:block;font-family:'Oswald',sans-serif;font-weight:500;font-size:16px;letter-spacing:.14em;text-transform:uppercase;color:#eef1ea}
+  .lx-row small{display:block;font-family:'EB Garamond',serif;font-size:16px;color:#9aa5ad}
+  .lx-row .wls{background:#06120e;box-shadow:inset 0 0 0 2px #2c343c}
+  .lx-row .wl b{color:#7dffb0;font-size:26px;letter-spacing:0}
+  .lx-row .wls i{color:#7dffb0}
+  .lx-lamp{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3a4450,#161b21);border:2px solid #2c343c;visibility:hidden}
+  .lx-desk.pick .lx-lamp{visibility:visible}
+  .lx-desk.pick .lx-lamp:hover{border-color:#63d2b8}
+  .lx-lamp.sel{background:radial-gradient(circle at 35% 30%,#d5ffe6,#2f9d5a);border-color:#7dffb0;box-shadow:0 0 18px rgba(63,191,106,.8)}
+  .lx-desk .pmsg{min-height:128px;margin:12px 0 8px}
+  .lx-desk .btn{float:right}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="curtF" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b141a"/><stop offset=".8" stop-color="#9a2228"/><stop offset="1" stop-color="#c2452f"/></linearGradient>
+  <linearGradient id="wallL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a1c20"/><stop offset="1" stop-color="#3a1216"/></linearGradient>
+  <linearGradient id="wallR" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#5a1c20"/><stop offset="1" stop-color="#3a1216"/></linearGradient>
+  <linearGradient id="deskT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e252c"/><stop offset="1" stop-color="#12171c"/></linearGradient>
+  <radialGradient id="chanG"><stop offset="0" stop-color="#fff3c4" stop-opacity=".9"/><stop offset=".4" stop-color="#ffd98a" stop-opacity=".28"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="clipG"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".7"/><stop offset=".45" stop-color="#f2b441" stop-opacity=".18"/><stop offset="1" stop-color="#f2b441" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig2" cx="50%" cy="45%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#000" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".85"/></radialGradient>
+  <clipPath id="winC"><rect x="70" y="80" width="1460" height="394"/></clipPath>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#0c1014"/>
+
+<!-- through the glass: the house, in the interval -->
+<g clip-path="url(#winC)">
+  <rect x="70" y="80" width="1460" height="394" fill="#3a1216"/>
+  <path d="M70 80H1530L1094 104H506Z" fill="#2a0c10"/>
+  <path d="M70 80L506 104V352L70 474Z" fill="url(#wallL)"/><path d="M1530 80L1094 104V352L1530 474Z" fill="url(#wallR)"/>
+  <g fill="#b08a35"><path d="M70 226L506 196V212L70 250Z"/><path d="M1530 226L1094 196V212L1530 250Z"/></g>
+  <g fill="#7a5f22"><path d="M70 250L506 212V220L70 262Z"/><path d="M1530 250L1094 212V220L1530 262Z"/></g>
+  <g fill="#ffe9a8"><circle class="blink c" cx="180" cy="200" r="5"/><circle cx="330" cy="188" r="4"/><circle cx="450" cy="180" r="3.500"/><circle cx="1420" cy="200" r="5"/><circle class="blink b" cx="1270" cy="188" r="4"/><circle cx="1150" cy="180" r="3.500"/></g>
+  <ellipse class="flick" cx="800" cy="92" rx="420" ry="70" fill="url(#chanG)"/>
+  <g id="curt2" class="hot">
+    <rect x="496" y="98" width="608" height="262" fill="#c9a24a"/><rect x="506" y="108" width="588" height="252" fill="#8a6a26"/>
+    <rect x="520" y="118" width="560" height="226" fill="url(#curtF)"/><g id="folds2"></g>
+    <path d="M520 118H1080V150Q1040 176 1000 150Q960 176 920 150Q880 176 840 150Q800 176 760 150Q720 176 680 150Q640 176 600 150Q560 176 520 150Z" fill="#5a1016"/>
+    <path d="M520 150Q560 176 600 150Q640 176 680 150Q720 176 760 150Q800 176 840 150Q880 176 920 150Q960 176 1000 150Q1040 176 1080 150" stroke="#e6c873" stroke-width="3" fill="none"/>
+    <rect x="520" y="326" width="560" height="18" fill="#ffd98a" opacity=".3"/>
+  </g>
+  <rect x="496" y="344" width="608" height="16" fill="#3a2717"/>
+  <path d="M506 360H1094L1530 474H70Z" fill="#240a0e"/>
+  <g id="house" class="hot"><path d="M506 360H1094L1530 474H70Z" fill="#fff" opacity="0"/><g id="rows"></g></g>
+  <g id="critic" class="hot"><circle cx="951" cy="425" r="12" fill="#fff" opacity="0"/><circle cx="951" cy="425" r="8" fill="#c9a084"/><path d="M943 422q8 -10 16 0q-8 -4 -16 0z" fill="#3a2a1a"/><rect x="957" y="431" width="14" height="10" fill="#f6f2e4" transform="rotate(-14 964 436)"/></g>
+  <g id="pellow" class="hot"><ellipse cx="800" cy="444" rx="16" ry="4" fill="#000" opacity=".4"/><path d="M790 444v-22h8v22zM802 444v-22h8v22z" fill="#17171b"/><path d="M786 424q-2 -30 14 -32t14 32z" fill="#f4f1e8"/>
+    <circle cx="800" cy="384" r="8" fill="#d9b08c"/><path d="M792 382q8 -10 16 0q-8 -3 -16 0z" fill="#55504a"/><rect x="778" y="404" width="44" height="6" fill="#5a3d20"/>
+    <g><circle cx="784" cy="401" r="3.500" fill="#f6b6c8"/><circle cx="794" cy="401" r="3.500" fill="#fff6d6"/><circle cx="806" cy="401" r="3.500" fill="#8a5a3a"/><circle cx="816" cy="401" r="3.500" fill="#f6b6c8"/></g></g>
+  <path d="M250 80H380L210 474H80Z" fill="#fff" opacity=".035"/><path d="M1180 80H1230L1060 474H1010Z" fill="#fff" opacity=".03"/>
+</g>
+<rect x="60" y="70" width="1480" height="414" fill="none" stroke="#06080a" stroke-width="22"/>
+<path d="M553 80V474M1047 80V474" stroke="#06080a" stroke-width="10"/>
+<rect x="30" y="484" width="1540" height="30" fill="#161b21"/><rect x="30" y="484" width="1540" height="4" fill="#2c343c"/>
+
+<!-- the desk -->
+<path d="M30 566H1570L1700 812H-100Z" fill="url(#deskT)"/><path d="M-100 812H1700V1320H-100Z" fill="#0b0e11"/><path d="M30 566H1570" stroke="#2c343c" stroke-width="4"/>
+<g id="sliders" class="hot"><rect x="470" y="580" width="480" height="210" fill="#fff" opacity="0"/><g id="faders"></g></g>
+<g id="s48" class="hot"></g>
+<g id="screen"><rect x="990" y="590" width="196" height="104" rx="6" fill="#06120e" stroke="#2c343c" stroke-width="4"/>
+  <text x="1004" y="620" class="led" font-size="17">CUE 38</text><text x="1004" y="646" class="led" font-size="13" opacity=".7">ACT ONE: DONE</text><text x="1004" y="672" class="led blink" font-size="13">WAITING FOR HER</text>
+  <rect x="1150" y="604" width="22" height="8" fill="#7dffb0" class="blink b"/></g>
+<g id="gokey" class="hot"><circle cx="1088" cy="752" r="38" fill="#0b0e11"/><circle cx="1088" cy="750" r="32" fill="#2f9d5a"/><circle cx="1088" cy="747" r="32" fill="#57d98a"/><text x="1088" y="755" class="gotxt">GO</text></g>
+<g><circle cx="1016" cy="752" r="14" fill="#8a5f16"/><circle cx="1016" cy="750" r="12" fill="#f2b441" class="blink c"/><circle cx="1160" cy="752" r="14" fill="#5a1410"/><circle cx="1160" cy="750" r="12" fill="#b3271f"/></g>
+
+<!-- the cue sheet on its clipboard, under a lamp -->
+<path d="M1560 520q-70 -30 -150 20" stroke="#2a2d36" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M1420 526l-30 22 18 22 34 -20z" fill="#1c1e25"/>
+<g id="sheet" class="hot">
+  <path d="M1236 592L1488 580L1516 790L1254 804Z" fill="#5a3d20"/><path d="M1250 604L1476 594L1500 780L1266 792Z" fill="#fbfbf7"/><path d="M1250 604L1476 594L1478 608L1252 618Z" fill="#1f7a76"/>
+  <g stroke="#55606e" stroke-width="2"><path d="M1262 634l204 -9M1264 648l204 -9M1266 662l204 -9M1268 676l204 -9M1270 690l204 -9M1272 704l204 -9M1274 718l204 -9M1276 732l204 -9"/></g>
+  <g stroke="#1c6a3a" stroke-width="2.200"><path d="M1280 752l150 -7M1282 766l120 -6"/></g>
+  <path d="M1340 588l52 -3 2 16 -52 3z" fill="#8d949c"/>
+</g>
+<ellipse class="flick" cx="1380" cy="690" rx="230" ry="170" fill="url(#clipG)" pointer-events="none"/>
+
+<!-- half a cheese sandwich, and a mug -->
+<g id="sandwich" class="hot"><path d="M70 652l124 -10 12 34 -128 10z" fill="#b99a6a"/><path d="M76 660l112 -9" stroke="#a3855a" stroke-width="2"/>
+  <path d="M96 652l84 -6 -84 -44z" fill="#f6ecd0" stroke="#c9a878" stroke-width="3" stroke-linejoin="round"/><path d="M100 640l58 -4" stroke="#f0c93a" stroke-width="6" stroke-linecap="round"/><path d="M100 630l40 -2" stroke="#7ab05a" stroke-width="4" stroke-linecap="round"/><path d="M96 652l84 -6" stroke="#c9a878" stroke-width="5" stroke-linecap="round"/></g>
+
+<!-- Samir Ibrahim -->
+<g id="samir" class="hot">
+  <ellipse cx="330" cy="892" rx="130" ry="12" fill="#000" opacity=".5"/>
+  <rect x="232" y="566" width="36" height="196" rx="12" fill="#23282e"/><rect x="232" y="744" width="196" height="26" rx="10" fill="#23282e"/><path d="M330 770V852M266 886l64 -36 64 36" stroke="#23282e" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <path d="M292 746h126q32 0 32 30v100" stroke="#1c2742" stroke-width="44" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M426 872h70q10 4 8 18h-78z" fill="#e9e6da"/>
+  <path d="M262 746q-12 -150 58 -182q72 4 80 72l-8 110z" fill="#1f7a76"/><path d="M274 602q-8 -42 42 -48l-6 52z" fill="#17605d"/>
+  <path d="M360 612q62 22 122 2" stroke="#1f7a76" stroke-width="30" fill="none" stroke-linecap="round"/><circle cx="488" cy="610" r="13" fill="#b8875a"/>
+  <rect x="318" y="536" width="24" height="28" fill="#a87448"/>
+  <circle cx="336" cy="506" r="36" fill="#b8875a"/><path d="M369 498l13 11 -13 7z" fill="#b8875a"/>
+  <path d="M300 512q-12 -54 40 -56q38 0 38 30q-22 -8 -40 -2t-24 32z" fill="#17120e"/><g fill="#17120e"><circle cx="312" cy="474" r="13"/><circle cx="334" cy="462" r="14"/><circle cx="358" cy="466" r="12"/></g>
+  <path d="M304 498q24 -62 64 -20" stroke="#4a4d57" stroke-width="7" fill="none"/><rect x="318" y="490" width="22" height="36" rx="8" fill="#2a2c33"/><path d="M334 524q14 22 36 14" stroke="#2a2c33" stroke-width="4" fill="none"/>
+  <circle cx="361" cy="500" r="3" fill="#2a1a0c"/><path d="M354 491l12 -2" stroke="#17120e" stroke-width="3" stroke-linecap="round"/><path d="M360 522q8 4 14 -2" stroke="#6b3a24" stroke-width="2.500" fill="none" stroke-linecap="round"/>
+</g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig2)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Back through the pass door</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="understudy.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  /* the folds of the curtain, a hundred and eighty-six people, forty-eight sliders */
+  (function () {
+    var s = '', x, r, t, y, hw, n, j, sx, rad, k = 0, HAIR = ['#2a1a12', '#55504a', '#8a5a3a', '#b9bec4', '#c9a24a', '#17120e'], SKIN = ['#d9b08c', '#c9a084', '#a87448', '#e8c4a2', '#6b4423'];
+    for (x = 532; x < 1080; x += 26) s += '<rect x="' + x + '" y="150" width="10" height="194" fill="#000" opacity=".2"/>';
+    $('#folds2').innerHTML = s; s = '';
+    for (r = 0; r < 9; r++) {
+      t = r / 8; y = 372 + t * 92; hw = 262 + t * 470; n = 6 + r; rad = 4.5 + t * 5.5;
+      s += '<path d="M' + (800 - hw) + ' ' + (y + rad) + 'H' + (800 - 22 - t * 26) + 'M' + (800 + 22 + t * 26) + ' ' + (y + rad) + 'H' + (800 + hw) + '" stroke="#8a1c22" stroke-width="' + (9 + t * 9) + '"/>';
+      for (j = 0; j < n * 2; j++) {
+        k++;
+        sx = j < n ? 800 - 34 - t * 36 - (hw - 60 - t * 40) * (j / (n - 1)) : 800 + 34 + t * 36 + (hw - 60 - t * 40) * ((j - n) / (n - 1));
+        if (r === 5 && j === n + 2) continue;                               /* the critic has a seat of his own, in row F */
+        if ((k * 7) % 10 < 3) {                                            /* out of the seat, and on their feet */
+          if ((k * 3) % 4 === 0) s += '<g class="bob' + (k % 3 ? (k % 3 === 1 ? ' b' : ' c') : '') + '"><rect x="' + (sx - rad * 0.9) + '" y="' + (y - rad * 3.4) + '" width="' + (rad * 1.8) + '" height="' + (rad * 3.6) + '" rx="' + (rad * 0.8) + '" fill="' + ['#2c3a55', '#5a2a3a', '#3a4a3a', '#4a443a'][k % 4] + '"/><circle cx="' + sx + '" cy="' + (y - rad * 4.2) + '" r="' + rad + '" fill="' + SKIN[k % 5] + '"/><path d="M' + (sx - rad) + ' ' + (y - rad * 4.4) + 'q' + rad + ' ' + (-rad * 1.4) + ' ' + (rad * 2) + ' 0z" fill="' + HAIR[k % 6] + '"/></g>';
+          continue;
+        }
+        s += '<circle cx="' + sx.toFixed(1) + '" cy="' + (y - rad * 0.5).toFixed(1) + '" r="' + rad.toFixed(1) + '" fill="' + SKIN[k % 5] + '"/><path d="M' + (sx - rad).toFixed(1) + ' ' + (y - rad * 0.7).toFixed(1) + 'q' + rad.toFixed(1) + ' ' + (-rad * 1.5).toFixed(1) + ' ' + (rad * 2).toFixed(1) + ' 0z" fill="' + HAIR[k % 6] + '"/>';
+      }
+    }
+    $('#rows').innerHTML = s; s = '';
+    for (r = 0; r < 2; r++) for (j = 0; j < 12; j++) {
+      x = 494 + j * 39; y = 596 + r * 100; n = r * 12 + j + 25; t = ((n * 37) % 11) / 11;
+      s += '<path d="M' + x + ' ' + y + 'v66" stroke="#06080a" stroke-width="5" stroke-linecap="round"/><text x="' + x + '" y="' + (y + 84) + '" class="num">' + n + '</text>';
+      if (n !== 48) s += '<rect x="' + (x - 9) + '" y="' + (y + 6 + t * 46).toFixed(0) + '" width="18" height="12" rx="3" fill="' + (n % 5 ? '#c9ced3' : '#f2b441') + '"/>';
+    }
+    $('#faders').innerHTML = s;
+    $('#s48').innerHTML = '<circle cx="923" cy="712" r="26" fill="#fff" opacity="0"/><rect x="914" y="702" width="18" height="12" rx="3" fill="#4f7fe0"/><rect x="915" y="704" width="16" height="3" fill="#b9d0ff"/>';
+  })();
+
+  ER.init({
+    theme: 'mystery', story: 'understudy', storyTitle: 'The Understudy', id: 'box', no: 'II', title: 'The Lighting Box',
+    go: 'Knock',
+    intro: [
+      'You read the call sheet against the running order, one rule at a time. An actor who is in a scene is on the stage. An actor who is in the next scene is in the wings, ready. Everybody else is upstairs: except an understudy, who watches from the wings, and a dresser, who cannot get back. So in Act One five people stood in the wings at one time or another, and one was on the stage in every scene: Miss Lascelles.',
+      'Nobody touched the case while there was light to see it by. So the necklace was changed in one of the three darks, and that takes twelve seconds.',
+      'The pass door lets you out into red carpet, gold paint and the smell of ice cream. Nobody in the audience looks at you twice. Behind the last row of seats there is a small door with a notice on it: LIGHTS. KNOCK, AND THEN WAIT FOR &ldquo;GO&rdquo;.'
+    ],
+    exit: {"next":"wings","w":{"4196cd0c":"0498e8da"}}, tags: {"d1":["6267f7a9"],"d2":["3f5d3129"],"d3":["b86cb717"],"long":["50c3c5e2"]},
+    sound: ['noir', { root: 53, bpm: 58, drop: ['mel', 'ost'], beds: [['crowd', 0.75], ['hum', 0.4]] }],      /* the whole audience just under the window, and a desk that hums; seconds are counted here, so nothing with a beat */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#sheet').classList.toggle('ready', !!(told.sam && !nextFile));
+    ER.pips((told.sam ? 1 : 0) + ((ER.flag('b-stage') || 0) > 0 ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['Ms Tindall wants you back at Mr Mossop&rsquo;s table. The pass door is the way you came.']];
+    if (bench && bench.isOpen()) return [['darks', [
+      'Find the three cues that say BLACKOUT. After each one, find the cue that starts &ldquo;by itself&rdquo;: that is the cue which brings the light back.',
+      'A blackout is not black until its TIME is up. The dark begins then, and it ends when the next cue STARTS. So read exactly what each &ldquo;by itself&rdquo; cue counts from: her &ldquo;go&rdquo;, or the moment when the blackout is complete?',
+      'Cue 21 gets its &ldquo;go&rdquo; and takes 4 seconds to get black. Cue 22 starts 25 seconds after that same &ldquo;go&rdquo;. So how many of the 25 seconds are dark? Cue 30 and cue 31 work in the same way. Cue 10 is written differently.'
+    ]], ['long', ['Ms Tindall tried it herself, with the lights on. How many seconds did she need? Which of your three darks has that many seconds in it?']]][bench.stage()];
+    if (!told.sam) return ['samir', ['Samir is the one in the chair, with the headset on. Ask him about the three darks.']];
+    return ['sheet', ['His cue sheet is on the clipboard at the right-hand end of the desk, under the little lamp.']];
+  }
+  function begin() {
+    US.file('call', true); US.file('run', true); US.file('key', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('Three numbers on the edge of a cue sheet, and a ring round the middle one.'); return; }
+    if (told.in) { busy = false; ER.say('The lighting box. Samir has not finished his sandwich.'); return; }
+    tell('in');
+    ER.narrate([
+      'The lighting box is the size of a wardrobe. Most of it is a desk covered with sliders and small coloured lights, and the rest is Samir Ibrahim, who is nineteen, and a cheese sandwich. In front of him a long window looks down over the heads of the audience to the red curtain.',
+      '&ldquo;You&rsquo;re the one off the stool,&rdquo; he says. &ldquo;Ms Tindall has been in my ear.&rdquo; He taps his headset. &ldquo;Three darks, she says, and she wants them to the second. Sit there. Don&rsquo;t lean on anything that glows.&rdquo;',
+      'Through the glass, a hundred and eighty-six people are all talking at once, and not one of them knows that anything has happened.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- Samir ---------- */
+  $('#samir').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Eight seconds to cross,&rdquo; says Samir. &ldquo;Don&rsquo;t forget that one. She never says a number that she doesn&rsquo;t mean to use.&rdquo;'); return; }
+    ER.talk({
+      who: 'Samir Ibrahim', role: 'Lights · his second season at the Jackdaw', face: window.FACE('samir'),
+      lines: [
+        { note: 'He has a pencil behind one ear and crumbs on the desk, and he moves the crumbs before he moves anything else.', a: '&ldquo;I can&rsquo;t help you with WHO. From beginners to the interval I am shut in here, with the whole audience between me and the stage. All I do is press GO when Ms Tindall says &lsquo;go&rsquo;. If I press it when she hasn&rsquo;t, I buy the cakes.&rdquo;' },
+        { q: 'How long were the three darks?', a: 'I didn&rsquo;t count. I don&rsquo;t have to. Some cues wait for her voice. But the cue that brings the light back after a dark starts by itself: the desk counts the seconds, and the desk counts the same every night. It is all on my cue sheet. Every cue, and how long each one takes.' },
+        { q: 'What is a blackout, exactly?', a: 'Everything out. And at the Jackdaw I do mean everything: the blue lamp over the props table is on this desk as well, slider 48, because the front row can see into that wing. But read the TIME column. Lights do not go out like a candle. They go DOWN, and that takes a few seconds. While they are still going down it isn&rsquo;t dark yet. Ms Tindall can read her watch by it.' },
+        { q: 'Did you see anything?', a: 'I see everything, from the front. End of Scene 2: the Countess goes off on my right and the Colonel on my left. Then the dark, and Mossop pushing the sofa about. You can hear its wheels from here. Then moonlight, and Felix on the balustrade.</p><p class="note">He stops, and looks at his own hands.</p><p>Sorry. MY right is stage LEFT. On a stage, left and right belong to the actor, looking out at us. It took me a month.' },
+        { q: 'Is one of the darks long enough?', a: 'For twelve seconds&rsquo; work? You tell me. The cue sheet is on the clipboard. Work out how long each dark lasts, set the seconds in the three windows of the desk, and then we shall see.' }
+      ],
+      clue: { id: 'sam1', title: 'Samir Ibrahim, in the lighting box', kind: 'What he said' },
+      done: function (seen) {
+        if (seen && tell('sam')) { US.words(['blackout', 'lighting box', 'slider', 'stage left']); paint(); ER.say('The cue sheet is on the clipboard at the right-hand end of the desk, under the little lamp.'); }
+      }
+    });
+  });
+
+  /* ---------- things in the box ---------- */
+  US.thing('#house', 'the house', 'A hundred and eighty-six people, and half of them on their feet. Theatre people call them &ldquo;the house&rdquo;. Tonight the house is full.', isBusy);
+  US.thing('#critic', 'critic', 'In row F a man with a small notebook has stayed in his seat, and is writing something down. He is the critic of the Thornsea Gazette. Nobody has told him anything yet.', isBusy);
+  US.thing('#pellow', null, 'Mr Pellow, the manager, in the middle of the house with a tray of ice cream. He is giving each person their change one coin at a time.', isBusy);
+  US.thing('#curt2', 'house curtain', 'The house curtain, from the front: red velvet, gold rope, and nothing to show what is going on behind it.', isBusy);
+  US.thing('#sliders', 'slider', 'Forty-eight sliders. Push one up and a lamp comes on, somewhere. Samir knows where. You do not, so you keep your hands in your pockets.', isBusy);
+  US.thing('#s48', null, 'Slider 48 has a blue top. It works one small lamp, a metre from the stool where you sat all evening.', isBusy);
+  US.thing('#gokey', null, 'The GO button. It is the biggest thing on the desk, and Samir never touches it until he has been told to.', isBusy);
+  US.thing('#sandwich', null, 'Half a cheese sandwich, on the bag that it came in. The other half was Act One.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#sheet').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Thirteen cues, three of them blackouts, and three numbers pencilled along the edge.'); return; }
+    if (!told.sam) { ER.say('A sheet of paper on a clipboard, covered with small print. The person whose paper it is has not finished talking.'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the cue sheet: how long was each dark, and which is long enough? ---------- */
+  function makeBench() {
+    var NAME = ['First dark', 'Second dark', 'Third dark'], END = ['the end of Scene 1', 'the end of Scene 2', 'the end of Scene 3'],
+      stage = ER.flag('b-stage') || 0, saved = ER.flag('b-d') || [], pick = 0, wait = false, wl = [], box = ER.el('div', 'bx lx'), s, S = '&rdquo; says Samir. &ldquo;';
+    s = '<div class="lx-two"><div class="doc cues">' + ER.gloss(US.DOC.cues) + '</div><div class="lx-desk"><h5>The darks of Act One</h5>';
+    NAME.forEach(function (n, i) { s += '<div class="lx-row"><span><b>' + n + '</b><small>' + END[i] + '</small></span><span class="lx-w"></span><button type="button" class="lx-lamp" data-n="' + (i + 1) + '" title="this one"></button></div>'; });
+    s += '<p class="pmsg"></p><button type="button" class="btn" id="b-go"></button></div></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg'), go = box.querySelector('#b-go'), desk = box.querySelector('.lx-desk'), lamps = ER.$$('.lx-lamp', box);
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    ER.$$('.lx-w', box).forEach(function (n, i) {
+      wl[i] = US.wheels(n, { n: 2, unit: 'seconds', start: saved[i], change: function () { ER.flag('b-d', wl.map(function (w) { return w.at(); })); } });
+    });
+    function draw() {
+      desk.classList.toggle('pick', stage === 1);
+      lamps.forEach(function (b) { b.classList.toggle('sel', +b.getAttribute('data-n') === pick); });
+      wl.forEach(function (w) { w.lock(stage > 0); });
+      go.textContent = stage ? 'That one' : 'Tell Samir';
+    }
+    function why(i, v) {
+      if (i === 0) return v === 11 ? '&ldquo;Eleven? You have added the three seconds of fading,' + S + 'While the lights are still going down, it isn&rsquo;t dark yet. And read exactly when cue 10 starts counting.&rdquo;' :
+        v === 5 ? '&ldquo;Five? You took the fading away. A good idea, at the wrong cue,' + S + 'Read cue 10 again, slowly. Eight seconds after cue 9 is WHAT?&rdquo;' :
+        '&ldquo;The first dark begins with cue 9, and cue 10 brings the light back,' + S + 'When does cue 10 start? And is it dark while cue 9 is still fading?&rdquo;';
+      if (i === 1) return v === 25 ? '&ldquo;Twenty-five seconds from her &lsquo;go&rsquo;: yes,' + S + 'But for the first few of them the lights are still going down, and Ms Tindall can read her watch by that. Look at the TIME of cue 21.&rdquo;' :
+        v === 29 ? '&ldquo;You have added the fading on,' + S + 'The 25 seconds start at her &lsquo;go&rsquo;, so the fading is inside them. Take it away.&rdquo;' :
+        (v === 15 || v === 10 || v === 11) ? '&ldquo;Cue 21.5 is crossed out,' + S + 'It was cut on Wednesday. It does nothing at all.&rdquo;' :
+        '&ldquo;The second dark begins with cue 21, and cue 22 brings the light back,' + S + 'Cue 22 counts from her &lsquo;go&rsquo;. How many of its seconds have gone before the stage is black?&rdquo;';
+      return v === 8 ? '&ldquo;Eight seconds from her &lsquo;go&rsquo;: yes,' + S + 'And how long does cue 30 take to get black? It isn&rsquo;t dark until then.&rdquo;' :
+        v === 10 ? '&ldquo;You have added the fading on,' + S + 'The 8 seconds start at her &lsquo;go&rsquo;, so the fading is inside them.&rdquo;' :
+        '&ldquo;The third dark begins with cue 30, and cue 31 brings the light back,' + S + 'Cue 31 counts from her &lsquo;go&rsquo;, as cue 22 does.&rdquo;';
+    }
+    lamps.forEach(function (b) { b.addEventListener('click', function () { if (stage !== 1 || wait) return; pick = +b.getAttribute('data-n'); US.sfx.key(); draw(); }); });
+    go.addEventListener('click', function () {
+      var d = wl.map(function (w) { return +w.get(); }), i, file;
+      if (wait || nextFile) return;
+      if (!stage) {
+        if (!(d[0] && d[1] && d[2])) { msg('Three darks, three numbers. The small arrows turn the figures: seconds of dark, and nothing else.'); return; }
+        for (i = 0; i < 3; i++) if (!ER.check('d' + (i + 1), d[i])) { ER.sfx.no(); msg('<b>' + NAME[i] + '.</b> ' + why(i, d[i])); return; }
+        stage = 1; ER.flag('b-stage', 1); US.sfx.sw(); draw(); paint();
+        msg('&ldquo;' + d[0] + ', ' + d[1] + ' and ' + d[2] + '. That is what the desk counts, every night,' + S + 'Now. Ms Tindall says that it takes twelve seconds to change one necklace for another. So which dark was it? Press the button beside it.&rdquo;');
+        return;
+      }
+      if (!pick) { msg('Three round buttons have lit up beside the three darks. Press the one beside the dark that is long enough.'); return; }
+      if (!ER.check('long', pick)) { ER.sfx.no(); msg('&ldquo;' + d[pick - 1] + ' seconds, for twelve seconds&rsquo; work?' + S + 'Not unless somebody has very quick fingers. And Ms Tindall says that nobody has.&rdquo;'); return; }
+      file = ER.exit([d.join('-') + '-' + pick], { wait: true });
+      if (!file) { msg('The desk has gone dark. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('b-file', file);
+      US.mine('darks', 'The three darks', '<p>The end of Scene 1: ' + d[0] + ' seconds of dark.</p><p>The end of Scene 2: <b>' + d[1] + ' seconds</b>.</p><p>The end of Scene 3: ' + d[2] + ' seconds.</p>' +
+        '<p>It takes twelve seconds. So it was done in the second dark, at two minutes to eight.</p><p>To cross the stage in the dark, from one wing to the other: eight seconds. (Ms Tindall timed Mr Crane.)</p>' +
+        '<p>Samir: at the end of Scene 2 the Countess went off stage left, and the Colonel stage right.</p>', true);
+      msg('&ldquo;The ' + NAME[pick - 1].toLowerCase() + '. ' + d[pick - 1] + ' seconds, and it is the only one of the three with room in it,' + S + 'So now you know WHEN.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'Samir writes three numbers along the edge of his cue sheet, and draws a ring round the middle one. &ldquo;' + d[0] + ', ' + d[1] + ' and ' + d[2] + '. So it was done in the second dark, at two minutes to eight, while old Mossop was turning a drawing room into a terrace.&rdquo;',
+          'His headset crackles. He listens, and grins. &ldquo;Ms Tindall says: tell the stool that it takes eight seconds to cross the stage from one wing to the other in the dark. She has just made Mr Crane do it, with a stopwatch. He was not pleased.&rdquo;',
+          '&ldquo;And she says: come back through the pass door and look at Mossop&rsquo;s table. Properly. He says that somebody has been at it.&rdquo; Below the window, Mr Pellow is selling ice cream as slowly as a man can.'
+        ], function () { busy = false; showGo(); });
+      }, 3600);
+    });
+    draw();
+    msg(stage ? 'The three darks are set. Which of them is long enough for twelve seconds&rsquo; work? Press the round button beside it.' :
+      'Samir&rsquo;s cue sheet, and three empty windows on his desk. How many seconds was the stage dark, each time? The small arrows turn the figures.');
+    return {
+      open: function () { ER.open('ov-lock', box); if (tell('cues')) { US.file('cues'); US.words(['cue sheet', 'blackout']); } },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return stage; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

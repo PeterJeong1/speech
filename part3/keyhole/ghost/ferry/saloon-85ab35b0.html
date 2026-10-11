@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Saloon · When the Tide Serves</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ferry.css">
+<style>
+  body{--bg:#1b150c;--accent:#e9bd7a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(26,22,12,.96);--tc-ink:#f3ead0;--cap-bg:rgba(24,20,11,.95);--panel:#211c10;--face-bg:#1f3a34;--q-ink:#e9bd7a;--fade:#0c0904;--hud-bg:rgba(24,20,11,.8)}
+  .tc-room{font-size:clamp(44px,6.4vw,88px)}
+  .sway{animation:sway 7.3s steps(1,end) infinite}
+  .sway.s2{animation-delay:-2.900s}
+  @keyframes sway{0%{opacity:1}44%{opacity:.9}47%{opacity:1}81%{opacity:.94}83%{opacity:1}}
+  #steam{animation:steam 3.6s ease-in-out infinite}
+  @keyframes steam{0%{opacity:.1;transform:translateY(0)}50%{opacity:.5;transform:translateY(-8px)}100%{opacity:.1;transform:translateY(0)}}
+  #zz{animation:zz 4.2s ease-in-out infinite}
+  @keyframes zz{0%{opacity:0;transform:translate(0,0)}40%{opacity:.8}100%{opacity:0;transform:translate(14px,-30px)}}
+  #wall.ready,#box.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.25)}}
+  #cards{display:block}
+  #scene.done #cards{display:none}
+  #minis{display:none}
+  #scene.done #minis{display:block}
+
+  /* the forward bulkhead: nine brass plates, one empty place, nine printed cards */
+  .bk{width:min(1100px,96vw);-webkit-user-select:none;user-select:none}
+  .bk-wall{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;padding:12px;background:#e3d7b4 linear-gradient(172deg,rgba(255,255,255,.4),rgba(120,95,40,.2));border:4px solid #6b5326;box-shadow:0 22px 60px rgba(0,0,0,.6)}
+  .cell{display:flex;flex-direction:column;gap:6px}
+  .plate{position:relative;min-height:82px;display:grid;place-items:center;padding:10px 8px 7px;text-align:center;font-family:'Cinzel',serif;font-weight:700;font-size:12px;line-height:1.24;letter-spacing:.01em;color:#3a2a08;
+    background:linear-gradient(135deg,#8a6a26,#e6c873 28%,#b08a35 52%,#f0d98f 74%,#8a6a26);border:2px solid #6f531a;border-radius:2px;text-shadow:0 1px 0 rgba(255,240,190,.7);box-shadow:0 3px 6px rgba(0,0,0,.35)}
+  .plate:before,.plate:after{content:'';position:absolute;top:4px;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f7e7ae,#6f531a)}
+  .plate:before{left:4px}.plate:after{right:4px}
+  .plate.gone{background:#efe6c8;border:1.5px dashed #b9a97c;box-shadow:none;text-shadow:none;font-family:'Caveat',cursive;font-weight:400;font-size:19px;line-height:1.1;color:#6b6457;transform:none}
+  .plate.gone:before,.plate.gone:after{background:#3a3226;width:5px;height:5px}
+  .pslot{min-height:68px;border:1.5px dashed rgba(60,50,30,.5);border-radius:6px;background:rgba(60,50,30,.07)}
+  .cell.bad .plate{outline:3px solid #d2452f;outline-offset:1px}
+  .bk-tray{display:flex;flex-wrap:wrap;gap:7px;min-height:72px;margin-top:8px;padding:7px;background:#5a4028 linear-gradient(#6b4c30,#4a3320);border-radius:3px;box-shadow:inset 0 2px 0 rgba(255,220,160,.2)}
+  .nt{display:block;width:calc((100% - 28px) / 5);min-height:58px;padding:5px 9px 4px;background:#fdfdfa;color:#1c2428;border:1px solid #b9c4c2;border-radius:6px;font-family:'Outfit',sans-serif;font-size:12px;line-height:1.22;
+    box-shadow:0 3px 7px rgba(0,0,0,.35),inset 0 0 0 3px rgba(255,255,255,.7)}
+  .nt b{display:block;font-weight:700;font-size:11.5px;letter-spacing:.05em;color:#1f4a3d}
+  .pslot .nt{width:100%;min-height:66px;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+  .bk .wk-foot{margin-top:8px}
+  .bk .pmsg{font-size:17px;line-height:1.32;min-height:46px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efe4c2"/><stop offset=".7" stop-color="#dccfa6"/><stop offset="1" stop-color="#bfb186"/></linearGradient>
+  <linearGradient id="benchG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a6a55"/><stop offset="1" stop-color="#234a3c"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5df98"/><stop offset=".5" stop-color="#c79b3b"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24483c"/><stop offset="1" stop-color="#0f2019"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d5a36"/><stop offset="1" stop-color="#523820"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#fff3c8" stop-opacity=".8"/><stop offset=".35" stop-color="#ffd98a" stop-opacity=".26"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="44%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#1a1204" stop-opacity=".2"/><stop offset="1" stop-color="#0a0702" stop-opacity=".8"/></radialGradient>
+</defs>
+
+<!-- deckhead, bulkhead, two lamps that move with the boat -->
+<rect x="-1000" y="-400" width="3600" height="500" fill="#b3a57c"/><rect x="-1000" y="90" width="3600" height="12" fill="#8a7d58"/>
+<rect x="-1000" y="100" width="3600" height="680" fill="url(#wallG)"/>
+<g id="seams" stroke="#c9bb90" stroke-width="2"></g>
+<g class="sway"><ellipse cx="640" cy="160" rx="420" ry="300" fill="url(#lampG)"/></g><g class="sway s2"><ellipse cx="1250" cy="160" rx="420" ry="300" fill="url(#lampG)"/></g>
+<g fill="url(#brassG)"><rect x="612" y="96" width="56" height="12" rx="3"/><rect x="1222" y="96" width="56" height="12" rx="3"/></g><circle cx="640" cy="124" r="21" fill="#fff6d6"/><circle cx="1250" cy="124" r="21" fill="#fff6d6"/>
+
+<!-- the door to the after deck -->
+<g id="door" class="hot"><rect x="34" y="150" width="152" height="630" fill="#16302a"/><rect x="46" y="162" width="128" height="618" fill="#24503f"/><rect x="58" y="430" width="104" height="300" fill="none" stroke="#1a3a30" stroke-width="4"/>
+  <circle cx="110" cy="300" r="46" fill="url(#brassG)"/><circle cx="110" cy="300" r="37" fill="#1c2c33"/><circle cx="124" cy="288" r="5" fill="#f4fbfb"/><circle cx="124" cy="288" r="16" fill="#dfeef0" opacity=".25"/><path d="M78 312q30 -14 64 0" stroke="#9fb3b8" stroke-width="5" fill="none" opacity=".4"/>
+  <rect x="152" y="470" width="14" height="44" rx="6" fill="url(#brassG)"/><rect x="62" y="118" width="96" height="24" fill="url(#brassG)"/><text x="110" y="135" class="fZ" font-size="11.500" font-weight="700" text-anchor="middle" fill="#3a2a08" letter-spacing="1">AFTER DECK</text></g>
+
+<!-- the tea hatch: the urn, the honesty box, a heap of cards -->
+<g id="clock" class="hot"></g>
+<rect x="226" y="236" width="318" height="250" fill="url(#woodG)"/><rect x="240" y="250" width="290" height="226" fill="#1a1410"/>
+<g id="urn" class="hot"><rect x="244" y="250" width="282" height="150" fill="#1a1410"/><rect x="428" y="310" width="62" height="130" rx="6" fill="#9aa1a7"/><rect x="422" y="300" width="74" height="14" rx="4" fill="#5c666e"/><rect x="436" y="322" width="10" height="106" fill="#fff" opacity=".25"/><path d="M428 412h-14v12" stroke="#5c666e" stroke-width="7" fill="none"/>
+  <path id="steam" d="M446 296q-10 -14 0 -26t0 -24M470 296q10 -12 0 -24" stroke="#f1ede2" stroke-width="5" fill="none" stroke-linecap="round" opacity=".3"/>
+  <g fill="#e9e3d2"><rect x="262" y="286" width="26" height="30" rx="3"/><rect x="296" y="286" width="26" height="30" rx="3"/><rect x="330" y="286" width="26" height="30" rx="3"/><rect x="364" y="286" width="26" height="30" rx="3"/></g><path d="M254 316h142" stroke="#523820" stroke-width="6"/></g>
+<rect x="212" y="470" width="346" height="22" fill="#8f6a40"/><rect x="212" y="492" width="346" height="8" fill="#523820"/><path d="M240 500v40l30 -40M530 500v40l-30 -40" fill="#523820"/>
+<g id="box" class="hot"><rect x="258" y="416" width="92" height="56" rx="3" fill="#6b4a2a"/><rect x="258" y="416" width="92" height="12" rx="3" fill="#8f6a40"/><rect x="286" y="420" width="36" height="5" rx="2" fill="#15110c"/>
+  <rect x="266" y="436" width="76" height="28" fill="#fdfdfa"/><text x="304" y="449" class="fU" font-size="9.500" font-weight="700" text-anchor="middle" fill="#1f4a3d">HOT DRINKS £1.80</text><text x="304" y="460" class="fU" font-size="8" text-anchor="middle" fill="#4d5a5e">honesty box</text></g>
+<g id="cards" class="hot"><g fill="#fdfdfa" stroke="#b9c4c2" stroke-width="1.500"><rect x="378" y="448" width="70" height="24" rx="3" transform="rotate(-9 413 460)"/><rect x="398" y="446" width="70" height="24" rx="3" transform="rotate(7 433 458)"/><rect x="430" y="450" width="70" height="22" rx="3" transform="rotate(-3 465 461)"/><rect x="386" y="454" width="70" height="20" rx="3" transform="rotate(2 421 464)"/></g>
+  <path d="M392 458h40M410 452h36M440 458h44" stroke="#1f4a3d" stroke-width="2.500"/></g>
+
+<!-- the plates on the forward bulkhead -->
+<g id="wall" class="hot"><rect x="580" y="118" width="500" height="250" fill="#000" opacity="0"/><g id="plates"></g><g id="minis"></g></g>
+<g id="gapv" class="hot"></g>
+<g id="telbox" class="hot"><rect x="798" y="372" width="70" height="46" rx="3" fill="url(#brassG)"/><rect x="806" y="380" width="54" height="9" rx="2" fill="#3a2a08"/><text x="833" y="408" class="fZ" font-size="11" font-weight="700" text-anchor="middle" fill="#3a2a08" letter-spacing="1.500">FORMS</text></g>
+
+<!-- two windows full of fog -->
+<g id="wins" class="hot"><g fill="#16252b" stroke="url(#brassG)" stroke-width="9"><rect x="1136" y="150" width="170" height="190" rx="10"/><rect x="1352" y="150" width="170" height="190" rx="10"/></g>
+  <g stroke="#9fb3b8" stroke-width="7" fill="none" opacity=".28" stroke-linecap="round"><path d="M1150 230q40 -24 80 0t70 -6M1150 290q50 -20 90 4t52 -10M1366 210q40 -20 80 4t62 -8M1366 280q46 -22 86 0t56 -4"/></g>
+  <circle cx="1270" cy="186" r="9" fill="#fff6d6" opacity=".5"/><circle cx="1486" cy="186" r="9" fill="#fff6d6" opacity=".35"/></g>
+
+<!-- the long green bench, with the lifebelts under it -->
+<rect x="596" y="452" width="1984" height="218" fill="url(#benchG)"/><rect x="596" y="446" width="1984" height="8" fill="url(#brassG)"/><g id="pleats"></g>
+<rect x="596" y="662" width="1984" height="30" fill="#1c3d31"/><rect x="596" y="692" width="1984" height="88" fill="url(#woodG)"/>
+<g id="lockers" class="hot"></g>
+<rect x="-1000" y="780" width="3600" height="620" fill="url(#floorG)"/><rect x="-1000" y="776" width="3600" height="7" fill="url(#brassG)" opacity=".7"/>
+
+<!-- five passengers, one of them a cello -->
+<g id="rob" class="hot" transform="translate(690 786) scale(1.120)"></g>
+<path id="zz" d="M706 500h12l-12 12h12" stroke="#5a5346" stroke-width="3" fill="none" stroke-linecap="round" pointer-events="none"/>
+<g id="posy" class="hot" transform="translate(796 750) scale(.8)"></g>
+<g id="marek" class="hot" transform="translate(934 786) scale(1.160)"></g>
+<g id="parcels" class="hot"></g>
+<g id="tess" class="hot" transform="translate(1206 786) scale(1.100)"></g>
+<g id="cello" class="hot"><path d="M1296 786V560q-22 -8 -22 -36q0 -34 36 -40q36 6 36 40q0 28 -22 36V786z" fill="#17120f"/><path d="M1296 786V560q-22 -8 -22 -36q0 -34 36 -40" fill="none" stroke="#3a2c26" stroke-width="3"/><rect x="1300" y="640" width="20" height="10" rx="2" fill="url(#brassG)"/>
+  <g transform="rotate(12 1336 600)"><rect x="1326" y="584" width="30" height="18" rx="2" fill="#e8d5a4"/><path d="M1326 593l-14 -6" stroke="#e8d5a4" stroke-width="2"/></g></g>
+<g id="julian" class="hot" transform="translate(1466 806) scale(1.020)"></g>
+
+<!-- the purser, beside her hatch -->
+<g id="purser" class="hot" transform="translate(566 826) scale(1.160)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go out on to the after deck</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="ferry.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bulk = null, told = {}, stopWhistle = null;
+
+  /* the nine plates and the empty place, as they are screwed to the bulkhead; under each, the card that belongs there (seen when the work is done) */
+  var PLATES = [
+    ['tea', 'REFRESHMENTS. TEAS 4d. COFFEE 6d. BOVRIL 6d. BISCUITS 2d. KINDLY RETURN ALL CUPS TO THE HATCH.'],
+    ['fares', 'FARES. SINGLE 2/6. RETURN 4/-. CHILDREN UNDER FOURTEEN, HALF FARE. DOGS 6d. PERAMBULATORS 1/-.'],
+    ['tel', 'TELEGRAMS FOR THE SHORE MAY BE HANDED TO THE PURSER, WHO WILL SEND THEM FROM THE POST OFFICE.'],
+    ['bus', 'THE ISLAND OMNIBUS MEETS EVERY BOAT AT THE OLD PIER.'],
+    ['smoke', 'GENTLEMEN ARE REQUESTED NOT TO SMOKE IN THE SALOON. SMOKING IS PERMITTED ON THE AFTER DECK.'],
+    ['belt', 'LIFEBELTS ARE STOWED BENEATH THE SEATS.'],
+    ['sun', 'THIS VESSEL DOES NOT SAIL ON SUNDAYS.'],
+    ['port', 'PORTERS MEET ALL BOATS. CHARGE: 6d. FOR EACH ARTICLE.'],
+    ['fog', 'IN FOG THE WHISTLE IS SOUNDED EVERY TWO MINUTES. PASSENGERS NEED NOT BE ALARMED.'],
+    ['gap', 'wireless: to the Museum, 1996']
+  ];
+  var NOTES = [
+    ['wifi', 'STAY IN TOUCH', 'Free Wi-Fi on board: CURLEW-GUEST. No phone signal in mid-channel.'],
+    ['smoke', 'NO CIGARETTES, NO VAPES', 'inside or out. Thank you.'],
+    ['cctv', 'SMILE!', 'This vessel has CCTV.'],
+    ['fares', 'FARES 2026', 'Adult single £7.20. Under 16s half price. Dogs and pushchairs travel free.'],
+    ['jacket', 'IF THE ALARM SOUNDS', 'your lifejacket is under your seat.'],
+    ['drinks', 'HOT DRINKS £1.80', 'Help yourself. Please pay the honesty box.'],
+    ['trolley', 'HEAVY BAGS?', 'Trolleys are free at both ends. You push.'],
+    ['week', 'WINTER SAILINGS', 'every day of the week. Ask the purser for a timetable.'],
+    ['onward', 'ONWARD TRAVEL', 'Scan the code for bus times. Nothing meets the 21.40. All boats use the New Slip.']
+  ];
+
+  (function () {
+    var s = '', i, x, y, c, r;
+    for (i = -8; i < 24; i++) s += '<path d="M' + (i * 122 + 30) + ' 102v344"/>';
+    $('#seams').innerHTML = s; s = '';
+    for (i = 0; i < 10; i++) {
+      c = i % 5; r = Math.floor(i / 5); x = 590 + c * 98; y = 128 + r * 122;
+      if (i === 9) { $('#gapv').innerHTML = '<rect x="' + x + '" y="' + y + '" width="86" height="58" fill="#f3ead0" stroke="#cdbf96" stroke-width="1.500" stroke-dasharray="5 4"/><g fill="#5a5346"><circle cx="' + (x + 6) + '" cy="' + (y + 6) + '" r="2"/><circle cx="' + (x + 80) + '" cy="' + (y + 6) + '" r="2"/><circle cx="' + (x + 6) + '" cy="' + (y + 52) + '" r="2"/><circle cx="' + (x + 80) + '" cy="' + (y + 52) + '" r="2"/></g><path d="M' + (x + 16) + ' ' + (y + 26) + 'h50M' + (x + 16) + ' ' + (y + 36) + 'h36" stroke="#8a8170" stroke-width="2" stroke-linecap="round"/>'; continue; }
+      s += '<rect x="' + (x + 2) + '" y="' + (y + 3) + '" width="86" height="58" fill="#000" opacity=".25"/><rect x="' + x + '" y="' + y + '" width="86" height="58" fill="url(#brassG)" stroke="#6f531a" stroke-width="1.500"/>' +
+        '<g fill="#6f531a"><circle cx="' + (x + 5) + '" cy="' + (y + 5) + '" r="1.800"/><circle cx="' + (x + 81) + '" cy="' + (y + 5) + '" r="1.800"/></g>' +
+        '<path d="M' + (x + 14) + ' ' + (y + 18) + 'h58M' + (x + 10) + ' ' + (y + 28) + 'h66M' + (x + 14) + ' ' + (y + 38) + 'h58' + (i % 3 ? 'M' + (x + 22) + ' ' + (y + 48) + 'h42' : '') + '" stroke="#3a2a08" stroke-width="2.600" opacity=".7"/>';
+    }
+    $('#plates').innerHTML = s; s = '';
+    for (i = 0; i < 10; i++) {
+      if (i === 8) continue;                           /* nothing hangs under the plate about fog */
+      c = i % 5; r = Math.floor(i / 5); x = 590 + c * 98; y = 128 + r * 122 + 64;
+      s += '<rect x="' + (x + 3) + '" y="' + y + '" width="80" height="40" rx="4" fill="#fdfdfa" stroke="#b9c4c2" stroke-width="1.500"/><path d="M' + (x + 10) + ' ' + (y + 11) + 'h40" stroke="#1f4a3d" stroke-width="3"/><path d="M' + (x + 10) + ' ' + (y + 21) + 'h64M' + (x + 10) + ' ' + (y + 30) + 'h48" stroke="#8f959a" stroke-width="2.200"/>';
+    }
+    $('#minis').innerHTML = s; s = '';
+    for (i = 0; i < 36; i++) s += '<path d="M' + (622 + i * 54) + ' 456v204" stroke="#1c3d31" stroke-width="3"/><circle cx="' + (649 + i * 54) + '" cy="520" r="4" fill="#1c3d31"/>';
+    $('#pleats').innerHTML = s; s = '';
+    for (i = 0; i < 5; i++) { x = 640 + i * 200; s += '<rect x="' + x + '" y="702" width="170" height="66" fill="none" stroke="#3a2414" stroke-width="3"/><text x="' + (x + 85) + '" y="744" class="fS" font-size="22" font-weight="700" text-anchor="middle" fill="#e9dcb4" opacity=".8" letter-spacing="3">LIFEBELTS</text>'; }
+    $('#lockers').innerHTML = s; s = '';
+    [[1010, 716, 84, 70, '#b98d58'], [1016, 652, 76, 64, '#c9a06a'], [1008, 600, 70, 52, '#b98d58'], [1024, 556, 56, 44, '#c9a06a'], [1094, 730, 60, 56, '#c9a06a'], [1098, 684, 52, 46, '#b98d58']].forEach(function (p) {
+      s += '<rect x="' + p[0] + '" y="' + p[1] + '" width="' + p[2] + '" height="' + p[3] + '" fill="' + p[4] + '" stroke="#5a4028" stroke-width="2"/><path d="M' + (p[0] + p[2] / 2) + ' ' + p[1] + 'v' + p[3] + '" stroke="#e9e3d2" stroke-width="5" opacity=".8"/><rect x="' + (p[0] + 8) + '" y="' + (p[1] + 10) + '" width="22" height="14" fill="#fdfdfa"/>';
+    });
+    $('#parcels').innerHTML = s;
+    $('#clock').innerHTML = FY.clock(384, 176, 32, 9, 50);
+    $('#rob').innerHTML = FY.seated('rob', { asleep: true });
+    $('#posy').innerHTML = FY.seated('posy', {});
+    $('#marek').innerHTML = FY.seated('marek', { hold: true, extra: '<rect x="-14" y="-140" width="28" height="44" rx="4" fill="#22262a"/><rect x="-10" y="-134" width="20" height="24" fill="#9fd6b0"/>' });
+    $('#tess').innerHTML = FY.seated('tess', {});
+    $('#julian').innerHTML = FY.who('julian', { back: true, extra: '<path d="M-30 -238q30 16 60 0" stroke="#15181a" stroke-width="4" fill="none"/>' });
+    $('#purser').innerHTML = FY.who('purser', { extra: '<path d="M46 -116l8 40" stroke="#8f959a" stroke-width="6" stroke-linecap="round"/><rect x="38" y="-130" width="16" height="22" rx="4" fill="#c9302a"/>' });
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'ferry', storyTitle: 'When the Tide Serves', id: 'saloon', no: 'II', title: 'The Saloon',
+    go: 'Go into the saloon',
+    intro: [
+      'Seven labels found their heads without much trouble. The sleeping man and the small girl took two lines of the list with one name. The cello had a seat and no label. The man with the lantern has never paid, and the man with the binoculars booked at two minutes past two.',
+      'Then one label was left, COOMBES, E., and two young women in headscarves each said that it was hers: an adult, a single, to be met. Eight names, nine heads, and nobody you could call a stowaway.',
+      'At 21.40 the <i>Curlew</i> sounded one long blast on her whistle and backed out into the fog. It is forty-five minutes to Marram.'
+    ],
+    exit: {"next":"deck","w":{"8fe892f9":"474c2fe8"}}, tags: {"tea":["cd6a2001"],"fares":["9d95b775"],"tel":["e40fd23a"],"bus":["76ed7c25"],"smoke":["89c94ced"],"belt":["cbebd746"],"sun":["ddeea9e0"],"port":["c6ff0505"],"fog":["63cab537"],"gap":["3f07dd3b"]},
+    sound: ['hush', { root: 48, bpm: 54, drop: ['bass'], beds: [['hum', 0.55]] }],      /* warm, with the engine under it; the whistle sounds every two minutes */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('s-file') || null; told = ER.flag('s-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('s-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#box').classList.toggle('ready', !told.purser);
+    $('#wall').classList.toggle('ready', !!(told.purser && !nextFile));
+    $('#scene').classList.toggle('done', !!nextFile);
+    ER.pips((told.purser ? 1 : 0) + (told.coins ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The card is in your notebook. Go out on to the after deck: the green door on the left.']];
+    if (bulk && bulk.isOpen()) return ['bulk', [
+      'Read a brass plate, and ask what it is about: a drink, a fare, a message, a bus, a bag? Then find the printed card that is about the same thing tonight, and put it under the plate. The words are often different: rest the mouse on the dotted ones.',
+      'There are nine plates, one empty place and nine cards. One plate says nothing that has stopped being true, so nothing goes under it. One card is about something that no plate ever was, so it goes under the empty place.',
+      'A perambulator is a pram, and it is on the plate with the prices. An omnibus is a bus. A telegram was a way of sending a message. A porter carried bags. And the plate about fog and the card about an alarm only look alike.'
+    ]];
+    if (!told.purser) return ['purser', [
+      'Ms Pargeter is standing by the tea hatch, looking into the honesty box. Hear what she has found.',
+      'Click the purser: the one in the white cap, between the tea hatch and the long bench.'
+    ]];
+    return ['wall', [
+      'The purser wants every printed card back under the brass plate that it has replaced. The plates are on the wall above the bench, to the right of the tea hatch. Click them.',
+      'The cards are in a heap on the tea hatch, and the plates are in two rows on the bulkhead. Click the plates.'
+    ]];
+  }
+
+  function begin() {
+    paint();
+    stopWhistle = FY.whistle(26000, 120000, 0.4);
+    if (nextFile) { busy = false; showGo(); ER.say('Nine plates, nine cards, and four old pennies. The door to the after deck is on the left.'); return; }
+    if (told.in) { busy = false; ER.say('The saloon, at ten to ten.'); return; }
+    tell('in');
+    ER.narrate([
+      'The saloon: cream paint, green seats, and brass that somebody has polished every week since 1950. It is warm in here, and it smells of tea and wet coats.',
+      'The forward bulkhead is covered with notices. The old ones are brass plates, screwed on. The new ones are printed cards, stuck on with something that does not like the damp: tonight every one of them has slid off, and they are lying in a heap on the tea hatch.',
+      'Ms Pargeter is standing at the hatch with the honesty box open in front of her. She is not counting the money. She is looking at it.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the purser, and the honesty box ---------- */
+  $('#purser').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;An old word can still be true,&rdquo; says Ms Pargeter. &ldquo;An old price cannot. Out on deck, Trainee, and bring your ears.&rdquo;'); return; }
+    ER.talk({
+      who: 'Ms Pargeter', role: 'Purser, m.v. Curlew · six weeks', face: window.FACE('pargeter'),
+      lines: [
+        { note: 'She tips the honesty box towards you, so that you can see in.', a: '&ldquo;Tea is one pound eighty. People put in coins, or they tap a card on the lid. Tonight I have nine pounds in real money. And these.&rdquo;' },
+        { q: 'What are they?', a: 'Pennies. Four of them. Not our pennies: look at the size of them. There is a king on every one, and the newest says 1947. Somebody has had a cup of my tea tonight and paid for it with money that stopped being money before I was born.' },
+        { q: 'Why four?', a: 'That is what I asked myself. Then I looked up.</p><p>She points at a brass plate on the bulkhead. REFRESHMENTS. TEAS 4d.</p><p>&ldquo;A d was how they wrote pence. Fourpence. Somebody read that plate tonight, and believed it.&rdquo;' },
+        { q: 'What does the skipper say?', a: 'I rang up to the wheelhouse. I said: nine heads, eight names, four old pennies. Do you know what he said? &ldquo;Read the saloon, Purser. Old plates and new cards. Know which is which. Then go and listen to them talk.&rdquo; And he put the telephone down.' },
+        { a: 'So we will read the saloon. Every old plate that says something which is no longer true is telling lies to my passengers. Each printed card goes back under the plate that it has replaced. If a card has replaced nothing, find it the place where nothing is. If a plate is still true, leave it alone. And read them as you go, Trainee. Both sorts.' }
+      ],
+      clue: { id: 'pennies', title: 'Ms Pargeter: four old pennies', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('purser')) { paint(); ER.say('The brass plates are on the bulkhead, above the bench. The cards are in a heap on the hatch.'); } }
+    });
+  });
+  $('#box').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'honesty box');
+    if (!told.purser) { ER.say('The honesty box: a wooden box with a slot in the lid, and nobody to watch it. HOT DRINKS £1.80. Ms Pargeter has not taken her eyes off it.'); return; }
+    FY.sfx.coins(); if (tell('coins')) paint();
+    ER.say('Four brown pennies among the pound coins, each as big as a biscuit. Two have one king&rsquo;s head on them and two have another&rsquo;s. The dates are 1921, 1936, 1938 and 1947.');
+  });
+
+  /* ---------- things in the saloon ---------- */
+  FY.thing('#cards', null, 'Nine printed cards, lying where they slid. HOT DRINKS. STAY IN TOUCH. SMILE! They are from the office, and they have the office&rsquo;s way of talking.', isBusy);
+  FY.thing('#urn', 'tea urn', 'The tea urn. It has been on the boil since 1950, with short breaks.', isBusy);
+  FY.thing('#telbox', 'telegram', 'A small brass box with a flap, under the plate about telegrams. FORMS, it says. There are no forms in it, and nothing else. When the boat rolls, something at the back of it rattles.', isBusy);
+  FY.thing('#gapv', 'wireless', 'A paler square of varnish with four screw holes, and a note in pencil: WIRELESS. TO THE MUSEUM, 1996. Something stood here for a long time.', isBusy);
+  FY.thing('#door', null, 'The door to the after deck. Through its round window you can see fog, the white stern lamp, and four people who will not come in.', isBusy);
+  FY.thing('#clock', null, function () { return nextFile ? 'Five to ten.' : 'Ten to ten. Thirty-five minutes to Marram.'; }, isBusy);
+  FY.thing('#wins', null, 'Fog. It is the same in both windows.', isBusy);
+  FY.thing('#lockers', 'lifebelt', 'LIFEBELTS, in stencilled letters, on a locker under every seat. The lockers have been full of lifejackets since before the purser was born. Nobody has repainted the word.', isBusy);
+  FY.thing('#rob', null, 'Mr Brimble, of Marram, asleep. He has spent the whole of Saturday in town with a seven-year-old, and he has earned it.', isBusy);
+  FY.thing('#posy', null, '&ldquo;The lady in the scarf put big brown money in the box,&rdquo; says Posy Brimble. &ldquo;I saw. It went clonk.&rdquo; Which lady? &ldquo;The one who went outside.&rdquo; They are both outside. Posy thinks about this. &ldquo;Then both of her,&rdquo; she says.', isBusy);
+  FY.thing('#marek', null, '&ldquo;Nine heads and eight names?&rdquo; says Marek Mazur. &ldquo;I have fourteen parcels, and I can tell you where every one of them has been since Tuesday. You should scan your passengers.&rdquo;', isBusy);
+  FY.thing('#parcels', 'parcel', 'Fourteen parcels for Marram, on a sack truck. Each has a label with a black-and-white square on it, and each has been scanned twice.', isBusy);
+  FY.thing('#tess', null, 'Tess Anstey keeps one hand on the cello case, as you would keep a hand on a large dog. &ldquo;Boris is booked to play at a wedding on Monday,&rdquo; she says. &ldquo;I am only here to carry him.&rdquo;', isBusy);
+  FY.thing('#cello', 'cello', 'Boris, in his case, with a luggage label of his own. He has a seat. He has not got a line on the list.', isBusy);
+  FY.thing('#julian', null, 'Julian Yeo is looking at the fog through his binoculars, in case it is different close up. &ldquo;A Pallas&rsquo;s warbler,&rdquo; he says. &ldquo;It weighs less than a pound coin, it has flown here from Siberia, and it is somewhere on Marram. Low water was at a quarter to nine, by the way. Birders always know the tide.&rdquo;', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) { if (stopWhistle) stopWhistle(); ER.leave(nextFile); } });
+  $('#wall').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Nine brass plates, and eight printed cards under them. The plate about fog has nothing under it, and needs nothing.'); return; }
+    if (!told.purser) { ER.say('Two rows of brass plates, each with four lines of small capitals. Ms Pargeter has something to show you before you read them.'); return; }
+    if (!bulk) bulk = makeBulk();
+    bulk.open();
+  });
+
+  /* ---------- the bulkhead: a card under every plate that has stopped being true ---------- */
+  var CRIB = '<h4>THEN AND NOW<small>the saloon bulkhead, m.v. Curlew</small></h4><table>' +
+    '<tr><th></th><th>THEN: THE BRASS PLATES</th><th>NOW: THE PRINTED CARDS</th></tr>' +
+    '<tr><td>A cup of tea</td><td>4d (fourpence)</td><td>£1.80</td></tr>' +
+    '<tr><td>The crossing</td><td>single 2/6, return 4/-; children under 14 half fare</td><td>single £7.20; under 16s half price</td></tr>' +
+    '<tr><td>A baby&rsquo;s pram</td><td>a perambulator: 1/-</td><td>a pushchair: free</td></tr>' +
+    '<tr><td>Word ashore</td><td>a telegram, handed to the purser</td><td>Wi-Fi; a mobile phone</td></tr>' +
+    '<tr><td>From the pier</td><td>the island omnibus meets every boat at the Old Pier</td><td>nothing meets the 21.40; all boats use the New Slip</td></tr>' +
+    '<tr><td>Smoking</td><td>gentlemen: not in the saloon, but on the after deck</td><td>nobody, anywhere</td></tr>' +
+    '<tr><td>Sundays</td><td>no boat</td><td>boats every day of the week</td></tr>' +
+    '<tr><td>Your bags</td><td>a porter: 6d for each</td><td>a trolley; you push</td></tr>' +
+    '<tr><td>If she sinks</td><td>lifebelts under the seats</td><td>lifejackets under the seats (a new word for the same thing)</td></tr>' +
+    '<tr><td>In fog</td><td>the whistle, every two minutes</td><td class="still">STILL TRUE. No card.</td></tr></table>' +
+    '<p class="hand">Old money: 12 pence (12d) made a shilling, and 20 shillings made a pound. 2/6 is two shillings and sixpence: people said &ldquo;two and six&rdquo;, or &ldquo;half a crown&rdquo;. It all stopped in 1971. The wireless (a radio) went to the Museum in 1996; the only new thing with no old plate is the CCTV. &mdash; P.</p>' +
+    '<p class="rule">An old WORD can still be true. An old PRICE cannot.</p>';
+  function makeBulk() {
+    var ORDER = PLATES.map(function (p) { return p[0]; });
+    var WHY = {
+      tea: 'TEAS 4d. That plate is about what a hot drink costs. Which card says what one costs tonight?',
+      fares: 'That plate is the price of the crossing: for a grown-up, a child, a dog and a baby&rsquo;s pram. A perambulator is a pram. Which card has tonight&rsquo;s prices on it?',
+      tel: 'A telegram was a few words sent along a telegraph line, and carried to your door by a boy on a bicycle. It was how you sent word ashore. How does anybody send word ashore tonight?',
+      bus: 'Omnibus is the long word for a bus. That plate says how you got on from the pier. Which card says how you get on tonight?',
+      smoke: 'That plate tells gentlemen where they may smoke. Tonight nobody may, anywhere, and one card says so.',
+      belt: 'A lifebelt is what they called it before they called it a lifejacket. The same seat, and the same reason.',
+      sun: 'No boats on a Sunday, says the plate. One card says on which days we sail now.',
+      port: 'A porter carried your bags, at sixpence each. Nobody carries your bags tonight, and one card owns up to it.',
+      fog: 'Read that plate again, and then listen. The whistle has sounded every two minutes since we left the quay. Is there one word on that plate which is not true tonight? Then it wants no card. Leave it bare.',
+      gap: 'Nothing is screwed there now: the wireless went to the Museum. So that is the place for the one card which has replaced nothing at all: the one thing on this boat that nobody did when she was new.'
+    };
+    var under = ER.flag('s-under') || {}, wait = false, box = ER.el('div', 'bk'), s = '<div class="bk-wall">';
+    PLATES.forEach(function (p) { s += '<div class="cell" data-p="' + p[0] + '"><div class="plate' + (p[0] === 'gap' ? ' gone' : '') + '"><span>' + ER.gloss(p[1]) + '</span></div><div class="pslot" data-p="' + p[0] + '"></div></div>'; });
+    s += '</div><div class="bk-tray"></div><div class="wk-foot"><p class="pmsg"></p><button type="button" class="btn" id="b-go">Show the purser</button></div>';
+    box.innerHTML = s;
+    var tray = box.querySelector('.bk-tray'), msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function slot(k) { return box.querySelector('.pslot[data-p="' + k + '"]'); }
+    NOTES.forEach(function (n) {
+      var c = ER.el('span', 'nt dnd-item', '<b>' + n[1] + '</b>' + ER.gloss(n[2])), at = null, k;
+      c.setAttribute('data-n', n[0]);
+      for (k in under) if (under[k] === n[0]) at = k;
+      (at && slot(at) ? slot(at) : tray).appendChild(c);
+    });
+    function read() {
+      under = {};
+      ORDER.forEach(function (k) { var c = slot(k).querySelector('.nt'); if (c) under[k] = c.getAttribute('data-n'); });
+      ER.flag('s-under', under); box.setAttribute('data-under', ORDER.map(function (k) { return under[k] || 'none'; }).join('|'));
+    }
+    ER.dnd(box, { item: '.nt', slot: '.pslot', home: tray, lock: function () { return wait || !!nextFile; }, change: function () { read(); FY.sfx.stick(); msg(''); } });
+    box.querySelector('#b-go').addEventListener('click', function () {
+      var left = tray.querySelectorAll('.nt').length, i, k, v, file, why;
+      if (wait || nextFile) return;
+      read();
+      if (left) { msg('&ldquo;' + (left === 9 ? 'Nine cards on my hatch, and not one on my bulkhead' : left === 1 ? 'One card is still lying on my hatch' : left + ' cards are still lying on my hatch') + ',&rdquo; says Ms Pargeter. &ldquo;Every one of them goes somewhere.&rdquo;'); return; }
+      for (i = 0; i < ORDER.length; i++) {
+        k = ORDER[i]; v = under[k] || 'none';
+        if (!ER.check(k, v)) {
+          ER.sfx.no(); FY.flash(slot(k).parentNode);
+          why = k === 'fog' && v === 'jacket' ? 'The plate says that passengers need not be ALARMED. The card says what to do if the ALARM sounds. One word alike is not one meaning alike. Read the plate again: is anything on it untrue tonight?' : WHY[k];
+          if (v === 'none') msg('Ms Pargeter taps the plate above an empty place. &ldquo;Nothing under this one? ' + (k === 'gap' ? '' : 'Then you are telling me that it is still true tonight. ') + why + '&rdquo;');
+          else { msg('Ms Pargeter peels one card off again. &ldquo;' + why + '&rdquo;'); tray.appendChild(slot(k).querySelector('.nt')); read(); }
+          return;
+        }
+      }
+      file = ER.exit([ORDER.map(function (k) { return under[k] || 'none'; }).join('|')], { wait: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('s-file', file);
+      msg('Ms Pargeter reads along the bulkhead with one finger, the top row and then the bottom, like somebody checking a till.');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true; FY.sfx.horn(0.4);
+        ER.narrate([
+          '&ldquo;Tea, fares, telegrams, the omnibus, smoking, Sundays, porters,&rdquo; says Ms Pargeter. &ldquo;Seven plates, and not one of them is true tonight. The lifebelts have only changed their name.&rdquo;',
+          'Over your heads the whistle sounds: one long blast, as it has every two minutes since the quay. Ms Pargeter looks up at the plate with nothing under it. &ldquo;And that one is still true.&rdquo;',
+          '&ldquo;So that is the skipper&rsquo;s lesson. An old word can still be true. An old price cannot. And somebody on this boat has paid fourpence for a cup of tea tonight, and thought nothing of it.&rdquo; She shuts the honesty box.',
+          'She writes for a minute on the back of a blank ticket card, and gives it to you. THEN AND NOW. &ldquo;Keep that. You are going to need it out there.&rdquo;',
+          '&ldquo;Four of our nine have been out on the after deck since the quay, in fog that you could lean on. Both the Miss Coombeses are among them. Come on, Trainee. And bring your ears.&rdquo;'
+        ], function () { busy = false; ER.addClue('then', 'Then and now: the purser’s card', CRIB, 'crib', 'From the saloon'); FY.terms(['shilling', 'half a crown', 'telegram', 'omnibus', 'perambulator', 'lifebelt', 'porter', 'wireless']); showGo(); });
+      }, 2800);
+    });
+    read();
+    msg(Object.keys(under).length ? 'The bulkhead, with some of the cards back in their places. Drag a card under a plate, or click the card and then the place.' :
+      'Nine brass plates, one empty place, and nine printed cards on the hatch. Put each card under the plate that it has replaced. Drag it, or click the card and then the place.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

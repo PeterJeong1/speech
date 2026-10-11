@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Daybreak · Come at Once</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="carpathia.css">
+<style>
+  body{--bg:#04070d;--accent:#f0b98a;--font-display:'Libre Caslon Text',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(4,7,13,.96);--tc-ink:#eef1f6;--cap-bg:rgba(6,9,15,.94);--panel:#121a26;--face-bg:#111a24;--q-ink:#f2c8a0;--fade:#020408;--hud-bg:rgba(6,9,15,.82)}
+  .tc-room{font-weight:700}
+  .lb{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.14em}
+  .tw{animation:tw 3.4s steps(1,end) infinite}
+  .tw.t2{animation-duration:4.7s;animation-delay:-1.3s}
+  .tw.t3{animation-duration:2.6s;animation-delay:-.8s}
+  @keyframes tw{50%{opacity:.35}}
+  #skyD,#seaD,#bergs,#boats,#deckD{opacity:0;transition:opacity 9s steps(30,end)}
+  #bergs,#boats{pointer-events:none}
+  body.dawn #bergs,body.dawn #boats{pointer-events:auto}
+  #stars5,#mastglow{transition:opacity 7s steps(24,end)}
+  body.dawn #skyD,body.dawn #seaD,body.dawn #bergs,body.dawn #boats,body.dawn #deckD{opacity:1}
+  body.dawn #stars5,body.dawn #mastglow{opacity:0}
+  body.quick #skyD,body.quick #seaD,body.quick #bergs,body.quick #boats,body.quick #deckD,body.quick #stars5,body.quick #mastglow{transition:none}
+  #flare{display:none;animation:fl 6s steps(1,end) infinite}
+  body.s0 #flare{display:block}
+  @keyframes fl{0%{opacity:0}40%{opacity:1}82%{opacity:0}}
+  #berg1{display:none;transition:transform 5s ease-in-out}
+  body.s1 #berg1,body.s2 #berg1{display:block}
+  body.s2 #berg1{transform:translateX(-520px)}
+  #glint{animation:tw 1.9s steps(1,end) infinite}
+  #rocket{display:none}
+  body.fire #rocket{display:block;animation:rk 3.4s ease-out 1 forwards}
+  @keyframes rk{0%{opacity:0}5%{opacity:1}70%{opacity:1}100%{opacity:0}}
+  #tp{transition:transform 1s}
+  body.stopped #tp{transform:rotate(-46deg)}
+  #tp{transform-origin:1040px 664px}
+  #sinclair5.ready #sl5{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+
+  .tx{display:grid;grid-template-columns:minmax(0,540px) 300px;gap:24px;width:min(880px,96vw);align-items:start}
+  .tx-face{width:150px;border:1px solid rgba(255,255,255,.2);margin-bottom:10px}
+  .tx-face svg{display:block;width:100%;height:auto}
+  /* the slip at the end */
+  .done{position:fixed;right:2.4vw;top:60px;z-index:34;width:min(610px,94vw);max-height:calc(100vh - 76px);overflow:auto;padding:18px 26px 16px;display:none;background:#f6f3e8 linear-gradient(176deg,rgba(255,255,255,.5),rgba(120,110,70,.12));
+    color:#22231e;border-top:9px solid #6f766f;box-shadow:0 20px 60px rgba(0,0,0,.65)}
+  .done.on{display:block}
+  .okstamp{float:right;margin:2px 0 6px 14px;padding:4px 14px 1px;border:4px solid #8c2f24;color:#8c2f24;font-family:'Stardos Stencil',serif;font-weight:700;font-size:23px;letter-spacing:.12em;transform:rotate(5deg)}
+  .done h6{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:#6b6552}
+  .done p{margin:0 0 4px;font-family:'Courier Prime',monospace;font-size:15.5px;line-height:1.34}
+  .done h5{clear:both;margin:11px 0 5px;font-family:'Libre Caslon Text',serif;font-weight:700;font-size:18px;border-top:1px solid #a39c84;padding-top:9px}
+  .done ol{margin:0;padding:0 0 0 20px;font-family:'Libre Caslon Text',serif;font-size:14.6px;line-height:1.36}
+  .done li{margin:0 0 3px}
+  .done .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+  .done .btn{--accent:#22231e;font-size:13px;padding:8px 14px}
+  .done .btn:hover:not([disabled]){color:#f6f3e8}
+  .done small{display:block;margin-top:10px;font-family:'Libre Caslon Text',serif;font-size:12.6px;opacity:.82;line-height:1.45}
+  .done small button{text-decoration:underline;font:inherit}
+  /* telling it */
+  .rp{width:min(760px,94vw);max-height:84vh;overflow:auto;background:#fbf8ee;color:#22231e;padding:24px 36px 20px;border-top:4px solid #b3261c;box-shadow:0 26px 70px rgba(0,0,0,.6);-webkit-user-select:text;user-select:text}
+  .rp h4{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#6b6552}
+  .rp h3{margin:0 0 10px;font-family:'Libre Caslon Text',serif;font-weight:700;font-size:23px;border-bottom:1px solid #9db3cf;padding-bottom:8px}
+  .rp label{display:block;font-family:'Libre Caslon Text',serif;font-size:17.5px;line-height:1.45;margin:8px 0 8px}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Caveat',cursive;font-size:25px;line-height:34px;color:#1d2a52;background:#fbf9f0 repeating-linear-gradient(transparent 0 33px,#b9c7d6 33px 34px);border:1px solid #b9b09a;
+    padding:0 12px;border-radius:0;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:204px}
+  .rp input[type=text]{height:36px}
+  .rp .count{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right;margin-top:4px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:12px}
+  .rp .foot span{flex:1;font-family:'Libre Caslon Text',serif;font-size:14.5px;opacity:.7}
+  .rp .btn{--accent:#22231e}.rp .btn:hover:not([disabled]){color:#fbf8ee}
+  @media (max-width:900px){.tx{grid-template-columns:1fr}}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible}
+  }
+</style>
+</head>
+<body class="s0">
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyNG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02040a"/><stop offset="1" stop-color="#0a1626"/></linearGradient>
+  <linearGradient id="skyDG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2440"/><stop offset=".5" stop-color="#5a5578"/><stop offset=".8" stop-color="#e89a7a"/><stop offset="1" stop-color="#ffdca8"/></linearGradient>
+  <linearGradient id="seaNG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#060c16"/><stop offset="1" stop-color="#02050a"/></linearGradient>
+  <linearGradient id="seaDG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98a8a"/><stop offset=".25" stop-color="#4f5d7c"/><stop offset="1" stop-color="#1c2a44"/></linearGradient>
+  <linearGradient id="iceG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff4ea"/><stop offset=".5" stop-color="#f3c9b8"/><stop offset="1" stop-color="#8e9fc4"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc92"/><stop offset=".5" stop-color="#c39a3c"/><stop offset="1" stop-color="#7d5f1e"/></linearGradient>
+  <linearGradient id="teakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3220"/><stop offset="1" stop-color="#1e130b"/></linearGradient>
+  <radialGradient id="grnG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#d9ffd0"/><stop offset=".3" stop-color="#3fe06a" stop-opacity=".8"/><stop offset="1" stop-color="#3fe06a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="whtG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="44%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".65" stop-color="#000" stop-opacity=".25"/><stop offset="1" stop-color="#000" stop-opacity=".8"/></radialGradient>
+  <g id="boatU"><rect x="-28" y="-10" width="56" height="26" fill="transparent"/><path d="M-22 0q22 12 44 0l-6 8h-32z" fill="#f4f1e8"/><path d="M-14 2l-14 10M14 2l14 10M-4 2l-10 12M4 2l10 12" stroke="#d9d2bd" stroke-width="1.5"/><g fill="#22262e"><circle cx="-8" cy="-3" r="3"/><circle cx="0" cy="-4" r="3"/><circle cx="8" cy="-3" r="3"/><circle cx="14" cy="-2" r="2.5"/><circle cx="-14" cy="-2" r="2.5"/></g></g>
+</defs>
+
+<!-- the night, and under it the morning -->
+<rect x="-1000" y="-400" width="3600" height="840" fill="url(#skyNG)"/>
+<g id="stars5" fill="#eef2f6"></g>
+<rect id="skyD" x="-1000" y="-400" width="3600" height="840" fill="url(#skyDG)"/>
+<rect x="-1000" y="438" width="3600" height="900" fill="url(#seaNG)"/>
+<g id="seaD"><rect x="-1000" y="438" width="3600" height="900" fill="url(#seaDG)"/><g stroke="#ffd9c0" stroke-width="2" opacity=".5"><path d="M100 470h120M420 492h90M980 466h140M1260 500h110M640 520h70M1420 476h90M240 540h60"/></g></g>
+<path d="M-1000 438H2600" stroke="#16263c" stroke-width="2"/>
+
+<!-- ice: one berg found by a spark of starlight, and at daybreak all the rest -->
+<g id="berg1"><path d="M330 438l30-44l22 12l26-50l34 30l18-16l40 68z" fill="#070d18"/><g id="glintH" class="hot"><circle cx="410" cy="366" r="26" fill="transparent"/><g id="glint"><path d="M410 354v24M398 366h24" stroke="#fff" stroke-width="2"/><circle cx="410" cy="366" r="3" fill="#fff"/><circle cx="410" cy="366" r="12" fill="url(#whtG)"/></g></g></g>
+<g id="bergs" class="hot">
+  <path d="M60 438l34-70l30 20l40-96l44 60l24-22l52 108z" fill="url(#iceG)"/><path d="M360 438l22-40l28 14l18-34l40 60z" fill="url(#iceG)"/>
+  <path d="M560 438l16-26l22 8l14-18l26 36z" fill="url(#iceG)" opacity=".9"/><path d="M930 438l26-52l30 22l34-78l40 54l30 54z" fill="url(#iceG)"/>
+  <path d="M1210 438l20-34l24 12l16-26l34 48z" fill="url(#iceG)" opacity=".9"/><path d="M1390 438l40-110l36 44l30-30l64 96z" fill="url(#iceG)"/>
+  <path d="M1130 520l34-58l26 20l28-44l44 82z" fill="url(#iceG)"/><path d="M1130 520h132l-10 14h-112z" fill="#5a6a8c" opacity=".5"/>
+  <path d="M-200 438l60-40l50 20l30-20l60 40z" fill="url(#iceG)" opacity=".85"/><path d="M1620 438l50-70l40 30l60 40z" fill="url(#iceG)" opacity=".85"/>
+</g>
+<g id="flare" class="hot"><circle cx="702" cy="430" r="30" fill="transparent"/><circle cx="702" cy="430" r="22" fill="url(#grnG)"/><circle cx="702" cy="430" r="4" fill="#eaffe4"/></g>
+<g id="boats" class="hot"><use href="#boatU" x="300" y="486" transform="scale(1)"/><g transform="translate(520 468) scale(.6)"><use href="#boatU"/></g><g transform="translate(1010 478) scale(.7)"><use href="#boatU"/></g><g transform="translate(1160 580) scale(1.5)"><use href="#boatU"/></g><g transform="translate(160 530) scale(1.1)"><use href="#boatU"/></g><g transform="translate(760 452) scale(.45)"><use href="#boatU"/></g></g>
+
+<!-- a rocket, by the captain's order -->
+<g id="rocket"><path d="M1560 760Q1500 400 1400 150" stroke="#ffe9a8" stroke-width="3" fill="none" stroke-dasharray="6 10"/><circle cx="1400" cy="150" r="70" fill="url(#whtG)"/><g stroke="#fff3c0" stroke-width="3" stroke-linecap="round"><path d="M1400 150l-60-40M1400 150l64-30M1400 150l-30 62M1400 150l50 50M1400 150l-78 16M1400 150l10-72M1400 150l80 6"/></g></g>
+
+<!-- the fore part of the ship: the mast, the crow's nest, the men right forward -->
+<g id="fore" class="hot">
+  <path d="M250 760L760 474h80L1350 760z" fill="#0b1016"/><path d="M250 760L760 474M1350 760L840 474" stroke="#27313c" stroke-width="4"/>
+  <g id="deckD"><path d="M250 760L760 474h80L1350 760z" fill="#3a3a44"/><path d="M250 760L760 474M1350 760L840 474" stroke="#b08a7a" stroke-width="4"/></g>
+  <g fill="#161d26" stroke="#2f3a46" stroke-width="2"><path d="M650 640h300l40 56H610z"/><path d="M726 560h148l20 36H706z"/></g>
+  <path d="M800 640V40" stroke="#1d2530" stroke-width="12"/><path d="M800 640V40" stroke="#3a4654" stroke-width="2"/>
+  <g stroke="#27313c" stroke-width="1.6" fill="none" pointer-events="none"><path d="M800 70L520 610M800 70L1080 610M800 250L640 566M800 250L960 566"/></g>
+  <path d="M800 600L640 500M800 600L960 500" stroke="#27313c" stroke-width="6"/>
+  <circle id="mastglow" cx="800" cy="112" r="34" fill="url(#whtG)" opacity=".8"/><circle cx="800" cy="112" r="5" fill="#fff"/>
+  <g fill="#0c1016"><circle cx="792" cy="468" r="5"/><rect x="788" y="472" width="8" height="12"/><circle cx="810" cy="468" r="5"/><rect x="806" y="472" width="8" height="12"/></g>
+</g>
+<g id="nest" class="hot"><rect x="770" y="230" width="60" height="46" rx="8" fill="#1d2530" stroke="#3a4654" stroke-width="2"/><circle cx="800" cy="222" r="10" fill="#0c1016"/><rect x="790" y="230" width="20" height="14" fill="#0c1016"/><circle cx="800" cy="253" r="44" fill="transparent"/></g>
+
+<!-- the front of the bridge: the captain and his officers, the telegraph, and Sinclair -->
+<g id="officers" class="hot">
+  <g fill="#070a0f"><path d="M330 900q-6-170 16-232q10-28 34-28t34 28q22 62 16 232z"/><circle cx="380" cy="614" r="26"/><path d="M350 604q30-18 60 0l-2 8q-28-12-56 0z"/>
+    <path d="M470 900q-6-200 18-262q10-28 36-28t36 28q24 62 18 262z"/><circle cx="524" cy="582" r="28"/><path d="M492 572q32-20 64 0l-2 8q-30-14-60 0z"/>
+    <path d="M606 900q-6-160 14-220q10-26 32-26t32 26q20 60 14 220z"/><circle cx="652" cy="630" r="25"/><path d="M624 620q28-18 56 0l-2 8q-26-12-52 0z"/></g>
+</g>
+<path d="M-1000 780H2600V1400H-1000z" fill="url(#teakG)"/><path d="M-1000 780H2600" stroke="#8a6238" stroke-width="6"/><path d="M-1000 804H2600" stroke="#120b06" stroke-width="3"/>
+<g id="tele5" class="hot"><path d="M1040 800V700" stroke="url(#brassG)" stroke-width="20"/><circle cx="1040" cy="664" r="52" fill="url(#brassG)"/><circle cx="1040" cy="664" r="42" fill="#f1ede0"/><g stroke="#22231e" stroke-width="2"><path d="M1040 622v16M1040 690v16M998 664h16M1066 664h16M1010 634l11 11M1059 683l11 11M1070 634l-11 11M1021 683l-11 11"/></g><circle cx="1040" cy="664" r="24" fill="none" stroke="#22231e" stroke-width="1.2"/>
+  <g id="tp"><path d="M1040 664L1068 632" stroke="#b3261c" stroke-width="6" stroke-linecap="round"/><path d="M1040 664L1086 612" stroke="url(#brassG)" stroke-width="8" stroke-linecap="round"/><circle cx="1088" cy="610" r="10" fill="#141110"/></g><circle cx="1040" cy="664" r="7" fill="#22231e"/></g>
+<g id="sinclair5" class="hot">
+  <path d="M1264 1320V900q-10-210 18-282q12-34 50-36t50 36q28 72 18 282V1320z" fill="#16203a"/><path d="M1284 660q48 30 96 0" stroke="#253556" stroke-width="9" fill="none"/>
+  <rect x="1318" y="546" width="28" height="34" fill="#c18d68"/><path d="M1298 522q0-46 34-46t34 46v16q-4 24-34 24t-34-24z" fill="#cf9c76"/><path d="M1298 536q4 38 34 46q30-8 34-46q-6 20-34 20t-34-20z" fill="#c9ccd0"/>
+  <path d="M1290 506q42-24 84 0l-2 9q-40-16-80 0z" fill="#0c1220"/><path d="M1298 502q0-32 34-32t34 32q-34-12-68 0z" fill="#1b2740"/>
+  <circle cx="1320" cy="522" r="2.6" fill="#1b1512"/><circle cx="1344" cy="522" r="2.6" fill="#1b1512"/>
+  <g id="sl5"><rect x="1370" y="660" width="120" height="84" rx="4" fill="#6b4a2a" transform="rotate(8 1430 702)"/><rect x="1380" y="670" width="100" height="64" fill="#22282b" transform="rotate(8 1430 702)"/><g id="sl5t" stroke="#e9e6dc" stroke-width="2" transform="rotate(8 1430 702)"></g></g>
+  <path d="M1380 650q40 30 36 70" stroke="#16203a" stroke-width="22" fill="none" stroke-linecap="round"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">RECEIVED</div>
+  <h6>The North Atlantic &middot; Monday 15 April 1912</h6>
+  <p id="d-time"></p><p id="d-slips"></p><p id="d-words"></p><p id="d-hints"></p>
+  <h5>What you now know</h5>
+  <ol>
+    <li>The Morse code is dots and dashes. A dash is as long as three dots, and the gaps matter as much as the marks.</li>
+    <li>In a call, the station that signs after DE is the one that is sending. CQD was the Marconi distress call. SOS, sent as one long sign, was the newer call that the nations had agreed on.</li>
+    <li>A position is a latitude and a longitude, in degrees and minutes. There are sixty minutes in a degree, not a hundred.</li>
+    <li>A course is read off the compass rose, at the end of the rule that points where you are going. Distance is measured at the side of the chart, because one minute of latitude is one nautical mile.</li>
+    <li>A knot is one nautical mile an hour, and time is distance divided by speed. Fifty-eight miles at 17 knots is 3 hours 25 minutes.</li>
+    <li>A steamship is one kettle. The steam that does not warm the cabins can drive the engines.</li>
+    <li>Getting ready is most of a rescue, and it has an order: the door is opened before the ladder is hung on it.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-tell">Tell it to a friend</button><button type="button" class="btn" id="b-book">Open the box</button><button type="button" class="btn" id="b-lobby">Back to the Archive</button></div>
+  <small>Nobody on the Carpathia knew that the position in the distress call was about thirteen miles from the true one. The wreck was found in 1985, to the east of it. The boats were found that night because an officer in one of them burned green lights. &middot; In 1912 a ship with one operator heard nothing while he slept. Before the year was out the law had begun to change: on a passenger ship, somebody listens day and night. &middot; The British court said of Captain Rostron: &ldquo;He did the very best that could be done.&rdquo; &middot; <button type="button" id="b-reset">lift the lid again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="carpathia.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, stage = 0, txBox = null, inTx = false;
+
+  /* a sky full of stars, right down to the edge of the sea */
+  (function () {
+    var s = '', i, x, y, r, seed = 7;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (i = 0; i < 230; i++) { x = Math.round(-200 + rnd() * 2000); y = Math.round(-60 + rnd() * 494); r = (0.7 + rnd() * 1.5).toFixed(1); s += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '"' + (i % 7 === 0 ? ' class="tw' + (i % 3 ? ' t' + (1 + i % 3) : '') + '"' : '') + '/>'; }
+    $('#stars5').innerHTML = s;
+    $('#sl5t').innerHTML = '<path d="M1392 688h76M1392 702h60M1392 716h70"/>';
+  })();
+
+  ER.init({
+    theme: 'history', story: 'carpathia', storyTitle: 'Come at Once', id: 'daybreak', no: 'V', title: 'Daybreak',
+    go: 'Go up to the bridge', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'Everything that came to the saloon door went where the captain&rsquo;s list sent it, and one thing had to come first: the carpenter opened the gangway doors before anything could be hung at them. The first coffee went to our own men, because the soup, coffee and tea in the saloons were for later. The blankets went three ways: to the gangways, to the saloons, to the boats. The Hungarian doctor went to the third-class dining hall, and our own steerage passengers went anywhere but there. The canvas ash bags went down to the gangway as well, for children too small to climb a ladder.',
+      'It is now twenty minutes to three. For two hours the Carpathia has been running at a speed that she was never built for, in the dark, towards a place where another ship has struck ice. The captain doubled the look-outs as soon as he had put her on her course: one man in the crow&rsquo;s nest and two in the bows, where one is the rule. Three of his officers are on the bridge beside him.',
+      'Sinclair has put you on the wing of the bridge, with one order. Look ahead. If you see anything at all, say so.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"rd":["22bc1237"]},
+    sound: ['archive', { root: 50, bpm: 48, drop: ['mel', 'arp', 'ost'], sting: 'soft', beds: [['sea', 0.8]] }],
+    hints: hints, onBegin: begin
+  });
+  stage = ER.flag('v-st') || 0;
+
+  function hints() {
+    if (stage >= 5) return null;
+    if (inTx || stage === 4) return ['rd', [
+      'The sign that you want is on Mr Cottam&rsquo;s card, in your notebook: the one that says a message has come in safely. You sent it to Sinclair once before, at midnight.',
+      'It is two letters. The first one is dot, dash, dot.'
+    ]];
+    if (stage === 3) return ['sin', ['It is daylight. Look at whatever you want to look at. Sinclair is on your right, with the slate: speak to him when you are ready.']];
+    if (stage === 1) return ['glint', [
+      'Now look for ice, the way Sinclair told you: one spark of starlight where no star ought to be, low down over the water.',
+      'It is on the port side. Port is left. It is a good deal further left than the green light was.'
+    ]];
+    if (stage === 0) return ['flare', [
+      'Sinclair told you to look ahead. Look low down, where the stars stop, a little to the left of the mast.',
+      'It is green, and it only shows for a few seconds at a time.'
+    ]];
+    return null;
+  }
+  function isBusy() { return busy; }
+  function setStage(n) { stage = n; ER.flag('v-st', n); paint(); }
+  function paint() {
+    var b = document.body.classList;
+    b.toggle('s0', stage === 0); b.toggle('s1', stage === 1); b.toggle('s2', stage === 2);
+    b.toggle('stopped', stage >= 3); b.toggle('dawn', stage >= 3);
+    $('#sinclair5').classList.toggle('ready', stage === 3 || stage === 4);
+    ER.pips(Math.min(stage, 5), 5);
+  }
+  function rocket() { var b = document.body.classList; b.remove('fire'); void document.body.offsetWidth; b.add('fire'); CP.sfx.rocket(); }
+
+  function begin() {
+    if (stage >= 3) document.body.classList.add('quick');
+    paint();
+    CP.need('code', 'The Morse code', CP.CODE, 'card', 'Card on the wall');
+    if (stage >= 5) { if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now()); busy = false; finish(true); return; }
+    if (stage === 4) { busy = false; ER.say('Daylight. Sinclair is waiting, and so is the thing in your pocket.'); return; }
+    if (stage === 3) { busy = false; ER.say('Daylight, and ice, and small boats on the water.'); return; }
+    CP.mood('tense');
+    if (stage === 2) { night2(); return; }
+    if (stage === 1) { busy = false; ER.say('The bridge. Look for ice: one spark of starlight where no star ought to be.'); return; }
+    CP.learn('lookout', 'bow');
+    ER.narrate([
+      'The open bridge, and a wind that is made of nothing but the ship&rsquo;s own speed. The night is so clear that the stars go right down to the edge of the sea and stop there, as if they had been cut off with a knife.',
+      'Nobody on the bridge is talking. The captain stands a little apart from the others, at the front.',
+      '&ldquo;Ice shows by starlight,&rdquo; Sinclair says, very low. &ldquo;It will not look white. Look for a place where there ought to be stars and there are none. Or for one spark, low down, where no star ought to be.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- twenty to three: a green light ---------- */
+  $('#flare').addEventListener('click', function () {
+    if (busy || stage !== 0) return;
+    busy = true; setStage(1); CP.learn('port', 'point');
+    ER.narrate([
+      'A green light, far ahead, for a few seconds. Then nothing. &ldquo;Light! Green! A little on the port bow!&rdquo; you say, and three other voices say it with you.',
+      'It is half a point on the port bow: almost right ahead. Everybody on the bridge has seen it. A light that shows from so far off must be high above the water. The captain says aloud that she must still be afloat.',
+      '&ldquo;Port is left,&rdquo; Sinclair says in your ear. &ldquo;And a point is one of the thirty-two points of the compass. Half a point is three of your fingers, held out at the end of your arm.&rdquo;',
+      '&ldquo;Now forget the green light. The officers have it. Look for ice.&rdquo;'
+    ], function () { busy = false; });
+  });
+  /* ---------- a quarter to three: ice ---------- */
+  $('#glintH').addEventListener('click', function () {
+    if (busy || stage !== 1) return;
+    busy = true; CP.learn('iceberg');
+    ER.narrate([
+      'One spark, low down, where no star ought to be. And under it, something that is darker than the sea.',
+      '&ldquo;ICE!&rdquo; The second officer has it at the same moment: an iceberg, a mile or two away on the port bow, with one streak of starlight down its side.'
+    ], function () { setStage(2); night2(); });
+  });
+  function night2() {
+    busy = true;
+    ER.narrate([
+      'The deck leans as the wheel goes over. The iceberg slides away to the left, very slowly, as high as a church. Nobody says anything at all.'
+    ], function () {
+      rocket();
+      ER.narrate([
+        'It is a quarter to three. Behind the bridge a rocket goes up with a roar, by the captain&rsquo;s order, and bursts over the masts. Another will follow it every quarter of an hour, so that anybody who is out there may know that a ship is coming.',
+        'After that they come out of the dark one after another: six icebergs in an hour and a quarter. Each time the wheel goes over. Each time the ship comes back to her course.',
+        'At a quarter past three Mr Cottam sends: ' + CP.said('If you are there we are firing rockets.') + ' The telephones give him nothing back.',
+        'At a quarter to four the purser, the chief steward and the doctor come up to the bridge, one after another. Each of them tells the captain the same thing: every order is carried out, and the ship is ready.',
+        'At four o&rsquo;clock, by the chart, she has run her fifty-eight miles. The captain stops the engines.'
+      ], function () {
+        CP.sfx.clang(); CP.mood('calm'); setStage(3);
+        ER.narrate([
+          'After three hours and twenty-five minutes of that noise, the silence is like going deaf. There is no ship. There is black water, and ice, and the stars.',
+          'Then the green light again: close, and very low. Far too low to be a ship. It is a lifeboat.',
+          'There is an iceberg right ahead as well. The captain swings the ship round it, and brings the boat along his starboard side. A voice comes up out of the dark. It is an officer. He has only one seaman with him, he calls, and he cannot handle her very well.',
+          'At ten minutes past four the first of them are coming up the side. And as they come, the day breaks.'
+        ], function () { busy = false; CP.learn('starboard'); });
+      });
+    });
+  }
+
+  /* ---------- things to look at ---------- */
+  CP.thing('#nest', 'crow’s nest', function () { return stage >= 3 ? 'The crow&rsquo;s nest. The man in it has been looking at the dark for three hours. Now he is looking at boats.' : 'One man in the crow&rsquo;s nest, and two more right forward, in the bows. It is one more than the rule. All three of them are looking for the same thing as you.'; }, isBusy);
+  CP.thing('#fore', null, function () { return stage >= 3 ? 'The fore part of the ship, in grey light. Every boat that she owns is swung out, ready to be lowered.' : 'The fore part of the ship, and the mast, and beyond them nothing.'; }, isBusy);
+  CP.thing('#officers', null, function () { return stage >= 3 ? 'The captain and his officers. He has not left the bridge since he gave his orders.' : 'The captain and his officers, at the front of the bridge. They see most things before the look-outs do, and they are not looking anywhere else.'; }, isBusy);
+  CP.thing('#tele5', 'telegraph', function () { return stage >= 3 ? 'The telegraph. The handle is at STOP.' : 'The telegraph. The handle has been at FULL AHEAD since twenty-five minutes to one.'; }, isBusy);
+  CP.thing('#bergs', 'iceberg', function () { return stage >= 3 ? 'Ice, on every side. A junior officer has been sent up on top of the wheelhouse to count the big ones: twenty-five of them are a hundred and fifty feet high, or more. In the dark, the ship came through the middle of all that.' : null; }, function () { return busy || stage < 3; });
+  CP.thing('#boats', 'lifeboat', function () { return stage >= 3 ? 'Boats. Small white boats, far apart, over four or five miles of sea. In some of them women are rowing. All of them are coming this way.' : null; }, function () { return busy || stage < 3; });
+  $('#sinclair5').addEventListener('click', function () {
+    if (busy) return;
+    if (stage < 3) { ER.say('&ldquo;Not me,&rdquo; says Sinclair. &ldquo;Ahead. Look ahead.&rdquo;'); return; }
+    if (stage === 4) { openTx(); return; }
+    if (stage >= 5) { ER.say('Sinclair. He has put his cap on again.'); return; }
+    busy = true;
+    ER.narrate([
+      'Sinclair has the slate in his hand. He has written nothing on it since the chart room. &ldquo;The officer from the first boat has been to the captain,&rdquo; he says. &ldquo;She went down at about twenty past two. More than an hour and a half before we stopped.&rdquo;',
+      'Neither of you says anything for some time. Below you, at the gangway, a small child goes up the ship&rsquo;s side in a canvas bag, hauled up very carefully by two seamen.',
+      '&ldquo;Fifty-eight miles by the chart, in three hours and twenty-five minutes,&rdquo; Sinclair says at last. &ldquo;Seventeen knots, in a fourteen-knot ship. Write that down somewhere, Buzzer. Nobody is going to believe it.&rdquo;',
+      'By half past eight the last boat is empty, and everybody who was in the boats is on board. All day you run between the saloons and the wireless shack with the pursers&rsquo; lists: names, and names, and names. When the lists are added up, there are seven hundred and five.',
+      'Mrs Latham made ready for two thousand.',
+      'Late in the day you find Sinclair in the doorway of the wireless shack, where he stood last night with his lantern. He is watching Mr Cottam&rsquo;s back. Mr Cottam is sending names. He has not slept, and he will not sleep tonight, or tomorrow.',
+      '&ldquo;For forty years,&rdquo; says Sinclair, &ldquo;I have said that I would believe in wireless on the day it brought a ship alongside.&rdquo; He looks at the deck for a while. &ldquo;He called her until nearly four o&rsquo;clock, and he got nothing back. She said: come at once. We came. Somebody ought to tell her so. Have you that thing in your pocket?&rdquo;'
+    ], function () {
+      CP.mine('log', 'For Sinclair’s slate', '<p>Turned at 12.35. Stopped at 4.00.</p><p><b>58 miles</b> by the chart, in <b>3 hours 25 minutes</b>: 17 knots.</p><p>First boat alongside at 4.10. All on board by 8.30.</p><p>The pursers&rsquo; lists: <b>705</b> names.</p>', true);
+      busy = false; setStage(4); openTx();
+    });
+  });
+
+  /* ---------- two letters, on a buzzer that sends nothing to anybody ---------- */
+  function buildTx() {
+    var box = ER.el('div', 'tx'), msgEl, lock = false;
+    var ky = CP.keyer({ label: 'That is my message', onSend: sent, lock: function () { return lock; } });
+    var side = ER.el('div', 'tx-side', '<div class="tx-face">' + FACE('sinclair') + '</div><h6 class="lk-h">Quartermaster Sinclair</h6><p class="pmsg"></p>');
+    box.appendChild(ky); box.appendChild(side); msgEl = side.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function spell(t) { return t.toUpperCase().split('').join(', ').replace(/\?/g, 'something that is no letter'); }
+    function sent(t) {
+      if (!t) return;
+      if (ER.check('rd', t)) {
+        lock = true; ER.flag('v-rd', t); ER.sfx.ok();
+        msg(spell(t) + '. The buzzer makes its small sound, twice.');
+        setTimeout(function () { ER.closeAll(); last(); }, 2200);
+        return;
+      }
+      CP.slip(); ER.sfx.no(); ER.shake(ky.querySelector('.ky-strip'));
+      if (t === 'sos' || t === 'cqd') msg('&ldquo;No,&rdquo; says Sinclair. &ldquo;Not that. That one has been sent.&rdquo;');
+      else msg('&ldquo;I read ' + spell(t) + '. That is not what Mr Cottam would send, when a message had come in.&rdquo;');
+      ky.kyClear();
+    }
+    box.first = function () { msg('Your buzzer. It sends nothing to anybody, and Sinclair knows that as well as you do. &ldquo;The Marconi way,&rdquo; he says. &ldquo;The way one of them tells another that he has heard.&rdquo;<br><br>Press the brass key with the mouse and hold it, or use the space bar. A pause finishes a letter.'); };
+    return box;
+  }
+  function openTx() {
+    if (!txBox) txBox = buildTx();
+    txBox.first(); inTx = true;
+    ER.open('ov-lock', txBox, function () { inTx = false; });
+  }
+  function last() {
+    busy = true; inTx = false; setStage(5);
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    var t = String(ER.flag('v-rd') || '').toUpperCase().split('').join('. ');
+    ER.narrate([
+      t + '. Received. It goes nowhere at all. Sinclair takes off his cap.',
+      'Four days later, in New York, the captain is asked whether he did not run a great risk with his own ship that night. He answers: ' + CP.said('Although I was running a risk with my own ship and my own passengers, I also had to consider what I was going for.'),
+      'The Archive keeps one box for each day that mattered. In this one there are a page of pencil dots and dashes, an old chart with two pin holes in it, a list of orders torn out of a book, and a piece of board with a small brass key. The key sends nothing to anybody. But one night a ship fifty-eight miles away said: come at once. And somebody was still listening.'
+    ], function () { finish(false); });
+  }
+
+  /* ---------- the slip at the end ---------- */
+  function finish(quiet) {
+    var st = ER.state(), mins = CP.minutesPlayed(), hn = ER.hintsUsed(), sl = CP.slips();
+    busy = false;
+    $('#d-time').textContent = 'The night took you ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-slips').textContent = sl ? 'Somebody had to put you right ' + sl + (sl === 1 ? ' time.' : ' times.') : 'Nobody had to put you right, not once.';
+    $('#d-words').textContent = 'In the box: ' + st.clues.length + ' papers and ' + Object.keys(st.words).length + ' words.';
+    $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+    $('#done').classList.add('on');
+    if (!quiet) CP.solved();
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties the box. click again to do it';
+  });
+  $('#b-tell').addEventListener('click', function () {
+    var saved = ER.flag('tell') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>The North Atlantic &middot; April 1912</h4><h3>Tell it to a friend</h3>' +
+      '<label for="r1">A friend says: &ldquo;How could a ship fifty-eight miles away know where to go, and when she would get there?&rdquo; Explain how the Carpathia did it. Say it aloud first. Then write it, in 60 to 90 words. Use all three of these: <b>wireless</b>, <b>position</b>, <b>knots</b>.</label><textarea id="r1"></textarea>' +
+      '<div class="count"></div><label for="r2">Written by</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’'-]+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('tell', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

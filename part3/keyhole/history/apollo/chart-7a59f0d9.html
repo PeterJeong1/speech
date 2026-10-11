@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Wall Chart · Lots and Lots of People</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="apollo.css">
+<style>
+  body{--bg:#151a1f;--accent:#ffd97a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(13,20,32,.97);--tc-ink:#e9eefa;--cap-bg:rgba(13,20,32,.94);--panel:#17253a;--face-bg:#33291f;--q-ink:#ffd97a;--fade:#0a0f18;--hud-bg:rgba(13,20,32,.82)}
+  .lb{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.18em}
+  .hw{font-family:'Architects Daughter',cursive;text-anchor:middle}
+  #tubeA{animation:fz 7.3s steps(1,end) infinite}
+  @keyframes fz{0%{opacity:1}61%{opacity:.55}62%{opacity:1}64%{opacity:.7}65%{opacity:1}}
+  #bubble{animation:bub 5s ease-in infinite}
+  @keyframes bub{0%{transform:translateY(0);opacity:0}10%{opacity:.8}60%{transform:translateY(-58px);opacity:.8}70%{opacity:0}100%{opacity:0}}
+  #armH{animation:arm 4.2s ease-in-out infinite alternate;transform-origin:236px 432px}
+  @keyframes arm{from{transform:rotate(-2deg)}to{transform:rotate(3deg)}}
+  #wools{display:none}
+  body.done #wools{display:block}
+  #tbl.ready #woolBall{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+
+  /* the red wool */
+  .wl{width:min(1060px,96vw)}
+  .wl svg{display:block;width:100%;height:auto;box-shadow:0 22px 50px rgba(0,0,0,.6);-webkit-user-select:none;user-select:none;touch-action:none}
+  .wl .nm{font-family:'Oswald',sans-serif;font-weight:500;font-size:19px;letter-spacing:.3em;fill:#ffd97a;text-anchor:middle}
+  .wl .sl{font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.1em;fill:#fff;text-anchor:middle}
+  .wl .gh{font-family:'Oswald',sans-serif;font-weight:500;font-size:14px;letter-spacing:.2em;fill:#22231e;text-anchor:middle}
+  .wl .ct{font-family:'Architects Daughter',cursive;font-size:15px;fill:#22231e;text-anchor:middle}
+  .sock{cursor:pointer}
+  .sock circle.hit{fill:transparent}
+  .sock:hover .pin{fill:#fff}
+  .need{cursor:grab}
+  .need.sel rect.cd{stroke:#c0261c;stroke-width:4}
+  .need.ok{cursor:default}
+  .need.ok rect.cd{stroke:#2f6a4a;stroke-width:3}
+  .yarn{fill:none;stroke:#c0261c;stroke-width:3.4;stroke-linecap:round;pointer-events:none}
+  .yarn.ok{stroke:#8c1a12;stroke-width:4.4}
+  .yarn.tmp{stroke-dasharray:7 6;opacity:.85}
+  .wl-foot{display:grid;grid-template-columns:1fr 250px;gap:8px 20px;align-items:start;margin-top:12px}
+  .wl-foot .btn{width:100%}
+  .wl-line{display:none;grid-column:1 / 3;margin:0;font-family:'Architects Daughter',cursive;font-size:21px;line-height:1.5;color:#f4f7f0;white-space:nowrap}
+  .wl.say .wl-line{display:block}
+  .wl-b{min-width:150px;margin:0 3px;padding:1px 10px 0;border-bottom:2px solid #f4f7f0;font-family:'Architects Daughter',cursive;font-size:21px;color:#ffd97a;text-align:center}
+  .wl-b:hover{color:#fff}
+  @media (max-width:800px){.wl-foot{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#efe9d2"/><stop offset=".75" stop-color="#e2dbbf"/><stop offset="1" stop-color="#cfc7a8"/></linearGradient>
+  <linearGradient id="bluG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#27508a"/><stop offset="1" stop-color="#17345c"/></linearGradient>
+  <linearGradient id="bdG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f4a3c"/><stop offset="1" stop-color="#1f3229"/></linearGradient>
+  <radialGradient id="tubeGl" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".5" stop-color="#fff" stop-opacity=".1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="40%" r="85%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#1a1400" stop-opacity=".1"/><stop offset="1" stop-color="#0a0800" stop-opacity=".5"/></radialGradient>
+  <pattern id="lino" width="240" height="240" patternUnits="userSpaceOnUse" patternTransform="skewX(-24)"><rect width="240" height="240" fill="#b3a685"/><rect width="120" height="120" fill="#998d6c"/><rect x="120" y="120" width="120" height="120" fill="#998d6c"/></pattern>
+  <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M0 0H30M0 0V30" stroke="#fff" stroke-opacity=".08" stroke-width="1.5" fill="none"/></pattern>
+</defs>
+
+<!-- ceiling, wall, floor -->
+<rect x="-1000" y="-400" width="3600" height="462" fill="#d3cfbd"/>
+<rect x="-1000" y="60" width="3600" height="646" fill="url(#wallG)"/>
+<rect x="-1000" y="56" width="3600" height="7" fill="#b9b39a"/>
+<rect x="-1000" y="682" width="3600" height="24" fill="#7b6a4a"/>
+<rect x="-1000" y="704" width="3600" height="620" fill="url(#lino)"/>
+<rect x="-1000" y="704" width="3600" height="620" fill="#3a3220" opacity=".18"/>
+<g id="lights" class="hot"><rect x="250" y="10" width="420" height="34" rx="5" fill="#aaa692"/><rect id="tubeA" x="262" y="18" width="396" height="18" rx="9" fill="#fff"/><rect x="930" y="10" width="420" height="34" rx="5" fill="#aaa692"/><rect x="942" y="18" width="396" height="18" rx="9" fill="#fff"/></g>
+<ellipse cx="800" cy="40" rx="1100" ry="520" fill="url(#tubeGl)" pointer-events="none"/>
+
+<!-- the wall clock: half past ten -->
+<g id="clock" class="hot"><circle cx="150" cy="170" r="50" fill="#3d4148"/><circle cx="150" cy="170" r="43" fill="#fbf8ee"/><g stroke="#22231e" stroke-width="3"><path d="M150 132v9M150 199v9M112 170h9M179 170h9"/></g>
+  <path d="M150 170l-17-18" stroke="#22231e" stroke-width="6" stroke-linecap="round"/><path d="M150 170v33" stroke="#22231e" stroke-width="3.5" stroke-linecap="round"/><circle cx="150" cy="170" r="4" fill="#b3261c"/></g>
+
+<!-- the water cooler -->
+<g id="cooler" class="hot"><ellipse cx="96" cy="712" rx="60" ry="9" fill="#000" opacity=".2"/><rect x="56" y="520" width="80" height="188" rx="5" fill="#e3e0d2"/><rect x="56" y="520" width="80" height="188" rx="5" fill="none" stroke="#a9a48f" stroke-width="3"/>
+  <rect x="66" y="410" width="60" height="112" rx="14" fill="#a9cfe6" opacity=".85"/><rect x="66" y="410" width="60" height="112" rx="14" fill="none" stroke="#6f9fc0" stroke-width="3"/><path d="M68 450h56" stroke="#dff1fb" stroke-width="3"/>
+  <circle id="bubble" cx="96" cy="500" r="5" fill="#eaf7ff"/><rect x="86" y="560" width="20" height="10" fill="#6f9fc0"/><path d="M90 570v10" stroke="#6f9fc0" stroke-width="5"/><rect x="74" y="600" width="44" height="50" fill="#cfcbb9"/></g>
+
+<!-- the wall chart -->
+<g id="chartW" class="hot">
+  <rect x="326" y="96" width="948" height="478" fill="#e9e2cf"/><rect x="342" y="112" width="916" height="446" fill="url(#bluG)"/><rect x="342" y="112" width="916" height="446" fill="url(#grid)"/>
+  <text x="800" y="152" class="lb" font-size="19" fill="#fff">APOLLO 13 &#183; WHAT EACH PART CARRIES</text>
+  <g id="stackS" transform="translate(335 172)" stroke="#fff" stroke-width="2.6" fill="none" stroke-linejoin="round"></g>
+  <text x="600" y="508" class="lb" font-size="19" fill="#ffd97a">SERVICE MODULE</text><text x="805" y="508" class="lb" font-size="19" fill="#ffd97a">ODYSSEY</text><text x="1075" y="508" class="lb" font-size="19" fill="#ffd97a">AQUARIUS</text>
+  <g fill="#aab0b2"><path d="M316 104l36-14l5 11l-36 14zM1248 90l36 12l-4 11l-36-12zM318 566l34 14l-5 11l-34-14zM1250 580l34-12l4 11l-34 12z"/></g>
+  <g id="wools" stroke="#c0261c" stroke-width="4" fill="none" stroke-linecap="round"><path d="M1073 304q-200 190-420 250M1137 304q-120 180-330 250M1105 394q-60 110-180 160M1193 347q-90 150-250 205M780 322q-30 150-80 232M780 377q14 100-20 177M735 347q-50 130-110 207M853 347q16 120-4 207"/><g fill="#e7c873" stroke="none"><circle cx="1073" cy="304" r="6"/><circle cx="1137" cy="304" r="6"/><circle cx="1105" cy="394" r="6"/><circle cx="1193" cy="347" r="6"/><circle cx="780" cy="322" r="6"/><circle cx="780" cy="377" r="6"/><circle cx="735" cy="347" r="6"/><circle cx="853" cy="347" r="6"/></g></g>
+</g>
+
+<!-- Mrs Halloran -->
+<g id="hall" class="hot">
+  <ellipse cx="214" cy="716" rx="62" ry="10" fill="#000" opacity=".22"/>
+  <path d="M196 700h-22q-8 0-8 8h30zM240 700h22q8 0 8 8h-30z" fill="#22231e"/><path d="M190 640v62M246 640v62" stroke="#c9a98a" stroke-width="15" stroke-linecap="round"/>
+  <path d="M168 548h100l12 104H156z" fill="#3d4148"/>
+  <path d="M166 560q-8-128 48-134t60 134z" fill="#5c7186"/><path d="M214 430v124" stroke="#46586b" stroke-width="4"/><g fill="#3f5062"><circle cx="222" cy="470" r="3.5"/><circle cx="222" cy="500" r="3.5"/><circle cx="222" cy="530" r="3.5"/></g>
+  <path d="M178 446q-22 50-10 104" stroke="#5c7186" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="170" cy="554" r="12" fill="#ecc9ac"/>
+  <g id="armH"><path d="M240 440q40 4 62-30" stroke="#5c7186" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="304" cy="406" r="12" fill="#ecc9ac"/>
+    <g transform="rotate(-24 300 400)"><rect x="296" y="392" width="120" height="16" rx="2" fill="#f7f3ea" stroke="#6b6552" stroke-width="2"/><path d="M296 400h120" stroke="#6b6552" stroke-width="1.2"/><rect x="368" y="388" width="14" height="24" rx="2" fill="#dff3ff" fill-opacity=".5" stroke="#22231e" stroke-width="1.6"/></g></g>
+  <rect x="204" y="392" width="22" height="34" fill="#e2bfa2"/>
+  <path d="M190 366q0-36 30-36t28 36q-2 30-28 34t-30-34z" fill="#ecc9ac"/>
+  <path d="M186 372q-8-48 34-48q30 0 30 26q-18-12-40-6q-14 6-14 28z" fill="#c4c7ca"/><circle cx="184" cy="352" r="17" fill="#b9bcc0"/><circle cx="184" cy="352" r="9" fill="none" stroke="#9ea2a7" stroke-width="2"/>
+  <path d="M226 358h20M246 358l6 2" stroke="#2a1c16" stroke-width="3" fill="none"/><rect x="232" y="352" width="16" height="12" rx="3" fill="#f7f3ea" fill-opacity=".3" stroke="#2a1c16" stroke-width="2.6"/>
+  <path d="M196 344l26 16" stroke="#d9a22b" stroke-width="4.5" stroke-linecap="round"/><path d="M250 374l6 8l-6 4" stroke="#c39a7e" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M238 392q8 2 12-2" stroke="#9a4a40" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- the blackboard on wheels -->
+<g id="board" class="hot">
+  <ellipse cx="1446" cy="712" rx="150" ry="10" fill="#000" opacity=".2"/>
+  <path d="M1340 600v96M1552 600v96M1320 700h60M1522 700h60" stroke="#7b5a36" stroke-width="10" stroke-linecap="round"/><circle cx="1326" cy="708" r="8" fill="#22231e"/><circle cx="1374" cy="708" r="8" fill="#22231e"/><circle cx="1528" cy="708" r="8" fill="#22231e"/><circle cx="1576" cy="708" r="8" fill="#22231e"/>
+  <rect x="1316" y="250" width="260" height="352" rx="4" fill="#7b5a36"/><rect x="1330" y="264" width="232" height="324" fill="url(#bdG)"/>
+  <g font-family="'Architects Daughter',cursive" font-size="24" fill="#f4f7f0"><text x="1346" y="322">LIVE IN</text><text id="bd1" x="1346" y="358" fill="#ffd97a">__________</text><text x="1346" y="420">SWITCH OFF</text><text id="bd2" x="1346" y="456" fill="#ffd97a">__________</text><text x="1346" y="518">COME HOME IN</text><text id="bd3" x="1346" y="554" fill="#ffd97a">__________</text></g>
+  <rect x="1330" y="588" width="232" height="12" fill="#5a4226"/><rect x="1360" y="582" width="30" height="8" rx="2" fill="#f4f7f0"/><rect x="1500" y="580" width="42" height="12" rx="3" fill="#a9a48f"/>
+</g>
+
+<!-- the wall telephone -->
+<g id="phone" class="hot"><rect x="1420" y="120" width="70" height="96" rx="8" fill="#1b1d1d"/><rect x="1410" y="108" width="90" height="26" rx="12" fill="#2c3030"/><circle cx="1455" cy="176" r="24" fill="#33383a"/><circle cx="1455" cy="176" r="9" fill="#1b1d1d"/>
+  <g fill="#1b1d1d"><circle cx="1455" cy="158" r="4"/><circle cx="1471" cy="166" r="4"/><circle cx="1473" cy="184" r="4"/><circle cx="1459" cy="194" r="4"/><circle cx="1441" cy="190" r="4"/><circle cx="1437" cy="170" r="4"/></g>
+  <path d="M1424 132q-26 34-8 62t-2 34" stroke="#1b1d1d" stroke-width="4" fill="none"/></g>
+
+<!-- the table: wool, pins, eight cards, and the page you brought -->
+<g id="tbl" class="hot">
+  <ellipse cx="800" cy="716" rx="290" ry="12" fill="#000" opacity=".22"/>
+  <path d="M580 650v60M1020 650v60" stroke="#5a4226" stroke-width="12"/><rect x="548" y="632" width="504" height="20" rx="3" fill="#8c6a45"/><rect x="548" y="632" width="504" height="6" fill="#a8845a"/>
+  <g id="woolBall"><circle cx="630" cy="608" r="25" fill="#c0261c"/><path d="M610 600q20-16 40 0M608 612q22-14 44 2M616 624q14-10 30 0M622 588q10 20 4 42M640 586q8 22-2 44" stroke="#8c1a12" stroke-width="2.5" fill="none"/><path d="M654 616q30 14 20 16t-34-2" stroke="#c0261c" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+  <rect x="700" y="606" width="56" height="26" rx="3" fill="#aab0b2"/><rect x="700" y="606" width="56" height="8" fill="#8e979b"/><text x="728" y="627" class="lb" font-size="10" fill="#22231e">PINS</text>
+  <g><rect x="786" y="604" width="70" height="26" fill="#fbf8ee" stroke="#b9b39c" transform="rotate(-6 820 617)"/><rect x="800" y="602" width="70" height="26" fill="#fbf8ee" stroke="#b9b39c" transform="rotate(2 835 615)"/><rect x="822" y="604" width="70" height="26" fill="#e3edf6" stroke="#9db3cf" transform="rotate(9 857 617)"/><path d="M812 612h44M812 619h30" stroke="#55585c" stroke-width="2" transform="rotate(2 835 615)"/></g>
+</g>
+<g id="page2" class="hot"><rect x="930" y="592" width="100" height="40" fill="#f6f3e8" stroke="#c9c2ad" transform="rotate(-5 980 612)"/><g stroke="#55585c" stroke-width="2" transform="rotate(-5 980 612)"><path d="M940 602h80M940 610h80M940 618h56"/></g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Sleep. Then find Mrs Halloran</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="apollo.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, wlBox = null, inLock = false, part = 'wool', seen = {};
+
+  /* the three parts, in outline: used on the wall, on the page of the notebook, and under the wool */
+  var STK = '<path d="M130 150L70 120V230L130 200"/><rect x="130" y="95" width="270" height="160"/>' +
+    '<circle cx="173" cy="136" r="15"/><circle cx="217" cy="136" r="15"/><circle cx="173" cy="208" r="15"/><circle cx="217" cy="208" r="15"/>' +
+    '<rect x="306" y="150" width="14" height="50"/><rect x="323" y="150" width="14" height="50"/><rect x="340" y="150" width="14" height="50"/>' +
+    '<path d="M400 95L540 150V200L400 255Z"/><path d="M400 95V255" stroke-width="7"/><rect x="540" y="160" width="26" height="30"/>' +
+    '<path d="M566 140l34-34h64l30 34v70l-30 34h-64l-34-34z"/><rect x="606" y="138" width="18" height="16"/><rect x="636" y="138" width="18" height="16"/><path d="M694 150h10M694 200h10"/>' +
+    '<rect x="704" y="90" width="130" height="170"/><path d="M834 150l46-24v98l-46-24"/><path d="M716 90L806 46h34M716 260L806 304h34"/>';
+  $('#stackS').innerHTML = STK;
+
+  ER.init({
+    theme: 'history', story: 'apollo', storyTitle: 'Lots and Lots of People', id: 'chart', no: 'II', title: 'The Wall Chart',
+    go: 'Go down the hall', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'The log had five tabs, and each one wanted the line where a thing first happened: who was speaking (the letters on the left), and exactly what they said. The stamp wanted that moment by the clock on the wall. The spacecraft&rsquo;s clock started from nothing at lift-off, at 13:13 on Saturday. Two days, seven hours and fifty-five minutes after that, it was Monday, 21:08.',
+      'It is now half past ten. Odyssey has three fuel cells to make her electricity. Two of them have stopped, and the oxygen that feeds the third is leaking away.',
+      'Down the hall there is a wall with the whole spacecraft drawn on it, a table with a ball of red wool, and a woman who does not look pleased to see a student.'
+    ],
+    exit: {"next":"desk","w":{"dc3e2a46":"5a90f161"}}, tags: {"y1":["f0ca8ae5"],"y2":["2cfc897d"],"y3":["d49f920b"],"y4":["cd544bda"],"y5":["d8a80761"],"y6":["459bc2db"],"y7":["4cb74ab6"],"y8":["fe555186"],"m1":["0374ad8d"],"m2":["6b6aebba"],"m3":["06b1cd44"]},
+    sound: ['archive', { root: 48, bpm: 56, mood: 'tense', drop: ['mel', 'arp'] }],
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('c-file') || null; seen = ER.flag('c-seen') || {};
+
+  /* ---------- the papers ---------- */
+  var WALL = '<h4>Apollo 13 &middot; what each part carries</h4>' +
+    '<svg viewBox="30 30 880 286"><g stroke="#fff" stroke-width="2.4" fill="none" stroke-linejoin="round">' + STK + '</g>' +
+    '<g font-family="\'Architects Daughter\',cursive" font-size="15" fill="#fff" text-anchor="middle"><text x="195" y="114">oxygen</text><text x="195" y="244">hydrogen</text><text x="330" y="142">3 fuel cells</text><text x="86" y="262">big engine</text>' +
+    '<text x="388" y="84">heat shield</text><text x="462" y="181">crew</text><text x="769" y="172">oxygen, water,</text><text x="769" y="191">batteries</text><text x="874" y="262">engine</text><text x="630" y="190">2 men</text></g></svg>' +
+    '<div class="cols"><div><h6>SERVICE MODULE</h6><p>Never comes home: it is let go before the air. It carries 2 oxygen tanks, 2 hydrogen tanks, 3 fuel cells and the big engine.</p></div>' +
+    '<div><h6>COMMAND MODULE &ldquo;ODYSSEY&rdquo;</h6><p>The only part that comes home. She carries the crew, the heat shield and the parachutes. Of her own she has only 3 small batteries and 1 small tank of oxygen (the surge tank). They are meant for the very end: down through the air, and on the sea.</p></div>' +
+    '<div><h6>LUNAR MODULE &ldquo;AQUARIUS&rdquo;</h6><p>Built to take two men down to the Moon and keep them for two days. Never comes home: she has no heat shield. She carries her own oxygen, her own water, her own batteries and her own engine.</p></div></div>' +
+    '<p class="fc">A FUEL CELL joins hydrogen and oxygen. Out come electricity, and water, which the crew drink. No oxygen: no electricity, and no new water.</p>';
+  var ROWS2 = [
+    ['02 08 34 29', 'CC', '&hellip; we&rsquo;d like you to open circuit fuel cell 3.<span class="pn">open circuit = cut it off. It is giving nothing.</span>'],
+    ['02 08 35 55', 'CC', '13, Houston. Turn BATTERY A OFF - -'],
+    ['02 08 36 02', 'CDR', 'BATTERY A OFF. Roger.'],
+    ['02 08 37 07', 'CC', '13, Houston. We&rsquo;d like you to isolate your O2 surge tank. Over.<span class="pn">isolate = shut it off from everything else, so that nothing can drain it.</span>'],
+    ['02 08 39 21', 'CMP', 'Let&rsquo;s read you the lights we got on now; CRYO PRESS, FUEL CELL 1, FUEL CELL 3, MAIN BUS B UNDERVOLT, SUIT COMPRESSOR.'],
+    null,
+    ['02 09 14 08', 'LMP', 'And, Houston, 13. O2 tank pressure number 1 is less than 300 now.<span class="pn">It ought to read about 900.</span>'],
+    ['02 09 14 14', 'CC', 'Roger. We&rsquo;re seeing that. We confirm it.']
+  ];
+  var NEED = [null, ['AIR TO', 'BREATHE'], ['ELECTRICITY'], ['WATER'], ['AN ENGINE', 'TO STEER', 'HOME'], ['AIR TO', 'BREATHE'], ['ELECTRICITY'], ['SOMETHING', 'TO KEEP THE', 'HEAT OUT'], ['SOMETHING', 'TO SLOW', 'THE FALL']];
+  var SOCK = {
+    s1: [195, 136, 'OXYGEN TANKS', 195, 113], s2: [195, 208, 'HYDROGEN TANKS', 195, 245], s3: [330, 175, 'FUEL CELLS', 330, 142], s4: [98, 175, 'BIG ENGINE', 92, 256],
+    c1: [445, 205, 'BATTERIES (3)', 452, 272], c2: [445, 150, 'SURGE TANK', 494, 104], c3: [400, 175, 'HEAT SHIELD', 396, 84], c4: [518, 175, 'PARACHUTES', 532, 248],
+    l1: [738, 132, 'OXYGEN', 738, 113], l2: [802, 132, 'WATER', 802, 113], l3: [770, 222, 'BATTERIES', 770, 251], l4: [858, 175, 'ENGINE', 884, 252]
+  };
+  var NAMES = ['?', 'AQUARIUS', 'ODYSSEY', 'THE SERVICE MODULE'], NKEY = ['', 'aquarius', 'odyssey', 'service'];
+
+  function hints() {
+    if (nextFile) return ['go', ['Nothing more can be done at this wall tonight. Use the button at the bottom of the screen.']];
+    if (inLock && part === 'line') return ['line', [
+      'Look at your own wool. Where do the four strands for tonight go? Where do the four for the last hour go?',
+      'A ship that is switched off uses nothing. Which ship has something small of her own that must be kept for the end?'
+    ]];
+    if (inLock) return ['wool', [
+      'Each card is something that the three men need. Each brass pin is something that one of the three parts carries. Ask two things of every pin: is it still working, and may it be used tonight?',
+      'The cards on the left are for the days of the journey home. The cards on the right are for the last hour, down through the air. Which of the three parts will still be there in that last hour? The chart says which ones never come home.',
+      'Nothing in the service module can be trusted now: read the new page of the air-to-ground. What Odyssey carries of her own is small, and the chart says what it is meant for. So tonight&rsquo;s needs must come from somewhere else.'
+    ]];
+    if (seen.chart && seen.page) return ['open', ['The cards, the pins and the red wool are on the table in front of the chart.']];
+    return ['look', [
+      'Mrs Halloran told you to read the chart before you touch anything. It is the big blue drawing on the wall.',
+      'Two papers matter here: the wall chart, and the new page of the air-to-ground, which is lying on the right-hand end of the table. Mrs Halloran will answer questions too, if they are asked properly.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function see(k) { if (!seen[k]) { seen[k] = 1; ER.flag('c-seen', seen); } paint(); }
+  function paint() {
+    $('#tbl').classList.toggle('ready', !!(seen.chart && seen.page) && !nextFile);
+    ER.pips((seen.chart ? 1 : 0) + (seen.page ? 1 : 0) + (nextFile ? 1 : 0), 3);
+    if (nextFile) {
+      document.body.classList.add('done'); $('#go').classList.add('on');
+      ['#bd1', '#bd2', '#bd3'].forEach(function (s, i) { var m = chalked(); if (m[i]) $(s).textContent = NAMES[m[i]]; });
+    }
+  }
+  /* what the player chalked on the blackboard (kept with the saved game, not in this page) */
+  function chalked() { return (ER.flag('c-ans') || {}).m || []; }
+
+  function begin() {
+    paint(); AP.mood('tense');
+    if (ER.flag('c-in')) { busy = false; ER.say('The wall chart. Mrs Halloran has not moved.'); return; }
+    ER.flag('c-in', 1);
+    ER.narrate([
+      'A long wall, a drawing as big as a car, and a woman with a slide rule in her hand and a pencil behind her ear. Mrs Halloran does sums for a living, and she has been doing them without a stop since nine o&rsquo;clock.',
+      '&ldquo;So Mr Voss has sent me the co-op,&rdquo; she says, to the wall. &ldquo;Very well. Put the page you brought on the table. And read the chart before you touch anything.&rdquo;',
+      '&ldquo;In this building a number without a unit is a rumour, and a plan without a reason is a wish. I have no time tonight for rumours or for wishes.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things in the room ---------- */
+  $('#chartW').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: WALL, cls: 'wall', clue: { id: 'wall', title: 'The wall chart: what each part carries', kind: 'Wall chart' }, done: function () { AP.learn('service module', 'fuel cell', 'heat shield'); see('chart'); } });
+  });
+  $('#page2').addEventListener('click', function (e) {
+    e.stopPropagation(); if (busy) return;
+    ER.read({ html: AP.page(2, 'The pencil is mine. M.H.', ROWS2), cls: 'tscript', clue: { id: 'page2', title: 'Air-to-ground, page 2', kind: 'Typed transcript' }, done: function () { see('page'); } });
+  });
+  $('#hall').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mrs Marian Halloran', role: 'mathematician · at the wall chart, Monday night', face: window.FACE('halloran'),
+      lines: [
+        { note: 'She does not turn round.', a: '&ldquo;If you have come to ask what is going on, co-op, ask it properly. One question at a time.&rdquo;' },
+        { q: 'What is wrong with Odyssey?', a: 'With Odyssey herself? Nothing that anybody knows of. She is not hurt. She is starving. Everything she lives on comes from the service module behind her, and the service module is where the bang was.' },
+        { q: 'What did the bang do?', a: 'Nobody knows, and I do not guess. I can tell you what the gauges say. One oxygen tank is empty. The other is going down while we watch it. Two of the three fuel cells have stopped, and the third is living on the tank that is going down.' },
+        { q: 'What is a fuel cell?', a: 'It is on the chart. Everything is on the chart. I drew half of it myself.' },
+        { q: 'And when the oxygen has all gone?', a: 'Then Odyssey has only what she carries herself, and that is very little. So: eight cards on the table. Eight things that those three men cannot do without. Show me, with the wool, where each one is going to come from.' }
+      ],
+      clue: { id: 'hall1', title: 'Mrs Halloran, at the wall chart', kind: 'What she said' }, last: 'Thank her'
+    });
+  });
+  AP.thing('#clock', null, 'Half past ten. In mission time that is 57 hours and 17 minutes. You are getting quicker at the sum.', isBusy);
+  AP.thing('#cooler', 'water cooler', 'A water cooler. Every few seconds a bubble goes up through it. It is the only thing in the building that is not in a hurry.', isBusy);
+  AP.thing('#phone', null, 'A telephone on the wall. It has rung four times since you came, and every time it was somebody asking Mrs Halloran for a number.', isBusy);
+  AP.thing('#lights', null, 'One of the lights flickers. Nobody is going to change it this week.', isBusy);
+  AP.thing('#board', 'blackboard', function () {
+    var m = chalked();
+    return nextFile && m.length === 3 ? 'Three lines in chalk. LIVE IN ' + NAMES[m[0]] + '. SWITCH OFF ' + NAMES[m[1]] + '. COME HOME IN ' + NAMES[m[2]] + '.' : 'A blackboard on wheels. Somebody has begun three lines in chalk, and finished none of them.';
+  }, isBusy);
+  $('#tbl').addEventListener('click', function (e) {
+    if (busy) return;
+    if (nextFile) { ER.say('Eight strands of red wool, all pinned and knotted. The blackboard says the rest.'); return; }
+    if (!seen.chart) { ER.wordAt(e.clientX, e.clientY, 'wool'); ER.say('&ldquo;The chart first,&rdquo; says Mrs Halloran, without looking. &ldquo;Then the wool.&rdquo;'); return; }
+    if (!seen.page) { ER.say('&ldquo;And have you read the page you brought me?&rdquo; says Mrs Halloran. &ldquo;I have. It is on the end of the table.&rdquo;'); return; }
+    openWool();
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; AP.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+
+  /* ---------- the wool ---------- */
+  function build() {
+    var box = ER.el('div', 'wl'), s, svg, msgEl, goBtn, link = {}, okN = {}, sel = 0, tmp = null, pick = [0, 0, 0], k, i, x, n;
+    s = '<svg viewBox="0 0 1040 512"><defs><pattern id="grid2" width="26" height="26" patternUnits="userSpaceOnUse"><path d="M0 0H26M0 0V26" stroke="#fff" stroke-opacity=".07" stroke-width="1.2" fill="none"/></pattern></defs>' +
+      '<rect width="1040" height="342" fill="#1d3f6e"/><rect width="1040" height="342" fill="url(#grid2)"/><rect y="342" width="1040" height="170" fill="#b08a5a"/><rect y="342" width="1040" height="6" fill="#8c6a42"/>' +
+      '<text x="520" y="30" class="sl" style="font-size:14px;letter-spacing:.3em">APOLLO 13 &#183; WHAT EACH PART CARRIES</text>' +
+      '<g stroke="#fff" stroke-width="2.2" fill="none" stroke-linejoin="round" opacity=".8">' + STK + '</g>' +
+      '<text x="265" y="328" class="nm">SERVICE MODULE</text><text x="470" y="328" class="nm">ODYSSEY</text><text x="745" y="328" class="nm">AQUARIUS</text>' +
+      '<text x="960" y="150" class="sl" style="fill:#ffd97a">A BRASS PIN:</text><text x="960" y="168" class="sl">something that</text><text x="960" y="186" class="sl">part carries</text>';
+    for (k in SOCK) s += '<g class="sock" data-s="' + k + '"><circle class="hit" cx="' + SOCK[k][0] + '" cy="' + SOCK[k][1] + '" r="24"/><circle class="pin" cx="' + SOCK[k][0] + '" cy="' + SOCK[k][1] + '" r="7.5" fill="#e7c873" stroke="#6f531a" stroke-width="2"/>' +
+      '<text class="sl" x="' + SOCK[k][3] + '" y="' + SOCK[k][4] + '">' + SOCK[k][2] + '</text></g>';
+    s += '<text x="262" y="374" class="gh">FROM TONIGHT: THE LONG WAY HOME</text><text x="778" y="374" class="gh">THE LAST HOUR: DOWN THROUGH THE AIR</text><g class="yarns"></g>';
+    for (n = 1; n <= 8; n++) {
+      x = (n <= 4 ? 14 : 530) + ((n - 1) % 4) * 126;
+      s += '<g class="need" data-n="' + n + '" data-x="' + (x + 59) + '"><rect class="cd" x="' + x + '" y="390" width="118" height="110" rx="3" fill="' + (n <= 4 ? '#fbf8ee' : '#dfeaf5') + '" stroke="#6b6552" stroke-width="1.5"/>' +
+        '<circle cx="' + (x + 59) + '" cy="402" r="6" fill="#e7c873" stroke="#6f531a" stroke-width="2"/>';
+      NEED[n].forEach(function (t, j) { s += '<text class="ct" x="' + (x + 59) + '" y="' + (462 - (NEED[n].length - 1) * 10 + j * 20) + '">' + t + '</text>'; });
+      s += '</g>';
+    }
+    s += '</svg><div class="wl-foot"><p class="wl-line">LIVE IN <button type="button" class="wl-b" data-i="0">?</button>. SWITCH <button type="button" class="wl-b" data-i="1">?</button> OFF. COME HOME IN <button type="button" class="wl-b" data-i="2">?</button>.</p><p class="pmsg"></p>' +
+      '<button type="button" class="btn wl-go" disabled>Ask Mrs Halloran</button></div>';
+    box.innerHTML = s;
+    svg = box.querySelector('svg'); msgEl = box.querySelector('.pmsg'); goBtn = box.querySelector('.wl-go');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function path(n, to) {
+      var c = box.querySelector('.need[data-n="' + n + '"]'), x1 = +c.getAttribute('data-x'), y1 = 402, x2 = to[0], y2 = to[1];
+      return 'M' + x1 + ' ' + y1 + 'Q' + ((x1 + x2) / 2 + (x2 - x1) * 0.08).toFixed(1) + ' ' + ((y1 + y2) / 2 + 34).toFixed(1) + ' ' + x2.toFixed(1) + ' ' + y2.toFixed(1);
+    }
+    function draw() {
+      var out = '', n, c = 0;
+      for (n = 1; n <= 8; n++) if (link[n]) { out += '<path class="yarn' + (okN[n] ? ' ok' : '') + '" d="' + path(n, SOCK[link[n]]) + '"/>'; c++; }
+      if (tmp) out += '<path class="yarn tmp" d="' + path(tmp[0], tmp[1]) + '"/>';
+      box.querySelector('.yarns').innerHTML = out;
+      ER.$$('.need', box).forEach(function (g) { var n = +g.getAttribute('data-n'); g.classList.toggle('sel', n === sel); g.classList.toggle('ok', !!okN[n]); });
+      goBtn.disabled = part === 'wool' ? c < 8 : pick.indexOf(0) >= 0;
+      box.setAttribute('data-links', c); box.setAttribute('data-ok', Object.keys(okN).length);
+    }
+    function near(p) {
+      var best = null, bd = 34, k, d;
+      for (k in SOCK) { d = Math.sqrt(Math.pow(SOCK[k][0] - p.x, 2) + Math.pow(SOCK[k][1] - p.y, 2)); if (d < bd) { bd = d; best = k; } }
+      return best;
+    }
+    function attach(n, k) { link[n] = k; sel = 0; AP.sfx.pin(); draw(); }
+    ER.$$('.need', box).forEach(function (g) {
+      var n = +g.getAttribute('data-n');
+      ER.drag(g, {
+        start: function () { if (part !== 'wool' || okN[n]) return false; },
+        move: function (ev, moved) { if (!moved) return; var p = ER.pt(svg, ev); tmp = [n, [p.x, p.y]]; sel = 0; draw(); },
+        end: function (ev, moved) {
+          var p, k;
+          tmp = null;
+          if (!moved) { sel = sel === n ? 0 : n; ER.sfx.click(); draw(); return; }
+          p = ER.pt(svg, ev); k = near(p);
+          if (k) attach(n, k); else draw();
+        }
+      });
+    });
+    ER.$$('.sock', box).forEach(function (g) {
+      g.addEventListener('click', function () { if (part === 'wool' && sel && !okN[sel]) attach(sel, g.getAttribute('data-s')); });
+    });
+    function why(n, k) {
+      var late = n > 4, mod = k.charAt(0);
+      if (mod === 's') {
+        if (late) return 'The service module never comes home. It is let go before the air. Read its corner of the chart.';
+        if (k === 's1') return 'One tank reads zero and the other is going down. Read the page you brought me.';
+        if (k === 's2') return 'The hydrogen is all there, every pound of it. A fuel cell needs two things, and it is losing the other one.';
+        if (k === 's3') return 'Two fuel cells have stopped. The third is living on a tank that is leaking. How long do you give it?';
+        return 'An engine full of fuel, and bolted to the end where the bang was. Nobody can go out there and look at it. Would you light it?';
+      }
+      if (mod === 'c' && !late) return k === 'c1' || k === 'c2' ? 'That is the end of the flight you are spending. Read what the chart says those are meant for. And why do you suppose Houston said &ldquo;isolate&rdquo;?' : 'That is no use to anybody tonight. Read the label under the pin.';
+      if (mod === 'l' && late) return 'In the last hour Aquarius is not there. Read her corner of the chart: what has she not got? So what must happen to her before the air?';
+      return 'The right ship, and the wrong pin. Read the label under it.';
+    }
+    ER.$$('.wl-b', box).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = +b.getAttribute('data-i'); if (part !== 'line') return;
+        pick[i] = pick[i] % 3 + 1; b.textContent = NAMES[pick[i]]; AP.sfx.chalk(); draw();
+      });
+    });
+    goBtn.addEventListener('click', function () {
+      var wrong = [], first = '', n, file, t;
+      if (part === 'wool') {
+        for (n = 1; n <= 8; n++) {
+          if (okN[n]) continue;
+          if (ER.check('y' + n, link[n])) okN[n] = 1;
+          else { wrong.push(n); if (!first) first = why(n, link[n]); delete link[n]; }
+        }
+        if (wrong.length) {
+          AP.slip(); ER.sfx.no(); draw();
+          msg('Mrs Halloran pulls out ' + (wrong.length === 1 ? 'one pin' : wrong.length + ' pins') + '. &ldquo;' + first + '&rdquo; The strands that are right, she knots.');
+          return;
+        }
+        part = 'line'; ER.sfx.ok(); box.classList.add('say'); goBtn.textContent = 'Chalk it up'; draw();
+        msg('Eight strands, eight knots. &ldquo;Now say it,&rdquo; says Mrs Halloran. &ldquo;Three short lines, for the blackboard. People will make their plans from that board.&rdquo; Click each gap until it holds the right name.');
+        return;
+      }
+      if (part !== 'line') return;
+      if (ER.check('m1', NKEY[pick[0]]) && ER.check('m2', NKEY[pick[1]]) && ER.check('m3', NKEY[pick[2]])) {
+        file = ER.exitOk([[1, 2, 3, 4, 5, 6, 7, 8].map(function (n) { return link[n]; }).join('-') + '|' + pick.map(function (v) { return NKEY[v]; }).join('-')]);
+        if (!file) { msg('The chalk breaks, and nothing happens. Something is wrong: tell your teacher.'); return; }
+        part = 'done'; nextFile = file; ER.flag('c-file', file);
+        ER.flag('c-ans', { y: [1, 2, 3, 4, 5, 6, 7, 8].map(function (n) { return link[n]; }), m: pick.slice() });
+        var st = ER.state(); st.done = st.done || {}; st.done.chart = 1; ER.flag('c-out', 1);
+        ER.sfx.ok(); msg('Mrs Halloran reads it aloud, once, and nods. &ldquo;Chalk it up.&rdquo;');
+        setTimeout(function () { ER.closeAll(); after(); }, 2200);
+        return;
+      }
+      AP.slip(); ER.sfx.no();
+      if (!ER.check('m1', NKEY[pick[0]])) t = pick[0] === 2 ? 'Live in Odyssey, on three small batteries? Look at where your own wool goes for tonight&rsquo;s electricity.' : 'Nobody can live in the service module. There is no room in it for a man.';
+      else if (!ER.check('m2', NKEY[pick[1]])) t = pick[1] === 1 ? 'Switch off the one ship that is keeping them alive?' : 'The service module has switched itself off. Which ship still has something of her own that is worth saving?';
+      else t = pick[2] === 1 ? 'Home in Aquarius? Read her corner of the chart once more. What has she not got?' : 'The service module never comes home.';
+      msg('&ldquo;' + t + '&rdquo;');
+    });
+    draw();
+    msg('Eight cards and a ball of red wool. Drag each card&rsquo;s pin up to the brass pin that it must be fed from, or click the card and then the brass pin. Nothing is judged until all eight strands are up.');
+    return box;
+  }
+  function openWool() {
+    if (!wlBox) wlBox = build();
+    inLock = true;
+    ER.open('ov-lock', wlBox, function () { inLock = false; });
+  }
+  function after() {
+    var ans = ER.flag('c-ans') || { y: [], m: [] }, SHIP = { s: 'the service module', c: 'Odyssey', l: 'Aquarius' }, note;
+    busy = true; paint(); AP.sfx.chalk(); AP.learn('lifeboat');
+    note = '<p><b>LIVE IN ' + NAMES[ans.m[0]] + '. SWITCH ' + NAMES[ans.m[1]] + ' OFF. COME HOME IN ' + NAMES[ans.m[2]] + '.</b></p><p>From tonight:<br>';
+    ans.y.forEach(function (k, i) {
+      if (i === 4) note += '</p><p>In the last hour:<br>';
+      note += NEED[i + 1].join(' ').toLowerCase() + ' &larr; ' + SHIP[k.charAt(0)] + ', ' + SOCK[k][2].toLowerCase() + '<br>';
+    });
+    AP.mine('plan', 'The blackboard, Monday night', note + '</p><p>A fuel cell needs oxygen. No oxygen: no electricity, and no new water.</p>', true);
+    ER.narrate([
+      'You write the three lines on the blackboard. The chalk squeaks. Nobody in the hall takes any notice, because on the wall behind you the speaker has begun to talk.',
+      AP.said('Swigert', 'Okay, Jack. It looks like O2 tank 1 pressure is just a hair over 200.'),
+      AP.said('Houston', 'It&rsquo;s slowly going to zero, and we&rsquo;re starting to think about the LM lifeboat.'),
+      AP.said('Swigert', 'Yes. That&rsquo;s what we&rsquo;re thinking about, too.'),
+      '&ldquo;Lifeboat,&rdquo; says Mrs Halloran. &ldquo;So that is the word.&rdquo; She looks at the wool, and then, for the first time, at you.',
+      'Twelve minutes later, at eleven minutes to eleven, the speaker says the rest.',
+      AP.said('Houston', '&hellip; We figure we&rsquo;ve got about 15 minutes&rsquo; worth of power left in the command module, so we want you to start getting over in the LM and getting some power on that.')
+    ], function () {
+      AP.mine('life', 'Heard on the speaker, Monday night', '<p>22:37, Houston to the crew:</p><p><span class="said">&ldquo;It&rsquo;s slowly going to zero, and we&rsquo;re starting to think about the LM lifeboat.&rdquo;</span></p><p>22:49:</p>' +
+        '<p><span class="said">&ldquo;&hellip; We figure we&rsquo;ve got about 15 minutes&rsquo; worth of power left in the command module, so we want you to start getting over in the LM and getting some power on that.&rdquo;</span></p>', true);
+      ER.narrate([
+        'Fifteen minutes. Somewhere down the hall a man starts to run, which is a thing that nobody in this building does.',
+        'By seven minutes to midnight, Odyssey is dark. There was no check list for switching a command module off in the middle of a flight: one was made up tonight. There is none for switching her on again. Somebody will have to write that too.',
+        '&ldquo;A lifeboat built for two men, for two days,&rdquo; says Mrs Halloran. &ldquo;Now she must keep three men for four. That is not a question for wool, co-op. That is a question for sums. Come and find me tomorrow night.&rdquo;'
+      ], function () { busy = false; paint(); });
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Kitchen · Your Place Is Laid</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="orchard.css">
+<style>
+  body{--bg:#191813;--accent:#e2b25c;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(24,23,18,.96);--tc-ink:#efe9d6;--cap-bg:rgba(22,21,16,.95);--panel:#211f18;--face-bg:#3a3428;--q-ink:#e2b25c;--fade:#0b0a07;--hud-bg:rgba(22,21,16,.8)}
+  .tc-room{font-size:clamp(44px,6.4vw,88px)}
+  #beam{animation:beam 9s steps(1,end) infinite}
+  @keyframes beam{0%{opacity:.13}46%{opacity:.1}52%{opacity:.13}80%{opacity:.11}84%{opacity:.13}}
+  #bellamy.ready,#board.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.25)}}
+  #tagsv,#latchup{display:none}
+  #scene.done #tagsv,#scene.done #latchup{display:block}
+  #scene.done #latchdn{display:none}
+  #scene.gone #fair{display:none}
+
+  /* the year board: twelve pegs, eleven tin tags, and Hannah's book open beside it */
+  .yb{width:min(1190px,96vw);display:flex;gap:18px;align-items:flex-start;-webkit-user-select:none;user-select:none}
+  .yb .doc.kbook{flex:1 1 0;width:auto;max-height:none;font-size:19.5px;line-height:25px;padding:22px 24px 14px 30px;
+    background:#f3ecd6 repeating-linear-gradient(transparent 0,transparent 24px,#d6cba8 24px,#d6cba8 25px)}
+  .yb .doc.kbook h4{font-size:20px;line-height:25px}
+  .yb .doc.kbook h4 small{font-size:17.5px}
+  .yb-side{flex:0 0 548px}
+  .yb-board{display:grid;grid-template-columns:repeat(6,1fr);gap:8px 6px;padding:12px 10px 12px;background:#5a4028 linear-gradient(174deg,#7a5a38,#4a3320);border:3px solid #33230f;border-radius:3px;box-shadow:0 22px 60px rgba(0,0,0,.6)}
+  .mo{position:relative;text-align:center}
+  .mo i{display:block;font-style:normal;font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.14em;color:#e9d9b0;text-shadow:0 1px 0 #2a1c0c}
+  .mo u{display:block;width:12px;height:12px;margin:3px auto 0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d9c08a,#5a4426);box-shadow:0 2px 3px rgba(0,0,0,.5)}
+  .pegslot{min-height:52px;margin-top:-3px;padding-top:5px;border:1.5px dashed rgba(233,217,176,.35);border-radius:4px;background:rgba(0,0,0,.14)}
+  .mo.bad{outline:3px solid #d2452f;outline-offset:1px}
+  .yb-tray{display:flex;flex-wrap:wrap;gap:7px;min-height:106px;margin-top:8px;padding:9px;background:#c9b48a linear-gradient(#d6c39a,#b9a276);border-radius:3px;box-shadow:inset 0 2px 0 rgba(255,255,255,.3);align-content:flex-start}
+  .tg{position:relative;display:block;width:82px;padding:15px 2px 6px;text-align:center;font-family:'Stardos Stencil',serif;font-weight:700;font-size:12.5px;letter-spacing:.03em;line-height:1.15;color:#23282a;
+    background:linear-gradient(160deg,#dfe3e0,#aeb5b2 60%,#8f9794);border:1px solid #6f7775;border-radius:9px 9px 3px 3px;box-shadow:0 3px 6px rgba(0,0,0,.4)}
+  .tg:before{content:'';position:absolute;left:50%;top:4px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#3a2a1a;box-shadow:inset 0 1px 1px #000}
+  .pegslot .tg{width:auto;margin:0 2px;box-shadow:0 2px 3px rgba(0,0,0,.4)}
+  .yb .pmsg{font-size:17.5px;line-height:1.34;min-height:72px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9b4a2"/><stop offset=".7" stop-color="#9c9786"/><stop offset="1" stop-color="#7d796b"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6f6b60"/><stop offset="1" stop-color="#2c2a25"/></linearGradient>
+  <linearGradient id="oakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a4028"/><stop offset="1" stop-color="#33230f"/></linearGradient>
+  <linearGradient id="dealG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6c7a2"/><stop offset="1" stop-color="#b3a37c"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe6e2"/><stop offset=".5" stop-color="#b9c7b6"/><stop offset="1" stop-color="#6f8a62"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f1dc9a"/><stop offset=".5" stop-color="#c29a3f"/><stop offset="1" stop-color="#7a5c1c"/></linearGradient>
+  <linearGradient id="dayG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6ece6"/><stop offset=".6" stop-color="#c9d6c4"/><stop offset="1" stop-color="#8fa67c"/></linearGradient>
+  <radialGradient id="vig" cx="42%" cy="46%" r="82%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#0c0b08" stop-opacity=".22"/><stop offset="1" stop-color="#060504" stop-opacity=".82"/></radialGradient>
+</defs>
+
+<!-- ceiling and beams, a limewashed wall, a floor of stone flags -->
+<rect x="-1000" y="-400" width="3600" height="512" fill="#2c261d"/><g id="beams" fill="#1c1710"></g>
+<rect x="-1000" y="110" width="3600" height="530" fill="url(#wallG)"/>
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#floorG)"/><g id="flags" stroke="#24221d" stroke-width="3" opacity=".7"></g>
+<rect x="-1000" y="632" width="3600" height="10" fill="#5f5b52"/>
+
+<!-- the window on the orchard side -->
+<g id="window" class="hot"><path d="M70 170H350V486H70Z" fill="#8f8a7a"/><rect x="98" y="194" width="224" height="264" fill="url(#glassG)"/>
+  <g fill="#4f6a44"><ellipse cx="150" cy="392" rx="64" ry="44"/><ellipse cx="282" cy="398" rx="58" ry="40"/></g><ellipse cx="214" cy="372" rx="34" ry="24" fill="#8c3a2c"/><g fill="#c9452f"><circle cx="202" cy="366" r="4"/><circle cx="220" cy="376" r="4"/><circle cx="228" cy="362" r="3.500"/><circle cx="208" cy="382" r="3"/></g>
+  <g stroke="#3a3428" stroke-width="7" fill="none"><rect x="98" y="194" width="224" height="264"/><path d="M172.700 194v264M247.300 194v264M98 282h224M98 370h224"/></g>
+  <path d="M60 486h300v16h-300z" fill="#a9a393"/><path d="M70 170l28 24M350 170l-28 24" stroke="#7d796b" stroke-width="3"/></g>
+<path id="beam" d="M98 458L322 458L900 900L-60 900Z" fill="#e6efe9" opacity=".13" pointer-events="none"/>
+
+<!-- six pegs by the door, each with a name burnt in -->
+<g id="pegs" class="hot"><rect x="392" y="246" width="136" height="20" rx="3" fill="url(#oakG)"/><g id="pegv"></g>
+  <path d="M398 262q-12 30 4 52h20q14 -22 2 -52z" fill="#3a3a34"/><path d="M394 314h34" stroke="#2a2a26" stroke-width="7" stroke-linecap="round"/></g>
+
+<!-- the chimney breast: the year board, the mantel shelf, the range -->
+<rect x="548" y="110" width="364" height="530" fill="#c3bdaa"/><path d="M548 110v530M912 110v530" stroke="#8f8a7a" stroke-width="4"/>
+<g id="board" class="hot"><rect x="574" y="146" width="312" height="112" rx="3" fill="url(#oakG)"/><rect x="574" y="146" width="312" height="112" rx="3" fill="none" stroke="#24170a" stroke-width="3"/><g id="pegrow"></g><g id="tagsv"></g></g>
+<rect x="540" y="284" width="380" height="16" fill="url(#oakG)"/><rect x="552" y="300" width="356" height="6" fill="#24170a" opacity=".5"/>
+<g fill="url(#brassG)"><rect x="580" y="252" width="10" height="32"/><rect x="574" y="278" width="22" height="6"/><rect x="870" y="252" width="10" height="32"/><rect x="864" y="278" width="22" height="6"/></g><rect x="582" y="238" width="6" height="16" fill="#ece6d6"/><rect x="872" y="238" width="6" height="16" fill="#ece6d6"/>
+<g id="range" class="hot"><rect x="582" y="318" width="296" height="322" fill="#121211"/><rect x="598" y="398" width="264" height="242" fill="#1d1e20"/><rect x="592" y="388" width="276" height="14" fill="#2c2d30"/>
+  <rect x="612" y="424" width="108" height="92" fill="#141516" stroke="#34363a" stroke-width="3"/><rect x="740" y="424" width="108" height="92" fill="#141516" stroke="#34363a" stroke-width="3"/><rect x="612" y="536" width="236" height="60" fill="#141516" stroke="#34363a" stroke-width="3"/>
+  <path d="M606 412h248" stroke="url(#brassG)" stroke-width="5"/><circle cx="706" cy="470" r="6" fill="url(#brassG)"/><circle cx="754" cy="470" r="6" fill="url(#brassG)"/><path d="M640 566h180" stroke="#34363a" stroke-width="4"/>
+  <path d="M790 388v-26q0 -10 -18 -12h-30q-14 2 -14 12v26z" fill="#2c2d30"/><path d="M792 362q22 -4 26 10" stroke="#2c2d30" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M736 350q20 -16 40 0" stroke="#2c2d30" stroke-width="5" fill="none"/></g>
+
+<!-- the dresser: blue plates, four hooks and three mugs, the Book and her book -->
+<rect x="946" y="140" width="252" height="500" fill="url(#oakG)"/><rect x="958" y="152" width="228" height="282" fill="#2a1c0e"/>
+<g id="plates"></g>
+<g id="mugs" class="hot"><rect x="962" y="372" width="220" height="62" fill="#000" opacity="0"/><g id="mugv"></g></g>
+<rect x="938" y="434" width="268" height="14" fill="#6b4c30"/><rect x="958" y="462" width="104" height="160" fill="none" stroke="#24170a" stroke-width="4"/><rect x="1082" y="462" width="104" height="160" fill="none" stroke="#24170a" stroke-width="4"/><circle cx="1052" cy="540" r="5" fill="url(#brassG)"/><circle cx="1092" cy="540" r="5" fill="url(#brassG)"/>
+<g id="bible" class="hot"><rect x="964" y="396" width="78" height="38" rx="3" fill="#15130f"/><rect x="964" y="402" width="78" height="6" fill="#d6c7a2"/><rect x="996" y="396" width="14" height="38" fill="url(#brassG)"/><path d="M970 426h66" stroke="#3a342a" stroke-width="2"/></g>
+<g id="kbook" class="hot" transform="rotate(-7 1090 420)"><rect x="1056" y="412" width="74" height="22" rx="2" fill="#6b3a22"/><rect x="1058" y="416" width="70" height="5" fill="#ead9b0"/><path d="M1068 412v22" stroke="#4a2414" stroke-width="3"/></g>
+
+<!-- the door to the back stairs, and the back door standing open -->
+<g id="sdoor" class="hot"><rect x="1232" y="214" width="132" height="426" fill="#33230f"/><rect x="1242" y="224" width="112" height="416" fill="#5a4630"/><path d="M1270 224v416M1298 224v416M1326 224v416" stroke="#3a2a18" stroke-width="3"/><path d="M1242 300h112M1242 560h112" stroke="#3a2a18" stroke-width="9"/>
+  <g id="latchdn"><rect x="1250" y="424" width="44" height="9" rx="3" fill="#15130f"/><circle cx="1256" cy="428" r="7" fill="#15130f"/></g><g id="latchup"><rect x="1250" y="424" width="44" height="9" rx="3" fill="#15130f" transform="rotate(-24 1256 428)"/><circle cx="1256" cy="428" r="7" fill="#15130f"/><path d="M1354 224v416" stroke="#0a0806" stroke-width="7"/></g></g>
+<g id="frame" class="hot"><rect x="1210" y="214" width="22" height="426" fill="#4a3320"/><g stroke="#d6c7a2" stroke-width="2.500" opacity=".85"><path d="M1213 392h12M1213 372h12M1213 350h9M1213 334h12M1213 312h9M1213 296h12M1213 430h9M1213 452h12M1213 470h9"/></g><rect x="1214" y="276" width="14" height="12" fill="#2a1c0e"/></g>
+<g id="bdoor" class="hot"><rect x="1404" y="186" width="176" height="454" fill="#33230f"/><rect x="1416" y="198" width="152" height="442" fill="url(#dayG)"/><path d="M1416 560q60 -30 152 -8v88h-152z" fill="#7a946a"/><path d="M1568 198l60 -16v500l-60 -42z" fill="#4a3826"/><path d="M1568 198v442" stroke="#24170a" stroke-width="4"/></g>
+<g id="fair" class="hot" transform="translate(1486 668) scale(.86)"></g>
+
+<!-- Father's chair at the head, the long table, the one place laid -->
+<g id="chair" class="hot"><path d="M150 800V470q0 -16 14 -16h70q14 0 14 16V800h-14V690h-70V800z" fill="#3a2a18"/><path d="M170 474v176M192 470v180M214 474v176" stroke="#5a4028" stroke-width="8"/><rect x="146" y="640" width="150" height="18" rx="5" fill="#4a3522"/>
+  <path d="M150 566h124q14 0 14 14v60h-12v-52h-126z" fill="#4a3522"/><path d="M282 658v142" stroke="#3a2a18" stroke-width="13"/></g>
+<g id="bench" class="hot"><rect x="330" y="560" width="660" height="14" fill="#6b4c30"/><path d="M350 574v20M970 574v20" stroke="#4a3320" stroke-width="12"/></g>
+<path d="M330 590H980L1052 676H258Z" fill="url(#dealG)"/><path d="M258 676H1052V698H258Z" fill="#8f7f5c"/><g stroke="#a39370" stroke-width="2" opacity=".7"><path d="M306 618H1004M282 648H1028"/></g>
+<path d="M286 698v124M1024 698v124M364 698v70M946 698v70" stroke="#6f6046" stroke-width="18"/>
+<g id="lamp" class="hot"><ellipse cx="772" cy="622" rx="34" ry="9" fill="url(#brassG)"/><path d="M748 620q0 -30 24 -34q24 4 24 34z" fill="url(#brassG)"/><rect x="762" y="572" width="20" height="16" fill="#7a5c1c"/><path d="M756 574q-12 -40 16 -66q28 26 16 66z" fill="#e6ece6" fill-opacity=".2" stroke="#dfe6e2" stroke-width="2.500"/><path d="M764 560q-6 -22 6 -40" stroke="#fff" stroke-width="2.500" fill="none" opacity=".5" stroke-linecap="round"/></g>
+<g id="place" class="hot"><rect x="436" y="590" width="230" height="56" fill="#000" opacity="0"/><ellipse cx="520" cy="624" rx="50" ry="15" fill="#f4f1e6"/><ellipse cx="520" cy="623" rx="50" ry="15" fill="none" stroke="#3d5a8c" stroke-width="3"/><ellipse cx="520" cy="624" rx="32" ry="9" fill="#e6e2d4"/>
+  <path d="M450 632l12 -22" stroke="#cfd4d6" stroke-width="5" stroke-linecap="round"/><path d="M448 636l4 -8" stroke="#8a6a3a" stroke-width="7" stroke-linecap="round"/><path d="M584 634l10 -24" stroke="#cfd4d6" stroke-width="6" stroke-linecap="round"/><path d="M582 638l4 -9" stroke="#8a6a3a" stroke-width="8" stroke-linecap="round"/>
+  <path d="M608 612v-26h30v26q-15 7 -30 0z" fill="#f4f1e6"/><path d="M608 596h30" stroke="#3d5a8c" stroke-width="5"/><path d="M638 592q13 2 11 10q-2 7 -11 6" stroke="#f4f1e6" stroke-width="5" fill="none"/><path d="M652 620v-10h14v10z" fill="#dfe3e0"/><ellipse cx="659" cy="610" rx="7" ry="2.500" fill="#f4f1e6"/></g>
+
+<!-- the living -->
+<g id="bellamy" class="hot" transform="translate(1128 852) scale(1.130)"></g>
+<g id="lumley" class="hot" transform="translate(1318 866) scale(1.150)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up the back stairs</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="orchard.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, yb = null, told = {};
+  var MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  var FULL = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  /* the tin tags, as they lie in the dresser drawer */
+  var TAGS = [['keepers', 'KEEPERS'], ['graft', 'GRAFT'], ['rent', 'RENT'], ['mow', 'MOW'], ['wassail', 'WASSAIL'], ['cider', 'CIDER'], ['thin', 'THIN'], ['wood', 'GRAFT-WOOD'], ['prune', 'PRUNE'], ['blossom', 'BLOSSOM'], ['earlies', 'EARLIES']];
+
+  /* a page of Hannah's kitchen book */
+  var BOOK = '<h4>THE ORCHARD YEAR<small>as Amos keeps it. &mdash; H. O., her book</small></h4>' +
+    '<p>A peg for every month, a tag for every job. One peg is bare, and is meant to be.</p>' +
+    '<p>We <b>WASSAIL</b> the trees on Old Twelfth Night, the seventeenth of January: cider on the roots, toast in the branches, and all the noise the boys can make.</p>' +
+    '<p>We <b>GRAFT</b> in the month of Lady Day, when the sap has begun to rise. An apple never comes true from a pip: sow a Blenheim and a stranger comes up. So every tree here is a twig of the old kind, bound on to a young root.</p>' +
+    '<p>The <b>GRAFT-WOOD</b> is cut a month before it is wanted, while the trees are still asleep.</p>' +
+    '<p>The month after the grafting has no tag. The grafts are taking, and are to be let alone.</p>' +
+    '<p>Then the <b>BLOSSOM</b>. Nobody leans a ladder on a tree until it has fallen.</p>' +
+    '<p>As soon as the blossom is over we <b>MOW</b> the orchard for hay.</p>' +
+    '<p>The <b>RENT</b> tag hangs on the month of Michaelmas. (Rent is paid at Lady Day, 25th March, and at Michaelmas, 29th September. Amos made the one tag, and hung it where there is fruit to pay with.)</p>' +
+    '<p>The first apples, the <b>EARLIES</b>, are picked the month before Michaelmas; the <b>KEEPERS</b> the month after it, before the hard frosts.</p>' +
+    '<p>We <b>THIN</b> the young fruit in the one month between the mowing and the first picking.</p>' +
+    '<p><b>CIDER</b> is made when the keepers have been a month in the loft.</p>' +
+    '<p>Amos <b>PRUNES</b> last of all, between the cider and the wassail, when the leaves are down.</p>';
+
+  var REGISTER = '<h4>FAMILY REGISTER</h4><h5>MARRIAGES</h5><p class="ink">Amos Oakes of Sweetings and Hannah Winterbourne of Hill End. 23rd April 1895.</p>' +
+    '<h5>BIRTHS</h5><p class="ink">Catherine. 3rd March 1898.</p><span class="strip"></span><p class="ink">George. 20th June 1907.</p><p class="ink">Charlotte. 9th November 1910.</p>' +
+    '<h5>DEATHS</h5><p class="ink2">Amos Oakes. 11th February 1941.</p><p class="ink3">Hannah Oakes. 2nd December 1951.</p>' +
+    '<p class="note">A strip of paper has been pasted over one line of the births, between Catherine and George. It is stuck down hard, and it has been there a very long time.</p>';
+
+  (function () {
+    var s = '', i, x, y, r, c, x2;
+    for (i = 0; i < 16; i++) s += '<rect x="' + (i * 214 - 900) + '" y="34" width="52" height="78" /><rect x="' + (i * 214 - 890) + '" y="34" width="8" height="78" fill="#3a3226"/>';
+    $('#beams').innerHTML = s + '<rect x="-1000" y="100" width="3600" height="12"/>'; s = '';
+    for (i = -14; i < 30; i++) { x = i * 112 - 260; x2 = 800 + (x - 800) * 3.06; s += '<path d="M' + x + ' 640L' + OY.num(x2) + ' 1340"/>'; }
+    [686, 748, 836, 960, 1130].forEach(function (v) { s += '<path d="M-1000 ' + v + 'H2600"/>'; });
+    $('#flags').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) { x = 404 + i * 23; s += (i === 3 ? '<rect x="' + (x - 10) + '" y="247" width="20" height="18" fill="#8a6a44"/>' : '') + '<circle cx="' + x + '" cy="262" r="5.500" fill="#24170a"/><circle cx="' + (x - 1) + '" cy="260" r="2" fill="#8a6a44"/>'; }
+    $('#pegv').innerHTML = s; s = ''; x2 = '';
+    for (i = 0; i < 12; i++) {
+      c = i % 6; r = Math.floor(i / 6); x = 604 + c * 50; y = 172 + r * 50;
+      s += '<circle cx="' + x + '" cy="' + y + '" r="4.500" fill="#d9c08a"/><circle cx="' + x + '" cy="' + (y + 1.500) + '" r="4.500" fill="none" stroke="#24170a" stroke-width="1.500"/>';
+      if (i !== 3) x2 += '<path d="M' + (x - 13) + ' ' + (y + 30) + 'v-18q13 -12 26 0v18z" fill="#aeb5b2" stroke="#5f6765" stroke-width="1.500"/><path d="M' + (x - 7) + ' ' + (y + 20) + 'h14" stroke="#23282a" stroke-width="2.500"/>';
+    }
+    $('#pegrow').innerHTML = s; $('#tagsv').innerHTML = x2; s = '';
+    [226, 300, 372].forEach(function (v, k) {
+      s += '<rect x="958" y="' + v + '" width="228" height="7" fill="#6b4c30"/>';
+      for (i = 0; i < 4; i++) { x = 992 + i * 56; s += '<circle cx="' + x + '" cy="' + (v - 28) + '" r="27" fill="#f4f1e6"/><circle cx="' + x + '" cy="' + (v - 28) + '" r="23" fill="none" stroke="#3d5a8c" stroke-width="' + (k === 1 ? 6 : 4) + '"/><circle cx="' + x + '" cy="' + (v - 28) + '" r="10" fill="none" stroke="#3d5a8c" stroke-width="2.500" stroke-dasharray="3 3"/>'; }
+    });
+    $('#plates').innerHTML = s; s = '';
+    ['K', '', 'G', 'C'].forEach(function (ch, k) {
+      x = 1066 + k * 34;
+      s += '<path d="M' + x + ' 379q0 8 6 8" stroke="#d9c08a" stroke-width="2.500" fill="none"/>';
+      if (ch) s += '<rect x="' + (x - 3) + '" y="386" width="22" height="22" rx="3" fill="#f4f1e6"/><path d="M' + (x - 3) + ' 392h22" stroke="#3d5a8c" stroke-width="4"/><text x="' + (x + 8) + '" y="405" class="fZ" font-size="9" font-weight="700" text-anchor="middle" fill="#3d5a8c">' + ch + '</text>';
+    });
+    $('#mugv').innerHTML = s;
+    $('#bellamy').innerHTML = OY.who('bellamy', { hold: true, extra: '<rect x="-12" y="-170" width="24" height="26" rx="4" fill="#f4f1e6"/><path d="M-12 -162h24" stroke="#3d5a8c" stroke-width="5"/>' });
+    $('#lumley').innerHTML = OY.who('lumley', { extra: '<rect x="18" y="-176" width="50" height="62" rx="2" fill="#8f959a"/><rect x="18" y="-176" width="50" height="14" fill="#6f757a"/><rect x="30" y="-150" width="26" height="14" fill="#f1ecdc"/>' });
+    $('#fair').setAttribute('transform', 'translate(1490 652) scale(.86)');
+    $('#fair').innerHTML = OY.who('fair', {});
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'orchard', storyTitle: 'Your Place Is Laid', id: 'kitchen', no: 'I', title: 'The Kitchen',
+    go: 'Go into the kitchen',
+    intro: [
+      'Sweetings Farm, at the end of a lane with grass down the middle. It is Tuesday the twenty-ninth of September, and on Thursday the farm is to be sold: house, buildings, sixty acres and an old orchard.',
+      'You are here to carry boxes for Miss Lumley of the County Record Office. Before a farm is sold she comes for its papers: account books, letters, anything in writing. &ldquo;The furniture goes to the saleroom,&rdquo; she says. &ldquo;The paper goes to me, or on the bonfire.&rdquo;',
+      'Mrs Bellamy, from the next farm, has the key. She lets you in at the back, straight into the kitchen. It is four o&rsquo;clock, and colder indoors than out.'
+    ],
+    exit: {"next":"backroom","w":{"e9ca4756":"5278755c"}}, tags: {"m1":["456cbaf4"],"m2":["2e0d41a7"],"m3":["621a3710"],"m4":["0e61fbc0"],"m5":["1ff7cc42"],"m6":["d0fd90c6"],"m7":["43ceab22"],"m8":["c5634bfc"],"m9":["e32bd7c1"],"m10":["bfe54da3"],"m11":["16ade290"],"m12":["8b66bca8"]},
+    sound: ['hush', { bpm: 52, drop: ['bass'], beds: [['wind', 0.3]] }],      /* a cold stone kitchen with the range out: the theme's slow tune, thin, and a draught */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('k-file') || null; told = ER.flag('k-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('k-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#bellamy').classList.toggle('ready', !told.bellamy);
+    $('#board').classList.toggle('ready', !!(told.bellamy && !nextFile));
+    $('#scene').classList.toggle('done', !!nextFile);
+    $('#scene').classList.toggle('gone', !!(told.fair || nextFile));
+    ER.pips((told.bellamy ? 1 : 0) + (told.book ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['The latch of the back-stairs door has lifted. Go up: the button at the bottom of the screen.']];
+    if (yb && yb.isOpen()) return ['year', [
+      'Three days in Hannah&rsquo;s book are real dates: Old Twelfth Night, Lady Day and Michaelmas. Hang those three tags first. Every other job is a month before something, or a month after it, or between two things.',
+      'Work outwards from the grafting. The graft-wood is cut a month before it is wanted. The month after the grafting is the bare one. &ldquo;Then the blossom&rdquo;: so the blossom comes in the month after the bare one, and the mowing as soon as the blossom is over.',
+      'Now work outwards from Michaelmas: the earlies the month before it, the keepers the month after it, the cider a month after the keepers. That leaves one tag for the one month between the mowing and the earlies, and one for the very end of the year.'
+    ]];
+    if (!told.bellamy) return ['bellamy', [
+      'Mrs Bellamy has the key, and she has been coming into this kitchen for eleven years. Ask her about the table.',
+      'Click Mrs Bellamy: the woman in the apron, in front of the dresser.'
+    ]];
+    return ['board', [
+      'Mrs Bellamy wants the tags hung on the year board again, as Hannah has them in her kitchen book. The book is on the dresser, beside the big black Bible. Read it. Then find the board.',
+      'The year board is the long piece of oak with twelve pegs, on the chimney breast above the range. Click it.'
+    ]];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('Eleven tags on twelve pegs, and the latch of the back-stairs door is up.'); return; }
+    if (told.in) { busy = false; ER.say('The kitchen at Sweetings, a little after four.'); return; }
+    tell('in');
+    ER.narrate([
+      'A farmhouse kitchen: a stone floor, a black range, and a table long enough for ten. Nobody has lived here since Miss Dora Oakes died, the winter before last, at ninety-two.',
+      'One place is laid at the table. A plate, a knife and fork, a mug with a blue ring round it. They are perfectly clean. They look as if somebody had put them there five minutes ago.',
+      'Mrs Bellamy is drying her hands on her apron, and looking at everything in the kitchen except the table.',
+      'Behind you, at the back door, somebody coughs politely: a woman in a green jacket, with a rucksack on one shoulder.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the living ---------- */
+  $('#bellamy').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Go on up,&rdquo; says Mrs Bellamy. &ldquo;I shall stop down here. I have never been up those stairs, and I am not starting on a Tuesday.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mrs Bellamy', role: 'Brook Farm, next door · she has the key', face: window.FACE('bellamy'),
+      lines: [
+        { note: 'She nods at the table without looking at it.', a: '&ldquo;There you are. I left it this morning, for you to see. One place, the same as every night. Plate, knife, fork, his mug, and the salt by his right hand.&rdquo;' },
+        { q: 'Who lays it?', a: 'Nobody. I clear it at eight every morning and put the things back on the dresser. By the time the lamp would have been lit, it is laid again. I have been coming in for eleven years, ever since Miss Dora&rsquo;s hip, and it has not missed a night. I have stopped telling my husband.' },
+        { q: 'What did Miss Dora say about it?', a: 'Miss Dora was George Oakes&rsquo;s girl, and she lived ninety-two years in this house. She said her grandmother Hannah laid that place every night of her life. When the old lady died, in fifty-one, it went on being laid. Miss Dora never laid it herself. She was very clear about that.' },
+        { q: 'Laid for whom?', a: '&ldquo;For the one who went on an errand.&rdquo; That was all she would say, and I do not think she knew any more. Nobody in this family ever said his name. Not once, in my hearing.' },
+        { q: 'Are there any papers?', a: 'If there are, they are up the back stairs, in the room that was kept shut. And that door has stuck fast since the tags came off the year board. Miss Dora took them down to clean in 2019, and she could not get them back in their order. I am not saying that the one has to do with the other. I am saying that I have noticed.' },
+        { a: 'Old Amos made that board: a peg for every month, and a tag for every job in the orchard. His wife wrote the whole year out in her kitchen book, and the book is on the dresser. Hang the tags as she has them, and we shall see about that door. Hannah Oakes liked a thing in its place.' }
+      ],
+      clue: { id: 'bellamy', title: 'Mrs Bellamy: one place, every night', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('bellamy')) { paint(); ER.say('The year board is over the range. Hannah&rsquo;s kitchen book is on the dresser, beside the Bible.'); } }
+    });
+  });
+  $('#lumley').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;Papers first, ghosts afterwards,&rdquo; says Miss Lumley. She has one foot on the bottom stair already.' :
+      told.bellamy ? '&ldquo;I am from the Record Office,&rdquo; says Miss Lumley. &ldquo;I do not hold with ghosts until they are in writing. But I should like that door open. Hang the tags.&rdquo;' :
+      '&ldquo;Mrs Bellamy first,&rdquo; says Miss Lumley. &ldquo;The person with the key always knows more than the person with the catalogue.&rdquo;');
+  });
+  $('#fair').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'A visitor', role: 'at the back door, with a rucksack', face: window.FACE('fair'),
+      lines: [
+        { note: 'A woman in a green jacket is standing in the doorway, like somebody who has knocked twice and given it up.', a: '&ldquo;Sorry to walk in. Is this the way to the church? My phone says that I have arrived, and I can see for myself that I haven&rsquo;t.&rdquo;' },
+        { note: '&ldquo;Field path, behind the orchard,&rdquo; says Mrs Bellamy. &ldquo;Ten minutes. Are you here for the viewing? The sale is on Thursday.&rdquo;', a: '&ldquo;I&rsquo;m here for the churchyard first. I&rsquo;m looking for somebody. I couldn&rsquo;t tell you that he&rsquo;s there.&rdquo;' },
+        { q: 'Have you come far?', a: 'Hawke&rsquo;s Bay. That&rsquo;s in New Zealand. And then two days in a hired car, finding a farm that is on no map I own. At home they would say that I had gone for the rent.' },
+        { q: 'Gone for the what?', a: 'Gone for the rent. It&rsquo;s what my family says when somebody is a very long time coming. Don&rsquo;t ask me why. Nobody ever told me.</p><p>She looks at the table, and at the one place laid on it, for a moment longer than a stranger would. Then she thanks Mrs Bellamy, and goes.' }
+      ],
+      clue: { id: 'visitor', title: 'A visitor at the back door', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('fair')) paint(); }
+    });
+  });
+
+  /* ---------- things in the kitchen ---------- */
+  OY.thing('#place', null, 'One place: a plate, a knife and fork, a mug with a blue ring, and the salt at the right hand. The plate is cold, and so is the mug. Nobody has eaten here.', isBusy);
+  OY.thing('#chair', null, 'The chair at the head of the table is the only one with arms. Nobody sits in it. Mrs Bellamy dusts it standing up.', isBusy);
+  OY.thing('#bench', 'bench', 'A bench runs along the far side of the table, worn into four shallow hollows. The place is laid in front of the second one.', isBusy);
+  OY.thing('#pegs', 'peg', 'Six pegs by the door, each with a name burnt into the wood: FATHER, MOTHER, KATE, then a peg that has been planed smooth, then GEORGE and LOTTIE. A man&rsquo;s old hat hangs on FATHER. On the smooth peg there is nothing at all, not even dust.', isBusy);
+  OY.thing('#mugs', null, 'Four hooks under the shelf, and three mugs: K, then an empty hook, then G and C. The fourth mug is the one on the table. Where its letter was, the blue has been scraped away.', isBusy);
+  OY.thing('#frame', null, 'Somebody has cut the children&rsquo;s heights into the door frame, with a letter beside each mark: K, G, C. Beside one ladder of marks the letter has been cut out with a chisel. Its top mark is a hand higher than any of George&rsquo;s.', isBusy);
+  OY.thing('#range', 'range', 'The range: black iron, and as cold as a stone. Nobody has lit it since Miss Dora went.', isBusy);
+  OY.thing('#lamp', 'oil lamp', 'An oil lamp, in the middle of the table. The electricity came to Sweetings in 1958, and it was turned off at the meter last year. There is oil in the lamp.', isBusy);
+  OY.thing('#window', null, 'The orchard, through old glass, full of apples that nobody has picked. Behind the nearest trees there is one that is red all over.', isBusy);
+  OY.thing('#bdoor', null, function () { return told.fair || nextFile ? 'The back door, and the yard. The woman in the green jacket has gone by the field path.' : 'The back door, standing open. Somebody is standing in it.'; }, isBusy);
+  OY.thing('#sdoor', 'latch', function () { return nextFile ? 'The latch is up. The stairs are narrow, and they smell of apples.' : 'The door to the back stairs: four planks and an iron latch. It does not move. It does not even rattle.'; }, isBusy);
+  $('#bible').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: REGISTER, cls: 'bible', clue: { id: 'register', title: 'The family Bible: the register', kind: 'From the kitchen' },
+      done: function () { if (tell('bible')) ER.say('Catherine, a strip of paper, George, Charlotte. Three children, and four lines.'); } });
+  });
+  $('#kbook').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BOOK, cls: 'kbook', clue: { id: 'kbook', title: 'Hannah’s kitchen book: the orchard year', kind: 'From the kitchen' },
+      done: function () { if (tell('book')) { paint(); OY.terms(['wassail', 'graft', 'Lady Day', 'Michaelmas']); } } });
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#board').addEventListener('click', function (e) {
+    if (busy) return;
+    if (nextFile) { ER.say('January to December, with the one peg bare. The tags move a little, though there is no draught.'); return; }
+    if (!told.bellamy) { ER.wordAt(e.clientX, e.clientY, 'year board'); ER.say('A long oak board with twelve pegs, and nothing hanging on any of them. Mrs Bellamy will know what it is for.'); return; }
+    if (!yb) yb = makeBoard();
+    yb.open();
+  });
+
+  /* ---------- the year board: eleven tags on twelve pegs ---------- */
+  function makeBoard() {
+    /* which peg is looked at first: the three with real dates, and then outwards from them */
+    var SCAN = [1, 3, 9, 2, 4, 5, 6, 8, 10, 7, 11, 12];
+    var WHY = {
+      1: 'January has one job, and it is done at night with a jug of cider. She gives you the very day for it.',
+      2: 'February is the month before the grafting. What has to be cut a month before it is wanted?',
+      3: 'March is the month of Lady Day: the twenty-fifth. She tells you in plain words what we do in the month of Lady Day.',
+      4: 'April is the month after the grafting. Read what she says about that month.',
+      5: 'May comes after the bare month. &lsquo;Then the blossom&rsquo;, she says, and nobody touches a tree while it is out.',
+      6: '&lsquo;As soon as the blossom is over.&rsquo; That is the very next month, and there is grass to cut.',
+      7: 'July is the one month between two jobs. Find the two jobs, and you have the third.',
+      8: 'August is the month before Michaelmas. What is picked the month before Michaelmas?',
+      9: 'September has Michaelmas in it: the twenty-ninth. What is paid at Michaelmas?',
+      10: 'October is the month after Michaelmas, with the hard frosts coming. Which apples are picked then?',
+      11: 'By November the keepers have been a month in the loft. What is made then?',
+      12: 'December is the last peg of the year. What does Amos do last of all, when the leaves are down?'
+    };
+    /* how each tag is written down in your own note, once the board is right */
+    var JOB = { wassail: 'wassail (Old Twelfth Night, the 17th)', wood: 'the graft-wood is cut', graft: 'grafting (and Lady Day, the 25th: rent)', blossom: 'blossom', mow: 'mowing', thin: 'thinning',
+      earlies: 'the earlies are picked', rent: 'Michaelmas, the 29th: rent', keepers: 'the keepers are picked', cider: 'cider', prune: 'pruning' };
+    var hung = ER.flag('k-hung') || {}, wait = false, box = ER.el('div', 'yb'), s;
+    s = '<div class="doc kbook">' + ER.gloss(BOOK) + '</div><div class="yb-side"><div class="yb-board">';
+    MONTHS.forEach(function (m, i) { s += '<div class="mo" data-m="' + (i + 1) + '"><i>' + m + '</i><u></u><div class="pegslot" data-m="' + (i + 1) + '"></div></div>'; });
+    s += '</div><div class="yb-tray"></div><div class="pfoot"><p class="pmsg"></p><button type="button" class="btn" id="y-go">Show Mrs Bellamy</button></div></div>';
+    box.innerHTML = s;
+    var tray = box.querySelector('.yb-tray'), msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function slot(m) { return box.querySelector('.pegslot[data-m="' + m + '"]'); }
+    TAGS.forEach(function (t) {
+      var n = ER.el('span', 'tg dnd-item', t[1]), at = 0, m;
+      n.setAttribute('data-t', t[0]);
+      for (m = 1; m <= 12; m++) if (hung[m] === t[0]) at = m;
+      (at ? slot(at) : tray).appendChild(n);
+    });
+    function key() { var a = [], m; for (m = 1; m <= 12; m++) a.push(hung[m] || 'none'); return a.join('|'); }
+    function read() {
+      var m, t; hung = {};
+      for (m = 1; m <= 12; m++) { t = slot(m).querySelector('.tg'); if (t) hung[m] = t.getAttribute('data-t'); }
+      ER.flag('k-hung', hung); box.setAttribute('data-hung', key());
+    }
+    ER.dnd(box, { item: '.tg', slot: '.pegslot', home: tray, lock: function () { return wait || !!nextFile; }, change: function () { read(); OY.sfx.tag(); msg(''); } });
+    OY.swapClick(box, '.tg', '.pegslot');
+    box.querySelector('#y-go').addEventListener('click', function () {
+      var left = tray.querySelectorAll('.tg').length, i, m, v, file;
+      if (wait || nextFile) return;
+      read();
+      if (left) { msg('&ldquo;' + (left === 11 ? 'Eleven tags in the drawer, and not one on the board' : left === 1 ? 'There is one tag still lying in the drawer' : 'There are ' + left + ' tags still lying in the drawer') + ',&rdquo; says Mrs Bellamy. &ldquo;Amos made eleven, and he hung eleven.&rdquo;'); return; }
+      for (i = 0; i < SCAN.length; i++) {
+        m = SCAN[i]; v = hung[m] || 'none';
+        if (!ER.check('m' + m, v)) {
+          ER.sfx.no(); OY.flash(slot(m).parentNode);
+          if (v === 'none') msg('Mrs Bellamy taps a bare peg. &ldquo;Nothing on ' + FULL[m] + '? One peg is bare, but it is not that one. ' + WHY[m] + '&rdquo;');
+          else { msg('Mrs Bellamy lifts one tag off again, and looks at the book over your shoulder. &ldquo;' + WHY[m] + '&rdquo;'); tray.appendChild(slot(m).querySelector('.tg')); read(); }
+          return;
+        }
+      }
+      file = ER.exit([key()], { wait: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('k-file', file);
+      msg('Mrs Bellamy reads along the board with her lips moving: the top row, and then the bottom.');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true; OY.sfx.latch();
+        ER.narrate([
+          '&ldquo;January to December, and the one peg bare,&rdquo; says Mrs Bellamy. &ldquo;That is how it hung when I first came into this kitchen.&rdquo;',
+          'Behind you there is a small dry click. The latch of the back-stairs door has lifted. Nobody is standing near it.',
+          'Mrs Bellamy does not turn round. &ldquo;There,&rdquo; she says. &ldquo;I said that I had noticed.&rdquo;',
+          'Miss Lumley writes something in her notebook, looks at it, and crosses it out. &ldquo;I shall put: door opened.&rdquo; She picks up her box.',
+          'The stairs are narrow, and they smell of apples.'
+        ], function () {
+          busy = false;
+          OY.mine('year', 'The orchard year at Sweetings', FULL.slice(1).map(function (mn, k) { return '<p><b>' + mn + '</b> ' + (hung[k + 1] ? JOB[hung[k + 1]] : 'nothing: the bare peg') + '</p>'; }).join(''));
+          OY.terms(['wassail', 'graft', 'Lady Day', 'Michaelmas', 'keepers', 'earlies', 'blossom', 'prune']); showGo();
+        });
+      }, 2600);
+    });
+    read();
+    msg(Object.keys(hung).length ? 'The year board, with some of the tags back on their pegs. Drag a tag to a peg, or click the tag and then the place under the peg.' :
+      'Twelve pegs, eleven tin tags, and Hannah&rsquo;s book. Hang each tag under its month. Drag it, or click the tag and then the place under the peg.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>
