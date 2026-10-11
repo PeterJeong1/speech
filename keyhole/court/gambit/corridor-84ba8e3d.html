@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Corridor · Move Sixteen</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-court.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="gambit.css">
+<link rel="stylesheet" href="crossx.css">
+<style>
+  body{--bg:#241c10;--accent:#f0b64a;--font-display:'Cinzel',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(32,24,12,.97);--tc-ink:#f4ecd6;--cap-bg:rgba(32,24,12,.93);--panel:#2a2014;--face-bg:#4a4234;--q-ink:#e6cf9c;--fade:#120c04;--hud-bg:rgba(32,24,12,.8)}
+  #exitsign{animation:ex 4.7s steps(1,end) infinite}
+  @keyframes ex{0%{opacity:1}90%{opacity:.7}94%{opacity:1}}
+  .mote{animation:mote 11s linear infinite;opacity:0}
+  .mote.m2{animation-duration:14s;animation-delay:-5s}
+  @keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.8}85%{opacity:.8}100%{transform:translate(70px,90px);opacity:0}}
+
+  /* five questions, and a rack of hooks */
+  .hk{width:min(1100px,96vw);display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px;align-items:start}
+  .hk-pad{position:relative;background:#eef3f6 repeating-linear-gradient(transparent 0 30px,rgba(60,110,170,.2) 30px 31px);padding:20px 24px 12px 30px;border-top:16px solid #2b2f36;box-shadow:0 22px 60px rgba(0,0,0,.6);transform:rotate(.3deg)}
+  .hk-pad:before{content:'';position:absolute;left:0;right:0;top:-10px;height:8px;background:radial-gradient(circle,#c9ccd0 3px,transparent 4px) 6px 0/22px 8px repeat-x}
+  .hk-q{position:relative;margin:0 0 13px;padding-left:26px}
+  .hk-q>i{position:absolute;left:0;top:27px;font-style:normal;font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;color:#6b7480}
+  .hk-q s{display:block;font-family:'Caveat',cursive;font-weight:700;font-size:19px;line-height:22px;color:#1f3a8a;text-decoration:line-through;text-decoration-color:#55585f;opacity:.75}
+  .hk-q p{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 9px;font-family:'Caveat',cursive;font-weight:700;font-size:24.5px;line-height:38px;color:#3a3f4a}
+  .hk-slot{flex:none;min-width:132px;height:36px;border:1.500px dashed #7a8696;border-radius:3px;display:grid;place-items:center;background:rgba(255,255,255,.5)}
+  .hk.done .hk-slot{border:0;background:none}
+  .hk-tile{position:relative;padding:4px 12px 3px 24px;background:#fbf9ef;border:1.500px solid #8d8873;box-shadow:0 3px 7px rgba(0,0,0,.35);font-family:'Caveat',cursive;font-weight:700;font-size:23px;line-height:1.15;color:#2f6243;white-space:nowrap}
+  .hk-tile:before{content:'';position:absolute;left:7px;top:50%;width:9px;height:14px;margin-top:-9px;border:2.500px solid #8d9097;border-top:0;border-right:0;border-radius:0 0 0 9px}
+  .hk-side h6{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:400;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#e6cf9c}
+  .hk-rack{display:flex;flex-wrap:wrap;gap:9px;min-height:150px;align-content:flex-start;padding:12px;background:rgba(14,10,4,.72);border:1px dashed rgba(240,182,74,.5)}
+  .hk .pmsg{margin-top:12px;min-height:150px;font-size:18px}
+  .hk .btn{margin-top:10px;width:100%}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="sunG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6d48a"/><stop offset=".6" stop-color="#f3b866"/><stop offset="1" stop-color="#e99a5a"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9ae96"/><stop offset="1" stop-color="#8d8168"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a26"/><stop offset=".3" stop-color="#e6c873"/><stop offset=".55" stop-color="#b08a35"/><stop offset=".8" stop-color="#f0d98f"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="tableG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98b54"/><stop offset="1" stop-color="#8f6535"/></linearGradient>
+  <radialGradient id="lampG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff2c8" stop-opacity=".7"/><stop offset="1" stop-color="#fff2c8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="56%" cy="44%" r="84%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".66" stop-color="#1a1206" stop-opacity=".16"/><stop offset="1" stop-color="#120b02" stop-opacity=".76"/></radialGradient>
+</defs>
+
+<!-- a corridor, seen from the door of the hall: everything in it is drawn by the script below -->
+<g id="shell"></g>
+<g id="wins" class="hot"></g>
+<g id="rads" class="hot"></g>
+<g id="doors"></g>
+<g id="shafts" pointer-events="none"></g>
+<g pointer-events="none"><circle class="mote" cx="560" cy="420" r="2.500" fill="#fff2c8"/><circle class="mote m2" cx="700" cy="460" r="2" fill="#fff2c8"/></g>
+
+<!-- the far end: a fire door, a green sign, and Mr Pettifer standing where he stood -->
+<g id="firedoor" class="hot"><rect x="982" y="344" width="116" height="176" fill="#e9dfc2"/><rect x="988" y="350" width="50" height="170" fill="#35604a"/><rect x="1042" y="350" width="50" height="170" fill="#35604a"/><rect x="1000" y="364" width="26" height="46" fill="#bcd0c4"/><rect x="1054" y="364" width="26" height="46" fill="#bcd0c4"/>
+  <rect x="1030" y="428" width="6" height="26" rx="2" fill="url(#brassG)"/><rect x="1044" y="428" width="6" height="26" rx="2" fill="url(#brassG)"/>
+  <g id="exitsign"><rect x="1006" y="310" width="68" height="26" rx="3" fill="#1f8a4a"/><text x="1040" y="329" class="sT" font-size="16" fill="#fff" letter-spacing="3">EXIT</text></g></g>
+<g id="pettifer" class="hot"><rect x="900" y="384" width="78" height="140" fill="#000" opacity="0"/><ellipse cx="940" cy="520" rx="26" ry="5" fill="#000" opacity=".3"/>
+  <path d="M930 518v-52h8v52zM942 518v-52h8v52z" fill="#4a4234"/><path d="M922 472q-4-56 18-58t18 58z" fill="#6b4e33"/><path d="M925 470q-3-46 15-48t15 48z" fill="#e9d93a"/><path d="M925 450h30" stroke="#c9ccd0" stroke-width="3"/>
+  <rect x="936" y="404" width="8" height="10" fill="#d3a888"/><circle cx="940" cy="397" r="11" fill="#eecbb0"/><path d="M930 395q-2-8 3-12M950 395q2-8-3-12" stroke="#f1f1ee" stroke-width="3" fill="none"/><path d="M935 402q5-3 10 0" stroke="#f1f1ee" stroke-width="3" fill="none"/></g>
+
+<!-- the fountain, and the windowsill beside it -->
+<g id="fountain" class="hot"><rect x="436" y="626" width="88" height="130" fill="#000" opacity="0"/><path d="M479 692V864" stroke="#a8a08a" stroke-width="7"/><path d="M456 664h46l-9 36h-28z" fill="#e6e2d6"/><ellipse cx="479" cy="660" rx="36" ry="12" fill="#f6f4ec"/><ellipse cx="479" cy="660" rx="27" ry="7" fill="#bcd0d8"/><path d="M462 648q0-16 16-14" stroke="#c9ccd0" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="460" cy="652" r="5" fill="#c9ccd0"/></g>
+<g id="sill" class="hot"><path d="M300 584l138-32 6 18-140 36z" fill="#000" opacity="0"/></g>
+
+<!-- the steward's table, by the door of the hall -->
+<g id="table" class="hot"><path d="M30 764h340l44 70h-430z" fill="url(#tableG)"/><path d="M-16 834h430v90h-430z" fill="#6b4a2a"/><path d="M30 764h340" stroke="#d9bd8c" stroke-width="4"/>
+  <g transform="rotate(-6 320 800)"><rect x="286" y="772" width="78" height="54" rx="3" fill="#7a5a36"/><rect x="292" y="780" width="66" height="42" fill="#fdfdfb"/><rect x="312" y="768" width="26" height="9" rx="2" fill="#c9ccd0"/><path d="M298 792h54M298 802h54M298 812h40" stroke="#c9ccd0" stroke-width="2"/></g></g>
+<g id="pad2" class="hot"><g transform="rotate(-7 110 800)"><path d="M56 772h110l8 60h-124z" fill="#eef3f6"/><path d="M56 772h110l1 8h-112z" fill="#2b2f36"/><g stroke="#1f3a8a" stroke-width="2.400"><path d="M64 792h94M62 804h80M60 816h100"/></g></g></g>
+<g id="hooknote" class="hot"><g transform="rotate(8 228 800)"><path d="M186 774h84l6 54h-96z" fill="#fbf9ef"/><g stroke="#6b7480" stroke-width="2.400"><path d="M194 788h66M192 800h70M190 812h50"/></g></g></g>
+
+<!-- Maeve by the fountain; the committee, like three people waiting for a bus -->
+<g id="maeve" class="hot"><rect x="530" y="690" width="170" height="210" fill="#000" opacity="0"/><use href="#ch-maeve" x="522" y="672" width="184" height="240"/></g>
+<g id="quayle" class="hot"><rect x="870" y="680" width="180" height="220" fill="#000" opacity="0"/><use href="#ch-quayle" x="858" y="652" width="204" height="265"/></g>
+<g id="rahman" class="hot"><rect x="1080" y="676" width="180" height="224" fill="#000" opacity="0"/><use href="#ch-rahman" x="1066" y="646" width="208" height="270"/></g>
+<g id="tloxley" class="hot"><rect x="1290" y="680" width="180" height="220" fill="#000" opacity="0"/><use href="#ch-loxley" x="1278" y="652" width="204" height="265"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1760" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Wait for the decision</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="gambit.js"></script>
+<script src="crossx.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, hkBox = null, TOTAL = 5;
+
+  /* the corridor in one-point perspective: every line runs to the same point, a little above the fire door */
+  (function () {
+    var VX = 1040, VY = 405, s = '', i;
+    function L(yf, x) { return VY + (yf - VY) * (x - VX) / (900 - VX); }        /* a line along the left wall that is at height yf at the far end */
+    function R(yf, x) { return VY + (yf - VY) * (x - VX) / (1180 - VX); }       /* the same for the right wall */
+    function quad(pts, fill, extra) { return '<path d="M' + pts.map(function (p) { return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('L') + 'z" fill="' + fill + '"' + (extra || '') + '/>'; }
+    s += '<rect x="-1000" y="-400" width="3600" height="1800" fill="#efe6cc"/>';
+    s += quad([[-400, L(290, -400)], [2000, R(290, 2000)], [1180, 290], [900, 290]], '#f4eeda');                               /* ceiling */
+    s += quad([[900, 290], [900, 455], [-400, L(455, -400)], [-400, L(290, -400)]], '#eadfbf');                               /* left wall */
+    s += quad([[900, 455], [900, 520], [-400, L(520, -400)], [-400, L(455, -400)]], '#3f6a52');
+    s += quad([[1180, 290], [1180, 455], [2000, R(455, 2000)], [2000, R(290, 2000)]], '#d9cdab');                             /* right wall, in shadow */
+    s += quad([[1180, 455], [1180, 520], [2000, R(520, 2000)], [2000, R(455, 2000)]], '#35594a');
+    s += '<rect x="900" y="290" width="280" height="165" fill="#e2d7b6"/><rect x="900" y="455" width="280" height="65" fill="#3a6250"/>';
+    s += quad([[900, 520], [1180, 520], [2000, R(520, 2000)], [2000, 1400], [-400, 1400], [-400, L(520, -400)]], 'url(#floorG)');   /* floor */
+    s += '<g stroke="#2f5040" stroke-width="5"><path d="M900 455L-400 ' + L(455, -400).toFixed(1) + 'M1180 455L2000 ' + R(455, 2000).toFixed(1) + 'M900 455h280"/></g>';
+    s += '<g stroke="#8d8168" stroke-width="2" opacity=".6">';
+    for (i = -6; i <= 6; i++) s += '<path d="M' + (1040 + i * 23) + ' 520L' + (1040 + i * 330) + ' 1400"/>';
+    [534, 556, 590, 640, 716, 830].forEach(function (y) { s += '<path d="M-400 ' + y + 'h2400"/>'; });
+    s += '</g>';
+    s += '<path d="M1040 -400V70" stroke="#8d8873" stroke-width="4"/><circle cx="1040" cy="96" r="30" fill="#fff6dc"/><circle cx="1040" cy="96" r="120" fill="url(#lampG)"/><path d="M1040 150V262" stroke="#8d8873" stroke-width="2"/><circle cx="1040" cy="272" r="11" fill="#fff6dc"/>';
+    $('#shell').innerHTML = s; s = '';
+    var W = [[-170, 110], [205, 430], [515, 660], [712, 800], [836, 884]], rr = '', sh = '';
+    W.forEach(function (w) {
+      var a = w[0], b = w[1], m = (a + b) / 2;
+      s += quad([[a - 14, L(308, a - 14)], [b + 8, L(308, b + 8)], [b + 8, L(448, b + 8)], [a - 14, L(448, a - 14)]], '#f6f1e0');
+      s += quad([[a, L(318, a)], [b, L(318, b)], [b, L(440, b)], [a, L(440, a)]], 'url(#sunG)');
+      s += '<g stroke="#f6f1e0" stroke-width="' + Math.max(3, (b - a) / 28).toFixed(1) + '"><path d="M' + m + ' ' + L(318, m).toFixed(1) + 'V' + L(440, m).toFixed(1) + 'M' + a + ' ' + L(378, a).toFixed(1) + 'L' + b + ' ' + L(378, b).toFixed(1) + '"/></g>';
+      s += quad([[a - 26, L(440, a - 26)], [b + 16, L(440, b + 16)], [b + 16, L(449, b + 16)], [a - 26, L(450, a - 26)]], '#fbf8ec');
+      var ra = a + (b - a) * 0.12, rb = b - (b - a) * 0.1, j, rx;
+      rr += quad([[ra, L(466, ra)], [rb, L(466, rb)], [rb, L(512, rb)], [ra, L(512, ra)]], '#e9e2cc', ' stroke="#b9b29c" stroke-width="2"');
+      for (j = 1; j < 7; j++) { rx = ra + (rb - ra) * j / 7; rr += '<path d="M' + rx.toFixed(1) + ' ' + L(469, rx).toFixed(1) + 'V' + L(509, rx).toFixed(1) + '" stroke="#b9b29c" stroke-width="' + Math.max(1.5, (b - a) / 70).toFixed(1) + '"/>'; }
+      if (b > 400) sh += quad([[a, L(520, a)], [b, L(520, b)], [b + (VX - b) * 0.5, L(520, b) + (VX - b) * 0.05], [a + (VX - a) * 0.5, L(520, a) + (VX - a) * 0.05]], '#ffd98a', ' opacity=".3"');
+    });
+    $('#wins').innerHTML = s; $('#rads').innerHTML = rr; $('#shafts').innerHTML = sh; s = '';
+    [[1226, 1288, 'WC'], [1352, 1456, 'CLOAKS'], [1570, 1800, '']].forEach(function (d) {
+      var a = d[0], b = d[1];
+      s += quad([[a - 8, R(326, a - 8)], [b + 12, R(326, b + 12)], [b + 12, R(520, b + 12)], [a - 8, R(520, a - 8)]], '#c9bd9a');
+      s += quad([[a, R(334, a)], [b, R(334, b)], [b, R(520, b)], [a, R(520, a)]], '#2f4f3f');
+      if (d[2]) s += '<rect x="' + (a + 4) + '" y="' + (R(318, a) - 26).toFixed(1) + '" width="' + (b - a - 8) + '" height="20" fill="#fbf8ec"/><text x="' + ((a + b) / 2) + '" y="' + (R(318, a) - 11).toFixed(1) + '" class="sT" font-size="' + (b - a > 80 ? 13 : 11) + '" fill="#1c1d22" letter-spacing="1">' + d[2] + '</text>';
+    });
+    $('#doors').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'court', story: 'gambit', storyTitle: 'Move Sixteen', id: 'corridor', no: 'IV', title: 'The Corridor',
+    go: 'Go out into the corridor',
+    intro: [
+      'You asked your own witness open questions, and the answers were hers. WHERE was her telephone? In envelope fourteen. WHEN did she go out? When she had just moved. WHY? Water, the toilet, water again. HOW did she find the move with the queen? She remembered it, from a book.',
+      'And WHAT did she do in the corridor, the third time? That was the one whose answer you thought you knew. She found a telephone buzzing on a windowsill, and she took it to the desk. A leading question would have got you a yes, and nobody would ever have heard about it.',
+      'Now it is the other way round. Mr Pettifer is the other side&rsquo;s witness, and what you do to him is called cross-examination. The Chair&rsquo;s card says that now you may lead.'
+    ],
+    exit: {"next":"boardone","w":{"bb6166db":"71f03c1c"}}, tags: {"cx":["b98dd5b0","8741919e","91f4fbb2","2fb3e394","8d374fd3"],"h1":["f6cede1d"],"h2":["1e9a50e7"],"h3":["7082772d"],"h4":["c6290e4d"],"h5":["5f81e57a"],"h1p":["319cc094"],"h2t":["a4cd911f"],"h3p":["970aafa7"],"h4p":["0cd1b7a4"],"h5s":["962e8b6d"]},
+    sound: ['bench', { root: 43, bpm: 66, drop: ['ost'], beds: [['hum', 0.3]] }],      /* the hearing itself, lower: old radiators humming, and no pulse that could be taken for a clock */
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('k-file') || null;
+
+  var HOOKS = '<span class="ghost">BRINDLOW JUNIOR CONGRESS &middot; UNDER-9</span><h4>Hooks (for the runner)</h4>' +
+    '<p>In cross-examination you may lead. A leading question is a plain statement with a hook on the end of it.</p>' +
+    '<p>Make the hook out of the statement&rsquo;s own FIRST VERB and its SUBJECT, turned round. A positive statement takes a negative hook. A negative statement takes a positive one.</p>' +
+    '<p class="egs">She was here, wasn&rsquo;t she?<br>He cannot swim, can he?<br>They have not gone, have they?<br>You saw it, didn&rsquo;t you? &nbsp;(a plain verb borrows DID)</p>' +
+    '<p>Take the statement from a paper, and not out of your own head. Then all he can say is yes. &nbsp;L.Q.</p>';
+  var LOST = '<h4>LOST PROPERTY &middot; CONGRESS DESK</h4><table><tr><th>When</th><th>What</th><th>Found</th><th>Collected</th></tr>' +
+    '<tr><td>Sat 10.40</td><td>one glove, blue, left hand</td><td>cloakroom</td><td>&nbsp;</td></tr>' +
+    '<tr><td>Sat 2.15</td><td>a white pawn</td><td>under board 22</td><td>back in its box</td></tr>' +
+    '<tr><td>Sun 11.05</td><td>spectacles, on a gold chain</td><td>tea room</td><td>11.30 &nbsp;<span class="sig">S Rahman</span></td></tr>' +
+    '<tr><td>Sun 3.11</td><td>telephone, black, glass cracked at one corner. Picture of a brown and white dog on the front</td><td>corridor windowsill, by the fountain. Handed in by player 14</td><td>3.25 &nbsp;<span class="sig">D. Pettifer</span></td></tr>' +
+    '<tr><td>Sun 3.40</td><td>one cheese sandwich</td><td>board 9</td><td>&nbsp;</td></tr></table>';
+
+  /* ---------- your questions, and their hooks ---------- */
+  var QH = [['Where were you standing?', 'You were at the far end of the corridor, by the fire door,'], ['How far away was she?', 'It is about twenty metres from there to the fountain,'],
+    ['What was on the screen?', 'You could not see the screen,'], ['What did she do with the telephone?', 'You did not see where the telephone went,'], ['When did she sign out?', 'She signed your sheet at seven minutes past three,']];
+  var TILES = [['did', 'did you?'], ['wasnt', 'wasn&rsquo;t it?'], ['werent', 'weren&rsquo;t you?'], ['couldnt', 'couldn&rsquo;t you?'], ['didntshe', 'didn&rsquo;t she?'], ['isnt', 'isn&rsquo;t it?'], ['were', 'were you?'], ['didntyou', 'didn&rsquo;t you?'], ['could', 'could you?']];
+  function hookText(k) { return TILES.filter(function (t) { return t[0] === k; })[0][1]; }
+  function openHooks() {
+    var box = ER.el('div', 'hk'), done = false, s = '<div class="hk-pad">';
+    QH.forEach(function (q, i) { s += '<div class="hk-q" data-n="' + (i + 1) + '"><i>' + (i + 1) + '</i><s>' + q[0] + '</s><p><span>' + q[1] + '</span><span class="hk-slot"></span></p></div>'; });
+    s += '</div><div class="hk-side"><h6>Hooks</h6><div class="hk-rack"></div><button type="button" class="btn" id="hk-go">Read them to Mr Quayle</button><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    var rack = box.querySelector('.hk-rack'), msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    TILES.forEach(function (t) { var d = ER.el('div', 'hk-tile dnd-item', t[1]); d.setAttribute('data-k', t[0]); rack.appendChild(d); });
+    ER.dnd(box, { item: '.hk-tile', slot: '.hk-slot', home: rack, lock: function () { return done; }, change: function () { GB.sfx.card(); box.setAttribute('data-in', box.querySelectorAll('.hk-slot .hk-tile').length); } });
+    box.querySelector('#hk-go').addEventListener('click', function () {
+      var wrong = [], n, k, why;
+      if (done) return;
+      if (box.querySelectorAll('.hk-slot .hk-tile').length < 5) { msg('&ldquo;Five statements,&rdquo; says Mr Quayle, &ldquo;and I can see daylight at the end of at least one of them. A statement without a hook is not a question. It is a speech.&rdquo;'); return; }
+      QH.forEach(function (q, i) { var t = box.querySelector('.hk-q[data-n="' + (i + 1) + '"] .hk-tile').getAttribute('data-k'); if (!ER.check('h' + (i + 1), t)) wrong.push([i + 1, t]); });
+      if (wrong.length) {
+        GB.bump('k-tries'); GB.sfx.hm(); n = wrong[0][0]; k = wrong[0][1];
+        why = (ER.check('h' + n + 'p', k)) ? 'That goes the same way twice. A positive statement takes a negative hook, and a negative statement takes a positive one.'
+          : (n === 2 && ER.check('h2t', k)) ? 'Your statement says IS. The corridor has not moved since ten past three. Keep the hook in the same tense as its verb.'
+          : (n === 5 && ER.check('h5s', k)) ? 'Who signed the sheet? Then who is the hook about? The hook takes the subject of the statement.'
+          : 'The hook is made out of the statement&rsquo;s own first verb. Find that verb in line ' + n + ', and turn it round.';
+        msg('Mr Quayle reads line ' + n + ' aloud, in the voice that he uses on a weekday. &ldquo;' + QH[n - 1][1] + ' ' + hookText(k) + '&rdquo; He shuts his eyes. &ldquo;' + why + '&rdquo;' +
+          (wrong.length > 1 ? ' <i>&ldquo;And ' + (wrong.length === 2 ? 'one more of them limps' : (wrong.length - 1) + ' more of them limp') + '.&rdquo;</i>' : ''));
+        return;
+      }
+      done = true; box.classList.add('done'); ER.flag('k-hooks', 1); GB.sfx.pencil(); paint();
+      msg('Mr Quayle reads all five without stopping. <b>&ldquo;Every one of those can be answered with a yes,&rdquo; he says. &ldquo;And every one of them came off a piece of paper. Off you go.&rdquo;</b>');
+      GB.mine('hooks', 'Five leading questions for Mr Pettifer', QH.map(function (q, i) { return '<p>' + q[1] + ' ' + hookText(box.querySelector('.hk-q[data-n="' + (i + 1) + '"] .hk-tile').getAttribute('data-k')) + '</p>'; }).join(''), true);
+      setTimeout(function () { ER.closeAll(); ER.say('Five questions, each with its hook. Mr Pettifer is waiting at the far end of the corridor, by the fire door.', 6000); }, 3200);
+    });
+    msg('Five open questions. Ask Mr Pettifer any one of them, and he will make a speech. <b>Ask each of them again as a leading question:</b> the statements are from your papers, and each one needs a hook on the end. <i>Drag a hook, or click the hook and then the gap.</i>');
+    hkBox = box; box.setAttribute('data-in', 0);
+    ER.open('ov-lock', box, function () { hkBox = null; });
+  }
+
+  /* ---------- Mr Pettifer's evidence ---------- */
+  var CARDS = [
+    { id: 'a', tab: 'Thirty-four years', from: 'His evidence, as he gave it', text: 'I was an inspector on the Brindlow buses for thirty-four years. I know the look of a person who has no ticket.', press: [
+      { q: 'You have been the corridor steward at this congress for some years, haven&rsquo;t you?', a: 'Nineteen congresses. This weekend alone I have taken eleven telephones off children. And one calculator.', j: 'What had the calculator done, Mr Pettifer?' },
+      { q: 'And every one of those telephones went to the Congress Desk, didn&rsquo;t it?', a: 'Every one. I walk them round in my own hand, and Miss Ferrars puts them into envelopes. A telephone in an envelope cannot get up to anything.' }] },
+    { id: 'b', tab: 'Three times', from: 'His evidence, as he gave it', text: 'She left the hall three times in one game. A player with nothing to hide stays at the board.', press: [
+      { q: 'Players are allowed to leave the hall, aren&rsquo;t they?', a: 'They are allowed. Rule 6. They sign my sheet, out and in. I am only telling you what it looks like.', j: '&ldquo;What it looks like.&rdquo; I have written that down exactly, Mr Pettifer.' }] },
+    { id: 'c', tab: 'The queen', from: 'His evidence, as he gave it', text: 'The third time, she came back from the corridor, sat down and gave up her queen. Just like that. That move came out of the corridor.', press: [
+      { q: 'She signed your sheet at seven minutes past three, didn&rsquo;t she?', a: 'If that is what it says. They write the times themselves, by the corridor clock, and I watch them do it.' },
+      { q: 'You did not see her play that move yourself, did you?', a: 'I was in the corridor, where I belong. Mrs Hargreave showed me the score sheet afterwards. A queen! From a girl graded 1180!', j: 'So this card is what you worked out afterwards, Mr Pettifer. It is not what you saw.' }] },
+    { id: 'd', tab: 'A telephone', from: 'His evidence, as he gave it', text: 'At about ten past three I saw her by the window, near the fountain, with a telephone in her hand.', press: [
+      { q: 'You were at the far end of the corridor, by the fire door, weren&rsquo;t you?', a: 'I was. Some boys had propped it open with a chair. I had gone down to shut it.' },
+      { q: 'It is about twenty metres from there to the fountain, isn&rsquo;t it?', a: 'About that. There is nothing wrong with my eyes. I could read the number on a bus at twenty metres, in the rain.' },
+      { q: 'You could not see the screen, could you?', a: 'I did not need to see the screen. I saw HER. Head down, thumb going. She was reading it, and she was typing.', gives: 'd2' }] },
+    { id: 'd2', hidden: true, tab: 'Thumb going', from: 'In answer to you', text: 'Her head was down and her thumb was going. She was reading the screen, and she was typing.', press: [
+      { q: 'You are quite sure about the typing, aren&rsquo;t you?', a: 'I can see it now.', j: 'That is rather what I am afraid of, Mr Pettifer.' }] },
+    { id: 'e', tab: 'Round the corner', from: 'His evidence, as he gave it', text: 'When she saw me looking, she walked off round the corner, towards the entrance hall, as quick as you like.', press: [
+      { q: 'You did not see where the telephone went, did you?', a: 'Into her pocket, I should think. Where else would it go?', j: '&ldquo;I should think&rdquo;, Mr Pettifer.' },
+      { q: 'And you did not go after her, did you?', a: 'I had a fire door to see to. Then I went straight to Mrs Hargreave. It was her own telephone, plainly. They all keep them, whatever Rule 7 says.', gives: 'e2' }] },
+    { id: 'e2', hidden: true, tab: 'Her own', from: 'In answer to you', text: 'It was her own telephone. They all keep them, whatever Rule 7 says.', press: [] },
+    { id: 'g', hidden: true, tab: 'Where it went', from: 'In answer to you', text: 'It was a telephone, a black one, in her hand, at ten past three. And nobody in this corridor can tell me where it went.', press: [
+      { q: 'You have a telephone of your own, haven&rsquo;t you?', a: 'In my pocket. Stewards are not players. I mislaid it for a few minutes this afternoon, as it happens, but it turned up.', j: 'Did it, Mr Pettifer.' }] }
+  ];
+  var WON = {
+    b: { note: 'Nine players went out. One of them went seven times.', clue: { id: 'x1', title: 'He gives way: three times' }, lines: [
+      ['you', 'Mr Pettifer, this is your own sheet. Nine players signed out during round 4. Board 12 went out three times, exactly as Maeve did. Board 9 went out seven times. Tunde went out himself. Have all of them something to hide?'],
+      ['wit', 'Board 9 is a nervous boy. He drinks a great deal of squash.'],
+      ['judge', 'And board 1, Mr Pettifer?'],
+      ['wit', 'Board 1 went out three times. So did board 12, I grant you. Very well. Going out shows nothing by itself.'],
+      ['judge', 'An honest player might do it just as well. I have a word for that kind of thing, and the word is not &ldquo;evidence&rdquo;.']] },
+    c: { note: 'The queen went at 3.05. She went out at 3.07.', clue: { id: 'x2', title: 'He gives way: the queen' }, lines: [
+      ['you', 'This is round 4, minute by minute, from the score sheet. She wrote 24 beside her 16th move, and Tunde&rsquo;s clock still said 31. That is five minutes past three. She signed your sheet at seven minutes past. The queen went first, Mr Pettifer, didn&rsquo;t it?'],
+      ['wit', 'That cannot be right. She came back, and she&hellip;'],
+      ['note', 'Mr Loxley turns the till roll round, so that Mr Pettifer can read it. Mr Pettifer reads it twice.'],
+      ['wit', 'Five past. And out at seven minutes past. Then the move was on the board before she ever came through my door.'],
+      ['judge', 'And for nineteen minutes before it she had not left her chair. Whatever she found, Mr Pettifer, she found it sitting down.']] },
+    d2: { note: 'At 3.20 he said: I did not see her press anything.', clue: { id: 'x3', title: 'He gives way: the typing' }, lines: [
+      ['you', 'At twenty past three you told Mrs Hargreave what you had seen, and she wrote it down as you spoke. &ldquo;I did not see the screen. I did not see her press anything.&rdquo; You said that, didn&rsquo;t you?'],
+      ['wit', 'If Mrs Hargreave wrote it, then I said it.'],
+      ['judge', 'Then which am I to believe: what you remembered after ten minutes, or what you remember after an hour?'],
+      ['note', 'Mr Pettifer looks down the corridor at the window, for a long time.'],
+      ['wit', 'The ten minutes. I saw a telephone in her hand, and her head was down. The thumb I must have&hellip; put in afterwards. I did not know that I had.'],
+      ['judge', 'Nobody ever does, Mr Pettifer. That is why Mrs Hargreave keeps a book.']] },
+    e2: { note: 'Her own telephone has been in envelope 14 since 1.50.', clue: { id: 'x4', title: 'He gives way: her own telephone' }, gives: ['g'], lines: [
+      ['you', 'This is the list from the lid of the telephone box. Envelope fourteen: Maeve Loxley, handed in at ten to two. Nobody has signed it out. It is in the box now, stuck down. It was not her own telephone, was it?'],
+      ['wit', 'A child can have two.'],
+      ['judge', 'A child can. Did you see two, Mr Pettifer?'],
+      ['wit', 'No. Very well: not her own. But it was A telephone. A black one, in her hand, at ten past three. And nobody in this corridor can tell me where it went.']] },
+    g: { note: 'Found on the windowsill. Handed in at 3.11. Collected at 3.25: D. Pettifer.', clue: { id: 'x5', title: 'He gives way: whose telephone' }, lines: [
+      ['you', 'The lost property book can tell you. Eleven minutes past three: one telephone, black, glass cracked at one corner, a brown and white dog on the front. Found on the corridor windowsill, and handed in by player 14. And at the end of the same line: collected at twenty-five past three. That is your signature, Mr Pettifer, isn&rsquo;t it?'],
+      ['note', 'He takes the red book in both hands. For some time the only sound in the corridor is the radiators.'],
+      ['wit', 'That is Biscuit. That is my dog.'],
+      ['wit', 'I put it down on the sill when I went to shut the fire door. At twenty-five past I missed it, and Miss Ferrars had it at the desk. I never asked her who&hellip; I thought that I must have left it there myself.'],
+      ['judge', 'At ten past three, Mr Pettifer, you saw a girl with a telephone in her hand. You were perfectly right. It was yours, and she was taking it to the desk.'],
+      ['wit', 'Then I have had a child brought before a committee for handing in lost property.']] }
+  };
+  var NO = {
+    'a>*': 'Thirty-four years on the buses. I do not think that we need to doubt it, and I cannot see that it hurts your friend.',
+    'b>time': 'Your till roll says three times as well. So does she. If you want to answer &ldquo;three times&rdquo;, show me what everybody ELSE did.',
+    'b>note': 'The note is about ten past three. This card is about leaving the hall at all. Which of your papers counts people going out?',
+    'c>so': 'His sheet tells me when she was out of the hall. It cannot tell me when a move was made. Something else of yours can.',
+    'c>note': 'The note is about a corridor. This card is about a move on a chess board. Which of your papers knows when the moves were made?',
+    'd>note': 'He says a telephone in her hand. At twenty past three he said a telephone in her hand. Those two agree perfectly. Lead him on, and see what ELSE he saw.',
+    'd>phones': 'The list tells me where HER telephone was. He has not yet said whose telephone this one was. Lead him there.',
+    'd>time': 'Ten past three on his card, and ten past three on your till roll. Where is the difficulty?',
+    'd>so': 'The sheet says that she was out of the hall at ten past three. So does he. So does she.',
+    'd>book': 'He says that she had a telephone in her hand, and the book says that she handed one in a minute later. Those two agree. Which card of his does the book ANSWER?',
+    'd2>phones': 'A telephone in an envelope cannot be typed on: I follow you. But first things first. Did he SEE any typing? One of your papers was written at twenty past three.',
+    'e>note': 'He says that she walked off towards the entrance hall. The note says that she walked off towards the entrance hall. That is not a contradiction. That is an echo.',
+    'e>phones': 'This card is about which way she walked. Lead him a little further, and he may tell you whose telephone he thinks it was.',
+    'e>book': 'He says that she walked towards the entrance hall, and the book says that she got there. Find the card on which he asks a question.',
+    'e2>note': 'The note does not say whose telephone it was. Nor did he, at twenty past three. Which of your papers knows where her telephone has been since ten to two?',
+    'e2>time': 'Your till roll knows about minutes and moves. It knows nothing about envelopes.',
+    'g>phones': 'We have dealt with envelope fourteen. He is asking where the BLACK telephone went. Somebody wrote that down.',
+    'g>note': '&ldquo;I did not see where the telephone went.&rdquo; He said it at twenty past three, and he is saying it now. For once he agrees with himself.',
+    '*>book': 'The red book is about a thing that somebody found. He has said nothing on that card which it can answer.',
+    '*>so': 'His own sheet says who went out, and when. I cannot see that it touches that.',
+    '*>time': 'Your till roll is about minutes and moves. It does not seem to me to touch that.',
+    '*>note': 'I have read the note again. It does not quarrel with that.',
+    '*>phones': 'The list knows where one telephone has been all afternoon. I do not see what it has to say about that.',
+    '*': 'I have put those two answers side by side. They sit together quite comfortably.'
+  };
+  function wonList() { return (ER.flag('cx-k') || {}).won || []; }
+  function has(card) { return wonList().some(function (p) { return p.split('>')[0] === card; }); }
+  function openCx(hello) {
+    var papers = [{ id: 'so', tab: 'A', name: 'Sign-out sheet', look: function () { GB.look('signout', 'Mr Pettifer&rsquo;s sign-out sheet. It was on the Congress Desk, but you did not stop to read it.'); } },
+      { id: 'time', tab: 'B', name: 'Your till roll', look: function () { GB.look('time', 'The time line that you made at the Congress Desk.'); } },
+      { id: 'note', tab: 'C', name: 'The 3.20 note', look: function () { GB.look('note', 'The page from Mrs Hargreave&rsquo;s incident book. It was on the Congress Desk, but you did not stop to read it.'); } },
+      { id: 'phones', tab: 'D', name: 'Telephone list', look: function () { GB.look('phones', 'The list on the lid of the telephone box says: envelope 14, Maeve Loxley, handed in at 1.50, and not signed out.'); } }];
+    if (ER.flag('k-book')) papers.push({ id: 'book', tab: 'E', name: 'Lost property book', look: function () { GB.look('lost', 'The red book from the Congress Desk.'); } });
+    CX.open({
+      key: 'k', pencils: 4, total: TOTAL, cards: CARDS, won: WON, papers: papers,
+      witness: { name: 'Mr Pettifer', role: 'Corridor steward · the Chief Arbiter’s witness', face: window.FACE('pettifer') },
+      judge: { name: 'Dr Rahman, in the chair', face: window.FACE('rahman') },
+      words: { today: 'said in this corridor today', patience: 'pepper-<br>mints', cost: 'Dr Rahman takes a peppermint.', kind: 'Said to the committee' },
+      sfx: { card: GB.sfx.card, win: GB.sfx.pencil, lose: GB.sfx.mint },
+      hello: hello || (wonList().length ? 'Go on. Mr Pettifer has not moved.' : 'He is the other side&rsquo;s witness. You may lead him.'),
+      idle: 'Every card is something that Mr Pettifer has told the committee this afternoon. Choose one. Ask him more about it, or put something beside it.',
+      bites: function (card, w) { return ER.check('cx', card + '>' + w); },
+      refuse: function (card, w) { return NO[card + '>' + w] || NO[card + '>*'] || NO['*>' + w] || NO['*']; },
+      onWin: function (n, total, card) {
+        ER.pips(n, TOTAL);
+        if (card !== 'e2' || ER.flag('k-book')) return;
+        ER.flag('k-book', 1); busy = true;          /* the red book arrives: everything stops while it is carried up the corridor */
+        ER.addClue('lost', 'The lost property book', LOST, 'lost', 'From the Congress Desk');
+        setTimeout(function () {
+          ER.closeAll(); ER.sfx.paper();
+          ER.narrate([
+            'Feet on the stone floor. Mr Quayle comes round the corner from the entrance hall with a red book under his arm, and Miss Ferrars&rsquo;s paper clip to mark the place.',
+            '&ldquo;I have not opened it,&rdquo; he says. &ldquo;I thought that the Chair should.&rdquo; Dr Rahman does not open it either. She holds it out to you. &ldquo;It is Maeve&rsquo;s paper. Her friend may read it first.&rdquo;',
+            'You read the line for eleven minutes past three. Then you read to the end of the line. Then you read it again.'
+          ], function () { busy = false; openCx('You have a new paper. Take your time. I should, in your place.'); });
+        }, 900);
+      },
+      onOut: function () {          /* she is given time to finish her sentence first */
+        GB.bump('k-outs'); busy = true;
+        setTimeout(function () {
+          ER.closeAll();
+          ER.narrate([
+            'Dr Rahman looks into the peppermint tin for some time. It is empty.',
+            '&ldquo;A paper only answers him if the two cannot both be true,&rdquo; she says. &ldquo;If he can look at your paper and say &lsquo;yes, and?&rsquo;, then you have cost me a peppermint for nothing.&rdquo;',
+            'Mr Quayle feels in the pocket of his jacket and brings out a second tin. He has spent the day with the Under-9s. He came prepared.'
+          ], function () { busy = false; openCx(); });
+        }, 3400);
+      },
+      done: function (pairs) {
+        var file = ER.exitOk([pairs.join('+')]);
+        if (!file) { ER.toast('Something is wrong with this lock: tell your teacher.'); return; }
+        nextFile = file; ER.flag('k-file', file); GB.done('corridor');
+        setTimeout(function () {
+          ER.closeAll(); GB.solved(); paint(); busy = true;
+          ER.narrate([
+            'Nobody says anything. At the far end of the corridor the fire door, which nobody has propped open, shuts itself with a sigh.',
+            'Mr Pettifer walks the twenty metres to where Maeve is standing, by the fountain. It takes him a long time. &ldquo;Miss Loxley. I saw a child with a telephone, and I never once asked myself what an honest child does when she finds one. You did the right thing with it. I did the wrong thing with you.&rdquo;',
+            '&ldquo;It kept buzzing,&rdquo; says Maeve. &ldquo;I think your wife wants you to buy dog biscuits.&rdquo;',
+            'Dr Rahman shuts the red book. &ldquo;The committee will now withdraw,&rdquo; she says, and looks up and down the corridor. &ldquo;To the other end. It is as far as anybody can withdraw in a corridor. Five minutes.&rdquo;'
+          ], function () { busy = false; });
+        }, 1200);
+      }
+    });
+  }
+
+  var TARGET = [
+    ['b', ['Begin with the card called &ldquo;Three times&rdquo;. He says that a player with nothing to hide stays at the board. One of your papers is his own, and every player who went out is on it.',
+      'Choose that card and press &ldquo;Put something to him&rdquo;. Then choose the paper that counts people going out and coming in.',
+      'His own sheet counts nine players who went out in round 4, and one of them went seven times. If going out shows anything, it shows it about all nine.']],
+    ['c', ['The card called &ldquo;The queen&rdquo; says that she came back from the corridor and THEN gave up her queen. You worked out the real order at the Congress Desk.',
+      'When was move 16 played, and when did she sign out? One of your papers has both of those on it.',
+      'It is the paper that you made yourself. Look at where the flag for White&rsquo;s move 16 stands, and where the third red line begins.']],
+    ['d2', ['Ask him more about the card called &ldquo;A telephone&rdquo;: three times. They are your own leading questions, and after the third he says more than he said this afternoon.',
+      'His new card says that she was reading the screen and typing. Is that what he told Mrs Hargreave at twenty past three?',
+      'One of your papers was made at the time, while he was speaking. Read the middle of it, and then put it beside the card called &ldquo;Thumb going&rdquo;.']],
+    ['e2', ['Ask him more about the card called &ldquo;Round the corner&rdquo;, twice. He will tell you whose telephone he thinks it was.',
+      'He says that it was her own telephone. Where has her own telephone been since ten to two?',
+      'One of your papers was taped to the lid of a shoe box. Read the line for envelope 14, and put that paper beside the card called &ldquo;Her own&rdquo;.']],
+    ['g', ['He has asked a question of his own: where did the black telephone go? Mr Quayle has brought you a paper that nobody in this corridor has read. Look at it with the glass.',
+      'Read the line for 3.11 in the red book, right to the end of the line.',
+      'The book says where the black telephone went, and who came for it. Put it beside the card called &ldquo;Where it went&rdquo;.']]
+  ];
+  function hints() {
+    var i;
+    if (nextFile) return ['go', ['The committee has withdrawn to the far end of the corridor. Wait for the decision: the button is at the bottom of the screen.']];
+    if (hkBox) return ['hooks', [
+      'Mr Quayle&rsquo;s note has the whole rule. Find the FIRST VERB of each statement: were, is, could, did, signed. The hook is made out of that verb.',
+      'Is the statement positive, or has it a NOT in it? A positive statement takes a negative hook, and a negative one takes a positive hook. &ldquo;You could not see&hellip;&rdquo; is negative.',
+      'The last line has a plain verb, &ldquo;signed&rdquo;, so its hook borrows DID. And look at who signed: the hook must be about the same person as the statement.'
+    ]];
+    if (!ER.flag('k-note')) return ['note', ['Mr Quayle has put a page on the steward&rsquo;s table, at the bottom of the screen on the left. It is the back of an Under-9 score sheet. Read it.']];
+    if (!ER.flag('k-hooks')) return ['pad', ['Your pad is on the steward&rsquo;s table too, beside Mr Quayle&rsquo;s page. Your questions for Mr Pettifer are still open ones. Click the pad.']];
+    if (!CX.isOpen()) return ['start', ['Mr Pettifer is standing at the far end of the corridor, beside the fire door, where he stood at ten past three. Click him, and begin.']];
+    for (i = 0; i < TARGET.length; i++) if (!has(TARGET[i][0])) return ['t-' + TARGET[i][0], TARGET[i][1]];
+    return null;
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#go').classList.toggle('on', !!nextFile);
+    $('#hooknote').classList.toggle('ready', !nextFile && !ER.flag('k-note'));
+    $('#pad2').classList.toggle('ready', !nextFile && !!ER.flag('k-note') && !ER.flag('k-hooks'));
+    $('#pettifer').classList.toggle('ready', !nextFile && !!ER.flag('k-hooks'));
+    ER.pips(nextFile ? TOTAL : wonList().length, TOTAL);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The committee is at the far end of the corridor, with its heads together.'); return; }
+    if (ER.flag('k-in')) { ER.say('The corridor. Mr Pettifer is still standing by the fire door.'); return; }
+    busy = true; ER.flag('k-in', 1);
+    ER.narrate([
+      'The corridor runs the whole length of the Council Chamber: tall windows down one side, with the last of the sun in them, and at the far end a fire door under a green sign.',
+      'The Appeals Committee stands in a row beside you, like three people waiting for a bus. Mr Pettifer has been asked to stand where he stood at ten past three. He is a long way off.',
+      'Mrs Hargreave takes him through his evidence. She asks him open questions, because he is her own witness: &ldquo;What did you see, Desmond?&rdquo; He tells the committee what he saw. It takes some time. It has grown since twenty past three.',
+      '&ldquo;Now,&rdquo; says Dr Rahman. &ldquo;The player&rsquo;s friend. He is the other side&rsquo;s witness, so you may lead him, and I advise you to.&rdquo; She opens the peppermints. There are four left.',
+      'You look at your pad. &ldquo;Where were you standing? What was on the screen?&rdquo; Mr Quayle looks at it too, over your shoulder, and makes a small sound. He turns over an Under-9 score sheet, writes on the back of it, and lays it on the steward&rsquo;s table.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the room ---------- */
+  $('#hooknote').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: HOOKS, cls: 'back', clue: { id: 'hooknote', title: 'Mr Quayle’s note: hooks', kind: 'On the back of a score sheet' }, done: function () { ER.flag('k-note', 1); paint(); GB.learn(['lead', 'statement']); } });
+  });
+  $('#pad2').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('k-hooks')) { ER.say('Your five questions, each with its hook. They are in your notebook as well.'); return; }
+    if (!ER.flag('k-note')) { ER.say('Your pad, with five open questions on it. Mr Quayle is tapping the page that he has just written, with the blunt end of his pencil.'); return; }
+    openHooks();
+  });
+  function start() {
+    if (busy) return;
+    if (nextFile) { ER.say('Mr Pettifer is standing by himself at the window where the telephone was. He has it in his hand now. He is not looking at it.'); return; }
+    if (!ER.flag('k-hooks')) { ER.say('Mr Pettifer, twenty metres away, beside the fire door. He is waiting. Your questions are not ready: they are still open ones.'); return; }
+    openCx();
+  }
+  $('#pettifer').addEventListener('click', start);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  GB.thing('#firedoor', null, 'The fire door, at the far end. It is twenty metres from the fountain: Mr Loxley has just walked it, and counted.', isBusy);
+  GB.thing('#fountain', null, 'The drinking fountain. The water comes out sideways, and very cold.', isBusy);
+  GB.thing('#sill', null, 'The windowsill beside the fountain: wide, white, and exactly the height at which a person puts a thing down and forgets it.', isBusy);
+  GB.thing('#wins', null, 'The sun is low, and it comes straight in at the windows. Anybody who stands in front of one is a dark shape with a bright edge.', isBusy);
+  GB.thing('#rads', 'radiator', 'The radiators hum. They have hummed since 1911.', isBusy);
+  GB.thing('#table', null, 'The steward&rsquo;s table, by the door of the hall, with a clean sheet on the clipboard for round 5. Nobody has signed out yet.', isBusy);
+  GB.thing('#maeve', null, 'Maeve is standing by the fountain, where she stood at ten past three. She has her water bottle in both hands.', isBusy);
+  GB.thing('#rahman', null, function () { return nextFile ? 'Dr Rahman is at the far end of the corridor with the other two. All that you can hear is the radiators.' : 'Dr Rahman, with the peppermint tin. She takes one each time somebody wastes her time.'; }, isBusy);
+  GB.thing('#quayle', null, 'Mr Quayle teaches English at Upper Brindlow School for five days of the week, and chess to eight-year-olds on the seventh. He is enjoying the hooks more than he ought to.', isBusy);
+  GB.thing('#tloxley', null, 'Mr Loxley has the till roll in one hand and the score sheet in the other, and he keeps looking from one to the other.', isBusy);
+})();
+</script>
+</body>
+</html>

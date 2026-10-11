@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Gate · The Keeper Gives No Change</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="toll.css">
+<style>
+  body{--bg:#1d1a2b;--accent:#f0b35c;--font-display:'Uncial Antiqua',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(22,18,34,.96);--tc-ink:#efe6d6;--cap-bg:rgba(20,16,32,.94);--cap-ink:#f3ecdf;--panel:#221d31;--face-bg:#3a3a4a;--q-ink:#c9b9e6;--fade:#0b0914;--hud-bg:rgba(20,16,32,.78)}
+  #sun{transition:transform 4.5s ease-in}
+  #scene.night #sun{transform:translateY(120px)}
+  #dark{opacity:0;transition:opacity 4.5s}
+  #scene.night #dark{opacity:.5}
+  #glow{opacity:0;transition:opacity 1.2s}
+  #scene.lit #glow{opacity:1;animation:gl 3.4s steps(4) infinite}
+  @keyframes gl{50%{opacity:.82}}
+  #lampGlass{transition:fill .6s}
+  #scene.lit #lampGlass{fill:#ffd98a}
+  #scene.lit #flame{opacity:1}
+  #flame{opacity:0;transform-origin:900px 318px;animation:fl 1.9s ease-in-out infinite}
+  @keyframes fl{0%,100%{transform:scale(1,1)}35%{transform:scale(.88,1.14)}65%{transform:scale(1.1,.92)}}
+  #rainG{display:none}
+  #scene.wet #rainG{display:block}
+  .puff{animation:puff 9s linear infinite}
+  .puff:nth-child(2){animation-delay:-3s}.puff:nth-child(3){animation-delay:-6s}
+  @keyframes puff{0%{transform:translate(0,0) scale(.5);opacity:0}15%{opacity:.26}100%{transform:translate(60px,-120px) scale(1.5);opacity:0}}
+  .puff{transform-origin:505px 40px}
+  #mabel{animation:bob 4.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .shim{stroke-dasharray:40 120;animation:shim 6s linear infinite}
+  .shim:nth-child(2n){animation-duration:8s;stroke-dasharray:26 90}
+  @keyframes shim{to{stroke-dashoffset:-160}}
+  #win{animation:win 5s steps(3) infinite}
+  @keyframes win{50%{opacity:.86}}
+
+  /* the Keeper's reckoning frame */
+  .rf{display:grid;grid-template-columns:minmax(0,560px) 400px;gap:26px;width:min(1000px,96vw);align-items:start}
+  .rf-frame{padding:20px 24px 18px;background:#5a3c22 linear-gradient(160deg,#6f4b2b,#40290f);border:8px solid #2a1a0c;border-radius:6px;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 2px rgba(255,220,150,.15)}
+  .rf-frame h4{margin:0;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:25px;line-height:1.1;color:#ffe9a8}
+  .rf-frame h5{margin:4px 0 14px;font-family:'Cinzel',serif;font-weight:700;font-size:12px;letter-spacing:.2em;color:#e3c98a;border-bottom:2px solid rgba(255,233,168,.3);padding-bottom:10px}
+  .rf-rod{display:grid;grid-template-columns:138px minmax(0,1fr) 92px;align-items:center;gap:12px;margin-bottom:8px;padding:7px 8px;border-radius:4px}
+  .rf-rod.bad{background:rgba(190,50,30,.34)}
+  .rf-rod label{font-family:'Cinzel',serif;font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:#ffe9a8;line-height:1.15}
+  .rf-rod label small{display:block;font-family:'IM Fell English',serif;font-style:italic;font-weight:400;font-size:14.5px;letter-spacing:0;text-transform:none;color:#e3cfa6}
+  .rf-beads{position:relative;display:flex;height:46px;align-items:center;padding:0 4px}
+  .rf-beads:before{content:'';position:absolute;left:0;right:0;top:50%;height:5px;margin-top:-3px;border-radius:3px;background:linear-gradient(#d8b150,#8a6a26)}
+  .rf-bead{position:relative;flex:0 0 auto;width:33px;height:33px;margin-right:3px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#9a9fa6,#3d4148 70%);box-shadow:0 3px 5px rgba(0,0,0,.5)}
+  .rf-bead.on{background:radial-gradient(circle at 34% 30%,#ffd98a,#b0661c 70%)}
+  .rf-bead.gap{margin-left:auto}
+  .rf-bead:hover{outline:2px solid #ffe9a8;outline-offset:1px}
+  .rf-rod output{font-family:'Almendra',serif;font-weight:700;font-size:18px;color:#ffe9a8;text-align:right;white-space:nowrap}
+  .rf-foot{display:flex;align-items:center;gap:14px;margin-top:12px}
+  .rf-foot .btn{--accent:#ffe9a8;white-space:nowrap}
+  .rf-foot span{font-family:'IM Fell English',serif;font-style:italic;font-size:15px;color:#e3cfa6;line-height:1.25}
+  .rf-cart{display:block;width:100%;height:236px;margin:10px 0 0;background:#4f475c;border:1px solid rgba(255,233,168,.25)}
+  .rf-left .pmsg{margin-top:14px;min-height:110px}
+  @media (max-width:900px){.rf{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#151436"/><stop offset=".5" stop-color="#3f3562"/><stop offset=".76" stop-color="#a65a6c"/><stop offset=".9" stop-color="#e3935c"/><stop offset="1" stop-color="#f7cb7c"/></linearGradient>
+  <linearGradient id="riverG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a5376"/><stop offset=".3" stop-color="#3f3a5c"/><stop offset="1" stop-color="#211f38"/></linearGradient>
+  <linearGradient id="stoneG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e6879"/><stop offset="1" stop-color="#4a4557"/></linearGradient>
+  <linearGradient id="postG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7b7486"/><stop offset=".55" stop-color="#5a5466"/><stop offset="1" stop-color="#433e4e"/></linearGradient>
+  <linearGradient id="roofG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f3749"/><stop offset="1" stop-color="#282330"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5e3f24"/><stop offset=".5" stop-color="#74512f"/><stop offset="1" stop-color="#4a3019"/></linearGradient>
+  <linearGradient id="oakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#33241a"/><stop offset="1" stop-color="#1c130d"/></linearGradient>
+  <linearGradient id="roadG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a5162"/><stop offset="1" stop-color="#2f2936"/></linearGradient>
+  <linearGradient id="winG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd98a"/><stop offset="1" stop-color="#f08a3a"/></linearGradient>
+  <linearGradient id="cheeseG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6dc86"/><stop offset="1" stop-color="#d3a23a"/></linearGradient>
+  <linearGradient id="boardG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3f2c14"/><stop offset=".5" stop-color="#4c3519"/><stop offset="1" stop-color="#33230f"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffe7a8" stop-opacity=".85"/><stop offset=".28" stop-color="#ffb24a" stop-opacity=".3"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="sunG"><stop offset="0" stop-color="#fff0b8" stop-opacity=".8"/><stop offset="1" stop-color="#ffb060" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="48%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#0b0914" stop-opacity=".2"/><stop offset="1" stop-color="#0b0914" stop-opacity=".82"/></radialGradient>
+  <clipPath id="hatchC"><rect x="452" y="292" width="176" height="178"/></clipPath>
+  <clipPath id="winC"><rect x="276" y="326" width="118" height="100"/></clipPath>
+</defs>
+
+<!-- the sky, the last of the sun, the far bank -->
+<rect x="-1000" y="-640" width="3600" height="1150" fill="url(#skyG)"/>
+<g fill="#6b4a6e" opacity=".55"><ellipse cx="1180" cy="250" rx="330" ry="15"/><ellipse cx="1420" cy="310" rx="230" ry="11"/><ellipse cx="200" cy="190" rx="260" ry="12"/></g>
+<g fill="#e88a6a" opacity=".4"><ellipse cx="840" cy="372" rx="300" ry="9"/><ellipse cx="1260" cy="404" rx="210" ry="7"/></g>
+<g id="sun" class="hot"><circle cx="884" cy="450" r="150" fill="url(#sunG)"/><circle cx="884" cy="450" r="46" fill="#ffe2a0"/></g>
+<path d="M-1000 474Q-600 404-200 450T260 434Q420 400 620 444T1000 424Q1250 394 1500 440T2600 424V540H-1000Z" fill="#2c2542"/>
+<path d="M-1000 490Q800 474 2600 490V540H-1000Z" fill="#211b34"/>
+<g fill="#ffd98a"><circle cx="1484" cy="483" r="2"/><circle cx="1500" cy="481" r="1.600"/><circle cx="1519" cy="484" r="2"/><circle cx="1540" cy="482" r="1.500"/><circle cx="1562" cy="484" r="1.800"/></g>
+
+<!-- Stickle Water -->
+<g id="river" class="hot"><rect x="-1000" y="508" width="3600" height="170" fill="url(#riverG)"/>
+  <g stroke="#f2a468" stroke-width="3" stroke-linecap="round" opacity=".5" fill="none"><path class="shim" d="M1100 524h300"/><path class="shim" d="M1110 544h420"/><path class="shim" d="M1140 566h300"/><path class="shim" d="M1230 590h320"/></g>
+  <g stroke="#8f86b0" stroke-width="2" stroke-linecap="round" opacity=".4" fill="none"><path class="shim" d="M-200 540h520"/><path class="shim" d="M1420 610h500"/><path class="shim" d="M-400 600h600"/></g></g>
+
+<!-- the near bank, and the road down to the bridge -->
+<path d="M-1000 646Q800 606 2600 646V1500H-1000Z" fill="#2b2433"/>
+<path d="M746 640H1090L1500 1500H380Z" fill="url(#roadG)"/>
+<g id="cobbles" stroke="#231e2a" stroke-width="2.500" fill="none" opacity=".7"></g>
+
+<!-- the bridge, going away over the water -->
+<path d="M746 640H1090L985 512H870Z" fill="#514a5d"/>
+<path d="M746 640L870 512V484L746 566Z" fill="#666073"/><path d="M1090 640L985 512V484L1090 566Z" fill="#423c4d"/>
+<path d="M746 566L870 484M1090 566L985 484" stroke="#8a8398" stroke-width="5"/>
+<g stroke="#39333f" stroke-width="2" opacity=".7"><path d="M790 610h256M826 580h186M852 552h134M866 530h108"/></g>
+
+<!-- the toll-house -->
+<rect x="-1000" y="232" width="1660" height="430" fill="url(#stoneG)"/>
+<g id="blocks" stroke="#3b3646" stroke-width="2.500" fill="none" opacity=".75"></g>
+<path d="M-1000 244V150L-560 128H600L694 244Z" fill="url(#roofG)"/><path d="M-1000 244H694" stroke="#1c1823" stroke-width="7"/>
+<g stroke="#201c28" stroke-width="2" opacity=".8"><path d="M-1000 172H624M-1000 198H646M-1000 222H670"/></g>
+<rect x="470" y="54" width="70" height="100" fill="#5a5466"/><rect x="462" y="46" width="86" height="14" fill="#3d384a"/>
+<g fill="#b9b2c9"><circle class="puff" cx="505" cy="40" r="16"/><circle class="puff" cx="505" cy="40" r="16"/><circle class="puff" cx="505" cy="40" r="16"/></g>
+<g id="door" class="hot"><path d="M84 662V420Q84 360 150 360Q216 360 216 420V662Z" fill="#2a2433"/><path d="M96 662V422Q96 372 150 372Q204 372 204 422V662Z" fill="url(#woodG)"/>
+  <path d="M132 374V662M168 374V662" stroke="#3a2512" stroke-width="3"/><path d="M96 440h70M96 590h70" stroke="#17131c" stroke-width="9"/><circle cx="190" cy="520" r="7" fill="#17131c"/></g>
+<g id="window" class="hot"><rect x="262" y="312" width="146" height="128" fill="#2a2433"/><rect id="win" x="276" y="326" width="118" height="100" fill="url(#winG)"/>
+  <g clip-path="url(#winC)" fill="#3a1f18"><path d="M284 426v-38q0-22 20-22t20 22v38z"/><circle cx="304" cy="356" r="12"/><path d="M296 380l44 12" stroke="#3a1f18" stroke-width="3"/>
+    <path d="M344 426v-52q0-20 18-20t18 20v52z"/><path d="M350 352q0-18 12-18t12 18v8h-24z"/><path d="M380 384h18" stroke="#3a1f18" stroke-width="7"/><ellipse cx="398" cy="372" rx="9" ry="11"/><circle cx="399" cy="358" r="6"/></g>
+  <path d="M335 326v100M276 376h118" stroke="#2a2433" stroke-width="6"/><rect x="254" y="438" width="162" height="12" fill="#3d384a"/></g>
+
+<!-- the hatch, and the Keeper in it -->
+<g id="hatch" class="hot">
+  <rect x="438" y="278" width="204" height="198" fill="#2a2433"/><rect x="452" y="292" width="176" height="178" fill="#120f1a"/>
+  <g clip-path="url(#hatchC)"><use href="#ch-spandrel" x="448" y="270" width="184" height="239"/></g>
+  <path d="M438 278h-40l12 198h28zM642 278h40l-12 198h-28z" fill="url(#woodG)"/><path d="M404 330h30M406 420h30M646 330h30M644 420h30" stroke="#17131c" stroke-width="7"/>
+  <path d="M424 470h232l12 22H412z" fill="url(#woodG)"/><path d="M412 492h256" stroke="#2a1a0c" stroke-width="5"/><path d="M446 494l-10 44M634 494l10 44" stroke="#3a2512" stroke-width="10" stroke-linecap="round"/>
+</g>
+<g id="tinder" class="hot"><rect x="596" y="452" width="40" height="20" rx="3" fill="#8a6a26"/><rect x="596" y="448" width="40" height="8" rx="3" fill="#c9a044"/><circle cx="616" cy="462" r="3" fill="#3a2a08"/></g>
+<g id="frame" class="hot"><g id="frameIn"><rect x="462" y="424" width="92" height="50" rx="3" fill="#2a1a0c"/><rect x="468" y="430" width="80" height="38" fill="#6f4b2b"/>
+  <path d="M468 438h80M468 448h80M468 458h80" stroke="#d8b150" stroke-width="2"/>
+  <g fill="#ffd27a"><circle cx="476" cy="438" r="4"/><circle cx="486" cy="438" r="4"/><circle cx="476" cy="448" r="4"/><circle cx="476" cy="458" r="4"/><circle cx="486" cy="458" r="4"/><circle cx="496" cy="458" r="4"/></g>
+  <g fill="#8a8f96"><circle cx="530" cy="438" r="4"/><circle cx="540" cy="438" r="4"/><circle cx="520" cy="448" r="4"/><circle cx="530" cy="448" r="4"/><circle cx="540" cy="448" r="4"/><circle cx="540" cy="458" r="4"/></g></g></g>
+
+<!-- the gate, the lamp over it, and a notice -->
+<g id="gate" class="hot">
+  <rect x="700" y="332" width="46" height="330" fill="url(#postG)"/><rect x="690" y="314" width="66" height="20" fill="#3d384a"/><rect x="1090" y="332" width="46" height="330" fill="url(#postG)"/><rect x="1080" y="314" width="66" height="20" fill="#3d384a"/>
+  <g fill="url(#oakG)"><rect x="746" y="492" width="344" height="14"/><rect x="746" y="526" width="344" height="14"/><rect x="746" y="560" width="344" height="14"/><rect x="746" y="594" width="344" height="14"/><rect x="746" y="628" width="344" height="14"/>
+    <rect x="750" y="482" width="16" height="172"/><rect x="1070" y="482" width="16" height="172"/><rect x="910" y="482" width="16" height="172"/><path d="M766 640L910 500h20L786 640zM926 640L1070 500h16v6L946 640z"/></g>
+  <g fill="#0d0a10"><circle cx="758" cy="499" r="3"/><circle cx="758" cy="635" r="3"/><circle cx="1078" cy="499" r="3"/><circle cx="1078" cy="635" r="3"/></g>
+</g>
+<path d="M723 316Q723 222 900 222V256" stroke="#14101a" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M723 290Q760 250 812 232" stroke="#14101a" stroke-width="5" fill="none"/>
+<g id="goats" class="hot"><g transform="rotate(-4 918 548)"><rect x="866" y="516" width="104" height="62" fill="#e9dfc6"/><rect x="866" y="516" width="104" height="62" fill="none" stroke="#2a1a0c" stroke-width="3"/>
+  <text x="918" y="543" class="cz" font-size="17" fill="#5a1f16">NO</text><text x="918" y="564" class="cz" font-size="17" fill="#5a1f16">GOATS</text><circle cx="918" cy="522" r="3" fill="#14101a"/></g></g>
+
+<!-- the board with the Table of Tolls -->
+<g id="board" class="hot">
+  <path d="M1196 480V662M1424 480V662" stroke="#2a1a0c" stroke-width="16" stroke-linecap="round"/>
+  <rect x="1160" y="236" width="300" height="250" rx="4" fill="#1d1306"/><rect x="1170" y="246" width="280" height="230" fill="url(#boardG)"/>
+  <text x="1310" y="282" class="cz" font-size="21" fill="#ffe9a8" letter-spacing="2">TABLE OF TOLLS</text><path d="M1190 294h240" stroke="#f3e5bf" stroke-width="2" opacity=".6"/>
+  <g stroke="#f3e5bf" stroke-width="3.500" stroke-linecap="round" opacity=".85"><path d="M1216 316h206M1216 338h186M1216 350h120M1216 372h206M1216 384h96M1216 406h190M1216 418h60M1216 440h150M1216 460h172"/></g>
+  <g fill="#ffe9a8"><rect x="1190" y="312" width="12" height="8"/><rect x="1190" y="334" width="12" height="8"/><rect x="1190" y="368" width="12" height="8"/><rect x="1190" y="402" width="12" height="8"/><rect x="1190" y="436" width="12" height="8"/><rect x="1190" y="456" width="12" height="8"/></g>
+  <g fill="#8a6a26"><circle cx="1178" cy="254" r="4"/><circle cx="1442" cy="254" r="4"/><circle cx="1178" cy="468" r="4"/><circle cx="1442" cy="468" r="4"/></g>
+</g>
+
+<!-- your handcart: nine cheeses, a goose, and a spare wheel -->
+<g id="cart">
+  <ellipse cx="1210" cy="866" rx="250" ry="14" fill="#000" opacity=".35"/>
+  <g stroke="#17110a" fill="none"><circle cx="1222" cy="796" r="62" stroke-width="11"/><path d="M1222 734v124M1160 796h124M1178 752l88 88M1266 752l-88 88" stroke-width="5"/></g>
+  <g id="cheeses" class="hot">
+    <g id="cheeseRows"></g>
+  </g>
+  <g id="cartBody" class="hot">
+    <path d="M1352 742L1520 706M1352 762L1520 726" stroke="#4a3019" stroke-width="11" stroke-linecap="round"/><path d="M1330 770l10 92" stroke="#3a2512" stroke-width="11" stroke-linecap="round"/>
+    <rect x="1062" y="704" width="296" height="72" rx="4" fill="url(#woodG)"/><path d="M1062 728h296M1062 752h296" stroke="#3a2512" stroke-width="3"/><path d="M1110 704v72M1210 704v72M1310 704v72" stroke="#3a2512" stroke-width="2.500" opacity=".7"/>
+    <circle cx="1200" cy="800" r="62" fill="#000" opacity="0"/>
+    <g stroke="#5a3f26" fill="none"><circle cx="1200" cy="800" r="62" stroke-width="12"/><path d="M1200 738v124M1138 800h124M1156 756l88 88M1244 756l-88 88" stroke-width="6"/></g><circle cx="1200" cy="800" r="11" fill="#33230f"/><circle cx="1200" cy="800" r="4" fill="#c9a044"/>
+  </g>
+  <g id="spare" class="hot"><ellipse cx="1030" cy="738" rx="36" ry="64" fill="#000" fill-opacity="0" stroke="#7a5632" stroke-width="12"/><path d="M1030 674v128M994 738h72M1008 692l44 92M1052 692l-44 92" stroke="#7a5632" stroke-width="5"/><ellipse cx="1030" cy="738" rx="8" ry="12" fill="#33230f"/>
+    <path d="M1066 706q-16-10-30 2M1066 770q-16 10-30-2" stroke="#efe2bd" stroke-width="6" fill="none" stroke-linecap="round"/></g>
+  <g id="mabel" class="hot"><path d="M1246 586q26-16 30-40q-28 4-42 26z" fill="#e9e4d6"/><ellipse cx="1206" cy="592" rx="50" ry="27" fill="#f8f5ec"/>
+    <path d="M1170 586q-16-30-8-58" stroke="#f8f5ec" stroke-width="20" fill="none" stroke-linecap="round"/><circle cx="1160" cy="522" r="15" fill="#f8f5ec"/>
+    <path d="M1148 518l-24 6 22 8z" fill="#e88a2a"/><circle cx="1157" cy="518" r="2.600" fill="#1d1410"/><path d="M1186 592q22 16 46 2" stroke="#cfc9b8" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+</g>
+
+<g id="rainG" class="rain" pointer-events="none"></g>
+<rect id="dark" x="-1000" y="-640" width="3600" height="2140" fill="#0a0b22" pointer-events="none"/>
+<g id="lamp" class="hot"><circle id="glow" cx="900" cy="296" r="330" fill="url(#lampG)" pointer-events="none"/>
+  <path d="M884 256h32l4 8h-40z" fill="#14101a"/><path id="lampGlass" d="M880 264h40l8 62h-56z" fill="#2f2a3c"/><path id="flame" d="M900 286q-7 12-7 18a7 7 0 0 0 14 0q0-6-7-18z" fill="#fff6d8"/>
+  <path d="M880 264h40M872 326h56M900 264v62M880 264l-8 62M920 264l8 62" stroke="#14101a" stroke-width="4" fill="none"/><path d="M876 326h48l-6 10h-36z" fill="#14101a"/></g>
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Ask for the Riddles</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="toll.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, frameBox = null;
+
+  /* stones, cobbles, cheeses, rain */
+  (function () {
+    var s = '', x, y, row = 0, i, r, c;
+    for (y = 276; y < 660; y += 46, row++) {
+      s += '<path d="M-1000 ' + y + 'H660"/>';
+      for (x = -960 + (row % 2) * 58; x < 660; x += 116) s += '<path d="M' + x + ' ' + y + 'v' + Math.min(46, 660 - y) + '"/>';
+    }
+    $('#blocks').innerHTML = s; s = '';
+    for (i = 0; i < 9; i++) {
+      y = 664 + i * i * 3.2 + i * 12; r = (y - 640) / 860;
+      s += '<path d="M' + (746 - r * 366).toFixed(0) + ' ' + y.toFixed(0) + 'H' + (1090 + r * 410).toFixed(0) + '"/>';
+    }
+    for (i = 0; i <= 8; i++) { x = 746 + i * 43; s += '<path d="M' + x + ' 640L' + (380 + i * 140) + ' 1500"/>'; }
+    $('#cobbles').innerHTML = s; s = '';
+    /* nine cheeses: four, three and two */
+    [[4, 1096, 690], [3, 1129, 660], [2, 1162, 630]].forEach(function (rw, k) {
+      for (c = 0; c < rw[0]; c++) {
+        x = rw[1] + c * 66; y = rw[2];
+        s += '<g><path d="M' + (x - 30) + ' ' + y + 'v20q30 12 60 0v-20z" fill="' + (k === 0 && c === 0 ? '#c9d3da' : 'url(#cheeseG)') + '"/><ellipse cx="' + x + '" cy="' + y + '" rx="30" ry="10" fill="' + (k === 0 && c === 0 ? '#e6edf1' : '#fbe9a4') + '"/>' +
+          (k === 0 && c === 0 ? '<g fill="#5f7fa0"><circle cx="' + (x - 12) + '" cy="' + (y + 14) + '" r="2"/><circle cx="' + (x + 6) + '" cy="' + (y + 18) + '" r="2.4"/><circle cx="' + (x + 18) + '" cy="' + (y + 12) + '" r="1.8"/></g>' : '') +
+          '<path d="M' + (x - 30) + ' ' + y + 'q30 12 60 0" stroke="#b9882c" stroke-width="1.5" fill="none" opacity=".6"/></g>';
+      }
+    });
+    $('#cheeseRows').innerHTML = s; s = '';
+    for (i = 0; i < 26; i++) { x = -260 + i * 86 + (i % 3) * 17; s += '<path d="M' + x + ' -40l-70 1000"/>'; }
+    $('#rainG').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'toll', storyTitle: 'The Keeper Gives No Change', id: 'gate', no: 'I', title: 'The Gate',
+    go: 'Go down to the bridge',
+    intro: [
+      'Every autumn Father takes the cheeses over Stickle Bridge to the Cheese Fair at Overwater. This autumn Father has hurt his back, and the cheeses are going with you.',
+      'You are thirteen. You have a handcart, nine cheeses to sell, one silver sixpence, and a goose called Mabel, who is not for sale at any price and goes wherever you go.',
+      'The fair opens at sunrise, and the best places in the square go to whoever gets there first. Overwater is two hours beyond the bridge.',
+      'The bridge belongs to a troll. &ldquo;He won&rsquo;t eat you,&rdquo; Father said. &ldquo;He&rsquo;ll read to you. It&rsquo;s worse. So read his board before you open your mouth. He has.&rdquo;'
+    ],
+    exit: {"next":"arch","w":{"db0b2ee3":"46fb5dec"}}, tags: {"l1":["bfbd493d"],"l2":["a62268cb"],"l3":["9a86d2a5"],"l4":["bf30f6d5"]},
+    sound: ['candle', { root: 50, bpm: 60, beds: [['wind', 0.5]] }],        /* dusk by a river: the theme's harp, slow, and wind off the water */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('g-file') || null;
+
+  var TABLE = '<h4>The Table of Tolls</h4><h5>STICKLE BRIDGE &middot; SPANDREL, KEEPER</h5>' +
+    '<p><b>I.</b><span>Every traveller who crosses on foot shall pay one penny.</span></p>' +
+    '<p><b>II.</b><span>For every beast or bird: one penny for each leg that walks upon the bridge.</span></p>' +
+    '<p><b>III.</b><span>For every cart: one penny for each wheel, unless the cart is empty.</span></p>' +
+    '<p><b>IV.</b><span>Of goods carried for sale the Keeper shall have one in every ten, and shall choose it himself.</span></p>' +
+    '<p><b>V.</b><span>A child shall pay nothing until the age of seven.</span></p>' +
+    '<p><b>VI.</b><span>No toll is taken by lamplight.</span></p>' +
+    '<p><b>VII.</b><span>The Keeper gives no change.</span></p>';
+
+  function hints() {
+    if (nextFile) return ['go', ['The Keeper has told you about one other way. The button is at the bottom of the screen.']];
+    if (ER.flag('g-talk')) return ['frame', [
+      'Four rods: yourself, the goose, the cart, the cheeses. Take the Table one line at a time, and look hard at your own cart: what is on it, what is under it, and what is tied to it.',
+      'The small words do the work. Line II does not say &ldquo;each leg&rdquo;: it says &ldquo;each leg that walks upon the bridge&rdquo;. Line III does not say &ldquo;each wheel that turns&rdquo;: it says &ldquo;each wheel&rdquo;, and stops. Line IV says &ldquo;one in every ten&rdquo;.',
+      'Mabel is riding, so her legs are not walking. A spare wheel is still a wheel. Nine is not ten. And you stopped being under seven a long time ago.'
+    ]];
+    return ['start', [
+      'Read the big board on the right of the gate. It is the Table of Tolls, and everything you owe is on it.',
+      'Then talk to the Keeper. He is in the hatch in the wall of the toll-house, behind a small pair of spectacles.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    var sc = $('#scene');
+    sc.classList.toggle('night', !!nextFile); sc.classList.toggle('lit', !!nextFile); sc.classList.toggle('wet', !!nextFile);
+    $('#frameIn').setAttribute('class', ER.flag('g-talk') && !nextFile ? 'nudge' : '');
+    $('#go').classList.toggle('on', !!nextFile && !busy);
+    ER.pips((ER.flag('g-talk') ? 1 : 0) + (nextFile ? 1 : 0), 2);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.amb.rain(0.035); ER.say('The lamp is lit, the gate is shut, and it is raining. The Keeper is waiting to hear whether you will ask for his Riddles.'); return; }
+    if (ER.flag('g-talk')) { ER.say('Stickle Bridge, at sunset. The reckoning frame is on the shelf of the hatch.'); return; }
+    busy = true;
+    ER.narrate([
+      'Stickle Bridge. The sun is sitting on the hills across the water, and it will not sit there long.',
+      'A gate across the road. A toll-house with one lit window. A board with writing on it. And a hatch in the wall, with something very large behind it, looking at you over a small pair of spectacles.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things at the gate ---------- */
+  $('#board').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: TABLE, cls: 'board', clue: { id: 'table', title: 'The Table of Tolls', kind: 'On the board at the gate' },
+      done: function () { TOLL.learn(['toll', 'on foot', 'beast', 'unless', 'goods', 'until', 'shall', 'change']); } });
+  });
+  $('#hatch').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Three riddles,&rdquo; says the Keeper. &ldquo;You have only to ask.&rdquo; He has put a clean page in his book, in case.'); return; }
+    if (ER.flag('g-talk')) { ER.say('&ldquo;The frame is on my shelf,&rdquo; says the Keeper. &ldquo;The Table is on my board. The cart is yours, and I should look at it carefully if I were you. I have.&rdquo;', 8000); return; }
+    ER.talk({
+      who: 'Spandrel', role: CAST.spandrel.role, face: FACE('spandrel'),
+      lines: [
+        { note: 'He is the size of a haystack and the colour of the bridge. He wears a waistcoat with brass buttons, no two of them the same, and he is writing in a book. He does not look up until he has finished the line.',
+          a: '&ldquo;One traveller. One goose. One cart. Cheeses.&rdquo; He looks at the sky. &ldquo;And very little day left. Good evening.&rdquo;' },
+        { q: 'Good evening. I have to cross tonight. The fair opens at sunrise.',
+          a: 'Then you had better pay your toll while there is light to pay it by. The Table is on the board. Everything that you owe is written there, and nothing that you do not owe. I wrote it myself.' },
+        { q: 'How much is it?',
+          a: 'I do not tell travellers what they owe. They tell me. It saves argument: nobody quarrels with their own counting. There is a reckoning frame on my shelf, with four rods: yourself, your beast or bird, your cart, your goods. Set it, and I shall tell you whether you can read.' },
+        { q: 'And if I pay, you will let me cross?',
+          a: 'When my gate is open, a traveller who has paid may cross. You have my word. A troll&rsquo;s word is not like a man&rsquo;s. It does not break.' }
+      ],
+      clue: { id: 'keeper1', title: 'Spandrel, at the hatch', kind: 'What he said' }, last: 'Go to the frame',
+      done: function (seen) {
+        if (!seen) return;
+        ER.flag('g-talk', 1); paint(); TOLL.learn(['toll', 'troll', 'Keeper', 'reckoning frame']);
+        ER.say('The reckoning frame is on the shelf of the hatch: four rods, and a great many beads.');
+      }
+    });
+  });
+  $('#frame').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    if (nextFile) { ER.say('The Keeper has left the beads where you put them. He says that he likes to look at a right answer.'); return; }
+    if (!ER.flag('g-talk')) { ER.wordAt(e.clientX, e.clientY, 'reckoning frame'); ER.say('A wooden frame with four rods of beads, on the shelf of the hatch. It is the Keeper&rsquo;s. Better ask him before you touch it.'); return; }
+    openFrame();
+  });
+  TOLL.thing('#sun', null, function () { return nextFile ? 'The sun has gone. The lamp is lit. By the Keeper&rsquo;s reckoning it is night, whatever the sky is still doing.' : 'A red rim of sun on the hills. It is going down while you look at it.'; }, isBusy);
+  TOLL.thing('#river', null, 'Stickle Water: fast, cold, and as deep as a church. There is no other bridge for a day&rsquo;s walk.', isBusy);
+  TOLL.thing('#gate', null, 'A gate of black oak, shut. There is no lock on it. Nobody has ever needed one.', isBusy);
+  $('#goats').addEventListener('click', function (e) { if (busy) return; e.stopPropagation(); ER.say('NO GOATS, says the notice on the gate. Underneath, in smaller letters, somebody has added: THIS MEANS YOU, GRUFF.'); });
+  TOLL.thing('#lamp', 'lamp', function () { return nextFile ? 'The lamp is lit. It will burn all night: the Keeper has never once let it go out.' : 'An iron lamp over the gate. It is not lit yet. On the shelf of the hatch there is a tinderbox, ready.'; }, isBusy);
+  $('#tinder').addEventListener('click', function (e) { if (busy) return; e.stopPropagation(); ER.wordAt(e.clientX, e.clientY, 'tinderbox'); ER.say('A tinderbox, ready on the shelf. When the sun goes, the Keeper lights the lamp. He has not been late in three hundred years.'); });
+  TOLL.thing('#window', null, 'Through the window you can see firelight and people: a woman knitting, a pedlar asleep on his pack, a girl with a basket, and a knight in armour with a small fat hawk on his wrist. The hawk is wearing a hood. Why are they all just sitting there?', isBusy);
+  TOLL.thing('#door', 'toll-house', 'The door of the toll-house. Behind it: a fire, a smell of soup, and voices that are in no hurry.', isBusy);
+  TOLL.thing('#cartBody', 'handcart', 'Your handcart. Two wheels under it, and the spare wheel tied on behind. Nine cheeses in it, and Mabel on top of them like a queen on a cushion.', isBusy);
+  TOLL.thing('#cheeses', null, 'Nine cheeses, all of them for sale. You counted them at the farm and again at the crossroads, and Mabel has not eaten any.', isBusy);
+  TOLL.thing('#spare', 'spare wheel', 'The spare wheel. Father ties one on behind the cart every year: the road down to the bridge eats wheels.', isBusy);
+  TOLL.thing('#mabel', 'goose', 'Mabel. She has not walked one step since the farm gate, and she does not mean to start now.', isBusy);
+
+  /* ---------- the reckoning frame ---------- */
+  var NUM = ['Nothing', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+  var RODS = [['Yourself', 'in pennies'], ['Beast or bird', 'the goose, in pennies'], ['Your cart', 'in pennies'], ['Your goods', 'what the Keeper takes, in cheeses']];
+  function sayRod(i, v) {
+    if (i === 0) return v === 0 ? '&ldquo;Nothing? Line V: a child pays nothing until the age of seven. You were seven some time ago, I think.&rdquo;'
+      : '&ldquo;You are one traveller. I have looked twice.&rdquo;';
+    if (i === 1) return v === 2 ? '&ldquo;Two pennies for the goose? Read line II to its end: each leg that <i>walks</i> upon the bridge. Where are her legs at this moment?&rdquo;'
+      : '&ldquo;That is not how many legs a goose has. And in any case, read line II to its end.&rdquo;';
+    if (i === 2) return v === 2 ? '&ldquo;Two? Count again. Not the wheels that turn: the wheels. Line II says &lsquo;each leg that walks&rsquo;. Line III says &lsquo;each wheel&rsquo;, and stops. I wrote both lines, and I know the difference.&rdquo;'
+      : v === 0 ? '&ldquo;Nothing for the cart? &lsquo;Unless the cart is empty.&rsquo; It is full of cheese. And goose.&rdquo;'
+      : '&ldquo;Count the wheels. All of them, wherever they are.&rdquo;';
+    return v === 1 ? '&ldquo;One cheese? I wish it were so; I can smell the blue one from here. But line IV says one in every ten, and you have not got ten.&rdquo;'
+      : '&ldquo;Line IV: one in every ten. How many tens of cheeses have you?&rdquo;';
+  }
+  function openFrame() {
+    var box = ER.el('div', 'rf'), vals = (ER.flag('g-vals') || [0, 0, 0, 0]).slice(), done = false, s, n;
+    s = '<div class="rf-left"><div class="rf-frame"><h4>The Keeper&rsquo;s reckoning frame</h4><h5>WHAT DO YOU OWE &middot; AS YOU STAND AT THE GATE</h5>';
+    RODS.forEach(function (r, i) {
+      s += '<div class="rf-rod" data-i="' + i + '"><label>' + r[0] + '<small>' + r[1] + '</small></label><div class="rf-beads">';
+      for (n = 1; n <= 6; n++) s += '<button type="button" class="rf-bead" data-n="' + n + '"></button>';
+      s += '</div><output></output></div>';
+    });
+    s += '<div class="rf-foot"><button type="button" class="btn" id="rf-go">Tell the Keeper</button><span>Click a bead to count it. Click the last counted bead to push it back.</span></div></div><p class="pmsg"></p></div>' +
+      '<div class="rf-side"><div class="doc board mini">' + ER.gloss(TABLE) + '</div><svg class="rf-cart" viewBox="950 470 590 410"><use href="#cart"/></svg></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg'), rods = ER.$$('.rf-rod', box);
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() {
+      rods.forEach(function (rod, i) {
+        var v = vals[i];
+        ER.$$('.rf-bead', rod).forEach(function (b, k) { b.classList.toggle('on', k < v); b.classList.toggle('gap', k === v); });
+        rod.querySelector('output').textContent = !v ? 'nothing' : i === 3 ? v + (v === 1 ? ' cheese' : ' cheeses') : v + (v === 1 ? ' penny' : ' pennies');
+        rod.setAttribute('data-v', v);
+      });
+    }
+    rods.forEach(function (rod, i) {
+      rod.addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('.rf-bead') : null; if (!b || done) return;
+        var k = +b.getAttribute('data-n');
+        vals[i] = vals[i] === k ? k - 1 : k; ER.flag('g-vals', vals);
+        rods.forEach(function (x) { x.classList.remove('bad'); });
+        TOLL.sfx.bead(); draw();
+      });
+    });
+    box.querySelector('#rf-go').addEventListener('click', function () {
+      if (done) return;
+      var wrong = [], i, file, tries;
+      for (i = 0; i < 4; i++) if (!ER.check('l' + (i + 1), vals[i])) wrong.push(i);
+      if (!wrong.length) {
+        file = ER.exitOk([vals.join('-')]);
+        if (!file) { msg('The Keeper looks at the frame for a long time. Something is wrong with this lock: tell your teacher.'); return; }
+        done = true; nextFile = file; ER.flag('g-file', file); TOLL.done('gate'); busy = true;
+        msg('The Keeper runs one grey finger along the rods. &ldquo;' + vals.map(function (v) { return NUM[v]; }).join('. ') + '.&rdquo;');
+        TOLL.sfx.bead(); setTimeout(TOLL.sfx.bead, 260); setTimeout(TOLL.sfx.bead, 520);
+        setTimeout(function () { ER.closeAll(); TOLL.solved(); paid(vals[0] + vals[1] + vals[2]); }, 2300);
+        return;
+      }
+      tries = TOLL.bump('g-tries'); TOLL.miss(); TOLL.sfx.hm();
+      i = wrong[0]; rods[i].classList.add('bad');
+      msg('<b>' + RODS[i][0] + '.</b> ' + sayRod(i, vals[i]) +
+        (wrong.length === 1 ? ' <i>The other three rods will do.</i>' : ' <i>And that is not the only rod he is frowning at: there ' + (wrong.length === 2 ? 'is one more.' : 'are ' + (wrong.length - 1) + ' more.') + '</i>') +
+        (tries === 1 ? ' <i>Somewhere inside the hatch, something small and hard drops into a jar.</i>' : ''));
+    });
+    draw();
+    msg('Four rods, and six beads on each. The Keeper has put down his pen, and is watching your hands.');
+    frameBox = box;
+    ER.open('ov-lock', box, function () { frameBox = null; });
+  }
+
+  /* ---------- paid: and then the sun goes down ---------- */
+  function paid(total) {
+    $('#frameIn').setAttribute('class', '');
+    ER.pips(2, 2);
+    ER.narrate([
+      '&ldquo;' + NUM[total] + ' pennies,&rdquo; says the Keeper. &ldquo;You can read. It is rarer than you would think.&rdquo;',
+      'You put Father&rsquo;s silver sixpence on the shelf. A hand like a spade closes over it. Nothing comes back.',
+      '&ldquo;A sixpence is six pennies,&rdquo; you say. &ldquo;You owe me ' + NUM[6 - total].toLowerCase() + '.&rdquo; &ldquo;Line VII,&rdquo; says the Keeper. &ldquo;The Keeper gives no change.&rdquo;'
+    ], function () {
+      $('#scene').classList.add('night'); TOLL.sfx.coin();
+      setTimeout(function () { TOLL.sfx.flint(); }, 1500);
+      setTimeout(function () { $('#scene').classList.add('lit'); }, 1900);
+      setTimeout(function () {
+        ER.narrate([
+          'Behind the hills the last red edge of the sun goes out. The Keeper takes a tinderbox from his shelf, reaches up out of the hatch with an arm as long as a ladder, and lights the lamp over the gate.',
+          '&ldquo;Night,&rdquo; he says. &ldquo;By night the gate stays shut. You have paid, and so you may cross as soon as it opens.&rdquo; &ldquo;When is that?&rdquo; &ldquo;When day begins.&rdquo;',
+          '&ldquo;But the fair opens at sunrise, and it&rsquo;s two hours from here!&rdquo; &ldquo;That,&rdquo; says the Keeper, &ldquo;is not in the Table.&rdquo; He pushes a book through the hatch. &ldquo;You may wait in the toll-house. Sign. It is only the house book.&rdquo;'
+        ], function () {
+          $('#scene').classList.add('wet'); ER.amb.rain(0.035);
+          ER.narrate([
+            'It has begun to rain. You sign.',
+            'Inside there is a fire, a smell of soup, and four people who look up and then look down again: a girl with a hen, a pedlar, a knight in armour with a small fat hawk on his wrist, and a woman knitting. &ldquo;Another one,&rdquo; says the woman. &ldquo;Sit down, dear. I&rsquo;ve been waiting nine years. You&rsquo;ll want a cushion.&rdquo;',
+            'Nine years. You go back out into the rain. &ldquo;There must be another way,&rdquo; you say.',
+            '&ldquo;There is one,&rdquo; says the Keeper. &ldquo;By night a traveller may ask for the Riddles. Three of them. Nobody has asked since the year of the comet.&rdquo; He takes off his spectacles and polishes them. &ldquo;I should like it very much if somebody asked.&rdquo;'
+          ], function () { busy = false; paint(); });
+        });
+      }, 3400);
+    });
+  }
+  $('#go').addEventListener('click', function () { if (nextFile && !busy) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>

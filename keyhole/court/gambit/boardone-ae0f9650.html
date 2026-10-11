@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Board One · Move Sixteen</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-court.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="gambit.css">
+<style>
+  body{--bg:#141a26;--accent:#f2c66b;--font-display:'Cinzel',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(16,21,32,.97);--tc-ink:#f1ecdc;--cap-bg:rgba(16,21,32,.93);--panel:#161c28;--face-bg:#3d3046;--q-ink:#d9c9a0;--fade:#090c13;--hud-bg:rgba(16,21,32,.8)}
+  .cone{animation:cone 5.9s steps(1,end) infinite}
+  .cone.c2{animation-delay:-2.1s}.cone.c3{animation-delay:-4s}
+  @keyframes cone{0%{opacity:.5}48%{opacity:.56}}
+  #sticker{transition:opacity 1.1s}
+  #sticker.off{opacity:0;pointer-events:none}
+  #r5b{display:none}
+  #scene.right #r5a{display:none}
+  #scene.right #r5b{display:block}
+
+  /* the pink slip again, and Mr Quayle's pencil */
+  .sk{width:min(980px,96vw);display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start}
+  .sk-slip{background:#f6cfd6 linear-gradient(168deg,rgba(255,255,255,.5),rgba(160,60,90,.14));padding:20px 28px 16px;font-family:'Caveat',cursive;font-weight:700;font-size:24px;line-height:1.2;color:#27365f;box-shadow:0 22px 60px rgba(0,0,0,.6);transform:rotate(-.6deg)}
+  .sk-slip h4{margin:0 0 8px;display:flex;justify-content:space-between;align-items:flex-end;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.14em;color:#3a1d26;border-bottom:2px solid #3a1d26;padding-bottom:5px}
+  .sk-slip h4 small{font-family:'Courier Prime',monospace;font-weight:700;font-size:14px;letter-spacing:.04em}
+  .sk-slip p{margin:0 0 6px}
+  .sk-r{position:relative;display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px;width:100%;margin:0 0 6px;padding:6px 10px 4px;text-align:left;font:inherit;color:inherit;border:1.500px dashed rgba(58,29,38,.35);border-radius:3px}
+  .sk-r:hover{background:rgba(255,255,255,.4)}
+  .sk-r.x span{text-decoration:line-through;text-decoration-color:#4a4f5a;text-decoration-thickness:3px;opacity:.6}
+  .sk-r.x:after{content:'suspicion';position:absolute;right:10px;top:-11px;padding:0 8px;background:#fbf9ef;font-family:'Caveat',cursive;font-weight:700;font-size:19px;color:#4a4f5a;transform:rotate(2deg);box-shadow:0 2px 4px rgba(0,0,0,.25)}
+  .sk .pmsg{min-height:210px;font-size:18px}
+  .sk .btn{width:100%;margin-bottom:12px}
+
+  /* the end of the afternoon */
+  .done{position:fixed;right:2vw;top:60px;z-index:34;width:min(474px,94vw);max-height:calc(100vh - 74px);overflow:auto;padding:16px 26px 12px;display:none;background:#fbf8ec;color:#1c1d22;border-top:10px solid #1f5a3a;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .done.on{display:block}
+  .okstamp{display:inline-block;padding:3px 14px 0;border:4px solid #1f5a3a;color:#1f5a3a;font-family:'Stardos Stencil',serif;font-weight:700;font-size:25px;letter-spacing:.12em;transform:rotate(-3deg);margin-bottom:8px}
+  .done h6{margin:8px 0 4px;font-family:'Cinzel',serif;font-weight:700;font-size:15px;letter-spacing:.12em;color:#1f5a3a}
+  .done p{margin:0 0 2px;font-family:'Courier Prime',monospace;font-size:13.5px;line-height:1.36}
+  .done ol{margin:0;padding-left:20px;font-family:'Tinos',serif;font-size:14.5px;line-height:1.3}
+  .done li{margin:0 0 3px}
+  .done .row{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+  .done .btn{--accent:#1f5a3a;font-size:13px;padding:7px 13px}
+  .done .btn:hover:not([disabled]){color:#fbf8ec}
+  .done small{display:block;margin-top:8px;font-family:'Courier Prime',monospace;font-size:12px;opacity:.75;line-height:1.5}
+  .done small button{text-decoration:underline;font:inherit}
+  /* tell a friend */
+  .rp{width:min(760px,94vw);max-height:84vh;overflow:auto;background:#fbf8ec;color:#1c1d22;padding:24px 36px 20px;box-shadow:0 26px 70px rgba(0,0,0,.6);-webkit-user-select:text;user-select:text;border-left:8px solid #1f5a3a}
+  .rp h4{margin:0 0 4px;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#1f5a3a}
+  .rp h3{margin:0 0 10px;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:29px;line-height:1.1}
+  .rp label{display:block;font-family:'Tinos',serif;font-size:18px;line-height:1.4;margin:8px 0 6px}
+  .rp textarea,.rp input[type=text]{width:100%;font-family:'Caveat',cursive;font-size:25px;line-height:34px;color:#1f3a8a;background:#eef3f6 repeating-linear-gradient(transparent 0 33px,rgba(60,110,170,.25) 33px 34px);border:1px solid #b9b09a;
+    padding:0 12px;border-radius:0;resize:vertical;-webkit-user-select:text;user-select:text}
+  .rp textarea{min-height:206px}
+  .rp input[type=text]{height:36px}
+  .rp .count{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.6;text-align:right;margin-top:4px}
+  .rp .foot{display:flex;gap:10px;align-items:center;margin-top:10px}
+  .rp .foot span{flex:1;font-family:'Courier Prime',monospace;font-size:13.5px;opacity:.7}
+  .rp .btn{--accent:#1f5a3a}.rp .btn:hover:not([disabled]){color:#fbf8ec}
+  @media print{
+    body{overflow:visible;background:#fff}
+    body>*:not(.ov){display:none!important}
+    .ov{position:static!important;display:block!important;background:#fff!important;padding:0!important;overflow:visible!important}
+    .ov-bar,.rp .foot{display:none!important}
+    .rp{box-shadow:none;max-height:none;width:auto;overflow:visible}
+  }
+  @media (max-width:820px){.sk{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f8a78"/><stop offset="1" stop-color="#6f6a58"/></linearGradient>
+  <linearGradient id="oakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3f24"/><stop offset="1" stop-color="#3a2614"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a5a36"/><stop offset="1" stop-color="#4f381f"/></linearGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16233f"/><stop offset="1" stop-color="#3d4f78"/></linearGradient>
+  <linearGradient id="tableG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9bd8c"/><stop offset="1" stop-color="#b3905c"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a26"/><stop offset=".3" stop-color="#e6c873"/><stop offset=".55" stop-color="#b08a35"/><stop offset=".8" stop-color="#f0d98f"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="coneG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe3a0" stop-opacity=".6"/><stop offset="1" stop-color="#ffe3a0" stop-opacity="0"/></linearGradient>
+  <radialGradient id="vig" cx="46%" cy="46%" r="84%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#070a12" stop-opacity=".22"/><stop offset="1" stop-color="#04060c" stop-opacity=".8"/></radialGradient>
+  <pattern id="cork" width="9" height="9" patternUnits="userSpaceOnUse"><rect width="9" height="9" fill="#b98a56"/><circle cx="2" cy="3" r="1" fill="#7a5a36" opacity=".5"/><circle cx="6" cy="7" r=".8" fill="#7a5a36" opacity=".4"/></pattern>
+</defs>
+
+<!-- the hall after dark -->
+<rect x="-1000" y="-400" width="3600" height="940" fill="url(#wallG)"/>
+<rect x="-1000" y="392" width="3600" height="146" fill="url(#oakG)"/><rect x="-1000" y="384" width="3600" height="11" fill="#2a1b10"/>
+<rect x="-1000" y="536" width="3600" height="900" fill="url(#floorG)"/>
+<g id="windows" class="hot"></g>
+<g id="lamps"></g>
+
+<!-- round five, finding its boards -->
+<g id="rows"></g>
+<g id="tunde" class="hot"><rect x="1086" y="312" width="140" height="170" fill="#000" opacity="0"/><use href="#ch-tunde" x="1080" y="300" width="150" height="195"/></g>
+<g id="pettifer" class="hot"><rect x="1396" y="296" width="150" height="180" fill="#000" opacity="0"/><use href="#ch-pettifer" x="1388" y="286" width="164" height="213"/></g>
+<rect x="1040" y="486" width="560" height="10" fill="#b3905c"/><path d="M1056 496v56M1580 496v56" stroke="#3a2614" stroke-width="6"/>
+<g id="env"><g transform="rotate(-6 1470 474)"><rect x="1436" y="462" width="70" height="24" fill="#c9a877"/><path d="M1436 462l35 14 35-14" stroke="#a17a4a" stroke-width="2" fill="none"/><text x="1471" y="483" class="hT" font-size="12" fill="#2a2318">59</text></g></g>
+
+<!-- the wall chart, and Mrs Hargreave beside it -->
+<g id="chart" class="hot"><rect x="56" y="96" width="560" height="500" fill="#3a2614"/><rect x="70" y="110" width="532" height="472" fill="url(#cork)"/>
+  <rect x="88" y="126" width="496" height="330" fill="#fdfdfb"/><rect x="88" y="126" width="496" height="18" fill="#1f5a3a"/>
+  <text x="336" y="176" class="kT" font-size="24" fill="#1f5a3a" letter-spacing="4">MAJOR SECTION &#183; ROUND 4</text>
+  <g stroke="#9a9c94" stroke-width="1.500"><path d="M104 196h464M104 252h464M104 304h464M104 356h464M104 408h464"/></g>
+  <rect x="104" y="197" width="464" height="54" fill="#fff3c4"/>
+  <text x="128" y="232" class="kT" font-size="24" fill="#1c1d22">1</text>
+  <text x="218" y="222" class="sT" font-size="16" fill="#1c1d22">Maeve Loxley</text><text x="218" y="242" class="sT" font-size="13" fill="#55584f">1180 &#183; no club</text>
+  <text x="468" y="222" class="sT" font-size="16" fill="#1c1d22">Tunde Oyelaran</text><text x="468" y="242" class="sT" font-size="13" fill="#55584f">1640 &#183; Castle Hill</text>
+  <text x="340" y="236" class="hT" font-size="32" fill="#1c1d22">1 &#8211; 0</text>
+  <g fill="#55584f"><text x="128" y="286" class="kT" font-size="20">2</text><text x="128" y="338" class="kT" font-size="20">3</text><text x="128" y="390" class="kT" font-size="20">4</text></g>
+  <g stroke="#8d8f92" stroke-width="5"><path d="M166 280h104M416 280h104M166 332h96M416 332h110M166 384h110M416 384h92"/></g>
+  <g font-size="24" fill="#3a3f4a"><text x="340" y="288" class="hT">&#189; &#8211; &#189;</text><text x="340" y="340" class="hT">1 &#8211; 0</text><text x="340" y="392" class="hT">0 &#8211; 1</text></g>
+  <g id="sticker"><rect x="282" y="204" width="118" height="40" rx="3" fill="#d8382a"/><text x="341" y="232" class="sT" font-size="20" fill="#fff" letter-spacing="1">0 &#8211; 1 &#160;R.7</text></g>
+  <g transform="rotate(1.500 336 520)"><rect x="150" y="474" width="372" height="92" fill="#fbf8ec"/><text x="336" y="502" class="kT" font-size="19" fill="#1c1d22" letter-spacing="3">ROUND 5 &#183; 4.45 &#183; BOARD 1</text>
+    <text id="r5a" x="336" y="542" class="hT" font-size="24" fill="#6b6d66">waiting for the Appeals Committee</text><text id="r5b" x="336" y="542" class="hT" font-size="26" fill="#27365f">Noor S. (3&#189;) v Maeve Loxley (4)</text></g></g>
+<g id="harg" class="hot"><rect x="640" y="330" width="180" height="240" fill="#000" opacity="0"/><use href="#ch-hargreave" x="630" y="322" width="200" height="260"/></g>
+<rect x="596" y="574" width="270" height="12" fill="#b3905c"/><rect x="608" y="586" width="246" height="70" fill="#174a2e"/>
+
+<!-- board 1, set up again -->
+<g id="maeve" class="hot"><rect x="850" y="486" width="180" height="220" fill="#000" opacity="0"/><use href="#ch-maeve" x="838" y="462" width="200" height="260"/></g>
+<path d="M560 708h780l130 240h-1040z" fill="url(#tableG)"/><path d="M560 708h780" stroke="#f0dcae" stroke-width="5"/>
+<g id="board" class="hot"><path d="M760 738h360l44 110h-448z" fill="#3a2614"/><g id="squares"></g><g id="men"></g></g>
+<g id="tent"><path d="M634 800l14-48h60l14 48z" fill="#fbf8ec"/><text x="678" y="790" class="kT" font-size="24" fill="#1f5a3a">1</text></g>
+<g id="clock1" class="hot"><rect x="1190" y="756" width="140" height="60" rx="5" fill="#63431f"/><rect x="1200" y="768" width="54" height="32" rx="3" fill="#cfd6c4"/><rect x="1266" y="768" width="54" height="32" rx="3" fill="#cfd6c4"/>
+  <text x="1227" y="792" class="sT" font-size="22" fill="#1c241c">60</text><text x="1293" y="792" class="sT" font-size="22" fill="#1c241c">60</text><rect x="1212" y="750" width="28" height="8" rx="3" fill="#8d9097"/><rect x="1278" y="750" width="28" height="8" rx="3" fill="#8d9097"/></g>
+<g id="pencil" class="hot"><g transform="rotate(-12 1150 730)"><rect x="1096" y="722" width="74" height="26" fill="#fbf9ef"/><path d="M1102 730h60M1102 738h40" stroke="#8d8f92" stroke-width="2"/></g><g transform="rotate(10 1130 716)"><rect x="1090" y="712" width="66" height="6" fill="#e8b923"/><path d="M1156 712l9 3-9 3z" fill="#e9c9a4"/></g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1760" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">APPEAL ALLOWED</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-mints"></p><p id="d-words"></p>
+  <h6>What you now know</h6>
+  <ol>
+    <li>A tribunal is not a court. It is a few people at a table who decide one question. But it has to be fair in the same ways as a court.</li>
+    <li>Nobody judges a case that they have a part in: not the person who made the decision, not a witness, not a relative, not a club-mate.</li>
+    <li>Both sides are heard. The person who is accused must be told exactly what is said, and must see every paper, before answering.</li>
+    <li>Whoever accuses must prove it. A suspicion is something that an honest person might do just as well, and &ldquo;it is possible&rdquo; is not &ldquo;it is shown&rdquo;.</li>
+    <li>You ask your own witness open questions: what, why, when, how, where, who. That is examination-in-chief. A leading question carries its answer inside it.</li>
+    <li>In cross-examination you may lead: a statement from your papers, with a hook on the end. &ldquo;You could not see the screen, could you?&rdquo;</li>
+    <li>A record made at the time is worth more than a memory, because a memory grows. And a chess clock is two clocks: add up what has gone from both, and a score sheet tells the time.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Tell a friend</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the list</button></div>
+  <small>Move Sixteen &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="gambit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, skBox = null, MAJOR = [0, 2, 4, 5, 7, 9, 11];
+
+  /* dark windows, lit lamps, the far tables with heads bent over them, and board 1 set up for a new game */
+  (function () {
+    var s = '', i, c, r;
+    [700, 980, 1260].forEach(function (x) {
+      s += '<path d="M' + (x - 12) + ' 372V150a102 102 0 0 1 204 0v222z" fill="#55523f"/><path d="M' + x + ' 360V150a90 90 0 0 1 180 0v210z" fill="url(#nightG)"/>' +
+        '<path d="M' + (x + 90) + ' 60v300M' + x + ' 170h180M' + x + ' 265h180" stroke="#55523f" stroke-width="6"/><circle cx="' + (x + 130) + '" cy="130" r="2" fill="#fff"/><circle cx="' + (x + 44) + '" cy="210" r="1.500" fill="#fff"/>';
+    });
+    $('#windows').innerHTML = s; s = '';
+    [[850, ''], [1140, ' c2'], [1430, ' c3']].forEach(function (l) {
+      s += '<path d="M' + l[0] + ' -400V178" stroke="#2a1b10" stroke-width="4"/><path class="cone' + l[1] + '" d="M' + (l[0] - 36) + ' 214h72l190 480h-452z" fill="url(#coneG)" pointer-events="none"/>' +
+        '<path d="M' + (l[0] - 44) + ' 214q44-60 88 0z" fill="#1f5a3a"/><ellipse cx="' + l[0] + '" cy="216" rx="30" ry="8" fill="#fff2c8"/>';
+    });
+    $('#lamps').innerHTML = s; s = '';
+    var HAIR = ['#2a1c16', '#7a4a2a', '#17120f', '#b5672c', '#4a4648', '#d9b25a'], SKIN = ['#e8c2a2', '#c99870', '#855a40', '#f1cfb2', '#b98560'];
+    for (i = 0; i < 7; i++) {
+      c = 880 + i * 104;
+      if (i === 2 || i === 5) continue;          /* Tunde and Mr Pettifer stand there */
+      s += '<path d="M' + (c - 26) + ' 486q0-40 26-40t26 40z" fill="' + ['#2f6a8a', '#7b1f2a', '#3f7d55', '#55585f', '#8f5a9a'][i % 5] + '"/><circle cx="' + c + '" cy="430" r="18" fill="' + SKIN[i % 5] + '"/><path d="M' + (c - 18) + ' 428q0-22 18-22t18 22q-18-10-36 0z" fill="' + HAIR[i % 6] + '"/>';
+    }
+    $('#rows').innerHTML = s; s = '';
+    function at(u, v) { var xl = 766 + (722 - 766) * v, xr = 1114 + (1158 - 1114) * v; return [xl + (xr - xl) * u, 744 + 100 * v]; }
+    for (r = 0; r < 8; r++) for (c = 0; c < 8; c++) {
+      var a = at(c / 8, r / 8), b = at((c + 1) / 8, r / 8), d = at((c + 1) / 8, (r + 1) / 8), e = at(c / 8, (r + 1) / 8);
+      s += '<path d="M' + a[0].toFixed(1) + ' ' + a[1].toFixed(1) + 'L' + b[0].toFixed(1) + ' ' + b[1].toFixed(1) + 'L' + d[0].toFixed(1) + ' ' + d[1].toFixed(1) + 'L' + e[0].toFixed(1) + ' ' + e[1].toFixed(1) + 'z" fill="' + ((r + c) % 2 ? '#2f6a4a' : '#efe6c6') + '"/>';
+    }
+    $('#squares').innerHTML = s; s = '';
+    [0, 1, 6, 7].forEach(function (row) {          /* this time Maeve has Black: her pieces are on the far side */
+      for (c = 0; c < 8; c++) {
+        var p = at((c + 0.5) / 8, (row + 0.6) / 8), k = 0.8 + row * 0.035, tall = (row === 0 || row === 7) ? (c === 3 || c === 4 ? 3 : 2) : 1, h = (11 + tall * 6) * k, blk = row < 2;
+        s += '<g stroke="' + (blk ? '#0e0d0b' : '#8d8873') + '" stroke-width="1.200" fill="' + (blk ? '#2b2a26' : '#f7f2e4') + '"><ellipse cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" rx="' + (10 * k).toFixed(1) + '" ry="' + (3.6 * k).toFixed(1) + '"/>' +
+          '<path d="M' + (p[0] - 6.5 * k).toFixed(1) + ' ' + p[1].toFixed(1) + 'L' + (p[0] - 3.2 * k).toFixed(1) + ' ' + (p[1] - h).toFixed(1) + 'h' + (6.4 * k).toFixed(1) + 'L' + (p[0] + 6.5 * k).toFixed(1) + ' ' + p[1].toFixed(1) + 'z"/>' +
+          '<circle cx="' + p[0].toFixed(1) + '" cy="' + (p[1] - h - 3.6 * k).toFixed(1) + '" r="' + (5 * k).toFixed(1) + '"/></g>';
+      }
+    });
+    $('#men').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'court', story: 'gambit', storyTitle: 'Move Sixteen', id: 'boardone', no: 'V', title: 'Board One',
+    go: 'Five minutes',
+    intro: [
+      'In cross-examination you led. Every question was a statement from one of your papers with a hook on the end, and all that Mr Pettifer could say was yes. Then you put paper beside what he had told the committee: his own sign-out sheet, with nine players on it; your till roll, with the queen at five past three; the note that was made at twenty past three, with no typing in it; and the telephone list, with envelope fourteen still in the box.',
+      'He was right about one small thing. There was a telephone in her hand. The lost property book says whose it was, and his own signature is at the end of the line.',
+      'He is an honest man. When he saw what the red book meant, he said so himself, before anybody had to tell him. Now three people are standing at the far end of a corridor with their heads together, and round five begins in six minutes.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"s1":["263c1a33"],"s2":["d4c1f1a2"],"s3":["0668ed4d"],"s4":["027d64a0"]},
+    sound: ['bench', { scale: MAJOR, root: 48, bpm: 72, drop: ['ost'], beds: [['crowd', 0.3]] }],      /* the same music in a major key: the hall is filling up again for round five */
+    hints: hints, onBegin: begin
+  });
+
+  var REASONS = ['She played far above her grade. Her 16th move gave up her queen. Players graded 1180 do not find such moves.', 'She left the hall three times during the game.',
+    'Mr Pettifer, the corridor steward, saw her in the corridor with a telephone, at about ten past three.', 'When I told her my decision, she went red and said nothing.'];
+  var KEEP = ['Half the children in this hall have beaten somebody stronger today. An honest player does that just as well, and this one had read a book. Strike it out.',
+    'Nine players went out of the hall, and one of them went seven times. An honest player goes out just as well. Strike it out.',
+    'No. That one stays. Mr Pettifer SAW something, and said so at the time. That is evidence, and it had to be answered. It has been answered. But we only know that because somebody went and looked.',
+    'She went red. So should I have done, at twelve, with an arbiter standing over me. So would anybody honest. Strike it out.'];
+
+  function isBusy() { return busy; }
+  function hints() {
+    if (skBox) return ['strike', [
+      'Dr Rahman wrote down what a suspicion is, on the back of Form G: rule 5. It is in your notebook, and you can open that from here.',
+      'Take the four reasons one at a time, and ask of each: might an honest player do exactly the same? If the answer is yes, then it shows nothing, and it is only a suspicion.',
+      'One of the four is a different kind of thing. Somebody SAW something, and said so at the time. That is evidence, even though it turned out to have an honest answer. Leave that one alone, and strike out the rest.'
+    ]];
+    if (ER.flag('v-dec') && !ER.flag('v-chart')) return ['chart', ['The wall chart still shows the wrong result. There is a red sticker on the line for board 1. You are the runner: the wall chart is your job. Click the sticker.']];
+    return null;
+  }
+  function begin() {
+    $('#scene').classList.toggle('right', !!ER.flag('v-chart')); $('#sticker').classList.toggle('off', !!ER.flag('v-chart'));
+    if (ER.flag('v-done')) { busy = false; finish(); return; }
+    if (ER.flag('v-chart')) { ending(); return; }
+    if (ER.flag('v-dec')) { busy = false; chartReady(); return; }
+    if (ER.flag('v-strike')) { decision(); return; }
+    ER.narrate([
+      'The Council Chamber, with the lamps lit. Fifty-seven children are looking for their boards for round five. The fifty-eighth is standing beside you in front of the wall chart, holding her water bottle in both hands.',
+      'The committee comes in from the corridor in single file. Dr Rahman has the pink slip in one hand and Mr Quayle&rsquo;s pencil in the other.',
+      '&ldquo;Before I read our decision,&rdquo; she says to you, &ldquo;one last thing, since you have been right about so much this afternoon. Mrs Hargreave gave four reasons. Take the pencil, and strike out every one of them that is only a suspicion.&rdquo;'
+    ], openSlip);
+  }
+
+  /* ---------- the last lock: which of the four reasons were only suspicion ---------- */
+  function openSlip() {
+    var box = ER.el('div', 'sk'), done = false, s;
+    s = '<div class="sk-slip"><h4>DECISION OF THE CHIEF ARBITER<small>Sunday, 3.50 pm</small></h4><p>Round 4, board 1. Result changed to 0&ndash;1. Reasons:</p>';
+    REASONS.forEach(function (r, i) { s += '<button type="button" class="sk-r" data-n="' + (i + 1) + '"><b>' + (i + 1) + '.</b><span>' + r + '</span></button>'; });
+    s += '<p>E. Hargreave</p></div><div><button type="button" class="btn" id="sk-go">Give her back the slip</button><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    ER.$$('.sk-r', box).forEach(function (b) {
+      b.innerHTML = b.innerHTML.replace(/<span>([\s\S]*)<\/span>/, function (m, t) { return '<span>' + ER.gloss(t) + '</span>'; });
+      b.addEventListener('click', function () { if (done) return; b.classList.toggle('x'); GB.sfx.strike(); box.setAttribute('data-x', box.querySelectorAll('.sk-r.x').length); });
+    });
+    box.querySelector('#sk-go').addEventListener('click', function () {
+      var wrong = [];
+      if (done) return;
+      ER.$$('.sk-r', box).forEach(function (b) { var n = +b.getAttribute('data-n'); if (!ER.check('s' + n, b.classList.contains('x') ? 'x' : 'o')) wrong.push(n); });
+      if (wrong.length) {
+        GB.bump('v-tries'); GB.sfx.hm();
+        msg('Dr Rahman puts her finger on reason ' + wrong[0] + '. &ldquo;' + KEEP[wrong[0] - 1] + '&rdquo;' + (wrong.length > 1 ? ' <i>&ldquo;And look again at the rest.&rdquo;</i>' : ''));
+        return;
+      }
+      done = true; ER.flag('v-strike', 1); GB.sfx.pencil();
+      msg('Three lines struck out, and one left standing. <b>&ldquo;Three suspicions, and one piece of evidence,&rdquo; says Dr Rahman. &ldquo;And the evidence turned out to be a child handing in lost property.&rdquo;</b>');
+      GB.mine('four', 'The four reasons, sorted', '<p>SUSPICION (an honest player does it too): she played well. She went out. She went red.</p><p>EVIDENCE: somebody saw a telephone in her hand. It had to be answered, and it was: the telephone was his.</p><p>&ldquo;It is possible&rdquo; is not &ldquo;it is shown&rdquo;.</p>', true);
+      setTimeout(function () { ER.closeAll(); decision(); }, 3400);
+    });
+    msg('Four reasons, in Mrs Hargreave&rsquo;s writing. <b>Click a reason to draw the pencil through it.</b> Click it again if you change your mind. Then give the slip back.');
+    skBox = box; box.setAttribute('data-x', 0); busy = false;
+    ER.open('ov-lock', box, function () { skBox = null; if (!ER.flag('v-strike')) setTimeout(function () { if (!ER.isOpen()) openSlip(); }, 400); });
+  }
+
+  /* ---------- the decision, the wall chart, round five ---------- */
+  function decision() {
+    busy = true;
+    ER.talk({
+      who: 'Dr Rahman', role: 'Chair of the committee · giving its decision', face: window.FACE('rahman'),
+      lines: [
+        { a: 'This committee was asked one question. Has it been shown, more likely than not, that Maeve Loxley used a telephone to help her in round four? It was for those who said so to show it. It was never for her to show that she did not.' },
+        { a: 'What has been shown is this. She played her sixteenth move at five past three, after nineteen minutes at the board. She left the hall two minutes later. At about ten past three she picked up a telephone from a windowsill, and at eleven minutes past she handed it in at the Congress Desk. It was Mr Pettifer&rsquo;s. Her own has been in envelope fourteen since ten to two.' },
+        { note: 'Mrs Hargreave raises one finger.', a: '&ldquo;It is still possible, Chair, that at twenty to three, the second time she went out&hellip;&rdquo;</p><p>&ldquo;It is possible, Mrs Hargreave. I agree with you. A great many things are possible, and we do not take points away for them. We take them away for what is shown. If somebody had seen a chess board on that screen, before she moved, that would have been proof. Nobody has told us anything of the kind.&rdquo;' },
+        { a: 'Nothing has been shown. The appeal is allowed. The result of board one stands as it was played: one&ndash;nil to White.' },
+        { a: '&ldquo;Mr Pettifer. You saw what you said that you saw, at twenty past three. If you had stopped there, none of us would have missed our tea.&rdquo;</p><p>&ldquo;Mrs Hargreave. You had three suspicions and one piece of evidence, and you asked nobody anything.&rdquo;</p><p>&ldquo;I know,&rdquo; says Mrs Hargreave. &ldquo;I wrote half of Rule 9. I ought to have read it.&rdquo;' },
+        { a: '&ldquo;And Maeve. We are not a court, and we have no grand words. We say that the result stands. But I shall add something that committees are hardly ever able to add: we are quite sure. The papers did that. Somebody went and read them.&rdquo;</p><p class="note">She gives Mr Quayle his pencil back.' }
+      ],
+      clue: { id: 'decision', title: 'The decision of the committee', kind: 'Dr Rahman, in the chair' }, last: 'Go to the wall chart',
+      done: function (seen) { if (!seen) { decision(); return; } ER.flag('v-dec', 1); GB.learn(['decision', 'allowed', 'stands']); busy = false; chartReady(); }
+    });
+  }
+  function chartReady() {
+    $('#sticker').classList.add('ready');
+    ER.say('The wall chart still says 0 &ndash; 1. Somebody ought to put that right, and you are the runner.', 6000);
+  }
+  $('#chart').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('v-chart')) { ER.say('The wall chart. Board 1, round 4: Maeve Loxley 1, Tunde Oyelaran 0. It is the truth again.'); return; }
+    if (!ER.flag('v-dec')) return;
+    ER.flag('v-chart', 1); GB.sfx.peel();
+    $('#sticker').classList.remove('ready'); $('#sticker').classList.add('off'); $('#scene').classList.add('right');
+    setTimeout(ending, 1300);
+  });
+  function ending() {
+    busy = true;
+    ER.narrate([
+      'Under the red sticker the first result is still there, in Mrs Hargreave&rsquo;s own black ink: 1 &ndash; 0.',
+      'Mrs Hargreave takes the sticker out of your hand, folds it in half with the sticky side in, and puts it in her pocket. &ldquo;I should have asked you,&rdquo; she says to Maeve. &ldquo;I am sorry. Board one, round five, in three minutes. You have Black.&rdquo;',
+      'By the door of the hall, Mr Pettifer is writing a number on a brown envelope. He puts his own telephone into it and sticks it down. &ldquo;Fifty-nine,&rdquo; he says. &ldquo;Rule 7. From today it applies to stewards.&rdquo; Then he carries it out to the Congress Desk himself.',
+      'Tunde stops at board 1 on his way to board 2. &ldquo;I&rsquo;ve seen that game,&rdquo; he says. &ldquo;Everybody has. Miss Ferrars showed it to us in Year 7. I just never thought I was the Duke.&rdquo; He holds out his hand, and Maeve shakes it.',
+      'She sits down, puts her water bottle where it always goes, and opens her pad. Then she holds something out to you, across the board. It is a pencil. &ldquo;Round two,&rdquo; she says. &ldquo;I wrote move sixteen with it.&rdquo; She thinks about that. &ldquo;I still need it, actually. I only wanted you to know.&rdquo;',
+      'Then twenty-nine clocks are started at once. In a chess hall that is not a noise. It is the opposite of one.'
+    ], function () { busy = false; ER.flag('v-done', 1); finish(); GB.solved(true); });
+  }
+
+  /* ---------- the end of the afternoon ---------- */
+  function finish() {
+    var st = ER.state(), mins = GB.minutes(), hn = ER.hintsUsed(), laid = (ER.flag('cx-k') || {}).laid || 0;
+    $('#d-time').textContent = 'The afternoon took you ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'You asked for ' + hn + (hn === 1 ? ' hint.' : ' hints.') : 'You did not ask for a single hint.';
+    $('#d-mints').textContent = laid ? 'Dr Rahman took ' + laid + (laid === 1 ? ' peppermint.' : ' peppermints.') : 'Dr Rahman did not need one peppermint.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' papers and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('v-task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Move Sixteen &middot; tell a friend</h4><h3>&ldquo;But she HAD a telephone in her hand!&rdquo;</h3>' +
+      '<label for="r1">Your friend says: &ldquo;She had a telephone in her hand in the middle of a game. Of course she cheated.&rdquo; Explain why the committee did not agree. Say it aloud first, and then write 60 to 90 words. Try to use: <b>suspicion, evidence, prove, it is possible, it was shown, a record made at the time</b>.</label><textarea id="r1"></textarea>' +
+      '<div class="count"></div><label for="r2">Name</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > label');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('v-task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+
+  /* ---------- things in the hall ---------- */
+  GB.thing('#harg', null, function () { return ER.flag('v-chart') ? 'Mrs Hargreave has a red sticker in her pocket and a clean pink pad on her desk. On the top sheet she has written, for herself: ASK FIRST.' : 'Mrs Hargreave is standing beside her own wall chart. She has not said a word since the corridor.'; }, isBusy);
+  GB.thing('#maeve', null, function () { return ER.flag('v-done') ? 'Maeve, at board 1, with Black. She has not moved yet. She is counting the pieces.' : 'Maeve is looking at the wall chart, at the line for board 1.'; }, isBusy);
+  GB.thing('#tunde', null, 'Tunde Oyelaran, on his way to board 2. He has asked Mr Loxley to keep a copy of FIFTY FAMOUS GAMES for him.', isBusy);
+  GB.thing('#pettifer', null, 'Mr Pettifer, with envelope 59. On his way back from the desk he will stop at the windowsill and look at it for some time.', isBusy);
+  GB.thing('#board', null, 'Board 1, set up for a new game. Every piece is on its own square, and nobody has given anything up yet.', isBusy);
+  GB.thing('#clock1', 'chess clock', 'Sixty minutes on each side. Only one of them will ever be running.', isBusy);
+  GB.thing('#pencil', null, 'A pencil, with the congress&rsquo;s name on it in gold. They cost the Secretary eleven pence each.', isBusy);
+  GB.thing('#windows', null, 'It is dark outside now. Maeve&rsquo;s bus goes at ten past six, and Mr Pettifer has said that he will see her on to it. He knows the driver.', isBusy);
+})();
+</script>
+</body>
+</html>

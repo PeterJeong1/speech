@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Van · A Smell of Vinegar</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-forensic.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="fair.css">
+<style>
+  body{--bg:#0b1014;--accent:#6fd3ea;--font-display:'IBM Plex Mono',monospace;--font-ui:'Barlow Condensed',sans-serif;--font-body:'Libre Baskerville',serif;
+    --tc-bg:rgba(8,13,17,.96);--tc-ink:#e6eef2;--cap-bg:rgba(8,13,17,.94);--panel:#131b21;--face-bg:#1b2f3a;--q-ink:#9fdcee;--fade:#04070a;--hud-bg:rgba(8,13,17,.8)}
+  .tc-room{font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(32px,4.8vw,60px)}
+  .sB{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-anchor:middle}
+  .sM{font-family:'IBM Plex Mono',monospace;font-weight:500;text-anchor:middle}
+  #rain{animation:rain .8s linear infinite}
+  @keyframes rain{to{transform:translate(-12px,54px)}}
+  #led{animation:led 9s steps(1,end) infinite}
+  @keyframes led{0%{opacity:1}61%{opacity:.82}62%{opacity:1}}
+  #scrn{animation:scrn 3.3s steps(1,end) infinite}
+  @keyframes scrn{0%{opacity:.95}50%{opacity:.8}}
+  #cardbox.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.4)}}
+  .hot:hover{filter:brightness(1.15)}
+
+  /* the box of cards, and the comparator */
+  .bx .tab{cursor:pointer}
+  .bx .tab rect{fill:#8a6a3a;stroke:#5a4420;stroke-width:1.500}
+  .bx .tab text{fill:#f3e9c0;font-size:15px}
+  .bx .tab:hover rect{fill:#a8844a}
+  .bx .tab.on rect{fill:#fbfbf6}
+  .bx .tab.on text{fill:#1c1d22}
+  .bx .cell{cursor:pointer}
+  .bx .cell:hover rect{stroke:#0e6e8c;stroke-width:3}
+  .bx .cell.out rect{fill:#e3ded0}
+  .bx .cell.out use{opacity:.35}
+  .bx .ring{cursor:pointer}
+  .bx .ring circle{fill:rgba(179,38,28,.001);stroke:#b3261c;stroke-width:2.200}
+  .bx .ring.sel circle{stroke-width:4.500}
+  .bx .ring.ok circle{stroke:#1f7a3a}
+  .bx .ring.ok text{fill:#1f7a3a}
+  .bx .ring.no circle{stroke:#59616a;stroke-dasharray:5 4}
+  .bx .ring.no text{fill:#59616a}
+  .bx .kd{cursor:pointer}
+  .bx .kd rect{fill:#e9eef0;stroke:#59616a;stroke-width:1.500}
+  .bx .kd:hover rect{fill:#fff}
+  .bx .kd.on rect{fill:#0e6e8c;stroke:#073f52}
+  .bx .kd.on text{fill:#fff}
+  .bx .kd.on path,.bx .kd.on line{stroke:#fff}
+  .bx #refwin{cursor:crosshair}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f8c93"/><stop offset=".25" stop-color="#b3bfc5"/><stop offset="1" stop-color="#8a979d"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9e1e5"/><stop offset="1" stop-color="#9aa7ad"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#05080f"/><stop offset="1" stop-color="#121c2e"/></linearGradient>
+  <radialGradient id="scrG"><stop offset="0" stop-color="#f4fdff"/><stop offset=".7" stop-color="#bfe9f5"/><stop offset="1" stop-color="#7fc4d9"/></radialGradient>
+  <radialGradient id="blueG"><stop offset="0" stop-color="#7fb4ff" stop-opacity=".7"/><stop offset="1" stop-color="#7fb4ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="postG"><stop offset="0" stop-color="#ffd98a" stop-opacity=".7"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+  <pattern id="plate" width="34" height="34" patternUnits="userSpaceOnUse"><rect width="34" height="34" fill="#353d43"/><path d="M5 12l10 -6M19 28l10 -6" stroke="#4a545b" stroke-width="4" stroke-linecap="round"/><path d="M22 8l6 10M5 22l6 10" stroke="#2a3136" stroke-width="4" stroke-linecap="round"/></pattern>
+  <radialGradient id="vig" cx="52%" cy="48%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#02080c" stop-opacity=".3"/><stop offset="1" stop-color="#02060a" stop-opacity=".9"/></radialGradient>
+  <clipPath id="winC"><rect x="1190" y="130" width="270" height="260" rx="26"/></clipPath>
+</defs>
+
+<!-- the wall of the van, the strip light -->
+<rect x="-1000" y="-400" width="3600" height="1050" fill="url(#wallG)"/>
+<g id="seams" stroke="#6f7b82" stroke-width="3"></g>
+<rect x="-1000" y="-400" width="3600" height="430" fill="#4a565c"/><rect id="led" x="230" y="34" width="1160" height="16" rx="8" fill="#f4fdff"/><rect x="230" y="50" width="1160" height="60" fill="#f4fdff" opacity=".06"/>
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#plate)"/><rect x="-1000" y="640" width="3600" height="8" fill="#1c2226"/>
+
+<!-- the window on the car park -->
+<g id="win" class="hot"><rect x="1176" y="116" width="298" height="288" rx="34" fill="#14191d"/><rect x="1190" y="130" width="270" height="260" rx="26" fill="url(#skyG)"/>
+  <g clip-path="url(#winC)"><rect x="1190" y="318" width="270" height="80" fill="#0a0e13"/><path d="M1200 318V236h180v-20h80v102z" fill="#161f2b"/>
+    <g fill="#0c131c"><rect x="1216" y="252" width="26" height="30"/><rect x="1296" y="252" width="26" height="30"/><rect x="1336" y="252" width="26" height="30"/><rect x="1402" y="236" width="26" height="30"/></g><rect x="1256" y="252" width="26" height="30" fill="#ffd98a"/><rect x="1256" y="252" width="26" height="30" fill="#fff" opacity=".2"/>
+    <circle cx="1218" cy="210" r="60" fill="url(#postG)" opacity=".7"/><path d="M1218 210v112" stroke="#1c232c" stroke-width="4"/><circle cx="1218" cy="208" r="5" fill="#ffe9b0"/>
+    <path d="M1380 338q8 -22 28 -22h18q16 0 24 22v18h-70z" fill="#2c3542"/><path d="M1392 336q6 -14 16 -14h14q10 0 14 14z" fill="#ffd98a"/><circle cx="1396" cy="358" r="8" fill="#05070a"/><circle cx="1436" cy="358" r="8" fill="#05070a"/>
+    <g id="rain" stroke="#b9d0e6" stroke-width="1.300" opacity=".5"></g></g>
+  <rect x="1190" y="130" width="270" height="260" rx="26" fill="none" stroke="#2a3136" stroke-width="6"/></g>
+
+<!-- the cabinet -->
+<g id="cab" class="hot"><rect x="60" y="130" width="290" height="514" fill="url(#steelG)"/><rect x="60" y="130" width="290" height="514" fill="none" stroke="#59646a" stroke-width="4"/><g id="drw"></g></g>
+<g id="ext" class="hot"><rect x="372" y="388" width="48" height="16" rx="4" fill="#1c232c"/><path d="M380 440q0 -22 16 -22t16 22v186q0 10 -16 10t-16 -10z" fill="#b3261c"/><rect x="384" y="490" width="24" height="46" fill="#f1eee2" opacity=".85"/><path d="M396 418v-14h14" stroke="#16171c" stroke-width="6" fill="none"/></g>
+
+<!-- what hangs on the wall over the bench -->
+<g id="chart" class="hot"><rect x="640" y="120" width="250" height="210" fill="#eef2f3"/><rect x="640" y="120" width="250" height="14" fill="#0e6e8c"/><text x="765" y="160" class="sM" font-size="16" fill="#0e6e8c" letter-spacing="2">RIDGE DETAILS</text>
+  <g fill="none" stroke="#16232b" stroke-width="2.600" stroke-linecap="round"><path d="M660 196q30 -12 60 0M660 210q14 -6 28 -4M660 224q30 -12 60 0"/><path d="M735 210q16 -8 30 -2q14 -8 30 -6M765 208q14 8 30 8M735 196q30 -12 60 0M735 226q30 -8 60 0"/><path d="M810 196q30 -12 60 0M832 209q8 -3 16 0M810 224q30 -12 60 0"/></g>
+  <g stroke="#59616a" stroke-width="2"><path d="M660 252h210M660 264h210M660 276h170M660 296h210M660 308h130"/></g><circle cx="650" cy="126" r="4" fill="#b3261c"/><circle cx="880" cy="126" r="4" fill="#b3261c"/></g>
+<g id="motto" class="hot"><rect x="930" y="150" width="210" height="58" rx="6" fill="#17324d"/><text x="1035" y="174" class="sB" font-size="15" fill="#fff" letter-spacing="2">EVERY CONTACT</text><text x="1035" y="196" class="sB" font-size="15" fill="#f0b429" letter-spacing="2">LEAVES A TRACE</text></g>
+<g id="clock" class="hot"><rect x="960" y="246" width="150" height="56" rx="6" fill="#14191d"/><text x="1035" y="288" class="sM" font-size="34" fill="#ff5a4a" letter-spacing="3">21:40</text></g>
+
+<!-- Dr Novak, with her tea -->
+<g id="novak" class="hot" transform="translate(236 846)">
+  <ellipse cx="0" cy="2" rx="56" ry="9" fill="#000" opacity=".4"/>
+  <path d="M-22 0v-104h18v104zM4 0v-104h18v104z" fill="#2c3540"/><path d="M-26 0h24v8h-28zM2 0h24v8h-24z" fill="#111"/>
+  <path d="M-44 -96q-8 -150 44 -158t44 158z" fill="#27415e"/><path d="M-10 -252l10 36 10-36z" fill="#eef1f0"/><path d="M-7 -240l6 84M7 -240l-6 84" stroke="#b3261c" stroke-width="3"/><rect x="-10" y="-162" width="20" height="24" fill="#f2f4ee"/>
+  <path d="M-40 -212q-18 40 0 76l44 -22" stroke="#27415e" stroke-width="17" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="-176" width="26" height="28" rx="4" fill="#e9eef0"/><path d="M28 -170q12 2 10 12t-10 8" fill="none" stroke="#e9eef0" stroke-width="4"/><circle cx="6" cy="-158" r="9" fill="#e4c19c"/>
+  <path d="M8 -180q4 -8 0 -14M18 -180q4 -8 0 -14" stroke="#dfeffb" stroke-width="2.400" fill="none" opacity=".7" stroke-linecap="round"/>
+  <rect x="-9" y="-272" width="18" height="20" fill="#d6ae86"/><circle cx="0" cy="-292" r="29" fill="#e4c19c"/>
+  <path d="M-31 -287q-3 -39 31 -39t31 39q3 18 -6 24q5 -29 -6 -44q-19 -11 -38 0q-11 15 -6 44q-9 -6 -6 -24z" fill="#46464b"/>
+  <circle cx="-10" cy="-290" r="9" fill="none" stroke="#15171a" stroke-width="2.400"/><circle cx="10" cy="-290" r="9" fill="none" stroke="#15171a" stroke-width="2.400"/><path d="M-1 -290h2" stroke="#15171a" stroke-width="2.400"/><path d="M-7 -273q7 4 14 0" stroke="#8c4a3c" stroke-width="2.400" fill="none"/>
+</g>
+
+<!-- the bench and what is on it -->
+<path d="M430 546h1090l40 46H390z" fill="url(#steelG)"/><rect x="390" y="592" width="1170" height="18" fill="#6f7b82"/><rect x="410" y="610" width="1130" height="36" fill="#4a545b"/><path d="M430 646v60M1520 646v60" stroke="#2a3136" stroke-width="10"/>
+<g id="bottle" class="hot"><rect x="450" y="486" width="150" height="76" rx="8" fill="#dfeffb" opacity=".22"/><rect x="450" y="486" width="150" height="14" fill="#b3261c"/><path d="M592 552h-88q-12 0 -16 -9h-16v-14h16q4 -9 16 -9h88z" fill="#3a2414"/><rect x="536" y="520" width="34" height="32" fill="#e9c93a"/><circle cx="512" cy="536" r="8" fill="#fdfdf8"/>
+  <path d="M528 526l6 8M548 540l8 -4" stroke="#fdfdf8" stroke-width="2.400" opacity=".8"/></g>
+<g id="comp" class="hot"><path d="M640 556V420q0 -20 20 -20h220q20 0 20 20v136z" fill="#59646a"/><path d="M640 556V420q0 -20 20 -20h220q20 0 20 20v136z" fill="none" stroke="#2a3136" stroke-width="4"/>
+  <g id="scrn"><circle cx="712" cy="468" r="50" fill="url(#scrG)"/><circle cx="828" cy="468" r="50" fill="url(#scrG)"/></g><circle cx="712" cy="468" r="50" fill="none" stroke="#14191d" stroke-width="7"/><circle cx="828" cy="468" r="50" fill="none" stroke="#14191d" stroke-width="7"/>
+  <g fill="none" stroke="#16232b" stroke-width="2" opacity=".7"><ellipse cx="712" cy="466" rx="8" ry="10"/><ellipse cx="712" cy="466" rx="19" ry="22"/><ellipse cx="712" cy="466" rx="30" ry="34"/><ellipse cx="828" cy="466" rx="8" ry="10"/><ellipse cx="828" cy="466" rx="19" ry="22"/><ellipse cx="828" cy="466" rx="30" ry="34"/></g>
+  <rect x="756" y="444" width="28" height="48" fill="#3a444a"/><circle cx="676" cy="538" r="8" fill="#14191d"/><circle cx="864" cy="538" r="8" fill="#14191d"/><text x="770" y="544" class="sM" font-size="11" fill="#dfe7ea" letter-spacing="2">COMPARATOR</text></g>
+<g id="cardbox" class="hot"><path d="M940 520h92v40h-92z" fill="#8a6a3a"/><path d="M940 520l10 -14h72l10 14z" fill="#6b4f2e"/><g fill="#fbfbf6"><rect x="952" y="498" width="8" height="22"/><rect x="964" y="496" width="8" height="24"/><rect x="976" y="498" width="8" height="22"/><rect x="988" y="496" width="8" height="24"/><rect x="1000" y="498" width="8" height="22"/><rect x="1012" y="497" width="8" height="23"/></g><rect x="962" y="532" width="48" height="16" fill="#f3e9c0"/><text x="986" y="544" class="sM" font-size="9" fill="#3a2414">CARDS</text></g>
+<g id="bluelamp" class="hot"><circle cx="1090" cy="520" r="62" fill="url(#blueG)"/><path d="M1126 558h-44l6 -10h32z" fill="#2a3136"/><path d="M1104 548q14 -70 -14 -92" stroke="#2a3136" stroke-width="7" fill="none"/><path d="M1068 446l40 14 -8 22 -40 -14z" fill="#2a3136"/><path d="M1062 468l38 13" stroke="#7fb4ff" stroke-width="5"/>
+  <rect x="1050" y="534" width="62" height="24" rx="4" fill="#dfeffb" opacity=".3"/><path d="M1058 548l44 -4" stroke="#16171c" stroke-width="5" stroke-linecap="round"/><rect x="1050" y="534" width="62" height="6" fill="#b3261c"/></g>
+<g id="flask" class="hot"><rect x="1168" y="474" width="34" height="84" rx="8" fill="#3d6b4a"/><rect x="1172" y="462" width="26" height="16" rx="4" fill="#c9ced3"/><rect x="1216" y="528" width="30" height="30" rx="4" fill="#e9eef0"/><path d="M1246 534q12 2 10 12t-10 8" fill="none" stroke="#e9eef0" stroke-width="4"/><path d="M1224 524q4 -8 0 -14M1236 524q4 -8 0 -14" stroke="#fff" stroke-width="2.400" fill="none" opacity=".5" stroke-linecap="round"/></g>
+<g id="envl" class="hot"><path d="M1300 548l8 -86h116l-8 86z" fill="#d9b877"/><path d="M1308 462l52 44 64 -44" fill="none" stroke="#a8844a" stroke-width="3"/><text x="1360" y="536" class="sB" font-size="19" fill="#b3261c" letter-spacing="4">NAMES</text><circle cx="1362" cy="506" r="9" fill="#b3261c"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Open the envelope</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="ridges.js"></script>
+<script src="fair.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, lock = null, told = {};
+
+  /* seams, rain, drawers */
+  (function () {
+    var s = '', i, x, y, D = ['TAPE', 'POWDERS', 'BRUSHES', 'BAGS', 'FORMS'];
+    for (i = -4; i < 12; i++) s += '<path d="M' + (i * 220 + 130) + ' 30v610"/>';
+    $('#seams').innerHTML = s; s = '';
+    for (i = 0; i < 40; i++) { x = 1180 + (i * 67) % 290; y = 110 + (i * 43) % 290; s += '<path d="M' + x + ' ' + y + 'l-4 20"/>'; }
+    $('#rain').innerHTML = s; s = '';
+    for (i = 0; i < 5; i++) {
+      y = 148 + i * 98;
+      s += '<rect x="76" y="' + y + '" width="258" height="84" fill="none" stroke="#59646a" stroke-width="3"/><rect x="170" y="' + (y + 16) + '" width="70" height="12" rx="6" fill="#59646a"/>' +
+        '<rect x="160" y="' + (y + 42) + '" width="90" height="24" fill="#fdfdf8"/><text x="205" y="' + (y + 59) + '" class="sM" font-size="13" fill="#1c1d22">' + D[i] + '</text>';
+    }
+    $('#drw').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'forensic', story: 'fair', storyTitle: 'A Smell of Vinegar', id: 'van', no: 'IV', title: 'The Van',
+    go: 'Run across the car park',
+    intro: [
+      'Black ink is a mixture of dyes, and water pulls it apart. Pen 2, Otis&rsquo;s marker, never moved: its ink does not dissolve in water, and the note&rsquo;s ink does. That left two.',
+      'The colours of the note stood level with the colours of pen 1, the pen on the string by the hall door, and Mrs Shrike was pleased. But the note&rsquo;s strip was a short one: its water had climbed 5 cm, not 10. An Rf value is the dye&rsquo;s distance divided by the water&rsquo;s. The note gave 0.9, 0.6 and 0.3. Pen 1 gave 0.45, 0.3 and 0.15. Pen 3 gave 0.9, 0.6 and 0.3.',
+      'Pen 3 is the fine black pen from the pencil tin on Table 7. The note was written with Annika Lindqvist&rsquo;s own pen.',
+      '&ldquo;Then he took it out of her tin,&rdquo; said Mrs Shrike. &ldquo;Then his fingers will be on it,&rdquo; said Dr Novak. &ldquo;We shall look. But first I want the two white prints on that bottle, and everything for those is in the van.&rdquo;'
+    ],
+    exit: {"next":"judging","w":{"28812bda":"574e8485"}}, tags: {},
+    sound: ['lab', { root: 45, bpm: 76, mood: 'tense', drop: ['arp'], beds: [['rain', 0.8]] }],      /* twenty minutes left, and rain on a steel roof */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#cardbox').classList.toggle('ready', !!(told.chart && !nextFile));
+    ER.pips((told.chart ? 1 : 0) + ((ER.flag('d-out') || []).length) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['The comparison is signed. Open the envelope.']];
+    if (lock && lock.isOpen()) return lock.comparing() ? ['detail', [
+      'Click a red ring on the left-hand print and look hard at what is inside it. Does the ridge simply stop (a ridge ending)? Does one ridge split into two (a bifurcation)? Or is it a short piece standing alone (an island)?',
+      'Both prints are the same way up, with a blue cross on the core. Count the ridges from the cross out to the ring, and notice the direction, like the hand of a clock. The print from the bottle is a little twisted and squashed, so trust your count more than your eye. Then choose the kind of detail, and click the same place on the right-hand print.',
+      'If the detail is really not there on the card, say so with the last button. Two real differences rule a finger out, and you go back to the box for the next hand. On the right finger, all six are there.'
+    ]] : ['hands', [
+      'P4 is an arch and P5 is a whorl, and they lay side by side. So you want a card on which an arch and a whorl are neighbours on the same hand. Arches are rare: find those first, and use the lens.',
+      'There are four arches in the box, on four different cards. One of them has only loops beside it. Click the whorl that sits next to each of the other three, one at a time.'
+    ]];
+    if (!told.chart) return ['chart', [
+      'Before you open the box, read the chart that is pinned to the wall of the van, over the bench: RIDGE DETAILS.'
+    ]];
+    return ['box', ['The box of cards is on the bench, to the right of the machine with the two round screens. Click it.']];
+  }
+
+  function begin() {
+    paint();
+    FAIR.mine('inks', 'Four strips', '<p>Rf = the dye&rsquo;s distance ÷ the water&rsquo;s distance.</p><p>The note (water 5 cm): 0.9, 0.6, 0.3.</p><p>Pen 1, the hall door (water 10 cm): 0.45, 0.3, 0.15. Level with the note, and not the same.</p>' +
+      '<p>Pen 2, Otis&rsquo;s marker: did not move.</p><p>Pen 3, from the tin on Table 7: 0.9, 0.6, 0.3. This pen wrote the note.</p>', true);
+    if (nextFile) { busy = false; showGo(); ER.say('The comparison is signed. Dr Novak is holding out the envelope.'); return; }
+    if (told.in) { busy = false; ER.say('The van, twenty to ten. Rain on the roof.'); return; }
+    tell('in');
+    ER.narrate([
+      'The back of the laboratory&rsquo;s van: a steel bench, a hard white light, and rain on the roof like somebody pouring out a bag of rice.',
+      'Across the car park one window of the school is still lit. In the only other car a man is sitting quite still.',
+      'Dr Novak pours two cups of tea from a flask and puts the box of cards on the bench. &ldquo;Eight people made a card at our stand this afternoon. Otis&rsquo;s is number 6, and we know all about that one. Seven are left. They have numbers and no names. The names are in this envelope, and it stays shut until we have finished.&rdquo;',
+      '&ldquo;Why?&rdquo;',
+      '&ldquo;Because if I know whose card I am looking at, I shall start to see what I expect to see. Everybody does. Mrs Shrike is not a fool. She only knew the answer before she looked.&rdquo;',
+      '&ldquo;Your arch and your whorl, P4 and P5, lay side by side on that bottle in the same flour. Two neighbouring fingers of one hand. So first find me the hands. Then I shall show you how to be sure of a finger.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the chart ---------- */
+  var D1 = '<svg viewBox="0 0 120 80"><g fill="none" stroke="#16232b" stroke-width="5" stroke-linecap="round"><path d="M8 18Q60 2 112 18"/><path d="M8 40Q34 30 62 33"/><path d="M8 62Q60 46 112 62"/><path d="M72 47Q94 49 112 40" stroke="#9fb0b8"/></g><circle cx="62" cy="33" r="11" fill="none" stroke="#b3261c" stroke-width="2"/></svg>';
+  var D2 = '<svg viewBox="0 0 120 80"><g fill="none" stroke="#16232b" stroke-width="5" stroke-linecap="round"><path d="M8 14Q60 0 112 14"/><path d="M8 40Q30 34 52 38Q82 26 112 30"/><path d="M52 38Q84 50 112 48"/><path d="M8 66Q60 54 112 66"/></g><circle cx="52" cy="38" r="11" fill="none" stroke="#b3261c" stroke-width="2"/></svg>';
+  var D3 = '<svg viewBox="0 0 120 80"><g fill="none" stroke="#16232b" stroke-width="5" stroke-linecap="round"><path d="M8 18Q60 4 112 18"/><path d="M48 39Q60 36 72 39"/><path d="M8 62Q60 48 112 62"/></g><circle cx="60" cy="38" r="17" fill="none" stroke="#b3261c" stroke-width="2"/></svg>';
+  var CHART = '<h4>RIDGE DETAILS</h4><p>A pattern is not a person. Millions of fingers are whorls. But follow any one ridge with a lens, and sooner or later it does one of three things. No two fingers do them in the same places: not even the fingers of identical twins.</p>' +
+    '<div class="three"><div>' + D1 + '<b>RIDGE ENDING</b>The ridge simply stops.</div><div>' + D2 + '<b>BIFURCATION</b>One ridge splits into two, like a fork in a road.</div><div>' + D3 + '<b>ISLAND</b>A very short ridge, standing alone.</div></div>' +
+    '<p>To compare two prints, put them the same way up and find the <b>core</b> of each: the centre of the pattern. Then take the details one at a time. Is it the same kind of detail? Is it in the same place: the same number of ridges out from the core, in the same direction?</p>' +
+    '<p class="rule">Enough details that agree, and not one that disagrees: the same finger. One real difference: a different finger. (Until 2001, experts in England had to find sixteen that agreed.)</p>';
+  $('#chart').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CHART, cls: 'chart', clue: { id: 'chart', title: 'Ridge details', kind: 'The chart in the van' }, done: function () {
+      FAIR.terms(['core', 'ridge ending', 'bifurcation', 'island']);
+      if (tell('chart')) { paint(); ER.say('A ridge stops, or splits, or stands alone. And where it does so is different on every finger in the world.'); }
+    } });
+  });
+
+  /* ---------- things in the van ---------- */
+  FAIR.thing('#envl', 'envelope', 'A brown envelope with a red seal: NAMES. Not to be opened until the comparison is signed. M.N.', isBusy);
+  FAIR.thing('#flask', 'flask', 'A green flask, and tea strong enough to stand a spoon in. One of the mugs is yours.', isBusy);
+  FAIR.thing('#win', null, 'Rain on the glass. The school is dark except for one window: Mrs Shrike is still at her desk, with an unsigned letter. In the car under the lamp, Otis&rsquo;s father has not moved.', isBusy);
+  FAIR.thing('#bottle', null, 'Bottle number 3, in a bag of its own. The two white prints are still on it, side by side: P4 and P5.', isBusy);
+  FAIR.thing('#bluelamp', null, 'Pen 3 is lying under the blue lamp, in its bag. Dr Novak has dusted it already. &ldquo;After the fingers,&rdquo; she says. &ldquo;One thing at a time.&rdquo;', isBusy);
+  FAIR.thing('#motto', null, '&ldquo;Every contact leaves a trace.&rdquo; On a sticker, this time. Somebody has stuck it on perfectly straight.', isBusy);
+  FAIR.thing('#clock', null, 'Twenty to ten. Twenty minutes, and then the caretaker locks up and the letter goes.', isBusy);
+  FAIR.thing('#cab', 'drawer', 'Five steel drawers: TAPE, POWDERS, BRUSHES, BAGS, FORMS. There are always more forms than anything else.', isBusy);
+  FAIR.thing('#ext', null, 'A fire extinguisher. Nobody has ever needed it. Dr Novak says that is what it is for.', isBusy);
+  $('#novak').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(told.chart ? '&ldquo;Pattern first,&rdquo; says Dr Novak. &ldquo;It is quick, and it throws out nearly everybody. Then the details, slowly, for the few that are left.&rdquo;' : '&ldquo;Read the chart on the wall before you open the box,&rdquo; says Dr Novak. &ldquo;It is the whole of the job, on one sheet.&rdquo;');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  function openLock() {
+    if (busy) return;
+    if (nextFile) { ER.say('Seven cards, back in their box. One of them has Dr Novak&rsquo;s initials on it now.'); return; }
+    if (!told.chart) { ER.say('&ldquo;The chart first,&rdquo; says Dr Novak, and points at the wall with her mug.'); return; }
+    if (!lock) lock = makeLock();
+    lock.open();
+  }
+  $('#cardbox').addEventListener('click', openLock);
+  $('#comp').addEventListener('click', function () {
+    if (busy) return;
+    if (!lock || !lock.comparing()) { ER.say('The comparator: two prints side by side, the same size and the same way up. It is waiting for a finger out of the box.'); return; }
+    openLock();
+  });
+
+  /* ---------- the box of cards, then the comparator ---------- */
+  function makeLock() {
+    var CARDS = [1, 2, 3, 4, 5, 7, 8], FING = ['thumb', 'index', 'middle', 'ring', 'little'], KIND = { e: 'ridge ending', f: 'bifurcation', i: 'island' };
+    var out = ER.flag('d-out') || [], cur = ER.flag('d-card') || 1, misses = 0, wait = false, made = {}, comp = null;
+    var box = ER.el('div', 'bx', '<svg viewBox="0 0 1000 600"><defs id="vdefs"></defs><g id="vbox"></g><g id="vcmp" style="display:none"></g></svg>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="v-back" style="display:none">Back to the box</button><button type="button" class="btn" id="v-sign" style="display:none">Sign the comparison</button></div>');
+    var svg = box.querySelector('svg'), defs = box.querySelector('#vdefs'), gBox = box.querySelector('#vbox'), gCmp = box.querySelector('#vcmp'), msgEl = box.querySelector('.pmsg'), backBtn = box.querySelector('#v-back'), signBtn = box.querySelector('#v-sign');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function need(card, f) {
+      var id = 'vp' + card + '-' + f;
+      if (!made[id]) { made[id] = 1; defs.appendChild(FAIR.el('g', {}, FAIR.printPath(card, f, id)).firstChild); }
+      return id;
+    }
+    function fname(f) { return (f < 5 ? 'right ' : 'left ') + (f % 5 === 0 ? 'thumb' : FING[f % 5] + ' finger'); }
+    function isOut(card, f) { return out.indexOf(card + '.' + f) >= 0; }
+    /* does this finger have an arch on the finger next to it, on the same hand? */
+    function archBeside(card, f) {
+      var a = f % 5 > 0 && RIDGES.cls(card, f - 1) === 'a', b = f % 5 < 4 && RIDGES.cls(card, f + 1) === 'a';
+      return a || b;
+    }
+
+    /* --- the box --- */
+    function drawBox() {
+      var s = '<rect width="1000" height="600" fill="#59646a"/><rect x="14" y="60" width="236" height="526" rx="6" fill="#14191d"/>' +
+        '<text x="132" y="90" class="tM" font-size="13" fill="#dfe7ea" text-anchor="middle" letter-spacing="2">FROM BOTTLE 3</text>' +
+        '<use href="#' + need(4, 1) + '" stroke="#fbfaf4" transform="translate(24 108) scale(.52)"/><use href="#' + need(4, 2) + '" stroke="#fbfaf4" transform="translate(134 116) rotate(5 52 68) scale(.52)"/>' +
+        '<text x="76" y="268" class="tB" font-size="22" fill="#fbfaf4" text-anchor="middle">P4</text><text x="186" y="274" class="tB" font-size="22" fill="#fbfaf4" text-anchor="middle">P5</text>' +
+        '<text x="132" y="316" class="tH" font-size="18" fill="#9fdcee" text-anchor="middle">side by side,</text><text x="132" y="338" class="tH" font-size="18" fill="#9fdcee" text-anchor="middle">in the same white powder:</text><text x="132" y="360" class="tH" font-size="18" fill="#9fdcee" text-anchor="middle">two neighbouring fingers</text><text x="132" y="382" class="tH" font-size="18" fill="#9fdcee" text-anchor="middle">of one hand</text>' +
+        '<path d="M34 410h196" stroke="#3a444a" stroke-width="2"/><text x="132" y="440" class="tH" font-size="17" fill="#dfe7ea" text-anchor="middle">Find the hand. Then click</text><text x="132" y="461" class="tH" font-size="17" fill="#dfe7ea" text-anchor="middle">the whorl on it.</text>', i, x, y, c, f, id;
+      CARDS.forEach(function (n, k) {
+        s += '<g class="tab' + (n === cur ? ' on' : '') + '" data-n="' + n + '"><rect x="' + (270 + k * 102) + '" y="18" width="96" height="' + (n === cur ? 50 : 44) + '" rx="5"/><text x="' + (318 + k * 102) + '" y="46" class="tM" text-anchor="middle">No. ' + n + '</text></g>';
+      });
+      s += '<g id="vcard"><rect x="262" y="60" width="724" height="526" rx="4" fill="#fbfbf6"/><text x="282" y="86" class="tM" font-size="12" fill="#59616a" letter-spacing="2">CARD No. ' + cur + ' &#183; RIGHT HAND</text><text x="282" y="344" class="tM" font-size="12" fill="#59616a" letter-spacing="2">LEFT HAND</text>';
+      for (f = 0; f < 10; f++) {
+        x = 280 + (f % 5) * 140; y = f < 5 ? 94 : 352; id = need(cur, f);
+        s += '<g class="cell' + (isOut(cur, f) ? ' out' : '') + '" data-f="' + f + '"><rect x="' + x + '" y="' + y + '" width="128" height="198" fill="#fff" stroke="#1c1d22" stroke-width="1.500"/><use href="#' + id + '" stroke="#1d2a3a" transform="translate(' + (x + 6) + ' ' + (y + 6) + ') scale(.58)"/>' +
+          '<text x="' + (x + 64) + '" y="' + (y + 188) + '" class="tM" font-size="11.500" fill="#59616a" text-anchor="middle">' + FING[f % 5] + '</text>' +
+          (isOut(cur, f) ? '<path d="M' + (x + 14) + ' ' + (y + 150) + 'l100 -120" stroke="#b3261c" stroke-width="4"/><text x="' + (x + 64) + '" y="' + (y + 172) + '" class="tK" font-size="14" fill="#b3261c" text-anchor="middle">RULED OUT</text>' : '') + '</g>';
+      }
+      s += '</g>';
+      gBox.innerHTML = s;
+      ER.$$('.tab', gBox).forEach(function (t) { t.addEventListener('click', function () { if (wait) return; cur = +t.getAttribute('data-n'); ER.flag('d-card', cur); FAIR.sfx.clip(); drawBox(); }); });
+      ER.$$('.cell', gBox).forEach(function (cl) { cl.addEventListener('click', function () { pickFinger(+cl.getAttribute('data-f')); }); });
+      var old = svg.querySelector('.lens'); if (old) svg.removeChild(old);
+      FAIR.lens(svg, { x: 132, y: 520, r: 56, zoom: 2.4, href: '#vcard', bg: '#fbfbf6', lim: [40, 60, 960, 560] });
+    }
+    function pickFinger(f) {
+      var c = RIDGES.cls(cur, f);
+      if (wait || nextFile) return;
+      if (isOut(cur, f)) { msg('That finger is ruled out already. Two of the details that should have been there were not.'); return; }
+      if (c === 'w' && archBeside(cur, f)) { misses = 0; startCompare(cur, f); return; }
+      ER.sfx.no(); misses++;
+      msg((c === 'l' ? '&ldquo;That one is a loop,&rdquo; says Dr Novak. &ldquo;P5 is a whorl. You can rule a loop out without even picking up the lens.&rdquo;' :
+        c === 'a' ? '&ldquo;An arch, like P4. Good: the hand we want has one,&rdquo; says Dr Novak. &ldquo;But an arch has no core to steer by. We shall compare the whorl that lay beside it.&rdquo;' :
+        '&ldquo;A whorl, yes,&rdquo; says Dr Novak. &ldquo;But on the bottle the whorl had an arch beside it, on the next finger of the same hand. Look at this one&rsquo;s neighbours.&rdquo;') +
+        (misses > 4 ? ' She puts her mug down. &ldquo;You are trying fingers at random. There are seventy in that box. Find the arches first: they are rare.&rdquo;' : ''));
+    }
+
+    /* --- the comparator --- */
+    var WX = [40, 470], WY = 56, WS = 400, HALF = 62, SC = WS / (HALF * 2), TILT = -7, SQX = 1.05, SQY = 0.96, TOL = 7;
+    function startCompare(card, f) {
+      var T = RIDGES.get(4, 2), R = RIDGES.get(card, f), P = RIDGES.pick(T, T.core[0], T.core[1] + 6, 72, 72, 6), st = P.map(function () { return ''; }), sel = 0, kind = '', diffs = 0, bad = 0, s, i, a, m, q, rad = TILT * Math.PI / 180;
+      comp = { card: card, f: f };
+      /* where a point of the print from the bottle is drawn: turned and squashed a little about its core, as a lifted print is */
+      function lat(p) {
+        var dx = (p.x - T.core[0]) * SQX, dy = (p.y - T.core[1]) * SQY;
+        return { x: WX[0] + WS / 2 + (dx * Math.cos(rad) - dy * Math.sin(rad)) * SC, y: WY + (38 + (dx * Math.sin(rad) + dy * Math.cos(rad))) * SC };
+      }
+      function ref(p) { return { x: WX[1] + WS / 2 + (p.x - R.core[0]) * SC, y: WY + (38 + p.y - R.core[1]) * SC }; }
+      /* the place on the card where detail k ought to be, and whether a detail of that kind is there */
+      function want(k) { return { x: R.core[0] + P[k].x - T.core[0], y: R.core[1] + P[k].y - T.core[1] }; }
+      function near(pt, t, r) {
+        var best = null, bd = r * r;
+        R.min.forEach(function (mm) { var d = (mm.x - pt.x) * (mm.x - pt.x) + (mm.y - pt.y) * (mm.y - pt.y); if ((!t || mm.t === t) && d < bd) { bd = d; best = mm; } });
+        return best;
+      }
+      s = '<rect width="1000" height="552" fill="#3a444a"/><defs><clipPath id="vw0"><rect x="' + WX[0] + '" y="' + WY + '" width="' + WS + '" height="' + WS + '" rx="10"/></clipPath><clipPath id="vw1"><rect x="' + WX[1] + '" y="' + WY + '" width="' + WS + '" height="' + WS + '" rx="10"/></clipPath></defs>' +
+        '<rect x="' + (WX[0] - 8) + '" y="' + (WY - 8) + '" width="' + (WS + 16) + '" height="' + (WS + 16) + '" rx="14" fill="#14191d"/><rect x="' + (WX[1] - 8) + '" y="' + (WY - 8) + '" width="' + (WS + 16) + '" height="' + (WS + 16) + '" rx="14" fill="#14191d"/>' +
+        '<rect x="' + WX[0] + '" y="' + WY + '" width="' + WS + '" height="' + WS + '" rx="10" fill="#e9e6da"/><rect id="refwin" x="' + WX[1] + '" y="' + WY + '" width="' + WS + '" height="' + WS + '" rx="10" fill="#fdfdfb"/>' +
+        '<g clip-path="url(#vw0)"><use href="#' + need(4, 2) + '" stroke="#2a2826" stroke-width="3.500" transform="translate(' + (WX[0] + WS / 2) + ' ' + (WY + 38 * SC) + ') scale(' + SC + ') rotate(' + TILT + ') scale(' + SQX + ' ' + SQY + ') translate(' + (-T.core[0]) + ' ' + (-T.core[1]) + ')"/>';
+      /* where the powder was thin, the print is patchy: but never over a ringed detail, or over the core */
+      var seed = 77; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      for (i = 0, a = 0; i < 60 && a < 9; i++) {
+        q = { x: WX[0] + 20 + rnd() * (WS - 40), y: WY + 20 + rnd() * (WS - 40) };
+        if (P.some(function (pp) { m = lat(pp); return (m.x - q.x) * (m.x - q.x) + (m.y - q.y) * (m.y - q.y) < 62 * 62; })) continue;
+        m = lat({ x: T.core[0], y: T.core[1] }); if ((m.x - q.x) * (m.x - q.x) + (m.y - q.y) * (m.y - q.y) < 60 * 60) continue;
+        s += '<ellipse cx="' + q.x.toFixed(0) + '" cy="' + q.y.toFixed(0) + '" rx="' + (26 + rnd() * 22).toFixed(0) + '" ry="' + (18 + rnd() * 16).toFixed(0) + '" fill="#e9e6da" opacity=".82" transform="rotate(' + (rnd() * 180).toFixed(0) + ' ' + q.x.toFixed(0) + ' ' + q.y.toFixed(0) + ')"/>'; a++;
+      }
+      s += '</g><g clip-path="url(#vw1)" pointer-events="none"><use href="#' + need(card, f) + '" stroke="#16202c" transform="translate(' + (WX[1] + WS / 2) + ' ' + (WY + 38 * SC) + ') scale(' + SC + ') translate(' + (-R.core[0]) + ' ' + (-R.core[1]) + ')"/></g>';
+      [lat({ x: T.core[0], y: T.core[1] }), ref({ x: R.core[0], y: R.core[1] })].forEach(function (c) { s += '<path d="M' + (c.x - 12) + ' ' + c.y + 'h24M' + c.x + ' ' + (c.y - 12) + 'v24" stroke="#1f6fd9" stroke-width="3" pointer-events="none"/>'; });
+      P.forEach(function (pp, k) { m = lat(pp); s += '<g class="ring" data-k="' + k + '"><circle cx="' + m.x.toFixed(1) + '" cy="' + m.y.toFixed(1) + '" r="23"/><text x="' + (m.x + 27).toFixed(1) + '" y="' + (m.y - 16).toFixed(1) + '" class="tB" font-size="22" fill="#b3261c">' + (k + 1) + '</text></g>'; });
+      s += '<g id="pins" pointer-events="none"></g>' +
+        '<text x="' + (WX[0] + WS / 2) + '" y="' + (WY + WS + 30) + '" class="tM" font-size="14" fill="#dfe7ea" text-anchor="middle">P5 &#183; from bottle 3 &#183; six details ringed by M.N.</text>' +
+        '<text x="' + (WX[1] + WS / 2) + '" y="' + (WY + WS + 30) + '" class="tM" font-size="14" fill="#dfe7ea" text-anchor="middle">CARD No. ' + card + ' &#183; ' + fname(f) + '</text>' +
+        '<text x="935" y="74" class="tB" font-size="15" fill="#9fdcee" text-anchor="middle" letter-spacing="2">WHAT IS IT?</text>';
+      [['e', 'RIDGE ENDING', '<path d="M-26 -9q26 -8 52 0M-26 0q12 -4 24 -2M-26 9q26 -8 52 0" fill="none" stroke="#16232b" stroke-width="3" stroke-linecap="round"/>'],
+        ['f', 'BIFURCATION', '<path d="M-26 0q10 -3 20 0q16 -8 32 -6M-6 0q16 8 32 8" fill="none" stroke="#16232b" stroke-width="3" stroke-linecap="round"/>'],
+        ['i', 'ISLAND', '<path d="M-26 -9q26 -8 52 0M-7 1q7 -2 14 0M-26 10q26 -8 52 0" fill="none" stroke="#16232b" stroke-width="3" stroke-linecap="round"/>']].forEach(function (b, n) {
+        s += '<g class="kd" data-t="' + b[0] + '"><rect x="885" y="' + (90 + n * 96) + '" width="100" height="84" rx="6"/><g transform="translate(935 ' + (120 + n * 96) + ')">' + b[2] + '</g><text x="935" y="' + (162 + n * 96) + '" class="tB" font-size="14.500" fill="#16232b" text-anchor="middle">' + b[1] + '</text></g>';
+      });
+      s += '<g class="kd" data-t="x"><rect x="885" y="386" width="100" height="70" rx="6"/><text x="935" y="414" class="tB" font-size="14.500" fill="#16232b" text-anchor="middle">NOT ON</text><text x="935" y="434" class="tB" font-size="14.500" fill="#16232b" text-anchor="middle">THIS FINGER</text></g>' +
+        '<g id="tally"></g>';
+      gCmp.innerHTML = s; gBox.style.display = 'none'; gCmp.style.display = ''; svg.setAttribute('viewBox', '0 0 1000 552');
+      var old = svg.querySelector('.lens'); if (old) svg.removeChild(old);
+      backBtn.style.display = ''; signBtn.style.display = ''; signBtn.disabled = true;
+      function agreed() { return st.filter(function (v) { return v === 'ok'; }).length; }
+      function draw() {
+        var pins = '', t = '';
+        ER.$$('.ring', gCmp).forEach(function (r) { var k = +r.getAttribute('data-k'); r.setAttribute('class', 'ring' + (k === sel ? ' sel' : '') + (st[k] ? ' ' + st[k] : '')); });
+        ER.$$('.kd', gCmp).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-t') === kind); });
+        P.forEach(function (pp, k) {
+          if (st[k] === 'ok') { m = ref(near(want(k), pp.t, 5.5)); pins += '<circle cx="' + m.x.toFixed(1) + '" cy="' + m.y.toFixed(1) + '" r="23" fill="none" stroke="#1f7a3a" stroke-width="3.500"/><text x="' + (m.x + 27).toFixed(1) + '" y="' + (m.y - 16).toFixed(1) + '" class="tB" font-size="22" fill="#1f7a3a">' + (k + 1) + '</text>'; }
+          t += '<circle cx="' + (60 + k * 34) + '" cy="526" r="13" fill="' + (st[k] === 'ok' ? '#1f7a3a' : st[k] === 'no' ? '#59616a' : '#14191d') + '" stroke="#dfe7ea" stroke-width="1.500"/><text x="' + (60 + k * 34) + '" y="531.500" class="tB" font-size="15" fill="#fff" text-anchor="middle">' + (st[k] === 'ok' ? '✓' : st[k] === 'no' ? '×' : k + 1) + '</text>';
+        });
+        t += '<text x="276" y="532" class="tM" font-size="13" fill="#dfe7ea">' + agreed() + ' agree &#183; ' + diffs + ' not there</text>';
+        gCmp.querySelector('#pins').innerHTML = pins; gCmp.querySelector('#tally').innerHTML = t;
+        signBtn.disabled = agreed() < 6;
+      }
+      function next() { for (var k = 0; k < 6; k++) if (!st[k]) { sel = k; return; } }
+      function done(k) {
+        kind = ''; next(); draw();
+        if (diffs >= 2) {
+          wait = true; out.push(card + '.' + f); ER.flag('d-out', out); paint();
+          msg('&ldquo;Two details that ought to be there, and are not,&rdquo; says Dr Novak. &ldquo;I do not need a third. Card ' + card + ', ' + fname(f) + ', is <b>ruled out</b>. Back to the box.&rdquo;');
+          setTimeout(function () { wait = false; back(); }, 3200);
+          return true;
+        }
+        if (agreed() === 6) { FAIR.sfx.clip(); msg('Six details. Every one of them the same kind, in the same place, and nothing on this finger that disagrees. Dr Novak has stopped drinking her tea. &ldquo;Then sign it,&rdquo; she says.'); return true; }
+        return false;
+      }
+      ER.$$('.ring', gCmp).forEach(function (r) { r.addEventListener('click', function () { if (wait) return; sel = +r.getAttribute('data-k'); kind = ''; draw(); msg(st[sel] ? 'Number ' + (sel + 1) + ' is done.' : 'Number ' + (sel + 1) + '. Look at what is inside the ring. What is it? Then find it on the card, or say that it is not there.'); }); });
+      ER.$$('.kd', gCmp).forEach(function (b) {
+        b.addEventListener('click', function () {
+          var t = b.getAttribute('data-t');
+          if (wait || nextFile) return;
+          if (st[sel]) { msg('Number ' + (sel + 1) + ' is done. Click another ring.'); return; }
+          if (t !== 'x') { kind = t; draw(); msg('Number ' + (sel + 1) + ', a <b>' + KIND[t] + '</b>, you say. Now click the same place on the card, on the right.'); return; }
+          if (near(want(sel), P[sel].t, 5.5)) { ER.sfx.no(); bad++; msg('Dr Novak looks for herself. &ldquo;I can see it,&rdquo; she says. &ldquo;Count the ridges from the cross again, on both prints.&rdquo;'); return; }
+          var k = sel; st[k] = 'no'; diffs++; FAIR.sfx.stamp();
+          if (!done(k)) msg('Dr Novak looks for herself, for some time. &ldquo;Agreed. Number ' + (k + 1) + ' is not on this finger. That is one difference. One real difference is enough, but find me a second, so that I can sleep.&rdquo;');
+        });
+      });
+      gCmp.querySelector('#refwin').addEventListener('click', function (e) {
+        var p = ER.pt(svg, e), pt = { x: R.core[0] + (p.x - WX[1] - WS / 2) / SC, y: R.core[1] + (p.y - WY) / SC - 38 }, k = sel, here, there;
+        if (wait || nextFile) return;
+        if (st[k]) { msg('Number ' + (k + 1) + ' is done. Click another ring on the left.'); return; }
+        if (!kind) { msg('First say what number ' + (k + 1) + ' is: a ridge ending, a bifurcation or an island. The three buttons are on the right.'); return; }
+        if (kind !== P[k].t) {
+          ER.sfx.no(); bad++;
+          msg('&ldquo;Is number ' + (k + 1) + ' a ' + KIND[kind] + '?&rdquo; says Dr Novak. &ldquo;Look again. ' + { e: 'A ridge ending is a ridge that simply stops, with its neighbours closing in round it.', f: 'In a bifurcation one ridge splits into two, and all three arms are joined.', i: 'An island is short, and it touches nothing at either end.' }[kind] + '&rdquo;');
+          kind = ''; draw(); return;
+        }
+        there = near(want(k), kind, 5.5); here = near(pt, kind, TOL);
+        if (there && here === there) {
+          st[k] = 'ok'; FAIR.sfx.clip();
+          if (!done(k)) msg('Number ' + (k + 1) + ' <b>agrees</b>: the same kind of detail, in the same place.' + (agreed() === 1 ? ' One proves nothing: one can agree by chance. Go on.' : ' That is ' + agreed() + ' of the six.'));
+          return;
+        }
+        ER.sfx.no(); bad++;
+        msg(here ? 'There is a ' + KIND[kind] + ' where you clicked, but it is not in the same place as number ' + (k + 1) + '. Count the ridges out from the blue cross, on both prints.' :
+          'There is no ' + KIND[kind] + ' where you clicked. Count the ridges out from the blue cross to number ' + (k + 1) + ', and go the same way on the card. If it is truly not there, say so.' +
+          (bad > 5 ? ' &ldquo;You are prodding,&rdquo; says Dr Novak. &ldquo;Stop, and count.&rdquo;' : ''));
+      });
+      draw();
+      msg('Left: P5, from the bottle. Right: card ' + card + ', ' + fname(f) + ', the same size and the same way up. Click a ring, say what it is, then show Dr Novak the same detail on the card.');
+    }
+    function back() {
+      if (wait) return;
+      comp = null; gCmp.style.display = 'none'; gCmp.innerHTML = ''; gBox.style.display = ''; svg.setAttribute('viewBox', '0 0 1000 600'); backBtn.style.display = 'none'; signBtn.style.display = 'none';
+      drawBox();
+      msg(out.length ? out.length + (out.length === 1 ? ' finger is' : ' fingers are') + ' ruled out. Which other hand in the box has an arch beside a whorl?' : 'Seven cards. Find a hand with an arch beside a whorl, and click the whorl.');
+    }
+    backBtn.addEventListener('click', back);
+    signBtn.addEventListener('click', function () {
+      var file;
+      if (wait || nextFile || !comp || signBtn.disabled) return;
+      file = ER.exitOk([comp.card + '-' + comp.f]);
+      if (!file) { msg('The form will not sign. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('d-file', file);
+      var s0 = ER.state(); s0.done = s0.done || {}; s0.done.van = 1; ER.persist(true);
+      FAIR.sfx.stamp(); msg('Your name, and under it: M. Novak. She blows on the ink.');
+      setTimeout(function () {
+        ER.closeAll(); FAIR.solved(); paint(); busy = true;
+        try { ER.mood('calm'); } catch (e) {}
+        ER.narrate([
+          '&ldquo;A number,&rdquo; says Dr Novak. &ldquo;That is all we have, and all we wanted. We did not go looking for a person. We let the finger tell us.&rdquo;',
+          'She takes the brown envelope off the bench and looks at the seal. Then she holds it out to you.',
+          '&ldquo;You found it. You open it.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 2600);
+    });
+    drawBox();
+    msg('Seven cards, seventy fingers. On the left, the two white prints from the bottle. The lens is yours. Find a hand with an arch beside a whorl, and click the whorl.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      comparing: function () { return !!comp; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Counting-House · The Keeper Gives No Change</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="toll.css">
+<style>
+  body{--bg:#1c1408;--accent:#e9c46a;--font-display:'Uncial Antiqua',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(24,17,7,.96);--tc-ink:#f1e7cf;--cap-bg:rgba(24,17,7,.94);--cap-ink:#f6eedb;--panel:#2a1d0c;--face-bg:#4a3516;--q-ink:#e3cf9a;--fade:#0c0803;--hud-bg:rgba(24,17,7,.8)}
+  .tc-room,.tk-name{font-family:'Almendra',serif;font-weight:700;font-style:italic;letter-spacing:0}      /* the Keeper's book-hand */
+  .glowD{animation:gd 3.6s steps(4) infinite}
+  @keyframes gd{50%{opacity:.84}}
+  .fl{animation:fl 1.8s ease-in-out infinite}
+  .fl2{animation:fl 2.3s ease-in-out infinite;animation-delay:-.7s}
+  @keyframes fl{0%,100%{transform:scale(1,1)}35%{transform:scale(.86,1.16)}65%{transform:scale(1.1,.92)}}
+  .mote{animation:mote 15s linear infinite}
+  @keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.6}85%{opacity:.4}100%{transform:translate(30px,-110px);opacity:0}}
+  #henB{animation:hen 7s steps(1) infinite}
+  @keyframes hen{0%,91%{transform:translateY(0)}93%{transform:translateY(-4px)}96%{transform:translateY(0)}}
+  #charter.next #skin{animation:nudge 1.7s ease-in-out infinite}
+
+  /* the Charter, and the Keeper's seal */
+  .cl{display:grid;grid-template-columns:minmax(0,720px) 370px;gap:26px;width:min(1120px,96vw);align-items:start}
+  .cl-skin{position:relative;padding:20px 30px 22px;background:#e9d8ad radial-gradient(ellipse at 30% 12%,rgba(255,250,228,.8),rgba(132,92,36,.34));color:#2f2210;border:1px solid #b89b62;
+    box-shadow:0 26px 70px rgba(0,0,0,.7);font-family:'IM Fell English',Georgia,serif;-webkit-user-select:text;user-select:text}
+  .cl-skin h4{margin:0;text-align:center;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:26px;line-height:1.1;color:#6a1f16}
+  .cl-skin h5{margin:2px 0 12px;text-align:center;font-style:italic;font-weight:400;font-size:15px;line-height:1.25;border-bottom:1px solid #9b7b46;padding-bottom:9px}
+  .cl-cols{-webkit-column-count:2;column-count:2;-webkit-column-gap:24px;column-gap:24px}
+  .cl-c{display:grid;grid-template-columns:24px 24px minmax(0,1fr);gap:3px;margin:0 0 7px;padding:2px 3px;border-radius:3px;font-size:15.5px;line-height:1.26;cursor:pointer;
+    -webkit-column-break-inside:avoid;break-inside:avoid}
+  .cl-c:hover{background:rgba(160,60,40,.12)}
+  .cl-c b{font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:18px;line-height:1.15;color:#6a1f16}
+  .cl-spot{width:21px;height:21px;margin-top:1px;border-radius:50%;border:1.5px dashed rgba(106,31,22,.5)}
+  .cl-c.sealed{background:rgba(160,60,40,.2)}
+  .cl-c.sealed .cl-spot{border:0;background:radial-gradient(circle at 36% 32%,#e06a52,#9a2418 62%,#5e150d);box-shadow:0 2px 4px rgba(0,0,0,.45)}
+  .cl-c.won{background:rgba(200,160,60,.26);cursor:default}
+  .cl-c.won .cl-spot{border:0;background:radial-gradient(circle at 36% 32%,#ffe9a8,#c9a044 62%,#7d5f1d);box-shadow:0 2px 4px rgba(0,0,0,.45)}
+  .cl-c.won .cl-t:after{content:attr(data-won);display:block;margin-top:1px;font-family:'Cinzel',serif;font-weight:700;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#7d5f1d}
+  .cl-side h6{margin:0 0 8px;font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:23px;line-height:1.15;color:#ffe9a8}
+  .cl-ask{margin:0 0 12px;font-family:'IM Fell English',Georgia,serif;font-size:18px;line-height:1.3;color:#f3ecd9}
+  .cl-ask b{font-family:'Cinzel',serif;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#ffe9a8}
+  .cl-tokens{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+  .cl-tok{display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid rgba(255,233,168,.45);border-radius:22px;background:rgba(40,28,10,.8);color:#f3ecd9;
+    font-family:'Almendra',serif;font-weight:700;font-size:15.5px;line-height:1.1;text-align:left}
+  .cl-tok svg{flex:0 0 auto;width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .cl-tok:hover{border-color:#ffe9a8}
+  .cl-tok.on{background:#ffe9a8;color:#2a1d0c;border-color:#ffe9a8}
+  .cl-ok{margin:0 0 8px;padding:7px 10px;border-left:4px solid #c9a044;background:rgba(200,160,60,.14);font-family:'IM Fell English',Georgia,serif;font-size:16px;line-height:1.26;color:#f3ecd9}
+  .cl-ok b{font-family:'Cinzel',serif;font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#ffe9a8;margin-right:5px}
+  .cl-side .pmsg{min-height:132px;margin-bottom:10px}
+  .cl-foot .btn{--accent:#ffe9a8}
+  @media (max-width:900px){.cl{grid-template-columns:1fr}.cl-cols{-webkit-column-count:1;column-count:1}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3a20"/><stop offset=".5" stop-color="#6a5430"/><stop offset="1" stop-color="#4c3b20"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d2e17"/><stop offset="1" stop-color="#20170a"/></linearGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6a4826"/><stop offset=".5" stop-color="#855d33"/><stop offset="1" stop-color="#553919"/></linearGradient>
+  <linearGradient id="vellumG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4e7c2"/><stop offset=".6" stop-color="#e3cf9f"/><stop offset="1" stop-color="#c9ad74"/></linearGradient>
+  <linearGradient id="ironG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#55504a"/><stop offset="1" stop-color="#2b2824"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a0"/><stop offset=".5" stop-color="#c9a044"/><stop offset="1" stop-color="#7d5f1d"/></linearGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1330"/><stop offset="1" stop-color="#1f4a5a"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffe7a8" stop-opacity=".75"/><stop offset=".3" stop-color="#ffb24a" stop-opacity=".22"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="52%" cy="48%" r="76%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#0c0803" stop-opacity=".25"/><stop offset="1" stop-color="#0c0803" stop-opacity=".88"/></radialGradient>
+  <clipPath id="winC"><circle cx="1486" cy="232" r="56"/></clipPath>
+</defs>
+
+<!-- one round room in the thickness of the pier -->
+<rect x="-1000" y="-640" width="3600" height="1370" fill="url(#wallG)"/>
+<g id="courses" stroke="#2f2412" stroke-width="2.500" fill="none" opacity=".5"></g>
+<path d="M-1000 -640H2600V104Q800 -76 -1000 104Z" fill="#170f06"/><path d="M-1000 104Q800 -76 2600 104" stroke="#8a6e40" stroke-width="7" fill="none"/>
+<path d="M-1000 728H2600V1500H-1000Z" fill="url(#floorG)"/><path d="M-1000 728H2600" stroke="#140d05" stroke-width="7"/>
+<g id="flags" stroke="#171005" stroke-width="2.500" fill="none" opacity=".8"></g>
+
+<!-- the round window -->
+<g id="window" class="hot"><circle cx="1486" cy="232" r="70" fill="#2f2412"/><circle cx="1486" cy="232" r="56" fill="url(#nightG)"/>
+  <g clip-path="url(#winC)"><path d="M1420 262q66-10 132 0v40h-132z" fill="#0d2430"/><g fill="#ffd98a"><circle cx="1466" cy="258" r="1.800"/><circle cx="1480" cy="256" r="1.500"/><circle cx="1497" cy="259" r="1.800"/><circle cx="1512" cy="257" r="1.400"/></g>
+    <g fill="#eaf4ff"><circle cx="1456" cy="204" r="1.400"/><circle cx="1506" cy="196" r="1.600"/><circle cx="1478" cy="214" r="1.100"/><circle cx="1522" cy="222" r="1.200"/></g></g>
+  <path d="M1486 176v112M1430 232h112" stroke="#2f2412" stroke-width="6"/></g>
+
+<!-- shelves: hens, buttons, scales -->
+<g id="shelves"><rect x="64" y="150" width="14" height="470" fill="#3a2512"/><rect x="522" y="150" width="14" height="470" fill="#3a2512"/>
+  <rect x="54" y="258" width="492" height="14" fill="url(#woodG)"/><rect x="54" y="398" width="492" height="14" fill="url(#woodG)"/><rect x="54" y="538" width="492" height="14" fill="url(#woodG)"/><rect x="78" y="150" width="444" height="460" fill="#1a1208" opacity=".35"/></g>
+<g id="hens" class="hot"></g>
+<g id="buttons" class="hot"></g>
+<g id="scales" class="hot"><path d="M190 452v78M150 530h80" stroke="url(#brassG)" stroke-width="7" stroke-linecap="round"/><path d="M128 462h124" stroke="url(#brassG)" stroke-width="5" stroke-linecap="round"/><circle cx="190" cy="452" r="6" fill="url(#brassG)"/>
+  <path d="M128 462l-14 40h28zM252 462l-14 40h28z" stroke="#c9a044" stroke-width="1.500" fill="none"/><path d="M108 502q20 14 40 0zM232 502q20 14 40 0z" fill="url(#brassG)"/>
+  <g><rect x="318" y="486" width="150" height="20" fill="#5a2a22"/><rect x="326" y="466" width="136" height="20" fill="#2f4a3a"/><rect x="314" y="506" width="160" height="32" fill="#3a3352"/><path d="M318 496h150M326 476h136M314 522h160" stroke="#d8b150" stroke-width="1.500" opacity=".7"/></g></g>
+
+<!-- a hill of left boots -->
+<g id="boots" class="hot"></g>
+
+<!-- the Charter of Stickle Bridge, under a little roof of its own -->
+<circle class="glowD" cx="590" cy="318" r="150" fill="url(#lampG)" pointer-events="none"/><circle class="glowD" cx="930" cy="318" r="150" fill="url(#lampG)" pointer-events="none"/>
+<g fill="#14100a"><path d="M572 356h36l-6 12h-24zM912 356h36l-6 12h-24z"/><rect x="584" y="332" width="12" height="26" fill="#efe6cf"/><rect x="924" y="332" width="12" height="26" fill="#efe6cf"/></g>
+<path class="fl" style="transform-origin:590px 332px" d="M590 306q-7 12-7 18a7 7 0 0 0 14 0q0-6-7-18z" fill="#ffe9a8"/><path class="fl2" style="transform-origin:930px 332px" d="M930 306q-7 12-7 18a7 7 0 0 0 14 0q0-6-7-18z" fill="#ffe9a8"/>
+<g id="charter" class="hot">
+  <path d="M606 136L760 92L914 136V150H606Z" fill="url(#woodG)"/><path d="M606 150h308" stroke="#2a1a0c" stroke-width="5"/>
+  <g id="skin"><path d="M634 152H886V636Q822 650 760 640T634 644Z" fill="url(#vellumG)"/><path d="M634 152H886V636Q822 650 760 640T634 644Z" fill="none" stroke="#8a6e40" stroke-width="2"/>
+    <text x="760" y="188" class="un" font-size="19" fill="#6a1f16">The Charter</text><path d="M664 200h192" stroke="#8a6e40" stroke-width="1.500"/>
+    <g id="clauseMarks"></g>
+    <path d="M744 640l-6 44M776 640l6 44" stroke="#8a1d16" stroke-width="7"/><circle cx="760" cy="694" r="30" fill="#9a2418"/><circle cx="752" cy="686" r="20" fill="#c9453a" opacity=".6"/><text x="760" y="704" class="un" font-size="26" fill="#f3c9b8">S</text></g>
+</g>
+
+<!-- the Keeper, his desk, his day-book -->
+<circle class="glowD" cx="1404" cy="470" r="380" fill="url(#lampG)" pointer-events="none"/>
+<g id="keeper" class="hot"><use href="#ch-spandrel" x="1086" y="150" width="316" height="411"/></g>
+<path d="M984 560h480l12 24H972z" fill="#9a7242"/><rect x="996" y="584" width="456" height="190" fill="url(#woodG)"/><path d="M1016 606h196v146h-196zM1236 606h196v146h-196z" fill="none" stroke="#3a2512" stroke-width="3"/><circle cx="1114" cy="680" r="6" fill="url(#brassG)"/><circle cx="1334" cy="680" r="6" fill="url(#brassG)"/>
+<g id="daybook" class="hot"><path d="M1010 558q40-22 76-6v-30q-36-14-76 6z" fill="#f3ead0"/><path d="M1162 558q-40-22-76-6v-30q36-14 76 6z" fill="#efe3c2"/><path d="M1086 522v30" stroke="#5a2a22" stroke-width="3"/>
+  <g stroke="#6a5a8a" stroke-width="1.600" opacity=".8"><path d="M1020 540q30-12 56-4M1020 548q30-12 56-4M1096 536q26-8 56 4M1096 544q26-8 56 4"/></g></g>
+<g id="jar" class="hot"><path d="M1180 560Q1166 534 1182 518Q1186 514 1186 508H1216Q1216 514 1220 518Q1236 534 1222 560Z" fill="#8a5a3a"/><path d="M1174 536q27 7 54 0" stroke="#6b4228" stroke-width="2.500" fill="none"/><ellipse cx="1201" cy="508" rx="15" ry="4.500" fill="#2a1a10"/><g id="jarP" fill="#b9bfb4"></g></g>
+<g><path d="M1262 560h34v-16q-17-10-34 0z" fill="#14100a"/><path d="M1280 544L1312 478q8 14-4 34z" fill="#f4efe2"/></g>
+<g id="lampD" class="hot"><path d="M1380 560h52l-6-16h-40z" fill="url(#brassG)"/><ellipse cx="1406" cy="524" rx="24" ry="20" fill="url(#brassG)"/><path d="M1394 506h24l8-58h-40z" fill="#ffd98a" opacity=".9"/><path d="M1394 506h24l8-58h-40z" fill="none" stroke="#7d5f1d" stroke-width="2.500"/>
+  <path class="fl" style="transform-origin:1406px 500px" d="M1406 468q-7 12-7 18a7 7 0 0 0 14 0q0-6-7-18z" fill="#fff6d8"/></g>
+
+<!-- the strongbox -->
+<g id="box" class="hot"><ellipse cx="1486" cy="806" rx="120" ry="10" fill="#000" opacity=".4"/><rect x="1384" y="656" width="204" height="148" rx="6" fill="url(#ironG)"/><path d="M1384 700h204M1436 656v148M1536 656v148" stroke="#1a1815" stroke-width="7"/>
+  <g fill="#8a8479"><circle cx="1400" cy="672" r="4"/><circle cx="1572" cy="672" r="4"/><circle cx="1400" cy="788" r="4"/><circle cx="1572" cy="788" r="4"/><circle cx="1486" cy="672" r="4"/></g>
+  <path d="M1468 700v-14q0-18 18-18t18 18v14" stroke="url(#brassG)" stroke-width="8" fill="none"/><rect x="1456" y="700" width="60" height="52" rx="6" fill="url(#brassG)"/><circle cx="1486" cy="720" r="6" fill="#3a2a08"/><path d="M1486 722v14" stroke="#3a2a08" stroke-width="5" stroke-linecap="round"/></g>
+
+<g id="motes" fill="#ffe9a8" pointer-events="none"></g>
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go across to the toll-house</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="toll.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null;
+
+  /* the stones of the wall, the flags of the floor, hens, buttons, boots, clause marks, dust */
+  (function () {
+    var s = '', i, x, y, row = 0, seed = 11, c, k;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (y = 150; y < 728; y += 58, row++) {
+      s += '<path d="M-1000 ' + y + 'H2600"/>';
+      for (x = -980 + (row % 2) * 74; x < 2600; x += 148) s += '<path d="M' + x + ' ' + y + 'v58"/>';
+    }
+    $('#courses').innerHTML = s; s = '';
+    s += '<path d="M-1000 772H2600M-1000 836H2600M-1000 924H2600"/>';
+    for (i = -6; i <= 22; i++) s += '<path d="M' + (i * 120) + ' 728L' + (800 + (i * 120 - 800) * 2.1).toFixed(0) + ' 1500"/>';
+    $('#flags').innerHTML = s; s = '';
+    [['#9a5a2e', '#7a4420'], ['#efe6cf', '#cfc5ac'], ['#6b6862', '#4a4742'], ['#c9762e', '#9a5420']].forEach(function (h, n) {      /* four hens, all called Henrietta */
+      x = 130 + n * 106;
+      s += '<g' + (n === 1 ? ' id="henB"' : '') + '><path d="M' + (x - 34) + ' 232q-18-18-12-40q16 6 22 24z" fill="' + h[1] + '"/><ellipse cx="' + x + '" cy="232" rx="36" ry="26" fill="' + h[0] + '"/>' +
+        '<path d="M' + (x - 16) + ' 228q16 14 34 2" stroke="' + h[1] + '" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="' + (x + 28) + '" cy="206" r="13" fill="' + h[0] + '"/>' +
+        '<path d="M' + (x + 22) + ' 194q2-8 6-4q2-6 6 0q4-2 2 6z" fill="#c9281c"/><path d="M' + (x + 40) + ' 206l9 3-9 4z" fill="#e2b23a"/><path d="M' + (x + 28) + ' 204q4 3 8 0" stroke="#1d1410" stroke-width="1.800" fill="none" stroke-linecap="round"/></g>';
+    });
+    $('#hens').innerHTML = s; s = '';
+    c = ['#c9553f', '#d8b150', '#7fa7c9', '#e9dfc6', '#6d7a4d', '#8a4b6e', '#33301f'];
+    for (i = 0; i < 5; i++) {                                    /* jars of buttons */
+      x = 100 + i * 88;
+      s += '<g><rect x="' + x + '" y="316" width="64" height="82" rx="8" fill="#cfe0ea" fill-opacity=".16" stroke="#cfe0ea" stroke-opacity=".5" stroke-width="2"/><rect x="' + (x + 4) + '" y="306" width="56" height="12" rx="3" fill="#8a6a42"/>';
+      for (k = 0; k < 22; k++) s += '<circle cx="' + (x + 9 + rnd() * 46).toFixed(0) + '" cy="' + (340 + rnd() * 52).toFixed(0) + '" r="' + (3.5 + rnd() * 2.5).toFixed(1) + '" fill="' + c[Math.floor(rnd() * c.length)] + '"/>';
+      s += '<path d="M' + (x + 8) + ' 322v70" stroke="#fff" stroke-width="3" opacity=".22"/></g>';
+    }
+    $('#buttons').innerHTML = s; s = '';
+    c = ['#3a2a1c', '#5a3f24', '#2a2422', '#6b4a2a', '#4a3320', '#33281f'];
+    [[150, 772, -8], [250, 778, 12], [352, 770, -4], [440, 780, 20], [196, 720, 6], [300, 716, -14], [396, 724, 8], [244, 664, -6], [340, 668, 16], [292, 618, 2]].forEach(function (b, n) {
+      s += '<g transform="translate(' + b[0] + ' ' + b[1] + ') rotate(' + b[2] + ')"><path d="M-22 -64h30v40q26 2 36 14q6 10 2 22h-68z" fill="' + c[n % c.length] + '"/><path d="M-22 -64h30" stroke="#8a6a42" stroke-width="5"/>' +
+        '<path d="M-22 12h70" stroke="#14100a" stroke-width="5"/><path d="M-12 -44h10M-12 -34h10M-12 -24h10" stroke="#d9c49a" stroke-width="2" opacity=".7"/></g>';
+    });
+    $('#boots').innerHTML = '<ellipse cx="296" cy="800" rx="230" ry="16" fill="#000" opacity=".4"/>' + s; s = '';
+    for (i = 0; i < 12; i++) {
+      y = 222 + i * 34;
+      s += '<circle cx="656" cy="' + y + '" r="5" fill="#9a2418"/><path d="M672 ' + (y - 5) + 'h' + (160 + (i * 37) % 34) + 'M672 ' + (y + 6) + 'h' + (110 + (i * 53) % 80) + '" stroke="#5a4526" stroke-width="2.200" stroke-linecap="round"/>';
+    }
+    $('#clauseMarks').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) s += '<circle class="mote" cx="' + Math.round(1150 + rnd() * 420) + '" cy="' + Math.round(360 + rnd() * 300) + '" r="' + (1 + rnd() * 1.4).toFixed(1) +
+      '" style="animation-duration:' + (11 + rnd() * 9).toFixed(1) + 's;animation-delay:-' + (rnd() * 14).toFixed(1) + 's"/>';
+    $('#motes').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'toll', storyTitle: 'The Keeper Gives No Change', id: 'counting', no: 'III', title: 'The Counting-House',
+    go: 'Go in',
+    intro: [
+      '&ldquo;All <i>but</i> two&rdquo; flew, so two geese walked: four pennies. The tumbler crossed on his <i>hands</i>, and line I asks a penny only from a traveller on foot: nothing. And the thing that the Keeper gave, and has <i>kept</i> ever since, is his word. Each riddle turned on one small word, and you put your finger on all three.',
+      'For your prize you asked for an open gate, and the Charter forbids it. So you asked for the Charter.',
+      'The Keeper&rsquo;s counting-house is inside the bridge itself: one round room in the thickness of the first pier, with three hundred years of tolls in it. He lights the reading lamp and stands back. &ldquo;It has no holes,&rdquo; he says. &ldquo;I have looked.&rdquo;'
+    ],
+    exit: {"next":"house","w":{"eaf52711":"c50b3b2b"}}, tags: {"ev":["479cdb76"],"c1":["2cb03d95"],"c2":["b01b8d3a"],"c3":["7c3c6090"]},
+    sound: ['candle', { root: 48, bpm: 58, drop: ['mel'] }],        /* the room with the most to read: slow, and no tune over it */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null;
+  var stp = ER.flag('c-st') || { step: 1, ev: '', won: [] };
+
+  var CL = [
+    'Spandrel shall be Keeper of the bridge, and shall keep it in good repair, for as long as the water runs.',
+    'Night begins when the Keeper lights the lamp over the gate at sunset. Day begins when the Keeper hears a cock crow.',
+    'By night the gate shall stay shut, except as Clause 7 allows. When day begins, the Keeper shall open it.',
+    'By day the Keeper may ask a toll, as the Table says, of every traveller who would cross; and every traveller must pay what the Keeper asks before he crosses.',
+    'The lamp shall burn until the sun is up. If it goes out before then, the Keeper must light it again at once.',
+    'While the lamp burns, the Keeper shall neither ask nor take a toll: for no honest counting was ever done by lamplight.',
+    'The Keeper may open the gate by night for a doctor on the way to the sick.',
+    'By night a traveller may ask for the Riddles. If he answers all three, the Keeper shall grant him one thing, unless this Charter forbids it.',
+    'A traveller who cannot cross may wait in the toll-house, unless he is a goat.',
+    'The Keeper may sleep only if the lamp is out.',
+    'The first traveller across the bridge each day shall wish the Keeper good morning, and the Keeper shall wish him the same.',
+    'Not one word of this Charter shall be changed. The Keeper gives no change.'
+  ];
+  var HEAD = '<h4>The Charter of Stickle Bridge</h4><h5>made in the Year of the Long Frost between SPANDREL, a Troll, who built the bridge, and the People of Both Banks, who wished to cross it</h5>';
+  var CHARTER = HEAD + CL.map(function (t, n) { return '<p><b>' + (n + 1) + '</b><span>' + t + '</span></p>'; }).join('');
+  var DAYBOOK = '<h4>Stickle Bridge: the day-book</h4>' +
+    '<p>Today.</p>' +
+    '<p>Noon. 1 miller, on foot: 1 penny.</p>' +
+    '<p>Three o&rsquo;clock. 1 carter, on foot: 1 penny. 1 horse, four legs walking: 4 pennies. 1 cart, four wheels, not empty: 4 pennies. 20 cabbages for sale: 2 cabbages (the two biggest).</p>' +
+    '<p>Sunset. 1 traveller, on foot, aged thirteen: 1 penny. 1 goose, riding: nothing. 1 cart, three wheels: 3 pennies. 9 cheeses for sale: nothing. A pity.</p>' +
+    '<p class="sum">Taken from the last: one sixpence. Change given: none.</p>' +
+    '<p>Lamp lit. Box locked. Gate shut.</p>' +
+    '<p>The Riddles asked for (!). Three answered. The Charter asked for (!!).</p>';
+  var EVENTS = [
+    ['sun', 'The sun comes up', '<circle cx="13" cy="13" r="5"/><path d="M13 2v4M13 20v4M2 13h4M20 13h4M5 5l3 3M18 18l3 3M21 5l-3 3M8 18l-3 3"/>'],
+    ['lamp', 'The lamp goes out', '<path d="M9 9h8l2 12H7z"/><path d="M11 9V5h4v4M13 13v5"/>'],
+    ['sleep', 'The Keeper falls asleep', '<path d="M17 16A8 8 0 1 1 10 4a6 6 0 0 0 7 12z"/><path d="M17 4h6l-6 6h6"/>'],
+    ['cock', 'A cock crows', '<path d="M7 23v-8q0-8 6-8q5 0 5 5l5 2-5 2q0 7-5 7z"/><path d="M10 7q0-4 3-3q1-3 4 0"/><circle cx="14" cy="11" r=".8"/>'],
+    ['doctor', 'A doctor comes by', '<rect x="4" y="9" width="18" height="13" rx="2"/><path d="M10 9V5h6v4M13 12v7M9.500 15.500h7"/>'],
+    ['pay', 'You pay a second time', '<circle cx="9" cy="15" r="6"/><circle cx="17" cy="11" r="6"/>'],
+    ['riddles', 'You answer three more riddles', '<path d="M9 9q0-5 4-5t4 4q0 3-4 5v3"/><circle cx="13" cy="21.500" r=".9"/>']
+  ];
+  var TITLES = ['What must happen tonight?', 'What stops the toll?', 'What keeps the lamp alight?'];
+  var ASK = [
+    'The gate is shut until day. &ldquo;Choose one thing that might happen tonight,&rdquo; says the Keeper, &ldquo;and press my seal beside the clause that would then make me open the gate. I shall tell you what the Charter says to it.&rdquo;',
+    '&ldquo;Very well. If a cock crowed in my hearing, now, at ten o&rsquo;clock at night, it would be day, and I should have to open my gate. And then I should stand in it with my hand out. Clause 4: by day the Keeper may ask a toll of every traveller. There are four people in my toll-house without a penny between them. They would stay exactly where they are.&rdquo; <b>Press the seal beside the clause that stops him.</b>',
+    '&ldquo;Then it is simple,&rdquo; says the Keeper, and he smiles for the first time: it is like a crack opening in a wall. &ldquo;The cock crows. It is day. And I put out the lamp. Then nothing ties my hands, and I ask for my pennies.&rdquo; <b>Press the seal beside the clause that stops him.</b>'
+  ];
+  var SAY1 = {
+    sun: '&ldquo;The sun will come up, in about eight hours, and I shall be glad to see it. But show me where my Charter says that the <i>sun</i> opens my gate. Read Clause 2 to the letter.&rdquo;',
+    lamp: '&ldquo;If the lamp goes out? Clause 5: I must light it again at once, and I carry a tinderbox in every pocket. In any case, a dark lamp does not end the night. Look at how Clause 2 ends it.&rdquo;',
+    sleep: '&ldquo;If I fall asleep? Clause 10: the Keeper may sleep <i>only if</i> the lamp is out. The lamp is not out, so I may not. I have not slept at night for three hundred years. One gets used to it.&rdquo;',
+    doctor: '&ldquo;A doctor? Clause 7 says that I <i>may</i> open the gate for a doctor. It does not say that I <i>shall</i>. &lsquo;May&rsquo; leaves it to me. And I should leave it shut, because you are not a doctor: you are a cheesemonger with a goose.&rdquo;',
+    pay: '&ldquo;Pay again? You have paid. And now that the lamp is lit, I could not take another penny from you if I wanted to: Clause 6. Nobody ever bought a way through this gate by night.&rdquo;',
+    riddles: '&ldquo;Three more riddles? Clause 8 gives the winner one thing, <i>unless</i> the Charter forbids it. An open gate by night is forbidden: Clause 3. You could answer riddles until breakfast.&rdquo;'
+  };
+  var SAY2 = {
+    4: '&ldquo;Clause 4 is <i>my</i> clause: it is the one that gives me my toll. You will not stop me with that.&rdquo;',
+    5: '&ldquo;Clause 5 keeps the lamp burning. Good. And what does a burning lamp do to a toll? That is another clause.&rdquo;',
+    12: '&ldquo;&lsquo;No change&rsquo; means that I give none back. It does not mean that I take nothing.&rdquo;',
+    '*': '&ldquo;That clause says nothing about tolls. Find me the one that ties my hands.&rdquo;'
+  };
+  var SAY3 = {
+    2: '&ldquo;Clause 2 begins the day. It does not keep a lamp alight.&rdquo;',
+    6: '&ldquo;Clause 6 says what I may not do <i>while</i> the lamp burns. I am going to put the lamp out. Which clause says that I cannot?&rdquo;',
+    10: '&ldquo;Clause 10 is about my sleep, not my lamp.&rdquo;',
+    '*': '&ldquo;That clause does not keep a lamp alight.&rdquo;'
+  };
+
+  function hints() {
+    if (nextFile) return ['go', ['You know what you need now, and you know where you saw one. The button is at the bottom of the screen.']];
+    return [['s1', [
+      'Read all twelve clauses before you touch anything. You want the gate open. Only one clause in the whole Charter makes the Keeper open it: find that clause first, and then ask what has to happen before it begins to work.',
+      'One clause says that the Keeper SHALL open the gate, and when. Another clause says exactly when that moment comes: and it is not the sun that brings it. Watch the difference between &ldquo;may&rdquo; and &ldquo;shall&rdquo;, too: &ldquo;may&rdquo; leaves the choice to the Keeper.',
+      'Day begins when the Keeper hears something: Clause 2 says what. Choose that from the tray. Then press the seal beside the other clause: the one that says what he shall do when day begins.'
+    ]], ['s2', [
+      'He says that he will ask everybody for a toll. One clause says when he may ask, and another says when he shall not. Can both of them be true at the same moment?',
+      'Clause 4 says &ldquo;may&rdquo;: by day he is allowed to ask. Find the clause that says &ldquo;shall neither ask nor take&rdquo;. When is that?',
+      'The clause that you want begins with the words &ldquo;While the lamp burns&rdquo;. The same rule was on the board at the gate, as line VI of the Table.'
+    ]], ['s3', [
+      'He wants to put out the lamp. Is he free to do that? One clause says how long the lamp must burn.',
+      'Find the clause with the word &ldquo;until&rdquo; in it. Until what, exactly? Set it beside the way that Clause 2 begins the day.',
+      'The lamp shall burn until the SUN is up. A cock at midnight begins the day, but it does not bring up the sun. Press the seal beside the clause that keeps the lamp burning.'
+    ]]][stp.step - 1];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    var i, s = '';
+    for (i = 0; i < Math.min(5, TOLL.pebbles()); i++) s += '<circle cx="' + (1193 + i * 4.500) + '" cy="' + (506 - (i % 2) * 2.500) + '" r="3"/>';
+    $('#jarP').innerHTML = s;
+    $('#charter').setAttribute('class', 'hot' + (nextFile ? '' : ' next'));
+    $('#go').classList.toggle('on', !!nextFile && !busy);
+    ER.pips(nextFile ? 3 : stp.step - 1, 3);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The counting-house. The Keeper is sitting on his strongbox, reading Clause 5 for the ninth time.'); return; }
+    if (ER.flag('c-seen')) { ER.say('The counting-house. The Charter is on the far wall, under its little roof.'); return; }
+    busy = true; ER.flag('c-seen', 1);
+    ER.narrate([
+      'Shelves of buttons. A hill of left boots. Four hens asleep in a row, and a strongbox with a lock the size of a loaf.',
+      'And on the far wall, under a little roof of its own, a sheet of old skin as long as a door, with twelve clauses written on it and a red seal as big as a plate: the Charter of Stickle Bridge.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things in the counting-house ---------- */
+  $('#keeper').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Until the sun is up,&rdquo; says the Keeper, to nobody. &ldquo;I wrote that. I was proud of it.&rdquo;'); return; }
+    ER.talk({
+      who: 'Spandrel', role: CAST.spandrel.role, face: FACE('spandrel', '#4a3516'),
+      lines: [
+        { note: 'The Keeper has put on a second pair of spectacles over the first.',
+          a: '&ldquo;Read for as long as you like. You have, by my watch, about eight hours before the sun is up. After that you will not need a hole in my Charter. You will need a faster cart.&rdquo;' },
+        { q: 'What am I looking for?',
+          a: 'You tell me. You want my gate open tonight. I say that the Charter keeps it shut. If you can show me a clause that opens it, I shall open it. I keep every word on that skin, including the ones that I do not like.' },
+        { q: 'How do I show you?',
+          a: 'There is a tray of tokens under the Charter: things that might happen tonight. Choose one. Then press my seal beside the clause that would make me open the gate if it did happen. I shall tell you what the Charter says to that. Each mistake is a pebble.' },
+        { q: 'Did you write it yourself?',
+          a: 'Half of it. The People of Both Banks wrote the other half. They wrote Clause 9, after the trouble with the goats. I wrote Clause 5. It is the best clause of the twelve: &ldquo;The lamp shall burn until the sun is up.&rdquo; Not one word wasted.' }
+      ],
+      clue: { id: 'keeper3', title: 'Spandrel, in the counting-house', kind: 'What he said' }, last: 'Go to the Charter',
+      done: function (seen) { if (!seen) return; ER.flag('c-talk', 1); TOLL.learn(['Charter', 'clause']); ER.say('The Charter is on the far wall, between the two candles.'); }
+    });
+  });
+  $('#daybook').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: DAYBOOK, cls: 'daybook', clue: { id: 'daybook', title: 'The Keeper’s day-book', kind: 'On his desk' } });
+  });
+  $('#jar').addEventListener('click', function (e) { if (busy) return; ER.wordAt(e.clientX, e.clientY, 'jar'); ER.say(TOLL.jar()); });
+  TOLL.thing('#hens', null, 'Four hens asleep in a row: old tolls, one in every ten. &ldquo;They are all called Henrietta,&rdquo; says the Keeper. &ldquo;It saves time.&rdquo;', isBusy);
+  TOLL.thing('#buttons', null, 'Jars and jars of buttons. People who have no penny always have a button. The Keeper has sewn the best ones on his waistcoat.', isBusy);
+  TOLL.thing('#scales', 'scales', 'A pair of brass scales, for cheeses, geese and arguments.', isBusy);
+  TOLL.thing('#boots', null, 'A hill of boots, and every one of them is a left boot. &ldquo;A man with no penny offered me a boot once, in the year of the comet,&rdquo; says the Keeper. &ldquo;I ought not to have said yes. Word got round.&rdquo;', isBusy);
+  TOLL.thing('#box', 'strongbox', 'The strongbox, shut and locked. &ldquo;I lock it when I light the lamp,&rdquo; says the Keeper. &ldquo;No honest counting was ever done by lamplight. At night I read.&rdquo;', isBusy);
+  TOLL.thing('#window', null, 'A round window, and the river going by under it in the dark. A long way off, a few lights are still awake in Overwater.', isBusy);
+  TOLL.thing('#lampD', null, 'The Keeper&rsquo;s reading lamp. By its light he reads the Charter every night, from the first word to the last. He says that it has never once changed.', isBusy);
+  $('#charter').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.read({ html: CHARTER, cls: 'charter' }); return; }
+    openCharter();
+  });
+
+  /* ---------- the Charter: a thing that might happen, and the Keeper's seal ---------- */
+  function openCharter() {
+    var box = ER.el('div', 'cl'), done = false, seal = 0, ev = stp.ev || '', s;
+    ER.addClue('charter', 'The Charter of Stickle Bridge', CHARTER, 'charter', 'On the wall of the counting-house');
+    TOLL.learn(['Charter', 'clause', 'shall', 'may', 'must', 'unless', 'until', 'only if']);
+    s = '<div class="cl-skin">' + HEAD + '<div class="cl-cols">';
+    CL.forEach(function (t, n) { s += '<div class="cl-c" data-n="' + (n + 1) + '"><span class="cl-spot"></span><b>' + (n + 1) + '</b><span class="cl-t">' + ER.gloss(t) + '</span></div>'; });
+    s += '</div></div><div class="cl-side"><h6></h6><p class="cl-ask"></p><div class="cl-list"></div><p class="pmsg"></p><div class="cl-foot"><button type="button" class="btn" id="cl-go">Put it to the Keeper</button></div></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg'), list = box.querySelector('.cl-list'), rows = ER.$$('.cl-c', box);
+    var WON = ['this opens the gate', 'this stops the toll'];
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function render() {
+      var S = stp.step, h = '';
+      box.querySelector('h6').textContent = TITLES[S - 1];
+      box.querySelector('.cl-ask').innerHTML = ER.gloss(ASK[S - 1]);
+      if (S === 1) {
+        h = '<div class="cl-tokens">' + EVENTS.map(function (e) { return '<button type="button" class="cl-tok' + (e[0] === ev ? ' on' : '') + '" data-e="' + e[0] + '"><svg viewBox="0 0 26 26">' + e[2] + '</svg><span>' + e[1] + '</span></button>'; }).join('') + '</div>';
+      } else {
+        h = '<p class="cl-ok"><b>Agreed</b>If a cock crows where the Keeper can hear it, day begins, and he shall open the gate (Clauses 2 and ' + stp.won[0] + ').</p>';
+        if (S === 3) h += '<p class="cl-ok"><b>Agreed</b>While the lamp burns, he shall neither ask nor take a toll (Clause ' + stp.won[1] + ').</p>';
+      }
+      list.innerHTML = h;
+      rows.forEach(function (r) {
+        var n = +r.getAttribute('data-n'), w = stp.won.indexOf(n);
+        r.classList.toggle('won', w >= 0); r.classList.toggle('sealed', n === seal && w < 0);
+        if (w >= 0) r.querySelector('.cl-t').setAttribute('data-won', WON[w]);
+      });
+    }
+    box.addEventListener('click', function (e) {
+      var t = e.target.closest ? e.target.closest('.cl-tok') : null, r = e.target.closest ? e.target.closest('.cl-c') : null, n;
+      if (done) return;
+      if (e.target.closest && e.target.closest('.w')) return;                  /* a dotted word is being looked up, not sealed */
+      if (t) { ev = t.getAttribute('data-e'); ER.sfx.click(); render(); return; }
+      if (!r) return;
+      n = +r.getAttribute('data-n');
+      if (stp.won.indexOf(n) >= 0) { msg('That clause has the Keeper&rsquo;s seal on it already. He agreed to it, and he does not go back.'); return; }
+      seal = seal === n ? 0 : n; TOLL.sfx.seal(); render();
+    });
+    function miss(t) { TOLL.miss(); TOLL.sfx.hm(); paint(); msg(t); }
+    function won(t) { stp.won.push(seal); stp.step++; seal = 0; ER.flag('c-st', stp); ER.sfx.ok(); render(); msg(t); paint(); }
+    box.querySelector('#cl-go').addEventListener('click', function () {
+      if (done) return;
+      var S = stp.step, file;
+      if (S === 1) {
+        if (!ev || !seal) { msg('&ldquo;A thing that might happen, <i>and</i> a clause,&rdquo; says the Keeper. &ldquo;I need both.&rdquo;'); return; }
+        if (SAY1[ev]) { miss(SAY1[ev]); return; }
+        if (!ER.check('ev', ev)) { miss(SAY2['*']); return; }
+        if (!ER.check('c1', seal)) {
+          miss(seal === 2 ? '&ldquo;A cock.&rdquo; The Keeper stops. &ldquo;&hellip;Clause 2 says what a cock&rsquo;s crow <i>begins</i>. It opens nothing. Which clause says what I must <i>do</i> when day begins?&rdquo;'
+            : '&ldquo;A cock?&rdquo; The Keeper stops, and looks at you over both pairs of spectacles. &ldquo;&hellip;That clause would not open my gate. Find me the one that says what I must <i>do</i> when day begins.&rdquo;');
+          return;
+        }
+        stp.ev = ev;
+        won('The Keeper reads the clause aloud, twice. &ldquo;When day begins, the Keeper <i>shall</i> open it. Shall. Not may.&rdquo; He looks at Clause 2. &ldquo;And day begins when the Keeper hears a cock crow. It does not say &lsquo;at sunrise&rsquo;. It does not say &lsquo;in the morning&rsquo;.&rdquo;');
+        return;
+      }
+      if (!seal) { msg('&ldquo;Press the seal beside a clause,&rdquo; says the Keeper. &ldquo;I cannot argue with a finger in the air.&rdquo;'); return; }
+      if (S === 2) {
+        if (!ER.check('c2', seal)) { miss(seal === stp.won[0] || seal === 2 ? '&ldquo;That clause has done its work: it has opened the gate. Now find the one that closes my hand.&rdquo;' : (SAY2[seal] || SAY2['*'])); return; }
+        won('The Keeper reads it, and then reads Clause 4 again. &ldquo;By day I <i>may</i> ask. While the lamp burns I <i>shall not</i>. If I ask for nothing, I keep both clauses. If I ask for one penny, I break one of them.&rdquo; He is quiet for some time. &ldquo;&lsquo;May&rsquo; has never yet won an argument with &lsquo;shall not&rsquo;.&rdquo;');
+        return;
+      }
+      if (!ER.check('c3', seal)) { miss(SAY3[seal] || SAY3['*']); return; }
+      file = ER.exitOk([stp.ev + '>' + stp.won[0] + '>' + stp.won[1] + '>' + seal]);
+      if (!file) { msg('The Keeper looks at his Charter for a long time. Something is wrong with this lock: tell your teacher.'); return; }
+      done = true; nextFile = file; ER.flag('c-file', file); TOLL.done('counting'); busy = true;
+      TOLL.mine('holes', 'The hole in the Charter', '<p>Day begins when the Keeper hears a cock crow (Clause 2). Not at sunrise!</p><p>When day begins, he SHALL open the gate (Clause ' + stp.won[0] + ').</p>' +
+        '<p>While the lamp burns, he SHALL NOT ask or take a toll (Clause ' + stp.won[1] + '). MAY loses to SHALL NOT.</p><p>And the lamp SHALL burn until the SUN is up (Clause ' + seal + ').</p><p>A cock at midnight = an open gate, and nothing to pay.</p>', true);
+      stp.won.push(seal); stp.step = 4; rows.forEach(function (r) { if (+r.getAttribute('data-n') === seal) r.classList.add('won'); r.classList.remove('sealed'); });
+      TOLL.sfx.seal(); msg('The Keeper opens his mouth. He shuts it again. Then he leans very close to the skin, so that his nose almost touches it.');
+      setTimeout(function () { ER.closeAll(); TOLL.solved(); paint(); found(); }, 2800);
+    });
+    render();
+    msg(stp.step === 1 ? 'Twelve clauses, and seven things that might happen tonight. The Keeper holds out a brass seal the size of a doorknob.' : 'The Keeper is waiting, with his arms folded.');
+    ER.open('ov-lock', box);
+  }
+
+  /* ---------- a hole the size of a whole night ---------- */
+  function found() {
+    ER.narrate([
+      'The Keeper reads Clause 5. Then he takes off one pair of spectacles, and reads it again. &ldquo;The lamp shall burn until the <i>sun</i> is up. Not &lsquo;until day begins&rsquo;. Until the sun is up.&rdquo;',
+      '&ldquo;Day begins with a cock. The lamp burns until the sun. I wrote those two clauses on the same afternoon. For three hundred years the cock and the sun have come up together, and I have never once seen the gap between them.&rdquo;',
+      '&ldquo;If a cock crowed tonight where I could hear it, I should have to open my gate, and leave my lamp burning, and stand there until sunrise asking nobody for anything.&rdquo; He sits down on the strongbox, which creaks.',
+      '&ldquo;It is a hole,&rdquo; he says. &ldquo;It is a hole the size of a whole night. But it is a hole with nothing in it. There has been no cock at Stickle Bridge since the year of the fox.&rdquo;',
+      'You think of the toll-house: of a knight by the fire, and the small fat hawk on his wrist, which wore a hood, and did not look very much like a hawk.'
+    ], function () { busy = false; paint(); });
+  }
+  $('#go').addEventListener('click', function () { if (nextFile && !busy) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>

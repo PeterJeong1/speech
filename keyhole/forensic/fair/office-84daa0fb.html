@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Head’s Office · A Smell of Vinegar</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-forensic.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="fair.css">
+<style>
+  body{--bg:#120a0b;--accent:#d9b25a;--font-display:'Libre Baskerville',serif;--font-ui:'Barlow Condensed',sans-serif;--font-body:'Libre Baskerville',serif;
+    --tc-bg:rgba(20,10,12,.96);--tc-ink:#f1e9da;--cap-bg:rgba(22,12,13,.94);--panel:#1e1213;--face-bg:#33161d;--q-ink:#e6c98a;--fade:#070304;--hud-bg:rgba(22,12,13,.8)}
+  .tc-room{font-weight:700;font-style:italic;letter-spacing:0;font-size:clamp(32px,4.8vw,62px)}
+  .sB{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-anchor:middle}
+  .sS{font-family:'Cinzel',serif;font-weight:700;text-anchor:middle}
+  .sI{font-family:'Libre Baskerville',serif;font-style:italic;text-anchor:middle}
+  #rain{animation:rain .9s linear infinite}
+  @keyframes rain{to{transform:translate(-12px,54px)}}
+  #otisS{animation:bob 3.4s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(5px)}}
+  #glasses.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.35)}}
+  .hot:hover{filter:brightness(1.16)}
+
+  /* the blotter */
+  .bx .glass{cursor:pointer}
+  .bx .wet{transform:scaleY(0);transition:transform 4.2s linear}
+  .bx .bd{opacity:0;transition:transform 4.2s ease-out,opacity 1.2s}
+  .bx .cloud{opacity:0;transition:opacity 1.2s}
+  .bx .wh{cursor:pointer}
+  .bx .wh:hover path{fill:#b3261c}
+  .bx .pn{cursor:pointer}
+  .bx .pn circle{fill:#fbf8ea;stroke:#5a4630;stroke-width:2}
+  .bx .pn:hover circle{fill:#fff6c9}
+  .bx .pn.on circle{fill:#b3261c;stroke:#7d1f1f}
+  .bx .pn.on text{fill:#fff}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c2423"/><stop offset="1" stop-color="#4a3432"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3a22"/><stop offset="1" stop-color="#2e1c10"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#060a14"/><stop offset="1" stop-color="#141e33"/></linearGradient>
+  <linearGradient id="curtG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a1820"/><stop offset=".4" stop-color="#7d2430"/><stop offset=".7" stop-color="#5a1820"/><stop offset="1" stop-color="#6e1f2b"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".55"/><stop offset=".5" stop-color="#ffc870" stop-opacity=".16"/><stop offset="1" stop-color="#ffc870" stop-opacity="0"/></radialGradient>
+  <radialGradient id="postG"><stop offset="0" stop-color="#ffd98a" stop-opacity=".8"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="42%" cy="62%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#000" stop-opacity=".34"/><stop offset="1" stop-color="#000" stop-opacity=".9"/></radialGradient>
+  <pattern id="carpet" width="60" height="60" patternUnits="userSpaceOnUse"><rect width="60" height="60" fill="#5a161e"/><path d="M30 6l24 24-24 24L6 30z" fill="none" stroke="#7d2430" stroke-width="3"/></pattern>
+  <clipPath id="winC"><rect x="1100" y="140" width="340" height="350"/></clipPath>
+</defs>
+
+<!-- the wall, the panelling -->
+<rect x="-1000" y="-400" width="3600" height="1050" fill="url(#wallG)"/>
+<rect x="-1000" y="430" width="3600" height="220" fill="#3a2618"/><rect x="-1000" y="424" width="3600" height="10" fill="#5a3d24"/><g id="panels" stroke="#2a1a0e" stroke-width="4"></g>
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#carpet)"/>
+
+<!-- the door, and somebody waiting outside it -->
+<g id="door" class="hot"><rect x="34" y="150" width="212" height="494" fill="#2a1a0e"/><rect x="48" y="164" width="184" height="480" fill="#5a3d24"/><rect x="72" y="196" width="136" height="236" fill="#b9c2c4" opacity=".55"/>
+  <g id="otisS"><circle cx="150" cy="352" r="26" fill="#3a3f46" opacity=".75"/><path d="M106 432q4 -52 44 -52t44 52z" fill="#3a3f46" opacity=".75"/><path d="M132 330l-4 -12 9 7 3 -12 7 11 6 -11 3 13 9 -7 -4 12" fill="#3a3f46" opacity=".75"/></g>
+  <rect x="72" y="196" width="136" height="236" fill="none" stroke="#2a1a0e" stroke-width="6"/><circle cx="214" cy="470" r="9" fill="#c9a23a"/><rect x="92" y="464" width="96" height="26" fill="#c9a23a"/><text x="140" y="482" class="sB" font-size="14" fill="#2a1a0e" letter-spacing="2">HEAD TEACHER</text></g>
+
+<!-- the cabinet with the shield -->
+<g id="cab" class="hot"><rect x="296" y="170" width="270" height="474" fill="#2a1a0e"/><rect x="308" y="182" width="246" height="450" fill="#1a2226"/><g stroke="#5a3d24" stroke-width="6"><path d="M308 320h246M308 448h246M431 182v450"/></g>
+  <path id="shield" d="M340 204h72v52q0 34 -36 50q-36 -16 -36 -50z" fill="#8a6a3a"/><path d="M348 212h56v42q0 28 -28 40q-28 -12 -28 -40z" fill="#c9ced3"/>
+  <g fill="#f4f6f5"><rect x="356" y="222" width="40" height="7"/><rect x="356" y="234" width="40" height="7"/><rect x="356" y="246" width="40" height="7" fill="#fff"/></g>
+  <g fill="#c9a23a"><path d="M470 300v-30q-16 -6 -16 -30h52q0 24 -16 30v30h14v10h-48v-10z"/><path d="M350 430v-22q-12 -4 -12 -22h40q0 18 -12 22v22h10v8h-36v-8z"/><path d="M476 430v-40h20v40h10v8h-40v-8z"/></g>
+  <g fill="#aab2b8"><circle cx="380" cy="520" r="26"/><path d="M366 546h28l6 30h-40z"/></g><rect x="452" y="500" width="72" height="92" fill="#f3e9c6"/><g stroke="#8a6a3a" stroke-width="2"><path d="M460 516h56M460 528h56M460 540h40"/></g>
+  <path d="M308 182h246v450h-246z" fill="#dfeffb" opacity=".06"/><path d="M320 190l60 0-70 150z" fill="#fff" opacity=".06"/></g>
+
+<!-- the motto, the long photograph, the clock -->
+<g id="motto" class="hot"><rect x="640" y="176" width="190" height="124" fill="#2a1a0e"/><rect x="652" y="188" width="166" height="100" fill="#f1e9da"/><path d="M735 198l14 6v14q0 12 -14 18q-14 -6 -14 -18v-14z" fill="#6e1f2b"/>
+  <text x="735" y="256" class="sS" font-size="10" fill="#6e1f2b" letter-spacing=".600">BRACKENFOLD SCHOOL</text><text x="735" y="276" class="sI" font-size="13" fill="#22201b">Be sure, then go on.</text></g>
+<g id="photo" class="hot"><rect x="620" y="330" width="250" height="70" fill="#2a1a0e"/><rect x="630" y="340" width="230" height="50" fill="#d9cfb8"/><g id="heads" fill="#5a4630"></g></g>
+<g id="clock" class="hot"><circle cx="950" cy="236" r="40" fill="#2a1a0e"/><circle cx="950" cy="236" r="33" fill="#f1e9da"/><g stroke="#1c1d22" stroke-width="3"><path d="M950 208v6M950 258v6M922 236h6M972 236h6"/></g>
+  <path d="M950 236l-17 -6" stroke="#1c1d22" stroke-width="5" stroke-linecap="round"/><path d="M950 236l14 22" stroke="#1c1d22" stroke-width="3" stroke-linecap="round"/><circle cx="950" cy="236" r="3.500" fill="#6e1f2b"/></g>
+
+<!-- the window on the car park -->
+<g id="win" class="hot"><rect x="1088" y="128" width="364" height="374" fill="#2a1a0e"/><rect x="1100" y="140" width="340" height="350" fill="url(#skyG)"/>
+  <g clip-path="url(#winC)"><rect x="1100" y="430" width="340" height="60" fill="#0c1016"/><circle cx="1392" cy="250" r="90" fill="url(#postG)" opacity=".6"/><path d="M1392 250v186" stroke="#1c232c" stroke-width="5"/><circle cx="1392" cy="248" r="6" fill="#ffe9b0"/>
+    <path d="M1128 384h112v52h-112z" fill="#dfe7ea"/><path d="M1240 400h26l12 16v20h-38z" fill="#c9d3d8"/><rect x="1128" y="408" width="112" height="9" fill="#2a5aa0"/><rect x="1196" y="390" width="34" height="16" fill="#ffe9a0"/><circle cx="1150" cy="438" r="9" fill="#0a0d11"/><circle cx="1252" cy="438" r="9" fill="#0a0d11"/>
+    <path d="M1304 416q8 -22 30 -22h20q18 0 26 22v20h-76z" fill="#3a4350"/><path d="M1318 414q6 -14 18 -14h16q10 0 16 14z" fill="#ffd98a"/><circle cx="1322" cy="438" r="8" fill="#0a0d11"/><circle cx="1364" cy="438" r="8" fill="#0a0d11"/>
+    <g id="rain" stroke="#9fb7d6" stroke-width="1.300" opacity=".45"></g></g>
+  <path d="M1270 140v350M1100 300h340" stroke="#2a1a0e" stroke-width="8"/>
+  <path d="M1076 110h80q-6 200 -30 400h-50z" fill="url(#curtG)"/><path d="M1464 110h-80q6 200 30 400h50z" fill="url(#curtG)"/><rect x="1066" y="102" width="408" height="14" rx="6" fill="#c9a23a"/></g>
+<g id="coats" class="hot"><path d="M1530 650V230" stroke="#2a1a0e" stroke-width="9"/><path d="M1500 650h60M1506 250l24 -18 24 18" stroke="#2a1a0e" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M1508 258q-22 120 -10 250h52q10 -130 -14 -250z" fill="#1d2a3a"/><path d="M1554 260v290" stroke="#b3261c" stroke-width="7" stroke-linecap="round"/></g>
+
+<!-- Dr Novak and Mrs Shrike, on the far side of the desk -->
+<g id="novak" class="hot" transform="translate(456 640)">
+  <path d="M-56 0q-8 -140 56 -148t56 148z" fill="#27415e"/><path d="M-11 -146l11 40 11-40z" fill="#eef1f0"/><path d="M-8 -134l7 90M8 -134l-7 90" stroke="#b3261c" stroke-width="3.200"/><rect x="-11" y="-50" width="22" height="26" fill="#f2f4ee"/>
+  <rect x="-10" y="-168" width="20" height="22" fill="#d6ae86"/><circle cx="0" cy="-190" r="32" fill="#e4c19c"/>
+  <path d="M-34 -184q-3 -43 34 -43t34 43q3 20 -7 27q6 -32 -6 -49q-21 -12 -42 0q-12 17 -6 49q-10 -7 -7 -27z" fill="#46464b"/>
+  <circle cx="-11" cy="-187" r="10" fill="none" stroke="#15171a" stroke-width="2.600"/><circle cx="11" cy="-187" r="10" fill="none" stroke="#15171a" stroke-width="2.600"/><path d="M-1 -187h2" stroke="#15171a" stroke-width="2.600"/><path d="M-8 -169q8 4 16 0" stroke="#8c4a3c" stroke-width="2.600" fill="none"/>
+</g>
+<g id="shrike" class="hot" transform="translate(1040 640)">
+  <path d="M-62 0q-8 -124 62 -132t62 132z" fill="#a32a2a"/><path d="M-12 -130l12 44 12-44z" fill="#f3efe4"/><path d="M-12 -130l-14 26 26 18M12 -130l14 26 -26 18" fill="#8a2020"/>
+  <g fill="#f4f1e8"><circle cx="-10" cy="-122" r="3.400"/><circle cx="0" cy="-116" r="3.400"/><circle cx="10" cy="-122" r="3.400"/></g>
+  <rect x="-10" y="-152" width="20" height="22" fill="#e0c2a8"/><circle cx="0" cy="-174" r="31" fill="#ead0b6"/>
+  <path d="M-31 -180q3 -36 31 -36t31 36q-14 -17 -31 -17t-31 17z" fill="#b9ad98"/><ellipse cx="0" cy="-216" rx="15" ry="11" fill="#b9ad98"/>
+  <path d="M-18 -180q7 -3 13 1M5 -183q7 -4 13 -1" stroke="#6b6253" stroke-width="2.600" fill="none"/><path d="M-16 -172h9M7 -174h9" stroke="#3b4a55" stroke-width="3"/><path d="M-9 -154q9 -3 18 0" stroke="#8a3a3a" stroke-width="2.600" fill="none"/>
+</g>
+
+<!-- the desk -->
+<circle cx="560" cy="610" r="470" fill="url(#lampG)" pointer-events="none"/>
+<path d="M214 606h1180l56 96H158z" fill="#6b4526"/><path d="M158 702h1292v24H158z" fill="#3d2513"/><rect x="186" y="726" width="1236" height="300" fill="url(#deskG)"/><g stroke="#24150a" stroke-width="4" fill="none"><rect x="230" y="752" width="330" height="120"/><rect x="1048" y="752" width="330" height="120"/></g><circle cx="395" cy="812" r="8" fill="#c9a23a"/><circle cx="1213" cy="812" r="8" fill="#c9a23a"/>
+<g id="plate" class="hot"><path d="M650 706h300l8 26H642z" fill="#c9a23a"/><text x="800" y="725" class="sB" font-size="17" fill="#2a1a0e" letter-spacing="3">MRS D. SHRIKE · HEAD TEACHER</text></g>
+<g id="fern" class="hot"><path d="M258 622h64l-8 -46h-48z" fill="#8a4a2a"/><g stroke="#3d7a4a" stroke-width="5" fill="none" stroke-linecap="round"><path d="M290 576q-10 -50 -44 -66M290 576q0 -60 -8 -82M290 576q14 -50 46 -62M290 576q-24 -30 -52 -30M290 576q26 -28 50 -24"/></g></g>
+<g id="manual" class="hot"><path d="M316 660l66 -22 66 22 -66 22z" fill="#f6f2e6"/><path d="M382 638v44" stroke="#9c917a" stroke-width="2"/><g stroke="#7a705c" stroke-width="1.600"><path d="M334 658l40 -13M340 664l40 -13M392 646l40 13M392 654l34 11"/></g><path d="M316 660l66 22 66 -22v7l-66 22 -66 -22z" fill="#17324d"/></g>
+<g id="lamp" class="hot"><path d="M540 614h70l-8 -10h-54z" fill="#8a6a26"/><path d="M574 606v-56" stroke="#c9a23a" stroke-width="7"/><path d="M500 552q0 -30 74 -30t74 30z" fill="#1f6b4a"/><path d="M510 552h128" stroke="#ffe9b0" stroke-width="5"/><path d="M516 540q20 -12 50 -12" stroke="#fff" stroke-width="3" fill="none" opacity=".3"/></g>
+<g id="bag" class="hot"><rect x="640" y="624" width="96" height="62" rx="4" fill="#dfe7ea" opacity=".35" transform="rotate(-6 688 655)"/><rect x="640" y="624" width="96" height="12" fill="#b3261c" transform="rotate(-6 688 655)"/><rect x="656" y="644" width="64" height="32" fill="#fbfaf2" transform="rotate(-6 688 655)"/><path d="M664 656h46M664 666h30" stroke="#16171c" stroke-width="3" transform="rotate(-6 688 655)"/></g>
+<g id="glasses" class="hot"><path d="M770 630h250l18 60H752z" fill="#1f3d2e"/><path d="M770 630h250l18 60H752z" fill="none" stroke="#8a6a3a" stroke-width="5"/>
+  <g id="tum"></g><path d="M786 566h206" stroke="#e9c93a" stroke-width="6" stroke-linecap="round"/></g>
+<g id="pens" class="hot"><path d="M1050 644l66 -10M1056 660l70 -4M1062 676l60 4" stroke="#16171c" stroke-width="6" stroke-linecap="round"/><g fill="#fdfdf8"><rect x="1112" y="624" width="20" height="14"/><rect x="1122" y="646" width="20" height="14"/><rect x="1118" y="672" width="20" height="14"/></g></g>
+<g id="letter" class="hot"><path d="M1168 628h110l14 60h-124z" fill="#fbf8ee"/><path d="M1180 636h86" stroke="#6e1f2b" stroke-width="3"/><g stroke="#7a705c" stroke-width="1.800"><path d="M1182 648h84M1182 656h86M1182 664h70M1184 672h50"/></g><path d="M1218 690l70 -30" stroke="#16171c" stroke-width="6" stroke-linecap="round"/><path d="M1288 660l10 -4" stroke="#c9a23a" stroke-width="5" stroke-linecap="round"/></g>
+<g id="coffee" class="hot"><rect x="1326" y="556" width="62" height="72" rx="5" fill="#16171c"/><path d="M1336 598h42v22q0 8 -8 8h-26q-8 0 -8 -8z" fill="#dfe7ea" opacity=".4"/><path d="M1336 610h42v10q0 8 -8 8h-26q-8 0 -8 -8z" fill="#3a2414"/><rect x="1338" y="564" width="38" height="18" fill="#3a3f46"/><circle cx="1380" cy="590" r="3" fill="#b3261c"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Run across the car park to the van</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="fair.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, ink = null, told = {};
+
+  /* panelling, rain, the faces in the long photograph, three glasses */
+  (function () {
+    var s = '', i, x, y;
+    for (i = -4; i < 20; i++) s += '<path d="M' + (i * 130 + 20) + ' 438v206"/>';
+    $('#panels').innerHTML = s; s = '';
+    for (i = 0; i < 44; i++) { x = 1090 + (i * 83) % 360; y = 120 + (i * 47) % 380; s += '<path d="M' + x + ' ' + y + 'l-4 20"/>'; }
+    $('#rain').innerHTML = s; s = '';
+    for (i = 0; i < 66; i++) s += '<circle cx="' + (640 + (i % 22) * 10) + '" cy="' + (352 + Math.floor(i / 22) * 13) + '" r="3.500"/>';
+    $('#heads').innerHTML = s; s = '';
+    [820, 890, 960].forEach(function (gx) {
+      s += '<rect x="' + (gx - 6) + '" y="566" width="12" height="84" fill="#fbfaf2"/><path d="M' + (gx - 24) + ' 590l4 66h40l4 -66" fill="#dfeffb" fill-opacity=".14" stroke="#dfeffb" stroke-width="2.500"/><path d="M' + (gx - 20) + ' 644h40" stroke="#9fd0ea" stroke-width="6" opacity=".5"/>';
+    });
+    $('#tum').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'forensic', story: 'fair', storyTitle: 'A Smell of Vinegar', id: 'office', no: 'III', title: 'The Head’s Office',
+    go: 'Go in',
+    intro: [
+      'Vinegar asks one question: is there bicarbonate here? Iodine asks another: is there starch? The powder from the hall floor said yes to both. It fizzed, as the caretaker saw, but only a little, and the iodine turned it blue-black. Otis&rsquo;s bicarbonate froths, and leaves iodine brown. They are not the same powder.',
+      'Starch with a little bicarbonate mixed into it is self-raising flour, and one table in the hall had some: Table 8, WHY DO CAKES RISE?, which belongs to the Castell twins. The same flour was on the fingers that left the arch on Otis&rsquo;s bottle. (The salt by the main door came in on somebody&rsquo;s shoes, off the icy steps. It has nothing to do with anything.)',
+      '&ldquo;So it was the Castells,&rdquo; said Mrs Shrike on the stairs. &ldquo;I would not have thought it of them.&rdquo; &ldquo;It was their flour,&rdquo; said Dr Novak. &ldquo;That is all that six dishes can tell us. Now, about that note.&rdquo;'
+    ],
+    exit: {"next":"van","w":{"b32eab24":"f5e25750"}}, tags: {"pen":["f0728e1c"],"rb":["0c959bec"],"rp":["5539a615"],"ry":["b94a2f53"]},
+    sound: ['lab', { root: 47, bpm: 66, drop: ['arp'] }],      /* a quiet room with a great deal to read and to measure: slower, and nothing plucked */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#glasses').classList.toggle('ready', !!(told.manual && told.note && !nextFile));
+    ER.pips((told.note ? 1 : 0) + (told.manual ? 1 : 0) + (ER.flag('c-stage') ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['The tag is signed and tied to the bag. The rest of the work is in the laboratory&rsquo;s van, out in the car park.']];
+    if (ink && ink.isOpen()) return ink.stage() ? ['read', [
+      'Drag the ruler to a strip, with its zero on the pencil line. Read where the middle of each colour is, and where the water stopped.',
+      'Rf = how far the dye went ÷ how far the water went. On the note&rsquo;s strip the water went 5 cm, not 10. Work out the three numbers for the note, and set the three wheels on the tag.',
+      'Now work out the same three numbers for pen 1 and for pen 3. Do not trust your eye: the strips are not the same length. Which pen has the note&rsquo;s numbers?'
+    ]] : ['setup', [
+      'Each pen makes one dot, on the pencil line of the strip with its own number: carry the pen to the strip and let go. Then every glass needs water: hold the mouse button down on a glass to pour.',
+      'Stop pouring while the water is still below the dot. It must touch the bottom of the paper, and it must not reach the ink. If the dot goes under, the ink washes out into the glass.'
+    ]];
+    if (!told.note || !told.manual) return ['look', [
+      'Two things on the desk first: the clear bag with the note in it, and Dr Novak&rsquo;s field manual, lying open at the left-hand end.',
+      'The manual explains how to ask ink where it came from. Read page 14 before you touch the three glasses.'
+    ]];
+    return ['glasses', ['Three glasses are standing on the green blotter in the middle of the desk, with a strip of filter paper hanging in each. Click them.']];
+  }
+
+  function begin() {
+    paint();
+    FAIR.mine('dishes', 'Six dishes', '<p>A (floor under the bridge) and B (beside print P4): they fizz a little, and iodine turns them blue-black. Starch + bicarbonate = self-raising flour, from Table 8.</p>' +
+      '<p>C, Otis&rsquo;s tub: froths, stays brown. Bicarbonate, and nothing like A.</p><p>D salt (off the icy steps), E sugar, F cornflour.</p><p>The powder in the hall is not Otis&rsquo;s.</p>', true);
+    if (nextFile) { busy = false; showGo(); ER.say('The tag is signed. Dr Novak is putting her coat on.'); return; }
+    if (told.in) { busy = false; ER.say('The head teacher&rsquo;s office, twenty-five past nine.'); return; }
+    tell('in');
+    ER.narrate([
+      'The head teacher&rsquo;s office: a thick red carpet, a green lamp, and a silver shield in a glass case.',
+      'The note is on the desk, in one of Dr Novak&rsquo;s clear bags. Beside it lie three black pens, each with a numbered ticket tied to it.',
+      '&ldquo;I had the caretaker collect every black pen that was in the hall this evening,&rdquo; says Mrs Shrike, sitting down. &ldquo;There were three. One of them was in the boy&rsquo;s pocket.&rdquo;',
+      '&ldquo;Then we shall ask the ink,&rdquo; says Dr Novak. She looks round the room. &ldquo;I shall need three of your glasses, a jug of water, and the papers out of your coffee machine.&rdquo;',
+      '&ldquo;On my desk?&rdquo; &ldquo;On your desk.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- papers ---------- */
+  var NOTE = '<h4>SORRY.<br>I WILL EXPLAIN<br>TOMORROW.</h4><p>EXHIBIT N1. Found on top of the wreck, Table 7, at 7.15 pm. Black ink, capitals. Squared paper, torn from the corner of a larger sheet. No name.</p>';
+  $('#bag').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: NOTE, cls: 'scrap', clue: { id: 'note', title: 'The note from the wreck', kind: 'Exhibit N1' }, done: function () {
+      if (tell('note')) { paint(); ER.say('Five words in black capitals, on a torn corner of squared paper.'); }
+    } });
+  });
+  var DIAG = '<svg viewBox="0 0 190 300"><g fill="none" stroke="#221f1a" stroke-width="1.800" stroke-linecap="round" stroke-linejoin="round"><path d="M14 150v118q0 8 8 8h44q8 0 8 -8V150"/><path d="M8 142h72" stroke="#b08a1a" stroke-width="5"/></g>' +
+    '<rect x="15" y="250" width="58" height="25" fill="#9fd0ea" opacity=".6"/><rect x="34" y="142" width="20" height="118" fill="#fff" stroke="#221f1a" stroke-width="1.200"/><path d="M34 236h20" stroke="#8a8f93" stroke-width="1.500"/><circle cx="44" cy="236" r="3.500" fill="#111"/>' +
+    '<path d="M86 236h10M86 250h10" stroke="#221f1a" stroke-width="1"/><text x="100" y="240" font-family="Patrick Hand,cursive" font-size="14" fill="#17324d">dot on the</text><text x="100" y="254" font-family="Patrick Hand,cursive" font-size="14" fill="#17324d">pencil line</text><text x="20" y="294" font-family="Patrick Hand,cursive" font-size="14" fill="#17324d">water BELOW the dot</text>' +
+    '<rect x="130" y="14" width="24" height="124" fill="#fff" stroke="#221f1a" stroke-width="1.200"/><path d="M130 124h24" stroke="#8a8f93" stroke-width="1.500"/><path d="M130 34h24" stroke="#8a8f93" stroke-width="1.500" stroke-dasharray="3 2"/>' +
+    '<ellipse cx="142" cy="52" rx="9" ry="4" fill="#2b5fd9"/><ellipse cx="142" cy="79" rx="9" ry="4" fill="#b03a9a"/><ellipse cx="142" cy="106" rx="9" ry="4" fill="#e8c21a"/>' +
+    '<g stroke="#b3261c" stroke-width="1.500" fill="none"><path d="M164 124V52M160 56l4 -4 4 4"/><path d="M180 124V34M176 38l4 -4 4 4"/></g><text x="160" y="18" font-family="Patrick Hand,cursive" font-size="14" fill="#b3261c" text-anchor="middle">a   b</text><text x="118" y="38" font-family="Patrick Hand,cursive" font-size="13" fill="#17324d" text-anchor="end">front</text><text x="118" y="128" font-family="Patrick Hand,cursive" font-size="13" fill="#17324d" text-anchor="end">start</text></svg>';
+  var MANUAL = '<h4>Field manual &middot; inks</h4><h3>Whose pen?</h3><div class="two"><div>' +
+    '<p>Black ink is not one colour. It is a mixture of dyes, and <b>chromatography</b> takes it apart.</p>' +
+    '<p><b>1</b> Rule a line in <em>pencil</em> across a strip of filter paper, near the bottom. (Pencil does not dissolve.) Put a dot of the ink on the line.</p>' +
+    '<p><b>2</b> Stand the strip in a little water. The water must touch the paper, and stay <em>below</em> the dot.</p>' +
+    '<p><b>3</b> The water climbs the paper and carries the dyes with it, each at its own speed. The dot comes apart into bands of colour.</p>' +
+    '<p><b>4</b> Take the strip out, and mark how far the water climbed: the <b>solvent front</b>.</p>' +
+    '<p>For each band, measure from the pencil line to the middle of the band (a), and from the pencil line to the front (b).</p></div>' + DIAG + '</div>' +
+    '<p class="rule">Rf = distance moved by the dye ÷ distance moved by the solvent  (a ÷ b)</p>' +
+    '<p style="margin-top:9px">The same ink, in the same solvent, on the same paper, always gives the same Rf values, whether the water has climbed 5 cm or 15. An ink that does not dissolve in water will not move at all. It needs another solvent, such as alcohol.</p><p class="pg">14</p>';
+  $('#manual').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: MANUAL, cls: 'manual', clue: { id: 'manual', title: 'Whose pen? (field manual, page 14)', kind: 'Dr Novak’s field manual' }, done: function () {
+      FAIR.terms(['chromatography', 'dye', 'solvent', 'solvent front', 'Rf value', 'dissolve']);
+      if (tell('manual')) { paint(); ER.say('A dot on a pencil line, a little water, and then a ruler.'); }
+    } });
+  });
+  var LETTER = '<h4>BRACKENFOLD SCHOOL</h4><h5>From the Head Teacher</h5><p>Thursday evening</p><p>Dear Mr and Mrs Brice,</p>' +
+    '<p>I am sorry to have to tell you that this evening, in the school hall, Otis deliberately destroyed another pupil&rsquo;s project for the Science Fair.</p>' +
+    '<p>He will take no part in the Fair tomorrow, and he will not return to school before Wednesday of next week.</p><p>Yours sincerely,</p><div class="sig"></div><p class="small">D. Shrike, Head Teacher</p>';
+  $('#letter').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LETTER, cls: 'head', clue: { id: 'letter', title: 'The letter that has not been sent', kind: 'On Mrs Shrike’s desk' }, done: function () {
+      if (tell('letter')) ER.say('The space for her name is still empty. Her pen is lying across it.');
+    } });
+  });
+
+  /* ---------- things in the room ---------- */
+  FAIR.thing('#pens', null, 'Three black pens. Ticket 1: tied by a string to the clipboard at the main door of the hall. Ticket 2: from Otis Brice&rsquo;s pocket, a thick marker. Ticket 3: a fine black pen, from the pencil tin on Table 7.', isBusy);
+  FAIR.thing('#cab', 'shield', 'THE BRACKENFOLD SHIELD FOR SCIENCE. The last two small silver plates on it both say A. LINDQVIST. The plate under them is still blank, but somebody has polished it already.', isBusy);
+  FAIR.thing('#motto', null, 'The school&rsquo;s motto, in a frame: &ldquo;Be sure, then go on.&rdquo; Mrs Shrike has been sure since half past seven.', isBusy);
+  FAIR.thing('#photo', null, 'The whole school, in one very long photograph. Five hundred and forty people, and every one of them has ten fingers.', isBusy);
+  FAIR.thing('#clock', null, 'Twenty-five past nine. Thirty-five minutes, and then the caretaker locks up.', isBusy);
+  FAIR.thing('#win', null, 'Rain, and the car park. The laboratory&rsquo;s white van is under the lamp. In the only other car a man is sitting with the inside light on, and both hands on the wheel.', isBusy);
+  FAIR.thing('#door', null, 'Through the glass of the door you can see the top of a head. Otis is on the chair outside, where pupils wait for bad news.', isBusy);
+  FAIR.thing('#coats', 'coat stand', 'A coat stand, one dark coat, and an umbrella as thin as a sword.', isBusy);
+  FAIR.thing('#fern', 'fern', 'A fern in a pot. It looks well. It has no idea what is coming.', isBusy);
+  FAIR.thing('#lamp', 'lamp', 'A green desk lamp. It makes everything on the desk look as if it mattered.', isBusy);
+  FAIR.thing('#plate', null, 'MRS D. SHRIKE, HEAD TEACHER. In brass, and screwed down.', isBusy);
+  FAIR.thing('#coffee', 'filter paper', 'A coffee machine. Dr Novak has taken the filter papers out of it and cut them into strips. Mrs Shrike watched her do it.', isBusy);
+  $('#shrike').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(ER.flag('c-stage') ? '&ldquo;Well?&rdquo; says Mrs Shrike. &ldquo;Which pen?&rdquo; &ldquo;When my colleague has measured it,&rdquo; says Dr Novak.' : '&ldquo;He wrote that note himself,&rdquo; says Mrs Shrike. &ldquo;Who else would trouble to? And he had a black pen in his pocket.&rdquo;');
+  });
+  $('#novak').addEventListener('click', function () {
+    if (busy) return;
+    ER.say('&ldquo;The ink for the note&rsquo;s strip I took with a wet brush, from the full stop after SORRY,&rdquo; says Dr Novak. &ldquo;I ran it downstairs, on the last short piece of paper I had. The three pens are yours.&rdquo;', 9000);
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#glasses').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Four strips of paper, dry now, in a bag of their own.'); return; }
+    if (!told.note) { ER.say('&ldquo;Look at the note first,&rdquo; says Dr Novak. &ldquo;It is in the bag beside the lamp. You should know what we are asking about.&rdquo;'); return; }
+    if (!told.manual) { ER.say('&ldquo;Page 14,&rdquo; says Dr Novak, and pushes her field manual along the desk. &ldquo;It is open at the place.&rdquo;'); return; }
+    if (!ink) ink = makeInk();
+    ink.open();
+  });
+
+  /* ---------- three glasses, four strips, a ruler ---------- */
+  function makeInk() {
+    var GX = [190, 400, 610], COL = ['#2b5fd9', '#b03a9a', '#e8c21a'], CORE = ['#173a96', '#7a1f6a', '#b08a00'];
+    /* how far each dye of each ink travels, as a part of the water's journey (pen 2's ink does not dissolve in water) */
+    var INK = [[0.45, 0.3, 0.15], null, [0.9, 0.6, 0.3]], SPOT = [0.9, 0.6, 0.3], RUN = { n: 5, p: 10 };
+    var stage = ER.flag('c-stage') || 0, wh = ER.flag('c-w') || [0, 0, 0], pen = ER.flag('c-pen') || 0, wait = false;
+    var box = ER.el('div', 'bx', '<svg viewBox="0 0 1000 600"></svg><div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="i-go"></button></div>');
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.pmsg'), goBtn = box.querySelector('#i-go');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    var BASE = '<rect width="1000" height="600" fill="#5a3a22"/><rect x="14" y="14" width="972" height="572" rx="8" fill="#1f3d2e"/><rect x="14" y="14" width="972" height="572" rx="8" fill="none" stroke="#8a6a3a" stroke-width="6"/>';
+
+    /* --- first the glasses --- */
+    function setup() {
+      var dots = [0, 0, 0], level = [0, 0, 0], ok = [0, 0, 0], ran = false, pourT = 0, ticks = 0, s = BASE, g, gx;
+      s += '<text x="400" y="62" class="tH" font-size="22" fill="#e9dcc0" text-anchor="middle" opacity=".9">one dot from each pen, on its own strip &#183; then water: hold the mouse down on a glass</text><path d="M96 110h608" stroke="#e9c93a" stroke-width="12" stroke-linecap="round"/><path d="M700 110l22 0" stroke="#3a2414" stroke-width="12" stroke-linecap="round"/>';
+      for (g = 0; g < 3; g++) {
+        gx = GX[g];
+        s += '<g class="glass" data-g="' + g + '"><rect x="' + (gx - 24) + '" y="104" width="48" height="366" fill="#fbfaf2"/><text x="' + gx + '" y="158" class="tH" font-size="30" fill="#8a8f93" text-anchor="middle">' + (g + 1) + '</text>' +
+          '<g transform="translate(' + gx + ' 470)"><rect class="wet" x="-24" y="-290" width="48" height="290" fill="#9fb9c9" opacity=".3"/></g>' +
+          '<path d="M' + (gx - 24) + ' 430h48" stroke="#8a8f93" stroke-width="1.800"/><g transform="translate(' + gx + ' 430)" id="run' + g + '"></g><circle id="dot' + g + '" cx="' + gx + '" cy="430" r="6.500" fill="#0c0c10" style="display:none"/>' +
+          '<rect id="wat' + g + '" x="' + (gx - 62) + '" y="524" width="124" height="0" fill="#9fd0ea" opacity=".5"/><ellipse class="cloud" id="cl' + g + '" cx="' + gx + '" cy="490" rx="44" ry="22" fill="#0c0c10"/>' +
+          '<path d="M' + (gx - 70) + ' 226l8 296q0 8 8 8h108q8 0 8 -8l8 -296" fill="#dfeffb" fill-opacity=".08" stroke="#dfeffb" stroke-width="3.500"/><path d="M' + (gx - 56) + ' 250l5 240" stroke="#fff" stroke-width="5" opacity=".18" stroke-linecap="round"/></g>';
+      }
+      s += '<g opacity=".95"><path d="M850 86h84l-8 84q-2 12 -14 12h-40q-12 0 -14 -12z" fill="#dfeffb" fill-opacity=".14" stroke="#dfeffb" stroke-width="3.500"/><path d="M934 104q30 4 26 34t-32 22" fill="none" stroke="#dfeffb" stroke-width="6"/><path d="M856 122h72l-5 46q-2 10 -12 10h-38q-10 0 -12 -10z" fill="#9fd0ea" opacity=".5"/><path d="M850 86l-14 -8" stroke="#dfeffb" stroke-width="3.500" stroke-linecap="round"/></g>';
+      [['#8a9298', 5, 'hall door, on a string'], ['#16171c', 11, 'Otis&rsquo;s marker'], ['#27333a', 4, 'the tin on Table 7']].forEach(function (pp, k) {
+        s += '<g id="pen' + k + '" class="tool"><rect x="-10" y="-16" width="200" height="32" fill="#000" opacity="0"/><path d="M0 0l16 -' + (pp[1] / 2 + 1) + 'v' + (pp[1] + 2) + 'z" fill="#0c0c10"/><rect x="16" y="-' + (pp[1] / 2 + 2) + '" width="118" height="' + (pp[1] + 4) + '" rx="' + (pp[1] / 2 + 2) + '" fill="' + pp[0] + '"/>' +
+          '<rect x="140" y="-13" width="40" height="26" fill="#fdfdf8" stroke="#8a6a3a" stroke-width="1.500"/><path d="M134 0h6" stroke="#c9c2ad" stroke-width="1.500"/><text x="160" y="8" class="tK" font-size="20" fill="#b3261c" text-anchor="middle">' + (k + 1) + '</text>' +
+          '<text x="20" y="' + (pp[1] / 2 + 22) + '" class="tM" font-size="10.500" fill="#e9dcc0">' + pp[2] + '</text></g>';
+      });
+      svg.innerHTML = s;
+      goBtn.textContent = 'Wait ten minutes'; goBtn.disabled = true;
+      function wat(g) { var r = svg.querySelector('#wat' + g); r.setAttribute('y', 524 - level[g]); r.setAttribute('height', level[g]); svg.querySelector('.glass[data-g="' + g + '"]').setAttribute('data-level', level[g]); }
+      function ready() { goBtn.disabled = !(ok[0] && ok[1] && ok[2]) || ran; }
+      [0, 1, 2].forEach(function (k) {
+        var t = FAIR.tool(svg, svg.querySelector('#pen' + k), { x: 780, y: 262 + k * 96 }, {
+          end: function (p) {
+            var g = -1, i;
+            t.home();
+            if (ran || wait) return;
+            for (i = 0; i < 3; i++) if (Math.abs(p.x - GX[i]) < 34 && p.y > 104 && p.y < 500) g = i;
+            if (g < 0) return;
+            if (g !== k) { msg('&ldquo;Strip ' + (g + 1) + ' is for pen ' + (g + 1) + ',&rdquo; says Dr Novak. &ldquo;If we mix them up now we shall prove something very interesting, and quite untrue.&rdquo;'); return; }
+            if (dots[g]) return;
+            if (level[g] >= 50) { msg('Not into a wet strip. That glass has to be started again first.'); return; }
+            dots[g] = 1; svg.querySelector('#dot' + g).style.display = ''; FAIR.sfx.scratch();
+            msg('One black dot from pen ' + (k + 1) + ', on the pencil line of strip ' + (k + 1) + '.' + (dots[0] && dots[1] && dots[2] ? ' That is all three. Now the water.' : ''));
+          }
+        });
+      });
+      function stop() {
+        var g = pourT ? +pourT.g : -1;
+        if (!pourT) return;
+        clearInterval(pourT.t); pourT = 0;
+        if (level[g] < 56) { msg('The water has not reached the paper in glass ' + (g + 1) + ' yet. A little more.'); return; }
+        if (level[g] < 86) { ok[g] = 1; ready(); FAIR.sfx.clip(); msg('Glass ' + (g + 1) + ': the water touches the bottom of the paper, and the dot is well above it. Good.' + (ok[0] && ok[1] && ok[2] ? ' All three are standing. Now there is nothing to do but wait.' : '')); return; }
+        wait = true; svg.querySelector('#cl' + g).style.opacity = 0.7; svg.querySelector('#dot' + g).style.display = 'none'; ER.sfx.no();
+        msg('Too much. The dot in glass ' + (g + 1) + ' is under water, and the ink is going out into the glass instead of up the paper. Dr Novak empties it into the fern, and hangs a clean strip.');
+        setTimeout(function () { level[g] = 0; dots[g] = 0; ok[g] = 0; wat(g); svg.querySelector('#cl' + g).style.opacity = 0; wait = false; ready(); }, 2400);
+      }
+      svg.addEventListener('pointerdown', function (e) {
+        var gl = e.target.closest ? e.target.closest('.glass') : null, g;
+        if (!gl || ran || wait || e.button) return;
+        g = +gl.getAttribute('data-g');
+        if (ok[g]) { msg('Glass ' + (g + 1) + ' is ready. Leave it alone.'); return; }
+        if (!dots[g]) { msg('No water yet. Strip ' + (g + 1) + ' has no ink on it: carry pen ' + (g + 1) + ' to its pencil line first.'); return; }
+        pourT = { g: g, t: setInterval(function () { level[g] = Math.min(150, level[g] + 1.5); wat(g); if (++ticks % 5 === 0) FAIR.sfx.pour(); if (level[g] >= 150) stop(); }, 50) };
+      });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) { svg.addEventListener(ev, stop); });
+      goBtn.onclick = function () {
+        if (goBtn.disabled || ran) return;
+        ran = true; goBtn.disabled = true;
+        [0, 1, 2].forEach(function (g) {
+          var run = svg.querySelector('#run' + g), h = '', w = svg.querySelector('.glass[data-g="' + g + '"] .wet');
+          if (INK[g]) INK[g].forEach(function (rf, j) { h += '<ellipse class="bd" rx="19" ry="8" fill="' + COL[j] + '" data-y="' + (-rf * 250) + '"/>'; });
+          run.innerHTML = h;
+          setTimeout(function () {
+            w.style.transform = 'scaleY(1)';
+            ER.$$('.bd', run).forEach(function (b) { b.style.opacity = 0.9; b.style.transform = 'translateY(' + b.getAttribute('data-y') + 'px)'; });
+            if (INK[g]) svg.querySelector('#dot' + g).style.opacity = 0.12;
+          }, 60);
+        });
+        msg('The water begins to climb. It takes the black dots with it, and as they go, they stop being black.');
+        setTimeout(function () {
+          msg('Ten minutes. Strips 1 and 3 have come apart into a blue, a purple and a yellow. Strip 2 has not moved at all: Otis&rsquo;s marker is the kind that does not dissolve in water. Dr Novak lifts all three out to dry.');
+          goBtn.textContent = 'Lay them on the blotter'; goBtn.disabled = false;
+          goBtn.onclick = function () { stage = 1; ER.flag('c-stage', 1); paint(); reading(); };
+        }, 5000);
+      };
+      msg('Three glasses, three strips of filter paper hanging from a pencil, and three pens with tickets on. The note&rsquo;s own strip is done already: Dr Novak ran it downstairs.');
+    }
+
+    /* --- then the ruler --- */
+    function reading() {
+      var Y0 = 536, CM = 30, SX = [96, 250, 404, 558], s = BASE, i, j, top, front, d, WL = ['BLUE', 'PURPLE', 'YELLOW'];
+      function strip(i, name, sub, run, rfs) {
+        var x = SX[i], q = '';
+        top = Y0 - (run + 0.7) * CM; front = Y0 - run * CM;
+        q += '<rect x="' + (x - 30) + '" y="' + top + '" width="60" height="' + (Y0 + 30 - top) + '" fill="#fbfaf2"/><rect x="' + (x - 30) + '" y="' + front + '" width="60" height="' + (Y0 + 30 - front) + '" fill="#e9eef0" opacity=".55"/>' +
+          '<path d="M' + (x - 30) + ' ' + Y0 + 'h60" stroke="#8a8f93" stroke-width="1.800"/><path d="M' + (x - 30) + ' ' + front + 'h60" stroke="#8a8f93" stroke-width="1.800" stroke-dasharray="5 3"/>' +
+          '<text x="' + x + '" y="' + (front - 5) + '" class="tH" font-size="13" fill="#8a8f93" text-anchor="middle">water got here</text><text x="' + x + '" y="' + (Y0 + 18) + '" class="tH" font-size="13" fill="#8a8f93" text-anchor="middle">start</text>';
+        if (rfs) rfs.forEach(function (rf, j) {
+          d = Y0 - rf * run * CM;
+          q += '<rect x="' + (x - 13) + '" y="' + d + '" width="26" height="' + (Y0 - d) + '" fill="' + COL[j] + '" opacity=".08"/><ellipse cx="' + x + '" cy="' + d + '" rx="23" ry="9.500" fill="' + COL[j] + '" opacity=".8"/><ellipse cx="' + x + '" cy="' + d + '" rx="14" ry="3" fill="' + CORE[j] + '" opacity=".9"/>';
+        }); else q += '<circle cx="' + x + '" cy="' + Y0 + '" r="7" fill="#0c0c10"/>';
+        q += '<rect x="' + (x - 48) + '" y="34" width="96" height="46" fill="#f3e9c0"/><text x="' + x + '" y="55" class="tK" font-size="17" fill="#1c1d22" text-anchor="middle">' + name + '</text><text x="' + x + '" y="72" class="tM" font-size="9" fill="#5a4630" text-anchor="middle">' + sub + '</text>';
+        return q;
+      }
+      s += strip(0, 'THE NOTE', 'exhibit N1', RUN.n, SPOT) + strip(1, 'PEN 1', 'hall door', RUN.p, INK[0]) + strip(2, 'PEN 2', 'Otis', RUN.p, null) + strip(3, 'PEN 3', 'Table 7 tin', RUN.p, INK[2]);
+      /* the tag */
+      s += '<g transform="rotate(1.500 846 320)"><path d="M700 96h270q12 0 12 12v420q0 12 -12 12H700q-12 0 -12 -12V108q0 -12 12 -12z" fill="#e9d6a8"/><circle cx="716" cy="124" r="9" fill="#1f3d2e"/><circle cx="716" cy="124" r="13" fill="none" stroke="#8a6a3a" stroke-width="3"/>' +
+        '<text x="742" y="131" class="tM" font-size="14.500" fill="#3a2414" letter-spacing="1">EXHIBIT N1 &#183; THE NOTE</text><path d="M700 148h270" stroke="#8a6a3a" stroke-width="2"/><text x="708" y="176" class="tB" font-size="17" fill="#3a2414" letter-spacing="2">Rf OF ITS THREE DYES</text>';
+      for (j = 0; j < 3; j++) {
+        s += '<ellipse cx="724" cy="' + (214 + j * 62) + '" rx="13" ry="7" fill="' + COL[j] + '"/><text x="746" y="' + (220 + j * 62) + '" class="tB" font-size="19" fill="#3a2414" letter-spacing="1">' + WL[j] + '</text>' +
+          '<rect x="836" y="' + (190 + j * 62) + '" width="78" height="46" rx="4" fill="#fbf8ea" stroke="#5a4630" stroke-width="2"/><text id="wv' + j + '" x="875" y="' + (223 + j * 62) + '" class="tM" font-size="26" fill="#1c1d22" text-anchor="middle"></text>' +
+          '<g class="wh" data-j="' + j + '" data-d="5"><rect x="920" y="' + (188 + j * 62) + '" width="40" height="24" fill="#000" opacity="0"/><path d="M928 ' + (208 + j * 62) + 'l12 -15 12 15z" fill="#5a4630"/></g>' +
+          '<g class="wh" data-j="' + j + '" data-d="-5"><rect x="920" y="' + (214 + j * 62) + '" width="40" height="24" fill="#000" opacity="0"/><path d="M928 ' + (218 + j * 62) + 'l12 15 12 -15z" fill="#5a4630"/></g>';
+      }
+      s += '<path d="M700 390h270" stroke="#8a6a3a" stroke-width="2"/><text x="708" y="420" class="tB" font-size="17" fill="#3a2414" letter-spacing="2">THE SAME INK AS PEN</text>';
+      for (j = 1; j <= 3; j++) s += '<g class="pn" data-p="' + j + '"><circle cx="' + (700 + j * 68) + '" cy="462" r="24"/><text x="' + (700 + j * 68) + '" y="471" class="tK" font-size="26" fill="#1c1d22" text-anchor="middle">' + j + '</text></g>';
+      s += '<text x="708" y="522" class="tH" font-size="16" fill="#5a4630">measured by: _______ &#183; checked: M.N.</text></g>';
+      /* the ruler: its own drawing starts from its zero */
+      s += '<g id="rul" class="tool"><rect x="0" y="-378" width="44" height="394" rx="3" fill="#e9c98a" stroke="#8a6a3a" stroke-width="1.500"/>';
+      for (i = 0; i <= 120; i++) s += '<path d="M0 ' + (-i * 3) + 'h' + (i % 10 === 0 ? 17 : i % 5 === 0 ? 12 : 6) + '" stroke="#3a2414" stroke-width="' + (i % 5 === 0 ? 1.2 : 0.7) + '"/>' + (i % 10 === 0 ? '<text x="30" y="' + (-i * 3 + 4.5) + '" class="tM" font-size="12" fill="#3a2414" text-anchor="middle">' + (i / 10) + '</text>' : '');
+      s += '<text x="30" y="-366" class="tM" font-size="8" fill="#3a2414" text-anchor="middle">cm</text></g>';
+      svg.innerHTML = s;
+      goBtn.textContent = 'Sign the tag'; goBtn.disabled = false;
+      var rul = FAIR.tool(svg, svg.querySelector('#rul'), { x: 636, y: 560 }, {
+        end: function (p) {
+          var x = p.x, k, best = -1;
+          for (k = 0; k < 4; k++) if (Math.abs(x - (SX[k] + 32)) < 40) best = k;
+          if (best >= 0 && Math.abs(p.y - Y0) < 30) { rul.set(SX[best] + 32, Y0); FAIR.sfx.clip(); }
+        }
+      }, [20, 380, 660, 590]);
+      function draw() {
+        for (var j = 0; j < 3; j++) svg.querySelector('#wv' + j).textContent = (wh[j] / 100).toFixed(2);
+        ER.$$('.pn', svg).forEach(function (n) { n.classList.toggle('on', +n.getAttribute('data-p') === pen); });
+      }
+      ER.$$('.wh', svg).forEach(function (n) {
+        n.addEventListener('click', function () {
+          var j = +n.getAttribute('data-j');
+          if (wait || nextFile) return;
+          wh[j] = Math.max(0, Math.min(100, wh[j] + (+n.getAttribute('data-d')))); ER.flag('c-w', wh); ER.sfx.tick(); draw();
+        });
+      });
+      ER.$$('.pn', svg).forEach(function (n) {
+        n.addEventListener('click', function () { if (wait || nextFile) return; pen = +n.getAttribute('data-p'); ER.flag('c-pen', pen); FAIR.sfx.clip(); draw(); });
+      });
+      goBtn.onclick = function () {
+        var KEY = ['rb', 'rp', 'ry'], j, bad = -1, file;
+        if (wait || nextFile) return;
+        if (!wh[0] && !wh[1] && !wh[2]) { msg('The three wheels on the tag are still at nought. Measure the note&rsquo;s strip first: how far each colour went, and how far the water went.'); return; }
+        for (j = 0; j < 3; j++) if (!ER.check(KEY[j], wh[j])) { bad = j; break; }
+        if (bad >= 0) {
+          ER.sfx.no(); ER.shake(svg.querySelector('#wv' + bad));
+          if (wh[0] === 45 && wh[1] === 30 && wh[2] === 15) msg('&ldquo;You have divided by ten,&rdquo; says Dr Novak. &ldquo;Put the ruler against the note&rsquo;s strip again. How far did the water get on <b>that</b> one?&rdquo;');
+          else if (wh[bad] > 100 || (wh[0] <= wh[1] || wh[1] <= wh[2])) msg('&ldquo;Blue went furthest, then purple, then yellow,&rdquo; says Dr Novak. &ldquo;Your numbers should go the same way. Rf is the dye&rsquo;s distance divided by the water&rsquo;s, both measured from the pencil line.&rdquo;');
+          else msg('&ldquo;Check the ' + WL[bad].toLowerCase() + ' one,&rdquo; says Dr Novak. &ldquo;The middle of the band, from the pencil line. Then the dotted line where the water stopped, from the pencil line. Divide the first by the second.&rdquo;');
+          return;
+        }
+        if (!pen) { msg('&ldquo;Those are the note&rsquo;s three numbers,&rdquo; says Dr Novak. &ldquo;Now do the same sum for the pens, and tell me which pen has them.&rdquo;'); return; }
+        if (!ER.check('pen', pen)) {
+          ER.sfx.no(); ER.shake(svg.querySelector('.pn.on'));
+          if (pen === 2) msg('&ldquo;Pen 2 never left its pencil line,&rdquo; says Dr Novak. &ldquo;Its ink does not dissolve in water at all, and the note&rsquo;s ink does. Whatever wrote the note, it was not that.&rdquo;');
+          else msg('&ldquo;Pen 1,&rdquo; says Mrs Shrike, leaning over the desk. &ldquo;Anybody can see it. The colours are level.&rdquo; &ldquo;Level,&rdquo; says Dr Novak, &ldquo;on a strip twice as long. Work out the Rf values of pen 1 before you sign for it.&rdquo;');
+          pen = 0; ER.flag('c-pen', 0); draw(); return;
+        }
+        file = ER.exitOk([pen + '-' + wh.join('-')]);
+        if (!file) { msg('The tag will not tie. Something is wrong with this page: tell your teacher.'); return; }
+        wait = true; nextFile = file; ER.flag('c-file', file);
+        var s0 = ER.state(); s0.done = s0.done || {}; s0.done.office = 1; ER.persist(true);
+        FAIR.sfx.stamp(); msg('Dr Novak checks your three sums with the ruler, and then does the six for pens 1 and 3 herself. She writes M.N. on the tag and ties it to the bag.');
+        setTimeout(function () {
+          ER.closeAll(); FAIR.solved(); paint(); busy = true;
+          ER.narrate([
+            'Mrs Shrike looks at the three pens on her desk for some time. Then she looks at their tickets.',
+            '&ldquo;That makes no sense at all,&rdquo; she says.',
+            '&ldquo;Not yet,&rdquo; says Dr Novak. &ldquo;But ink can only tell us which pen. It cannot tell us whose hand. There is one thing left that can, and the lamp for it is in the van.&rdquo;',
+            'She picks up the bag with the bottle in it, and the box of cards. &ldquo;Coat,&rdquo; she says to you. &ldquo;It is raining.&rdquo;'
+          ], function () { busy = false; showGo(); });
+        }, 2800);
+      };
+      draw();
+      msg('Four strips, dry. The note&rsquo;s is the short one: it was all the paper Dr Novak had left. Drag the ruler to a strip and put its zero on the pencil line.');
+    }
+    if (stage) reading(); else setup();
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return stage; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

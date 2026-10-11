@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Under the Arch · The Keeper Gives No Change</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="../../assets/wordkit.css">
+<link rel="stylesheet" href="toll.css">
+<style>
+  body{--bg:#081419;--accent:#9fdccf;--font-display:'Uncial Antiqua',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(7,18,24,.96);--tc-ink:#e3ece8;--cap-bg:rgba(7,18,24,.94);--cap-ink:#eef4f0;--panel:#10262f;--face-bg:#1d3a44;--q-ink:#a9d6cc;--fade:#03090c;--hud-bg:rgba(7,18,24,.78)}
+  .tc-room,.tk-name{font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700;letter-spacing:.03em}      /* down here the lettering is cut in stone */
+  .tk-name{font-size:24px}
+  .shim{stroke-dasharray:34 110;animation:shim 7s linear infinite}
+  .shim:nth-child(2n){animation-duration:9.5s;stroke-dasharray:22 84}
+  .shim:nth-child(3n){animation-duration:5.5s}
+  @keyframes shim{to{stroke-dashoffset:-144}}
+  #refl{animation:refl 3.2s steps(4) infinite}
+  @keyframes refl{50%{opacity:.6}}
+  #lanGlow{animation:lg 3.8s steps(4) infinite}
+  @keyframes lg{50%{opacity:.8}}
+  .drip{animation:drip 4.2s linear infinite;opacity:0}
+  .drip:nth-child(2){animation-delay:-1.6s;animation-duration:5.3s}.drip:nth-child(3){animation-delay:-3.1s;animation-duration:6.1s}
+  @keyframes drip{0%{transform:translateY(0);opacity:0}6%{opacity:.9}62%{transform:translateY(590px);opacity:.9}64%,100%{transform:translateY(590px);opacity:0}}
+  .stone .num{fill:#2d3531}
+  .stone.next .slab{animation:nudge 1.7s ease-in-out infinite}
+  .stone.done .num{fill:#f0e2a0}
+  .stone.done .face{fill:url(#slabLit)}
+  .stone.done .cut{stroke:#5d6a5e}
+
+  /* a riddle on its stone */
+  .rs{display:grid;grid-template-columns:minmax(0,640px) 380px;gap:26px;width:min(1050px,96vw);align-items:start}
+  .rs-stone{position:relative;padding:20px 44px 22px;background:#6b716a linear-gradient(160deg,#8d948c,#525852);color:#f3f4ea;border-radius:170px 170px 8px 8px / 76px 76px 8px 8px;
+    box-shadow:0 26px 70px rgba(0,0,0,.75),inset 0 0 0 3px rgba(255,255,255,.08);text-shadow:0 -1px 0 rgba(0,0,0,.55)}
+  .rs-stone.grind{animation:grind .9s}
+  @keyframes grind{0%{transform:rotate(0)}20%{transform:rotate(-1.4deg) translateX(-5px)}45%{transform:rotate(1.2deg) translateX(5px)}70%{transform:rotate(-.6deg) translateX(-2px)}100%{transform:rotate(0)}}
+  .rs-stone h4{margin:0 0 6px;text-align:center;font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700;font-size:34px;line-height:1;color:#d7dccf}
+  .rs-text{margin:0;font-family:'Almendra',serif;font-size:25px;line-height:1.36;text-align:center}
+  .rs-text .wk-w{padding:0 1px}
+  .rs-text .w{border-bottom-color:rgba(243,244,234,.55)}
+  .rs-text .rs-piv{display:inline-block;padding:0 6px;background:#eef3c8;color:#2b3028;text-shadow:none;border-radius:3px}
+  .rs-how{margin:14px 0 0;text-align:center;font-family:'Cinzel',serif;font-weight:700;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:#e3ebcf;line-height:1.5}
+  .rs-ans{display:none;margin-top:12px;padding-top:14px;border-top:1px solid rgba(240,240,230,.35)}
+  .rs-stone.turned .rs-ans{display:block}
+  .rs-bowl{display:flex;justify-content:center;align-items:center;flex-wrap:wrap}
+  .rs-coin{width:40px;height:40px;margin:0 3px;border-radius:50%;border:2px dashed rgba(240,240,230,.5);background:transparent}
+  .rs-coin.on{border:0;background:radial-gradient(circle at 34% 30%,#f2b780,#9a4f1c 70%);box-shadow:0 3px 5px rgba(0,0,0,.5),inset 0 0 0 3px rgba(90,40,10,.45)}
+  .rs-coin:hover{outline:2px solid #eef3c8;outline-offset:1px}
+  .rs-count{margin:8px 0 0;text-align:center;font-family:'Almendra',serif;font-weight:700;font-size:20px}
+  .rs-foot{display:flex;justify-content:center;margin-top:10px}
+  .rs-foot .btn{--accent:#f3f4ea}
+  .rs .wk{--wk-size:34px;--wk-font:'Cinzel',serif;--wk-ink:#f3f4ea;--wk-line:rgba(240,240,230,.6);font-weight:700}
+  .rs .wk-typed{margin:0 auto;max-width:420px}
+  .rs .wk-board{margin-top:10px}
+  .rs-side .pmsg{margin-top:14px;min-height:150px}
+  @media (max-width:900px){.rs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#060e1c"/><stop offset=".6" stop-color="#112d45"/><stop offset="1" stop-color="#2a5a66"/></linearGradient>
+  <linearGradient id="waterG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22505c"/><stop offset=".4" stop-color="#0f2e3a"/><stop offset="1" stop-color="#06151c"/></linearGradient>
+  <linearGradient id="slabG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8d968e"/><stop offset=".5" stop-color="#6a726c"/><stop offset="1" stop-color="#474f4a"/></linearGradient>
+  <linearGradient id="slabLit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9c5b4"/><stop offset=".5" stop-color="#8d9a8c"/><stop offset="1" stop-color="#5a655c"/></linearGradient>
+  <linearGradient id="seatG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a635d"/><stop offset="1" stop-color="#343b37"/></linearGradient>
+  <radialGradient id="moonG"><stop offset="0" stop-color="#f1f6ff" stop-opacity=".55"/><stop offset="1" stop-color="#bfe0e6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="lanG"><stop offset="0" stop-color="#ffd98a" stop-opacity=".7"/><stop offset=".35" stop-color="#ffab4a" stop-opacity=".2"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="52%" r="74%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#03090c" stop-opacity=".25"/><stop offset="1" stop-color="#03090c" stop-opacity=".85"/></radialGradient>
+</defs>
+
+<!-- the night, seen from under the bridge -->
+<rect x="-1000" y="-640" width="3600" height="1130" fill="url(#skyG)"/>
+<g id="stars" fill="#eaf4ff"></g>
+<g id="moon" class="hot"><circle cx="560" cy="250" r="120" fill="url(#moonG)"/><circle cx="560" cy="250" r="42" fill="#eef4fb"/><circle cx="546" cy="238" r="8" fill="#d3deea"/><circle cx="572" cy="264" r="6" fill="#d3deea"/><circle cx="574" cy="234" r="4" fill="#d3deea"/></g>
+<g fill="#1b3f58" opacity=".8"><ellipse cx="760" cy="300" rx="190" ry="12"/><ellipse cx="900" cy="322" rx="120" ry="8"/></g>
+<path d="M-1000 474Q300 444 700 466T1500 456L2600 474V510H-1000Z" fill="#0a1b23"/>
+<g fill="#0a1b23"><path d="M300 462q10-70 20 0zM334 464q12-90 24 0zM372 462q8-56 16 0zM1040 458q12-84 24 0zM1076 460q9-60 18 0zM1230 456q14-96 28 0z"/><ellipse cx="880" cy="452" rx="60" ry="20"/><ellipse cx="1340" cy="450" rx="70" ry="22"/></g>
+
+<!-- Stickle Water -->
+<g id="water" class="hot"><rect x="-1000" y="480" width="3600" height="1020" fill="url(#waterG)"/>
+  <g id="refl" stroke="#e6f1f6" stroke-linecap="round" fill="none"><path d="M520 500h80" stroke-width="5" opacity=".8"/><path d="M506 522h108" stroke-width="4" opacity=".65"/><path d="M530 546h64" stroke-width="4" opacity=".6"/><path d="M500 572h124" stroke-width="3.500" opacity=".5"/><path d="M526 600h72" stroke-width="3" opacity=".42"/><path d="M510 632h104" stroke-width="3" opacity=".34"/><path d="M536 664h52" stroke-width="2.500" opacity=".28"/></g>
+  <g stroke="#6fa9b0" stroke-width="2" stroke-linecap="round" opacity=".42" fill="none"><path class="shim" d="M180 520h400"/><path class="shim" d="M700 540h520"/><path class="shim" d="M240 584h360"/><path class="shim" d="M820 610h460"/><path class="shim" d="M200 650h560"/><path class="shim" d="M900 672h380"/></g></g>
+
+<!-- the ledge under the arch -->
+<path d="M-1000 708Q200 686 700 702T1500 706L2600 718V1500H-1000Z" fill="#1d2627"/><path d="M-1000 708Q200 686 700 702T1500 706L2600 718" stroke="#3d4e4e" stroke-width="4" fill="none"/>
+<g id="pebbles"></g>
+<g fill="#a9d9df"><ellipse class="drip" cx="430" cy="150" rx="2.500" ry="6"/><ellipse class="drip" cx="770" cy="110" rx="2.500" ry="6"/><ellipse class="drip" cx="1010" cy="122" rx="2.500" ry="6"/></g>
+
+<!-- three stones with writing cut into them -->
+<g id="stones"></g>
+
+<!-- the Keeper, sitting on the fourth -->
+<circle id="lanGlow" cx="1030" cy="716" r="230" fill="url(#lanG)" pointer-events="none"/>
+<g id="keeper" class="hot"><g transform="translate(-64 6)">
+  <ellipse cx="1280" cy="806" rx="230" ry="20" fill="#000" opacity=".4"/>
+  <rect x="1146" y="640" width="268" height="140" rx="10" fill="url(#seatG)"/><path d="M1146 690h268M1230 640v50M1330 690v90" stroke="#2a302c" stroke-width="3"/>
+  <path d="M1126 700Q1100 540 1170 462H1370Q1440 540 1414 700Z" fill="#4a2d3f"/>
+  <path d="M1150 648h118q16 70 4 126h-126q-12-60 4-126zM1292 648h118q16 70 4 126h-126q-12-60 4-126z" fill="#33392f"/>
+  <ellipse cx="1204" cy="786" rx="72" ry="24" fill="#8f9785"/><ellipse cx="1348" cy="786" rx="72" ry="24" fill="#8f9785"/>
+  <path d="M1150 782v10M1172 776v14M1196 774v16M1296 774v16M1320 776v14M1342 782v10" stroke="#5f6757" stroke-width="3" stroke-linecap="round"/>
+  <path d="M1150 500Q1104 590 1186 646" stroke="#d9cfb6" stroke-width="46" fill="none" stroke-linecap="round"/><path d="M1390 500Q1436 590 1354 646" stroke="#cfc5ac" stroke-width="46" fill="none" stroke-linecap="round"/>
+  <circle cx="1196" cy="650" r="27" fill="#8f9785"/><circle cx="1344" cy="650" r="27" fill="#8f9785"/><path d="M1182 640v20M1196 638v22M1210 640v20M1330 640v20M1344 638v22M1358 640v20" stroke="#6b7362" stroke-width="2.500" stroke-linecap="round"/>
+  <use href="#ch-spandrel" x="1140" y="226" width="260" height="338"/>
+</g></g>
+<g id="jar" class="hot" transform="translate(-45 0)"><ellipse cx="1000" cy="796" rx="44" ry="7" fill="#000" opacity=".4"/><path d="M968 794Q946 752 972 726Q978 720 978 712H1022Q1022 720 1028 726Q1054 752 1032 794Z" fill="#8a5a3a"/>
+  <path d="M958 754q42 10 84 0" stroke="#6b4228" stroke-width="3" fill="none"/><ellipse cx="1000" cy="712" rx="22" ry="6" fill="#2a1a10"/><ellipse cx="1000" cy="712" rx="22" ry="6" fill="none" stroke="#b98a5a" stroke-width="3"/><g id="jarP" fill="#aeb6ad"></g></g>
+<g id="lantern" class="hot" transform="translate(-62 0)"><path d="M1092 680q-14-22 0-30q14 8 0 30" stroke="#14100a" stroke-width="4" fill="none"/><path d="M1076 686h32l6 68h-44z" fill="#ffd98a"/><path d="M1092 706q-6 10-6 15a6 6 0 0 0 12 0q0-5-6-15z" fill="#fff6d8"/>
+  <path d="M1076 686h32M1070 754h44M1092 686v68M1076 686l-6 68M1108 686l6 68" stroke="#14100a" stroke-width="4" fill="none"/><path d="M1072 754h40l-4 10h-32z" fill="#14100a"/></g>
+
+<!-- the arch itself -->
+<path fill-rule="evenodd" d="M-1000 -640H2600V1500H-1000ZM150 1500V560C150 250 500 96 800 96C1100 96 1450 250 1450 560V1500Z" fill="#141c1f"/>
+<path d="M150 1500V560C150 250 500 96 800 96C1100 96 1450 250 1450 560V1500" stroke="#27332f" stroke-width="56" fill="none"/>
+<g id="joints" stroke="#141c1f" stroke-width="4"></g>
+<path d="M150 1500V560C150 250 500 96 800 96C1100 96 1450 250 1450 560V1500" stroke="#4d6360" stroke-width="3" fill="none" opacity=".8"/>
+<g fill="#3d5a3c" opacity=".7"><ellipse cx="170" cy="640" rx="14" ry="40"/><ellipse cx="1436" cy="600" rx="12" ry="34"/><ellipse cx="520" cy="150" rx="40" ry="10" transform="rotate(-24 520 150)"/><ellipse cx="1120" cy="160" rx="36" ry="9" transform="rotate(26 1120 160)"/></g>
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the counting-house</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="../../assets/wordkit.js"></script>
+<script src="toll.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, open = -1;
+  var NUM = ['Nothing', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
+
+  /* stars, pebbles, the stones of the arch, the three riddle stones */
+  (function () {
+    var s = '', i, x, y, t, u, px, py, dx, dy, n, seed = 7;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (i = 0; i < 70; i++) {
+      x = 200 + rnd() * 1200; y = 110 + rnd() * 330;
+      if (Math.pow((x - 800) / 640, 2) + Math.pow((y - 560) / 460, 2) < 0.9) s += '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="' + (0.7 + rnd() * 1.3).toFixed(1) + '" opacity="' + (0.4 + rnd() * 0.6).toFixed(2) + '"/>';
+    }
+    $('#stars').innerHTML = s; s = '';
+    for (i = 0; i < 90; i++) {
+      x = -200 + rnd() * 2000; y = 722 + rnd() * 190;
+      s += '<ellipse cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" rx="' + (5 + rnd() * 12).toFixed(0) + '" ry="' + (2.5 + rnd() * 4).toFixed(1) + '" fill="' + (rnd() < 0.5 ? '#283334' : '#34423f') + '"/>';
+    }
+    $('#pebbles').innerHTML = s; s = '';
+    for (i = 0; i < 11; i++) {                                   /* the stones of the arch: one half, and the same again in the mirror */
+      t = 0.03 + i * 0.094; u = 1 - t;
+      px = u * u * u * 150 + 3 * u * u * t * 150 + 3 * u * t * t * 500 + t * t * t * 800;
+      py = u * u * u * 560 + 3 * u * u * t * 250 + 3 * u * t * t * 96 + t * t * t * 96;
+      dx = 3 * u * u * 0 + 6 * u * t * 350 + 3 * t * t * 300; dy = 3 * u * u * -310 + 6 * u * t * -154 + 0;
+      n = Math.sqrt(dx * dx + dy * dy); dx /= n; dy /= n;
+      x = px + dy * 30; y = py - dx * 30;                           /* outwards: to the left of the way the curve runs */
+      s += '<path d="M' + (px - dy * 26).toFixed(0) + ' ' + (py + dx * 26).toFixed(0) + 'L' + x.toFixed(0) + ' ' + y.toFixed(0) + '"/>' +
+        '<path d="M' + (1600 - px + dy * 26).toFixed(0) + ' ' + (py + dx * 26).toFixed(0) + 'L' + (1600 - x).toFixed(0) + ' ' + y.toFixed(0) + '"/>';
+    }
+    for (y = 620; y < 1500; y += 66) s += '<path d="M122 ' + y + 'h56M1422 ' + y + 'h56"/>';
+    $('#joints').innerHTML = s; s = '';
+    [[290, 'I', -2.5, 0], [550, 'II', 1.8, 14], [810, 'III', -1.2, -8]].forEach(function (p, k) {      /* rough-cut standing stones, none of them quite upright */
+      x = p[0]; y = 488 + p[3];
+      s += '<g id="st' + (k + 1) + '" class="hot stone"><ellipse cx="' + x + '" cy="752" rx="120" ry="14" fill="#000" opacity=".45"/><g class="slab"><g transform="rotate(' + p[2] + ' ' + x + ' 750)">' +
+        '<path class="face" d="M' + (x - 95) + ' 750V' + (y + 36) + 'Q' + (x - 95) + ' ' + (y + 4) + ' ' + (x - 64) + ' ' + y + 'L' + (x + 58) + ' ' + (y - 14) + 'Q' + (x + 95) + ' ' + (y - 14) + ' ' + (x + 95) + ' ' + (y + 24) + 'V750Z" fill="url(#slabG)"/>' +
+        '<path d="M' + (x - 89) + ' 746V' + (y + 38) + 'Q' + (x - 89) + ' ' + (y + 10) + ' ' + (x - 62) + ' ' + (y + 6) + '" stroke="#c9d3c8" stroke-width="3" fill="none" opacity=".5"/>' +
+        '<path d="M' + (x + 95) + ' ' + (y + 90) + 'l-16 10 10 14" stroke="#3a423d" stroke-width="2.500" fill="none" opacity=".7"/>' +
+        '<text class="num" x="' + x + '" y="' + (y + 62) + '" text-anchor="middle" font-family="Cinzel Decorative,Cinzel,serif" font-weight="700" font-size="40">' + p[1] + '</text>' +
+        '<g class="cut" stroke="#3a423d" stroke-width="4" stroke-linecap="round"><path d="M' + (x - 62) + ' ' + (y + 96) + 'h124M' + (x - 62) + ' ' + (y + 120) + 'h' + (96 + k * 12) + 'M' + (x - 62) + ' ' + (y + 144) + 'h124M' + (x - 62) + ' ' + (y + 168) + 'h' + (110 - k * 20) + 'M' + (x - 62) + ' ' + (y + 192) + 'h' + (70 + k * 22) + '"/></g>' +
+        '<ellipse cx="' + (x - 40) + '" cy="744" rx="44" ry="9" fill="#405a3c"/><ellipse cx="' + (x + 58) + '" cy="746" rx="30" ry="7" fill="#4c6a45"/></g></g></g>';
+    });
+    $('#stones').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'toll', storyTitle: 'The Keeper Gives No Change', id: 'arch', no: 'II', title: 'Under the Arch',
+    go: 'Follow him down',
+    intro: [
+      'One penny for you, because you were on foot and long past seven. Nothing for Mabel, because the Table asks a penny for each leg that <i>walks</i> upon the bridge, and hers were not walking. Three for the cart, because the Table says &ldquo;each wheel&rdquo;, and a spare wheel is a wheel. Nothing for nine cheeses, because the Keeper takes one in every <i>ten</i>. Four pennies: and no change from your sixpence.',
+      'So your toll is paid, the lamp is lit, and the gate is shut until day begins.',
+      'The Keeper takes a lantern and goes down a stair in the bank that you had not noticed, to the dark place under the first arch, where the river talks to itself. The Riddles, it seems, are kept in the cellar.'
+    ],
+    exit: {"next":"counting","w":{"0e8eeb3d":"34eca58c"}}, tags: {"r3":["5ed9ad8d","350ecc9d","be58584d","b7b502cc","e3337197","edf7d0ce","881b4465","f2a79b25","f9a6decc","424d3405","e24fd8db","40c59ba3","3a7916fe","cd8247c8"],"r3@":["0143aedf","6cee918a","a7b6a36e","5ad723b5"],"r3?":["5b77f0cb","f4f35448","63184b24","5682c599"],"r3#":["06ca0c9b"],"p1":["66fb0d0c"],"a1":["206c404b"],"p2":["84353f1b"],"a2":["3e8b73da"],"p3":["7ae658d5"]},
+    sound: ['candle', { root: 45, bpm: 56, drop: ['mel'], beds: [['night', 0.5], ['drips', 0.5]] }],        /* lower and slower, with the drip of the arch; pennies ring in this room, so no small bright notes */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('a-file') || null;
+  var st = ER.flag('a-st') || { n: 0, piv: false, pw: '', pn: -1, got: [] };
+
+  var TABLE = '<h4>The Table of Tolls</h4><h5>STICKLE BRIDGE &middot; SPANDREL, KEEPER</h5>' +
+    '<p><b>I.</b><span>Every traveller who crosses on foot shall pay one penny.</span></p>' +
+    '<p><b>II.</b><span>For every beast or bird: one penny for each leg that walks upon the bridge.</span></p>' +
+    '<p><b>III.</b><span>For every cart: one penny for each wheel, unless the cart is empty.</span></p>' +
+    '<p><b>IV.</b><span>Of goods carried for sale the Keeper shall have one in every ten, and shall choose it himself.</span></p>' +
+    '<p><b>V.</b><span>A child shall pay nothing until the age of seven.</span></p>' +
+    '<p><b>VI.</b><span>No toll is taken by lamplight.</span></p>' +
+    '<p><b>VII.</b><span>The Keeper gives no change.</span></p>';
+
+  var RID = [
+    { no: 'I', name: 'the geese', piv: 'p1', ans: 'a1', kind: 'coins',
+      text: 'Five geese came down the road to my gate. All but two of them opened their wings and flew away over the water. The others walked across my bridge. How many pennies did I take for geese that day?',
+      wrongW: { five: '&ldquo;Five is how many came. The riddle does not turn there.&rdquo;',
+        two: '&ldquo;You are one word away. Which little word tells you what to do with the two?&rdquo;',
+        all: '&ldquo;You are one word away, on the other side of it.&rdquo;',
+        flew: '&ldquo;They flew: that much is plain. <i>Who</i> flew is the question.&rdquo;', wings: '&ldquo;They flew: that much is plain. <i>Who</i> flew is the question.&rdquo;',
+        others: '&ldquo;And who are &lsquo;the others&rsquo;? An earlier word decides that.&rdquo;', walked: '&ldquo;Some of them walked, yes. How many? An earlier word decides that.&rdquo;',
+        pennies: '&ldquo;That is the question. The trap is higher up the stone.&rdquo;',
+        '*': '&ldquo;Not that one. Read it as slowly as you would read a bill.&rdquo;' },
+      onPiv: function (w) { return '&ldquo;' + w + '.&rdquo; The stone turns on its foot with a noise like a millstone. &ldquo;A small word, and it has cost travellers more pennies than any other at my gate.&rdquo; The Keeper pushes a little heap of worn pennies across the gravel. &ldquo;Counters. I want them back.&rdquo;'; },
+      wrongA: function (n) {
+        return n === 6 ? '&ldquo;Six pennies is three geese walking. Read it again: how many did <i>not</i> fly?&rdquo;'
+          : n === 10 ? '&ldquo;Ten pennies is five geese walking. Then who flew?&rdquo;'
+          : n === 2 ? '&ldquo;A penny a goose? Look at line II of the Table. A goose pays by the leg.&rdquo;'
+          : n === 0 ? '&ldquo;Nothing? Somebody walked. I remember them. They were in no hurry.&rdquo;'
+          : '&ldquo;No. Count the walkers first. Then count their legs.&rdquo;';
+      },
+      right: function (a) { return '&ldquo;' + a + '.&rdquo; The Keeper nods, and takes his pennies back one at a time. &ldquo;&lsquo;All but two&rsquo; means all except two. So two of them did not fly; and a goose pays by the leg.&rdquo;'; } },
+    { no: 'II', name: 'the tumbler', piv: 'p2', ans: 'a2', kind: 'coins',
+      text: 'A tumbler came from the fair with his pockets empty. He read line I of my Table three times. Then he stood on his hands, and so he went from one bank to the other, with his boots in the air. How many pennies did I take from him?',
+      wrongW: { empty: '&ldquo;His pockets were empty: that is why he read so carefully. It is not why he owed what he owed.&rdquo;', pockets: '&ldquo;His pockets were empty: that is why he read so carefully. It is not why he owed what he owed.&rdquo;',
+        boots: '&ldquo;Close. You are at the wrong end of him.&rdquo;', air: '&ldquo;Close. You are at the wrong end of him.&rdquo;',
+        stood: '&ldquo;He stood, certainly. What on?&rdquo;',
+        line: '&ldquo;Yes: read line I, as he did. But the word that the riddle turns on is in the riddle.&rdquo;', table: '&ldquo;Yes: read line I, as he did. But the word that the riddle turns on is in the riddle.&rdquo;', read: '&ldquo;Yes: read line I, as he did. But the word that the riddle turns on is in the riddle.&rdquo;',
+        bank: '&ldquo;From one bank to the other: he crossed, there is no doubt of that. <i>How</i> he crossed is another matter.&rdquo;',
+        tumbler: '&ldquo;A tumbler is a traveller like any other. Until he does what this one did.&rdquo;',
+        '*': '&ldquo;Not that one. What did he do that no other traveller has done, before or since?&rdquo;' },
+      onPiv: function (w) { return '&ldquo;' + w + '.&rdquo; The stone turns. &ldquo;He had read line I more carefully than I had written it. I watched him do it. It took him a long time, and it rained.&rdquo;'; },
+      wrongA: function (n) {
+        return n === 1 ? '&ldquo;One penny? Line I: every traveller who crosses <i>on foot</i>. Did he?&rdquo;'
+          : n === 2 ? '&ldquo;Two hands are not two legs, and a tumbler is not a beast, whatever I thought of this one.&rdquo;'
+          : '&ldquo;No. Take line I one word at a time, and ask which of them fits him.&rdquo;';
+      },
+      right: function (a) { return '&ldquo;' + a + '.&rdquo; The Keeper breathes out slowly through his nose. &ldquo;I wrote &lsquo;on foot&rsquo;. I have been sorry for those two words for two hundred years, and I cannot change them.&rdquo;'; } },
+    { no: 'III', name: 'the Keeper&rsquo;s own', piv: 'p3', key: 'r3', kind: 'word',
+      text: 'It weighs nothing, and it has never been taken as a toll. I gave it in the Year of the Long Frost, and I have kept it ever since. It can be broken, but no smith can mend it. What is it?',
+      wrongW: { gave: '&ldquo;Half of it. A thing that is given is usually gone. Which word says that this one is not?&rdquo;',
+        broken: '&ldquo;That is the third leg of the stool. First find the word that quarrels with &lsquo;gave&rsquo;.&rdquo;', mend: '&ldquo;That is the third leg of the stool. First find the word that quarrels with &lsquo;gave&rsquo;.&rdquo;', smith: '&ldquo;That is the third leg of the stool. First find the word that quarrels with &lsquo;gave&rsquo;.&rdquo;',
+        weighs: '&ldquo;Many things weigh nothing. Very few of them can be given.&rdquo;', nothing: '&ldquo;Many things weigh nothing. Very few of them can be given.&rdquo;',
+        toll: '&ldquo;It is not a toll: the stone says so. Look at what I <i>did</i> with it.&rdquo;', taken: '&ldquo;It is not a toll: the stone says so. Look at what I <i>did</i> with it.&rdquo;',
+        ever: '&ldquo;One word to the left.&rdquo;', since: '&ldquo;Two words to the left.&rdquo;',
+        '*': '&ldquo;Not that one. Two words on this stone seem to quarrel. One of them is used in a way that pennies never are.&rdquo;' },
+      onPiv: function (w) { return '&ldquo;' + w + '.&rdquo; The stone turns. &ldquo;Given, and kept: both at once. Most things cannot manage it. Now tell me what it is.&rdquo;'; },
+      wrongT: { bridge: '&ldquo;The bridge weighs more than the hill it stands on. I built it; I should know.&rdquo;',
+        charter: '&ldquo;The Charter weighs four pounds with its seal. But you are in the right room of the house.&rdquo;',
+        secret: '&ldquo;A secret is kept by <i>not</i> giving it.&rdquo;', name: '&ldquo;My name was given <i>to</i> me. This I gave.&rdquo;',
+        toll: '&ldquo;The first line of the stone says that it is not.&rdquo;', time: '&ldquo;Time cannot be kept, by trolls or by anybody. I have tried.&rdquo;',
+        heart: '&ldquo;&hellip;No.&rdquo; The Keeper looks at the river for a moment. &ldquo;No. Not that.&rdquo;', love: '&ldquo;&hellip;No.&rdquo; The Keeper looks at the river for a moment. &ldquo;No. Not that.&rdquo;',
+        '*': '&ldquo;No. It was given, and it is kept, and it can be broken. What do people give, and then keep?&rdquo;' },
+      right: function (a) { return '&ldquo;My ' + a.toLowerCase() + ',&rdquo; says the Keeper. &ldquo;I gave it to both banks in the Year of the Long Frost, and I have kept it ever since. &lsquo;Keep&rsquo; is two words that look like one. You keep a penny by holding on to it. You keep this by doing what you said you would do.&rdquo;'; } }
+  ];
+
+  function hints() {
+    if (nextFile) return ['go', ['You have asked to read the Charter, and the Keeper is already on the stairs. The button is at the bottom of the screen.']];
+    if (!ER.flag('a-talk')) return ['start', ['Talk to the Keeper first. He is sitting on the fourth stone, and he has waited a long time to explain the rules.']];
+    return [['r1', [
+      'Stone I. Read it slowly, the way you would read a bill. One small word decides how many geese flew.',
+      'Look at the second sentence. Does it really say that two geese flew? Read its first three words again, one at a time.',
+      '&ldquo;All but two&rdquo; means all except two: so two geese did not fly. They walked. Now look at line II of the Table, beside the stone: how does a goose pay?'
+    ]], ['r2', [
+      'Stone II. The answer is in line I of the Table, and the word is in the riddle. How, exactly, did he cross?',
+      'Line I says: every traveller who crosses on foot. Read the last two words as a troll would read them.',
+      'He did not cross on his feet. Put your finger on the word that says what he did cross on. Then ask what line I has to say about a traveller who is not on foot. An empty bowl is an answer too.'
+    ]], ['r3', [
+      'Stone III. Two of its words seem to quarrel: how can you give a thing away and still have it?',
+      'English uses one of those words in two ways. You keep a coin in your pocket. What else can you keep, after you have given it to somebody?',
+      'At the gate the Keeper told you that a troll&rsquo;s ___ is not like a man&rsquo;s, and does not break. You give it, you keep it, and you can break it. Type it.'
+    ]]][st.n];
+  }
+  function isBusy() { return busy; }
+  function save() { ER.flag('a-st', st); }
+  function paint() {
+    var i, s = '';
+    for (i = 0; i < 3; i++) $('#st' + (i + 1)).setAttribute('class', 'hot stone' + (i < st.n ? ' done' : '') + (i === st.n && ER.flag('a-talk') && !nextFile ? ' next' : ''));
+    for (i = 0; i < Math.min(5, TOLL.pebbles()); i++) s += '<circle cx="' + (988 + i * 6) + '" cy="' + (709 - (i % 2) * 3) + '" r="4"/>';
+    $('#jarP').innerHTML = s;
+    $('#go').classList.toggle('on', !!nextFile && !busy);
+    ER.pips(st.n, 3);
+  }
+  function begin() {
+    paint();
+    if (!nextFile && st.n === 3) { finish(); return; }          /* the page was left between the last answer and the Keeper's verdict */
+    if (nextFile) { ER.say('Under the arch. Three stones have turned, and the Keeper is waiting on the stairs.'); return; }
+    if (ER.flag('a-talk')) { ER.say('Under the arch. The stones are waiting, and so is the Keeper.'); return; }
+    busy = true;
+    ER.narrate([
+      'Under the bridge. The arch goes over your head like the roof of a church, and the river goes by at your feet without looking at you.',
+      'Three stones stand on the bank, with writing cut into each of them. The Keeper sits down on a fourth, and puts a clay jar beside him.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things under the arch ---------- */
+  $('#keeper').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;The counting-house is up the stairs and through the small door,&rdquo; says the Keeper. &ldquo;Wipe your feet. Nobody has been in there but me since the bridge was built.&rdquo;', 8000); return; }
+    if (ER.flag('a-talk')) { ER.say('&ldquo;First the word that it turns on,&rdquo; says the Keeper. &ldquo;Then the answer. And in order: they are numbered.&rdquo;'); return; }
+    ER.talk({
+      who: 'Spandrel', role: CAST.spandrel.role, face: FACE('spandrel', '#1d3a44'),
+      lines: [
+        { note: 'The Keeper puts his lantern down on the gravel and folds his hands.',
+          a: '&ldquo;Three riddles. I did not make them up. They happened. Everything on these stones came to my gate, and I wrote it down as it was.&rdquo;' },
+        { q: 'What do I have to do?',
+          a: 'Each riddle turns on one word. Read past that word, and you will answer wrongly, as everybody does. So: first put your finger on the word. When you have the right one, the stone will turn. Then give me your answer.' },
+        { q: 'What do I answer with?',
+          a: 'With pennies in my bowl, for the first two: you tell me what was owed. The Table of Tolls is the same under the bridge as it is on top of it. The third riddle is another kind. I am allowed one of those.' },
+        { q: 'What is the jar for?',
+          a: 'Mistakes. One pebble for each. It is not in the Charter. It is a hobby.' },
+        { q: 'And if I answer all three?',
+          a: 'Clause 8. The Keeper shall grant the traveller one thing, unless the Charter forbids it. If I were you, I should think very carefully about the last five words.' }
+      ],
+      clue: { id: 'keeper2', title: 'Spandrel, under the arch', kind: 'What he said' }, last: 'Go to the stones',
+      done: function (seen) { if (!seen) return; ER.flag('a-talk', 1); paint(); TOLL.learn(['riddle', 'pebble']); ER.say('Three stones, numbered I, II and III. Begin with the first.'); }
+    });
+  });
+  $('#jar').addEventListener('click', function (e) { if (busy) return; ER.wordAt(e.clientX, e.clientY, 'jar'); ER.say(TOLL.jar()); });
+  TOLL.thing('#moon', null, 'The moon, and a second moon in the water, which the river keeps trying to carry away.', isBusy);
+  TOLL.thing('#water', null, 'Stickle Water, going by in the dark. It was here before the bridge, and in all that time it has never paid a penny.', isBusy);
+  TOLL.thing('#lantern', 'lantern', 'The Keeper&rsquo;s lantern. Down here it is the only warm thing there is, unless you count the Keeper, and nobody has ever been sure about that.', isBusy);
+  [0, 1, 2].forEach(function (i) {
+    $('#st' + (i + 1)).addEventListener('click', function () {
+      if (busy) return;
+      if (!ER.flag('a-talk')) { ER.say('Three stones with writing cut into them. The Keeper clears his throat. He would like to explain the rules first. He has waited a long time to explain the rules.', 7000); return; }
+      if (i > st.n) { ER.say('&ldquo;In order,&rdquo; says the Keeper. &ldquo;They are numbered.&rdquo;'); return; }
+      if (i < st.n) { var c = ER.state().clues.filter(function (x) { return x.id === 'rid' + i; })[0]; if (c) ER.read({ html: c.h, cls: 'stone' }); return; }
+      openRiddle(i);
+    });
+  });
+
+  /* ---------- a riddle: first the word it turns on, then the answer ---------- */
+  function openRiddle(i) {
+    var R = RID[i], box = ER.el('div', 'rs'), done = false, count = 0, pk = null, s;
+    s = '<div class="rs-stone"><h4>' + R.no + '</h4><p class="rs-text">' + ER.gloss(R.text) + '</p><p class="rs-how"></p><div class="rs-ans">' +
+      (R.kind === 'coins' ? '<div class="rs-bowl"></div><p class="rs-count"></p><div class="rs-foot"><button type="button" class="btn" id="rs-go">Give the Keeper your answer</button></div>' : '<div class="rs-line"></div>') +
+      '</div></div><div class="rs-side"><div class="doc board mini">' + ER.gloss(TABLE) + '</div><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    var stone = box.querySelector('.rs-stone'), how = box.querySelector('.rs-how'), msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function cap(w) { return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }
+    function solved(a, show) {
+      done = true;
+      st.got.push(st.pw.toLowerCase(), a); st.n++; st.piv = false; save();
+      ER.addClue('rid' + i, 'Riddle ' + R.no + ': ' + R.name, '<h4>' + R.no + '</h4><p>' + R.text + '</p><p class="ans">It turned on the word &ldquo;' + st.pw.toLowerCase() + '&rdquo;. Your answer: ' + show + '.</p>', 'stone', 'Riddle stone', true);
+      ER.sfx.ok(); msg(R.right(show.charAt(0).toUpperCase() + show.slice(1)));
+      setTimeout(function () { ER.closeAll(); paint(); if (st.n === 3) finish(); else ER.say('Stone ' + R.no + ' has turned. ' + (st.n === 1 ? 'Two' : 'One') + ' to go.'); }, 3600);
+    }
+    function answers(first) {
+      stone.classList.add('turned');
+      if (first) { stone.classList.add('grind'); TOLL.sfx.stone(); }
+      if (R.kind === 'coins') {
+        how.textContent = 'Put what was owed into the bowl. An empty bowl is an answer too.';
+        var bowl = box.querySelector('.rs-bowl'), cnt = box.querySelector('.rs-count'), k;
+        for (k = 1; k <= 10; k++) bowl.appendChild(ER.el('button', 'rs-coin')).setAttribute('data-n', k);
+        ER.$$('.rs-coin', bowl).forEach(function (b) { b.type = 'button'; });
+        var drawCoins = function () {
+          ER.$$('.rs-coin', bowl).forEach(function (b, n) { b.classList.toggle('on', n < count); });
+          cnt.textContent = count ? count + (count === 1 ? ' penny in the bowl' : ' pennies in the bowl') : 'The bowl is empty';
+          bowl.setAttribute('data-v', count);
+        };
+        bowl.addEventListener('click', function (e) {
+          var b = e.target.closest ? e.target.closest('.rs-coin') : null; if (!b || done) return;
+          var n = +b.getAttribute('data-n'); count = count === n ? n - 1 : n; TOLL.sfx.coin(); drawCoins();
+        });
+        box.querySelector('#rs-go').addEventListener('click', function () {
+          if (done) return;
+          if (ER.check(R.ans, count)) { solved(String(count), count ? NUM[count].toLowerCase() + (count === 1 ? ' penny' : ' pennies') : 'nothing'); return; }
+          TOLL.miss(); TOLL.sfx.hm(); paint(); msg(R.wrongA(count));
+        });
+        drawCoins();
+      } else {
+        how.textContent = 'Type what it is, and press Enter.';
+        WK.line(box.querySelector('.rs-line'), { max: 18, spaces: true, board: true, enter: 'Answer', placeholder: 'type your answer', sound: false,
+          onEnter: function (text) {
+            if (done) return;
+            var t = WK.norm(text), bare = text.toLowerCase().replace(/^(my|a|an|the|your|his)\s+/, '');
+            if (WK.is(R.key, text)) { solved('', bare); return; }
+            TOLL.miss(); TOLL.sfx.hm(); paint(); msg(R.wrongT[t] || R.wrongT['*']);
+            return false;
+          } });
+      }
+    }
+    ER.$$('.rs-text .w', box).forEach(function (w) { w.classList.add('wk-skip'); });      /* a dotted word is there to be looked up: clicking it is not a guess */
+    pk = WK.pick(box.querySelector('.rs-text'), { key: R.piv, sound: false,
+      onRight: function (w, node, n) {
+        st.piv = true; st.pw = node.textContent; st.pn = n; save();
+        node.classList.add('rs-piv'); pk.destroy(); ER.sfx.clunk();
+        answers(true); msg(R.onPiv(cap(node.textContent)));
+      },
+      onWrong: function (w) { if (done) return; TOLL.miss(); TOLL.sfx.hm(); paint(); msg(R.wrongW[w] || R.wrongW['*']); } });
+    if (st.piv && pk.words[st.pn]) { pk.words[st.pn].classList.add('rs-piv'); pk.destroy(); answers(false); msg('The stone has turned already. The Keeper is waiting for your answer.'); }
+    else { how.textContent = 'Put your finger on the word that it turns on.'; msg('The Keeper leans forward, with one pebble ready between his finger and thumb.'); }
+    open = i;
+    ER.open('ov-lock', box, function () { open = -1; });
+  }
+
+  /* ---------- three answered: and one thing granted ---------- */
+  function finish() {
+    var file = ER.exitOk([st.got.filter(function (x) { return x !== ''; }).join('-')]), n = TOLL.pebbles();
+    if (!file) { ER.say('The Keeper looks at his stones for a long time. Something is wrong with this lock: tell your teacher.'); return; }
+    nextFile = file; ER.flag('a-file', file); TOLL.done('arch'); TOLL.solved(); busy = true; paint();
+    ER.narrate([
+      'The Keeper tips his jar out on the gravel and counts. ' + (n ? '&ldquo;' + (NUM[n] || n) + (n === 1 ? ' pebble' : ' pebbles') + ',&rdquo; he says, and puts ' + (n === 1 ? 'it' : 'them') + ' back. ' : '&ldquo;Empty,&rdquo; he says, and looks into it twice to make sure. ') + '&ldquo;And three riddles answered. Clause 8: I shall grant you one thing. Name it.&rdquo;',
+      '&ldquo;Open the gate,&rdquo; you say. &ldquo;Forbidden,&rdquo; says the Keeper, and for the first time he looks almost sorry. &ldquo;Clause 3: by night the gate shall stay shut. One thing, <i>unless the Charter forbids it</i>. I did tell you about the last five words.&rdquo;',
+      '&ldquo;Then how am I to know what the Charter forbids?&rdquo; &ldquo;Most people, at this point, ask to read it.&rdquo; The Keeper thinks about that. &ldquo;I say most people. Nobody ever has.&rdquo;',
+      '&ldquo;Then that is my one thing,&rdquo; you say. &ldquo;I want to read the Charter.&rdquo;',
+      'The Keeper is on his feet before you have finished saying it. For somebody the size of a haystack, he moves very fast when he is pleased.'
+    ], function () { busy = false; paint(); });
+  }
+  $('#go').addEventListener('click', function () { if (nextFile && !busy) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>

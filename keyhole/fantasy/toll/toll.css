@@ -1,0 +1,109 @@
+/* The Keeper Gives No Change - what the five rooms of the story share: the Keeper's kinds of writing (a painted board,
+   a charter on skin, stones, his day-book, the rules of his house), a stone-and-brass skin for the notebook, the hints
+   and the word tags, and a few small parts. Each room sets its own palette on <body>. */
+
+/* ---- shared bits ---- */
+.hud,.btn,.ov-x{font-weight:700}
+.tc-theme{font-family:'Cinzel',serif;font-weight:700}
+.tc-room{font-family:'Uncial Antiqua',serif;letter-spacing:.01em}
+.tc-text,.cap{font-family:'IM Fell English',Georgia,serif;font-size:clamp(19px,1.58vw,24px)}
+.tk-name{font-family:'Uncial Antiqua',serif;font-size:27px;letter-spacing:.02em}
+.tk-text{font-family:'IM Fell English',Georgia,serif}
+.gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:1px solid var(--accent,#f0b35c);
+  color:var(--accent,#f0b35c);background:var(--hud-bg,rgba(16,13,24,.92));font-family:'Cinzel',serif;font-weight:700;font-size:16px;letter-spacing:.16em;
+  text-transform:uppercase;border-radius:3px}
+.gobtn.on{display:block}
+.gobtn:hover{background:var(--accent,#f0b35c);color:#14110b}
+.pmsg{min-height:54px;margin:0;font-family:'IM Fell English',Georgia,serif;font-size:19px;line-height:1.34;color:#f3ecd9}
+.pmsg b{color:var(--accent,#f0b35c);font-weight:normal;font-family:'Almendra',serif;font-weight:700}
+.pmsg i{color:#cfd3c4}
+.cz{font-family:'Cinzel',serif;font-weight:700;text-anchor:middle}
+.un{font-family:'Uncial Antiqua',serif;text-anchor:middle}
+.al{font-family:'Almendra',serif;font-weight:700;text-anchor:middle}
+.rain path{stroke:#c9d3e6;stroke-width:2;stroke-linecap:round;stroke-dasharray:26 70;animation:rain 1s linear infinite;opacity:.42}
+.rain path:nth-child(2n){animation-duration:1.4s;opacity:.3}
+.rain path:nth-child(3n){animation-duration:.85s;stroke-dasharray:18 84}
+@keyframes rain{to{stroke-dashoffset:-96}}
+.nudge{animation:nudge 1.7s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateY(-6px)}}
+
+/* ---- the Keeper's writing ---- */
+/* the Table of Tolls: cream letters cut into black oak */
+.doc.board{width:min(720px,94vw);padding:26px 38px 22px;background:#33230f repeating-linear-gradient(91deg,rgba(0,0,0,.16) 0 3px,rgba(255,255,255,.035) 3px 9px,rgba(0,0,0,.09) 9px 17px);
+  color:#f3e5bf;font-family:'Cinzel',serif;font-weight:700;font-size:17.5px;line-height:1.4;letter-spacing:.02em;border:9px solid #1d1306;border-radius:3px;
+  box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 2px rgba(240,220,170,.2);text-shadow:0 1px 0 rgba(0,0,0,.7)}
+.doc.board h4{margin:0;text-align:center;font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700;font-size:29px;letter-spacing:.06em;line-height:1.1;color:#ffe9a8}
+.doc.board h5{margin:4px 0 14px;text-align:center;font-family:'Cinzel',serif;font-weight:400;font-size:13px;letter-spacing:.3em;border-bottom:2px solid rgba(243,229,191,.5);padding-bottom:10px}
+.doc.board p{display:grid;grid-template-columns:46px minmax(0,1fr);margin:0 0 8px}
+.doc.board p b{font-family:'Cinzel Decorative','Cinzel',serif;color:#ffe9a8}
+.doc.board p:last-child{margin-bottom:0}
+.doc.board .w:hover{color:#ffd27a}
+.doc.board.mini{width:100%;max-height:none;padding:13px 18px 11px;font-size:13.5px;line-height:1.3;border-width:6px;box-shadow:none}
+.doc.board.mini h4{font-size:19px}
+.doc.board.mini h5{font-size:10px;margin:2px 0 8px;padding-bottom:6px}
+.doc.board.mini p{grid-template-columns:34px minmax(0,1fr);margin-bottom:4px}
+/* the Charter: brown ink on a skin as long as a door */
+.doc.charter{width:min(720px,94vw);padding:28px 40px 24px;background:#e9d8ad radial-gradient(ellipse at 30% 14%,rgba(255,250,228,.75),rgba(132,92,36,.32));color:#2f2210;
+  font-family:'IM Fell English',Georgia,serif;font-size:17.5px;line-height:1.34;border:1px solid #b89b62}
+.doc.charter h4{margin:0 0 2px;text-align:center;font-family:'Uncial Antiqua',serif;font-size:28px;line-height:1.1;color:#6a1f16}
+.doc.charter h5{margin:0 0 12px;text-align:center;font-family:'IM Fell English',serif;font-style:italic;font-weight:400;font-size:16px;line-height:1.3;border-bottom:1px solid #9b7b46;padding-bottom:10px}
+.doc.charter p{display:grid;grid-template-columns:38px minmax(0,1fr);margin:0 0 7px}
+.doc.charter p b{font-family:'Uncial Antiqua',serif;font-weight:normal;font-size:20px;line-height:1.2;color:#6a1f16}
+.doc.charter p:last-child{margin-bottom:0}
+/* a riddle, as it is cut into its stone */
+.doc.stone{width:min(620px,94vw);padding:46px 44px 28px;background:#6b716a linear-gradient(160deg,#8b928a,#535953);color:#f1f2e8;border-radius:120px 120px 6px 6px / 70px 70px 6px 6px;
+  font-family:'Almendra',serif;font-size:21.5px;line-height:1.36;text-shadow:0 -1px 0 rgba(0,0,0,.55)}
+.doc.stone h4{margin:0 0 10px;text-align:center;font-family:'Cinzel Decorative','Cinzel',serif;font-weight:700;font-size:26px;color:#d7dccf}
+.doc.stone p.ans{margin-top:12px;padding-top:10px;border-top:1px solid rgba(240,240,230,.4);font-style:italic;font-size:19px;color:#e7ecc7}
+.doc.stone .w:hover{color:#ffe9a8}
+/* the Keeper's day-book */
+.doc.daybook{width:min(700px,94vw);padding:30px 38px 30px 44px;background:#f3ead0 repeating-linear-gradient(transparent 0 31px,rgba(60,90,140,.2) 31px 32px);
+  color:#2a2440;font-family:'Almendra',serif;font-style:italic;font-size:21px;line-height:32px;border-left:26px solid #5a2a22}
+.doc.daybook h4{margin:0;font-family:'Uncial Antiqua',serif;font-style:normal;font-size:24px;line-height:32px;color:#5a2a22}
+.doc.daybook p{margin:0}
+.doc.daybook .sum{font-weight:700}
+/* the rules of the house, nailed to the wall */
+.doc.rules{width:min(580px,92vw);padding:34px 42px 28px;background:#efe3c2 linear-gradient(170deg,rgba(255,255,255,.45),rgba(120,82,30,.2));color:#2a2118;
+  font-family:'Almendra',serif;font-size:21px;line-height:1.36;transform:rotate(-1deg)}
+.doc.rules h4{margin:0 0 12px;text-align:center;font-family:'Uncial Antiqua',serif;font-size:26px;color:#5a1f16}
+.doc.rules p{margin:0 0 8px}
+.doc.rules .pen{font-family:'Caveat',cursive;font-weight:700;font-size:1.22em;line-height:1;color:#39507e}
+/* a bargain or a receipt, in the Keeper's best hand */
+.doc.deed{width:min(600px,92vw);padding:34px 40px 30px;background:#f3ead0 linear-gradient(175deg,rgba(255,255,255,.5),rgba(140,104,50,.2));color:#2a2440;
+  font-family:'Almendra',serif;font-style:italic;font-size:22px;line-height:1.4;border-top:1px solid #cdbd92}
+.doc.deed h4{margin:0 0 10px;font-family:'Uncial Antiqua',serif;font-style:normal;font-size:23px;color:#5a2a22}
+/* what somebody said */
+.doc.statement{background:#efe6cf;font-family:'IM Fell English',Georgia,serif;font-size:19.5px;border-left:8px solid #6d7a4d}
+.doc.statement h4{font-family:'Almendra',serif;font-weight:700;font-size:17px;letter-spacing:.14em;color:#4d5a2f}
+/* what you worked out */
+.doc.mine{width:min(600px,94vw);padding:30px 34px 28px;background:#fbf3d7 repeating-linear-gradient(transparent 0 31px,rgba(120,100,60,.2) 31px 32px);font-family:'Caveat',cursive;font-weight:700;
+  font-size:25px;line-height:32px;color:#33301f;transform:rotate(-.6deg)}
+.doc.mine h4{margin:0;font-size:29px;font-weight:700;line-height:32px;text-decoration:underline}
+.doc.mine p{margin:0}
+
+/* ---- the notebook: river stone, brass, the Keeper's kinds of paper inside ---- */
+.nb{background:#2b3028 linear-gradient(150deg,#3b4237,#1d211b);border:1px solid #11140f;border-radius:4px;color:#e9e4d0;
+  box-shadow:0 30px 90px rgba(0,0,0,.75),inset 0 0 0 5px #171a14,inset 0 0 0 6px rgba(216,177,80,.45)}
+.nb-tabs{border-bottom-color:rgba(216,177,80,.4)}
+.nb-tabs button{font-family:'Cinzel',serif;font-weight:700;font-size:14.5px;color:#b9bfa8}
+.nb-tabs button.on{background:#efe6cc;color:#2b3028;border-color:rgba(216,177,80,.6)}
+.nb-list{border-right-color:rgba(216,177,80,.4)}
+.nb-list button{font-family:'IM Fell English',Georgia,serif;font-size:18px;color:#e9e4d0}
+.nb-list button small{font-family:'Cinzel',serif;font-weight:700;font-size:10.5px}
+.nb-list button.on{background:#efe6cc;color:#2b3028}
+.nb-view{background:#171a14}
+.nb-words{background:#efe6cc;color:#27231d}
+.nb-words b{font-family:'Almendra',serif;font-weight:700;font-size:19px}
+.nb-words span{font-family:'IM Fell English',Georgia,serif;font-size:17.5px;color:#55503f}
+.nb-ko{border-color:#8f8873;color:#55503f;font-family:'Cinzel',serif;font-weight:700}
+.nb-ko.on{background:#2b3028;color:#efe6cc;border-color:#2b3028}
+.wtip,.wtag{background:#efe6cc;color:#27231d;border-radius:2px;box-shadow:0 10px 26px rgba(0,0,0,.55),inset 5px 0 0 #6d7a4d}
+.wtag{padding-left:20px}.wtag:before{display:none}.wtip{padding-left:19px}
+.wtip b,.wtag b{font-family:'Almendra',serif;font-weight:700;font-size:19px}
+.wtip span,.wtag span{font-family:'IM Fell English',Georgia,serif}
+.hintbox{background:#efe6cc;color:#27231d;border-top:6px solid #6d7a4d;border-radius:2px}
+.hintbox h6{font-family:'Cinzel',serif;font-weight:700;color:#4d5a2f}
+.hintbox p{font-family:'IM Fell English',Georgia,serif}
+.hintbox p i{background:#4d5a2f;color:#efe6cc;font-family:'Cinzel',serif;font-weight:700}
+.hintbox .btn{font-family:'Cinzel',serif}
+.toast{font-family:'Cinzel',serif;font-weight:700}

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Forensics · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-forensic.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{color:#dfe7ea;font-family:'Libre Baskerville',Georgia,serif;-webkit-user-select:none;user-select:none;
+    background:#0d1417;
+    background-image:radial-gradient(ellipse 900px 520px at 50% -80px,rgba(210,236,255,.3),rgba(190,225,255,.06) 55%,transparent 76%),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.022) 0 2px,transparent 2px 86px),linear-gradient(#1a262b,#0d1417)}
+  .back{position:fixed;left:14px;top:12px;z-index:3;height:36px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(255,255,255,.24);
+    background:rgba(8,12,14,.7);color:#efe9dc;border-radius:3px;font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.13em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#f0b429;color:#f0b429}
+  header{position:relative;max-width:1180px;margin:0 auto;padding:50px 26px 4px;display:grid;grid-template-columns:auto 1fr;gap:10px 34px;align-items:center}
+  .print{width:118px;height:150px;opacity:.9}
+  h1{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(50px,6.4vw,82px);line-height:.9;letter-spacing:.1em;text-transform:uppercase;color:#f4f6f5}
+  h1 b{color:#f0b429;font-weight:700}
+  header p{margin:12px 0 0;max-width:690px;font-size:17px;line-height:1.55;color:#b9c7cc}
+  .motto{display:inline-block;margin-top:14px;padding:7px 16px 6px;border:1px solid #6f8791;font-family:'IBM Plex Mono',monospace;font-size:13.5px;letter-spacing:.2em;text-transform:uppercase;color:#dfe7ea}
+  /* the rail that the bags hang from */
+  .rail{max-width:1180px;margin:18px auto 0;height:12px;border-radius:6px;background:linear-gradient(#aab6bb,#5c6a70 55%,#2c373c);box-shadow:0 6px 14px rgba(0,0,0,.6)}
+  main{max-width:1180px;margin:0 auto;padding:0 26px 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(318px,1fr));gap:30px 26px;align-items:start}
+  .bag{position:relative;display:block;margin-top:-4px;padding:0 0 16px;border:0;text-align:left;color:#1c1d22;cursor:pointer;font:inherit;background:none;transition:transform .2s;transform-origin:50% 0}
+  .bag:nth-child(3n+1){transform:rotate(-1deg)}.bag:nth-child(3n+2){transform:rotate(.8deg)}.bag:nth-child(3n){transform:rotate(-.4deg)}
+  .bag:hover{transform:rotate(0) translateY(5px)}
+  .peg{display:block;width:26px;height:34px;margin:0 auto -6px;border:5px solid #8a979c;border-bottom:0;border-radius:13px 13px 0 0}
+  .skin{position:relative;display:block;padding:0 0 14px;border-radius:5px;background:linear-gradient(160deg,rgba(255,255,255,.2),rgba(255,255,255,.06) 40%,rgba(255,255,255,.14));
+    border:1px solid rgba(255,255,255,.36);box-shadow:0 18px 40px rgba(0,0,0,.6),inset 0 0 26px rgba(255,255,255,.08)}
+  .tape{display:block;height:38px;border-radius:4px 4px 0 0;background:repeating-linear-gradient(-45deg,#b3261c 0 16px,#f4f1e8 16px 32px);position:relative}
+  .tape:after{content:'EVIDENCE';position:absolute;left:50%;top:7px;transform:translateX(-50%);padding:2px 14px 1px;background:#b3261c;color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;letter-spacing:.4em;text-indent:.4em}
+  .form{display:block;margin:12px 12px 0;padding:11px 14px 12px;background:#f6f4ec;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+  .form small{display:block;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#7a7f83}
+  .form h2{margin:1px 0 8px;font-family:'Permanent Marker',cursive;font-weight:normal;font-size:26px;line-height:1.12;color:#16171c;border-bottom:1px solid #9aa3a8;padding-bottom:6px}
+  .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;border-bottom:1px solid #9aa3a8;padding-bottom:6px;margin-bottom:7px}
+  .row b{display:block;font-family:'Permanent Marker',cursive;font-weight:normal;font-size:16.5px;color:#1d2a52;white-space:nowrap}
+  .stars{font-family:Arial,sans-serif;font-size:19px;letter-spacing:3px;color:#b3261c;line-height:1.1}
+  .form em{display:block;font-style:normal;font-family:'Libre Baskerville',serif;font-size:13.5px;line-height:1.46;color:#2b2d33}
+  .thing{display:block;height:78px;margin:8px 12px 0}
+  .thing svg{display:block;width:100%;height:100%}
+  .stamp{position:absolute;right:20px;bottom:30px;padding:3px 10px 1px;border:3px solid;font-family:'Stardos Stencil',serif;font-weight:700;font-size:17px;letter-spacing:.14em;transform:rotate(9deg);opacity:.9;display:none;background:rgba(246,244,236,.8)}
+  .bag.going .stamp{display:block;color:#1f3a8a}
+  .bag.solved .stamp{display:block;color:#b3261c}
+  .more{margin-top:34px;display:grid;place-items:center;min-height:230px;border:2px dashed rgba(223,231,234,.3);border-radius:5px;color:rgba(223,231,234,.62);
+    font-family:'IBM Plex Mono',monospace;font-size:14.5px;line-height:1.6;text-align:center;padding:20px}
+  footer{max-width:1180px;margin:0 auto;padding:6px 24px 50px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#8fa0a6;text-align:center;line-height:1.9}
+  footer b{color:#f0b429;font-weight:normal;letter-spacing:2px;font-family:Arial,sans-serif}
+  @media (max-width:640px){header{grid-template-columns:1fr}.print{display:none}}
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<header>
+  <svg class="print" viewBox="0 0 118 150" aria-hidden="true"><g fill="none" stroke="#dfe7ea" stroke-width="3.2" stroke-linecap="round">
+    <ellipse cx="59" cy="70" rx="6" ry="8"/><ellipse cx="59" cy="70" rx="15" ry="19"/><ellipse cx="59" cy="70" rx="24" ry="30"/><ellipse cx="59" cy="70" rx="33" ry="41"/>
+    <path d="M17 76Q14 18 59 18T101 76"/><path d="M8 84Q4 6 59 6T110 84"/><path d="M17 76V112M101 76V112M8 84V118M110 84V118"/>
+    <path d="M26 110Q59 128 92 110"/><path d="M18 124Q59 144 100 124"/><path d="M30 138Q59 150 88 138"/></g>
+    <path d="M22 100l7 11h-14zM96 100l7 11h-14z" fill="#f0b429"/></svg>
+  <div>
+    <h1>Foren<b>s</b>ics</h1>
+    <p>A small laboratory, and the cases that come through its door. In every one of them somebody is about to be blamed, and the evidence has not been asked yet. You are the newest person in the building.</p>
+    <span class="motto">Every contact leaves a trace</span>
+  </div>
+</header>
+<div class="rail"></div>
+<main id="files"></main>
+<footer><b>&#9733;&#9733;&#9733;</b> a full evening&rsquo;s work &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;</b> longer, and the simple answer is the wrong one &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> long, and nothing is handed to you<br>
+You will need the mouse in here: there are brushes, droppers and lenses to pick up.</footer>
+
+<script src="../assets/account.js"></script>
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"fair","title":"A Smell of Vinegar","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Thursday night in a school hall, twelve hours before the science fair is judged. The best project in the room lies in pieces in a cloud of white powder, the air smells of vinegar, and the head teacher has already written her letter about the boy with the volcano. All she wants from the laboratory is a signature.","rooms":5,"first":"hall.html","firstId":"hall","last":"judging"},{"id":"cake","title":"Warm in the Middle","stars":3,"minutes":"40-50","hold":false,"level":"B1+ to B2","blurb":"Friday night in a cake shop, fourteen hours before the wedding of the year. The cake has gone green down one side, somebody has walked through a sack of flour, and a small sponge on the rack is still warm in the middle. The new assistant locked up. The baker would like to be wrong about her, and cannot see how.","rooms":5,"first":"shop.html","firstId":"shop","last":"yard"}]), box = document.getElementById('files');
+  /* what can be seen through the plastic */
+  var L = 'fill="none" stroke="#dfe7ea" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"';
+  var THING = {
+    fair: '<path d="M96 76h-56q-14 0-18-10H8V50h14q4-10 18-10h56z" fill="#5a3a1e" stroke="#2a1a0c" stroke-width="2"/><rect x="56" y="42" width="30" height="32" fill="#e9c93a"/><rect x="2" y="52" width="8" height="12" fill="#7d2a1c"/>' +
+      '<g fill="#f4f1e8" opacity=".9"><circle cx="130" cy="70" r="3"/><circle cx="142" cy="78" r="2.500"/><circle cx="152" cy="66" r="2"/><circle cx="162" cy="76" r="3"/><circle cx="174" cy="70" r="2"/><ellipse cx="150" cy="82" rx="34" ry="5" opacity=".5"/></g>' +
+      '<g ' + L + ' stroke-width="2"><ellipse cx="236" cy="56" rx="5" ry="6"/><ellipse cx="236" cy="56" rx="12" ry="15"/><ellipse cx="236" cy="56" rx="19" ry="24"/><path d="M210 60q0-34 26-34t26 34v22M210 60v22"/></g>',
+    cake: '<path d="M40 78h110V52q-55-22-110 0z" fill="#e9c98a" stroke="#8a6a3a" stroke-width="2"/><path d="M40 60q55-18 110 0" ' + L + '/><circle cx="95" cy="34" r="7" fill="#b3261c"/><g ' + L + ' stroke-width="2"><path d="M190 80c8-8 4-18 12-22s12 4 10 12-8 12-6 12"/><path d="M226 80c8-8 4-18 12-22s12 4 10 12"/></g>',
+    forgery: '<rect x="60" y="16" width="120" height="70" fill="none" stroke="#c9a23a" stroke-width="8"/><path d="M70 76l30-30 22 20 16-12 32 22" ' + L + '/><circle cx="150" cy="36" r="7" ' + L + '/><path d="M214 22l34 54" ' + L + '/>',
+    orchid: '<path d="M120 84V46" ' + L + '/><g fill="#d9a5c9" stroke="#8a4a7a" stroke-width="2"><ellipse cx="120" cy="30" rx="10" ry="16"/><ellipse cx="102" cy="42" rx="16" ry="9"/><ellipse cx="138" cy="42" rx="16" ry="9"/></g><circle cx="120" cy="42" r="5" fill="#f0b429"/><path d="M120 70q-22-4-30 12M120 62q22-4 30 14" ' + L + '/>',
+    cold: '<rect x="70" y="30" width="110" height="54" fill="#8a6a3a" stroke="#4a3a20" stroke-width="2"/><path d="M62 30h126l-8-14H70z" fill="#a8844a" stroke="#4a3a20" stroke-width="2"/><rect x="100" y="44" width="50" height="22" fill="#f6f4ec"/><path d="M108 52h34M108 59h24" stroke="#1c1d22" stroke-width="2"/>'
+  };
+  var PRINT = '<g ' + L + ' stroke-width="2"><ellipse cx="130" cy="50" rx="6" ry="8"/><ellipse cx="130" cy="50" rx="15" ry="19"/><ellipse cx="130" cy="50" rx="24" ry="30"/><path d="M96 56q0-44 34-44t34 44v26M96 56v26"/></g>';
+  function no(i) { return 'FL-' + ('0' + (i + 1)).slice(-2) + '/26'; }
+  Shelf.init();
+  STORIES.forEach(function (s, i) {
+    var st = Shelf.status('forensic', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'bag ' + st.state; b.setAttribute('data-story', s.id);
+    b.innerHTML = '<span class="peg"></span><span class="skin"><span class="tape"></span><span class="stamp"></span><span class="form"><small class="cno"></small><h2></h2>' +
+      '<span class="row"><span><small>Difficulty</small><span class="stars"></span></span><span><small>Time</small><b class="t"></b></span><span><small>Rooms &middot; level</small><b class="r"></b></span></span>' +
+      '<small>What is in the bag</small><em></em></span><span class="thing"><svg viewBox="0 0 280 96" preserveAspectRatio="xMidYMid meet">' + (THING[s.id] || PRINT) + '</svg></span></span>';
+    b.querySelector('.cno').textContent = 'Case ' + no(i);
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('.stars').textContent = Shelf.stars(s.stars);
+    b.querySelector('.stars').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.t').textContent = s.minutes + ' min';
+    b.querySelector('.r').textContent = s.rooms + (s.level ? ' · ' + s.level.replace(' to ', '–') : '');
+    b.querySelector('em').textContent = s.blurb;
+    b.querySelector('.stamp').textContent = st.state === 'solved' ? 'CASE CLOSED' : 'IN THE LAB';
+    b.addEventListener('click', function () { Shelf.open('forensic', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 5) {
+    var m = document.createElement('div'), left = 5 - STORIES.length; m.className = 'more';
+    m.textContent = STORIES.length ? (left === 1 ? 'One more bag is' : 'More bags are') + ' on the way to the laboratory. They have not been signed in yet.' : 'The first bags have not been signed in yet.';
+    box.appendChild(m);
+  }
+})();
+</script>
+</body>
+</html>

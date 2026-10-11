@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Workroom · The Eleventh Hour</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-fantasy.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="hours.css">
+<style>
+  body{--bg:#1c1109;--accent:#ffc978;--font-display:'Almendra',serif;--font-ui:'Cinzel',serif;--font-body:'IM Fell English',Georgia,serif;
+    --tc-bg:rgba(28,16,8,.96);--tc-ink:#f8ead4;--cap-bg:rgba(28,16,8,.94);--cap-ink:#fbf0dd;--panel:#2a190d;--face-bg:#4a2f1a;--q-ink:#f0cc98;--fade:#0c0603;--hud-bg:rgba(28,16,8,.82)}
+  .tc-room{font-family:'Almendra',serif;font-weight:700;font-style:italic}
+  .tk-name{font-family:'Almendra',serif;font-style:italic;font-size:29px}
+  #glowW{animation:gw 3s steps(4) infinite}
+  @keyframes gw{50%{opacity:.84}}
+  .cfl{transform-origin:412px 560px;animation:cf 1.7s ease-in-out infinite}
+  @keyframes cf{0%,100%{transform:scale(1,1)}40%{transform:scale(.9,1.16)}70%{transform:scale(1.08,.9)}}
+  #dawW{animation:bob 5s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  #steamW{opacity:0;stroke-dasharray:10 16;animation:st 3.4s linear infinite}
+  @keyframes st{to{stroke-dashoffset:-52}}
+  #scene.made #steamW{opacity:.6}
+
+  /* the bench */
+  .wb{display:grid;grid-template-columns:minmax(0,430px) minmax(0,540px);gap:20px;width:min(1000px,96vw);align-items:start}
+  .wb .doc.receipt{width:100%;max-height:none;padding:18px 22px 14px;font-size:16.5px;line-height:1.3;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .wb .doc.receipt h4{font-size:21px}.wb .doc.receipt h5{font-size:14.5px;margin-bottom:8px;padding-bottom:7px}
+  .wb .doc.receipt p{grid-template-columns:28px minmax(0,1fr);margin-bottom:5px}
+  .wb .doc.receipt p.pen{font-size:20px}
+  .wb-b{padding:14px 18px 14px;background:#4a2f1a linear-gradient(170deg,#6a4526,#3a2210);border:7px solid #1c1109;border-radius:6px;box-shadow:0 26px 70px rgba(0,0,0,.7),inset 0 0 0 2px rgba(255,201,120,.2)}
+  .wb-pic{display:block;width:100%;height:150px;background:#2a190d;border:1px solid rgba(255,201,120,.3);margin-bottom:10px}
+  .wb-h{margin:8px 0 4px;font-family:'Cinzel',serif;font-weight:700;font-size:11px;letter-spacing:.2em;color:#e6c79a}
+  .wb-row{display:flex;flex-wrap:wrap}
+  .wb-row button{height:34px;margin:0 6px 6px 0;padding:0 11px;border-radius:3px;border:2px solid #8a6a26;background:linear-gradient(#e2c56f,#b08a35);color:#2a1c06;font-family:'Almendra',serif;font-weight:700;font-size:15.5px;
+    box-shadow:inset 0 2px 0 rgba(255,245,200,.55)}
+  .wb-row button:hover{border-color:#fff3c8}
+  .wb-jars button{border-radius:8px 8px 3px 3px;background:linear-gradient(#f4ecd4,#d9cfb0);border-color:#6f8f6a;color:#3b2a5c;font-style:italic}
+  .wb-jars button.on{background:linear-gradient(#fff,#ffe9a8);border-color:#fff;box-shadow:0 0 0 3px rgba(255,214,110,.45)}
+  .wb-ask{margin:6px 0 0;padding:9px 12px;border-radius:4px;background:rgba(0,0,0,.4);display:none}
+  .wb-ask.on{display:block}
+  .wb-ask p{margin:0 0 7px;font-family:'IM Fell English',Georgia,serif;font-size:17px;line-height:1.3;color:#fbf0dd}
+  .wb-ask .btn{--accent:#ffe2a0;font-size:12.500px;padding:6px 12px;margin-right:8px}
+  .wb .pmsg{min-height:96px;margin-top:8px;font-size:17px;line-height:1.3}
+  #pb-swirl{opacity:0}
+  #pb-swirl.go{animation:sw .8s ease-out}
+  @keyframes sw{0%{opacity:.9;transform:rotate(0deg)}100%{opacity:0;transform:rotate(200deg)}}
+  #pb-swirl.go.acw{animation-name:swa}
+  @keyframes swa{0%{opacity:.9;transform:rotate(0deg)}100%{opacity:0;transform:rotate(-200deg)}}
+  #pb-swirl{transform-origin:150px 74px}
+  #pb-flame{transform-origin:150px 128px;animation:cf 1.4s ease-in-out infinite}
+  @media (max-width:900px){.wb{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a4526"/><stop offset="1" stop-color="#3a2210"/></linearGradient>
+  <linearGradient id="woodW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a5230"/><stop offset="1" stop-color="#3f2814"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc8f"/><stop offset=".5" stop-color="#c79a3c"/><stop offset="1" stop-color="#7d5c1c"/></linearGradient>
+  <radialGradient id="glowWG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".6"/><stop offset=".4" stop-color="#ffb050" stop-opacity=".2"/><stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="48%" cy="52%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#0c0603" stop-opacity=".25"/><stop offset="1" stop-color="#0c0603" stop-opacity=".88"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-640" width="3600" height="1400" fill="url(#wallW)"/>
+<path d="M-1000 -640H2600V70H-1000Z" fill="#221409"/><g fill="#1c1109"><rect x="140" y="-640" width="30" height="710"/><rect x="760" y="-640" width="30" height="710"/><rect x="1380" y="-640" width="30" height="710"/><rect x="-480" y="-640" width="30" height="710"/><rect x="2000" y="-640" width="30" height="710"/></g>
+<path d="M-1000 760H2600V1500H-1000Z" fill="url(#woodW)"/><path d="M-1000 760H2600" stroke="#150b05" stroke-width="6"/>
+<g id="boardsW" stroke="#1c1109" stroke-width="3" fill="none" opacity=".7"></g>
+
+<!-- shelves of jars: the Warden labels everything -->
+<g id="jars" class="hot"><rect x="150" y="150" width="620" height="330" fill="#3a2210" opacity=".5"/><g fill="#2a190d"><rect x="150" y="262" width="620" height="14"/><rect x="150" y="372" width="620" height="14"/><rect x="150" y="480" width="620" height="14"/><rect x="150" y="150" width="620" height="12"/><rect x="150" y="150" width="14" height="344"/><rect x="756" y="150" width="14" height="344"/></g>
+  <g id="jarsG"></g></g>
+
+<!-- the sampler, the speaking-tube, the ladder to the loft -->
+<g id="sampler" class="hot"><rect x="872" y="150" width="300" height="150" fill="#2a190d"/><rect x="884" y="162" width="276" height="126" fill="#efe6cc"/>
+  <text x="1022" y="204" class="cd" font-size="17" fill="#7a2230">TOO MANY COOKS</text><text x="1022" y="232" class="cd" font-size="17" fill="#7a2230">SPOIL THE BROTH</text>
+  <text x="1022" y="264" class="al" font-size="13" fill="#3d5a3a">worked by T. Orrin, Warden, 1861</text>
+  <g fill="#3d5a3a"><circle cx="900" cy="178" r="4"/><circle cx="1144" cy="178" r="4"/><circle cx="900" cy="272" r="4"/><circle cx="1144" cy="272" r="4"/></g></g>
+<g id="tubeW" class="hot"><circle cx="1250" cy="330" r="40" fill="#000" opacity="0"/><path d="M1250 350V1500" stroke="#7d5c1c" stroke-width="9"/><path d="M1232 306h36l-8 44h-20z" fill="url(#brassG)"/><ellipse cx="1250" cy="306" rx="20" ry="8" fill="#2a1c06"/></g>
+<g id="ladder" class="hot"><rect x="1372" y="-640" width="190" height="700" fill="#150b05"/><rect x="1380" y="60" width="170" height="700" fill="#000" fill-opacity=".001"/><path d="M1400 760V-640M1530 760V-640" stroke="#3f2814" stroke-width="14"/>
+  <g stroke="#5a3c22" stroke-width="10"><path d="M1400 690h130M1400 610h130M1400 530h130M1400 450h130M1400 370h130M1400 290h130M1400 210h130M1400 130h130M1400 50h130"/></g>
+  <rect x="1400" y="-20" width="130" height="80" fill="#cfdcff" opacity=".22"/></g>
+
+<!-- the bench: lamp and pan, the candle with its pin, the receipt book, a little lever -->
+<g id="bench" class="hot">
+  <circle id="glowW" cx="488" cy="560" r="300" fill="url(#glowWG)" pointer-events="none"/>
+  <rect x="150" y="640" width="1060" height="26" fill="#7a5230"/><rect x="150" y="666" width="1060" height="14" fill="#3f2814"/><path d="M190 680v80M1170 680v80" stroke="#3f2814" stroke-width="22"/>
+  <g id="panW"><path d="M586 600V640M734 600V640" stroke="#15131a" stroke-width="7"/><path d="M626 640q0-18 34-18t34 18z" fill="url(#brassG)"/><path d="M660 622v-10" stroke="#3a2210" stroke-width="4"/>
+    <g transform="translate(0 -32)"><path d="M560 600h200l-16 40H576z" fill="#1c1c22"/><path d="M760 606h90" stroke="#1c1c22" stroke-width="10" stroke-linecap="round"/>
+    <g id="steamW" stroke="#f8ead4" stroke-width="4" fill="none" stroke-linecap="round"><path d="M620 590q-14-24 0-48t0-48"/><path d="M660 586q14-24 0-48t0-48"/><path d="M700 590q-14-24 0-48t0-48"/></g></g></g>
+  <g id="candleW" transform="translate(76 0)"><rect x="398" y="566" width="28" height="74" fill="#f4ecd4"/><path class="cfl" d="M412 536q-8 13-8 20a8 8 0 0 0 16 0q0-7-8-20z" fill="#ffe2a0"/><path d="M426 604h14" stroke="#8a8f96" stroke-width="3"/><ellipse cx="412" cy="642" rx="34" ry="8" fill="url(#brassG)"/></g>
+  <g id="leverW"><rect x="1100" y="610" width="70" height="30" fill="#2a190d"/><path d="M1134 612V556" stroke="#15131a" stroke-width="8" stroke-linecap="round"/><circle cx="1134" cy="552" r="9" fill="#5c6373"/><rect x="1096" y="646" width="78" height="16" fill="#f4ecd4"/><text x="1135" y="658" class="cz" font-size="9" fill="#1c2030">KILL TIME</text></g>
+</g>
+<g id="book" class="hot"><path d="M196 640L236 500h196l-40 140z" fill="#3f2814"/><path d="M214 624L248 512h84l-30 112z" fill="#efe2bd"/><path d="M308 624L338 512h84l-30 112z" fill="#e6d7ac"/>
+  <g stroke="#6a1f16" stroke-width="2.200" opacity=".8"><path d="M246 532h70M242 548h66M238 564h70M234 580h60M230 596h66M336 532h70M332 548h66M328 564h70M324 580h60"/></g></g>
+<g id="dawW" class="hot"><circle cx="700" cy="110" r="42" fill="#000" opacity="0"/><use href="#ch-byword" x="670" y="72" width="62" height="80"/></g>
+
+<rect x="-1000" y="-640" width="3600" height="2140" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Carry it up to the bell</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="hours.js"></script>
+<script>
+(function () {
+  var $ = ER.$, sc = $('#scene'), busy = false, nextFile = null;
+  var LABELS = ['SPARE TIME', 'LOST TIME', 'SALT', 'BORROWED TIME', 'ELBOW GREASE', 'NO TIME', 'HALF A MO', 'TWO SHAKES', 'A MONTH OF SUNDAYS', 'STRING', 'SECOND THOUGHTS', 'ODD MOMENTS', 'FORTY WINKS', 'A TICK', 'PINS'];
+
+  (function () {
+    var s = '', x, i, r, c, COL = ['#8fb39a', '#c9a55a', '#9ab0c9', '#b98a6a', '#a8b46a'];
+    for (x = -900; x < 2600; x += 170) s += '<path d="M' + x + ' 760L' + (800 + (x - 800) * 2.2).toFixed(0) + ' 1500"/>';
+    $('#boardsW').innerHTML = s; s = '';
+    for (i = 0; i < 15; i++) {
+      r = Math.floor(i / 5); c = i % 5; x = 190 + c * 114;
+      s += '<g><rect x="' + x + '" y="' + (184 + r * 110) + '" width="74" height="78" rx="9" fill="' + COL[(i * 2) % 5] + '" opacity=".85"/><rect x="' + (x + 10) + '" y="' + (172 + r * 110) + '" width="54" height="14" rx="3" fill="#5a3c22"/>' +
+        '<rect x="' + (x + 4) + '" y="' + (210 + r * 110) + '" width="66" height="30" fill="#f4ecd4"/>' +
+        LABELS[i].split(' ').reduce(function (acc, w) { var l = acc[acc.length - 1]; if (l && (l + ' ' + w).length <= 10) acc[acc.length - 1] = l + ' ' + w; else acc.push(w); return acc; }, []).slice(0, 2).map(function (ln, k, arr) {
+          return '<text x="' + (x + 37) + '" y="' + (223 + r * 110 + k * 11 + (arr.length === 1 ? 5 : 0)) + '" class="cz" font-size="8" fill="#3b2a5c">' + ln + '</text>'; }).join('') + '</g>';
+    }
+    $('#jarsG').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'fantasy', story: 'hours', storyTitle: 'The Eleventh Hour', id: 'workroom', no: 'IV', title: 'The Workroom',
+    go: 'Go into the workroom',
+    intro: [
+      'A lever gives the clock an order, so the clock took each label to the letter: KILL TIME stopped every wheel dead, and MARK TIME set it ticking and going nowhere. The hours went on their hooks back to front: anticlockwise from the top, and every figure in mirror writing, so that the plate that read XI was only the IX.',
+      'One hook is still empty. One more flight up, just under the bell, is the workroom: a warm little room full of jars, with a label on every jar in violet ink.',
+      'The clock cannot hear a word that is said in here. The Wardens have always found that a comfort.'
+    ],
+    exit: {"next":"loft","w":{"69b2dcff":"84abb828"}}, tags: {"a1":["02205997"],"a2":["6eddbdf1"],"a3":["d784ef36"],"a4":["e70897d2"],"a5":["00deabd3"],"a6":["652f1993"],"a7":["2b9e4843"],"a8":["bea52053"]},
+    sound: ['candle', { root: 52, bpm: 66, drop: ['mel'], beds: [['fire', 0.6]] }],      /* the one warm room in the tower: the harp, a little quicker, and a flame */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('k-file') || null;
+
+  var RECEIPT = '<h4>To Call a Lost Hour Home</h4><h5>from the Wardens&rsquo; receipt book &middot; for one cook and one spoon: let nobody else put in so much as a pinch</h5>' +
+    '<p><b>1.</b><span>First light the lamp under the iron pan; and while the pan is warming, do nothing else.</span></p>' +
+    '<p><b>2.</b><span>Then put in a pinch of salt.</span></p>' +
+    '<p><b>3.</b><span>Pour in spare time until the pan is half full.</span></p>' +
+    '<p><b>4.</b><span>Stir twice, clockwise. Before it settles, add three drops of elbow grease.</span></p>' +
+    '<p><b>5.</b><span>Kill time until the candle has burnt down to its pin.</span></p>' +
+    '<p><b>6.</b><span>Once the pin has dropped, and not before, stir once more: the other way.</span></p>' +
+    '<p><b>7.</b><span>Then take the pan off the lamp, and carry it up to the bell while it is hot. There say the Words, which are these: <i>(the corner of the page has been cut away, very neatly, with scissors)</i></span></p>' +
+    '<p class="pen">I have never needed this. And the Words are an order: better lost. W.Q.</p>';
+
+  function hints() {
+    if (nextFile) return ['go', ['The pan is ready, and it must go up while it is hot. The ladder is on the right; the button is at the bottom of the screen.']];
+    if (ER.flag('k-read')) return ['cook', [
+      'A receipt is a list of orders with small words in them: first, then, while, until, before, once. Every one of those words is about WHEN. Find the step where you have to be quick, and the two where you have to wait.',
+      'Measures matter: a pinch is not a spoonful, half full is two quarters, twice is not three times. And this room is not one of the three places where the clock hears. So when the receipt says &ldquo;kill time&rdquo;, who is it talking to, and what do people mean by it?',
+      'Light the lamp, and wait for the pan. A pinch of salt. Spare time, up to the half. Two stirs clockwise, and then three drops of grease at once, before the pan settles. Then simply wait until the pin falls; stir once the other way; and take the pan off. And let nobody help you: the wall says why.'
+    ]];
+    return ['start', [
+      'The receipt book is open on the left of the bench. Read all of it before you touch anything: one of its steps will not wait for you.',
+      'Then go to the bench. Everything that the receipt asks for is on it, or on the shelves over it.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    sc.classList.toggle('made', !!nextFile);
+    $('#panW').setAttribute('class', ER.flag('k-read') && !nextFile ? 'nudge' : '');
+    $('#go').classList.toggle('on', !!nextFile && !busy);
+    ER.pips((ER.flag('k-read') ? 1 : 0) + (nextFile ? 1 : 0), 2);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The pan is steaming on the bench, with a cloth round its handle. It must go up while it is hot.'); return; }
+    if (ER.flag('k-read')) { ER.say('The workroom. The lamp, the pan and the candle are on the bench.'); return; }
+    busy = true;
+    ER.narrate([
+      'It smells of candle wax, clock oil and old paper. Three shelves of jars, and a label on every one: SPARE TIME. LOST TIME. BORROWED TIME. A MONTH OF SUNDAYS. STRING.',
+      'On the bench a book lies open on its stand, beside a spirit lamp, an iron pan, and a candle with a brass pin stuck in its side. Somebody got this ready, a long time ago, in case.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the room ---------- */
+  $('#book').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation();
+    ER.read({ html: RECEIPT, cls: 'receipt', clue: { id: 'receipt', title: 'To call a lost hour home', kind: 'The receipt book' },
+      done: function () { ER.flag('k-read', 1); HRS.learn(['receipt', 'a pinch', 'clockwise', 'elbow grease', 'kill time']); paint(); } });
+  });
+  $('#bench').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The pan is the colour of an old penny, and smells of rain on a hot road. It is ready.'); return; }
+    if (!ER.flag('k-read')) { ER.say('A lamp, a pan, a candle with a pin in it, and a little brass lever screwed to the end of the bench. The book on the left will say what they are all for.'); return; }
+    openBench();
+  });
+  $('#dawW').addEventListener('click', function (e) {
+    if (busy) return;
+    e.stopPropagation(); ER.wordAt(e.clientX, e.clientY, 'jackdaw');
+    ER.say(nextFile ? 'Byword is looking up the ladder. He has gone very quiet, for a bird with a hundred sayings.' : 'Byword is on the top shelf, with one eye on the spoon. &ldquo;' + HRS.said('hands') + '&rdquo; he says, hopefully.');
+  });
+  HRS.thing('#jars', 'jar', 'SPARE TIME, LOST TIME, BORROWED TIME, HALF A MO, TWO SHAKES, FORTY WINKS. And one on the bottom shelf that says only STRING. Mistress Quillon labels everything.', isBusy);
+  HRS.thing('#sampler', 'sampler', 'A sampler in a frame: TOO MANY COOKS SPOIL THE BROTH, in red wool, worked by T. Orrin, Warden, 1861. So that is whose cross old voice Byword keeps.', isBusy);
+  HRS.thing('#tubeW', 'speaking-tube', function () { return nextFile ? '&ldquo;What are the Words?&rdquo; says the tube. Nobody answers it.' : '&ldquo;Is there anything that I can do?&rdquo; says the Mayor&rsquo;s voice in the speaking-tube. &ldquo;I am a great believer in helping.&rdquo;'; }, isBusy);
+  HRS.thing('#ladder', null, 'A ladder, and a trapdoor standing open at the top of it. Up there is the bell loft, and one small light, and somebody who is being very quiet.', isBusy);
+
+  /* ---------- the bench ---------- */
+  var JARS = [['salt', 'Salt'], ['spare', 'Spare time'], ['lost', 'Lost time'], ['borrowed', 'Borrowed time'], ['grease', 'Elbow grease'], ['notime', 'No time']];
+  var MEAS = [['pinch', 'A pinch'], ['spoon', 'A spoonful'], ['drop', 'One drop'], ['pour', 'Pour a quarter of a pan']];
+  var PIC = '<svg class="wb-pic" viewBox="0 0 520 150"><path d="M0 132H520" stroke="#7a5230" stroke-width="10"/>' +
+    '<rect id="pb-liq" x="96" y="92" width="108" height="0" fill="#9ad0c8"/><ellipse id="pb-swirl" cx="150" cy="74" rx="40" ry="9" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="14 10"/>' +
+    '<path d="M90 50v44h120V50" fill="none" stroke="#17171c" stroke-width="8"/><path d="M210 56h74" stroke="#17171c" stroke-width="8" stroke-linecap="round"/><path d="M84 72h12M204 72h12" stroke="#e9dfc0" stroke-width="2"/>' +
+    '<path d="M126 128q0-14 24-14t24 14z" fill="#c79a3c"/><path id="pb-flame" d="M150 100q-8 10-8 16a8 8 0 0 0 16 0q0-6-8-16z" fill="#8fd0ff"/>' +
+    '<rect id="pb-candle" x="356" y="44" width="22" height="80" fill="#f4ecd4"/><path id="pb-cfl" d="M367 26q-6 9-6 13a6 6 0 0 0 12 0q0-4-6-13z" fill="#ffe2a0"/><path id="pb-pin" d="M378 90h16" stroke="#c9d0d8" stroke-width="3" stroke-linecap="round"/>' +
+    '<ellipse cx="367" cy="128" rx="34" ry="6" fill="#c79a3c"/><text id="pb-note" x="508" y="22" text-anchor="end" font-family="Almendra,serif" font-style="italic" font-size="16" fill="#f8ead4"></text></svg>';
+  var WHILE = 'You could not wait. &ldquo;While the pan is warming, do nothing else,&rdquo; says the receipt; and &ldquo;while&rdquo; means for the whole of that time. The pan spits, and goes black. &ldquo;' + HRS.said('haste') + '&rdquo; says Byword.';
+  var SETTLED = 'Too slow. The pan has settled: it lies there as flat as a pond, and the grease would only sit on the top of it. &ldquo;Before it settles&rdquo; gave you ten seconds, and they have gone. <i>Have the jar in your hand before you pick up the spoon.</i>';
+  var LEVER = 'You pull the little lever. Nothing in the tower was moving, and nothing moves now: but the candle goes on burning, the pan boils dry, and the receipt is ruined. It was written for a cook, in a room where the clock cannot hear. When people say &ldquo;kill time&rdquo;, they mean: wait, and do something that does not matter.';
+
+  function openBench() {
+    var box = ER.el('div', 'wb'), c, done = false, jar = null, timers = [], asked = {}, pending = null, s;
+    function fresh() { return { n: 0, lit: false, warming: false, level: 0, stirs: [], drops: 0, burnt: 0, last: [], log: [] }; }
+    c = fresh();
+    s = '<div class="doc receipt">' + ER.gloss(RECEIPT) + '</div><div class="wb-b">' + PIC +
+      '<div class="wb-h">THE LAMP AND THE PAN</div><div class="wb-row"><button type="button" data-a="lamp">Light the lamp</button><button type="button" data-a="off">Take the pan off the lamp</button></div>' +
+      '<div class="wb-h">A JAR FROM THE SHELF &hellip;</div><div class="wb-row wb-jars">' + JARS.map(function (j) { return '<button type="button" data-j="' + j[0] + '">' + j[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="wb-h">&hellip; AND HOW MUCH OF IT</div><div class="wb-row">' + MEAS.map(function (m) { return '<button type="button" data-m="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="wb-h">THE SPOON, THE STOOL, THE LITTLE LEVER</div><div class="wb-row"><button type="button" data-a="cw">Stir clockwise</button><button type="button" data-a="acw">Stir anticlockwise</button><button type="button" data-a="wait">Sit and wait</button><button type="button" data-a="lever">Pull KILL TIME</button></div>' +
+      '<div class="wb-ask"><p></p><button type="button" class="btn" data-y="1"></button><button type="button" class="btn" data-y="0"></button></div><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg'), askEl = box.querySelector('.wb-ask');
+    function q(id) { return box.querySelector(id); }
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function clearT() { timers.forEach(clearTimeout); timers = []; }
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function draw() {
+      q('#pb-liq').setAttribute('y', 92 - c.level * 10); q('#pb-liq').setAttribute('height', c.level * 10);
+      q('#pb-liq').setAttribute('fill', c.drops >= 3 ? '#b9824a' : '#9ad0c8');
+      q('#pb-flame').style.display = c.lit ? '' : 'none';
+      q('#pb-candle').setAttribute('y', 44 + c.burnt * 16); q('#pb-candle').setAttribute('height', 80 - c.burnt * 16);
+      q('#pb-cfl').setAttribute('transform', 'translate(0 ' + c.burnt * 16 + ')');
+      q('#pb-pin').setAttribute('transform', c.burnt >= 3 ? 'translate(-26 36) rotate(20 386 90)' : '');
+      q('#pb-note').textContent = !c.lit ? 'The lamp is out. The pan is cold.' : c.warming ? 'The pan is warming …' : c.n >= 6 ? 'The pin has dropped.' : 'The pan is warm.';
+      ER.$$('.wb-jars button', box).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-j') === jar); });
+    }
+    function swirl(dir) { var e = q('#pb-swirl'); e.setAttribute('class', ''); void e.getBoundingClientRect(); e.setAttribute('class', 'go' + (dir === 'acw' ? ' acw' : '')); }
+    function ask(text, yes, no, onYes, onNo) {
+      pending = text ? { y: onYes, n: onNo } : null; askEl.classList.toggle('on', !!text); if (!text) return;
+      askEl.querySelector('p').innerHTML = ER.gloss(text); askEl.children[1].textContent = yes; askEl.children[2].textContent = no;
+    }
+    function spoil(text) {
+      clearT(); HRS.slip(); HRS.sfx.hiss(); c = fresh(); asked = {}; ask(null); draw();
+      msg(text + ' <i>You put out the lamp, scrape out the pan, set up a new candle, and begin again from the first word.</i>');
+    }
+    function ok(tag, key) { if (!ER.check(tag, key)) return false; c.log.push(key); return true; }
+    function offerDaw() {
+      HRS.sfx.caw();
+      ask('Byword has come down off the shelf, and he has the spoon in his beak. &ldquo;' + HRS.said('hands') + '&rdquo; he says, round the handle of it.', 'Let him stir', 'Take the spoon back',
+        function () { spoil('Byword stirs. He stirs rather well. But the receipt is for one cook and one spoon: the pan goes grey, and smells of wet feathers. &ldquo;' + HRS.said('cooks') + '&rdquo; says Byword, in the cross old voice. It seems to be the first time that he has understood it.'); },
+        function () { msg('You take the spoon back. Byword goes up to his shelf again, and looks at the sampler on the wall for some time.'); });
+    }
+    function offerMayor() {
+      ask('&ldquo;I could come up and watch the candle for you,&rdquo; says the Mayor&rsquo;s voice in the speaking-tube. &ldquo;Or give it a stir. I am a great believer in helping.&rdquo;', 'Yes, please', 'No, thank you',
+        function () { spoil('The Mayor comes up. It takes him some time. He gives the pan a stir &ldquo;to keep it going&rdquo;; and the receipt is for one cook and one spoon. &ldquo;' + HRS.said('cooks') + '&rdquo; says Byword. The Mayor says that at the winding it was the other way about. It was.'); },
+        function () { msg('&ldquo;No, thank you, Mr Sable. Not this time.&rdquo; The tube sighs. You go on waiting.'); });
+    }
+    function settle() { later(function () { if (!done && c.n <= 4 && c.drops < 3) spoil(SETTLED); }, 10000); }
+    function finish() {
+      var file = ER.exitOk([c.log.join('>')]);
+      if (!file) { msg('The pan goes cold in your hands. Something is wrong with this lock: tell your teacher.'); return; }
+      done = true; clearT(); nextFile = file; ER.flag('k-file', file); HRS.done('workroom'); busy = true; c.lit = false; draw();
+      msg('You lift the pan off the lamp, and wrap a cloth round the handle. It is hot, and heavy, and it hums.');
+      setTimeout(function () { ER.closeAll(); HRS.solved(); made(); }, 2400);
+    }
+    function step(a) {
+      var stir = a.k === 'cw' || a.k === 'acw';
+      switch (c.n) {
+      case 0:
+        if (a.k !== 'lamp') { HRS.slip(); msg('The lamp is not lit, and the pan is as cold as a key. <i>&ldquo;First&rdquo; is the first word of the receipt.</i>'); return; }
+        ok('a1', 'lamp'); c.lit = true; c.warming = true; HRS.sfx.flint(); draw(); msg('The lamp lights with a small blue pop. The pan begins to warm.');
+        later(function () { c.warming = false; c.n = 1; draw(); msg('The pan is warm. You can smell the iron.'); }, 4200);
+        return;
+      case 1:
+        if (a.k === 'lamp') { msg('The lamp is lit already.'); return; }
+        if (a.k !== 'add') { spoil('&ldquo;Then put in a pinch of salt.&rdquo; That comes second, and you have done something else second.'); return; }
+        if (ok('a2', a.j + ':' + a.m)) { c.n = 2; draw(); msg('A pinch of salt: as much as you can hold between one finger and a thumb. It hisses on the iron.'); return; }
+        spoil(a.j !== 'salt' ? 'That was not salt; and salt is what the receipt asks for second.' : a.m === 'spoon' ? 'A spoonful is not a pinch. A pinch is what you can hold between one finger and a thumb.' : 'Salt does not come in drops, and nobody pours a pinch.');
+        return;
+      case 2:
+        if (a.k === 'add' && a.m === 'pour') {
+          if (a.j === 'notime') { msg('The jar says NO TIME, and that is exactly what is in it. Nothing comes out.'); return; }
+          if (a.j !== 'spare') { spoil(a.j === 'lost' ? 'That was lost time. Nothing was ever made with lost time.' : a.j === 'borrowed' ? 'That was borrowed time, and sooner or later it has to be given back. The pan goes thin and grey.' : 'That is not a thing that pours.'); return; }
+          c.level++; HRS.sfx.pour(); draw();
+          if (c.level > 2) { spoil('It is over the half-way mark. &ldquo;Until the pan is half full&rdquo; has an end, and you have gone past it.'); return; }
+          if (c.level < 2) { msg('Spare time is thin and clear, and smells of a Sunday afternoon. The pan is a quarter full.'); return; }
+          msg('The pan is half full, to the mark.');
+          if (!asked.daw) { asked.daw = 1; offerDaw(); }
+          return;
+        }
+        if (c.level === 2 && ok('a3', 'spare:2')) { c.n = 3; step(a); return; }
+        spoil(a.k === 'add' ? 'Spare time, the receipt says; and time is poured, not pinched.' : 'The pan is not half full. &ldquo;Until&rdquo; means: go on, and stop exactly there.');
+        return;
+      case 3:
+        if (stir) {
+          c.stirs.push(a.k); HRS.sfx.stir(); swirl(a.k);
+          if (c.stirs.length > 2) { spoil('Twice, the receipt says. That was three times.'); return; }
+          if (c.stirs.length === 2) { settle(); msg('Round, and round again. The pan is turning by itself now, and slowing.'); } else msg('Once round.');
+          return;
+        }
+        if (ok('a4', (c.stirs[0] === c.stirs[1] ? c.stirs[0] : 'mixed') + ':' + c.stirs.length)) { c.n = 4; step(a); return; }
+        spoil(c.stirs.length !== 2 ? 'Twice, the receipt says; and it says so before anything else goes in.' : 'Clockwise, the receipt says: the way the hands of a clock go round, seen from the square. It has curdled.');
+        return;
+      case 4:
+        if (a.k === 'add' && a.j === 'grease' && a.m === 'drop') {
+          c.drops++; ER.sfx.drip(); draw();
+          if (c.drops > 3) { spoil('Three drops. That was four.'); return; }
+          if (c.drops === 3) { clearT(); HRS.byword('early'); msg('Three drops, and the pan has not stopped turning. It goes the colour of an old penny. &ldquo;' + HRS.said('early') + '&rdquo; says Byword.'); }
+          else msg(c.drops === 1 ? 'One.' : 'Two.');
+          return;
+        }
+        if (a.k === 'add') { spoil(a.j === 'grease' ? 'Elbow grease is thick. It comes in drops, and the receipt wants three of them.' : 'The receipt asks for elbow grease now, and for nothing else.'); return; }
+        if (ok('a5', 'grease:' + c.drops)) { c.n = 5; step(a); return; }
+        spoil(c.drops ? 'Three drops, the receipt says. Count them as they fall.' : '&ldquo;Before it settles,&rdquo; the receipt says; and the grease has not gone in.');
+        return;
+      case 5:
+        if (a.k === 'wait') {
+          c.burnt++; draw();
+          if (c.burnt === 1) { msg('You sit on the stool and watch the candle. Nothing happens, rather slowly.'); if (!asked.mayor) { asked.mayor = 1; offerMayor(); } return; }
+          if (c.burnt === 2) { HRS.byword('pot'); msg('You count the jars. There are fifteen. You count them again. &ldquo;' + HRS.said('pot') + '&rdquo; says Byword.'); return; }
+          ok('a6', 'wait'); HRS.sfx.pin(); c.n = 6; draw();
+          msg('The flame reaches the pin, and the pin falls into the dish: <i>ting</i>. People who talk of killing time mean exactly what you have just done: nothing much, until it was time.');
+          return;
+        }
+        if (a.k === 'lever') { HRS.sfx.lever(); spoil(LEVER); return; }
+        spoil(stir ? '&ldquo;Once the pin has dropped, and not before.&rdquo; The pin is still in the candle.' : a.k === 'off' ? 'Taken off now, it is only warm salt water. The candle has not reached its pin.' : 'Nothing more goes in. Step 5 asks for one thing only, and it is the easiest thing in the world.');
+        return;
+      case 6:
+        if (stir) {
+          c.last.push(a.k); HRS.sfx.stir(); swirl(a.k);
+          if (c.last.length > 1) { spoil('Once more, the receipt says. Not twice more.'); return; }
+          msg('Once round.'); return;
+        }
+        if (ok('a7', (c.last[0] || 'none') + ':' + c.last.length)) { c.n = 7; step(a); return; }
+        spoil(c.last.length ? 'The other way, the receipt says: the other way from the first stirring.' : '&ldquo;Stir once more&rdquo; comes before the pan is taken off, and before anything else.');
+        return;
+      default:
+        if (a.k !== 'off' || !ok('a8', 'off')) { spoil('Nothing more goes in, and nothing more is done to it. The last order is the one about the lamp.'); return; }
+        finish();
+      }
+    }
+    function act(a) {
+      if (done) return;
+      if (pending) { msg('Somebody has just offered to help you, and is waiting for an answer.'); return; }
+      if (c.warming) {
+        if (a.k === 'wait') { msg('You sit on the stool and do nothing at all. The pan ticks as it warms.'); return; }
+        spoil(WHILE); return;
+      }
+      if (a.k === 'lever' && c.n !== 5 && !(c.n === 4 && c.drops === 3)) { HRS.sfx.lever(); msg('You pull the little lever. Somewhere below, something goes clunk. Nothing in the tower was moving in any case.'); return; }
+      if (a.k === 'wait' && c.n < 3) { msg('You sit on the stool for a while. Nothing in the receipt has asked you to.'); return; }
+      step(a);
+    }
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null; if (!b || done) return;
+      if (b.hasAttribute('data-y')) { var p = pending; if (!p) return; ask(null); (b.getAttribute('data-y') === '1' ? p.y : p.n)(); return; }
+      if (b.hasAttribute('data-j')) { jar = jar === b.getAttribute('data-j') ? null : b.getAttribute('data-j'); ER.sfx.glass(); draw(); return; }
+      if (b.hasAttribute('data-m')) { if (!jar) { msg('Take a jar down from the shelf first: then say how much of it.'); return; } act({ k: 'add', j: jar, m: b.getAttribute('data-m') }); return; }
+      if (b.hasAttribute('data-a')) act({ k: b.getAttribute('data-a') });
+    });
+    draw();
+    msg('The lamp is out, the pan is clean, and the candle is new. The spoon is in your hand.');
+    ER.open('ov-lock', box, function () { clearT(); if (!done && !nextFile && c.n) ER.say('You cannot leave a pan on a lamp. You put it out and tip it away; the bench will be as it was when you come back.'); });
+  }
+  function made() {
+    sc.classList.add('made');
+    ER.narrate([
+      'The receipt was written for a cook, in the one room where the clock cannot hear. So you read it as people mean it: you killed time by waiting, and you let nobody help.',
+      '&ldquo;Is it done?&rdquo; says the speaking-tube. &ldquo;Then what are the Words?&rdquo; &ldquo;They are an order,&rdquo; you say, &ldquo;and somebody has cut them off the page.&rdquo;',
+      '&ldquo;Then who in the world knows them?&rdquo; says the Mayor. On the top shelf, Byword puts his head under his wing.'
+    ], function () {
+      HRS.learn(['kill time', 'elbow grease', 'a pinch']);
+      HRS.mine('n-work', 'The receipt, and the other proverb', '<p>The receipt was for a COOK, not for the clock: &ldquo;kill time&rdquo; = wait.</p><p>Here the wall said TOO MANY COOKS. One cook, one spoon.</p><p>The Words are an ORDER, to be said under the bell. They were cut off the page.</p><p>Byword says what he has heard said.</p>');
+      busy = false; paint();
+    });
+  }
+
+  $('#go').addEventListener('click', function () { if (nextFile && !busy) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Flour Store · Warm in the Middle</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-forensic.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="cake.css">
+<style>
+  body{--bg:#140d08;--accent:#f0b85a;--font-display:'Stardos Stencil',serif;--font-ui:'Barlow Condensed',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(22,14,8,.96);--tc-ink:#f3ead6;--cap-bg:rgba(24,15,8,.94);--panel:#21160c;--face-bg:#3a2a1a;--q-ink:#f0c888;--fade:#080402;--hud-bg:rgba(24,15,8,.8)}
+  .tc-room{font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:clamp(34px,5.2vw,66px)}
+  .tk-name{font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  .sB{font-family:'Barlow Condensed',sans-serif;font-weight:700;text-anchor:middle}
+  .sX{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle}
+  .sM{font-family:'IBM Plex Mono',monospace;font-weight:500;text-anchor:middle}
+  #bulbg{animation:swing 6s ease-in-out infinite;transform-origin:760px -200px}
+  @keyframes swing{0%,100%{transform:rotate(-1.300deg)}50%{transform:rotate(1.300deg)}}
+  #bulbl{animation:bulbl 7s steps(1,end) infinite}
+  @keyframes bulbl{0%{opacity:1}44%{opacity:.9}46%{opacity:1}}
+  #catz{animation:zz 4s ease-in-out infinite}
+  @keyframes zz{0%,100%{opacity:0}50%{opacity:.7}}
+  #flour.ready{animation:fl 1.600s steps(1,end) infinite}
+  @keyframes fl{50%{filter:brightness(1.12)}}
+  #sopen{display:none}
+  #scene.opened #sopen{display:block}
+  #scene.opened #sleaf{display:none}
+
+  /* the floor, and the sole */
+  .bn .pick{cursor:pointer}
+  .bn .pick rect{fill:#fffdf6;stroke:#8a8676;stroke-width:1.200}
+  .bn .pick text{fill:#1b2430}
+  .bn .pick:hover rect{fill:#ffe9a8}
+  .bn .pick.on rect{fill:#17324d;stroke:#0c1c2c}
+  .bn .pick.on text{fill:#fff}
+  .bn .cand{cursor:pointer}
+  .bn .cand .fr{fill:none;stroke:#8a8676;stroke-width:2}
+  .bn .cand:hover .fr{stroke:#f0b85a;stroke-width:4}
+  .bn .cand.on .fr{stroke:#f0b85a;stroke-width:6}
+  .bn #lift{cursor:crosshair}
+  .bn .stp{cursor:pointer}
+  .bn .stp rect{fill:#fffdf6;stroke:#8a8676;stroke-width:1.200}
+  .bn .stp:hover rect{fill:#ffe9a8}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="brick" width="96" height="48" patternUnits="userSpaceOnUse"><rect width="96" height="48" fill="#c4ae82"/><path d="M0 1H96M0 25H96M1 0V24M49 24V48" stroke="#a8936a" stroke-width="2"/></pattern>
+  <radialGradient id="bulbG"><stop offset="0" stop-color="#ffe2a8" stop-opacity=".8"/><stop offset=".45" stop-color="#ffc56a" stop-opacity=".22"/><stop offset="1" stop-color="#ffc56a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b3628"/><stop offset="1" stop-color="#8f4d3a"/></linearGradient>
+  <linearGradient id="sackG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cbb98f"/><stop offset=".5" stop-color="#e3d5b0"/><stop offset="1" stop-color="#bda97c"/></linearGradient>
+  <radialGradient id="vig" cx="48%" cy="44%" r="74%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#140800" stop-opacity=".4"/><stop offset="1" stop-color="#080300" stop-opacity=".94"/></radialGradient>
+</defs>
+
+<!-- painted brick -->
+<rect x="-1000" y="-400" width="3600" height="1026" fill="url(#brick)"/><rect x="-1000" y="596" width="3600" height="30" fill="#5a4630"/>
+
+<!-- through the arch: the bakehouse -->
+<g id="arch" class="hot"><path d="M24 626V310q0 -96 96 -96t96 96v316z" fill="#5a4630"/><path d="M36 626V312q0 -84 84 -84t84 84v314z" fill="#dfeef2"/><g stroke="#bfd0d6" stroke-width="2"><path d="M36 300h168M36 348h168M36 396h168M36 444h168M78 228v230M120 228v230M162 228v230"/></g><rect x="36" y="456" width="168" height="20" fill="#2f5a4c"/><rect x="36" y="530" width="168" height="96" fill="#9a938a"/><rect x="60" y="500" width="130" height="12" fill="#9aa5ac"/><path d="M70 512v114M180 512v114" stroke="#7d8a92" stroke-width="6"/></g>
+
+<!-- shelves, sacks, bins -->
+<g id="shelves" class="hot"><g fill="#5a4630"><rect x="244" y="150" width="14" height="476"/><rect x="556" y="150" width="14" height="476"/><rect x="866" y="150" width="14" height="476"/><rect x="244" y="196" width="636" height="12"/><rect x="244" y="326" width="636" height="12"/><rect x="244" y="456" width="636" height="12"/></g><g id="sacks"></g></g>
+<g id="bins" class="hot"></g>
+<g id="manual" class="hot"><path d="M410 520l8 -24h50l4 24z" fill="#f6f2e6"/><path d="M472 520l-4 -24h50l8 24z" fill="#efe9d8"/><path d="M468 496l4 24" stroke="#1f1c16" stroke-width="3"/><g stroke="#8a8676" stroke-width="1.300"><path d="M422 504h36M420 510h40M478 504h36M480 510h40"/></g></g>
+<g id="cat" class="hot" transform="translate(768 238)"></g><text id="catz" x="716" y="196" class="sB" font-size="20" fill="#3a2a1a">z</text>
+<g id="broom" class="hot"><circle cx="226" cy="254" r="5" fill="#2a1e16"/><path d="M226 258V540" stroke="#b08a55" stroke-width="7" stroke-linecap="round"/><path d="M198 540h56l8 44h-72z" fill="#8a6a3a"/><g stroke="#c9a86a" stroke-width="3"><path d="M200 584v22M212 584v24M224 584v22M236 584v24M248 584v22"/></g></g>
+
+<!-- the office door, the door to the stairs -->
+<g id="odoor" class="hot"><path d="M894 626V274l116 78v274z" fill="#2a1e16"/><path d="M904 626V294l96 64v268z" fill="#6b4a32"/><path d="M916 606V324l72 48v234z" fill="none" stroke="#4f3522" stroke-width="4"/><circle cx="984" cy="480" r="7" fill="#c9a23a"/>
+  <rect x="922" y="414" width="56" height="20" fill="#f3e9c0"/><text x="950" y="429" class="sB" font-size="13" fill="#2a1e16" letter-spacing="1.500">OFFICE</text></g>
+<g id="sdoor" class="hot"><rect x="1040" y="230" width="152" height="396" fill="#2a1e16"/>
+  <g id="sopen"><rect x="1052" y="242" width="128" height="384" fill="#0d0906"/><path d="M1052 626v-40h128v40z" fill="#5a4630"/><path d="M1052 586v-44h104v44z" fill="#4f3d2a"/><path d="M1052 542v-44h80v44z" fill="#43331f"/><path d="M1052 498v-44h56v44z" fill="#36291a"/>
+    <g fill="#7d1f1f"><path d="M1070 626v-40h76v40z"/><path d="M1066 586v-44h66v44z" opacity=".85"/><path d="M1062 542v-44h54v44z" opacity=".7"/></g>
+    <g><path d="M1078 584q0 -12 14 -12h14v12z" fill="#f1efe6"/><path d="M1110 584q0 -12 14 -12h14v12z" fill="#e6e2d6"/><path d="M1078 584h28M1110 584h28" stroke="#9a9484" stroke-width="2"/></g>
+    <path d="M1180 242l-20 14v362l20 8z" fill="#2f5a4c"/></g>
+  <g id="sleaf"><rect x="1052" y="242" width="128" height="384" fill="#2f5a4c"/><rect x="1066" y="258" width="100" height="150" fill="none" stroke="#234438" stroke-width="5"/><rect x="1066" y="428" width="100" height="180" fill="none" stroke="#234438" stroke-width="5"/>
+    <rect x="1082" y="296" width="68" height="22" fill="#c9a23a"/><text x="1116" y="312" class="sB" font-size="14" fill="#2a1e16" letter-spacing="2">PRIVATE</text><circle cx="1074" cy="440" r="8" fill="#c9a23a"/><rect x="1071" y="456" width="6" height="12" rx="3" fill="#0d0906"/></g></g>
+
+<!-- the shoe rack, the yard door -->
+<g id="shoes" class="hot"><rect x="1288" y="548" width="136" height="8" fill="#5a4630"/><rect x="1288" y="586" width="136" height="8" fill="#5a4630"/><path d="M1292 540v86M1420 540v86" stroke="#5a4630" stroke-width="8"/>
+  <g><path d="M1300 548q0 -14 16 -14h16v14z" fill="#fdfdfb"/><path d="M1336 548q0 -14 16 -14h16v14z" fill="#fdfdfb"/></g><g><path d="M1374 548q0 -16 18 -16h22v16z" fill="#f1efe6"/></g>
+  <g><path d="M1300 586q0 -13 15 -13h15v13z" fill="#bdb8ac"/><path d="M1334 586q0 -13 15 -13h15v13z" fill="#b5b0a4"/></g><g><path d="M1374 586q0 -16 18 -16h22v16z" fill="#eceae0"/></g>
+  <path d="M1436 626v-70h20v52h16v18z" fill="#3d5a3a"/></g>
+<g id="ydoor" class="hot"><rect x="1462" y="216" width="150" height="410" fill="#2a1e16"/><rect x="1474" y="228" width="130" height="398" fill="#6b4a32"/><g stroke="#4f3522" stroke-width="3"><path d="M1506 228v398M1540 228v398M1574 228v398"/></g><path d="M1474 300L1604 560" stroke="#5a3d28" stroke-width="16"/>
+  <rect x="1476" y="262" width="46" height="12" rx="3" fill="#1c1d20"/><rect x="1476" y="570" width="46" height="12" rx="3" fill="#1c1d20"/><circle cx="1492" cy="420" r="11" fill="#c9a23a"/><rect x="1484" y="440" width="16" height="34" rx="4" fill="#1c1d20"/></g>
+<g id="apron" class="hot"><path d="M1440 252h14" stroke="#2a1e16" stroke-width="6" stroke-linecap="round"/><path d="M1426 258q16 -8 30 0l6 150h-42z" fill="#fdfdfb"/><path d="M1422 330h38" stroke="#b79ad6" stroke-width="6"/></g>
+
+<!-- one bare bulb -->
+<circle id="bulbl" cx="760" cy="250" r="460" fill="url(#bulbG)" pointer-events="none"/>
+<g id="bulbg"><path d="M760 -400V132" stroke="#1c120a" stroke-width="3"/><rect x="752" y="130" width="16" height="16" fill="#3a2a1a"/><circle cx="760" cy="160" r="15" fill="#fff3c9"/></g>
+
+<!-- the floor -->
+<rect x="-1000" y="624" width="3600" height="800" fill="url(#floorG)"/><g id="grid" stroke="#57291d" stroke-width="2.500" opacity=".7"></g>
+<g id="flour" class="hot"><path d="M470 664q90 -34 250 -24q150 -18 250 22q70 40 36 96q-50 70 -210 82q-190 26 -330 -24q-110 -50 -80 -106q20 -34 84 -46z" fill="#f1ece0"/><path d="M430 690q-30 6 -40 26M1020 700q30 10 34 30M560 850q40 12 80 10" stroke="#f1ece0" stroke-width="10" stroke-linecap="round" opacity=".7" fill="none"/><g id="fprints"></g></g>
+<g id="burst" class="hot"><path d="M560 660q-30 -44 20 -54h120q44 8 26 54z" fill="url(#sackG)"/><path d="M604 606q20 28 0 54" stroke="#8a7a52" stroke-width="3" fill="none"/><path d="M640 612l30 20 -34 18 28 12" stroke="#5a4a2a" stroke-width="3" fill="none"/><path d="M636 640q60 -10 100 26q-60 16 -110 0z" fill="#fbf8f0"/><text x="596" y="640" class="sX" font-size="13" fill="#5a4a2a" transform="rotate(-4 596 640)">PLAIN</text></g>
+<g id="marks" pointer-events="none"></g>
+
+<!-- Mr Whitlow, Dr Novak, Chika -->
+<g id="whitlow" class="hot" transform="translate(126 852) scale(.96)"></g>
+<g id="novak" class="hot" transform="translate(1236 882)"></g>
+<g id="chika" class="hot" transform="translate(1528 856) scale(.94)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Open the office door</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="cake.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, lock = null, told = {};
+
+  /* sacks, bins, floor tiles, the marks in the flour as you see them from the door */
+  (function () {
+    var s = '', i, x, L = [['PLAIN', 'FLOUR'], ['SELF-', 'RAISING'], ['STRONG', 'WHITE'], ['ICING', 'SUGAR']];
+    function sack(x, y, a, b) {
+      return '<path d="M' + x + ' ' + y + 'q-6 -84 10 -92h80q16 8 10 92z" fill="url(#sackG)"/><path d="M' + (x + 12) + ' ' + (y - 92) + 'q40 14 76 0" stroke="#8a7a52" stroke-width="3" fill="none"/>' +
+        '<text x="' + (x + 50) + '" y="' + (y - 46) + '" class="sX" font-size="15" fill="#5a4a2a">' + a + '</text><text x="' + (x + 50) + '" y="' + (y - 26) + '" class="sX" font-size="13" fill="#5a4a2a">' + b + '</text>';
+    }
+    s += sack(270, 196, 'PLAIN', '16 kg') + sack(384, 196, 'PLAIN', '16 kg') + sack(640, 196, 'STRONG', '16 kg') + sack(752, 196, 'STRONG', '16 kg');
+    s += '<path d="M500 196v-6h44" stroke="#f1ece0" stroke-width="5" opacity=".8"/>';
+    s += sack(276, 326, 'ICING', '12 kg') + sack(716, 326, 'SELF-R.', '16 kg');
+    [[400, '#b3261c'], [446, '#d9a441'], [492, '#3d6fa8'], [596, '#7a9a6a'], [642, '#8a5a3a']].forEach(function (t) { s += '<rect x="' + t[0] + '" y="270" width="40" height="56" rx="4" fill="' + t[1] + '"/><rect x="' + (t[0] + 6) + '" y="286" width="28" height="22" fill="#f3e9c0"/>'; });
+    $('#sacks').innerHTML = s; s = '';
+    for (i = 0; i < 4; i++) {
+      x = 262 + i * 152;
+      s += '<path d="M' + x + ' 626v-110h140v110z" fill="#bfc7ca"/><path d="M' + (x - 6) + ' 516h152v-12h-152z" fill="#8f999c"/><path d="M' + (x + 12) + ' 626v-110M' + (x + 128) + ' 626v-110" stroke="#9aa5ab" stroke-width="3"/>' +
+        '<rect x="' + (x + 24) + '" y="544" width="92" height="46" fill="#f3e9c0"/><text x="' + (x + 70) + '" y="563" class="sX" font-size="14" fill="#2a1e16">' + L[i][0] + '</text><text x="' + (x + 70) + '" y="581" class="sX" font-size="14" fill="#2a1e16">' + L[i][1] + '</text>';
+    }
+    $('#bins').innerHTML = s; s = '';
+    for (i = -22; i <= 22; i++) s += '<path d="M' + (800 + i * 74) + ' 624L' + (800 + i * 260) + ' 1300"/>';
+    [652, 688, 736, 800, 884, 1000].forEach(function (y) { s += '<path d="M-800 ' + y + 'H2400"/>'; });
+    $('#grid').innerHTML = s; s = '';
+    function fp(x, y, r, col, op, big) { var k = big ? 1.3 : 1; return '<g transform="translate(' + x + ' ' + y + ') scale(1 .46) rotate(' + r + ')" fill="' + col + '" opacity="' + op + '"><ellipse cx="0" cy="-10" rx="' + 8.5 * k + '" ry="' + 15 * k + '"/><ellipse cx="0" cy="' + 16 * k + '" rx="' + 6.5 * k + '" ry="' + 8 * k + '"/></g>'; }
+    /* inside the flour */
+    [[560, 716, -80], [520, 748, -84], [640, 706, -70], [700, 738, -86], [790, 720, 60], [850, 700, 64]].forEach(function (q) { s += fp(q[0], q[1], q[2], '#b08a72', 0.9); });
+    [[610, 772, -88], [730, 786, -90], [860, 776, -88], [960, 760, -86]].forEach(function (q) { s += fp(q[0], q[1], q[2], '#a07a62', 0.9, true); });
+    [[900, 808], [884, 796], [866, 786], [850, 772], [836, 760], [824, 744], [816, 728], [810, 712], [806, 696]].forEach(function (q) { s += '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="3.200" fill="#a07a62"/>'; });
+    $('#fprints').innerHTML = s; s = '';
+    /* carried out of it, fainter at every step */
+    [[404, 720, -84, 0.8], [342, 742, -86, 0.6], [280, 718, -84, 0.42], [226, 738, -86, 0.26]].forEach(function (q) { s += fp(q[0], q[1], q[2], '#f1ece0', q[3]); });
+    [[934, 680, 56, 0.8], [990, 662, 58, 0.6], [1046, 648, 50, 0.42], [1092, 636, 30, 0.3], [1118, 626, 10, 0.24]].forEach(function (q) { s += fp(q[0], q[1], q[2], '#f1ece0', q[3]); });
+    [[900, 656, 10, 0.5], [944, 634, 6, 0.32]].forEach(function (q) { s += fp(q[0], q[1], q[2], '#f1ece0', q[3]); });
+    [[380, 790, -88, 0.7], [250, 780, -90, 0.4]].forEach(function (q) { s += fp(q[0], q[1], q[2], '#f1ece0', q[3], true); });
+    [[1380, 770, -90, 0.3], [1230, 790, -88, 0.3], [1100, 772, -90, 0.28]].forEach(function (q) { s += fp(q[0], q[1], q[2], '#2a120c', q[3], true); });
+    /* Dr Novak's markers */
+    [[540, 690, 1], [330, 700, 2], [760, 812, 3], [770, 690, 4], [1136, 652, 5]].forEach(function (m) { s += '<path d="M' + (m[0] - 13) + ' ' + (m[1] + 10) + 'l13 -30 13 30z" fill="#f0c020" stroke="#8a6a10" stroke-width="1.500"/><text x="' + m[0] + '" y="' + (m[1] + 6) + '" class="sB" font-size="15" fill="#1c1d22">' + m[2] + '</text>'; });
+    $('#marks').innerHTML = s;
+    $('#cat').innerHTML = CAKE.fig('cat');
+    $('#whitlow').innerHTML = CAKE.fig('whitlow'); $('#novak').innerHTML = CAKE.fig('novak'); $('#chika').innerHTML = CAKE.fig('chika');
+  })();
+
+  ER.init({
+    theme: 'forensic', story: 'cake', storyTitle: 'Warm in the Middle', id: 'store', no: 'III', title: 'The Flour Store',
+    go: 'Switch the light on',
+    intro: [
+      'The probe read 28 °C in the middle of the sponge at half past ten. Half an hour before, Dr Novak had read 38 °C. A straight line through those two readings runs back to 98 °C at seven o&rsquo;clock, when Chika was still in the shop.',
+      'But a hot thing cools quickly at first and then more and more slowly, because the speed depends on how much hotter it is than the room. The old card pinned over the rack gave five readings for a six-inch sponge, and they made a curve. Slid along the clock until it ran through both dots, the curve began at nine.',
+      'At nine Chika was at the college, with a register to say so. So somebody else took that sponge out of the oven, and mopped the floor, and splashed the cake.',
+      'Between the bakehouse and the yard door there is a passage where the flour is kept. Mr Whitlow walked through it at twenty to ten without putting the light on. It is now ten to eleven.'
+    ],
+    exit: {"next":"office","w":{"ffccd122":"9870877d"}}, tags: {"ord":["b1378e15"],"out":["b01ccb8e"],"len":["3121528a"],"ht":["e85b86d0"],"sole":["4cf6fa38"]},
+    sound: ['lab', { root: 50, bpm: 76, drop: ['arp'] }],      /* a passage under one bulb: quicker now, and nothing plucked while a floor is being read */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#flour').classList.toggle('ready', !!(told.manual && !nextFile));
+    $('#scene').classList.toggle('opened', !!ER.flag('c-st'));
+    ER.pips((told.manual ? 1 : 0) + (ER.flag('c-st') ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['The old clogs made the print. One fainter line of prints goes in at the little door under the stairs: the office.']];
+    if (lock && lock.isOpen()) return lock.stage() ? ['sole', [
+      'Carry the white scale to the right-hand edge of the print, with its 0 level with the back of the heel. Read the number at the tip of the toe, and set the length with the two small arrows.',
+      'Page 12: a shoe is about 2 cm longer than the foot inside it, and a foot is about 15% of a person&rsquo;s height. So take 2 off, and divide by 0.15. Then click on the print itself, in three places where it is not like a new clog.',
+      'Look at the outer edge of the heel, at the ball of the foot, and at the diamonds near the toe. Then find the test print with the same three marks in the same three places. It is not the newest pair.'
+    ]] : ['floor', [
+      'Three kinds of mark are on this floor: a clog, a boot and a cat. Where they cross, the two close-ups show which lies on top. A mark that is whole was made after a mark that is cut.',
+      'At marker 3, find the mark that nothing cuts across: it came last. Then decide whether the cat&rsquo;s paws spoil the pattern of the clog, or the clog spoils the paws.',
+      'At marker 4 two clog prints cross. The whole one points the way the walker went last. Follow that trail across the plan to marker 5, and look hard at the last print of all.'
+    ]];
+    if (!told.manual) return ['read', ['Dr Novak&rsquo;s field manual is lying open on the lid of a flour bin, under the shelves. Page 12, before you kneel in anything.']];
+    return ['flour', [ER.flag('c-st') ? 'The green door is open, and the old clogs are on the bottom stair. Click the flour again: now there is a print to compare.' : 'Half the floor is white. Click the flour.']];
+  }
+
+  function begin() {
+    paint();
+    CAKE.mine('graph', 'The graph', '<p>The sponge: 38 °C at 10.00 pm, 28 °C at 10.30 pm.</p><p>A straight line through the two says 98 °C at 7.00. Wrong: a hot thing cools fast at first, then slowly.</p>' +
+      '<p>The old card&rsquo;s curve, slid until it ran through both readings, starts at 9.00 pm.</p><p>At nine Chika was at the college.</p>', true);
+    if (nextFile) { busy = false; showGo(); ER.say('The clogs from the bottom stair made the print. And one line of prints goes to the office.'); return; }
+    if (told.in) { busy = false; ER.say('The flour store, ten to eleven. One bulb, and a white floor.'); return; }
+    tell('in');
+    ER.narrate([
+      'A narrow passage under one bare bulb: sacks on shelves, a row of bins, red tiles on the floor. Half of the floor is white.',
+      'A sixteen-kilo sack has come off the top shelf and split. Flour has gone everywhere, and somebody has walked in it. More than one somebody.',
+      '&ldquo;That was not there at half past seven,&rdquo; says Chika. &ldquo;I swept this floor. You could have eaten off it.&rdquo;',
+      'Mr Whitlow is looking at the prints. &ldquo;Clogs,&rdquo; he says. &ldquo;Kitchen clogs. That is the Baker&rsquo;s Friend pattern: we all wear them. And they are small ones.&rdquo; He does not say whose feet in this building are small. He does not need to.',
+      'On a sack on the middle shelf, a cat the colour of a digestive biscuit opens one eye, sees that nobody has brought any food, and shuts it again.',
+      '&ldquo;Page 12, before you kneel in anything,&rdquo; says Dr Novak. &ldquo;Then tell me what this floor remembers.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- page 12 ---------- */
+  var DIAG = '<svg viewBox="0 0 210 232"><rect width="210" height="232" fill="#22201c"/>' + CAKE.clog({ x: 70, y: 16, s: 7.4, ink: '#f4f1e8', bg: '#22201c', marks: { heel: 1, cut: 1 } }) +
+    '<g stroke="#f0b429" stroke-width="1.500" fill="none"><path d="M96 48h34M72 82h58M52 190h78"/></g><g font-family="Patrick Hand,cursive" font-size="14.500" fill="#f4f1e8"><text x="134" y="44">pattern:</text><text x="134" y="59">the factory</text><text x="134" y="80">a cut:</text><text x="134" y="95">damage</text><text x="134" y="186">worn</text><text x="134" y="201">smooth:</text><text x="134" y="216">wear</text></g></svg>';
+  var MANUAL = '<h4>Field manual &middot; Marks</h4><h3>Shoe prints</h3><div class="two"><div>' +
+    '<p><b>Pattern</b> and <b>size</b> come from the factory. Thousands of shoes share them. They can rule a shoe out, but they can never pick out one shoe.</p>' +
+    '<p><b>Wear</b> comes from the walker: every person rubs a sole smooth in places of their own. <b>Damage</b> comes from accidents: a cut, a stone stuck in the tread, a piece torn out. No two shoes have the same wear and damage in the same places. That is what picks out one shoe.</p>' +
+    '<p><b>Direction.</b> The toe points the way. A sole carries powder out of a spill, and prints it fainter at every step.</p>' +
+    '<p><b>Order.</b> Where two marks cross, the later one lies on top, whole, and cuts through the earlier one.</p>' +
+    '<p><b>Height.</b> A foot is about 15% of a person&rsquo;s height, and a shoe is about 2 cm longer than the foot inside it.</p></div>' + DIAG + '</div>' +
+    '<p class="rule">Height from a shoe is a rough guide. Write &ldquo;about&rdquo;, and never use it by itself to say who.</p><p class="pg">12</p>';
+  $('#manual').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: MANUAL, cls: 'manual', clue: { id: 'manual12', title: 'Shoe prints', kind: 'Field manual, page 12' }, done: function () {
+      CAKE.terms(['shoe print', 'sole', 'tread', 'heel', 'wear', 'damage']);
+      if (tell('manual')) { paint(); ER.say('Pattern and size for the kind of shoe. Wear and damage for the one shoe. And the later mark lies on top.'); }
+    } });
+  });
+
+  /* ---------- things in the passage ---------- */
+  CAKE.thing('#shelves', 'sack', 'The top shelf is two metres up, and there is a gap on it where a sack used to be. Sixteen kilos is nothing much, for a baker. It is a good deal for somebody reaching above their own head.', isBusy);
+  CAKE.thing('#burst', null, 'PLAIN FLOUR, 16 kg. It split along the seam when it landed. Nobody has tried to pick it up.', isBusy);
+  CAKE.thing('#bins', 'bin', 'Four bins: PLAIN FLOUR, SELF-RAISING, STRONG WHITE, ICING SUGAR. The lid of the first is not quite on, and its scoop is standing in the flour.', isBusy);
+  CAKE.thing('#cat', null, 'The cat is called Crumb. Officially he lives at the florist&rsquo;s next door, because a cake shop cannot keep a cat. Nobody has explained this to Crumb.', isBusy);
+  CAKE.thing('#broom', 'broom', 'The broom, on its nail. Its bristles are clean. Whoever made this mess did not get as far as sweeping it up.', isBusy);
+  CAKE.thing('#arch', null, 'Through the arch: the bakehouse, and the hum of its strip light.', isBusy);
+  CAKE.thing('#ydoor', 'bolt', 'The yard door: a lock and two bolts. Chika locked it behind her at half past seven, and Mr Whitlow unlocked it at twenty to ten. Nothing is scratched, and nothing has been forced.', isBusy);
+  CAKE.thing('#apron', 'apron', 'An apron on a hook: white, with a lilac stripe, and C. ABARA on the tape inside the neck. It is cleaner than Mr Whitlow&rsquo;s has ever been.', isBusy);
+  CAKE.thing('#shoes', null, 'The staff shoe rack. Mr Whitlow&rsquo;s spare clogs, size 11. A pair of size 6, nearly new, with C. ABARA written inside in biro. And a third pair, size 6 and grey with age, left behind by a Saturday boy in June.', isBusy);
+  CAKE.thing('#odoor', null, 'A low door with a sloping top, because the stairs run over it. OFFICE. It is not locked: nobody locks a cupboard.', isBusy);
+  $('#sdoor').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(ER.flag('c-st') ? 'The green door stands open. A steep, narrow staircase goes up into the dark, and on the bottom stair, side by side, is a pair of old white clogs.' : 'A green door marked PRIVATE: the stairs to the flat. &ldquo;Dad&rsquo;s,&rdquo; says Mr Whitlow. &ldquo;Locked since Easter. He can&rsquo;t manage the stairs any more, and he gave me his key.&rdquo;');
+  });
+  $('#whitlow').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;He is eighty-six,&rdquo; says Mr Whitlow, to nobody.' : ER.flag('c-st') ? '&ldquo;Those old things have stood on that stair for years,&rdquo; says Mr Whitlow. &ldquo;Nobody wears them.&rdquo;' : '&ldquo;Size 6,&rdquo; says Mr Whitlow. &ldquo;I take an 11. Dad&rsquo;s upstairs asleep. I am not a detective, but I can count.&rdquo;');
+  });
+  $('#chika').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;I said the little oven was warm,&rdquo; says Chika quietly.' : '&ldquo;I take a 6,&rdquo; says Chika. &ldquo;I know I do. My clogs are on that rack, where I left them at half past seven. Look at them as hard as you like.&rdquo;');
+  });
+  $('#novak').addEventListener('click', function () {
+    if (busy) return;
+    ER.say(nextFile ? '&ldquo;The office,&rdquo; says Dr Novak. &ldquo;I should like to know what an old baker wants in an office at nine o&rsquo;clock at night.&rdquo;' : told.manual ? '&ldquo;What came first, what came last, and which way it went,&rdquo; says Dr Novak. &ldquo;A floor is only a page. Read it from the top.&rdquo;' : '&ldquo;Page 12,&rdquo; says Dr Novak. &ldquo;It is on the lid of that bin. I did not carry the manual out here to keep the flour dry.&rdquo;');
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#flour').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Clog, cat, boot. And the clog went home up the stairs.'); return; }
+    if (!told.manual) { ER.say('&ldquo;Not yet,&rdquo; says Dr Novak. &ldquo;Page 12. It is lying on the lid of the flour bin, under the shelves.&rdquo;'); return; }
+    if (!lock) lock = makeLock();
+    lock.open();
+  });
+
+  /* ---------- the floor from above; then one print against three soles ---------- */
+  function makeLock() {
+    var st = ER.flag('c-st') || 0, ord = ER.flag('c-ord') || ['', '', ''], out = ER.flag('c-out') || '', wait = false;
+    var len = ER.flag('c-len') || 20, ht = ER.flag('c-ht') || '', found = ER.flag('c-f') || [0, 0, 0], sole = ER.flag('c-sole') || '', ruled = !!ER.flag('c-rul');
+    var box = ER.el('div', 'bn', '<svg viewBox="0 0 1000 600"></svg><div class="bn-foot"><p class="bmsg"></p><button type="button" class="btn" id="f-go"></button></div>');
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.bmsg'), goBtn = box.querySelector('#f-go');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function keep() { ER.flag('c-ord', ord); ER.flag('c-out', out); ER.flag('c-len', len); ER.flag('c-ht', ht); ER.flag('c-f', found); ER.flag('c-sole', sole); }
+    function pickG(g, v, x, y, w, label) { return '<g class="pick" data-g="' + g + '" data-v="' + v + '"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="26" rx="3"/><text x="' + (x + w / 2) + '" y="' + (y + 18.500) + '" class="tB" font-size="14.500" text-anchor="middle" letter-spacing=".400">' + label + '</text></g>'; }
+
+    /* --- the floor --- */
+    var FL = '#f1ece0', PRESS = '#e0d7c4', INK = '#a37258', WH = '#f6f1e6';
+    function floorMarks() {
+      var s = '', i, x, y;
+      s += '<rect x="38" y="36" width="924" height="256" fill="#8a4a38"/><g stroke="#6f3a2c" stroke-width="1.200">';
+      for (x = 38; x <= 962; x += 30.800) s += '<path d="M' + x.toFixed(1) + ' 36V292"/>';
+      for (y = 36; y <= 292; y += 32) s += '<path d="M38 ' + y + 'H962"/>';
+      s += '</g><path d="M196 72C150 110 170 200 230 236C300 270 410 262 480 240C548 220 560 150 536 108C516 76 440 70 380 70Z" fill="' + FL + '"/>' +
+        '<g fill="' + FL + '" opacity=".75"><circle cx="170" cy="96" r="5"/><circle cx="160" cy="210" r="4"/><circle cx="560" cy="210" r="6"/><circle cx="576" cy="96" r="4"/><circle cx="300" cy="276" r="5"/><circle cx="520" cy="262" r="3.500"/><circle cx="594" cy="170" r="3"/></g>';
+      /* the clogs: first across the flour to the bakehouse, into the office and out, and last of all to the stairs */
+      function inF(x, y, r, right, marks) { return CAKE.clog({ x: x, y: y, rot: r, s: 2, ink: INK, sole: PRESS, bg: PRESS, right: right, marks: marks }); }
+      function onT(x, y, r, right, op) { return CAKE.clog({ x: x, y: y, rot: r, s: 2, ink: WH, right: right, op: op }); }
+      s += inF(318, 112, -90, true) + inF(270, 150, -90, false, { heel: 1, cut: 1, gap: 1 }) + inF(372, 220, -90, true) + inF(440, 150, -90, true);
+      s += onT(160, 118, -90, true, 0.85) + onT(110, 150, -90, false, 0.6) + onT(62, 120, -90, true, 0.38);
+      s += onT(530, 84, 10, false, 0.7) + onT(556, 42, 6, true, 0.45) + onT(590, 96, 190, false, 0.25);
+      s += inF(478, 144, 62, false, { heel: 1, cut: 1, gap: 1 });
+      s += onT(552, 128, 64, true, 0.85) + onT(622, 104, 62, false, 0.62) + onT(690, 82, 52, true, 0.42) + onT(744, 58, 32, false, 0.3) + onT(776, 14, 8, true, 0.26);
+      /* the cat, afterwards */
+      [[476, 246], [456, 240], [440, 235], [424, 229], [412, 226], [402, 220], [390, 212], [380, 202], [372, 190], [366, 176], [360, 162], [356, 148], [353, 134], [351, 120], [350, 106], [351, 92], [353, 80]].forEach(function (q, k) {
+        var a = k < 8 ? -52 : -8, dx = (k % 2 ? 2.4 : -2.4);
+        s += '<circle cx="' + (q[0] + dx) + '" cy="' + q[1] + '" r="4.400" fill="' + FL + '"/>' + CAKE.paw({ x: q[0] + dx, y: q[1], rot: a, s: 2, ink: INK });
+      });
+      /* and Mr Whitlow's boots, at twenty to ten */
+      function boot(x, y, right, ink, op, pressed) { return CAKE.boot({ x: x, y: y, rot: -90, s: 2, ink: ink, sole: pressed ? '#d9cfba' : null, right: right, op: op }); }
+      s += boot(880, 210, false, '#3a1a12', 0.5) + boot(758, 176, true, '#3a1a12', 0.45) + boot(636, 210, false, '#3a1a12', 0.4);
+      s += boot(514, 176, true, '#8f6450', 1, true) + boot(392, 210, false, '#8f6450', 1, true) + boot(270, 176, true, '#8f6450', 1, true);
+      s += boot(148, 210, false, WH, 0.8) + boot(60, 176, true, WH, 0.5);
+      return s;
+    }
+    function drawFloor() {
+      var s = '<rect width="1000" height="600" fill="#d9d2c4"/><rect x="16" y="14" width="968" height="300" fill="#2a1e16"/><defs><g id="pfloor">' + floorMarks() + '</g></defs><use href="#pfloor"/>';
+      /* walls, doors, and what stands against them */
+      s += '<rect x="16" y="14" width="968" height="22" fill="#2a1e16"/><rect x="70" y="36" width="400" height="30" fill="#5a4630"/><g fill="#bfc7ca" stroke="#8f999c" stroke-width="1.500"><rect x="84" y="40" width="80" height="22" rx="4"/><rect x="178" y="40" width="80" height="22" rx="4"/><rect x="272" y="40" width="80" height="22" rx="4"/><rect x="366" y="40" width="80" height="22" rx="4"/></g>' +
+        '<text x="270" y="29" class="tB" font-size="12.500" fill="#d9d2c4" text-anchor="middle" letter-spacing="3">SHELVES · BINS</text>' +
+        '<rect x="500" y="22" width="130" height="14" fill="#6b4a32"/><text x="565" y="33.500" class="tB" font-size="12" fill="#f3e9c0" text-anchor="middle" letter-spacing="2">OFFICE</text>' +
+        '<rect x="670" y="20" width="150" height="16" fill="#2f5a4c"/><text x="745" y="32.500" class="tB" font-size="12" fill="#f3e9c0" text-anchor="middle" letter-spacing="2">STAIRS · PRIVATE</text>' +
+        '<rect x="850" y="36" width="100" height="24" fill="#5a4630"/><text x="900" y="52.500" class="tB" font-size="11" fill="#f3e9c0" text-anchor="middle" letter-spacing="1">SHOE RACK</text>' +
+        '<rect x="962" y="110" width="16" height="140" fill="#6b4a32"/><text x="973" y="180" class="tB" font-size="12" fill="#f3e9c0" text-anchor="middle" letter-spacing="2" transform="rotate(90 973 180)">YARD DOOR</text>' +
+        '<rect x="22" y="90" width="16" height="160" fill="#dfeef2"/><text x="31" y="170" class="tB" font-size="12" fill="#2a1e16" text-anchor="middle" letter-spacing="2" transform="rotate(-90 31 170)">BAKEHOUSE</text>' +
+        '<text x="500" y="308" class="tH" font-size="15" fill="#d9d2c4" text-anchor="middle">the passage, photographed from above &#183; one square of the floor is 15 cm</text>';
+      [[252, 132, 1], [112, 92, 2], [470, 262, 3], [500, 196, 4], [832, 62, 5]].forEach(function (m) { s += '<circle cx="' + m[0] + '" cy="' + m[1] + '" r="11" fill="#f0c020" stroke="#8a6a10" stroke-width="1.500"/><text x="' + m[0] + '" y="' + (m[1] + 5) + '" class="tB" font-size="15" fill="#1c1d22" text-anchor="middle">' + m[2] + '</text>'; });
+      s += '<rect id="z3" x="360" y="180" width="104" height="79" fill="none" stroke="#f0c020" stroke-width="1.500" stroke-dasharray="5 4"/><rect id="z4" x="410" y="106" width="104" height="79" fill="none" stroke="#f0c020" stroke-width="1.500" stroke-dasharray="5 4"/>';
+      /* two close-ups */
+      [[16, 360, 180, 3], [344, 410, 106, 4]].forEach(function (c) {
+        s += '<rect x="' + c[0] + '" y="328" width="314" height="262" fill="#2a1e16"/><svg x="' + (c[0] + 5) + '" y="333" width="304" height="230" viewBox="' + c[1] + ' ' + c[2] + ' 104 78.700"><use href="#pfloor"/></svg>' +
+          '<circle cx="' + (c[0] + 22) + '" cy="577" r="10" fill="#f0c020"/><text x="' + (c[0] + 22) + '" y="582" class="tB" font-size="14" fill="#1c1d22" text-anchor="middle">' + c[3] + '</text>' +
+          '<text x="' + (c[0] + 40) + '" y="582" class="tH" font-size="16" fill="#d9d2c4">' + (c[3] === 3 ? 'marker 3: three marks cross' : 'marker 4: two clog prints cross') + '</text>';
+      });
+      /* the report */
+      s += '<rect x="672" y="328" width="312" height="262" fill="#fbf5e6"/><rect x="672" y="328" width="312" height="8" fill="#17324d"/><text x="688" y="360" class="tB" font-size="16" fill="#17324d" letter-spacing="3">FINDING 3 · THE FLOOR</text>' +
+        '<text x="688" y="384" class="tS" font-size="13.500" fill="#1b2430">At marker 3 they were made in this order:</text>';
+      ['first', 'then', 'last'].forEach(function (lab, i) {
+        s += '<text x="688" y="' + (411 + i * 32) + '" class="tB" font-size="14" fill="#56616c" letter-spacing="1.500">' + lab.toUpperCase() + '</text>' +
+          pickG('o' + i, 'c', 742, 393 + i * 32, 72, 'CLOG') + pickG('o' + i, 'p', 820, 393 + i * 32, 72, 'CAT') + pickG('o' + i, 'b', 898, 393 + i * 32, 72, 'BOOT');
+      });
+      s += '<text x="688" y="508" class="tS" font-size="13.500" fill="#1b2430">Whoever wore the clogs left the passage by:</text>' +
+        pickG('out', 'ba', 688, 518, 138, 'THE BAKEHOUSE') + pickG('out', 'of', 832, 518, 138, 'THE OFFICE') + pickG('out', 'st', 688, 550, 138, 'THE STAIR DOOR') + pickG('out', 'ya', 832, 550, 138, 'THE YARD DOOR');
+      svg.innerHTML = s;
+      ER.$$('.pick', svg).forEach(function (p) {
+        p.addEventListener('click', function () {
+          var g = p.getAttribute('data-g'), v = p.getAttribute('data-v');
+          if (wait || nextFile) return;
+          if (g === 'out') out = out === v ? '' : v; else ord[+g.charAt(1)] = ord[+g.charAt(1)] === v ? '' : v;
+          ER.sfx.click(); keep(); picks();
+        });
+      });
+      picks(); goBtn.textContent = 'Sign the floor';
+    }
+    function picks() {
+      ER.$$('.pick', svg).forEach(function (p) {
+        var g = p.getAttribute('data-g'), v = p.getAttribute('data-v'), on = g === 'out' ? out === v : g === 'ht' ? ht === v : ord[+g.charAt(1)] === v;
+        p.setAttribute('class', 'pick' + (on ? ' on' : ''));
+      });
+    }
+    var NAME = { c: 'clog', p: 'cat', b: 'boot' };
+    function signFloor() {
+      if (ord.indexOf('') >= 0) { msg('&ldquo;Three marks at marker 3,&rdquo; says Dr Novak. &ldquo;First, then, last. I want all three.&rdquo;'); return; }
+      if (ord[0] === ord[1] || ord[1] === ord[2] || ord[0] === ord[2]) { msg('&ldquo;You have the ' + NAME[ord[0] === ord[1] || ord[0] === ord[2] ? ord[0] : ord[1]] + ' in there twice,&rdquo; says Dr Novak. &ldquo;Each of them walked over that place once.&rdquo;'); return; }
+      if (!out) { msg('&ldquo;And which way did the clogs go?&rdquo; says Dr Novak. &ldquo;There are four ways out of this passage.&rdquo;'); return; }
+      if (!ER.check('ord', ord.join(''))) {
+        ER.sfx.no();
+        msg(ord[2] !== 'b' ? '&ldquo;Look at the close-up of marker 3,&rdquo; says Dr Novak. &ldquo;One of the three marks is whole: nothing cuts across it anywhere. Whatever is whole came last.&rdquo;' :
+          '&ldquo;The boot last: agreed,&rdquo; says Dr Novak. &ldquo;Now the other two. Where a paw falls on the clog, is the paw whole and the pattern spoilt, or the pattern whole and the paw spoilt?&rdquo;');
+        return;
+      }
+      if (!ER.check('out', out)) {
+        ER.sfx.no();
+        msg(out === 'ba' ? '&ldquo;A trail does go to the bakehouse, getting fainter all the way,&rdquo; says Dr Novak. &ldquo;But look at marker 4. Another clog print lies on top of one of those, whole, and its toe points the other way.&rdquo;' :
+          out === 'of' ? '&ldquo;Prints go in at the office door,&rdquo; says Dr Novak, &ldquo;and one comes out again: its toe points back into the passage. Nobody leaves a building through a cupboard under the stairs.&rdquo;' :
+          '&ldquo;Not one clog print goes near the yard door,&rdquo; says Dr Novak. &ldquo;Only the boots came in that way, and those are Mr Whitlow&rsquo;s.&rdquo;');
+        return;
+      }
+      wait = true; CAKE.sfx.stamp();
+      msg('Clog first, then the cat, then the boots. And the last trail of clog prints runs to the green door marked PRIVATE, and stops. No: it does not stop. The last print is only half a print. The other half is under the door.');
+      setTimeout(function () {
+        ER.closeAll(); busy = true;
+        ER.narrate([
+          '&ldquo;That door is locked,&rdquo; says Mr Whitlow.',
+          '&ldquo;It was open when that print was made,&rdquo; says Dr Novak. &ldquo;May we have the key?&rdquo;',
+          'He fetches it from the office: a big old key on a loop of string. The lock turns as if somebody had oiled it. Behind the door a steep, narrow staircase goes up into the dark. On the bottom stair, side by side and very neat, stands a pair of old white clogs. There is flour in their treads.',
+          '&ldquo;Those old things,&rdquo; says Mr Whitlow. &ldquo;They have stood on that stair for years. Nobody wears them.&rdquo;',
+          '&ldquo;Somebody wore a size 6 clog through your flour tonight,&rdquo; says Dr Novak. &ldquo;There are three pairs of size 6 in this building: Miss Abara&rsquo;s, the Saturday boy&rsquo;s, and these. I have made a test print from the left shoe of each. Pattern and size will not choose between them. Let us see what will.&rdquo;'
+        ], function () {
+          wait = false; busy = false; st = 1; ER.flag('c-st', 1); CAKE.sfx.key(); paint(); drawSole();
+          msg('On the left: the clearest print from the flour, marker 1, lifted on black gel. On the right: three test prints, A, B and C. Measure the print. Then find three things in it that the factory did not put there, and choose.');
+          ER.open('ov-lock', box);
+        });
+      }, 4200);
+    }
+
+    /* --- the sole --- */
+    var LX = 125, LY = 46, LS = 15, FEAT = [[-2.7, 22.6, 'The outer edge of the heel prints as one smooth patch: the bars of the pattern have gone. That is <b>wear</b>. Somebody has come down on that corner at every step, for years.'],
+      [-0.3, 8.6, 'A cut in the shape of a V, under the ball of the foot. The factory did not put that there. That is <b>damage</b>.'], [0.95, 3.4, 'One diamond of the tread is missing altogether, near the toe: torn out. <b>Damage</b> again.']];
+    function drawSole() {
+      var s = '<rect width="1000" height="600" fill="#d9d2c4"/><g fill="#fff" opacity=".5"><circle cx="300" cy="520" r="3"/><circle cx="640" cy="470" r="2.500"/><circle cx="520" cy="560" r="3.500"/><circle cx="760" cy="540" r="2"/></g>', i;
+      s += '<rect x="20" y="14" width="210" height="462" rx="8" fill="#16181b"/><g id="lift"><rect x="24" y="18" width="202" height="454" fill="#16181b"/>' + CAKE.clog({ x: LX, y: LY, s: LS, ink: '#f4f1e8', bg: '#16181b', marks: { heel: 1, cut: 1, gap: 1 } }) + '</g><g id="rings"></g>' +
+        '<text x="125" y="494" class="tB" font-size="14" fill="#3a2f28" text-anchor="middle" letter-spacing="2">MARKER 1 · FROM THE FLOUR</text><text x="125" y="512" class="tH" font-size="16" fill="#3a2f28" text-anchor="middle">a left foot: click on anything odd</text><path id="toeline" d="M125 46h160" stroke="#f0b429" stroke-width="1.500" stroke-dasharray="5 4" style="display:none"/><path id="heelline" d="M125 436h160" stroke="#f0b429" stroke-width="1.500" stroke-dasharray="5 4" style="display:none"/>';
+      [['a', 'A', 'C. ABARA', 'written inside, in biro', { stone: 1 }], ['b', 'B', 'THE SATURDAY BOY', 'left on the rack in June', { toe: 1, hcut: 1 }], ['c', 'C', 'THE BOTTOM STAIR', 'behind the green door', { heel: 1, cut: 1, gap: 1 }]].forEach(function (c, k) {
+        var x = 318 + k * 164;
+        s += '<g class="cand" data-v="' + c[0] + '"><rect x="' + x + '" y="14" width="152" height="372" rx="8" fill="#16181b"/>' + CAKE.clog({ x: x + 78, y: 38, s: 12.4, ink: '#f4f1e8', bg: '#16181b', marks: c[4] }) + '<rect class="fr" x="' + x + '" y="14" width="152" height="372" rx="8"/>' +
+          '<circle cx="' + (x + 24) + '" cy="412" r="15" fill="#17324d"/><text x="' + (x + 24) + '" y="418" class="tB" font-size="19" fill="#fff" text-anchor="middle">' + c[1] + '</text><text x="' + (x + 46) + '" y="408" class="tB" font-size="13.500" fill="#3a2f28" letter-spacing=".800">' + c[2] + '</text><text x="' + (x + 46) + '" y="424" class="tH" font-size="14.500" fill="#3a2f28">' + c[3] + '</text><text x="' + (x + 76) + '" y="448" class="tM" font-size="12" fill="#56616c" text-anchor="middle">size 6 · left shoe</text></g>';
+      });
+      /* the report */
+      s += '<rect x="816" y="14" width="172" height="576" fill="#fbf5e6"/><rect x="816" y="14" width="172" height="8" fill="#17324d"/><text x="828" y="46" class="tB" font-size="15" fill="#17324d" letter-spacing="2.500">FINDING 4</text><text x="828" y="64" class="tB" font-size="15" fill="#17324d" letter-spacing="2.500">THE PRINT</text>' +
+        '<text x="828" y="96" class="tS" font-size="13" fill="#1b2430">The sole is</text><g class="stp" data-d="-1"><rect x="828" y="104" width="30" height="30" rx="3"/><path d="M848 111l-10 8 10 8z" fill="#17324d"/></g>' +
+        '<rect x="862" y="104" width="52" height="30" fill="#fff" stroke="#8a8676" stroke-width="1.200"/><text id="lenv" x="888" y="126" class="tM" font-size="20" fill="#1b2430" text-anchor="middle"></text><g class="stp" data-d="1"><rect x="918" y="104" width="30" height="30" rx="3"/><path d="M928 111l10 8 -10 8z" fill="#17324d"/></g><text x="956" y="126" class="tS" font-size="13" fill="#1b2430">cm</text>' +
+        '<text x="828" y="164" class="tS" font-size="13" fill="#1b2430">long, so the walker</text><text x="828" y="181" class="tS" font-size="13" fill="#1b2430">was about</text>' +
+        pickG('ht', '145', 828, 190, 72, '1.45 m') + pickG('ht', '160', 906, 190, 72, '1.60 m') + pickG('ht', '175', 828, 222, 72, '1.75 m') + pickG('ht', '190', 906, 222, 72, '1.90 m') +
+        '<text x="828" y="282" class="tS" font-size="13" fill="#1b2430">Not from the factory:</text><g id="ticks"></g>' +
+        '<text x="828" y="372" class="tS" font-size="13" fill="#1b2430">The print was made by</text><text x="828" y="389" class="tS" font-size="13" fill="#1b2430">the shoe of test print</text><rect x="872" y="402" width="60" height="60" rx="4" fill="#fff" stroke="#8a8676" stroke-width="1.200"/><text id="solev" x="902" y="447" class="tB" font-size="44" fill="#17324d" text-anchor="middle"></text>' +
+        '<path d="M828 540h148" stroke="#1b2430" stroke-width="1" stroke-dasharray="2 3"/><text x="828" y="556" class="tM" font-size="10.500" fill="#56616c">signed</text>';
+      /* the scale */
+      s += '<g class="tool" id="rul"><rect x="-4" y="-424" width="44" height="432" fill="#fdfdfb" stroke="#56616c" stroke-width="1.500"/>';
+      for (i = 0; i <= 28; i++) s += '<path d="M-4 ' + (-i * LS) + 'h' + (i % 2 ? 9 : 15) + '" stroke="#1b2430" stroke-width="' + (i % 2 ? 1.2 : 2) + '"/>' + (i % 2 ? '' : '<text x="16" y="' + (-i * LS + 5) + '" class="tM" font-size="13" fill="#1b2430">' + i + '</text>');
+      s += '</g>';
+      svg.innerHTML = s;
+      var rul = CAKE.tool(svg, svg.querySelector('#rul'), { x: 262, y: 584 }, {
+        start: function () { return !wait && !nextFile; },
+        end: function (p) {
+          if (Math.abs(p.y - (LY + 26 * LS)) < 12) {
+            rul.set(234, LY + 26 * LS); ruled = true; ER.flag('c-rul', 1); CAKE.sfx.snip();
+            svg.querySelector('#toeline').style.display = ''; svg.querySelector('#heelline').style.display = '';
+            msg('The 0 of the scale is level with the back of the heel. Follow the dotted line across from the tip of the toe, read the number, and set the length with the two arrows.');
+          } else { ruled = false; ER.flag('c-rul', 0); svg.querySelector('#toeline').style.display = 'none'; svg.querySelector('#heelline').style.display = 'none'; msg('Slide the scale along the edge of the print until its 0 is level with the very back of the heel.'); }
+        }
+      }, [232, 430, 290, 590]);
+      if (ruled) { rul.set(234, LY + 26 * LS); svg.querySelector('#toeline').style.display = ''; svg.querySelector('#heelline').style.display = ''; }
+      ER.$$('.stp', svg).forEach(function (b) { b.addEventListener('click', function () { if (wait || nextFile) return; len = CAKE.clamp(len + (+b.getAttribute('data-d')), 15, 35); keep(); ER.sfx.click(); vals(); }); });
+      ER.$$('.pick', svg).forEach(function (p) { p.addEventListener('click', function () { if (wait || nextFile) return; var v = p.getAttribute('data-v'); ht = ht === v ? '' : v; keep(); ER.sfx.click(); picks(); }); });
+      ER.$$('.cand', svg).forEach(function (c) {
+        c.addEventListener('click', function () {
+          if (wait || nextFile) return;
+          sole = c.getAttribute('data-v'); keep(); ER.sfx.click(); vals();
+        });
+      });
+      svg.querySelector('#lift').addEventListener('click', function (e) {
+        var p = ER.pt(svg, e), cx = (p.x - LX) / LS, cy = (p.y - LY) / LS, hit = -1;
+        if (wait || nextFile) return;
+        [[-4.7, 19.5, -0.5, 26.2], [-3.1, 6.3, 2.3, 10.5], [-0.2, 2.3, 2.1, 4.5]].forEach(function (b, k) { if (cx > b[0] && cx < b[2] && cy > b[1] && cy < b[3]) hit = k; });
+        if (hit >= 0) { if (!found[hit]) { found[hit] = 1; keep(); CAKE.sfx.dot(); } vals(); msg(FEAT[hit][2]); return; }
+        if (cy < -0.3 || cy > 26.3 || Math.abs(cx) > 5.6) { msg('That is the black gel round the print. Click on the print itself.'); return; }
+        ER.sfx.no();
+        msg(Math.abs(cx + 0.3) < 2.8 && Math.abs(cy - 16.7) < 1.4 ? 'BAKER&rsquo;S FRIEND, and a 6: the maker&rsquo;s name and the size. The factory pressed that into every clog it ever made.' :
+          cy > 19 ? 'The bars across the heel. Every Baker&rsquo;s Friend has them: that is pattern, and the factory put it there. Is every bar whole, though, all the way to both edges?' :
+          cy < 14.6 ? 'Diamonds. Every Baker&rsquo;s Friend has diamonds under the front of the foot: that is pattern, and the factory put it there. Look for a place where the pattern is spoilt.' :
+          'The plain part under the arch of the foot. Nothing touches the ground there, so nothing prints.');
+      });
+      vals(); picks(); goBtn.textContent = 'Sign the print';
+    }
+    function vals() {
+      var t = '', r = '', k, n = 0;
+      svg.querySelector('#lenv').textContent = len; svg.querySelector('#solev').textContent = sole.toUpperCase();
+      ER.$$('.cand', svg).forEach(function (c) { c.setAttribute('class', 'cand' + (c.getAttribute('data-v') === sole ? ' on' : '')); });
+      for (k = 0; k < 3; k++) if (found[k]) {
+        n++;
+        r += '<circle cx="' + (LX + FEAT[k][0] * LS) + '" cy="' + (LY + FEAT[k][1] * LS) + '" r="' + (k ? 19 : 34) + '" fill="none" stroke="#f0b429" stroke-width="2.500"/><circle cx="' + (LX + FEAT[k][0] * LS + (k ? 26 : -30)) + '" cy="' + (LY + FEAT[k][1] * LS - (k ? 18 : 34)) + '" r="10" fill="#f0b429"/><text x="' + (LX + FEAT[k][0] * LS + (k ? 26 : -30)) + '" y="' + (LY + FEAT[k][1] * LS - (k ? 13 : 29)) + '" class="tB" font-size="14" fill="#1c1d22" text-anchor="middle">' + n + '</text>';
+        t += '<text x="828" y="' + (284 + n * 21) + '" class="tH" font-size="16.500" fill="#1b2430">' + n + '. ' + ['heel worn smooth', 'a cut like a V', 'a diamond missing'][k] + '</text>';
+      }
+      svg.querySelector('#rings').innerHTML = r; svg.querySelector('#ticks').innerHTML = t;
+    }
+    function signSole() {
+      var file;
+      if (!ruled) { msg('&ldquo;Measure it first,&rdquo; says Dr Novak. &ldquo;The scale is lying beside the print. Its 0 goes level with the back of the heel.&rdquo;'); return; }
+      if (!ER.check('len', len)) { ER.sfx.no(); msg('&ldquo;' + len + ' centimetres?&rdquo; says Dr Novak. &ldquo;Look again. The 0 is at the back of the heel. Follow the dotted line across from the tip of the toe.&rdquo;'); return; }
+      if (!ht) { msg('&ldquo;And how tall was the person in the shoe?&rdquo; says Dr Novak. &ldquo;Roughly. Page 12.&rdquo;'); return; }
+      if (!ER.check('ht', ht)) {
+        ER.sfx.no();
+        msg(ht === '175' ? '&ldquo;Twenty-six divided by 0.15 is about 173, yes,&rdquo; says Dr Novak. &ldquo;But twenty-six centimetres is the shoe. Page 12: the foot inside it is about two centimetres shorter. Measure the walker by the foot.&rdquo;' :
+          '&ldquo;A foot is about 15% of a person&rsquo;s height,&rdquo; says Dr Novak. &ldquo;So take two centimetres off the sole to get the foot, and divide the foot by 0.15.&rdquo;');
+        return;
+      }
+      if (found.indexOf(0) >= 0) { msg('&ldquo;About one metre sixty,&rdquo; says Dr Novak. &ldquo;Which is Miss Abara&rsquo;s height, near enough. And her size, and her make of shoe. So now it matters. Find me three things in that print that the factory did not put there: you have ' + (found[0] + found[1] + found[2]) + '.&rdquo;'); return; }
+      if (!sole) { msg('&ldquo;Three marks,&rdquo; says Dr Novak. &ldquo;Now: which of the three test prints has the same three, in the same three places? Click it.&rdquo;'); return; }
+      if (!ER.check('sole', sole)) {
+        ER.sfx.no();
+        msg(sole === 'a' ? '&ldquo;Miss Abara&rsquo;s has the pattern and it has the size,&rdquo; says Dr Novak. &ldquo;It has none of your three marks. And it has a little stone stuck in its tread, which the print in the flour does not show. Same make, same size. Not the same shoe.&rdquo;' :
+          '&ldquo;Worn, yes,&rdquo; says Dr Novak. &ldquo;But B is worn at the toe, and the print is worn at the heel. And the cut in B runs straight across the heel. The cut in the print is a V, under the ball of the foot.&rdquo;');
+        sole = ''; keep(); vals(); return;
+      }
+      file = ER.exitOk([ord.join('') + '-' + out + '-' + len + '-' + ht + '-' + sole]);
+      if (!file) { msg('The form will not take the ink. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('c-file', file);
+      var s0 = ER.state(); s0.done = s0.done || {}; s0.done.store = 1; ER.persist(true);
+      CAKE.sfx.stamp(); msg('Three marks, in the same three places. Dr Novak signs under your name, and puts the lid on her pen.');
+      setTimeout(function () {
+        ER.closeAll(); CAKE.solved(); paint(); busy = true;
+        ER.narrate([
+          '&ldquo;Not Miss Abara&rsquo;s,&rdquo; says Dr Novak. &ldquo;The same make, the same size, and she is the right height, near enough. If we had stopped at the pattern, we should have stopped at her. But a shoe is worn by one person&rsquo;s walk, and cut by one person&rsquo;s accidents. The print was made by the clogs on the stair.&rdquo;',
+          'Mr Whitlow sits down on a flour bin. &ldquo;They are Dad&rsquo;s,&rdquo; he says. &ldquo;They were always Dad&rsquo;s. But he is eighty-six. He gave me his key at Easter. I watched him do it.&rdquo;',
+          '&ldquo;A man who fitted a lock himself has usually kept a second key,&rdquo; says Dr Novak.',
+          '&ldquo;But why would he? He would cut off his own hand before he spoilt a cake. He was in that bakehouse every working day for sixty-five years.&rdquo;',
+          '&ldquo;I do not think he came down to spoil anything,&rdquo; says Dr Novak. &ldquo;Look at the floor once more. One fainter line of prints goes in at that little door under the stairs, and comes out again. What is in there?&rdquo;',
+          '&ldquo;The office,&rdquo; says Mr Whitlow. &ldquo;The order book. Boxes. String.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 2800);
+    }
+    goBtn.addEventListener('click', function () { if (wait || nextFile) return; if (st) signSole(); else signFloor(); });
+    if (st) { drawSole(); msg('On the left: the clearest print from the flour, marker 1, lifted on black gel. On the right: three test prints, A, B and C. Measure the print. Then find three things in it that the factory did not put there, and choose.'); }
+    else { drawFloor(); msg('The passage from above, with Dr Novak&rsquo;s five yellow markers. There are three kinds of mark: a clog, a boot, and a cat. Underneath, two close-ups of the places where marks cross. Fill in the finding.'); }
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return st; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

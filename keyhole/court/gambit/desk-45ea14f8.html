@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Congress Desk · Move Sixteen</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-court.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="gambit.css">
+<style>
+  body{--bg:#1c1d22;--accent:#ef8a6a;--font-display:'Cinzel',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(22,23,28,.97);--tc-ink:#efece2;--cap-bg:rgba(22,23,28,.93);--panel:#1d1f25;--face-bg:#463238;--q-ink:#e3c4b6;--fade:#0c0d10;--hud-bg:rgba(22,23,28,.8)}
+  #glass{animation:gl 5.3s steps(1,end) infinite}
+  @keyframes gl{0%{opacity:1}55%{opacity:.86}}
+  #papers{display:none}
+  #scene.given #papers{display:block}
+  #scene.given #traypile{display:none}
+
+  /* the till roll: an hour and forty minutes of a Sunday, and four paper flags */
+  .tl{width:min(1180px,96vw);display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;align-items:start}
+  .tl-sheet{background:#fbf9ef;color:#22231f;padding:10px 12px 8px;font-family:'Outfit',Arial,sans-serif;font-weight:300;font-size:12.5px;box-shadow:0 18px 50px rgba(0,0,0,.6);transform:rotate(-.4deg)}
+  .tl-sheet h6{margin:0 0 5px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.1em;border-bottom:2px solid #22231f;padding-bottom:3px}
+  .tl-sheet h6 small{display:block;font-family:'Outfit',sans-serif;font-weight:300;font-size:12px;letter-spacing:0}
+  .tl-sheet table{width:100%;border-collapse:collapse}
+  .tl-sheet th{font-weight:500;font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid #6b6d66;padding:1px 3px;background:#ecebe0}
+  .tl-sheet td{border:1px solid #9a9c94;height:22.5px;padding:0 4px;text-align:center;font-family:'Caveat',cursive;font-weight:700;font-size:18.5px;line-height:1;color:#4a4f5a}
+  .tl-sheet td:first-child{font-family:'Outfit',sans-serif;font-weight:500;font-size:12px;color:#6b6d66;width:28px}
+  .tl-sheet td.m{background:#eef3de;width:50px;color:#22231f}
+  .tl-roll{position:relative;height:230px;background:#fdfdfb linear-gradient(180deg,rgba(0,0,0,.05),transparent 12%,transparent 88%,rgba(0,0,0,.07));box-shadow:0 18px 50px rgba(0,0,0,.6);-webkit-user-select:none;user-select:none}
+  .tl-roll:before,.tl-roll:after{content:'';position:absolute;top:0;bottom:0;width:10px;background:repeating-linear-gradient(180deg,#fdfdfb 0 6px,transparent 6px 12px)}
+  .tl-roll:before{left:-5px}.tl-roll:after{right:-5px}
+  .tl-rail{position:absolute;left:30px;right:30px;top:0;bottom:0}
+  .tl-rail i{position:absolute;top:122px;width:1px;height:7px;background:#6b6d66}
+  .tl-rail i.f{height:12px;background:#22231f}
+  .tl-rail i.t{height:18px;width:2px;margin-left:-.5px;background:#22231f}
+  .tl-rail s{position:absolute;top:142px;transform:translateX(-50%);text-decoration:none;font-family:'Courier Prime',monospace;font-weight:700;font-size:13.5px;color:#22231f}
+  .tl-base{position:absolute;left:0;right:0;top:121px;height:2px;background:#22231f}
+  .tl-out{position:absolute;top:110px;height:9px;background:#d8382a;border-radius:2px}
+  .tl-out em{position:absolute;left:50%;top:-82px;transform:translateX(-50%);white-space:nowrap;font-style:normal;font-family:'Caveat',cursive;font-weight:700;font-size:17px;line-height:1;color:#b3261c}
+  .tl-seen{position:absolute;top:6px;width:2px;height:115px;margin-left:-1px;background:repeating-linear-gradient(180deg,#27365f 0 5px,transparent 5px 9px)}
+  .tl-seen em{position:absolute;left:8px;top:-3px;white-space:nowrap;font-style:normal;font-family:'Caveat',cursive;font-weight:700;font-size:17px;line-height:1;color:#27365f}
+  .tl-flag{position:absolute;top:222px;width:0;height:0;z-index:2}
+  .tl-flag b{position:absolute;left:0;bottom:0;transform:translateX(-2px);padding:3px 9px 2px 7px;min-width:44px;background:#1f5a3a;color:#fff;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.06em;white-space:nowrap;
+    border-left:3px solid #2b2a26;box-shadow:0 3px 6px rgba(0,0,0,.35)}
+  .tl-flag.b b{background:#2b2a26}
+  .tl-flag.set{top:121px}
+  .tl-flag.set b{bottom:37px}
+  .tl-flag.set:before{content:'';position:absolute;left:-2px;bottom:0;width:3px;height:38px;background:#2b2a26}
+  .tl-flag u{position:absolute;left:0;top:43px;transform:translateX(-50%);padding:0 5px;background:#fff3c4;text-decoration:none;font-family:'Courier Prime',monospace;font-weight:700;font-size:13.5px;color:#22231f;display:none}
+  .tl-flag.set u{display:block}
+  .tl-flag.sel{z-index:3}
+  .tl-flag.sel b{outline:2px solid #ef8a6a;outline-offset:2px}
+  .tl-key{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:12px}
+  .tl-key div{display:flex;align-items:center;gap:8px;padding:5px 8px 4px 10px;background:rgba(10,11,14,.72);border:1px solid rgba(255,255,255,.16);font-family:'EB Garamond',serif;font-size:17px;color:#f1ecdf;cursor:pointer}
+  .tl-key div.sel{border-color:#ef8a6a}
+  .tl-key b{font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:.06em;padding:2px 6px 1px;background:#1f5a3a;color:#fff}
+  .tl-key div.b b{background:#55585f}
+  .tl-key span{flex:1}
+  .tl-key u{text-decoration:none;font-family:'Courier Prime',monospace;font-weight:700;font-size:15px;color:#f0cf7a;min-width:38px;text-align:right}
+  .tl-key button{width:26px;height:26px;border:1px solid rgba(255,255,255,.3);border-radius:2px;font-family:'Oswald',sans-serif;font-size:13px;color:#f1ecdf}
+  .tl-key button:hover{border-color:#ef8a6a;color:#ef8a6a}
+  .tl-foot{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:16px;margin-top:10px;align-items:start}
+  .tl .pmsg{min-height:98px;font-size:18px}
+  .tl .btn{width:100%}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e6dc"/><stop offset="1" stop-color="#cdc9bc"/></linearGradient>
+  <linearGradient id="duskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b7fa8"/><stop offset=".6" stop-color="#e9a56a"/><stop offset="1" stop-color="#f4c98a"/></linearGradient>
+  <linearGradient id="carpetG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f1d2c"/><stop offset="1" stop-color="#b3283a"/></linearGradient>
+  <linearGradient id="baizeG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#236a45"/><stop offset="1" stop-color="#174a2e"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a26"/><stop offset=".3" stop-color="#e6c873"/><stop offset=".55" stop-color="#b08a35"/><stop offset=".8" stop-color="#f0d98f"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a2a1c"/><stop offset=".5" stop-color="#5a3f28"/><stop offset="1" stop-color="#3a2a1c"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="82%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".68" stop-color="#0a0b10" stop-opacity=".15"/><stop offset="1" stop-color="#06070a" stop-opacity=".74"/></radialGradient>
+</defs>
+
+<!-- stone walls -->
+<rect x="-1000" y="-400" width="3600" height="970" fill="url(#wallG)"/>
+<g stroke="#b9b5a6" stroke-width="2" opacity=".7"><path d="M-1000 150h3600M-1000 300h3600M-1000 450h3600"/></g>
+<rect x="-1000" y="546" width="3600" height="16" fill="#a8a495"/>
+
+<!-- the landing window, with the town's arms in coloured glass -->
+<g id="window" class="hot"><path d="M374 262V96a66 66 0 0 1 132 0v166z" fill="#8d8873"/><g id="glass"></g><path d="M440 30v232M384 150h112" stroke="#55523f" stroke-width="5"/></g>
+
+<!-- the stairs to the Mayor's Parlour -->
+<g id="stairs" class="hot"><g id="steps"></g><path d="M132 470L300 170M748 470L580 170" stroke="url(#brassG)" stroke-width="10" stroke-linecap="round"/><g id="balusters" stroke="#55523f" stroke-width="5"></g>
+  <rect x="112" y="452" width="34" height="110" fill="#5a3f28"/><circle cx="129" cy="442" r="17" fill="url(#brassG)"/><rect x="734" y="452" width="34" height="110" fill="#5a3f28"/><circle cx="751" cy="442" r="17" fill="url(#brassG)"/></g>
+<g id="arrow"><rect x="792" y="330" width="170" height="56" fill="#fbf8ec"/><text x="877" y="353" class="sT" font-size="14" fill="#1c1d22" letter-spacing="2">MAYOR&#8217;S PARLOUR</text><path d="M916 371h-78m14-8l-14 8 14 8" stroke="#8f1d2c" stroke-width="4" fill="none"/></g>
+<g id="easel" class="hot"><path d="M830 560l40-150 40 150M870 410v150" stroke="#5a3f28" stroke-width="7" fill="none"/><rect x="812" y="404" width="118" height="92" fill="#22242a"/><text x="871" y="440" class="kT" font-size="22" fill="#fbf8ec" letter-spacing="2">ROUND 5</text><text x="871" y="478" class="kT" font-size="30" fill="#f0cf7a">4.45</text></g>
+
+<!-- the clock, the front doors -->
+<g id="clock" class="hot"><circle cx="1090" cy="150" r="44" fill="#5a3f28"/><circle cx="1090" cy="150" r="36" fill="#fbf8ec"/><g stroke="#1c1d1f" stroke-width="3"><path d="M1090 118v8M1090 174v8M1058 150h8M1114 150h8"/></g>
+  <path d="M1090 150V130" stroke="#1c1d1f" stroke-width="5" stroke-linecap="round" transform="rotate(118.500 1090 150)"/><path d="M1090 150V122" stroke="#1c1d1f" stroke-width="3" stroke-linecap="round" transform="rotate(342 1090 150)"/><circle cx="1090" cy="150" r="4" fill="#b3261c"/></g>
+<g id="doors" class="hot"><path d="M1222 562V200a160 160 0 0 1 320 0v362z" fill="#3a2a1c"/><path d="M1240 200a142 142 0 0 1 284 0z" fill="url(#duskG)"/><path d="M1382 58v142M1240 200h284M1290 106l92 94M1474 106l-92 94" stroke="#3a2a1c" stroke-width="6"/>
+  <rect x="1240" y="214" width="136" height="348" fill="url(#doorG)"/><rect x="1388" y="214" width="136" height="348" fill="url(#doorG)"/><rect x="1258" y="236" width="100" height="150" fill="url(#duskG)"/><rect x="1406" y="236" width="100" height="150" fill="url(#duskG)"/>
+  <path d="M1308 236v150M1456 236v150" stroke="#3a2a1c" stroke-width="5"/><rect x="1362" y="400" width="9" height="56" rx="4" fill="url(#brassG)"/><rect x="1393" y="400" width="9" height="56" rx="4" fill="url(#brassG)"/></g>
+
+<!-- the floor: the biggest board in the building -->
+<g id="floor" class="hot"></g>
+
+<!-- Miss Ferrars, behind the Congress Desk -->
+<g id="ferrars" class="hot"><rect x="1016" y="370" width="190" height="220" fill="#000" opacity="0"/><use href="#ch-ferrars" x="1010" y="342" width="204" height="265"/></g>
+<path d="M640 592h860l44 50h-948z" fill="#2c7a50"/><path d="M596 642h948v168h-948z" fill="url(#baizeG)"/><path d="M596 642h948" stroke="#3b9264" stroke-width="4"/>
+<text x="1070" y="768" class="kT" font-size="23" fill="#e7c477" letter-spacing="3">CONGRESS DESK &#183; RESULTS &#183; RAFFLE &#183; LOST PROPERTY</text>
+<g id="roll" class="hot"><rect x="630" y="664" width="880" height="34" fill="#fdfdfb"/><g id="rollticks" stroke="#22231f" stroke-width="1.500"></g><circle cx="640" cy="672" r="5" fill="#d8382a"/><circle cx="1500" cy="672" r="5" fill="#d8382a"/></g>
+<g id="traypile"><g id="tray" class="hot"><path d="M676 632l14-34h110l14 34z" fill="none" stroke="#8d9097" stroke-width="4"/><path d="M692 600h106l10 26h-126z" fill="#fbf9ef"/><path d="M694 596h104l8 22h-120z" fill="#f6f0dc"/><path d="M700 606h90" stroke="#8d8f92" stroke-width="2"/><text x="745" y="630" class="sT" font-size="11" fill="#e9e6dc" letter-spacing="2">ROUND 4</text></g></g>
+<g id="papers">
+  <g id="sheet" class="hot"><path d="M664 634l16-36h82l12 36z" fill="#fbf9ef"/><path d="M684 606h74M680 614h80M676 622h86" stroke="#9a9c94" stroke-width="2"/><path d="M720 598l-8 36" stroke="#9a9c94" stroke-width="1.500"/></g>
+  <g id="signout" class="hot"><path d="M790 636l12-40h92l14 40z" fill="#7a5a36"/><path d="M800 632l10-32h76l12 32z" fill="#fdfdfb"/><rect x="836" y="592" width="26" height="8" rx="2" fill="#c9ccd0"/><path d="M814 610h68M812 618h74M810 626h60" stroke="#2b3f86" stroke-width="2"/></g>
+  <g id="note" class="hot"><path d="M926 636l8-38h54l2 38zM990 636l-2-38h54l10 38z" fill="#f6f0dc"/><path d="M990 598v38" stroke="#5a2030" stroke-width="3"/><path d="M938 610h42M936 620h44M998 610h42M1000 620h44M1002 628h30" stroke="#1d2a52" stroke-width="2"/></g>
+</g>
+<g id="lost" class="hot"><rect x="1132" y="566" width="86" height="28" fill="#55585f"/><rect x="1166" y="574" width="18" height="8" rx="2" fill="#c9ccd0"/><path d="M1124 598h100l6 12h-112z" fill="#8f1d2c"/><path d="M1128 604h100" stroke="#f6f0dc" stroke-width="3"/></g>
+<g id="box" class="hot"><path d="M1268 632l8-58h104l10 58z" fill="#c9a877"/><path d="M1276 574h104l4 22h-112z" fill="#b08f5e"/><g fill="#a17a4a"><path d="M1284 578l4-20h14l2 20zM1310 578l3-24h14l2 24zM1336 578l2-18h14l4 18zM1360 578l2-22h12l4 22z"/></g>
+  <text x="1329" y="620" class="kT" font-size="13" fill="#2a2318" letter-spacing="1">TELEPHONES</text></g>
+<g id="card" class="hot"><path d="M1414 630l6-56h56l8 56z" fill="#fffef8"/><path d="M1424 586h46" stroke="#7b1f2a" stroke-width="4"/><path d="M1424 598h48M1424 606h44M1422 614h50" stroke="#55584f" stroke-width="2"/><path d="M1420 574l56 56" stroke="#fff" stroke-width="8" opacity=".5"/></g>
+<g><path d="M1084 590q0-18 14-18t14 18z" fill="url(#brassG)"/><circle cx="1098" cy="570" r="3" fill="#8a6a26"/></g>
+
+<!-- Mr Loxley's bookstall, and Maeve not touching anything -->
+<g id="maeve" class="hot"><rect x="250" y="456" width="170" height="210" fill="#000" opacity="0"/><use href="#ch-maeve" x="244" y="440" width="182" height="237"/></g>
+<g id="stall" class="hot"><path d="M60 662h430l40 46h-510z" fill="#d9bd8c"/><path d="M20 708h510v150h-510z" fill="#22344f"/><g id="books"></g>
+  <g transform="rotate(-4 130 640)"><rect x="30" y="602" width="196" height="64" fill="#fbf8ec"/><text x="128" y="628" class="hT" font-size="19" fill="#27365f">BACK IN 20 MINUTES</text><text x="128" y="651" class="hT" font-size="15" fill="#27365f">or when justice has been done</text></g>
+  <text x="275" y="790" class="kT" font-size="24" fill="#e7c477" letter-spacing="4">BOOKS &#183; T. LOXLEY</text></g>
+
+<rect x="-1000" y="-400" width="3600" height="1760" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the Mayor&rsquo;s Parlour</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="gambit.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, tlBox = null;
+
+  /* the stairs, the coloured glass, the marble floor, the books */
+  (function () {
+    var s = '', i, c, y, COL = ['#b3283a', '#e7c477', '#2f6a8a', '#2f8a5a', '#e9a56a', '#8f5a9a'];
+    for (i = 0; i < 12; i++) {
+      y = 560 - i * 25;
+      s += '<rect x="' + (150 + i * 14) + '" y="' + (y - 25) + '" width="' + (580 - i * 28) + '" height="25" fill="' + (i % 2 ? '#dedacd' : '#ecebe4') + '"/><rect x="' + (150 + i * 14) + '" y="' + (y - 6) + '" width="' + (580 - i * 28) + '" height="6" fill="#bdb8a8"/>' +
+        '<rect x="' + (270 + i * 9) + '" y="' + (y - 25) + '" width="' + (340 - i * 18) + '" height="25" fill="url(#carpetG)"/><rect x="' + (262 + i * 9) + '" y="' + (y - 4) + '" width="' + (356 - i * 18) + '" height="4" fill="url(#brassG)"/>';
+    }
+    $('#steps').innerHTML = s; s = '';
+    for (i = 0; i < 12; i++) s += '<path d="M' + (146 + i * 14) + ' ' + (560 - i * 25) + 'v-' + 92 + 'M' + (734 - i * 14) + ' ' + (560 - i * 25) + 'v-' + 92 + '"/>';
+    $('#balusters').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) for (c = 0; c < 4; c++) s += '<rect x="' + (386 + c * 28) + '" y="' + (40 + i * 37) + '" width="26" height="35" fill="' + COL[(i * 3 + c * 2) % 6] + '" opacity="' + (i === 0 && (c === 0 || c === 3) ? 0 : 0.86) + '"/>';
+    $('#glass').innerHTML = s; s = '';
+    var Y = [560, 590, 626, 670, 724, 790, 870, 968, 1100];
+    function fx(k, yy) { return 800 + k * 96 * (yy - 380) / 180; }
+    for (i = 0; i < 8; i++) for (c = -17; c < 17; c++) s += '<path d="M' + fx(c, Y[i]).toFixed(1) + ' ' + Y[i] + 'L' + fx(c + 1, Y[i]).toFixed(1) + ' ' + Y[i] + 'L' + fx(c + 1, Y[i + 1]).toFixed(1) + ' ' + Y[i + 1] + 'L' + fx(c, Y[i + 1]).toFixed(1) + ' ' + Y[i + 1] + 'z" fill="' + ((c + i) % 2 ? '#24262c' : '#ecebe4') + '"/>';
+    $('#floor').innerHTML = s; s = '';
+    for (i = 0; i < 19; i++) s += '<rect x="' + (230 + i * 14) + '" y="' + (606 + (i * 7) % 16) + '" width="12" height="' + (60 - (i * 7) % 16) + '" fill="' + COL[(i * 5) % 6] + '"/>';
+    s += '<rect x="80" y="676" width="60" height="12" fill="#2f6a8a"/><rect x="86" y="666" width="56" height="12" fill="#e9a56a"/><rect x="430" y="672" width="50" height="16" fill="#55585f"/><rect x="448" y="664" width="14" height="6" fill="#c9ccd0"/>';
+    $('#books').innerHTML = s; s = '';
+    for (i = 0; i <= 100; i += 2) s += '<path d="M' + (650 + i * 8.4).toFixed(1) + ' 698v-' + (i % 10 ? 7 : 14) + '"/>';
+    $('#rollticks').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'court', story: 'gambit', storyTitle: 'Move Sixteen', id: 'desk', no: 'II', title: 'The Congress Desk',
+    go: 'Go down to the entrance hall',
+    intro: [
+      'The panel board came right when you stopped asking who seemed fair and took Rule 9(b) one reason at a time. Mrs Hargreave made the decision, so she cannot judge it. Mr Pettifer is the witness. Dr Oyelaran is Tunde&rsquo;s mother, and Miss Ferrars coaches his club. That left the two who looked wrong at first: Mr Quayle, who had seen nothing all day, which is exactly what a judge ought to have seen; and Mr Loxley, who shares Maeve&rsquo;s name and nothing else.',
+      'So this is not a court. It is a tribunal: three people at a table. But it keeps a court&rsquo;s rules in small, and the third of them is the one you need now. Maeve must see every paper before she answers.',
+      'You are her friend, under Rule 9(a). It says so on Form G, in your own writing. The papers of round 4 are at the Congress Desk.'
+    ],
+    exit: {"next":"parlour","w":{"26027dec":"70ae2c9c"}}, tags: {"fA":["13076c38"],"fB":["b112797f"],"fC":["bffa4f7c"],"fD":["f837d312"],"tA":["1a73d44a"],"oA":["50141eca"],"tB":["eb497e5c"],"tC":["88cd5a18"],"oC":["4f57853a"],"tD":["5e2f8545"]},
+    sound: ['bench', { root: 48, bpm: 63, drop: ['mel', 'ost'], beds: [['crowd', 0.25]] }],      /* a stone hall with people passing through it, and a great deal to read: no tune */
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('d-file') || null;
+
+  /* ---------- the papers of round 4 ---------- */
+  /* White's move, minutes left, Black's move, minutes left */
+  var GAME = [['e4', 60, 'e5', 60], ['Nf3', 60, 'd6', 59], ['d4', 59, 'Bg4', 59], ['dxe5', 59, 'Bxf3', 58], ['Qxf3', 58, 'dxe5', 57], ['Bc4', 58, 'Nf6', 56], ['Qb3', 57, 'Qe7', 55], ['Nc3', 56, 'c6', 53], ['Bg5', 55, 'b5', 51],
+    ['Nxb5', 52, 'cxb5', 49], ['Bxb5+', 51, 'Nbd7', 44], ['O-O-O', 49, 'Rd8', 42], ['Rxd7', 46, 'Rxd7', 39], ['Rd1', 44, 'Qe6', 33], ['Bxd7+', 43, 'Nxd7', 31], ['Qb8+', 24, 'Nxb8', 19], ['Rd8#', 23, '', '']];
+  function rows() { return GAME.map(function (g, i) { return '<tr><td>' + (i + 1) + '</td><td class="h">' + g[0] + '</td><td class="m h">' + g[1] + '</td><td class="h">' + g[2] + '</td><td class="m h">' + g[3] + '</td></tr>'; }).join(''); }
+  var SHEET = '<h4>BRINDLOW JUNIOR CONGRESS &middot; SCORE SHEET &middot; TOP COPY</h4>' +
+    '<div class="top"><span>Round <b>4</b> &nbsp; Board <b>1</b></span><span>Began at <b>2.00 pm</b> &nbsp; Each player <b>60</b> min</span><span>White <b>M. Loxley, 1180</b></span><span>Black <b>T. Oyelaran, 1640</b></span></div>' +
+    '<table><tr><th>No.</th><th>White</th><th>min left</th><th>Black</th><th>min left</th></tr>' + rows() + '</table>' +
+    '<p class="res"><span>Result <b class="pen">1 &ndash; 0</b> &nbsp; <span class="sig">M Loxley</span> &nbsp; <span class="sig">T. Oyelaran</span></span><span class="red">changed 0&ndash;1, R.7. E.H.</span></p>';
+  var OUTS = [['2.06', '2.09', '9 Black'], ['2.11', '2.13', '4 White'], ['2.15', '2.19', '12 Black'], ['2.21', '2.24', '1 White'], ['2.22', '2.26', '9 Black'], ['2.27', '2.30', '6 White'], ['2.31', '2.33', '15 White'], ['2.34', '2.38', '9 Black'],
+    ['2.38', '2.41', '1 White'], ['2.40', '2.44', '3 Black'], ['2.45', '2.48', '12 Black'], ['2.50', '2.55', '1 Black'], ['2.52', '2.56', '9 Black'], ['2.58', '3.01', '7 White'], ['3.00', '3.04', '4 White'], ['3.01', '3.05', '9 Black'],
+    ['3.07', '3.13', '1 White'], ['3.15', '3.18', '9 Black'], ['3.16', '3.20', '12 Black'], ['3.21', '3.24', '6 White'], ['3.26', '3.29', '9 Black'], ['3.30', '3.33', '15 White']];
+  function outs(a, b) { return '<table><tr><th>Out</th><th>In</th><th>Board</th></tr>' + OUTS.slice(a, b).map(function (o) { return '<tr><td>' + o[0] + '</td><td>' + o[1] + '</td><td>' + o[2] + '</td></tr>'; }).join('') + '</table>'; }
+  var SIGN = '<h4>THE CORRIDOR &middot; ROUND 4 &middot; SIGN OUT AND IN</h4><h5>Rule 6. Write the time by the corridor clock, and your board. Steward: D. Pettifer.</h5>' +
+    '<div class="cols">' + outs(0, 11) + outs(11, 22) + '</div><p>This sheet goes to the Congress Desk at the end of the round.</p>';
+  var NOTE = '<h4>INCIDENT BOOK &middot; SUNDAY &middot; ROUND 4</h4>' +
+    '<p>3.20 pm. Mr Pettifer (corridor steward) came to my desk. I wrote this as he spoke.</p>' +
+    '<p>&ldquo;At about ten past three I was at the far end of the corridor, shutting the fire door. I looked back and saw the girl from board 1 by the window, near the drinking fountain. She had a telephone in her hand and she was looking down at it.</p>' +
+    '<p>I was about twenty metres away, and the window was behind her. I did not see the screen. I did not see her press anything, and I did not hear her speak. She walked off towards the entrance hall. I did not see where the telephone went.&rdquo;</p>' +
+    '<p>Board 1 finished two minutes ago: 1&ndash;0. I shall look at the score sheet. &nbsp;E.H.</p>';
+  var PHONES = '<h4>TELEPHONES &middot; ROUND 4</h4><h5>Rule 7(a). Switched off, in an envelope, with your number on it. Sign when you take it back.</h5>' +
+    '<table><tr><th>Env.</th><th>Player</th><th>In</th><th>Out</th></tr><tr><td>9</td><td>Freddie B.</td><td>1.44</td><td>3.36</td></tr><tr><td>11</td><td>Tunde Oyelaran</td><td>1.55</td><td>3.31</td></tr>' +
+    '<tr><td>14</td><td>Maeve Loxley</td><td>1.50</td><td>&nbsp;</td></tr><tr><td>17</td><td>Aisha K.</td><td>1.58</td><td>3.40</td></tr><tr><td>22</td><td>Noor S.</td><td>1.41</td><td>&nbsp;</td></tr></table>' +
+    '<p>Envelope 14 is in the box. It is stuck down, and it has a lump in it the size of a telephone.</p>';
+  var DIAG = '<svg class="dg" viewBox="0 0 190 104"><rect x="6" y="26" width="178" height="70" rx="8" fill="#63431f"/><rect x="18" y="40" width="68" height="40" rx="4" fill="#cfd6c4"/><rect x="104" y="40" width="68" height="40" rx="4" fill="#cfd6c4"/>' +
+    '<text x="52" y="69" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="600" font-size="26" fill="#1c241c">41</text><text x="138" y="69" text-anchor="middle" font-family="Oswald,sans-serif" font-weight="600" font-size="26" fill="#8d9486">47</text>' +
+    '<rect x="34" y="12" width="36" height="16" rx="4" fill="#8d9097"/><rect x="120" y="20" width="36" height="8" rx="4" fill="#8d9097"/>' +
+    '<text x="52" y="94" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="13" fill="#f0d98f">running</text><text x="138" y="94" text-anchor="middle" font-family="Caveat,cursive" font-weight="700" font-size="13" fill="#f0d98f">stopped</text></svg>';
+  var CARD = '<h4>WHAT THE NUMBERS ON A SCORE SHEET MEAN<small>for parents, and for anybody else who is about to ask me. J.F.</small></h4>' +
+    '<p>' + DIAG + 'A <b class="t">CHESS CLOCK</b> is two clocks in one box. Each player starts with 60 minutes. Your clock runs only while it is YOUR turn. When you have moved you press your button: your clock stops, and the other one starts. Only one of the two is ever running.</p>' +
+    '<p>After each move, you write down the move and the minutes left on your own clock.</p>' +
+    '<p>So a score sheet is a clock for the whole afternoon. Add up the minutes that have GONE from both clocks, and you have the time since the round began.</p>' +
+    '<p class="ex"><b>Example</b> (not your child&rsquo;s game; the round began at 2.00). White plays her 9th move and writes 41. Black&rsquo;s last number, on the line above, is 47. Gone: 19 and 13, which makes 32. White played that move at 2.32.</p>' +
+    '<p>Mind the line above. When White writes her number, Black has not written anything on that line yet.</p>';
+
+  function hints() {
+    if (nextFile) return ['go', ['The committee is waiting in the Mayor&rsquo;s Parlour, at the top of the stairs. The button is at the bottom of the screen.']];
+    if (tlBox) return ['roll', [
+      'Miss Ferrars&rsquo;s card has the whole method. Only one clock runs at a time, so the minutes that have gone from BOTH clocks, added together, are the minutes since two o&rsquo;clock.',
+      'Try it on a line that nobody has asked you for: Black&rsquo;s move 12. Line 12 says 49 and 42. Each player began with 60, so 11 and 18 have gone. That is 29 minutes: Black played his 12th move at 2.29.',
+      'A White move needs more care. When White wrote her number, Black had not yet moved on that line, so his clock still showed the number on the line ABOVE. For White&rsquo;s move 14, use her number on line 14 and Black&rsquo;s number on line 13.'
+    ]];
+    if (!ER.flag('d-ferrars')) return ['desk', ['The papers of round 4 are in a wire tray on the Congress Desk, and Miss Ferrars is sitting behind it. Ask her.']];
+    if (!(ER.flag('d-sheet') && ER.flag('d-sign') && ER.flag('d-note') && ER.flag('d-card'))) return ['read', [
+      'Miss Ferrars has laid three papers on the desk: a score sheet, a clipboard and an open book. Read all three. Then read the small white card standing at the right-hand end of the desk.',
+      'The white card explains what the numbers on a score sheet mean. You will need it. The box of telephones, beside it, is worth a look as well.'
+    ]];
+    return ['open', ['A long strip of paper is pinned along the front of the desk: Miss Ferrars&rsquo;s till roll, with every minute of round 4 marked on it. Click it.']];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#go').classList.toggle('on', !!nextFile);
+    $('#scene').classList.toggle('given', !!ER.flag('d-ferrars'));
+    $('#roll').classList.toggle('ready', !nextFile && !!(ER.flag('d-sheet') && ER.flag('d-sign') && ER.flag('d-note') && ER.flag('d-card')));
+    ER.pips(nextFile ? 1 : 0, 1);
+  }
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('Four flags on the till roll. Somebody is calling Maeve&rsquo;s name from the top of the stairs.'); return; }
+    if (ER.flag('d-in')) { ER.say('The entrance hall. Miss Ferrars is still stamping raffle tickets.'); return; }
+    busy = true; ER.flag('d-in', 1);
+    ER.narrate([
+      'The entrance hall of Brindlow Town Hall has a marble floor in black and white squares, a staircase with a red carpet, and a trestle table with a green cloth on it. The table is the Congress Desk.',
+      'Miss Ferrars runs the desk. She also coaches Castle Hill, which is Tunde&rsquo;s club, and that is why there is a red pin under her photograph. Nothing in Rule 9 says that she may not hand you a piece of paper.',
+      'Maeve has stopped at the bookstall. She is looking at every book on it and touching none of them.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the room ---------- */
+  function paper(sel, flag, html, cls, clue, words) {
+    $(sel).addEventListener('click', function () {
+      if (busy) return;
+      ER.read({ html: html, cls: cls, clue: clue, done: function () { ER.flag(flag, 1); paint(); if (words) GB.learn(words); } });
+    });
+  }
+  paper('#sheet', 'd-sheet', SHEET, 'sheet', { id: 'sheet', title: 'The score sheet of board 1', kind: 'Round 4: top copy' }, ['score sheet']);
+  paper('#signout', 'd-sign', SIGN, 'signout', { id: 'signout', title: 'The corridor sign-out sheet', kind: 'Round 4: Mr Pettifer’s sheet' }, ['sign out', 'steward']);
+  paper('#note', 'd-note', NOTE, 'inc', { id: 'note', title: 'The note made at 3.20', kind: 'Mrs Hargreave’s incident book' }, ['incident', 'record']);
+  paper('#card', 'd-card', CARD, 'lam', { id: 'clockcard', title: 'Miss Ferrars’s card: the numbers on a score sheet', kind: 'On the Congress Desk' }, ['chess clock']);
+  paper('#box', 'd-phones', PHONES, 'phones', { id: 'phones', title: 'The telephone list', kind: 'On the lid of the shoe box' }, null);
+  $('#tray').addEventListener('click', function () { if (!busy) ER.say('A wire tray marked ROUND 4. Miss Ferrars puts her hand flat on it. &ldquo;And you are?&rdquo;'); });
+  $('#ferrars').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Miss Ferrars is reading your till roll upside down. Results-desk people can do that.'); return; }
+    if (ER.flag('d-ferrars')) { ER.say('&ldquo;That is every paper there is,&rdquo; says Miss Ferrars. &ldquo;The white card is mine. Read it before you ask me what the numbers mean.&rdquo;'); return; }
+    ER.talk({
+      who: 'Miss Ferrars', role: 'The results desk · coach of Castle Hill C.C.', face: window.FACE('ferrars'),
+      lines: [
+        { note: 'Miss Ferrars is stamping raffle tickets with one hand and adding up round 4 with the other.', q: 'Rule 9(c). Maeve has to see every paper before she answers.', a: 'So she does. I didn&rsquo;t write that rule, but I should have written it the same way.' },
+        { note: 'She takes three things out of the wire tray and lays them on the desk in a row.', a: 'The score sheet from board 1: the top copy. Mr Pettifer&rsquo;s sheet from the corridor. And the page from Mrs Hargreave&rsquo;s incident book, which she wrote at twenty past three. That is every paper there is.' },
+        { q: 'And the telephones?', a: 'In the shoe box, with the list on the lid. Look, if you like. Nobody takes an envelope out of that box without signing for it.' },
+        { a: 'One more thing, so that nobody has to whisper it behind my back. Tunde is one of mine. If one of mine had been beaten by a telephone, I should want to know. I should also want it proved.</p><p class="note">She stands a small white card on the end of the desk.</p><p>If you can&rsquo;t read the numbers on a score sheet, read that. I had it made for the parents.' }
+      ],
+      clue: { id: 'ferrars', title: 'Miss Ferrars, at the Congress Desk', kind: 'What she said' }, last: 'Thank you',
+      done: function (seen) { if (seen) { ER.flag('d-ferrars', 1); paint(); } }
+    });
+  });
+  $('#roll').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The till roll, with four flags on it. Miss Ferrars has not taken it down.'); return; }
+    if (!ER.flag('d-ferrars')) { ER.say('A long strip of paper, pinned along the front of the desk. Somebody has ruled a hundred small lines on it: one for every minute from two o&rsquo;clock until twenty to four.'); return; }
+    if (!(ER.flag('d-sheet') && ER.flag('d-sign') && ER.flag('d-note') && ER.flag('d-card'))) { ER.say('The till roll: every minute of round 4, and nothing written on it yet. You cannot fill it in until you have read all three papers, and Miss Ferrars&rsquo;s white card.'); return; }
+    openRoll();
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  GB.thing('#maeve', null, function () { return nextFile ? '&ldquo;I always go out when I have moved,&rdquo; says Maeve. &ldquo;I thought everybody knew that.&rdquo;' : '&ldquo;I can tell you what was on my clock at every move,&rdquo; says Maeve. &ldquo;I can&rsquo;t tell you what was on the wall. I don&rsquo;t look at the wall when I am playing.&rdquo;'; }, isBusy);
+  GB.thing('#lost', null, 'A cash box, and under Miss Ferrars&rsquo;s left elbow a red book with LOST PROPERTY on the front. Nobody has asked for it.', isBusy);
+  GB.thing('#stall', null, 'Mr Loxley&rsquo;s bookstall. BACK IN 20 MINUTES, OR WHEN JUSTICE HAS BEEN DONE. He has left a tin for the money, and nobody has touched that either.', isBusy);
+  GB.thing('#stairs', null, 'The stairs to the Mayor&rsquo;s Parlour. The carpet is red, and the brass rods are polished every Friday.', isBusy);
+  GB.thing('#doors', null, 'The front doors. Outside, the afternoon is turning orange. Maeve&rsquo;s bus home goes at ten past six.', isBusy);
+  GB.thing('#floor', null, 'Black and white marble squares. It is the biggest chess board in the building, and there is a rule against playing on it.', isBusy);
+  GB.thing('#clock', null, 'Three minutes to four.', isBusy);
+  GB.thing('#easel', null, 'ROUND 5, at a quarter to five. If the wall chart is not put right before then, Maeve plays on board 2, for second place.', isBusy);
+  GB.thing('#window', null, 'The arms of Brindlow in coloured glass: a bridge, a sheep and three bees. Nobody now alive knows why the bees.', isBusy);
+
+  /* ---------- the till roll ---------- */
+  var FLAGS = [['A', 'W14', 'White plays move 14', ''], ['B', 'B15', 'Black plays move 15', 'b'], ['C', 'W16', 'White plays move 16: the queen', ''], ['D', 'B16', 'Black plays move 16', 'b']];
+  function wrongLine(f, m) {
+    if (f === 'A') return ER.check('tA', m) ? '&ldquo;That is when Tunde ANSWERED move 14. I had moved six minutes before that. When I wrote 44, his last number was still the one on the line above.&rdquo;'
+      : ER.check('oA', m) ? '&ldquo;You have only counted my clock. His was running too, half the time. It is both clocks together.&rdquo;'
+      : '&ldquo;No. I wrote 44 when I played my 14th move. Tunde had not written anything on that line yet: his clock still said what it says on the line above. How many minutes had GONE from both?&rdquo;';
+    if (f === 'B') return ER.check('tB', m) ? '&ldquo;That is when I played MY 15th move. Tunde took two more minutes to answer it.&rdquo;'
+      : '&ldquo;No. When Tunde wrote his number on line 15, mine was already there beside it. Both numbers are on the same line this time, because he moved after me.&rdquo;';
+    if (f === 'C') return ER.check('tC', m) ? '&ldquo;That is when he TOOK the queen. I had let go of it twelve minutes before. His 19 was not on the paper yet: he was still on the number above it.&rdquo;'
+      : ER.check('oC', m) ? '&ldquo;You have only counted my clock. Tunde had used some of his by then. It is what has gone from both.&rdquo;'
+      : '&ldquo;No. I wrote 24 when I let go of the queen. What did HIS clock say then? Not the number beside mine. The number on the line above.&rdquo;';
+    return ER.check('tD', m) ? '&ldquo;That is when I moved. Tunde didn&rsquo;t answer for a long time. Look how much his number changed.&rdquo;'
+      : '&ldquo;No. He wrote 19, and I still had 24. Same line.&rdquo;';
+  }
+  function openRoll() {
+    var box = ER.el('div', 'tl'), pos = ER.flag('d-flags') || {}, done = false, sel = 'A', s, i;
+    s = '<div class="tl-sheet"><h6>BOARD 1 &middot; ROUND 4 &middot; BEGAN AT 2.00<small>White: M. Loxley &middot; Black: T. Oyelaran &middot; 60 minutes each</small></h6><table><tr><th>No.</th><th>White</th><th>min</th><th>Black</th><th>min</th></tr>' + rows().replace(/ class="h"/g, '').replace(/class="m h"/g, 'class="m"') + '</table></div>' +
+      '<div><div class="tl-roll"><div class="tl-rail"><div class="tl-base"></div>';
+    for (i = 0; i <= 100; i++) s += '<i class="' + (i % 10 === 0 ? 't' : i % 5 === 0 ? 'f' : '') + '" style="left:' + i + '%"></i>' + (i % 10 === 0 ? '<s style="left:' + i + '%">' + GB.clock(i) + '</s>' : '');
+    [[21, 24], [38, 41], [67, 73]].forEach(function (o) { s += '<div class="tl-out" style="left:' + o[0] + '%;width:' + (o[1] - o[0]) + '%"><em>out ' + GB.clock(o[0]) + ' &middot; in ' + GB.clock(o[1]) + '</em></div>'; });
+    s += '<div class="tl-seen" style="left:70%"><em>about 3.10: &ldquo;a telephone&rdquo;</em></div>';
+    FLAGS.forEach(function (f, n) { s += '<div class="tl-flag drag ' + f[3] + '" data-f="' + f[0] + '" style="left:' + (8 + n * 12) + '%"><b>' + f[1] + '</b><u></u></div>'; });
+    s += '</div></div><div class="tl-key">';
+    FLAGS.forEach(function (f) { s += '<div class="' + f[3] + '" data-f="' + f[0] + '"><b>' + f[1] + '</b><span>' + f[2] + '</span><u>&ndash;</u><button type="button" data-d="-1" title="A minute earlier">&#9664;</button><button type="button" data-d="1" title="A minute later">&#9654;</button></div>'; });
+    s += '</div><div class="tl-foot"><p class="pmsg"></p><button type="button" class="btn" id="tl-go">Read the roll to Maeve</button></div></div>';
+    box.innerHTML = s;
+    var rail = box.querySelector('.tl-rail'), msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function F(f) { return box.querySelector('.tl-flag[data-f="' + f + '"]'); }
+    function K(f) { return box.querySelector('.tl-key div[data-f="' + f + '"]'); }
+    function pick(f) { sel = f; FLAGS.forEach(function (x) { F(x[0]).classList.toggle('sel', x[0] === f); K(x[0]).classList.toggle('sel', x[0] === f); }); }
+    function set(f, m, quiet) {
+      m = Math.max(0, Math.min(100, m)); pos[f] = m;
+      var n = F(f); n.classList.add('set'); n.style.left = m + '%'; n.querySelector('u').textContent = GB.clock(m); K(f).querySelector('u').textContent = GB.clock(m);
+      box.setAttribute('data-' + f.toLowerCase(), m);
+      if (!quiet) ER.flag('d-flags', pos);
+    }
+    FLAGS.forEach(function (f) {
+      var n = F(f[0]);
+      if (pos[f[0]] != null) set(f[0], pos[f[0]], true);
+      ER.drag(n, {
+        start: function () { if (done) return false; pick(f[0]); },
+        move: function (ev) { var r = rail.getBoundingClientRect(); set(f[0], Math.round((ev.clientX - r.left) / r.width * 100), true); },
+        end: function () { if (pos[f[0]] != null) { ER.flag('d-flags', pos); GB.sfx.flag(); } }
+      });
+      K(f[0]).addEventListener('click', function (e) {
+        if (done) return;
+        pick(f[0]);
+        var d = e.target.getAttribute ? e.target.getAttribute('data-d') : null;
+        if (d) { set(f[0], (pos[f[0]] == null ? 50 : pos[f[0]]) + (+d)); ER.sfx.click(); }
+      });
+    });
+    box.querySelector('#tl-go').addEventListener('click', function () {
+      var wrong = [], file;
+      if (done) return;
+      if (FLAGS.some(function (f) { return pos[f[0]] == null; })) { msg('Four flags, and at least one of them is still lying under the line. Stand every flag on its minute first.'); return; }
+      FLAGS.forEach(function (f) { if (!ER.check('f' + f[0], pos[f[0]])) wrong.push(f[0]); });
+      if (wrong.length) {
+        GB.bump('d-tries'); GB.sfx.hm(); pick(wrong[0]);
+        msg('Maeve looks at flag <b>' + FLAGS.filter(function (f) { return f[0] === wrong[0]; })[0][1] + '</b>. ' + wrongLine(wrong[0], pos[wrong[0]]) +
+          (wrong.length > 1 ? ' <i>She looks along the roll. &ldquo;And ' + (wrong.length === 2 ? 'one more flag is' : (wrong.length - 1) + ' more flags are') + ' on the wrong minute.&rdquo;</i>' : ''));
+        return;
+      }
+      file = ER.exitOk([FLAGS.map(function (f) { return pos[f[0]]; }).join('+')]);
+      if (!file) { msg('The flags will not stand up. Something is wrong with this lock: tell your teacher.'); return; }
+      done = true; nextFile = file; ER.flag('d-file', file); GB.done('desk');
+      msg('Maeve reads the four flags from left to right. <b>&ldquo;Yes,&rdquo; she says. &ldquo;That is my afternoon.&rdquo;</b>');
+      GB.mine('time', 'Your time line: board 1, round 4', '<p>2.37 she plays move 14. 2.38 OUT. 2.41 IN. 2.43 Tunde answers.</p><p>2.46 Tunde plays move 15.</p><p>2.46 to 3.05: NINETEEN MINUTES at the board. No red line. She does not leave the hall.</p>' +
+        '<p>3.05 MOVE 16: THE QUEEN.</p><p>3.07 OUT. About 3.10: Mr Pettifer sees a telephone. 3.13 IN.</p><p>3.17 Tunde takes the queen. 3.18 checkmate.</p><p>All three times she went out, she had just moved. It was Tunde&rsquo;s clock that was running.</p>', true);
+      GB.learn(['time line']);
+      setTimeout(function () {
+        ER.closeAll(); GB.solved(); paint(); busy = true;
+        ER.narrate([
+          'With four flags on it, the till roll can be read like a page.',
+          '2.46: Tunde plays his 15th move. Then nineteen minutes with nothing in them at all: no red line, no flag. She is at the board. 3.05: the queen. 3.07: she signs out. 3.10: a telephone, says Mr Pettifer. 3.17: Tunde takes the queen at last.',
+          '&ldquo;You went out AFTER you gave up your queen,&rdquo; you say. Maeve looks at you as if you had told her that water is wet. &ldquo;You go when it is the other person&rsquo;s turn. Then it is his clock that is running, and not yours.&rdquo;',
+          'Miss Ferrars has stopped stamping. She has read the whole roll upside down, and she says nothing at all, because she coaches Tunde. She holds out a paper clip, so that you can take the roll with you.',
+          'Then, from the top of the stairs: &ldquo;LOXLEY! Appeals Committee! The Mayor&rsquo;s Parlour, please, now!&rdquo;'
+        ], function () { busy = false; });
+      }, 3000);
+    });
+    msg('The round began at 2.00. The red lines are the three times that board 1 White signed out, and the dotted line is what Mr Pettifer told the arbiter. <b>Stand each flag on the minute when that move was played:</b> drag it, or click its name and use the arrows.');
+    pick('A'); tlBox = box;
+    ER.open('ov-lock', box, function () { tlBox = null; });
+  }
+})();
+</script>
+</body>
+</html>

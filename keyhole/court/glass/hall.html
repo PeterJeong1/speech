@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Waiting Hall · A Quarter Past Four</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-court.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="glass.css">
+<style>
+  body{--bg:#141b18;--accent:#d9b25a;--font-display:'Cormorant Garamond',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',Georgia,serif;
+    --tc-bg:rgba(13,20,17,.97);--tc-ink:#efe9d8;--cap-bg:rgba(13,20,17,.93);--panel:#16201c;--face-bg:#3a4a44;--q-ink:#b9cbbd;--fade:#0a100d;--hud-bg:rgba(13,20,17,.8)}
+  #flick{animation:fl 5.3s steps(1,end) infinite}
+  @keyframes fl{0%{opacity:1}71%{opacity:.35}73%{opacity:1}76%{opacity:.5}78%{opacity:1}}
+  #lamp{animation:lp 2.6s steps(1,end) infinite}
+  @keyframes lp{0%{opacity:1}50%{opacity:.8}}
+  #phone.new #pbadge{animation:pb 1.2s steps(1,end) infinite}
+  @keyframes pb{50%{opacity:.25}}
+  #slip{display:none}
+  #slip.on{display:block}
+  #slip.on.ready{animation:nudge 1.7s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+  #demirs.ready{animation:nudge 1.7s ease-in-out infinite}
+
+  /* the usher's slip, on its clipboard */
+  .us{display:grid;grid-template-columns:minmax(0,580px) 370px;gap:26px;width:min(1010px,96vw);align-items:start}
+  .us-clip{position:relative;padding:44px 20px 20px;background:#8a6a42 linear-gradient(160deg,#a5804f,#74552f);border-radius:10px;box-shadow:0 26px 70px rgba(0,0,0,.7)}
+  .us-clip:before{content:'';position:absolute;left:50%;top:10px;width:150px;height:30px;margin-left:-75px;border-radius:6px;background:linear-gradient(#f0d98f,#b08a35 60%,#7d5f1d);box-shadow:0 3px 5px rgba(0,0,0,.4)}
+  .us-form{background:#fbf8ec;color:#1c1d1f;padding:16px 22px 14px;font-family:'Courier Prime',monospace}
+  .us-form h4{margin:0;font-family:'Cormorant SC',serif;font-weight:700;font-size:25px;letter-spacing:.12em;line-height:1.1}
+  .us-form h5{margin:1px 0 10px;font-weight:400;font-size:14px;letter-spacing:.1em;border-bottom:3px double #1c1d1f;padding-bottom:8px}
+  .us-line{display:grid;grid-template-columns:196px minmax(0,1fr);align-items:center;gap:12px;margin-bottom:6px}
+  .us-line label{font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.14em;text-transform:uppercase;line-height:1.2}
+  .us-line label small{display:block;font-family:'Courier Prime',monospace;font-weight:400;font-size:12.5px;letter-spacing:0;text-transform:none;color:#6b6453}
+  .us-slot{min-height:46px;display:flex;align-items:center;padding:3px 4px;border-bottom:2px solid #1c1d1f;background:rgba(40,60,120,.06)}
+  .us-slot.bad{background:rgba(179,38,28,.16)}
+  .us-callrow{grid-template-columns:minmax(0,1fr);gap:4px;margin-top:9px}
+  .us-callrow label small{display:inline;margin-left:10px}
+  .us-call{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:16px}
+  #phone:not(.new) #pbadge{display:none}
+  .us-call button{padding:5px 11px 3px;border:1.5px solid #1c1d1f;font-family:'Courier Prime',monospace;font-weight:700;font-size:16px;color:#1c1d1f;border-radius:2px}
+  .us-call button.on{background:#1c1d1f;color:#fbf8ec}
+  .us-foot{display:flex;align-items:center;gap:14px;margin-top:10px}
+  .us-foot .btn{--accent:#1f4a37;white-space:nowrap}
+  .us-foot .btn:hover:not([disabled]){color:#fbf8ec}
+  .us-foot span{font-size:12.5px;color:#6b6453;line-height:1.3}
+  .us-side h6{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:400;font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#b9cbbd}
+  .us-tray{min-height:330px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;padding:12px;background:rgba(10,16,13,.7);border:1px dashed rgba(217,178,90,.5)}
+  .us-card{padding:8px 13px 6px;background:#fdfdfb;color:#1c1d22;border-left:6px solid #1f4a37;font-family:'Tinos',serif;font-size:17.5px;line-height:1.15;box-shadow:0 4px 9px rgba(0,0,0,.45);white-space:nowrap}
+  .us-slot .us-card{box-shadow:none;border-left-color:#39507e}
+  .us .pmsg{margin-top:14px;min-height:150px}
+  @media (max-width:900px){.us{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9c4b7"/><stop offset="1" stop-color="#a3b0a2"/></linearGradient>
+  <linearGradient id="dadoG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5f7868"/><stop offset="1" stop-color="#4a6253"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f978d"/><stop offset="1" stop-color="#5d655d"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8c98a2"/><stop offset="1" stop-color="#c3cbd0"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8a6a26"/><stop offset=".3" stop-color="#e6c873"/><stop offset=".55" stop-color="#b08a35"/><stop offset=".8" stop-color="#f0d98f"/><stop offset="1" stop-color="#8a6a26"/></linearGradient>
+  <linearGradient id="oakG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a5632"/><stop offset=".5" stop-color="#94693e"/><stop offset="1" stop-color="#6b4a2a"/></linearGradient>
+  <linearGradient id="winL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe8ea" stop-opacity=".34"/><stop offset="1" stop-color="#dfe8ea" stop-opacity="0"/></linearGradient>
+  <radialGradient id="vig" cx="52%" cy="46%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#06100b" stop-opacity=".2"/><stop offset="1" stop-color="#050b08" stop-opacity=".82"/></radialGradient>
+  <pattern id="terr" width="60" height="60" patternUnits="userSpaceOnUse"><g fill="#3d443e" opacity=".5"><circle cx="8" cy="12" r="2.2"/><circle cx="31" cy="6" r="1.6"/><circle cx="48" cy="22" r="2.4"/><circle cx="19" cy="34" r="1.8"/><circle cx="40" cy="44" r="2"/><circle cx="6" cy="50" r="1.5"/><circle cx="54" cy="54" r="1.7"/></g><g fill="#d5dbd0" opacity=".55"><circle cx="22" cy="18" r="2"/><circle cx="44" cy="8" r="1.4"/><circle cx="12" cy="40" r="1.6"/><circle cx="34" cy="28" r="1.5"/><circle cx="52" cy="38" r="1.9"/><circle cx="28" cy="54" r="1.5"/></g></pattern>
+  <pattern id="baize" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#1f4a37"/><path d="M0 0l6 6M-1 5l2 2M5 -1l2 2" stroke="#285c45" stroke-width="1"/></pattern>
+  <clipPath id="wc0"><rect x="76" y="116" width="108" height="318"/></clipPath><clipPath id="wc1"><rect x="226" y="116" width="108" height="318"/></clipPath><clipPath id="wc2"><rect x="376" y="116" width="108" height="318"/></clipPath>
+</defs>
+
+<!-- wall, dado, strip lights -->
+<rect x="-1000" y="-400" width="3600" height="1040" fill="url(#wallG)"/>
+<rect x="-1000" y="470" width="3600" height="170" fill="url(#dadoG)"/><rect x="-1000" y="462" width="3600" height="10" fill="#3d5245"/><rect x="-1000" y="628" width="3600" height="12" fill="#2f4035"/>
+<g fill="#f4f8f2"><rect x="250" y="14" width="300" height="14" rx="4"/><rect id="flick" x="820" y="14" width="300" height="14" rx="4"/><rect x="1390" y="14" width="300" height="14" rx="4"/></g>
+
+<!-- three tall windows, and the rain -->
+<g id="window" class="hot">
+  <g fill="#55615a"><rect x="64" y="104" width="132" height="344"/><rect x="214" y="104" width="132" height="344"/><rect x="364" y="104" width="132" height="344"/></g>
+  <g fill="url(#skyG)"><rect x="76" y="116" width="108" height="318"/><rect x="226" y="116" width="108" height="318"/><rect x="376" y="116" width="108" height="318"/></g>
+  <g fill="#6f7a78" opacity=".55"><path d="M76 434v-70q30-26 54-6t54-10v86zM226 434v-90q40 12 60-14t48 8v96zM376 434v-76q36-20 60 2t48-12v86z"/></g>
+  <g stroke="#55615a" stroke-width="6"><path d="M130 116v318M76 222h108M76 328h108M280 116v318M226 222h108M226 328h108M430 116v318M376 222h108M376 328h108"/></g>
+  <g class="rain" clip-path="url(#wc0)"><path d="M90 100l-14 360M112 100l-14 360M150 100l-14 360M176 100l-14 360"/></g>
+  <g class="rain" clip-path="url(#wc1)"><path d="M244 100l-14 360M270 100l-14 360M300 100l-14 360M328 100l-14 360"/></g>
+  <g class="rain" clip-path="url(#wc2)"><path d="M392 100l-14 360M420 100l-14 360M452 100l-14 360M478 100l-14 360"/></g>
+  <rect x="56" y="446" width="448" height="12" fill="#3d5245"/>
+</g>
+<g id="radiator" class="hot"><rect x="86" y="500" width="410" height="112" rx="6" fill="#d9ddd2"/><g stroke="#aeb5a8" stroke-width="5"><path d="M112 506v100M146 506v100M180 506v100M214 506v100M248 506v100M282 506v100M316 506v100M350 506v100M384 506v100M418 506v100M452 506v100M480 506v100"/></g><path d="M86 612v24M496 612v24" stroke="#8d958a" stroke-width="7"/></g>
+
+<!-- the green board with the daily list -->
+<rect x="640" y="112" width="220" height="30" fill="url(#brassG)"/><text x="750" y="134" class="cT" font-size="19" fill="#3a2a08" letter-spacing="4">DAILY LIST</text>
+<g id="board" class="hot">
+  <rect x="594" y="150" width="312" height="300" fill="url(#oakG)"/><rect x="608" y="164" width="284" height="272" fill="url(#baize)"/>
+  <g fill="url(#brassG)"><circle cx="601" cy="157" r="4"/><circle cx="899" cy="157" r="4"/><circle cx="601" cy="443" r="4"/><circle cx="899" cy="443" r="4"/></g>
+  <g transform="rotate(-1 714 300)"><rect x="626" y="180" width="176" height="238" fill="#fbf8ec"/><text x="714" y="204" class="cT" font-size="13" fill="#1c1d1f" letter-spacing="2">HATHERWICK COUNTY COURT</text>
+    <path d="M638 212h152" stroke="#1c1d1f" stroke-width="2.5"/><rect x="638" y="222" width="152" height="12" fill="#1c1d1f"/>
+    <g stroke="#3b3d3f" stroke-width="2.2"><path d="M638 246h152M638 258h130M638 270h152M638 282h118M638 294h152M638 306h100M638 318h140"/></g><rect x="638" y="336" width="152" height="12" fill="#1c1d1f"/><g stroke="#3b3d3f" stroke-width="2.2"><path d="M638 360h152M638 372h110"/></g>
+    <g stroke="#6a7ba8" stroke-width="2"><path d="M760 252q14 -6 26 0M750 288q18 -6 36 0M764 312q10 -5 22 0"/></g>
+    <circle cx="714" cy="186" r="5" fill="url(#brassG)"/></g>
+  <g transform="rotate(3 846 250)"><rect x="812" y="196" width="68" height="94" fill="#f3d7d0"/><text x="846" y="218" class="sT" font-size="11" fill="#8f2947">FIRE</text><path d="M822 230h48M822 242h40M822 254h48M822 266h30" stroke="#a8747a" stroke-width="2"/><circle cx="846" cy="202" r="4" fill="url(#brassG)"/></g>
+  <g transform="rotate(-4 846 362)"><rect x="814" y="318" width="66" height="84" fill="#fff7c2"/><path d="M822 336h50M822 348h40M822 360h50M822 372h34M822 384h44" stroke="#8a8250" stroke-width="2"/><circle cx="847" cy="324" r="4" fill="url(#brassG)"/></g>
+</g>
+
+<!-- the hot drinks machine -->
+<g id="vend" class="hot"><rect x="936" y="296" width="96" height="346" rx="5" fill="#22344f"/><rect x="944" y="306" width="80" height="60" rx="3" fill="#f0e2b0"/><text x="984" y="332" class="sT" font-size="15" fill="#22344f" letter-spacing="2">HOT</text><text x="984" y="354" class="sT" font-size="15" fill="#22344f" letter-spacing="2">DRINKS</text>
+  <g fill="#0f1a2c"><rect x="948" y="378" width="72" height="20" rx="2"/><rect x="948" y="402" width="72" height="20" rx="2"/><rect x="948" y="426" width="72" height="20" rx="2"/><rect x="948" y="450" width="72" height="20" rx="2"/></g>
+  <g fill="#e06b4a"><circle cx="1010" cy="388" r="5"/><circle cx="1010" cy="412" r="5"/><circle cx="1010" cy="436" r="5"/></g><circle id="lamp" cx="1010" cy="460" r="5" fill="#7be04a"/>
+  <rect x="960" y="500" width="48" height="66" rx="3" fill="#0b1220"/><rect x="972" y="538" width="24" height="26" rx="2" fill="#f4f1e6"/><rect x="994" y="476" width="22" height="10" rx="2" fill="#0b1220"/></g>
+
+<!-- the court clock: seven minutes past ten -->
+<g id="clock" class="hot"><circle cx="1128" cy="126" r="46" fill="#3d5245"/><circle cx="1128" cy="126" r="38" fill="#fbf8ec"/><g stroke="#1c1d1f" stroke-width="3"><path d="M1128 92v8M1128 152v8M1094 126h8M1154 126h8"/></g>
+  <path d="M1128 126V104" stroke="#1c1d1f" stroke-width="5" stroke-linecap="round" transform="rotate(303.5 1128 126)"/><path d="M1128 126V96" stroke="#1c1d1f" stroke-width="3" stroke-linecap="round" transform="rotate(42 1128 126)"/><circle cx="1128" cy="126" r="4" fill="#b3261c"/></g>
+
+<!-- the doors to the hearing rooms -->
+<g id="doors" class="hot">
+  <rect x="1352" y="150" width="216" height="34" rx="4" fill="#1a0d0b"/><text x="1460" y="174" class="sT lit" font-size="19" fill="#ff6a5a" letter-spacing="5">IN SESSION</text>
+  <rect x="1336" y="200" width="248" height="442" fill="#3d5245"/><rect x="1348" y="212" width="108" height="428" fill="url(#oakG)"/><rect x="1464" y="212" width="108" height="428" fill="url(#oakG)"/>
+  <g fill="#cfe0e0" opacity=".8"><rect x="1372" y="240" width="60" height="130"/><rect x="1488" y="240" width="60" height="130"/></g><g stroke="#55615a" stroke-width="1.5" opacity=".7"><path d="M1372 262l60 60M1372 300l60 60M1392 240l40 40M1488 262l60 60M1488 300l60 60M1508 240l40 40"/></g>
+  <rect x="1372" y="398" width="60" height="26" fill="url(#brassG)"/><rect x="1488" y="398" width="60" height="26" fill="url(#brassG)"/><text x="1402" y="416" class="cT" font-size="12" fill="#3a2a08">HEARING</text><text x="1518" y="416" class="cT" font-size="12" fill="#3a2a08">ROOMS 1–4</text>
+  <rect x="1440" y="470" width="10" height="70" rx="3" fill="url(#brassG)"/><rect x="1470" y="470" width="10" height="70" rx="3" fill="url(#brassG)"/>
+</g>
+
+<!-- floor -->
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#floorG)"/><rect x="-1000" y="640" width="3600" height="700" fill="url(#terr)"/>
+<g fill="url(#winL)" pointer-events="none"><path d="M76 640h108l-60 300h-170zM226 640h108l-20 300h-170zM376 640h108l20 300h-170z"/></g>
+<g id="prints" fill="#3f4841" opacity=".42" pointer-events="none"></g>
+
+<!-- the row of chairs, and the people on them -->
+<g id="chairs"></g>
+<g id="umbrella" class="hot"><path d="M548 470l-22 164" stroke="#1c1d1f" stroke-width="5" stroke-linecap="round"/><path d="M548 470q-28 60-30 150l16 4q14-80 14-154z" fill="#7b1f2a"/><path d="M548 470q8-12 16 0" stroke="#1c1d1f" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="528" cy="640" rx="34" ry="7" fill="#3f4841" opacity=".45"/></g>
+<g id="people"></g>
+
+<!-- Mr Makepeace, his desk, his book -->
+<g id="desk">
+  <path d="M1040 560h178l14 150h-206z" fill="url(#oakG)"/><path d="M1030 548h198l-10 14h-178z" fill="#a67a48"/><path d="M1054 590h150v96h-150z" fill="#6b4a2a" opacity=".5"/>
+  <path d="M1196 548v-58q0-18-18-18" stroke="url(#brassG)" stroke-width="6" fill="none"/><path d="M1150 462h44l-8 22h-28z" fill="#1f4a37"/><path d="M1158 484h28l10 26h-48z" fill="#fff3c0" opacity=".28"/>
+</g>
+<g id="file" class="hot"><rect x="1046" y="524" width="74" height="24" rx="2" fill="#d9c49a"/><rect x="1046" y="518" width="74" height="10" rx="2" fill="#e6d5ae"/><path d="M1046 532h74M1080 518v30" stroke="#d4577c" stroke-width="5"/></g>
+<g id="book" class="hot"><g transform="rotate(-9 1150 534)"><rect x="1126" y="522" width="52" height="26" rx="2" fill="#1f4a37"/><rect x="1126" y="522" width="8" height="26" fill="#17382a"/><path d="M1140 530h30M1140 538h22" stroke="#d9b25a" stroke-width="2.5"/></g></g>
+<g id="slip" class="hot"><g transform="rotate(7 1090 500)"><rect x="1060" y="462" width="62" height="78" rx="3" fill="#8a6a42"/><rect x="1066" y="472" width="50" height="64" fill="#fbf8ec"/><rect x="1080" y="456" width="22" height="12" rx="2" fill="url(#brassG)"/><path d="M1072 484h38M1072 494h30M1072 504h38M1072 514h26M1072 524h34" stroke="#55523f" stroke-width="2"/></g></g>
+<g id="usher" class="hot">
+  <ellipse cx="1284" cy="742" rx="62" ry="10" fill="#000" opacity=".25"/>
+  <path d="M1262 738v-150h44v150" fill="#4c5058"/><path d="M1262 738h-14v8h34v-8zM1306 738h14v8h-34v-8z" fill="#17181a"/>
+  <path d="M1232 720q-10-190 52-196t52 196q-22 8-40-2v-150h-24v150q-18 10-40 2z" fill="#15161a"/>
+  <path d="M1266 528l18 60 18-60z" fill="#f3f1ea"/><path d="M1281 540h7l3 34-6 9-6-9z" fill="#1f4a37"/>
+  <path d="M1240 560q-16 50-6 96l18 4q-4-50 8-90zM1328 560q14 40 2 92l-22 12q8-60 0-98z" fill="#15161a"/>
+  <rect x="1274" y="500" width="20" height="30" fill="#cfa987"/><ellipse cx="1284" cy="474" rx="27" ry="37" fill="#e3c2a0"/>
+  <path d="M1258 470q-4-18 5-28q-2 14 0 30zM1310 470q4-18-5-28q2 14 0 30z" fill="#b9bcc2"/>
+  <path d="M1266 466h14M1288 466h14" stroke="#8d9097" stroke-width="3" stroke-linecap="round"/><circle cx="1273" cy="476" r="2.4" fill="#2b2a26"/><circle cx="1295" cy="476" r="2.4" fill="#2b2a26"/>
+  <path d="M1284 476q-5 14 0 18" stroke="#b08a66" stroke-width="2" fill="none"/><path d="M1275 502q8 2 18-3" stroke="#7a4a3a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <g transform="rotate(-10 1236 660)"><rect x="1210" y="634" width="52" height="66" rx="3" fill="#8a6a42"/><rect x="1216" y="644" width="40" height="52" fill="#fbf8ec"/><rect x="1226" y="628" width="20" height="10" rx="2" fill="url(#brassG)"/></g>
+</g>
+
+<!-- the yellow sign, and your phone -->
+<g id="wetsign" class="hot"><path d="M1004 870l40-150h36l40 150z" fill="#e8b923"/><path d="M1016 862l32-124h28l32 124z" fill="#f4d35e"/><path d="M1062 762v52" stroke="#1c1d1f" stroke-width="8" stroke-linecap="round"/><circle cx="1062" cy="834" r="5.500" fill="#1c1d1f"/></g>
+<g id="phone" class="hot new"><g transform="rotate(-12 1470 800)"><rect x="1428" y="740" width="84" height="150" rx="12" fill="#17181a"/><rect x="1435" y="752" width="70" height="124" rx="5" fill="#2f6a4a"/><rect x="1441" y="762" width="52" height="14" rx="7" fill="#eaf6ee"/><rect x="1441" y="782" width="44" height="14" rx="7" fill="#eaf6ee"/><rect x="1441" y="802" width="56" height="14" rx="7" fill="#eaf6ee"/><rect x="1441" y="822" width="36" height="14" rx="7" fill="#eaf6ee"/>
+  <g id="pbadge"><circle cx="1506" cy="748" r="17" fill="#b3261c"/><text x="1506" y="757" class="sT" font-size="24" fill="#fff">7</text></g></g></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go to Consultation Room 2</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="glass.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = false, nextFile = null, slipBox = null;
+
+  /* the chairs, the people, the wet footprints */
+  (function () {
+    var s = '', i, x, SEATS = [130, 235, 340, 445, 550, 655, 760, 865];
+    s += '<rect x="84" y="640" width="828" height="9" rx="4" fill="#3a4048"/>';
+    for (i = 0; i < 8; i++) {
+      x = SEATS[i];
+      s += '<path d="M' + (x - 34) + ' 648v44M' + (x + 34) + ' 648v44" stroke="#3a4048" stroke-width="6"/>' +
+        '<rect x="' + (x - 44) + '" y="530" width="88" height="80" rx="10" fill="#6f8496"/><rect x="' + (x - 44) + '" y="530" width="88" height="80" rx="10" fill="none" stroke="#586c7d" stroke-width="3"/>' +
+        '<rect x="' + (x - 46) + '" y="606" width="92" height="36" rx="9" fill="#7a90a3"/>';
+    }
+    $('#chairs').innerHTML = s;
+    /* a person sitting down, seen from the front */
+    function sit(id, x, o) {
+      var k = o.small ? 0.9 : 1, hy = 496 + (o.small ? 14 : 0) + (o.down ? 6 : 0), g = '<g id="' + id + '" class="hot">';
+      g += '<rect x="' + (x - 46) + '" y="' + (hy - 40) + '" width="92" height="' + (724 - hy) + '" fill="#000" opacity="0"/>';
+      g += '<ellipse cx="' + x + '" cy="700" rx="46" ry="7" fill="#000" opacity=".2"/>';
+      g += '<path d="M' + (x - 24) + ' 616v70M' + (x + 24) + ' 616v70" stroke="' + o.legs + '" stroke-width="' + (22 * k) + '" stroke-linecap="round"/>';
+      g += '<path d="M' + (x - 38) + ' 694h28M' + (x + 10) + ' 694h28" stroke="' + (o.shoes || '#17181a') + '" stroke-width="12" stroke-linecap="round"/>';
+      g += '<rect x="' + (x - 36) + '" y="596" width="72" height="30" rx="12" fill="' + o.legs + '"/>';
+      g += '<path d="M' + (x - 38 * k) + ' 612q-6-' + (86 * k) + ' ' + (38 * k) + '-' + (90 * k) + 't' + (38 * k) + ' ' + (90 * k) + 'z" fill="' + o.coat + '"/>';
+      g += '<path d="M' + (x - 30 * k) + ' ' + (552 + (o.small ? 8 : 0)) + 'q-14 30 6 54M' + (x + 30 * k) + ' ' + (552 + (o.small ? 8 : 0)) + 'q14 30-6 54" stroke="' + o.coat + '" stroke-width="15" fill="none" stroke-linecap="round"/>';
+      g += '<rect x="' + (x - 8) + '" y="' + (hy + 16) + '" width="16" height="16" fill="' + o.skin + '"/><circle cx="' + x + '" cy="' + hy + '" r="' + (22 * k) + '" fill="' + o.skin + '"/>';
+      g += (o.hair || '').replace(/X/g, x).replace(/Y/g, hy) + (o.extra || '').replace(/X/g, x).replace(/Y/g, hy) + '</g>';
+      return g;
+    }
+    s = sit('wain1', 130, { coat: '#6b7068', legs: '#3f433f', skin: '#e0b596',
+      hair: '<g transform="translate(X Y)"><path d="M-22 -4q0-22 22-22t22 22q-10-10-22-10t-22 10z" fill="#d9d9d4"/><path d="M-9 4h6M3 4h6" stroke="#2b2a26" stroke-width="2.4"/><path d="M-7 14h14" stroke="#7a4a3a" stroke-width="2.4"/></g>',
+      extra: '<g transform="translate(X 0)"><path d="M-30 586h60" stroke="#6b7068" stroke-width="16" stroke-linecap="round"/></g>' });
+    s += sit('selinS', 340, { coat: '#e8b923', legs: '#2c3a55', skin: '#c99870',
+      hair: '<g transform="translate(X Y)"><circle cx="0" cy="-27" r="12" fill="#2a1c16"/><path d="M-23 2q-3-28 23-28t23 28q-8-14-23-14t-23 14z" fill="#2a1c16"/><path d="M-10 3h7M3 3h7" stroke="#1d1410" stroke-width="2.6"/><path d="M-6 13h12" stroke="#7a3a34" stroke-width="2.4"/></g>',
+      extra: '<g transform="translate(X 0)"><path d="M-20 560q20 16 40 0" stroke="#c99a12" stroke-width="5" fill="none"/></g>' });
+    s += sit('emreS', 445, { coat: '#24304d', legs: '#3a3f4a', skin: '#c99870', small: true, down: true, shoes: '#e9e9e4',
+      hair: '<g transform="translate(X Y)" fill="#1d1410"><circle cx="-12" cy="-14" r="10"/><circle cx="0" cy="-19" r="11"/><circle cx="12" cy="-14" r="10"/><circle cx="-18" cy="-4" r="6"/><circle cx="18" cy="-4" r="6"/></g><g transform="translate(X Y)"><path d="M-9 7h6M3 7h6" stroke="#22160f" stroke-width="2.4"/></g>' });
+    s += sit('stanS', 655, { coat: '#7a6442', legs: '#4a4234', skin: '#ecc7a8', shoes: '#3a2a1c',
+      hair: '<g transform="translate(X Y)"><path d="M-23 -2q0-24 23-24t23 24q-10-9-23-9t-23 9z" fill="#f1f1ee"/><path d="M-10 2h7M3 2h7" stroke="#3a4a5c" stroke-width="2.6"/><path d="M-11 12q11-7 22 0q-11 5-22 0z" fill="#f1f1ee"/></g>',
+      extra: '<g transform="translate(X 0)"><path d="M-30 566q30 22 60 0v36h-60z" fill="#fdfdfb"/><path d="M-30 574h60" stroke="#b3261c" stroke-width="5"/><circle cx="0" cy="590" r="24" fill="#fdfdfb"/><circle cx="0" cy="590" r="24" fill="none" stroke="#c9cdc6" stroke-width="2"/><path d="M-12 562q-4-12 4-14M12 562q4-12-4-14" stroke="#fdfdfb" stroke-width="4" fill="none"/></g>' });
+    s += sit('wain2', 865, { coat: '#8f2947', legs: '#5a5560', skin: '#e8cbb0', shoes: '#3a2a1c',
+      hair: '<g transform="translate(X Y)"><path d="M-25 6q-4-32 25-32t25 32q-4-14-10-18q-15-8-30 0q-6 4-10 18z" fill="#8a6a52"/><path d="M-9 4h6M3 4h6" stroke="#2b2a26" stroke-width="2.4"/><path d="M-6 14h12" stroke="#8a3a44" stroke-width="2.6"/></g>',
+      extra: '<g transform="translate(X 0)"><rect x="-22" y="578" width="44" height="30" rx="5" fill="#3a2a1c"/><path d="M-10 578q10-16 20 0" stroke="#3a2a1c" stroke-width="4" fill="none"/></g>' });
+    /* the man from the parking company, standing, with a case on wheels */
+    s += '<g id="parking" class="hot" transform="translate(-14 0)"><ellipse cx="1000" cy="716" rx="44" ry="7" fill="#000" opacity=".22"/><rect x="932" y="640" width="40" height="66" rx="5" fill="#22344f"/><path d="M952 640v-40h14" stroke="#17181a" stroke-width="4" fill="none"/><g fill="#17181a"><circle cx="940" cy="710" r="5"/><circle cx="964" cy="710" r="5"/></g>' +
+      '<path d="M984 712v-110h30v110" fill="#3c4a6a"/><path d="M984 712h-10v6h26v-6zM1014 712h10v6h-26v-6z" fill="#17181a"/><path d="M970 610q-4-90 30-92t30 92z" fill="#4a5a7e"/><path d="M990 522l10 30 10-30z" fill="#f3f1ea"/><path d="M997 530h6l2 26-5 6-5-6z" fill="#e06b4a"/>' +
+      '<rect x="993" y="498" width="14" height="24" fill="#d3a888"/><circle cx="1000" cy="482" r="21" fill="#e3bfa0"/><path d="M979 480q0-22 21-22t21 22q-8-10-21-10t-21 10z" fill="#3a2a1c"/><path d="M991 486h6M1003 486h6" stroke="#2b2a26" stroke-width="2.4"/><path d="M991 495q9 7 18 0" stroke="#7a3a34" stroke-width="2.4" fill="none"/></g>';
+    $('#people').innerHTML = s;
+    /* Selin and Emre are one thing to click */
+    var d = document.createElementNS('http://www.w3.org/2000/svg', 'g'); d.setAttribute('id', 'demirs'); d.setAttribute('class', 'hot');
+    $('#people').insertBefore(d, $('#selinS')); d.appendChild($('#selinS')); d.appendChild($('#emreS'));
+    s = '';
+    [[150, 860, -24], [214, 818, -20], [262, 846, -30], [318, 796, -20], [356, 822, -32], [404, 770, -24], [436, 794, -34]].forEach(function (p, n) {
+      s += '<ellipse cx="' + p[0] + '" cy="' + p[1] + '" rx="' + (17 - n) + '" ry="' + (8 - n * 0.4) + '" transform="rotate(' + p[2] + ' ' + p[0] + ' ' + p[1] + ')"/>';
+    });
+    $('#prints').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'court', story: 'glass', storyTitle: 'A Quarter Past Four', id: 'hall', no: 'I', title: 'The Waiting Hall',
+    go: 'Look at your phone',
+    intro: [
+      'Tuesday morning, and it is raining on Hatherwick as if somebody had paid it to.',
+      'You are a first-year law student. On Tuesdays you help at the Hatherwick Law Clinic, which gives free help to people who cannot pay for a lawyer. So far, your help has been this: you carry the files and you make the tea.',
+      'Today the Clinic has one case at the county court. A man wants £900 from a boy of thirteen for a broken greenhouse. Ms Nair, the Clinic&rsquo;s solicitor, is going to speak for the boy. You are going to sit behind her and watch.',
+      'At eight minutes to ten you walk into the court with a wet coat and no file, because Ms Nair has the file. Then your phone buzzes, seven times.'
+    ],
+    exit: {"next":"consult","w":{"d9944b44":"05746794"}}, tags: {"s1":["ed66b651"],"s2":["a3f300c1"],"s3":["88e50702"],"s4":["3fd0b5b1"],"s5":["c8a2a74e"],"s6":["dd0f3951"]},
+    sound: ['bench', { beds: [['rain', 0.55], ['crowd', 0.3]] }],        /* a hall full of people waiting, and the rain on tall windows */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('h-file') || null;
+
+  var PHONE = '<h4>Ms Nair<small>HATHERWICK LAW CLINIC</small></h4>' +
+    '<p><small>9.41</small>Tree on the line outside Coldbrook. We are not moving.</p>' +
+    '<p><small>9.44</small>Thistlewood v Demir is at 10.30. I shall not be there at 10.30.</p>' +
+    '<p><small>9.47</small>You will have to start without me. You are allowed to: read page 1 of Mr Makepeace&rsquo;s little book.</p>' +
+    '<p><small>9.48</small>The file is on his desk. I left it there last night. Everything is in it, and so is my card.</p>' +
+    '<p><small>9.50</small>Our clients are Selin (yellow raincoat, cross) and Emre (thirteen, silent). Be kind to both.</p>' +
+    '<p><small>9.51</small>Do NOT tell Mr Makepeace that his list is running late. He knows.</p>' +
+    '<p><small>9.52</small>Signal going. You know more than you th</p>';
+  var LIST = '<h4>Hatherwick County Court</h4><h5>Daily list &middot; Tuesday 14 April</h5>' +
+    '<h6>HEARING ROOM 3 &middot; before DISTRICT JUDGE ORMEROD</h6><table>' +
+    '<tr><td>10.00</td><td>Kwik-Clamp Parking Ltd v Hatherwick Brass Band</td><td>small claim<br>30 min</td><td><span class="pen">parking. They have brought a MAP</span></td></tr>' +
+    '<tr><td>10.30</td><td>Thistlewood v Demir (a child by Selin Demir his litigation friend)</td><td>small claim<br>1 hour</td><td><span class="pen">a greenhouse. £900</span></td></tr>' +
+    '<tr><td>12.00</td><td>Wainwright v Wainwright</td><td>small claim<br>45 min</td><td><span class="pen">the hedge. AGAIN</span></td></tr>' +
+    '<tr><td>2.00</td><td>Hatherwick Angling Club v Persons Unknown</td><td>application<br>15 min</td><td><span class="pen">swans</span></td></tr></table>' +
+    '<h6>COURT 1 &middot; before HIS HONOUR JUDGE SALLIS</h6><table>' +
+    '<tr><td>10.00</td><td>Hatherwick Borough Council v Kwik-Clamp Parking Ltd</td><td>trial<br>all day</td><td><span class="pen">good</span></td></tr></table>' +
+    '<p>ALL PARTIES MUST REPORT TO THE USHER ON ARRIVAL</p>';
+  var BOOK = '<h4>Notes for New Ushers</h4><h5>by the old one &middot; page 1: who everybody is</h5>' +
+    '<p>A <b class="t">CIVIL COURT</b> is where one person asks for something from another: nearly always money. Nobody here is &ldquo;guilty&rdquo;, and nobody goes to prison for losing.</p>' +
+    '<p>The <b class="t">CLAIMANT</b> is the one who asks. The <b class="t">DEFENDANT</b> is the one who is asked. On the list the claimant always comes first: Smith v Jones. We write &ldquo;v&rdquo;. We say &ldquo;and&rdquo;. Nobody in this building says &ldquo;versus&rdquo;.</p>' +
+    '<p>A child cannot run a case alone. A grown-up runs it for him, and is called his <b class="t">LITIGATION FRIEND</b>. The child is still the defendant: it is his name on the list.</p>' +
+    '<p>A claim for £10,000 or less is usually a <b class="t">SMALL CLAIM</b>. A <b class="t">DISTRICT JUDGE</b> hears it, in an ordinary room and an ordinary suit. No jury. No wig. No gavel (the little hammer): English judges have never used one. Say &ldquo;Judge&rdquo;.</p>' +
+    '<p>In a small claim anybody at all may speak for a party, as long as the party is in the room. That person is a <b class="t">LAY REPRESENTATIVE</b>. &ldquo;Lay&rdquo; means &ldquo;not a lawyer&rdquo;.</p>' +
+    '<p>I am the <b class="t">USHER</b>. Mine is the only gown you will see down here. I call the cases. I am not the judge. <span class="pen">I have been asked.</span></p>';
+
+  function hints() {
+    if (nextFile) return ['go', ['Your clients are the two people sitting in front of the radiator: a yellow raincoat, and a boy who is looking at the floor. Go and say hello.']];
+    if (slipBox) return ['slip', [
+      'Every name you need is on the 10.30 line of the list for Hearing Room 3. Everything else is on page 1 of the usher&rsquo;s book. Open your notebook and put the two side by side.',
+      'The book says that the claimant&rsquo;s name always comes first, and that a child is still the defendant even when a grown-up runs the case for him. So the grown-up is not the defendant. She has a line of her own on the slip.',
+      'A lay representative is somebody who is NOT a lawyer and who IS in the room: Ms Nair is a solicitor on a train. The judge for Hearing Room 3 is named at the top of its list. And the book tells you how the letter v is said aloud: it is a small, friendly word.'
+    ]];
+    if (ER.flag('h-usher')) return ['read', [
+      'Mr Makepeace wants his slip filled in. Before you try it, read two things: the daily list on the green board, and page 1 of the small green book on his desk.',
+      'The slip is on the clipboard that is lying on his desk. Click it when you have read the list and the book.'
+    ]];
+    return ['start', [
+      'Read your phone first: it is at the bottom of the screen, on the right. Ms Nair says where the file is.',
+      'Talk to Mr Makepeace, the usher. He is the tall man in the black gown, standing by his desk near the doors to the hearing rooms.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#slip').classList.toggle('on', !!ER.flag('h-usher')); $('#slip').classList.toggle('ready', !!ER.flag('h-usher') && !nextFile);
+    $('#file').style.display = ER.flag('h-usher') ? 'none' : '';
+    $('#phone').classList.toggle('new', !ER.flag('h-phone'));
+    $('#demirs').classList.toggle('ready', !!nextFile);
+    $('#go').classList.toggle('on', !!nextFile && !!ER.flag('h-met'));
+    ER.pips(nextFile ? 1 : 0, 1);
+  }
+  function readPhone(done) {
+    ER.read({ html: PHONE, cls: 'phone', clue: { id: 'phone', title: 'Seven messages from Ms Nair', kind: 'Your phone' }, done: function () { ER.flag('h-phone', 1); paint(); if (done) done(); } });
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { ER.say('The waiting hall. Mr Makepeace has his slip, and your clients are waiting by the radiator.'); return; }
+    if (ER.flag('h-phone')) { ER.say('The waiting hall of Hatherwick County Court. It is still raining.'); return; }
+    busy = true; GLASS.sfx.buzz();
+    setTimeout(function () {
+      readPhone(function () {
+        ER.narrate([
+          'So. No Ms Nair, and no file.',
+          'What you have is a hall full of wet people, a list on a green board, and a tall man in a black gown who is looking at you as if he had hoped for something better.'
+        ], function () { busy = false; });
+      });
+    }, 500);
+  }
+
+  /* ---------- things in the hall ---------- */
+  $('#phone').addEventListener('click', function () { if (!busy) readPhone(); });
+  $('#board').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LIST, cls: 'daily', clue: { id: 'list', title: 'The daily list', kind: 'On the green board' }, done: function () { GLASS.learn(['small claim', 'hearing']); } });
+  });
+  $('#book').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BOOK, cls: 'usher', clue: { id: 'book1', title: 'Notes for New Ushers, page 1', kind: 'Mr Makepeace’s book' },
+      done: function () { GLASS.learn(['civil court', 'claimant', 'defendant', 'party', 'litigation friend', 'small claim', 'district judge', 'lay representative', 'usher', 'gavel']); } });
+  });
+  $('#file').addEventListener('click', function () { if (!busy) ER.say('A fat file tied up with pink tape, with THE LAW CLINIC written on it. Yours. But it is on Mr Makepeace&rsquo;s desk, and so it is Mr Makepeace&rsquo;s until he says that it is not.'); });
+  $('#usher').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Consultation Room 2,&rdquo; says Mr Makepeace, without looking up. &ldquo;They will not walk there by themselves.&rdquo;'); return; }
+    if (ER.flag('h-usher')) { ER.say('&ldquo;The slip is on my desk, on the clipboard,&rdquo; says Mr Makepeace. &ldquo;The names are on my board. The rest is in my book. I have left you very little to do.&rdquo;', 8000); return; }
+    ER.talk({
+      who: 'Mr Makepeace', role: 'Usher · Hatherwick County Court', face: window.FACE('usher'),
+      lines: [
+        { note: 'A tall man in a black gown, with a clipboard. He has the face of somebody who has heard every excuse there is, and has kept a list of them.',
+          a: '&ldquo;You will be Ms Nair&rsquo;s student. She telephoned. A tree, I understand. It is always a tree, except in summer, when it is the heat.&rdquo;' },
+        { q: 'Can the hearing wait until she gets here?',
+          a: 'Judge Ormerod waits for nobody. She has a parking company at ten, your greenhouse at half past, and at twelve the Wainwrights and their hedge, heaven help us all. No. But in a small claim anybody may speak for a party who is in the room. Today, I am sorry to say, anybody is you.' },
+        { q: 'What do I have to do?',
+          a: 'First, you fill in my slip, so that I know who everybody is before I call them. I never call a case until the slip is right. It saves tears. The names are on the list on that board. Everything else is on page 1 of my book. I wrote it for new ushers, and it is the only book in this building that anybody has ever finished.' },
+        { note: 'He puts a fat file into your hands. It is tied up with pink tape, and somebody has written THE LAW CLINIC on it.',
+          a: '&ldquo;Ms Nair left this with me last night. It has sat on my desk and said nothing at all, which is more than I can say for most people who come through that door.&rdquo;' }
+      ],
+      clue: { id: 'usher', title: 'Mr Makepeace, the usher', kind: 'What he said' }, last: 'Take the file',
+      done: function (seen) {
+        if (!seen) return;
+        ER.flag('h-usher', 1); paint(); GLASS.learn(['usher', 'small claim', 'solicitor']);
+        ER.say('You have the file. The slip is on the clipboard on Mr Makepeace&rsquo;s desk.');
+      }
+    });
+  });
+  $('#slip').addEventListener('click', function () { if (busy) return; if (nextFile) { ER.say('The slip is right in every line. Mr Makepeace is going to have it framed.'); return; } openSlip(); });
+  $('#demirs').addEventListener('click', function () {
+    if (busy) return;
+    if (!nextFile) { ER.say('A young woman in a yellow raincoat, and a boy who is studying the floor. These two must be yours. But you had better know who is who in this building before you tell them that you are their lawyer.', 8000); return; }
+    ER.talk({
+      who: 'Selin Demir', role: 'Emre’s sister · his litigation friend', face: window.FACE('selin'),
+      lines: [
+        { note: 'The young woman in the yellow raincoat stands up before you reach her. The boy does not.', a: '&ldquo;You&rsquo;re not Ms Nair.&rdquo;' },
+        { q: 'Ms Nair is on a train that isn&rsquo;t moving. I&rsquo;m from the Clinic. I&rsquo;m going to speak for Emre.',
+          a: 'How old are you? No. Don&rsquo;t tell me. It will only make it worse.' },
+        { a: 'I&rsquo;m Selin. I&rsquo;m his litigation friend, which sounds nicer than it is. It means that I&rsquo;m the grown-up, I sign everything, and if we lose I&rsquo;m the one who explains it to Mum. This is Emre. He doesn&rsquo;t say much. Today he has said less.' },
+        { note: 'Emre looks up for exactly as long as it takes to see that you are not a teacher.',
+          a: '&ldquo;And that&rsquo;s him. Over there, sitting up straight, with our ball in a carrier bag on his knee as if it was his packed lunch. Nine hundred pounds. Come on, then. Where do we go?&rdquo;' }
+      ],
+      clue: { id: 'selin1', title: 'Selin Demir, in the waiting hall', kind: 'What she said' }, last: 'Consultation Room 2',
+      done: function (seen) { if (!seen) return; ER.flag('h-met', 1); paint(); GLASS.learn(['litigation friend']); ER.leave(nextFile); }
+    });
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  GLASS.thing('#stanS', null, 'An old man in a tweed jacket, sitting very straight, with a chrysanthemum in his buttonhole and a carrier bag on his knee. There is something round in the bag. He looks at you, then at the clock, and then he writes something down in a small notebook.', isBusy);
+  GLASS.thing('#parking', null, 'The man from Kwik-Clamp Parking has a shiny suit, a case on wheels and a map of a car park, in colour. He is practising his smile on the hot drinks machine.', isBusy);
+  GLASS.thing('#wain1', null, 'Mr Wainwright, at one end of the row. He and Mrs Wainwright used to be married. Now they are neighbours, which is worse.', isBusy);
+  GLASS.thing('#wain2', null, 'Mrs Wainwright, at the other end of the row. Between her and Mr Wainwright there are six chairs and one hedge, and at twelve o&rsquo;clock there will be a judge.', isBusy);
+  GLASS.thing('#vend', 'vending machine', 'Tea, coffee, hot chocolate and chicken soup. All four come out of the same pipe, and all four cost 60p.', isBusy);
+  GLASS.thing('#clock', null, 'Seven minutes past ten by the court clock. Judge Ormerod&rsquo;s list is running late already. You have been told not to mention it.', isBusy);
+  GLASS.thing('#window', null, 'Rain. It has rained on Hatherwick since Sunday, and it means to go on.', isBusy);
+  GLASS.thing('#radiator', 'radiator', null, isBusy);
+  GLASS.thing('#umbrella', 'umbrella', 'Somebody&rsquo;s umbrella, making a small lake of its own.', isBusy);
+  GLASS.thing('#wetsign', null, 'CAUTION: WET FLOOR. In this building, today, that is true in every sense.', isBusy);
+  GLASS.thing('#doors', null, 'HEARING ROOMS 1 TO 4. The lamp over the doors says IN SESSION. Nobody goes through until Mr Makepeace calls them.', isBusy);
+
+  /* ---------- the usher's slip ---------- */
+  var NAMES = [['kwik', 'Kwik-Clamp Parking Ltd'], ['selin', 'Miss Selin Demir'], ['sallis', 'His Honour Judge Sallis'], ['you', 'You, from the Law Clinic'], ['thistlewood', 'Mr S. Thistlewood'],
+    ['makepeace', 'Mr Makepeace'], ['ormerod', 'District Judge Ormerod'], ['emre', 'Emre Demir, aged 13'], ['nair', 'Ms Nair, solicitor']];
+  var LINES = [['Claimant', 'the one who asks'], ['Defendant', 'the one who is asked'], ['Litigation friend', 'the grown-up for a child'], ['Lay representative', 'speaking for the defendant'], ['Before', 'the judge']];
+  var SAYS = [
+    { emre: 'Emre Demir has not come here to ask for anything, except possibly to be left alone. The claimant is the one who asks. On my list he comes first.',
+      selin: 'Miss Demir is asking nobody for anything. The claimant is the one who wants the £900. On my list he comes first.',
+      kwik: 'Kwik-Clamp are my ten o&rsquo;clock, and with luck they will be gone by half past. Read the 10.30 line.',
+      '*': 'That is nobody&rsquo;s claimant. A claimant is a person who wants something from another person. Read the 10.30 line of my list: he comes first.' },
+    { selin: 'Miss Demir has broken nothing, and nobody is asking her for a penny. Whose name comes after the v? And read what my book says about children.',
+      thistlewood: 'A man cannot bring a claim against himself, although I have seen it tried.',
+      kwik: 'Kwik-Clamp are the defendant upstairs in Court 1, I am glad to say. Not down here at half past ten.',
+      '*': 'Nobody is asking that person for £900. The defendant is the one who is asked. On my list the name comes after the v.' },
+    { emre: 'A boy of thirteen cannot be his own grown-up. That is the whole point of having one.',
+      thistlewood: 'Mr Thistlewood is many things this morning, but he is nobody&rsquo;s friend.',
+      '*': 'A litigation friend is not a lawyer and not a helper. It is the grown-up who runs the case for a child. My list gives her name, in brackets.' },
+    { nair: 'Ms Nair is a solicitor, which is the opposite of &ldquo;lay&rdquo;. She is also on a train.',
+      selin: 'Miss Demir could speak for her brother herself. But she has asked the Clinic to do it, and the Clinic has sent somebody. Have a look round the hall. Then have a look in a mirror.',
+      makepeace: 'I call the cases. I do not argue them. I have opinions about all of them, and I keep those under the gown.',
+      '*': 'A lay representative is somebody who is not a lawyer, who is in the room, and who has been asked to speak. This morning there is exactly one of those.' },
+    { sallis: 'Judge Sallis is upstairs in Court 1, with a whole day of parking in front of him. Look at the top of my list for Hearing Room 3.',
+      makepeace: 'I am not the judge. I have been asked.',
+      '*': 'That is not a judge. The judge&rsquo;s name is at the top of the list for each room.' },
+    { v: 'We write &ldquo;v&rdquo;. We do not say it.', versus: '&ldquo;Versus&rdquo; is for boxing.',
+      against: '&ldquo;Against&rdquo; is what they say in the criminal courts down the road. This is a civil court, and we are civil.', '*': 'I must call it as something.' }
+  ];
+  function openSlip() {
+    var box = ER.el('div', 'us'), call = '', s = '<div class="us-clip"><div class="us-form"><h4>Usher&rsquo;s slip</h4><h5>HEARING ROOM 3 &middot; 10.30 &middot; a greenhouse &middot; £900</h5>';
+    LINES.forEach(function (l, i) { s += '<div class="us-line"><label>' + l[0] + '<small>' + l[1] + '</small></label><div class="us-slot" data-s="' + (i + 1) + '"></div></div>'; });
+    s += '<div class="us-line us-callrow"><label>I shall call it<small>aloud, in the hall</small></label><div class="us-call"><span>Thistlewood</span>' +
+      ['v', 'versus', 'and', 'against'].map(function (w) { return '<button type="button" data-c="' + w + '">' + w + '</button>'; }).join('') + '<span>Demir</span></div></div>' +
+      '<div class="us-foot"><button type="button" class="btn" id="us-go">Hand it to Mr Makepeace</button><span>Drag a name on to a line, or click the name and then the line.</span></div></div></div>' +
+      '<div class="us-side"><h6>In the building this morning</h6><div class="us-tray"></div><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    var tray = box.querySelector('.us-tray'), msgEl = box.querySelector('.pmsg'), done = false;
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    NAMES.forEach(function (n) { var c = ER.el('div', 'us-card dnd-item'); c.setAttribute('data-n', n[0]); c.textContent = n[1]; tray.appendChild(c); });
+    ER.dnd(box, { item: '.us-card', slot: '.us-slot', home: tray, lock: function () { return done; }, change: function () { ER.$$('.us-slot', box).forEach(function (x) { x.classList.remove('bad'); }); GLASS.sfx.card(); } });
+    ER.$$('.us-call button', box).forEach(function (b) {
+      b.addEventListener('click', function () { if (done) return; call = b.getAttribute('data-c'); ER.$$('.us-call button', box).forEach(function (o) { o.classList.toggle('on', o === b); }); ER.sfx.click(); });
+    });
+    box.querySelector('#us-go').addEventListener('click', function () {
+      if (done) return;
+      var vals = ER.$$('.us-slot', box).map(function (sl) { var c = sl.querySelector('.us-card'); return c ? c.getAttribute('data-n') : ''; }), wrong = [], i, file;
+      vals.push(call);
+      if (vals.indexOf('') >= 0) { msg('&ldquo;I do not take a slip with holes in it,&rdquo; says Mr Makepeace. &ldquo;Six lines, if you please.&rdquo;'); GLASS.sfx.hm(); return; }
+      for (i = 0; i < 6; i++) if (!ER.check('s' + (i + 1), vals[i])) wrong.push(i);
+      if (!wrong.length) {
+        file = ER.exitOk([vals.join('-')]);
+        if (!file) { msg('Mr Makepeace looks at the slip for a long time. Something is wrong with this lock: tell your teacher.'); return; }
+        done = true; nextFile = file; ER.flag('h-file', file); GLASS.done('hall');
+        msg('Mr Makepeace reads the slip from the top to the bottom. Then, to be quite sure, he reads it from the bottom to the top.');
+        GLASS.sfx.pencil();
+        setTimeout(function () {
+          ER.closeAll(); GLASS.solved(); paint(); busy = true;
+          ER.narrate([
+            '&ldquo;Correct in every line,&rdquo; says Mr Makepeace. &ldquo;I shall have it framed.&rdquo; He does not smile, but something happens near his mouth.',
+            '&ldquo;The parking company has brought a witness and a coloured map, so you have half an hour. Consultation Room 2 is empty. Take your clients in there, and read your file.&rdquo;',
+            'Your clients. They are the two people in front of the radiator: a yellow raincoat, and a boy.'
+          ], function () { busy = false; });
+        }, 2300);
+        return;
+      }
+      GLASS.bump('h-slips'); GLASS.sfx.hm();
+      i = wrong[0];
+      if (i < 5) ER.$$('.us-slot', box)[i].classList.add('bad');
+      msg('<b>' + (i < 5 ? LINES[i][0] : 'I shall call it') + '.</b> &ldquo;' + (SAYS[i][vals[i]] || SAYS[i]['*']) + '&rdquo;' +
+        (wrong.length === 1 ? ' <i>The other five lines will do.</i>' : ' <i>And that is not the only line he cannot use: there ' + (wrong.length === 2 ? 'is one more.' : 'are ' + (wrong.length - 1) + ' more.') + '</i>'));
+    });
+    msg('Five lines want a name, and the last line wants a word. Mr Makepeace has taken the top off his fountain pen, and is waiting.');
+    slipBox = box;
+    ER.open('ov-lock', box, function () { slipBox = null; });
+  }
+})();
+</script>
+</body>
+</html>
