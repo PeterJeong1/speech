@@ -1,0 +1,161 @@
+/* Come at Once - what every room of the story shares: the marks of the Morse code, the buzzer and its key,
+   the kinds of paper on the ship, and a grey-cloth skin (the archive box) for the notebook and the hints.
+   Each room sets its own palette on <body>. */
+
+.tc-theme{font-family:'Oswald',sans-serif}
+.tc-room{letter-spacing:.02em}
+.tc-text{font-family:'Libre Caslon Text',Georgia,serif;font-size:clamp(17px,1.42vw,21px);line-height:1.58}
+.tc-text .said,.cap .said,.tk-text .said,.pmsg .said,.doc .said{font-family:'Courier Prime',monospace;font-weight:700;font-size:.97em}
+.cap{font-family:'Libre Caslon Text',Georgia,serif;font-size:clamp(17px,1.4vw,21px);line-height:1.5}
+.tk-name{font-family:'Libre Caslon Text',serif;font-weight:700;letter-spacing:.01em}
+.tk-text{font-family:'Libre Caslon Text',Georgia,serif;font-size:clamp(17px,1.34vw,20.5px)}
+.gobtn{position:fixed;left:50%;bottom:5vh;transform:translateX(-50%);z-index:35;display:none;padding:13px 30px;border:1px solid var(--accent,#e2b04a);
+  color:var(--accent,#e2b04a);background:var(--hud-bg,rgba(10,12,10,.92));font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.18em;
+  text-transform:uppercase;border-radius:3px;white-space:nowrap}
+.gobtn.on{display:block}
+.gobtn:hover{background:var(--accent,#e2b04a);color:#111}
+.pmsg{min-height:60px;margin:0;font-family:'Libre Caslon Text',Georgia,serif;font-size:16.5px;line-height:1.4;color:#f1ecdf}
+.pmsg b{color:var(--accent,#e2b04a);font-weight:normal}
+.lk-h{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:#c9c3ae}
+
+/* ---- pencil marks: a dot, a dash, and a mark lost in the crackle ---- */
+.mk{display:inline-flex;align-items:center;gap:4px;vertical-align:middle;white-space:nowrap}
+.mk i{display:inline-block;height:7px;border-radius:4px;background:currentColor;flex:0 0 auto}
+.mk i.d{width:7px}
+.mk i.D{width:21px}
+.mk i.x{width:15px;height:15px;border-radius:50%;background:radial-gradient(circle,rgba(70,70,70,.7),rgba(70,70,70,.25) 55%,rgba(70,70,70,0) 72%)}
+
+/* ---- the buzzer: a strip for what has been sent, two glass tubes for time, and the key ---- */
+.ky{width:min(540px,92vw)}
+.ky-strip{min-height:96px;padding:13px 16px 9px;background:#f3ecd4 linear-gradient(178deg,rgba(255,255,255,.5),rgba(120,100,50,.12));color:#2f3a55;box-shadow:0 10px 26px rgba(0,0,0,.5);overflow:hidden}
+.ky-marks{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:flex-start;min-height:70px}
+.ky-l{display:inline-flex;flex-direction:column;align-items:center;gap:9px;min-width:26px}
+.ky-l .mk{height:20px}
+.ky-l .mk i{height:9px}.ky-l .mk i.d{width:9px}.ky-l .mk i.D{width:27px}
+.ky-l b{font-family:'Caveat',cursive;font-weight:700;font-size:30px;line-height:.9;color:#8c2f24}
+.ky-l.bad b{color:#9a958a}
+.ky-l.now b{color:#9a958a;font-size:24px}
+.ky-glass{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0 4px}
+.ky-g{position:relative;height:38px;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#c9c3ae}
+.ky-g:before{content:'';position:absolute;left:0;right:0;top:0;height:15px;border-radius:8px;background:#0c0e10;box-shadow:inset 0 2px 5px #000,0 0 0 1px rgba(255,255,255,.22)}
+.ky-g i{position:absolute;left:2px;top:2px;height:11px;width:0;max-width:calc(100% - 4px);border-radius:6px;background:linear-gradient(#ffe7a0,#d99a2b)}
+.ky-g u{position:absolute;top:-3px;height:21px;width:2px;background:#f1ecdf;text-decoration:none}
+.ky-len u{left:26.7%}
+.ky-gap u{right:0}
+.ky-g span{position:absolute;top:21px}
+.ky-g span:nth-of-type(1){left:0}
+.ky-g span:nth-of-type(2){right:0}
+.ky-len span:nth-of-type(2){right:auto;left:30%}
+.ky.down .ky-len i{animation:kyfill .9s linear forwards}
+.ky.gap .ky-gap i{animation:kyfill .8s linear forwards}
+@keyframes kyfill{from{width:0}to{width:calc(100% - 4px)}}
+.ky-board{margin-top:6px;cursor:pointer;touch-action:none;-webkit-user-select:none;user-select:none}
+.ky-board svg{display:block;width:100%;height:auto}
+.ky .ky-dn{display:none}
+.ky.down .ky-dn{display:block}
+.ky.down .ky-up{display:none}
+.ky-btns{display:flex;gap:10px;margin-top:10px}
+.ky-btns .btn{flex:1}
+
+/* ---- the paper of the ship ---- */
+/* a printed card for operators */
+.doc.card{width:min(900px,95vw);padding:20px 26px 20px;background:#f8f3e2;color:#22231e;font-family:'Courier Prime',monospace;font-size:15px;line-height:1.38;
+  border:1px solid #b9a877;box-shadow:0 26px 70px rgba(0,0,0,.6),inset 0 0 0 5px #f8f3e2,inset 0 0 0 7px #8c2f24}
+.doc.card h4{margin:0 0 10px;font-family:'Abril Fatface',serif;font-size:25px;letter-spacing:.06em;text-align:center;color:#8c2f24}
+.doc.card .cg{display:grid;grid-template-columns:minmax(0,1fr) 392px;gap:22px;align-items:start}
+.doc.card p{margin:0 0 8px}
+.doc.card b{font-weight:700}
+.doc.card svg{display:block;width:100%;height:auto;margin:2px 0 6px}
+.doc.card .mk.long{margin-top:6px;color:#8c2f24}
+.abc{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-flow:column;grid-template-rows:repeat(12,auto);gap:0 8px;padding:8px 10px;border:1px solid #b9a877;background:rgba(255,255,255,.4)}
+.abc-k{display:flex;align-items:center;gap:8px;height:23px;color:#22231e;text-align:left}
+.abc-k b{flex:0 0 17px;font-family:'Courier Prime',monospace;font-weight:700;font-size:17px;color:#8c2f24}
+.abc-k .mk{gap:3px}
+.abc-k .mk i{height:6px}.abc-k .mk i.d{width:6px}.abc-k .mk i.D{width:15px}
+/* a page out of the book of stations */
+.doc.calls{width:min(520px,92vw);padding:22px 30px 20px;background:#f3eede;color:#22231e;font-family:'Courier Prime',monospace;font-size:16px;line-height:1.4;border-left:14px solid #1d2a4a}
+.doc.calls h4{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.22em;text-transform:uppercase;border-bottom:2px solid #22231e;padding-bottom:6px}
+.doc.calls table{width:100%;border-collapse:collapse;margin:4px 0 10px}
+.doc.calls td{padding:3px 0;border-bottom:1px dotted #9c8b68;vertical-align:top}
+.doc.calls td:first-child{width:70px;font-weight:700;letter-spacing:.1em}
+.doc.calls .hw{font-family:'Caveat',cursive;font-size:23px;line-height:1.1;color:#2f3a55;transform:rotate(-.6deg)}
+/* a sheet off the operator's pad */
+.doc.padp{width:min(600px,92vw);padding:30px 34px 24px;background:#fbf6d9 repeating-linear-gradient(transparent 0 33px,rgba(90,120,170,.3) 33px 34px);color:#22231e;font-family:'Courier Prime',monospace;font-size:19px;line-height:34px;
+  border-top:10px solid #b3261c;transform:rotate(-.6deg)}
+.doc.padp h4{margin:0 0 0;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;line-height:34px;letter-spacing:.22em;text-transform:uppercase;color:#6b6552}
+.doc.padp p{margin:0}
+.doc.padp .said{font-size:21px}
+.doc.padp .hw{font-family:'Caveat',cursive;font-size:24px;color:#2f3a55}
+/* the quartermaster's cards, in his square hand */
+.doc.qm{width:min(640px,93vw);padding:20px 28px 20px;background:#dfe6e4 linear-gradient(172deg,rgba(255,255,255,.55),rgba(60,90,100,.14));color:#1d2a4a;font-family:'Architects Daughter',cursive;font-size:16.5px;line-height:1.34;
+  border-top:4px solid #1d2a4a;transform:rotate(.4deg)}
+.doc.qm h4{margin:0 0 8px;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;letter-spacing:.2em;text-transform:uppercase;color:#1d2a4a;border-bottom:1px solid #8ba0a6;padding-bottom:6px}
+.doc.qm p{margin:0 0 8px}
+.doc.qm b{font-weight:normal;color:#8c2f24;letter-spacing:.03em}
+.doc.qm svg{display:block;width:100%;height:auto;margin:2px 0 8px}
+.doc.qm .by{margin:6px 0 0;text-align:right}
+.doc .fig{font-family:'Courier Prime',monospace;font-weight:700;font-size:.97em;white-space:nowrap}
+.doc.qm,.doc.orders{text-shadow:0 0 .6px currentColor}
+/* a page torn out of the night order book */
+.doc.orders{width:min(700px,94vw);padding:16px 26px 16px 46px;background:#f6f1df repeating-linear-gradient(transparent 0 25px,rgba(90,120,170,.22) 25px 26px);color:#1d2a4a;font-family:'Architects Daughter',cursive;font-size:15.5px;line-height:26px;
+  box-shadow:0 26px 70px rgba(0,0,0,.6),inset 34px 0 0 -32px rgba(179,38,28,.55)}
+.doc.orders h4{margin:0;font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;line-height:26px;letter-spacing:.18em;text-transform:uppercase;color:#1d2a4a}
+.doc.orders h5{margin:0;font-family:'Architects Daughter',cursive;font-weight:normal;font-size:14px;line-height:26px;color:#6b6552}
+.doc.orders p{margin:0}
+.doc.orders b{font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.14em;color:#8c2f24}
+/* chalk on a slate */
+.doc.slatep{width:min(560px,92vw);padding:24px 30px 24px;background:#22282b linear-gradient(140deg,rgba(255,255,255,.07),rgba(0,0,0,.2));color:#e9e6dc;font-family:'Caveat',cursive;font-size:27px;line-height:1.2;
+  border:12px solid #6b4a2a;border-radius:3px}
+.doc.slatep h4{margin:0 0 8px;font-family:'Caveat',cursive;font-weight:700;font-size:30px;text-decoration:underline;color:#fff}
+.doc.slatep p{margin:0 0 6px}
+.doc.slatep b{color:#ffd97a;font-weight:700}
+.doc.slatep .w:hover{color:#ffd97a}
+/* a notice in the engine room: typed, and thumbed */
+.doc.oil{width:min(640px,93vw);padding:20px 30px 20px;background:#efe9d6;background-image:radial-gradient(ellipse 60px 44px at 88% 12%,rgba(60,50,30,.28),transparent 70%),radial-gradient(ellipse 40px 52px at 8% 86%,rgba(60,50,30,.22),transparent 70%),linear-gradient(175deg,rgba(255,255,255,.4),rgba(120,100,60,.14));
+  color:#22231e;font-family:'Special Elite','Courier New',monospace;font-size:16px;line-height:1.42;transform:rotate(-.5deg)}
+.doc.oil h4{margin:0 0 8px;font-family:'Stardos Stencil',serif;font-weight:700;font-size:27px;letter-spacing:.12em;color:#22231e;border-bottom:3px solid #22231e;padding-bottom:4px}
+.doc.oil p{margin:0 0 8px}
+.doc.oil svg{display:block;width:100%;height:auto;margin:4px 0 8px}
+.doc.oil .f{font-family:'Courier Prime',monospace;font-weight:700;text-align:center;letter-spacing:.02em}
+.doc.oil .by{text-align:right;font-family:'Caveat',cursive;font-size:23px;color:#2f3a55}
+/* your own notes: a page of a pocket book, in pencil */
+.doc.mine{width:min(540px,92vw);padding:26px 30px 22px;background:#f4f0df repeating-linear-gradient(transparent 0 31px,rgba(90,120,170,.25) 31px 32px);color:#2f3a55;font-family:'Caveat',cursive;font-size:25px;line-height:32px;
+  border-left:10px solid #3a2a1c}
+.doc.mine h4{margin:0;font-family:'Caveat',cursive;font-weight:700;font-size:28px;line-height:32px;text-decoration:underline;color:#2f3a55}
+.doc.mine p{margin:0}
+.doc.mine b{color:#8c2f24;font-weight:700}
+.doc.statement{background:#f3eedd;font-family:'Libre Caslon Text',Georgia,serif;font-size:18px;border-left:6px solid #6f766f}
+.doc.statement h4{color:#4c524c}
+
+/* in the notebook every paper lies flat and takes the width there is */
+.nb .nb-view .doc{width:100%;max-height:none;transform:none}
+.nb .nb-view .doc.card .cg{grid-template-columns:1fr}
+.nb .nb-view .doc.card .abc{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(9,auto)}
+
+/* ---- the notebook: an archive box, grey cloth outside and cream paper inside ---- */
+.nb{background:#6f766f;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.04) 0 1px,rgba(0,0,0,.05) 1px 3px),linear-gradient(150deg,#858c84,#5d645d);border:1px solid #3d433d;border-radius:5px;color:#f1ead6;
+  box-shadow:0 30px 90px rgba(0,0,0,.75),inset 0 0 0 5px #4a504a}
+.nb-tabs{border-bottom-color:#3d433d}
+.nb-tabs button{font-family:'Oswald',sans-serif;color:#d9d3bf}
+.nb-tabs button.on{background:#f1ead6;color:#22231e;border-color:#a8935a}
+.nb-list{border-right-color:#3d433d}
+.nb-list button{font-family:'Libre Caslon Text',serif;font-size:16.5px;color:#f1ead6}
+.nb-list button.on{background:#f1ead6;color:#22231e}
+.nb-view{background:#3f453f}
+.nb-empty{font-family:'Libre Caslon Text',serif}
+.nb-words{background:#f1ead6;color:#22231e}
+.nb-words b{font-family:'Courier Prime',monospace;font-weight:700}
+.nb-words span{font-family:'Libre Caslon Text',serif;font-size:16.5px;line-height:1.32;color:#4a473e}
+.nb-ko{border-color:#a8935a;color:#6b6552}
+.nb-ko.on{background:#22231e;color:#f1ead6;border-color:#22231e}
+.wtip,.wtag{background:#f1ead6;color:#22231e;border-radius:2px;box-shadow:0 10px 26px rgba(0,0,0,.6),inset 5px 0 0 #a8935a}
+.wtag{padding-left:20px}
+.wtag:before{display:none}
+.wtip{padding-left:19px}
+.wtip b,.wtag b{font-family:'Courier Prime',monospace;font-weight:700;font-size:18px}
+.wtip span,.wtag span{font-family:'Libre Caslon Text',serif;font-size:16px;line-height:1.32;color:#4a473e}
+.hintbox{background:#fbf8ee;color:#22231e;border-top:5px solid #b3261c;border-radius:2px}
+.hintbox h6{font-family:'Oswald',sans-serif;color:#8c2f24}
+.hintbox p{font-family:'Libre Caslon Text',Georgia,serif;font-size:17px;line-height:1.4}
+.hintbox p.hint-none{font-size:15.5px}
+.toast{font-family:'Oswald',sans-serif;background:rgba(14,16,14,.94)}

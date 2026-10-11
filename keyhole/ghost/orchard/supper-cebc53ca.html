@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Supper · Your Place Is Laid</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="orchard.css">
+<style>
+  body{--bg:#140d06;--accent:#f2c56a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(22,14,6,.96);--tc-ink:#f6ecd2;--cap-bg:rgba(20,13,6,.95);--panel:#21170c;--face-bg:#2c3a34;--q-ink:#f2c56a;--fade:#080502;--hud-bg:rgba(20,13,6,.8)}
+  .tc-room{font-size:clamp(48px,7vw,96px)}
+  #glow{animation:glow 5.200s steps(1,end) infinite}
+  @keyframes glow{0%{opacity:1}42%{opacity:.93}46%{opacity:1}78%{opacity:.96}81%{opacity:1}}
+  #fire{animation:fire 1.900s steps(1,end) infinite}
+  @keyframes fire{0%{opacity:.9}30%{opacity:.7}55%{opacity:1}80%{opacity:.8}}
+  #steam{animation:steam 3.600s ease-in-out infinite}
+  @keyframes steam{0%{opacity:.1;transform:translateY(0)}50%{opacity:.45;transform:translateY(-8px)}100%{opacity:.1;transform:translateY(0)}}
+  #fair.ready,.spot.ready{animation:rdy 1.700s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.3)}}
+  #fairsit,#rc,#gone{display:none}
+  #scene.sat #fairsit,#scene.sat #rc,#scene.named #gone{display:block}
+  #scene.sat #fair,#scene.named #strip{display:none}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3824"/><stop offset=".7" stop-color="#3a2a1a"/><stop offset="1" stop-color="#241810"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2e22"/><stop offset="1" stop-color="#0e0a06"/></linearGradient>
+  <linearGradient id="oakG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3220"/><stop offset="1" stop-color="#1f140a"/></linearGradient>
+  <linearGradient id="dealG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2c690"/><stop offset="1" stop-color="#a8854e"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe9a8"/><stop offset=".5" stop-color="#d9a83f"/><stop offset="1" stop-color="#7a5c1c"/></linearGradient>
+  <radialGradient id="lampG"><stop offset="0" stop-color="#fff0c0" stop-opacity=".95"/><stop offset=".14" stop-color="#ffd98a" stop-opacity=".6"/><stop offset=".5" stop-color="#f2a94a" stop-opacity=".2"/><stop offset="1" stop-color="#f2a94a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="fireG"><stop offset="0" stop-color="#ffb04a" stop-opacity=".8"/><stop offset=".5" stop-color="#e2562a" stop-opacity=".3"/><stop offset="1" stop-color="#e2562a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="48%" cy="60%" r="74%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".55" stop-color="#0a0502" stop-opacity=".3"/><stop offset="1" stop-color="#040201" stop-opacity=".9"/></radialGradient>
+</defs>
+
+<!-- the same kitchen, three hours later, by the light of one lamp -->
+<rect x="-1000" y="-400" width="3600" height="512" fill="#150e07"/><g id="beams" fill="#0c0804"></g>
+<rect x="-1000" y="110" width="3600" height="530" fill="url(#wallG)"/>
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#floorG)"/><g id="flags" stroke="#0e0a06" stroke-width="3" opacity=".8"></g>
+<rect x="-1000" y="632" width="3600" height="10" fill="#2a2018"/>
+
+<g id="window" class="hot"><path d="M70 170H350V486H70Z" fill="#33261a"/><rect x="98" y="194" width="224" height="264" fill="#0c1424"/><circle cx="236" cy="350" r="9" fill="#f2c56a" opacity=".7"/><circle cx="236" cy="350" r="26" fill="#f2c56a" opacity=".12"/>
+  <g stroke="#1c140c" stroke-width="7" fill="none"><rect x="98" y="194" width="224" height="264"/><path d="M172.700 194v264M247.300 194v264M98 282h224M98 370h224"/></g><path d="M60 486h300v16h-300z" fill="#3a2c1e"/></g>
+<g id="pegs" class="hot"><rect x="392" y="246" width="136" height="20" rx="3" fill="url(#oakG)"/><g id="pegv"></g><path d="M398 262q-12 30 4 52h20q14 -22 2 -52z" fill="#1c1a16"/><path d="M394 314h34" stroke="#141210" stroke-width="7" stroke-linecap="round"/></g>
+
+<rect x="548" y="110" width="364" height="530" fill="#54402a"/><path d="M548 110v530M912 110v530" stroke="#2a1d10" stroke-width="4"/>
+<g id="board" class="hot"><rect x="574" y="146" width="312" height="112" rx="3" fill="url(#oakG)"/><rect x="574" y="146" width="312" height="112" rx="3" fill="none" stroke="#120a04" stroke-width="3"/><g id="pegrow"></g></g>
+<rect x="540" y="284" width="380" height="16" fill="url(#oakG)"/>
+<g fill="url(#brassG)"><rect x="580" y="252" width="10" height="32"/><rect x="574" y="278" width="22" height="6"/><rect x="870" y="252" width="10" height="32"/><rect x="864" y="278" width="22" height="6"/></g>
+<circle id="fire" cx="730" cy="566" r="210" fill="url(#fireG)" pointer-events="none"/>
+<g id="range" class="hot"><rect x="582" y="318" width="296" height="322" fill="#0a0806"/><rect x="598" y="398" width="264" height="242" fill="#161412"/><rect x="592" y="388" width="276" height="14" fill="#24201c"/>
+  <rect x="612" y="424" width="108" height="92" fill="#0e0c0a" stroke="#2a2622" stroke-width="3"/><rect x="740" y="424" width="108" height="92" fill="#0e0c0a" stroke="#2a2622" stroke-width="3"/>
+  <rect x="612" y="536" width="236" height="60" fill="#c9451f"/><g stroke="#161412" stroke-width="9"><path d="M632 536v60M664 536v60M696 536v60M728 536v60M760 536v60M792 536v60M824 536v60"/></g><rect x="612" y="536" width="236" height="60" fill="none" stroke="#2a2622" stroke-width="3"/>
+  <path d="M606 412h248" stroke="url(#brassG)" stroke-width="5"/>
+  <path d="M790 388v-26q0 -10 -18 -12h-30q-14 2 -14 12v26z" fill="#24201c"/><path d="M792 362q22 -4 26 10" stroke="#24201c" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path id="steam" d="M822 362q-10 -14 0 -26t0 -24M838 366q10 -12 0 -24" stroke="#f1ede2" stroke-width="5" fill="none" stroke-linecap="round" opacity=".3"/></g>
+
+<rect x="946" y="140" width="252" height="500" fill="url(#oakG)"/><rect x="958" y="152" width="228" height="282" fill="#120a04"/>
+<g id="plates"></g>
+<g id="mugs" class="hot"><rect x="962" y="372" width="220" height="62" fill="#000" opacity="0"/><g id="mugv"></g></g>
+<rect x="938" y="434" width="268" height="14" fill="#4a3220"/><rect x="958" y="462" width="104" height="160" fill="none" stroke="#120a04" stroke-width="4"/><rect x="1082" y="462" width="104" height="160" fill="none" stroke="#120a04" stroke-width="4"/>
+<g id="bible" class="hot spot" data-p="book"><path d="M960 434L972 404H1058L1070 434Z" fill="#15130f"/><path d="M968 430L978 408H1014V430Z" fill="#efe6cc"/><path d="M1016 430V408H1052L1062 430Z" fill="#e6dcc0"/><g stroke="#8a7a5a" stroke-width="1.500"><path d="M984 414h24M982 420h26M1022 414h24M1022 420h28"/></g>
+  <rect id="strip" x="1020" y="423" width="30" height="5" fill="#fbf6e2"/><path id="gone" d="M1076 430l22 3 -2 5 -22 -3z" fill="#fbf6e2"/></g>
+
+<g id="sdoor"><rect x="1232" y="214" width="132" height="426" fill="#1f140a"/><rect x="1242" y="224" width="112" height="416" fill="#3a2a1a"/><path d="M1270 224v416M1298 224v416M1326 224v416" stroke="#241810" stroke-width="3"/><path d="M1242 300h112M1242 560h112" stroke="#241810" stroke-width="9"/></g>
+<g id="bdoor" class="hot"><rect x="1404" y="186" width="176" height="454" fill="#1f140a"/><rect x="1416" y="198" width="152" height="442" fill="#33241a"/><path d="M1454 198v442M1492 198v442M1530 198v442" stroke="#1f140a" stroke-width="3"/><rect x="1424" y="410" width="40" height="9" rx="3" fill="#0a0806"/></g>
+
+<!-- his granddaughter in his place; the chair with arms; the table laid for two -->
+<circle id="glow" cx="772" cy="540" r="640" fill="url(#lampG)" pointer-events="none"/>
+<g id="fairsit" transform="translate(540 770)"></g>
+<g id="chair" class="hot"><path d="M150 800V470q0 -16 14 -16h70q14 0 14 16V800h-14V690h-70V800z" fill="#2a1c10"/><path d="M170 474v176M192 470v180M214 474v176" stroke="#4a3220" stroke-width="8"/><rect x="146" y="640" width="150" height="18" rx="5" fill="#3a2818"/>
+  <path d="M150 566h124q14 0 14 14v60h-12v-52h-126z" fill="#3a2818"/><path d="M282 658v142" stroke="#2a1c10" stroke-width="13"/></g>
+<rect x="330" y="560" width="660" height="14" fill="#4a3220"/>
+<path d="M330 590H980L1052 676H258Z" fill="url(#dealG)"/><path d="M258 676H1052V698H258Z" fill="#7a6038"/><g stroke="#b99a62" stroke-width="2" opacity=".6"><path d="M306 618H1004M282 648H1028"/></g>
+<path d="M286 698v124M1024 698v124M364 698v70M946 698v70" stroke="#4a3a24" stroke-width="18"/>
+<g id="s-lamp" class="hot spot" data-p="lamp"><ellipse cx="772" cy="622" rx="34" ry="9" fill="url(#brassG)"/><path d="M748 620q0 -30 24 -34q24 4 24 34z" fill="url(#brassG)"/><rect x="762" y="572" width="20" height="16" fill="#7a5c1c"/><path d="M756 574q-12 -40 16 -66q28 26 16 66z" fill="#fff6d6" opacity=".9"/><path d="M772 566q-8 -16 0 -30q8 14 0 30z" fill="#ffb84a"/></g>
+<g id="s-own" class="hot spot" data-p="own"><rect x="440" y="592" width="230" height="52" fill="#000" opacity="0"/><ellipse cx="524" cy="620" rx="48" ry="14" fill="#fbf6e6"/><ellipse cx="524" cy="619" rx="48" ry="14" fill="none" stroke="#3d5a8c" stroke-width="3"/><ellipse cx="524" cy="620" rx="30" ry="8" fill="#ece4d0"/>
+  <path d="M458 628l11 -20" stroke="#dfe3e0" stroke-width="5" stroke-linecap="round"/><path d="M586 630l9 -22" stroke="#dfe3e0" stroke-width="6" stroke-linecap="round"/>
+  <path d="M608 610v-24h28v24q-14 6 -28 0z" fill="#fbf6e6"/><path d="M608 595h28" stroke="#3d5a8c" stroke-width="5"/><path d="M636 591q12 2 10 9q-2 6 -10 5" stroke="#fbf6e6" stroke-width="5" fill="none"/></g>
+<g id="s-head" class="hot spot" data-p="head"><path d="M286 606H470L462 668H264Z" fill="#000" opacity="0"/><ellipse cx="352" cy="640" rx="52" ry="16" fill="#fbf6e6"/><ellipse cx="352" cy="639" rx="52" ry="16" fill="none" stroke="#3d5a8c" stroke-width="3"/><ellipse cx="352" cy="640" rx="33" ry="9" fill="#ece4d0"/>
+  <path d="M286 650l8 -24" stroke="#dfe3e0" stroke-width="5" stroke-linecap="round"/><path d="M420 652l-6 -26" stroke="#dfe3e0" stroke-width="6" stroke-linecap="round"/></g>
+<g id="rc" transform="rotate(-9 440 646)"><rect x="412" y="632" width="56" height="30" fill="#e6ecdf" stroke="#8aa08c" stroke-width="1.500"/><path d="M420 641h40M420 648h34M420 655h22" stroke="#4a5a4e" stroke-width="2"/><rect x="452" y="650" width="10" height="9" fill="#d98a7a"/></g>
+
+<!-- the living -->
+<g id="bellamy" class="hot" transform="translate(1196 856) scale(1.130)"></g>
+<g id="lumley" class="hot" transform="translate(1330 868) scale(1.150)"></g>
+<g id="fair" class="hot" transform="translate(1470 864) scale(1.150)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">RECEIVED WITH THANKS</div>
+  <h6>Your Place Is Laid</h6>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <p class="last">Mrs Bellamy came in at eight the next morning, as she had for eleven years. The table was bare. Two mugs had been washed and set to dry beside the sink. This time she told her husband.</p>
+  <div class="row"><button type="button" class="btn" id="b-task">As far as, and no further</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the stories</button></div>
+  <small>Your Place Is Laid &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="orchard.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, told = {};
+
+  var RECEIPT = '<h4>STOKE POMEROY ESTATE</h4><p>No. <span class="pen">212</span></p>' +
+    '<p>RECEIVED this <span class="pen">6th</span> day of <span class="pen">October 1924</span> of <span class="pen">Mr Amos Oakes</span> the sum of <span class="pen">Forty-two pounds ten shillings</span>, being half a year&rsquo;s rent of <span class="pen">Sweetings Farm</span>, due at <span class="pen">Michaelmas last</span>.</p>' +
+    '<p class="sum">£42 : 10 : 0</p><p>For the Estate: <span class="pen">J. W. ~~~~~~</span>, Agent.</p><div class="st">POSTAGE<br>&amp;<br>REVENUE</div>';
+  function register(name) {
+    return '<h4>FAMILY REGISTER</h4><h5>MARRIAGES</h5><p class="ink">Amos Oakes of Sweetings and Hannah Winterbourne of Hill End. 23rd April 1895.</p>' +
+      '<h5>BIRTHS</h5><p class="ink">Catherine. 3rd March 1898.</p><p class="ink">' + name + '. 12th May 1905.</p><p class="ink">George. 20th June 1907.</p><p class="ink">Charlotte. 9th November 1910.</p>' +
+      '<h5>DEATHS</h5><p class="ink2">Amos Oakes. 11th February 1941.</p><p class="ink3">Hannah Oakes. 2nd December 1951.</p>' +
+      '<p class="note">The strip of paper has come away. The line under it is in the same hand and the same ink as the three others.</p>';
+  }
+
+  (function () {
+    var s = '', i, x, y, r, c;
+    for (i = 0; i < 16; i++) s += '<rect x="' + (i * 214 - 900) + '" y="34" width="52" height="78"/>';
+    $('#beams').innerHTML = s + '<rect x="-1000" y="100" width="3600" height="12"/>'; s = '';
+    for (i = -14; i < 30; i++) { x = i * 112 - 260; s += '<path d="M' + x + ' 640L' + OY.num(800 + (x - 800) * 3.06) + ' 1340"/>'; }
+    [686, 748, 836, 960, 1130].forEach(function (v) { s += '<path d="M-1000 ' + v + 'H2600"/>'; });
+    $('#flags').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) { x = 404 + i * 23; s += (i === 3 ? '<rect x="' + (x - 10) + '" y="247" width="20" height="18" fill="#6b4c2a"/>' : '') + '<circle cx="' + x + '" cy="262" r="5.500" fill="#120a04"/>'; }
+    $('#pegv').innerHTML = s + '<path id="jacket" d="M462 264q-14 34 2 62h24q14 -28 0 -62z" fill="#2f6a52" style="display:none"/>'; s = '';
+    for (i = 0; i < 12; i++) {
+      c = i % 6; r = Math.floor(i / 6); x = 604 + c * 50; y = 172 + r * 50;
+      s += '<circle cx="' + x + '" cy="' + y + '" r="4.500" fill="#d9a83f"/>';
+      if (i !== 3) s += '<path d="M' + (x - 13) + ' ' + (y + 30) + 'v-18q13 -12 26 0v18z" fill="#c9b98a" stroke="#5f4a24" stroke-width="1.500"/><path d="M' + (x - 7) + ' ' + (y + 20) + 'h14" stroke="#3a2a12" stroke-width="2.500"/>';
+    }
+    $('#pegrow').innerHTML = s; s = '';
+    [226, 300, 372].forEach(function (v) {
+      s += '<rect x="958" y="' + v + '" width="228" height="7" fill="#4a3220"/>';
+      for (i = 0; i < 4; i++) { x = 992 + i * 56; s += '<circle cx="' + x + '" cy="' + (v - 28) + '" r="27" fill="#b9a67c"/><circle cx="' + x + '" cy="' + (v - 28) + '" r="23" fill="none" stroke="#2c3f5c" stroke-width="4"/><path d="M' + (x - 20) + ' ' + (v - 40) + 'q12 -12 24 -8" stroke="#fff0c0" stroke-width="3" fill="none" opacity=".5" stroke-linecap="round"/>'; }
+    });
+    $('#plates').innerHTML = s; s = '';
+    ['K', '', 'G', 'C'].forEach(function (ch, k) {
+      x = 1066 + k * 34;
+      s += '<path d="M' + x + ' 379q0 8 6 8" stroke="#d9a83f" stroke-width="2.500" fill="none"/>';
+      if (ch) s += '<rect x="' + (x - 3) + '" y="386" width="22" height="22" rx="3" fill="#d9cba6"/><path d="M' + (x - 3) + ' 392h22" stroke="#2c3f5c" stroke-width="4"/>';
+    });
+    $('#mugv').innerHTML = s;
+    $('#bellamy').innerHTML = OY.who('bellamy', {});
+    $('#lumley').innerHTML = OY.who('lumley', { extra: '<rect x="18" y="-176" width="50" height="62" rx="2" fill="#8f959a"/><rect x="18" y="-176" width="50" height="14" fill="#6f757a"/>' });
+    $('#fair').innerHTML = OY.who('fair', { hold: true, extra: '<rect x="-24" y="-170" width="48" height="26" rx="3" fill="#c9a23a"/><rect x="-24" y="-170" width="48" height="7" rx="3" fill="#e2c46a"/>' });
+    var cp = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'), rc = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    cp.setAttribute('id', 'sitc'); rc.setAttribute('x', '-100'); rc.setAttribute('y', '-400'); rc.setAttribute('width', '200'); rc.setAttribute('height', '204'); cp.appendChild(rc);
+    $('#scene defs').appendChild(cp);
+    $('#fairsit').setAttribute('transform', 'translate(540 786)'); $('#fairsit').setAttribute('clip-path', 'url(#sitc)');
+    $('#fairsit').innerHTML = OY.who('fair', { hold: true, shadow: 0, pack: null, coat: '#e2b25c', collar: '#f6ecd2' });
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'orchard', storyTitle: 'Your Place Is Laid', id: 'supper', no: 'V', title: 'Supper',
+    go: 'Open the back door',
+    intro: [
+      'The row nearest the house was not the row nearest the house: George planted the Bramleys in the paddock in 1953. And the orchard gate was not the gate you came in at: that one was cut into the lane in 1947. In May 1931 there was one gate, the wicket by the pump, and one row along the garden side.',
+      'So it was the third tree from the wicket: a Worcester Pearmain grafted in 1905, the nearer of the twins, without an apple on it this year. Behind it, at the foot of the bee wall, the middle stone of three came up, and under it lay a mustard tin sealed with candle wax.',
+      'Ms Fairweather has carried it down through the orchard without opening it. The back door is not locked. Mrs Bellamy says that she locked it.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"plate":["2c20a808"]},
+    sound: ['hush', { scale: [0, 2, 4, 5, 7, 9, 11], root: 48, bpm: 56, beds: [['fire', 0.6]] }],      /* the same slow tune in a major key at last, with its tune back, and a fire in the range */
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('s-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('s-told', told); return true; }
+  function isBusy() { return busy; }
+  function paint() {
+    var done = !!ER.flag('s-sat');
+    $('#fair').classList.toggle('ready', !told.tin);
+    $('#scene').classList.toggle('sat', done);
+    $('#scene').classList.toggle('named', !!ER.flag('s-done'));
+    $('#jacket').style.display = done ? 'block' : 'none';
+    ER.pips((told.tin ? 1 : 0) + (ER.flag('s-done') ? 1 : 0), 2);
+  }
+  function hints() {
+    if (ER.flag('s-done') || ER.flag('s-sat')) return null;
+    if (!told.tin) return ['tin', [
+      'Ms Fairweather has carried the tin in at the back door, as the letter told her to. It has not been opened yet.',
+      'Click Ms Fairweather: she is on the right, with the tin in her hands.'
+    ]];
+    return ['plate', [
+      'Read the end of Hannah&rsquo;s letter once more: it is in your notebook. Where exactly is the paper to be put down?',
+      '&ldquo;Put it by your father&rsquo;s plate.&rdquo; Two places are laid. Which of them is the father&rsquo;s? Only one chair in this kitchen has arms.'
+    ]];
+  }
+
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    paint();
+    if (ER.flag('s-done')) { busy = false; finish(true); return; }
+    if (ER.flag('s-sat')) { ER.flag('s-sat', 0); paint(); }
+    if (told.in) { busy = false; ER.say(told.tin ? 'Where does the receipt go? Click the place.' : 'The kitchen at Sweetings, by lamplight.'); return; }
+    tell('in');
+    ER.narrate([
+      'The kitchen is warm. The oil lamp is burning in the middle of the table, and there is a red light behind the bars of the range.',
+      '&ldquo;I did not light that,&rdquo; says Mrs Bellamy. Nobody has asked her.',
+      'The table is laid. There is the plate on the bench side, with the blue-ringed mug. And there is a second plate, at the head of the table, in front of the chair with arms.',
+      '&ldquo;Two,&rdquo; says Mrs Bellamy. &ldquo;In eleven years it has never once been two.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the tin ---------- */
+  $('#fair').addEventListener('click', function () {
+    if (busy) return;
+    if (told.tin) { ER.say('Ms Fairweather is holding the receipt by one corner. &ldquo;Tell me where,&rdquo; she says.'); return; }
+    busy = true; OY.sfx.tin();
+    ER.narrate([
+      'Ms Fairweather puts the tin down on the corner of the table and runs her thumbnail round the lid. The wax comes away in one long curl.',
+      'Inside, folded once, there is a single piece of pale green paper, and nothing else. No money. No note.'
+    ], function () {
+      busy = false;
+      ER.read({ html: RECEIPT, cls: 'rcpt', clue: { id: 'receipt', title: 'The receipt for the Michaelmas rent, 1924', kind: 'From the tin' }, done: function () {
+        if (!tell('tin')) return;
+        paint(); busy = true;
+        ER.narrate([
+          '&ldquo;&lsquo;Received of Mr Amos Oakes&rsquo;,&rdquo; reads Ms Fairweather. &ldquo;It isn&rsquo;t even in his name.&rdquo;',
+          '&ldquo;It was never meant to be,&rdquo; says Miss Lumley. &ldquo;The errand was to pay the Michaelmas rent and bring his father the receipt. The rent is paid: there it is, in ink. The only thing that was ever left undone is the bringing.&rdquo;',
+          'Ms Fairweather looks at the table, with its two places, and at the paper in her hand. &ldquo;Then tell me where,&rdquo; she says. &ldquo;I have not come twelve thousand miles to put it down in the wrong place.&rdquo;'
+        ], function () { busy = false; ER.say('Where does the receipt go? Click the place.'); });
+      } });
+    });
+  });
+
+  /* ---------- where it goes ---------- */
+  var BEFORE = {
+    head: 'A second place, at the head of the table, in front of the chair with arms: a plate, a knife and a fork. The plate is warm, as if it had come out of the oven.',
+    own: 'His place, on the bench: the plate, and the mug with no letter on it. Somebody has filled the mug. It is tea, and it is hot.',
+    lamp: 'The lamp is burning with a steady yellow flame. Mrs Bellamy filled it herself, years ago, and she has never once lit it.',
+    book: 'The Bible is lying open on the dresser, at the family register. Nobody remembers opening it.'
+  };
+  var WRONG = {
+    own: '&ldquo;That is his own place,&rdquo; says Mrs Bellamy. &ldquo;The bench, and the mug with no letter. She says to put it by his father&rsquo;s.&rdquo;',
+    lamp: '&ldquo;Under the lamp, where anybody might have put it?&rdquo; says Miss Lumley. &ldquo;She says exactly where. She has been exact about everything else.&rdquo;',
+    book: '&ldquo;It is not the Book that has been waiting for it,&rdquo; says Mrs Bellamy.'
+  };
+  var AFTER = {
+    head: 'The receipt, beside the plate at the head of the table. Nobody has touched it. One corner of it has lifted, and laid itself flat again.',
+    own: 'Ms Fairweather is sitting in the second hollow of the bench, with both hands round the mug that has no letter on it.',
+    lamp: 'The lamp burns steadily. There is enough oil in it to last until morning.',
+    book: 'The Bible is open at the register. Four children, and four names.'
+  };
+  ER.$$('.spot').forEach(function (n) {
+    n.addEventListener('click', function () {
+      var p = n.getAttribute('data-p');
+      if (busy) return;
+      if (ER.flag('s-done')) { if (p === 'book') { ER.read({ html: register('Edward'), cls: 'bible' }); return; } ER.say(AFTER[p]); return; }
+      if (!told.tin) { ER.say(BEFORE[p]); return; }
+      if (!ER.check('plate', p)) { ER.sfx.no(); ER.say(WRONG[p]); return; }
+      OY.solved(true); OY.sfx.plate(); ER.flag('s-sat', 1); paint(); busy = true;
+      ER.narrate([
+        'Ms Fairweather lays the receipt down beside the plate at the head of the table, and squares it with one finger. Then she goes round to the bench and sits down in the second hollow, in front of the mug with no letter on it.',
+        '&ldquo;Let him speak first,&rdquo; she says, not very loudly. After that nobody says anything at all. The lamp burns. The range ticks as it warms.',
+        'Then, on the dresser, there is a small dry sound, like a page being turned.'
+      ], function () {
+        OY.sfx.strip(); $('#scene').classList.add('named');
+        ER.narrate([
+          'Miss Lumley is the nearest. She looks down at the open Bible for some time before she says anything. &ldquo;The strip has come away,&rdquo; she says.',
+          'Under it there is a line of writing, in the same black ink as Catherine, George and Charlotte: <i>Edward. 12th May 1905.</i>',
+          '&ldquo;Flour-and-water paste,&rdquo; says Mrs Bellamy. &ldquo;It never did hold in a warm room, and this kitchen has not been warm since Miss Dora&rsquo;s hip.&rdquo; She thinks about it. &ldquo;Still. It was Amos who wrote the names in that book. So I suppose that is him speaking first.&rdquo;',
+          'Ms Fairweather has both hands round the mug. For a long moment she looks at the chair with arms, at the head of the table.',
+          '&ldquo;Well,&rdquo; she says. &ldquo;That&rsquo;s the rent paid.&rdquo;'
+        ], function () { busy = false; ER.flag('s-done', 1); ER.addClue('register2', 'The family Bible, with the strip gone', register('Edward'), 'bible', 'From the kitchen', true); finish(false); });
+      });
+    });
+  });
+
+  /* ---------- people and things ---------- */
+  function say(sel, word, fn) { $(sel).addEventListener('click', function (e) { if (busy) return; if (word) ER.wordAt(e.clientX, e.clientY, word); ER.say(fn()); }); }
+  say('#bellamy', null, function () {
+    return ER.flag('s-done') ? '&ldquo;Flour-and-water paste,&rdquo; says Mrs Bellamy again. She does not sound like somebody who believes it.' :
+      '&ldquo;I shall say this once,&rdquo; says Mrs Bellamy. &ldquo;I filled that lamp, and I blacked that range, and I never lit the one or the other.&rdquo;';
+  });
+  say('#lumley', null, function () {
+    return ER.flag('s-done') ? '&ldquo;I shall catalogue the receipt as: delivered,&rdquo; says Miss Lumley. &ldquo;The Record Office likes a date. I shall put today&rsquo;s.&rdquo;' :
+      '&ldquo;Papers first,&rdquo; says Miss Lumley. She does not finish the sentence.';
+  });
+  say('#fairsit', null, function () { return '&ldquo;The sale is on Thursday,&rdquo; says Ms Fairweather. &ldquo;I have been asking what forty-two pounds ten would come to now. Miss Lumley says: about a pair of horses.&rdquo; She looks out towards the orchard. &ldquo;And next year it is his tree&rsquo;s turn to bear. I should like to be here for that.&rdquo;'; });
+  say('#chair', null, function () {
+    return ER.flag('s-done') ? 'The chair with arms. Nobody is sitting in it. All the same, Ms Fairweather has not once turned her back on it.' :
+      'The chair at the head of the table: the only one with arms. Its cushion is pressed down a little, as a cushion is when somebody has just sat down.';
+  });
+  say('#pegs', 'peg', function () { return ER.flag('s-sat') || ER.flag('s-done') ? 'Six pegs. On the smooth one, where there is no name, somebody has hung a green jacket.' : 'FATHER, MOTHER, KATE, a smooth peg, GEORGE, LOTTIE. The old hat is still on FATHER.'; });
+  say('#window', null, function () { return 'The window is black, with the lamp in it twice: once on the table, and once out among the trees.'; });
+  say('#board', null, function () { return 'The year board. It is the twenty-ninth of September, and the tag on that peg says RENT.'; });
+  say('#range', 'range', function () { return 'The range is alight, and the kettle on it is beginning to sing.'; });
+  say('#mugs', null, function () { return 'K, an empty hook, G and C. The fourth mug is on the table, and it is full.'; });
+  say('#bdoor', null, function () { return 'The back door, shut. Mrs Bellamy locked it this afternoon, and found it open this evening, and has decided to say nothing more about it.'; });
+
+  /* ---------- the end ---------- */
+  function finish(quick) {
+    var st = ER.state(), mins = OY.minutesPlayed(), hn = ER.hintsUsed();
+    paint();
+    $('#d-time').textContent = 'From the kitchen at four to the kitchen at dusk: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+    if (quick) ER.say('The kitchen at Sweetings, with the lamp lit and the rent paid.');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    var USE = [/\b(first|second|third|fourth|fifth|sixth|last)\b[^.!?]*\bfrom\b/i, /\bnearest\b/i, /\bthe one (that|which|who|with)\b/i, /\bbehind\b/i, /\bbetween\b/i, /\bunder\b/i, /\bas far as\b/i, /\bno further\b/i];
+    box.innerHTML = '<h4>Your Place Is Laid &middot; in your own words</h4><h3>As far as, and no further</h3>' +
+      '<p>Hannah hid a tin in 1931, and her letter could still be followed ninety-five years later, because every word of it was exact. Now it is your turn. Hide something: in your room, at your school, in your street. Then write the letter that tells one person how to find it, in 70 to 100 words.</p>' +
+      '<p>Use at least five of these, and tell the finder one thing that he or she must <i>not</i> do.</p><p class="use">the third &hellip; from &middot; nearest &middot; the one that &hellip; &middot; behind &middot; between &middot; under &middot; as far as &middot; no further</p>' +
+      '<textarea id="r1"></textarea><div class="count" id="c1"></div>' +
+      '<label for="r2">And one sentence more: what might change in a hundred years, and spoil your letter?</label><input type="text" id="r2" maxlength="220">' +
+      '<label for="r3">Name</label><input type="text" id="r3" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || ''; box.querySelector('#r3').value = saved.r3 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value, r3: box.querySelector('#r3').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length, k = 0, c1 = box.querySelector('#c1');
+      USE.forEach(function (re) { if (re.test(o.r1)) k++; });
+      c1.textContent = n + (n === 1 ? ' word' : ' words') + ' · ' + k + ' of the eight used' + (n >= 70 && n <= 100 && k >= 5 ? ' · Hannah would follow it.' : '');
+      c1.classList.toggle('ok', n >= 70 && n <= 100 && k >= 5);
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

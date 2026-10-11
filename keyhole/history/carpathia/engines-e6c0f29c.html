@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Below · Come at Once</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="carpathia.css">
+<style>
+  body{--bg:#0c0906;--accent:#ff9a4a;--font-display:'Stardos Stencil',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(12,8,5,.96);--tc-ink:#f3e6d6;--cap-bg:rgba(14,9,6,.94);--panel:#1c1511;--face-bg:#1a1716;--q-ink:#ffb97a;--fade:#050302;--hud-bg:rgba(14,9,6,.82)}
+  .tc-room{letter-spacing:.08em;text-transform:uppercase}
+  .lb{font-family:'Stardos Stencil',serif;font-weight:700;text-anchor:middle;letter-spacing:.08em}
+  .sm{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.1em}
+  #fire{animation:fire 1.7s steps(1,end) infinite}
+  @keyframes fire{0%{opacity:1}23%{opacity:.82}41%{opacity:.95}66%{opacity:.76}84%{opacity:.9}}
+  #needle{transform-origin:1130px 420px;transition:transform 2.4s ease-out;transform:rotate(-18deg)}
+  body.steam #needle{transform:rotate(26deg)}
+  #valves.ready #vplate,#desk.ready #dslate{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+
+  /* the valve chest */
+  .vv{display:grid;grid-template-columns:minmax(0,690px) 290px;gap:22px;width:min(1004px,97vw);align-items:start}
+  .vv-chest{position:relative;padding:54px 14px 16px;background:#2a2622 linear-gradient(#3a3531,#1f1c19);border:1px solid #0d0b09;box-shadow:0 18px 44px rgba(0,0,0,.6),inset 0 0 0 4px #191613}
+  .vv-chest:before{content:'';position:absolute;left:0;right:0;top:22px;height:22px;background:linear-gradient(#f1e6c8,#b9ab86 55%,#7d7258);box-shadow:0 3px 6px rgba(0,0,0,.6)}
+  .vv-chest h6{position:absolute;left:50%;top:-1px;transform:translateX(-50%);margin:0;padding:3px 16px 2px;background:linear-gradient(135deg,#8a6a26,#e6c873 40%,#b08a35);color:#2a1c08;font-family:'Stardos Stencil',serif;font-weight:700;font-size:15px;letter-spacing:.18em;white-space:nowrap;z-index:1}
+  .vv-row{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+  .vv-v{position:relative;display:flex;flex-direction:column;align-items:center;padding:0 0 8px;color:#e9e2cf}
+  .vv-v:before{content:'';position:absolute;left:50%;top:-10px;width:16px;height:44px;margin-left:-8px;background:linear-gradient(90deg,#7d7258,#f1e6c8 45%,#7d7258)}
+  .vv-w{position:relative;width:86px;height:86px;margin-top:22px;transition:transform .6s}
+  .vv-v.shut .vv-w{transform:rotate(200deg)}
+  .vv-w svg{display:block;width:100%;height:100%}
+  .vv-t{margin:8px 0 6px;padding:2px 8px 1px;font-family:'Oswald',sans-serif;font-weight:600;font-size:12px;letter-spacing:.2em;border-radius:2px;background:#d9b860;color:#2a1c08}
+  .vv-v.shut .vv-t{background:#b3261c;color:#fff}
+  .vv-n{min-height:54px;width:100%;padding:5px 3px 4px;background:linear-gradient(135deg,#8a6a26,#e6c873 40%,#b08a35);color:#2a1c08;font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;line-height:1.15;letter-spacing:.06em;text-align:center;text-transform:uppercase;border-radius:2px}
+  .vv-n small{display:block;margin-top:3px;font-family:'Libre Caslon Text',serif;font-weight:400;font-size:11.5px;letter-spacing:0;text-transform:none;font-style:italic}
+  .vv-side .tx-face{width:132px;border:1px solid rgba(255,255,255,.2);margin-bottom:10px}
+  .vv-side .tx-face svg{display:block;width:100%;height:auto}
+  .vv-side .btn{display:block;width:100%;margin:12px 0 0}
+  /* the slate: fifty-eight miles of chalk, and an hour's run to lay along it */
+  .rn{display:grid;grid-template-columns:minmax(0,740px) 250px;gap:20px;width:min(1014px,97vw);align-items:start}
+  .rn-slate{padding:10px 12px 12px;background:#22282b linear-gradient(140deg,rgba(255,255,255,.07),rgba(0,0,0,.2));border:10px solid #6b4a2a;border-radius:3px;box-shadow:0 14px 30px rgba(0,0,0,.55);color:#e9e6dc}
+  .rn-slate svg{display:block;width:100%;height:auto}
+  .rn-slate text{font-family:'Caveat',cursive;fill:#e9e6dc}
+  .rn-tally{margin:2px 4px 0;font-family:'Caveat',cursive;font-size:25px;line-height:1.1;color:#e9e6dc}
+  .rn-tally b{color:#ffd97a}
+  .rn-rack{margin-top:12px;padding:10px 12px 12px;background:#3a2a1c linear-gradient(#4a3524,#2c1f14);box-shadow:0 14px 30px rgba(0,0,0,.5)}
+  .rn-rack h6{margin:0 0 7px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#d9c9a8}
+  .rn-sp{display:flex;gap:8px;margin-bottom:10px}
+  .rn-sp button{flex:1;padding:6px 4px 4px;background:linear-gradient(135deg,#8a6a26,#e6c873 40%,#b08a35);color:#2a1c08;font-family:'Stardos Stencil',serif;font-weight:700;font-size:20px;line-height:1;border-radius:2px;opacity:.55}
+  .rn-sp button small{display:block;font-family:'Oswald',sans-serif;font-weight:500;font-size:10.5px;letter-spacing:.2em}
+  .rn-sp button.on{opacity:1;box-shadow:0 0 0 3px #ff9a4a}
+  .rn-pc{display:flex;align-items:flex-end;gap:14px;min-height:56px}
+  .rn-pc button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;color:#f1e6d2;font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+  .rn-pc button i{display:block;height:24px;border-radius:2px;background:linear-gradient(#e2bb80,#b98a4e);box-shadow:0 3px 5px rgba(0,0,0,.5),inset 0 0 0 1px #7b5a30}
+  .rn-pc button:hover i{background:linear-gradient(#ffd9a0,#d9a45e)}
+  .rn-pc .q i{background:linear-gradient(#e9d3a8,#c9a878)}
+  .rn-pc .f i{background:linear-gradient(#f4ead0,#d9c9a0)}
+  .rn-pc .sp{flex:1}
+  .rn-pc .undo{align-self:center;padding:7px 10px;border:1px solid rgba(255,255,255,.35);border-radius:3px;font-size:11.5px}
+  .rn-pc .undo:hover{border-color:#ff9a4a;color:#ff9a4a}
+  .rn-qs{margin:0 0 10px;padding:10px 12px 8px;background:#22282b;border:6px solid #6b4a2a;border-radius:3px;font-family:'Caveat',cursive;font-size:21px;line-height:1.12;color:#9aa19a}
+  .rn-qs p{margin:0 0 7px}
+  .rn-qs p.now{color:#fff}
+  .rn-qs p.ok{color:#bfe8b4}
+  .rn-qs p b{color:#ffd97a;font-weight:700}
+  .rn-clock{display:none;width:170px;margin:0 auto 6px;touch-action:none;cursor:grab}
+  .rn.q3 .rn-clock{display:block}
+  .rn-clock svg{display:block;width:100%;height:auto}
+  .rn-side .btn{display:block;width:100%;margin:10px 0 10px}
+  .rn-side .pmsg{font-size:15.6px;line-height:1.37}
+  @media (max-width:900px){.vv,.rn{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="ironG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1814"/><stop offset=".7" stop-color="#241d17"/><stop offset="1" stop-color="#15110d"/></linearGradient>
+  <linearGradient id="brassG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3dc92"/><stop offset=".5" stop-color="#c39a3c"/><stop offset="1" stop-color="#7d5f1e"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6c7478"/><stop offset=".4" stop-color="#e3e8ea"/><stop offset="1" stop-color="#5d6468"/></linearGradient>
+  <linearGradient id="cylG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1d2a24"/><stop offset=".35" stop-color="#3f5a4c"/><stop offset="1" stop-color="#141d19"/></linearGradient>
+  <linearGradient id="lagG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1e6c8"/><stop offset=".55" stop-color="#b9ab86"/><stop offset="1" stop-color="#7d7258"/></linearGradient>
+  <radialGradient id="fireG" cx="50%" cy="70%" r="75%"><stop offset="0" stop-color="#ffd27a"/><stop offset=".45" stop-color="#ff7a2c"/><stop offset="1" stop-color="#6b1d08"/></radialGradient>
+  <radialGradient id="glowG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff8a3c" stop-opacity=".45"/><stop offset="1" stop-color="#ff8a3c" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="52%" cy="50%" r="78%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#060302" stop-opacity=".3"/><stop offset="1" stop-color="#030100" stop-opacity=".88"/></radialGradient>
+  <pattern id="rivets" width="150" height="150" patternUnits="userSpaceOnUse"><path d="M0 0V150M0 0H150" stroke="#100d0a" stroke-width="4"/><g fill="#3a322a"><circle cx="12" cy="12" r="4"/><circle cx="50" cy="12" r="4"/><circle cx="88" cy="12" r="4"/><circle cx="126" cy="12" r="4"/><circle cx="12" cy="50" r="4"/><circle cx="12" cy="88" r="4"/><circle cx="12" cy="126" r="4"/></g></pattern>
+  <pattern id="grate" width="40" height="26" patternUnits="userSpaceOnUse" patternTransform="skewX(-30)"><rect width="40" height="26" fill="#17130f"/><path d="M0 0H40M0 0V26" stroke="#3a322a" stroke-width="3"/></pattern>
+  <g id="rodU"><rect x="-6" y="330" width="12" height="130" fill="url(#steelG)"/><rect x="-24" y="452" width="48" height="24" rx="3" fill="#6c7478"/><rect x="-9" y="476" width="18" height="190" fill="url(#steelG)"/></g>
+</defs>
+
+<!-- the bulkhead, the pipes overhead, the floor of gratings -->
+<rect x="-1000" y="-400" width="3600" height="1130" fill="url(#ironG)"/><rect x="-1000" y="-400" width="3600" height="1130" fill="url(#rivets)"/>
+<rect x="-1000" y="40" width="3600" height="34" fill="url(#lagG)"/><g stroke="#5a5240" stroke-width="3"><path d="M120 40v34M520 40v34M920 40v34M1320 40v34"/></g>
+<rect x="-1000" y="96" width="3600" height="16" fill="#3a322a"/>
+<rect x="-1000" y="722" width="3600" height="620" fill="url(#grate)"/><rect x="-1000" y="716" width="3600" height="10" fill="#0a0806"/>
+
+<!-- the door to the stokehold -->
+<g id="door3" class="hot">
+  <rect x="60" y="290" width="236" height="436" rx="6" fill="#0a0806"/>
+  <rect id="fire" x="78" y="308" width="200" height="418" fill="url(#fireG)"/>
+  <g fill="#120b06"><path d="M128 726q-8-120 6-170q8-26 26-26t26 26q14 50 6 170z"/><circle cx="160" cy="506" r="22"/><path d="M186 580l60 34l-6 10l-62-26z"/><path d="M240 608l40 60l-12 8l-38-60z"/>
+    <path d="M214 726q-4-90 6-130q6-20 20-20t20 20q10 40 6 130z" opacity=".8"/><circle cx="240" cy="558" r="17" opacity=".8"/></g>
+  <rect x="60" y="290" width="236" height="14" fill="#2a2622"/><g fill="#3a322a"><circle cx="72" cy="340" r="5"/><circle cx="72" cy="460" r="5"/><circle cx="72" cy="580" r="5"/><circle cx="284" cy="340" r="5"/><circle cx="284" cy="460" r="5"/><circle cx="284" cy="580" r="5"/></g>
+  <text x="178" y="282" class="lb" font-size="17" fill="#c9bca0">STOKEHOLD</text>
+</g>
+<ellipse cx="180" cy="740" rx="260" ry="60" fill="url(#glowG)" pointer-events="none"/>
+
+<!-- the watch that was asleep half an hour ago -->
+<g id="men" class="hot">
+  <ellipse cx="410" cy="730" rx="120" ry="10" fill="#000" opacity=".4"/>
+  <g fill="#2a221b"><path d="M330 726q-6-130 8-180q8-26 28-26t28 26q14 50 8 180z"/><circle cx="366" cy="496" r="23"/></g><path d="M338 560q28 14 56 0" stroke="#d9d2bd" stroke-width="5" fill="none" opacity=".5"/>
+  <g fill="#33291f"><path d="M418 726q-6-140 8-196q8-28 30-28t30 28q14 56 8 196z"/><circle cx="456" cy="476" r="25"/></g><path d="M430 520h52l-6 60h-40z" fill="#c9bca0" opacity=".45"/>
+  <path d="M488 560l52-110" stroke="#5a4226" stroke-width="8" stroke-linecap="round"/><path d="M528 436l34 20l-16 26l-30-20z" fill="#6c7478"/>
+</g>
+
+<!-- the two engines: cylinders above, rods that never stop -->
+<g id="engines" class="hot">
+  <g><use href="#rodU" x="590"/><animateTransform attributeName="transform" type="translate" values="0 0;0 36;0 0" dur="0.9s" repeatCount="indefinite"/></g>
+  <g><use href="#rodU" x="696"/><animateTransform attributeName="transform" type="translate" values="0 36;0 0;0 36" dur="0.9s" repeatCount="indefinite"/></g>
+  <g><use href="#rodU" x="826"/><animateTransform attributeName="transform" type="translate" values="0 18;0 36;0 0;0 18" dur="0.9s" repeatCount="indefinite"/></g>
+  <g><use href="#rodU" x="984"/><animateTransform attributeName="transform" type="translate" values="0 18;0 0;0 36;0 18" dur="0.9s" repeatCount="indefinite"/></g>
+  <g stroke="#2a2622" stroke-width="16" stroke-linecap="round"><path d="M556 350l-22 290M624 350l22 290M662 350l-22 290M730 350l22 290M788 350l-24 290M864 350l24 290M940 350l-26 290M1028 350l26 290"/></g>
+  <rect x="520" y="326" width="560" height="26" fill="#2a2622"/><path d="M520 326h560" stroke="#4a443c" stroke-width="3"/>
+  <g><rect x="548" y="150" width="84" height="178" rx="6" fill="url(#cylG)"/><ellipse cx="590" cy="150" rx="42" ry="13" fill="#3f5a4c"/><rect x="548" y="226" width="84" height="9" fill="url(#brassG)"/>
+    <rect x="644" y="134" width="104" height="194" rx="6" fill="url(#cylG)"/><ellipse cx="696" cy="134" rx="52" ry="15" fill="#3f5a4c"/><rect x="644" y="226" width="104" height="9" fill="url(#brassG)"/>
+    <rect x="762" y="116" width="128" height="212" rx="6" fill="url(#cylG)"/><ellipse cx="826" cy="116" rx="64" ry="17" fill="#3f5a4c"/><rect x="762" y="226" width="128" height="9" fill="url(#brassG)"/>
+    <rect x="904" y="96" width="160" height="232" rx="6" fill="url(#cylG)"/><ellipse cx="984" cy="96" rx="80" ry="19" fill="#3f5a4c"/><rect x="904" y="226" width="160" height="9" fill="url(#brassG)"/></g>
+  <g class="sm" font-size="13" fill="#c9bca0"><text x="590" y="270">H.P.</text><text x="696" y="270">1st I.P.</text><text x="826" y="270">2nd I.P.</text><text x="984" y="270">L.P.</text></g>
+  <rect x="506" y="624" width="590" height="102" rx="6" fill="#211c17"/><path d="M506 624h590" stroke="#4a443c" stroke-width="4"/>
+  <g fill="#0d0b09" stroke="url(#brassG)" stroke-width="5"><circle cx="590" cy="676" r="32"/><circle cx="696" cy="676" r="32"/><circle cx="826" cy="676" r="32"/><circle cx="984" cy="676" r="32"/></g>
+  <g stroke="#6c7478" stroke-width="6" stroke-linecap="round">
+    <g><path d="M590 652v48M566 676h48"/><animateTransform attributeName="transform" type="rotate" from="0 590 676" to="360 590 676" dur="0.9s" repeatCount="indefinite"/></g>
+    <g><path d="M696 652v48M672 676h48"/><animateTransform attributeName="transform" type="rotate" from="45 696 676" to="405 696 676" dur="0.9s" repeatCount="indefinite"/></g>
+    <g><path d="M826 652v48M802 676h48"/><animateTransform attributeName="transform" type="rotate" from="20 826 676" to="380 826 676" dur="0.9s" repeatCount="indefinite"/></g>
+    <g><path d="M984 652v48M960 676h48"/><animateTransform attributeName="transform" type="rotate" from="70 984 676" to="430 984 676" dur="0.9s" repeatCount="indefinite"/></g></g>
+  <path d="M500 590h602" stroke="url(#brassG)" stroke-width="6"/><g stroke="#8a6a26" stroke-width="5"><path d="M520 590v134M800 590v134M1082 590v134"/></g>
+</g>
+
+<!-- the steam gauge, the clock -->
+<g id="gauge" class="hot"><circle cx="1130" cy="420" r="62" fill="url(#brassG)"/><circle cx="1130" cy="420" r="50" fill="#f1ede0"/>
+  <path d="M1094 450a47 47 0 1 1 72 0" fill="none" stroke="#22231e" stroke-width="2" stroke-dasharray="2 7"/><path d="M1158 386a47 47 0 0 1 14 44" fill="none" stroke="#b3261c" stroke-width="6"/>
+  <path id="needle" d="M1130 420V380" stroke="#22231e" stroke-width="4" stroke-linecap="round"/><circle cx="1130" cy="420" r="6" fill="#22231e"/><text x="1130" y="456" class="sm" font-size="11" fill="#22231e">STEAM</text></g>
+<g id="clock3" class="hot"><circle cx="1130" cy="262" r="40" fill="url(#brassG)"/><circle cx="1130" cy="262" r="32" fill="#f1ede0"/><g stroke="#22231e" stroke-width="3"><path d="M1130 234v6M1130 284v6M1102 262h6M1152 262h6"/></g>
+  <path id="hh3" d="M1130 262V246" stroke="#22231e" stroke-width="4.5" stroke-linecap="round" transform="rotate(35 1130 262)"/><path id="mh3" d="M1130 262V236" stroke="#22231e" stroke-width="2.6" stroke-linecap="round" transform="rotate(60 1130 262)"/><circle cx="1130" cy="262" r="3.5" fill="#8c2f24"/></g>
+
+<!-- the valve chest: one pipe, six wheels -->
+<g id="valves" class="hot">
+  <rect x="1206" y="150" width="380" height="250" fill="transparent"/>
+  <rect x="1210" y="186" width="1400" height="30" fill="url(#lagG)"/><g stroke="#5a5240" stroke-width="3"><path d="M1260 186v30M1420 186v30M1560 186v30"/></g>
+  <g id="vplate"><rect x="1262" y="148" width="250" height="28" rx="2" fill="url(#brassG)"/><text x="1387" y="168" class="lb" font-size="16" fill="#2a1c08">AUXILIARY STEAM</text></g>
+  <g fill="url(#lagG)"><rect x="1232" y="216" width="14" height="56"/><rect x="1292" y="216" width="14" height="56"/><rect x="1352" y="216" width="14" height="56"/><rect x="1412" y="216" width="14" height="56"/><rect x="1472" y="216" width="14" height="56"/><rect x="1532" y="216" width="14" height="56"/></g>
+  <g fill="none" stroke="#b3261c" stroke-width="7"><circle cx="1239" cy="292" r="21"/><circle cx="1299" cy="292" r="21"/><circle cx="1359" cy="292" r="21"/><circle cx="1419" cy="292" r="21"/><circle cx="1479" cy="292" r="21"/><circle cx="1539" cy="292" r="21"/></g>
+  <g stroke="#b3261c" stroke-width="5"><path d="M1218 292h42M1239 271v42M1278 292h42M1299 271v42M1338 292h42M1359 271v42M1398 292h42M1419 271v42M1458 292h42M1479 271v42M1518 292h42M1539 271v42"/></g>
+  <g fill="url(#brassG)"><rect x="1214" y="328" width="50" height="16"/><rect x="1274" y="328" width="50" height="16"/><rect x="1334" y="328" width="50" height="16"/><rect x="1394" y="328" width="50" height="16"/><rect x="1454" y="328" width="50" height="16"/><rect x="1514" y="328" width="50" height="16"/></g>
+  <g id="shutT" class="sm" font-size="10" fill="#fff"></g>
+</g>
+
+<!-- the telegraph from the bridge -->
+<g id="tele" class="hot"><path d="M1124 726V560" stroke="url(#brassG)" stroke-width="22"/><ellipse cx="1124" cy="724" rx="34" ry="9" fill="#8a6a26"/>
+  <circle cx="1124" cy="540" r="50" fill="url(#brassG)"/><circle cx="1124" cy="540" r="40" fill="#f1ede0"/><g stroke="#22231e" stroke-width="2"><path d="M1124 500v15M1124 565v15M1084 540h15M1149 540h15M1096 512l10 10M1142 558l10 10M1152 512l-10 10M1106 558l-10 10"/></g><circle cx="1124" cy="540" r="23" fill="none" stroke="#22231e" stroke-width="1.2"/>
+  <path d="M1124 540L1150 510" stroke="#b3261c" stroke-width="6" stroke-linecap="round"/><circle cx="1124" cy="540" r="7" fill="#22231e"/><path d="M1124 540L1166 492" stroke="url(#brassG)" stroke-width="7" stroke-linecap="round"/><circle cx="1168" cy="490" r="9" fill="#141110"/></g>
+
+<!-- Mr Rudd's desk: his slate, his notice -->
+<g id="card3" class="hot"><rect x="1244" y="420" width="120" height="110" fill="#efe9d6" transform="rotate(-2 1304 475)"/><g transform="rotate(-2 1304 475)"><text x="1304" y="452" class="lb" font-size="21" fill="#22231e">KNOTS</text><path d="M1256 460h96" stroke="#22231e" stroke-width="3"/><g stroke="#55585c" stroke-width="2"><path d="M1258 478h92M1258 492h80M1258 506h92M1258 518h60"/></g><ellipse cx="1346" cy="432" rx="12" ry="9" fill="#3c321e" opacity=".3"/><circle cx="1304" cy="424" r="4.500" fill="#22231e"/></g></g>
+<g id="desk" class="hot">
+  <path d="M1200 726V612M1420 726V612" stroke="#3a2412" stroke-width="14"/><path d="M1180 612h262l-18-52h-226z" fill="#5a3a1f"/><rect x="1180" y="612" width="262" height="16" fill="#3a2412"/>
+  <g id="dslate"><path d="M1232 604l14-58h132l14 58z" fill="#6b4a2a"/><path d="M1244 598l10-44h112l10 44z" fill="#22282b"/><g stroke="#e9e6dc" stroke-width="2" opacity=".8"><path d="M1260 566h100M1258 578h70M1256 590h40"/></g></g>
+  <rect x="1396" y="596" width="26" height="8" rx="3" fill="#f4f1e8"/>
+</g>
+<g id="rudd" class="hot">
+  <ellipse cx="1500" cy="730" rx="70" ry="10" fill="#000" opacity=".45"/>
+  <path d="M1448 726q-8-170 14-232q10-30 38-30t38 30q22 62 14 232z" fill="#3f4d5b"/><path d="M1466 520q34 26 68 0" stroke="#33404c" stroke-width="8" fill="none"/>
+  <path d="M1478 470q22 16 44 0l-6 16q-16 12-32 0z" fill="#8c2f24"/>
+  <rect x="1488" y="430" width="24" height="30" fill="#c7906a"/>
+  <path d="M1470 408q0-40 30-40t30 40v14q-4 22-30 22t-30-22z" fill="#d39f78"/><path d="M1466 406q-4-42 34-44q38 2 34 44q-6-22-34-22t-34 22z" fill="#2a1c14"/>
+  <circle cx="1489" cy="410" r="2.5" fill="#1b1512"/><circle cx="1511" cy="410" r="2.5" fill="#1b1512"/><path d="M1490 428q10 6 20 0" stroke="#7a3f30" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M1532 386l-12 16" stroke="#f4f1e8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M1456 520q-30 40-34 80" stroke="#3f4d5b" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="1422" cy="604" r="12" fill="#3a2a1e"/>
+</g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the saloon</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="carpathia.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, vvBox = null, rnBox = null, inV = false, inR = false, qNo = 0;
+
+  ER.init({
+    theme: 'history', story: 'carpathia', storyTitle: 'Come at Once', id: 'engines', no: 'III', title: 'Below',
+    go: 'Go down the ladder', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'A position that is sent by wireless has no decimal point in it: 41.46 N is 41 degrees and 46 minutes, and there are sixty minutes in a degree. Out here longitude grows to the left. So the Titanic went on Sinclair&rsquo;s chart up and to the left of you. The brass rule, walked to the compass rose, cut the ring in two places: the end that pointed to her read N 52&deg; W, and the other end was only the way back. And the dividers were read at the side of the chart, where a minute is a mile: 58 of them. Along the bottom they would have said 78.',
+      'It is now ten past one. You have never been down here before. Messengers belong to the bridge, and the bridge is clean.',
+      'The engine room is four decks deep and as hot as a kitchen. The chief engineer has called out the watch that was asleep, and the men have come: some of them have not stopped to dress. As each one goes past you, he asks the same two things. How far? And then: how long?'
+    ],
+    exit: {"next":"saloon","w":{"9b49ddb4":"5a4b3858"}}, tags: {"v1":["d214239e"],"v2":["55fc468e"],"v3":["c6ff20c8"],"v4":["4c769710"],"v5":["d1e21e18"],"v6":["6ea87b6b"],"q1":["4dab8cfc"],"q2":["268c534d"],"eta":["82e3c713"]},
+    sound: ['archive', { root: 45, bpm: 66, mood: 'tense', drop: ['mel', 'arp'], beds: [['hum', 1.1]] }],
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('e-file') || null; qNo = ER.flag('e-q') || 0;
+
+  var CARD = '<h4>Knots</h4>' +
+    '<p>A <b>KNOT</b> is a speed: one nautical mile in one hour. (Never say &ldquo;knots an hour&rdquo;.) A ship that is doing 12 knots goes 12 sea miles every hour.</p>' +
+    '<p class="f">distance = speed × time &nbsp;&nbsp;&nbsp; time = distance ÷ speed</p>' +
+    '<p>Do not divide in your head down here. Lay it out. At 12 knots an hour&rsquo;s run is 12 miles. A quarter of an hour&rsquo;s run is 3 miles. Five minutes&rsquo; run is 1 mile.</p>' +
+    '<svg viewBox="0 0 560 74"><path d="M20 52h480" stroke="#22231e" stroke-width="2"/><g stroke="#22231e" stroke-width="1.5"><path d="M20 46v12M140 46v12M260 46v12M380 46v12M500 46v12"/></g>' +
+    '<g fill="#c79a5e" stroke="#7b5a30" stroke-width="1"><rect x="20" y="18" width="143" height="22"/><rect x="164" y="18" width="143" height="22"/><rect x="308" y="18" width="143" height="22"/></g><rect x="452" y="18" width="35" height="22" fill="#e2c898" stroke="#7b5a30"/><rect x="488" y="18" width="11.500" height="22" fill="#f4ead0" stroke="#7b5a30"/>' +
+    '<g font-family="\'Courier Prime\',monospace" font-size="13" font-weight="700" fill="#22231e"><text x="91" y="34" text-anchor="middle">1 hour</text><text x="235" y="34" text-anchor="middle">1 hour</text><text x="379" y="34" text-anchor="middle">1 hour</text><text x="469" y="13" text-anchor="middle">&frac14;</text><text x="496" y="13" text-anchor="middle">5</text>' +
+    '<text x="20" y="72" text-anchor="middle">0</text><text x="140" y="72" text-anchor="middle">10</text><text x="260" y="72" text-anchor="middle">20</text><text x="380" y="72" text-anchor="middle">30</text><text x="500" y="72" text-anchor="middle">40 miles</text></g></svg>' +
+    '<p>So 40 miles at 12 knots is three hours (36 miles) and 4 miles more: a quarter of an hour, and five minutes. <b>3 hours 20 minutes.</b></p>' +
+    '<p>And mind this: 3.33 hours is NOT 3 hours 33 minutes. A third of an hour is twenty minutes.</p><p class="by">For the next boy who asks. R.</p>';
+
+  function hints() {
+    if (nextFile) return ['go', ['Mr Rudd has told you where to take the time. Use the button at the bottom of the screen.']];
+    if (inR && qNo === 0) return ['run1', [
+      'Click a speed on the rack, and then click &ldquo;1 hour&rdquo; to lay one hour&rsquo;s run along the chalk line. Four of them must fill the line exactly.',
+      'Four hours for fifty-eight miles: so one hour&rsquo;s run must be a quarter of fifty-eight.'
+    ]];
+    if (inR && qNo === 1) return ['run2', [
+      'Take the 17-knot stick. Three hours will go into the line. A fourth will not.',
+      'Seven miles are still to run. At 17 knots a quarter of an hour&rsquo;s run is a little over four miles, and five minutes&rsquo; run is nearly a mile and a half.'
+    ]];
+    if (inR) return ['run3', [
+      'You know how long. Now it is a sum with a clock: start at 12.35, and drag the long hand round.',
+      'Add the minutes first: the 35 of the clock, and the minutes of your answer. If they come to sixty or more, that is one more hour.'
+    ]];
+    if (inV) return ['valves', [
+      'Read the captain&rsquo;s orders again: the Notebook button is at the top. Which of these six things does he mean to use tonight?',
+      'He wants electric lights at the gangways, steam on the forward winches, and hot soup. And a ship that cannot be steered is no use to anybody.',
+      'That leaves two things that nobody needs before morning. One of them warms the cabins, and the other warms the water.'
+    ]];
+    if (ER.flag('e-v')) return ['slate', [
+      'Mr Rudd&rsquo;s notice about knots is pinned to the bulkhead over his desk. Read it before you try his slate.',
+      'The slate is on the desk, beside Mr Rudd.'
+    ]];
+    return ['look', [
+      'Mr Rudd wants to know what the ship can do without tonight. His valve chest is on the bulkhead at the right, under the big pipe: six red wheels.',
+      'Take the captain&rsquo;s list with you. It is in your notebook.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function paint() {
+    document.body.classList.toggle('steam', !!ER.flag('e-v'));
+    $('#shutT').innerHTML = String(ER.flag('e-v') || '').split('-').map(function (s, i) { return s === 'shut' ? '<rect x="' + (1220 + i * 60) + '" y="350" width="38" height="14" fill="#b3261c"/><text x="' + (1239 + i * 60) + '" y="361">SHUT</text>' : ''; }).join('');
+    $('#valves').classList.toggle('ready', !ER.flag('e-v') && !!ER.flag('e-in'));
+    $('#desk').classList.toggle('ready', !!ER.flag('e-v') && !!ER.flag('e-card') && !nextFile);
+    ER.pips(nextFile ? 4 : (ER.flag('e-v') ? 1 : 0) + qNo, 4);
+    $('#hh3').setAttribute('transform', 'rotate(' + (nextFile ? 42.5 : 35) + ' 1130 262)');      /* ten past one; then twenty-five past */
+    $('#mh3').setAttribute('transform', 'rotate(' + (nextFile ? 150 : 60) + ' 1130 262)');
+    if (nextFile) $('#go').classList.add('on');
+  }
+
+  function begin() {
+    paint();
+    CP.need('orders', 'The captain’s orders', CP.ORDERS, 'orders', 'Page from the night order book');
+    if (ER.flag('e-in')) { busy = false; ER.say(nextFile ? 'The engine room. Every shovel in the stokehold is moving.' : 'The engine room. Mr Rudd is waiting, and he is not a patient man.'); return; }
+    CP.learn('stoker', 'watch', 'boiler');
+    ER.narrate([
+      'Steel ladders, hot handrails, and a noise that you can feel in your teeth. Two engines as big as houses are turning the ship&rsquo;s two propellers, and tonight they are turning them faster than anybody down here has ever seen.',
+      'A young engineer with oil up to his elbows is standing at a desk with a slate. &ldquo;Bridge messenger? You are a long way from home. My name is Rudd. Whatever it is, shout it.&rdquo;',
+      '&ldquo;FIFTY-EIGHT MILES,&rdquo; you shout. &ldquo;NORTH FIFTY-TWO WEST.&rdquo;',
+      '&ldquo;The second half is no use to me,&rdquo; says Mr Rudd. &ldquo;An engine does not know where it is going. The first half I can use. But a steamship is only a kettle that goes somewhere, and before anything else this kettle wants more steam.&rdquo;',
+      '&ldquo;Have you your captain&rsquo;s list? Then go and look at my valves, and tell me what this ship can do without tonight.&rdquo;'
+    ], function () { busy = false; ER.flag('e-in', 1); paint(); });
+  }
+
+  /* ---------- things in the room ---------- */
+  CP.thing('#engines', null, 'Two engines, with four cylinders each. The steam goes in at the smallest cylinder, and it is used four times over before it is finished. Mr Rudd calls them his ladies.', isBusy);
+  CP.thing('#tele', 'telegraph', 'The bridge moves a handle, a bell rings down here, and the pointer shows what is wanted. It has pointed at FULL AHEAD since twenty-five minutes to one.', isBusy);
+  CP.thing('#gauge', 'gauge', function () { return ER.flag('e-v') ? 'Steam, in pounds. The needle has climbed to the red line, and it trembles there.' : 'Steam, in pounds. The needle is well below the red line.'; }, isBusy);
+  CP.thing('#clock3', null, function () { return nextFile ? 'Twenty-five past one.' : 'Ten past one.'; }, isBusy);
+  CP.thing('#door3', null, 'The door to the stokehold. Behind it are the boilers, and the men who feed them. The light that comes through it is orange, and it moves.', isBusy);
+  CP.thing('#men', null, 'The watch that was asleep half an hour ago. One of them has his boots on and his shirt in his hand. Nobody ordered them to run.', isBusy);
+  $('#card3').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'oil', clue: { id: 'knots', title: 'Mr Rudd’s notice: knots', kind: 'Notice in the engine room' }, done: function () { CP.learn('knot', 'nautical mile'); ER.flag('e-card', 1); paint(); } });
+  });
+  $('#rudd').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mr Rudd', role: 'a junior engineer', face: FACE('rudd'),
+      lines: [
+        { note: 'He talks without looking at you. He is looking at four gauges and listening to two engines, and you come a long way after those.' },
+        { q: 'How fast can she go?', a: '&ldquo;Fourteen knots is what the company paid for, and fourteen is what she gives, on a good day, with one watch in the stokehold. Tonight there are two watches in the stokehold, and every one of us down here means to have seventeen out of her. I have never seen fifteen.&rdquo;' },
+        { q: 'What is a watch?', a: '&ldquo;Four hours on, eight hours off. The men who came off at midnight had been in their bunks for half an hour when the Chief sent for them. Go and count how many of them said no.&rdquo; He holds up a hand, with the fingers closed.' },
+        { q: 'Why do they all ask how long?', a: '&ldquo;Because a man can do anything at all if he knows when it stops. What he cannot do is shovel until somebody remembers to tell him. So I want a time from you, messenger, and I want a true one.&rdquo;' },
+        { q: 'Why is a ship a kettle?', a: '&ldquo;Coal makes fire. Fire makes steam in the boilers. Steam pushes the engines round, and warms the cabins, and boils the soup, and turns the dynamos for the electric light. It is all one kettle. What one thing takes, another cannot have.&rdquo;' }
+      ],
+      clue: { id: 'rudd1', title: 'Mr Rudd, in the engine room', kind: 'What he said' }, last: 'Back to work',
+      done: function () {}
+    });
+  });
+  $('#valves').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'valve');
+    if (ER.flag('e-v')) { ER.say('Six wheels. ' + CP.cap(CP.num(String(ER.flag('e-v')).split('shut').length - 1)) + ' of them are shut, and the pipes below those are already going cold.'); return; }
+    openV();
+  });
+  $('#desk').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'slate');
+    if (nextFile) { ER.say('Mr Rudd&rsquo;s slate. He has wiped it with his sleeve, which has made both of them worse.'); return; }
+    if (!ER.flag('e-v')) { ER.say('&ldquo;Steam first,&rdquo; says Mr Rudd. &ldquo;The valves. Then sums.&rdquo;'); return; }
+    if (!ER.flag('e-card')) { ER.say('&ldquo;Can you do a sum in knots?&rdquo; says Mr Rudd. &ldquo;No. Read my notice first: it is over the desk.&rdquo;'); return; }
+    openR();
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; CP.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+
+  /* ---------- the valve chest ---------- */
+  var VALVES = [['Cabin heating', 'radiators, all classes'], ['Hot water', 'baths and basins'], ['Dynamos', 'the electric light'], ['Steering engine', 'turns the rudder'], ['Galley', 'coppers and urns'], ['Forward winches', 'on deck, at the bow']];
+  var WHEEL = '<svg viewBox="0 0 86 86"><circle cx="43" cy="43" r="35" fill="none" stroke="#b3261c" stroke-width="10"/><g stroke="#b3261c" stroke-width="7"><path d="M43 8v70M8 43h70M18 18l50 50M68 18L18 68"/></g><circle cx="43" cy="43" r="11" fill="#d9b860"/><circle cx="43" cy="43" r="4" fill="#6f531a"/><circle cx="43" cy="13" r="4" fill="#f1e6c8"/></svg>';
+  var WHY = [
+    'Seven hundred passengers are asleep under their blankets. They can do without their radiators for one night. The engines cannot do without the steam.',
+    'Nobody takes a bath at one o&rsquo;clock in the morning. Shut it.',
+    'Shut the dynamos, and your captain has his electric lights at the gangways by candle. Read your list.',
+    'Shut the steering engine, and she goes to the Titanic in a circle.',
+    'Soup, coffee and tea in every saloon, your list says. Did it say cold?',
+    'Steam to be kept on the forward winches. That is on your own list, and you are carrying it.'
+  ];
+  function buildV() {
+    var box = ER.el('div', 'vv'), s = '<div class="vv-chest"><h6>AUXILIARY STEAM</h6><div class="vv-row">', msgEl, goB, lock = false;
+    VALVES.forEach(function (v, i) { s += '<button type="button" class="vv-v" data-i="' + (i + 1) + '"><span class="vv-w">' + WHEEL + '</span><span class="vv-t">OPEN</span><span class="vv-n">' + v[0] + '<small>' + v[1] + '</small></span></button>'; });
+    s += '</div></div><div class="vv-side"><div class="tx-face">' + FACE('rudd') + '</div><h6 class="lk-h">Mr Rudd</h6><p class="pmsg"></p><button type="button" class="btn vv-go">That is all we can spare</button></div>';
+    box.innerHTML = s; msgEl = box.querySelector('.pmsg'); goB = box.querySelector('.vv-go');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    ER.$$('.vv-v', box).forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (lock) return;
+        b.classList.toggle('shut'); b.querySelector('.vv-t').textContent = b.classList.contains('shut') ? 'SHUT' : 'OPEN'; CP.sfx.valve();
+        box.setAttribute('data-v', ER.$$('.vv-v', box).map(function (x) { return x.classList.contains('shut') ? 's' : 'o'; }).join(''));
+      });
+    });
+    goB.addEventListener('click', function () {
+      var st = ER.$$('.vv-v', box).map(function (x) { return x.classList.contains('shut') ? 'shut' : 'open'; }), bad = [], i;
+      if (lock) return;
+      for (i = 0; i < 6; i++) if (!ER.check('v' + (i + 1), st[i])) bad.push(i);
+      if (st.indexOf('shut') < 0) { CP.slip(); ER.sfx.no(); msg('&ldquo;You have shut nothing. Then the engines get nothing, and we arrive when we arrive.&rdquo;'); return; }
+      if (bad.length) {
+        CP.slip(); ER.sfx.no();
+        msg('Mr Rudd looks along the row of wheels. &ldquo;' + WHY[bad[0]] + '&rdquo;' + (bad.length > 1 ? ' And that is not the only wheel that he looks at.' : ''));
+        return;
+      }
+      lock = true; ER.flag('e-v', st.join('-')); ER.sfx.ok(); CP.sfx.hiss(); paint();
+      msg('&ldquo;' + CP.cap(VALVES.filter(function (v, j) { return st[j] === 'shut'; }).map(function (v) { return v[0].toLowerCase(); }).join(' and ')) + '. Seven hundred people will wake up cold and wash in cold water, and by breakfast I shall have heard about it.&rdquo; He looks pleased. &ldquo;Every pound of steam that the cabins do not get, the engines do. Look at the gauge.&rdquo;');
+      setTimeout(function () { ER.closeAll(); busy = true; ER.narrate([
+        'On the bulkhead the needle of the big steam gauge climbs to the red line, and stays there.',
+        '&ldquo;Now your fifty-eight miles,&rdquo; says Mr Rudd. &ldquo;There is a slate on my desk, and a notice over it for people who cannot do sums in knots. Read the notice first.&rdquo;'
+      ], function () { busy = false; paint(); }); }, 3200);
+    });
+    box.first = function () { msg('The valve chest. &ldquo;All six of these take their steam from the same boilers as the engines,&rdquo; says Mr Rudd. &ldquo;Shut what the ship can do without tonight, and nothing else. Your captain&rsquo;s list will tell you what he means to use.&rdquo;<br><br>Click a wheel to shut it, or to open it again.'); };
+    return box;
+  }
+  function openV() {
+    if (!vvBox) vvBox = buildV();
+    vvBox.first(); inV = true;
+    ER.open('ov-lock', vvBox, function () { inV = false; });
+  }
+
+  /* ---------- the slate: fifty-eight miles, and an hour's run to lay along them ---------- */
+  var MILES = 58, PXM = 12, X0 = 20, SPEEDS = [14, 14.5, 16.5, 17, 17.5];
+  function sp(v) { return String(v).replace('.5', '&frac12;'); }
+  function toMin(t) { var a = String(t || '0:0').split(':'); return (+a[0]) * 60 + (+a[1]); }
+  /* a time on the clock, as people say it */
+  function oclock(t) { var a = String(t || '12:00').split(':'), m = +a[1]; return m ? CP.num(+a[0]) + ' ' + (m < 10 ? 'oh ' : '') + CP.num(m) : CP.num(+a[0]) + ' o&rsquo;clock'; }
+  function buildR() {
+    var box = ER.el('div', 'rn'), speed = 14, laid = [], mins = 35, msgEl, goB, s;
+    s = '<div class="rn-main"><div class="rn-slate"><svg viewBox="0 0 740 146"><g id="rn-laid"></g>' +
+      '<path d="M' + X0 + ' 84H' + (X0 + MILES * PXM) + '" stroke="#e9e6dc" stroke-width="3" stroke-linecap="round"/><g id="rn-ticks" stroke="#e9e6dc" stroke-width="1.5"></g>' +
+      '<text x="' + X0 + '" y="140" font-size="21" text-anchor="start">us, at 12.35</text><text x="' + (X0 + MILES * PXM) + '" y="140" font-size="21" text-anchor="end">her: 58 miles</text><g id="rn-nums"></g></svg>' +
+      '<p class="rn-tally"></p></div>' +
+      '<div class="rn-rack"><h6>The rack: one hour&rsquo;s run at each speed</h6><div class="rn-sp">' + SPEEDS.map(function (v) { return '<button type="button" data-v="' + v + '">' + sp(v) + '<small>KNOTS</small></button>'; }).join('') + '</div>' +
+      '<div class="rn-pc"><button type="button" class="h" data-p="60"><i></i>1 hour</button><button type="button" class="q" data-p="15"><i></i>&frac14; hour</button><button type="button" class="f" data-p="5"><i></i>5 min</button><span class="sp"></span><button type="button" class="undo" data-u="1">Take one off</button><button type="button" class="undo" data-u="all">Clear the line</button></div></div></div>' +
+      '<div class="rn-side"><div class="rn-qs"><p data-q="0">1. Bridge has told her: <b>four hours</b>. What speed is that?</p><p data-q="1">2. We mean to have <b>17</b> out of her. How long then?</p><p data-q="2">3. She turned at <b>12.35</b>. So when is she there?</p></div>' +
+      '<div class="rn-clock"><svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="96" fill="#b08a35"/><circle cx="100" cy="100" r="84" fill="#f1ede0"/><g id="rn-cm" stroke="#22231e"></g><g font-family="\'Libre Caslon Text\',serif" font-size="19" font-weight="700" fill="#22231e" text-anchor="middle"><text x="100" y="40">12</text><text x="166" y="107">3</text><text x="100" y="174">6</text><text x="34" y="107">9</text></g>' +
+      '<path id="rn-hh" d="M100 100V56" stroke="#22231e" stroke-width="8" stroke-linecap="round"/><path id="rn-mh" d="M100 100V30" stroke="#b3261c" stroke-width="5" stroke-linecap="round"/><circle id="rn-tip" cx="100" cy="30" r="9" fill="#b3261c"/><circle cx="100" cy="100" r="7" fill="#22231e"/></svg></div>' +
+      '<button type="button" class="btn rn-go">Show Mr Rudd</button><p class="pmsg"></p></div>';
+    box.innerHTML = s; msgEl = box.querySelector('.pmsg'); goB = box.querySelector('.rn-go');
+    function q(x) { return box.querySelector(x); }
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    (function () {
+      var t = '', n = '', i;
+      for (i = 0; i <= MILES; i++) t += '<path d="M' + (X0 + i * PXM) + ' 84v' + (i % 10 === 0 || i === MILES ? 14 : i % 5 === 0 ? 10 : 6) + '"/>';
+      for (i = 10; i <= 50; i += 10) n += '<text x="' + (X0 + i * PXM) + '" y="118" font-size="19" text-anchor="middle">' + i + '</text>';
+      q('#rn-ticks').innerHTML = t; q('#rn-nums').innerHTML = n; t = '';
+      for (i = 0; i < 60; i++) t += '<path d="M100 ' + (i % 5 ? 22 : 18) + 'V28" stroke-width="' + (i % 5 ? 1 : 2.5) + '" transform="rotate(' + i * 6 + ' 100 100)"/>';
+      q('#rn-cm').innerHTML = t;
+    })();
+    function run() { return laid.reduce(function (a, m) { return a + speed * m / 60; }, 0); }
+    function tmin() { return laid.reduce(function (a, m) { return a + m; }, 0); }
+    function hm(m) { return Math.floor(m / 60) + ':' + ('0' + m % 60).slice(-2); }
+    function words(m) { var h = Math.floor(m / 60), r = m % 60; return (h ? h + (h === 1 ? ' hour' : ' hours') : '') + (h && r ? ' ' : '') + (r ? r + ' minutes' : '') || 'nothing'; }
+    function full() { return MILES - run() <= 0.35; }
+    function draw() {
+      var x = X0, g = '', w;
+      laid.forEach(function (m) {
+        w = speed * m / 60 * PXM;
+        g += '<rect x="' + x.toFixed(1) + '" y="44" width="' + Math.max(1, w - 1.5).toFixed(1) + '" height="28" rx="2" fill="' + (m === 60 ? '#c79a5e' : m === 15 ? '#e2c898' : '#f4ead0') + '" stroke="#7b5a30" stroke-width="1"/>' +
+          (m === 60 ? '<text x="' + (x + w / 2).toFixed(1) + '" y="65" font-size="21" text-anchor="middle" style="fill:#3a2412">1 hour</text>' : m === 15 ? '<text x="' + (x + w / 2).toFixed(1) + '" y="65" font-size="19" text-anchor="middle" style="fill:#3a2412">&frac14;</text>' : '');
+        x += w;
+      });
+      g += '<path d="M' + x.toFixed(1) + ' 38l-9-22h18z" fill="#ffd97a"/><path d="M' + x.toFixed(1) + ' 38v46" stroke="#ffd97a" stroke-width="1.5" stroke-dasharray="3 3"/>';
+      q('#rn-laid').innerHTML = g;
+      q('.rn-tally').innerHTML = 'At <b>' + sp(speed) + ' knots</b>: laid along the line so far, <b>' + words(tmin()) + '</b>.' + (full() ? ' She is there.' : '');
+      ER.$$('.rn-sp button', box).forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-v') === speed); });
+      q('.rn-pc .h i').style.width = (speed * PXM) + 'px'; q('.rn-pc .q i').style.width = (speed * PXM / 4) + 'px'; q('.rn-pc .f i').style.width = (speed * PXM / 12) + 'px';
+      box.setAttribute('data-run', speed + '|' + hm(tmin())); box.setAttribute('data-full', full() ? '1' : '0');
+    }
+    ER.$$('.rn-sp button', box).forEach(function (b) { b.addEventListener('click', function () { if (qNo > 1) return; speed = +b.getAttribute('data-v'); laid = []; CP.sfx.brass(); draw(); }); });
+    ER.$$('.rn-pc button[data-p]', box).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var m = +b.getAttribute('data-p');
+        if (qNo > 1) return;
+        if (run() + speed * m / 60 > MILES + 0.35) { ER.sfx.no(); msg('It will not go. There is less than that left to run' + (m > 5 ? ': try a shorter piece.' : '.')); return; }
+        laid.push(m); CP.sfx.wood(); draw();
+        /* an answer to an earlier try must not go on saying "not there yet" over a full line */
+        if (full() && /not there yet|will not go/.test(msgEl.textContent)) msg('The line is full. Show Mr Rudd.');
+      });
+    });
+    ER.$$('.rn-pc .undo', box).forEach(function (b) { b.addEventListener('click', function () { if (qNo > 1) return; if (b.getAttribute('data-u') === 'all') laid = []; else laid.pop(); CP.sfx.chalk(); draw(); }); });
+    /* the clock: drag the long hand; the short one follows */
+    function clockT() { return (Math.floor(mins / 60) || 12) + ':' + ('0' + mins % 60).slice(-2); }
+    function drawClock() {
+      var a = (mins % 60) * 6, r = a * Math.PI / 180;
+      q('#rn-mh').setAttribute('transform', 'rotate(' + a + ' 100 100)'); q('#rn-hh').setAttribute('transform', 'rotate(' + (mins / 2) + ' 100 100)');
+      q('#rn-tip').setAttribute('cx', (100 + 70 * Math.sin(r)).toFixed(1)); q('#rn-tip').setAttribute('cy', (100 - 70 * Math.cos(r)).toFixed(1));
+      box.setAttribute('data-clock', clockT());
+    }
+    (function () {
+      var c = q('.rn-clock'), svg = c.querySelector('svg');
+      function at(e) {
+        var p = ER.pt(svg, e), deg = Math.atan2(p.x - 100, -(p.y - 100)) * 180 / Math.PI, m, d;
+        m = (Math.round((deg + 360) % 360 / 30) * 5) % 60; d = m - mins % 60;
+        if (d > 30) d -= 60; else if (d < -30) d += 60;
+        if (d) { mins = (mins + d + 720) % 720; CP.sfx.key(); drawClock(); }
+      }
+      ER.drag(c, { start: function (e) { if (qNo !== 2) return false; at(e); }, move: at });
+    })();
+    function paintQ() {
+      ER.$$('.rn-qs p', box).forEach(function (p, i) { p.classList.toggle('ok', i < qNo); p.classList.toggle('now', i === qNo); });
+      box.classList.toggle('q3', qNo >= 2);
+      goB.textContent = qNo >= 2 ? 'That is the time' : 'Show Mr Rudd';
+    }
+    goB.addEventListener('click', function () {
+      var t = hm(tmin()), c, file;
+      if (qNo === 0) {
+        if (!full()) { msg('&ldquo;She is not there yet,&rdquo; says Mr Rudd. &ldquo;The line is not full.&rdquo;'); return; }
+        if (ER.check('q1', speed + '|' + t)) {
+          qNo = 1; ER.flag('e-q', 1); ER.flag('e-s1', speed); ER.flag('e-t1', t); ER.sfx.ok(); msg('&ldquo;' + CP.cap(CP.num(Math.floor(speed))) + (speed % 1 ? ' and a half' : '') + ' knots. That is this ship on her best day, with one watch in the stokehold and every passenger warm in bed. So when the captain said four hours, he had not counted on us at all.&rdquo; He nearly smiles. &ldquo;Now seventeen.&rdquo;');
+          laid = []; draw(); paintQ(); paint();
+          return;
+        }
+        CP.slip(); ER.sfx.no();
+        msg('&ldquo;That comes to ' + words(tmin()) + '. The bridge said four hours, and nothing over. Which speed goes into fifty-eight miles four times exactly?&rdquo;'); return;
+      }
+      if (qNo === 1) {
+        if (speed !== 17) { CP.slip(); ER.sfx.no(); msg('&ldquo;Seventeen, I said. Take the seventeen-knot stick from the rack.&rdquo;'); return; }
+        if (!full()) { msg('&ldquo;She is not there yet. Three whole hours go into the line, and a fourth will not. Use the short pieces for what is left.&rdquo;'); return; }
+        if (ER.check('q2', speed + '|' + t)) {
+          qNo = 2; ER.flag('e-q', 2); ER.flag('e-t2', t); ER.sfx.ok(); paintQ(); drawClock(); paint();
+          msg('&ldquo;' + CP.cap(CP.span(tmin())) + '.&rdquo; Mr Rudd turns the engine-room clock on its hook until it faces you. &ldquo;She turned at twenty-five to one. So when is she there? Show me on the clock.&rdquo;<br><br>Drag the long hand.');
+          return;
+        }
+        CP.slip(); ER.sfx.no(); msg('&ldquo;That is not what I make it. Clear the line and lay it again.&rdquo;'); return;
+      }
+      c = clockT();
+      if (ER.check('eta', c)) {
+        file = ER.exitOk([ER.flag('e-v') + '|' + ER.flag('e-s1') + '|' + ER.flag('e-t2') + '|' + c]);
+        if (!file) { msg('Mr Rudd looks at the clock, and nothing happens. Something is wrong: tell your teacher.'); return; }
+        nextFile = file; ER.flag('e-file', file); ER.flag('e-eta', c); qNo = 3; ER.flag('e-q', 3);
+        var st = ER.state(); st.done = st.done || {}; st.done.engines = 1; ER.persist(true);
+        ER.sfx.ok(); goB.disabled = true; paintQ();
+        msg('&ldquo;' + CP.cap(oclock(c)) + '. ' + CP.cap(CP.span(toMin(ER.flag('e-t1')) - toMin(ER.flag('e-t2')))) + ' better than the bridge promised her.&rdquo; Mr Rudd wipes the slate with his sleeve, which makes both of them worse. &ldquo;Come with me. This is not news for a desk.&rdquo;');
+        setTimeout(function () { ER.closeAll(); after(); }, 3000);
+        return;
+      }
+      CP.slip(); ER.sfx.no();
+      if (c === ER.flag('e-t2')) msg('&ldquo;That is how long. I asked you when. Add it to twenty-five minutes to one.&rdquo;');
+      else if (mins === 35) msg('&ldquo;That is when she turned. Drag the long hand round.&rdquo;');
+      else if (mins === (35 + toMin(ER.flag('e-t1'))) % 720) msg('&ldquo;That is the bridge&rsquo;s four hours again. With seventeen knots under her?&rdquo;');
+      else msg('&ldquo;Twelve thirty-five, and ' + CP.span(toMin(ER.flag('e-t2'))) + ' more. Add the minutes first. If they come to sixty, that is one more hour.&rdquo;');
+    });
+    if (qNo >= 1) { speed = 17; }
+    draw(); drawClock(); paintQ();
+    box.first = function () {
+      if (qNo === 0) msg('Mr Rudd&rsquo;s slate. &ldquo;That chalk line is your fifty-eight miles: us at this end, and her at that. I cannot show a fireman a sum. I can show him a line.&rdquo;<br><br>&ldquo;Take a speed from the rack, and lay one hour&rsquo;s run along the line, and then another, until she is there. The short pieces are a quarter of an hour, and five minutes.&rdquo;');
+      else if (qNo === 1) msg('&ldquo;Now seventeen,&rdquo; says Mr Rudd. &ldquo;Lay it along the line.&rdquo;');
+      else msg('&ldquo;She turned at twenty-five to one. So when is she there?&rdquo; Drag the long hand of the clock.');
+    };
+    return box;
+  }
+  function openR() {
+    if (!rnBox) rnBox = buildR();
+    rnBox.first(); inR = true;
+    ER.open('ov-lock', rnBox, function () { inR = false; });
+  }
+  function after() {
+    var when = oclock(ER.flag('e-eta')), t1 = toMin(ER.flag('e-t1')), t2 = toMin(ER.flag('e-t2'));
+    busy = true; inR = false; paint();
+    CP.mine('run', 'On Mr Rudd’s slate', '<p>58 miles.</p><p>At ' + sp(ER.flag('e-s1')) + ' knots: <b>' + CP.span(t1) + '</b>. That was what the bridge told her.</p><p>At 17 knots: <b>' + CP.span(t2) + '</b>.</p><p>She turned at 12.35, so: <b>' + when + '</b>.</p><p>time = distance ÷ speed</p>', true);
+    ER.narrate([
+      'He takes you as far as the door of the stokehold, and no further. Inside, everything is orange and black. There are twice as many men at the furnaces as there is room for, and some of them are wearing what they went to bed in.',
+      'Mr Rudd puts his hands round his mouth. &ldquo;' + when.toUpperCase() + '!&rdquo; he shouts. &ldquo;GIVE HER SEVENTEEN, AND WE ARE THERE BY ' + when.toUpperCase() + '! NOT A MINUTE AFTER!&rdquo;',
+      'Nobody answers him. But every shovel in the place is suddenly moving a little faster.',
+      '&ldquo;A man will shovel like that until ' + when + ', if he knows that it is ' + when + ',&rdquo; says Mr Rudd. &ldquo;Now go up. The stewards want that time more than I do: they have a whole ship to make ready.&rdquo;',
+      '&ldquo;Find the stewardess in the first-class saloon. Her name is Mrs Latham. I should knock.&rdquo;'
+    ], function () { busy = false; paint(); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Night Desk · Lots and Lots of People</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="apollo.css">
+<style>
+  body{--bg:#15110c;--accent:#9fd18b;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(20,16,11,.97);--tc-ink:#f1e9d6;--cap-bg:rgba(20,16,11,.94);--panel:#2a2219;--face-bg:#33291f;--q-ink:#c9e3b8;--fade:#0a0806;--hud-bg:rgba(20,16,11,.82)}
+  .lb{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.16em}
+  .hw{font-family:'Architects Daughter',cursive;text-anchor:middle}
+  #mast{animation:mast 2.4s steps(1,end) infinite}
+  @keyframes mast{50%{opacity:.15}}
+  #car{animation:car 17s linear infinite}
+  @keyframes car{0%{transform:translateX(-80px)}40%{transform:translateX(520px)}100%{transform:translateX(520px)}}
+  #glow{animation:glow 6s steps(1,end) infinite}
+  @keyframes glow{0%{opacity:1}71%{opacity:.93}73%{opacity:1}}
+  #calc.ready #tapeS{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+  #sq{display:none}
+  body.done #sq{display:block}
+
+  /* the adding machine and the sheet */
+  .cs{display:grid;grid-template-columns:340px minmax(0,640px);gap:24px;width:min(1010px,96vw);align-items:start}
+  .am{padding:14px 16px 16px;border-radius:14px 14px 8px 8px;background:#b9b29c linear-gradient(#cfc8b2,#9a937e);box-shadow:0 18px 40px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.4)}
+  .am-tape{height:86px;margin:0 26px 10px;padding:6px 12px 4px;overflow:hidden;background:#fdfcf6;display:flex;flex-direction:column;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1.36;color:#22231e;
+    box-shadow:inset 0 -10px 12px -8px rgba(0,0,0,.35);border-radius:3px 3px 0 0;text-align:right}
+  .am-tape div{white-space:nowrap}
+  .am-tape div:last-child{color:#8c2f24;font-weight:600}
+  .am-reg{margin:0 0 12px;padding:7px 12px 5px;border-radius:5px;background:#16181a;color:#f1ead6;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:25px;line-height:1.1;text-align:right;min-height:42px;box-shadow:inset 0 3px 8px #000}
+  .am-reg small{float:left;font-size:17px;font-weight:400;color:#9fd18b;line-height:1.6}
+  .am-keys{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+  .am-k{height:40px;border-radius:6px;background:#2f3336 linear-gradient(#4a4f53,#25282a);color:#f1ead6;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:19px;box-shadow:0 3px 0 #111,0 4px 6px rgba(0,0,0,.4)}
+  .am-k:active{transform:translateY(2px);box-shadow:0 1px 0 #111}
+  .am-k.op{background:#6b4a2a linear-gradient(#8c6a45,#5a3f22)}
+  .am-k.eq{grid-column:span 4;background:#8c2f24 linear-gradient(#b3261c,#7a2018);font-family:'Oswald',sans-serif;font-weight:500;font-size:15px;letter-spacing:.3em}
+  .am-brand{margin:10px 0 0;text-align:center;font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.4em;color:#55503f}
+  .cs-tray{min-height:74px;margin-top:14px;padding:8px 8px 2px;border:1px dashed rgba(255,255,255,.3);border-radius:4px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px}
+  .cs-tray:before{content:'slips torn off the tape';flex:0 0 100%;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#b9b39c}
+  .sl{padding:4px 10px 3px;background:#fdfcf6;color:#22231e;font-family:'IBM Plex Mono',monospace;box-shadow:0 3px 6px rgba(0,0,0,.45);
+    clip-path:polygon(0 0,100% 0,100% 88%,92% 100%,82% 88%,70% 100%,58% 88%,46% 100%,34% 88%,22% 100%,10% 88%,0 100%)}
+  .sl b{display:block;font-weight:600;font-size:17px;line-height:1.15}
+  .sl small{display:block;font-size:11px;line-height:1.2;color:#6b6552;padding-bottom:4px}
+  .sl.held{outline:3px solid #9fd18b;outline-offset:2px}
+  .sheet{position:relative;padding:16px 22px 14px;background:#f6f3e8 linear-gradient(176deg,rgba(255,255,255,.5),rgba(120,110,70,.1));color:#22231e;font-family:'Courier Prime',monospace;font-size:15px;line-height:1.36;box-shadow:0 22px 50px rgba(0,0,0,.6)}
+  .sheet h5{margin:0 0 8px;display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;letter-spacing:.08em;border-bottom:2px solid #22231e;padding-bottom:6px}
+  .ln{position:relative;display:grid;grid-template-columns:26px 1fr 96px;gap:0 6px;align-items:center;padding:6px 0 6px;border-bottom:1px dotted #a39c84}
+  .ln i{font-style:normal;font-weight:700}
+  .ln small{display:block;font-size:13px;color:#55584f}
+  .cs-slot{display:inline-block;min-width:86px;min-height:27px;margin:0 3px;vertical-align:middle;border-bottom:2px solid #22231e;background:rgba(159,209,139,.2);text-align:center}
+  .cs-slot.open:hover{background:rgba(159,209,139,.45)}
+  .cs-slot .sl{display:inline-block;padding:1px 8px 0;box-shadow:none;clip-path:none;background:transparent}
+  .cs-slot .sl small{display:none}
+  .cs-slot.ok{background:transparent;border-bottom-color:transparent;font-family:'Architects Daughter',cursive;font-size:20px;color:#1d2a52;line-height:1.2}
+  .yn{display:none;gap:4px;justify-content:flex-end}
+  .cs.stB .yn{display:flex}
+  .yn button{width:44px;height:26px;border:1.5px solid #22231e;border-radius:3px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12px;letter-spacing:.1em;color:#22231e}
+  .yn button.on{background:#22231e;color:#f6f3e8}
+  .yn.ok button{border-color:transparent;background:transparent;color:#a39c84}
+  .yn.ok button.on{color:#2f6a4a;font-size:15px}
+  .yn.ok.bad button.on{color:#b3261c}
+  .yh{display:none;position:absolute;right:22px;top:43px;width:150px;font-family:'Oswald',sans-serif;font-weight:500;font-size:10px;letter-spacing:.1em;line-height:1.2;text-align:right;color:#55584f;white-space:nowrap}
+  .cs.stB .yh{display:block}
+  .ln.sh{display:none;grid-template-columns:26px 1fr}
+  .cs.stC .ln.sh{display:grid}
+  .ln.sh .red{font-family:'Architects Daughter',cursive;font-size:19px;color:#b3261c}
+  .sheet .btn{display:block;width:100%;margin-top:10px;--accent:#22231e}
+  .sheet .btn:hover:not([disabled]){color:#f6f3e8}
+  .cs .pmsg{margin-top:12px;font-size:16.5px;min-height:96px}
+  @media (max-width:900px){.cs{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3226"/><stop offset="1" stop-color="#262018"/></linearGradient>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1226"/><stop offset=".6" stop-color="#172544"/><stop offset="1" stop-color="#27375a"/></linearGradient>
+  <linearGradient id="deskG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a5632"/><stop offset="1" stop-color="#3f2b18"/></linearGradient>
+  <linearGradient id="amG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d2cbb5"/><stop offset="1" stop-color="#8f8873"/></linearGradient>
+  <linearGradient id="cabG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6d7a70"/><stop offset="1" stop-color="#4c564e"/></linearGradient>
+  <radialGradient id="lampG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".55"/><stop offset=".5" stop-color="#ffd97a" stop-opacity=".16"/><stop offset="1" stop-color="#ffd97a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="postG" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".7"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="62%" cy="62%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".3"/><stop offset="1" stop-color="#000" stop-opacity=".86"/></radialGradient>
+  <clipPath id="winC"><rect x="126" y="116" width="508" height="408"/></clipPath>
+  <pattern id="gp" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#f3f6ee"/><path d="M0 0H14M0 0V14" stroke="#9fc6a0" stroke-width="1" fill="none"/></pattern>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#wallG)"/>
+<rect x="-1000" y="560" width="3600" height="10" fill="#1c1711"/>
+
+<!-- the window: the car park at ten at night -->
+<g id="win" class="hot">
+  <rect x="108" y="98" width="544" height="444" fill="#5a4630"/>
+  <g clip-path="url(#winC)">
+    <rect x="126" y="116" width="508" height="408" fill="url(#skyG)"/>
+    <g fill="#f3f1dc"><circle cx="180" cy="150" r="1.6"/><circle cx="260" cy="134" r="1.2"/><circle cx="340" cy="170" r="1.6"/><circle cx="450" cy="140" r="1.3"/><circle cx="540" cy="166" r="1.7"/><circle cx="600" cy="128" r="1.2"/><circle cx="410" cy="196" r="1.1"/></g>
+    <rect x="126" y="300" width="250" height="90" fill="#141c2c"/><g id="lit" fill="#ffd97a"></g>
+    <path d="M470 388V270M452 300h36M458 286h24" stroke="#1c2536" stroke-width="5" fill="none"/><circle id="mast" cx="470" cy="266" r="5" fill="#ff5a3c"/>
+    <rect x="126" y="388" width="508" height="140" fill="#1d2330"/>
+    <path d="M214 388v-70M560 388v-70" stroke="#3b4458" stroke-width="5"/><ellipse cx="214" cy="322" rx="12" ry="5" fill="#ffe9a8"/><ellipse cx="560" cy="322" rx="12" ry="5" fill="#ffe9a8"/>
+    <path d="M214 322l-90 200h180z" fill="url(#postG)" opacity=".5"/><path d="M560 322l-90 200h180z" fill="url(#postG)" opacity=".5"/>
+    <g id="cars"></g>
+    <g id="truck"><rect x="520" y="404" width="86" height="46" rx="4" fill="#d9dcd6"/><rect x="496" y="420" width="28" height="30" rx="4" fill="#b9bdb6"/><circle cx="516" cy="452" r="8" fill="#0c0f14"/><circle cx="586" cy="452" r="8" fill="#0c0f14"/><path d="M566 404v-22" stroke="#d9dcd6" stroke-width="4"/><path d="M546 374q20-16 40 0" stroke="#d9dcd6" stroke-width="5" fill="none"/><rect x="534" y="416" width="44" height="12" fill="#22231e"/><text x="556" y="426" class="lb" font-size="9" fill="#f3f1dc">TV NEWS</text></g>
+    <g id="car"><rect x="126" y="496" width="50" height="16" rx="5" fill="#0c0f14"/><path d="M176 500l60-6v18l-60-6z" fill="#ffe9a8" opacity=".5"/></g>
+    <g stroke="#cfc8b2" stroke-width="5" opacity=".9"><path d="M126 128h508M126 144h508M126 160h508M126 176h508M126 192h508"/></g>
+  </g>
+  <path d="M380 116v408M126 330h508" stroke="#5a4630" stroke-width="10"/><rect x="100" y="536" width="560" height="16" fill="#6b5338"/>
+</g>
+<g id="rad" class="hot"><rect x="160" y="580" width="440" height="130" rx="8" fill="#55503f"/><g id="fins" stroke="#2f2b22" stroke-width="5"></g></g>
+
+<!-- on the wall: her card, the curves, the calendar -->
+<g id="card3" class="hot"><rect x="716" y="236" width="150" height="190" fill="#fbf8ee" transform="rotate(-2 791 331)"/><g transform="rotate(-2 791 331)"><rect x="716" y="236" width="150" height="6" fill="#b3261c"/>
+  <text x="791" y="270" class="hw" font-size="16" fill="#22231e">HOW LONG</text><text x="791" y="290" class="hw" font-size="16" fill="#22231e">WILL IT LAST?</text>
+  <rect x="746" y="306" width="50" height="56" fill="none" stroke="#1d2a52" stroke-width="2.5"/><rect x="748" y="330" width="46" height="30" fill="#9db3cf"/><path d="M796 352h26v14" stroke="#1d2a52" stroke-width="2.5" fill="none"/><path d="M822 372v10M818 380l4 6l4-6" stroke="#b3261c" stroke-width="2" fill="none"/>
+  <g stroke="#9db3cf" stroke-width="1.5"><path d="M730 392h120M730 404h120M730 416h90"/></g><circle cx="791" cy="246" r="5" fill="#b3261c"/></g></g>
+<g id="graphs" class="hot">
+  <rect x="930" y="130" width="170" height="130" fill="url(#gp)" transform="rotate(2 1015 195)"/><path d="M944 150q60 10 90 50t56 46" stroke="#1d2a52" stroke-width="3" fill="none" transform="rotate(2 1015 195)"/>
+  <rect x="1090" y="150" width="170" height="130" fill="url(#gp)" transform="rotate(-3 1175 215)"/><path d="M1104 168q50 30 80 50t64 48" stroke="#b3261c" stroke-width="3" fill="none" transform="rotate(-3 1175 215)"/>
+  <rect x="1000" y="270" width="170" height="120" fill="url(#gp)" transform="rotate(-1 1085 330)"/><path d="M1014 288q70 14 100 40t44 50" stroke="#2f6a4a" stroke-width="3" fill="none" transform="rotate(-1 1085 330)"/>
+  <g fill="#b3261c"><circle cx="1016" cy="136" r="5"/><circle cx="1174" cy="154" r="5"/><circle cx="1084" cy="275" r="5"/></g>
+</g>
+<g id="cal2" class="hot"><rect x="1300" y="130" width="112" height="140" fill="#f1ead6"/><rect x="1300" y="130" width="112" height="32" fill="#1d2a52"/><text x="1356" y="152" class="lb" font-size="14" fill="#f1ead6">APRIL</text>
+  <g font-family="'IBM Plex Mono',monospace" font-size="15" fill="#22231e" text-anchor="middle"><text x="1326" y="192">12</text><text x="1356" y="192">13</text><text x="1386" y="192">14</text><text x="1326" y="222">15</text><text x="1356" y="222">16</text><text x="1386" y="222">17</text></g>
+  <circle cx="1386" cy="187" r="13" fill="none" stroke="#b3261c" stroke-width="2.5"/><path d="M1312 228h28" stroke="#b3261c" stroke-width="2.5"/><text x="1356" y="252" class="hw" font-size="13" fill="#b3261c">15: TAXES!!</text></g>
+
+<!-- the filing cabinet, and the speaker on top of it -->
+<g id="cab" class="hot"><rect x="1452" y="330" width="260" height="700" fill="url(#cabG)"/><g stroke="#3d463f" stroke-width="4"><path d="M1452 470h260M1452 610h260"/></g><g fill="#cfd6cb"><rect x="1510" y="380" width="60" height="26"/><rect x="1510" y="520" width="60" height="26"/></g><g fill="#3d463f"><rect x="1526" y="424" width="28" height="9" rx="3"/><rect x="1526" y="564" width="28" height="9" rx="3"/></g></g>
+<g id="spk" class="hot"><rect x="1474" y="246" width="96" height="86" rx="5" fill="#59645f"/><rect x="1474" y="246" width="96" height="86" rx="5" fill="none" stroke="#2c3331" stroke-width="3"/><circle cx="1522" cy="286" r="27" fill="#1b201f"/><g stroke="#59645f" stroke-width="3"><path d="M1499 276h46M1496 287h52M1499 298h46"/></g>
+  <g id="sq" stroke="#9fd18b" stroke-width="3" fill="none" stroke-linecap="round"><path d="M1586 262q12 24 0 48M1600 250q20 36 0 72"/></g></g>
+
+<!-- Mrs Halloran, at the far end of the desk -->
+<g id="hallo" class="hot">
+  <path d="M1296 650q-10-150 70-158t84 158z" fill="#5c7186"/><path d="M1368 494v150" stroke="#46586b" stroke-width="4"/>
+  <rect x="1356" y="452" width="24" height="46" fill="#e2bfa2"/>
+  <path d="M1332 420q0-40 36-40t34 40q-2 34-34 38t-36-38z" fill="#ecc9ac"/>
+  <path d="M1326 428q-10-58 42-58q36 2 36 30q-22-14-48-8q-22 6-30 36z" fill="#c4c7ca"/><circle cx="1396" cy="386" r="19" fill="#b9bcc0"/><circle cx="1396" cy="386" r="10" fill="none" stroke="#9ea2a7" stroke-width="2"/>
+  <g stroke="#2a1c16" stroke-width="2.8" fill="none"><rect x="1334" y="414" width="18" height="13" rx="3"/><path d="M1352 420h10M1362 414l22-6"/></g>
+  <path d="M1372 398l-26 18" stroke="#d9a22b" stroke-width="4.5" stroke-linecap="round"/><path d="M1340 446q8 3 14-2" stroke="#9a4a40" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <path d="M1310 560q-30 50 30 76" stroke="#5c7186" stroke-width="24" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- the desk -->
+<path d="M330 640h1500l300 700H-160z" fill="url(#deskG)"/><path d="M330 640h1500" stroke="#9a7448" stroke-width="5"/>
+<ellipse id="glow" cx="1160" cy="700" rx="620" ry="300" fill="url(#lampG)" pointer-events="none"/>
+<g id="lamp" class="hot"><ellipse cx="1220" cy="706" rx="64" ry="12" fill="#3a2c12"/><rect x="1214" y="560" width="12" height="146" fill="#b08a35"/><ellipse cx="1220" cy="704" rx="52" ry="9" fill="#c9a23a"/>
+  <path d="M1120 560q0-52 100-52t100 52z" fill="#2f6a4a"/><path d="M1120 560h200" stroke="#ffe9a8" stroke-width="7" stroke-linecap="round"/><path d="M1140 530q60-22 160 0" stroke="#4f9a6c" stroke-width="4" fill="none"/><path d="M1300 600v26" stroke="#b08a35" stroke-width="2"/><circle cx="1300" cy="630" r="4" fill="#b08a35"/></g>
+<g id="sheetS" class="hot"><rect x="430" y="688" width="230" height="150" fill="#f6f3e8" transform="rotate(-7 545 763)"/><g transform="rotate(-7 545 763)" stroke="#55585c" stroke-width="2"><path d="M446 712h198" stroke="#22231e" stroke-width="3"/><path d="M446 736h150M446 756h170M446 776h130M446 796h160M446 816h120"/><g stroke="#22231e"><path d="M610 744h36M620 764h26M592 784h54M616 804h30"/></g></g></g>
+<g id="mug" class="hot"><path d="M604 596h56l-6 52h-44z" fill="#f1ead6"/><path d="M660 606q18 0 16 16t-18 12" stroke="#f1ead6" stroke-width="6" fill="none"/><ellipse cx="632" cy="598" rx="28" ry="6" fill="#6b3f1a"/></g>
+<g id="calc" class="hot">
+  <ellipse cx="850" cy="742" rx="170" ry="16" fill="#000" opacity=".3"/>
+  <g id="tapeS"><path d="M800 566q-10-80 40-96t70 30q6 30-20 40" fill="none" stroke="#fdfcf6" stroke-width="44" stroke-linecap="butt"/><g stroke="#55585c" stroke-width="2"><path d="M790 520h36M792 534h30M796 548h30M828 480h30M850 474h26"/></g></g>
+  <path d="M716 600q0-34 34-34h200q34 0 34 34l14 136H702z" fill="url(#amG)"/><path d="M716 600q0-34 34-34h200q34 0 34 34" stroke="#f1ead6" stroke-width="3" fill="none"/>
+  <rect x="770" y="560" width="160" height="14" rx="4" fill="#3a3830"/><rect x="744" y="596" width="212" height="30" rx="4" fill="#16181a"/><text x="944" y="619" font-family="'IBM Plex Mono',monospace" font-weight="600" font-size="20" fill="#f1ead6" text-anchor="end">0</text>
+  <g id="amKeys"></g>
+  <path d="M998 640q34-6 34 30v40" stroke="#3a3830" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="1032" cy="712" r="11" fill="#8c2f24"/>
+</g>
+<g id="slips" class="hot"><rect x="1050" y="724" width="120" height="50" fill="#fffdf2" transform="rotate(4 1110 749)"/><rect x="1060" y="716" width="120" height="50" fill="#fbf7e2" transform="rotate(-3 1120 741)"/><rect x="1070" y="722" width="120" height="50" fill="#fffdf2" transform="rotate(1 1130 747)"/>
+  <g stroke="#55585c" stroke-width="2" transform="rotate(1 1130 747)"><path d="M1080 736h100M1080 748h80M1080 760h90"/></g><ellipse cx="1130" cy="744" rx="26" ry="16" fill="#bfe3f2" opacity=".55"/><ellipse cx="1124" cy="738" rx="9" ry="5" fill="#fff" opacity=".7"/></g>
+<g id="srule" class="hot"><rect x="1270" y="770" width="210" height="40" rx="8" fill="#5a3a22" transform="rotate(-4 1375 790)"/><rect x="1290" y="778" width="196" height="22" rx="2" fill="#f7f3ea" stroke="#6b6552" stroke-width="2" transform="rotate(-4 1375 790)"/><path d="M1296 789h184" stroke="#6b6552" stroke-width="1.2" transform="rotate(-4 1375 790)"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Walk over to Building 7</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="apollo.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, csBox = null, inLock = false, part = 'sums', seen = {};
+
+  /* lit windows, cars, radiator, keys */
+  (function () {
+    var s = '', i, r, COL = ['#3b4458', '#2a3245', '#4a3a3a', '#35403a', '#454032'];
+    for (r = 0; r < 3; r++) for (i = 0; i < 9; i++) if ((r * 4 + i * 7) % 5 < 3) s += '<rect x="' + (140 + i * 26) + '" y="' + (312 + r * 24) + '" width="12" height="12"/>';
+    $('#lit').innerHTML = s; s = '';
+    for (r = 0; r < 3; r++) for (i = 0; i < 9 - r; i++) {
+      if (r === 0 && i > 5) continue;
+      s += '<g transform="translate(' + (140 + i * (52 + r * 6) + r * 14) + ' ' + (410 + r * 34) + ') scale(' + (0.8 + r * 0.16) + ')"><rect x="0" y="8" width="40" height="13" rx="4" fill="' + COL[(i + r * 2) % 5] + '"/><path d="M8 8l5-8h14l5 8z" fill="' + COL[(i + r * 2) % 5] + '"/><rect x="14" y="2" width="12" height="5" fill="#0c0f14"/></g>';
+    }
+    $('#cars').innerHTML = s; s = '';
+    for (i = 0; i < 16; i++) s += '<path d="M' + (182 + i * 27) + ' 590v110"/>';
+    $('#fins').innerHTML = s; s = '';
+    for (r = 0; r < 4; r++) for (i = 0; i < 5; i++) s += '<rect x="' + (752 + i * 42 - r * 3) + '" y="' + (636 + r * 22) + '" width="' + (30 + r) + '" height="14" rx="4" fill="' + (i === 4 ? '#6b4a2a' : '#2f3336') + '"/>';
+    $('#amKeys').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'history', story: 'apollo', storyTitle: 'Lots and Lots of People', id: 'desk', no: 'III', title: 'The Night Desk',
+    go: 'Find her desk', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'Eight strands of red wool said it first, and then three lines of chalk. Live in Aquarius. Switch Odyssey off. Come home in Odyssey. The oxygen and the fuel cells were in the service module, so Odyssey was starving. Her own small batteries and her small tank of oxygen had to be kept for the end, because she has the only heat shield. Everything else had to come from the lifeboat.',
+      'By midnight on Monday, Odyssey was dark. It is now Tuesday 14 April, a quarter past ten at night. This evening they went round the far side of the Moon, and Aquarius&rsquo;s engine burned for more than four minutes to bring them home sooner. They will be home on Friday, if Aquarius can last that long.',
+      'She was built to keep two men for two days. Mrs Halloran has a desk by a window, an adding machine, and four slips of paper.'
+    ],
+    exit: {"next":"bench","w":{"e85264fc":"ef7900f4"}}, tags: {"p1":["dfc80675"],"p2":["997ed20f"],"p3":["8fc67a51"],"p4":["1d7ea158"],"p5":["42d64d8c"],"g1":["f03540fe"],"g2":["b201c2fe"],"g3":["616a7233"],"g4":["f24ad2b4"],"g5":["419c5110"]},
+    sound: ['archive', { root: 53, bpm: 54, drop: ['ost'], beds: [['night', 0.45]] }],
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('d-file') || null; seen = ER.flag('d-seen') || {};
+
+  /* ---------- the papers ---------- */
+  var CARD = '<h4>How long will it last?</h4>' +
+    '<p>A battery is a tank. An <b>AMP-HOUR</b> is how much is in it. An <b>AMP</b> is how fast it is running out. One amp for one hour uses one amp-hour. Ten amps for three hours use thirty.</p>' +
+    '<svg viewBox="0 0 560 104"><rect x="1" y="1" width="558" height="102" fill="#f1ead6" stroke="#22231e" stroke-width="1.5"/>' +
+    '<rect x="30" y="16" width="86" height="72" fill="none" stroke="#1d2a52" stroke-width="3"/><rect x="33" y="40" width="80" height="45" fill="#9db3cf"/><path d="M116 74h40v16" stroke="#1d2a52" stroke-width="3" fill="none"/><path d="M156 92v2M152 96l4 7l4-7" stroke="#b3261c" stroke-width="2.4" fill="none"/>' +
+    '<g font-family="\'Architects Daughter\',cursive" font-size="15" fill="#1d2a52"><text x="42" y="34">have: 30</text><text x="42" y="66" fill="#fff">amp-hours</text><text x="172" y="84">use: 10 amps</text></g>' +
+    '<g font-family="\'Courier Prime\',monospace" font-size="16" font-weight="700" fill="#22231e"><text x="300" y="40">30 &#247; 10 = 3 hours</text><text x="300" y="76">30 &#247; 3 hours = 10</text></g>' +
+    '<g font-family="\'Architects Daughter\',cursive" font-size="13" fill="#8c2f24"><text x="300" y="56">how long it lasts</text><text x="300" y="92">amps you can afford</text></g></svg>' +
+    '<p>So there are two sums, and tonight you will need both:<br><b>HAVE &#247; USE each hour = the HOURS it will last</b><br><b>HAVE &#247; the HOURS you need = what you can AFFORD each hour</b><br>It is the same for anything that runs out: pounds of water, pounds of oxygen.</p>' +
+    '<p>Electricity ends as heat. Aquarius gets rid of heat by boiling water away into space. So every amp costs water as well. Switch things off, and you save both. (And the cabin grows cold.)</p>' +
+    '<p class="rule">Round the safe way. What you HAVE: round it DOWN. What you USE: round it UP.&nbsp; M.H.</p>';
+  var SLIPS = '<h4>From the consoles, at 81 hours 46 minutes.<br>To the end: 61 hours.</h4>' +
+    '<p><b>AQUARIUS &middot; BATTERIES</b>1498 amp-hours left. The plan, after power-down: 14 amps.</p>' +
+    '<p><b>AQUARIUS &middot; WATER</b>215 lb that can be used. The plan: between 2.7 and 3.2 lb an hour, at 14 amps.</p>' +
+    '<p><b>AQUARIUS &middot; OXYGEN</b>44 lb left. Three men use 0.36 lb an hour.</p>' +
+    '<p><b>LITHIUM HYDROXIDE</b>Aquarius&rsquo;s own canisters: 44 hours left, in all of them together.<br>Odyssey&rsquo;s canisters: 16 of them, not yet used, good for 12 hours each.</p>';
+
+  function hints() {
+    if (nextFile) return ['go', ['Mrs Halloran has told you where to go next, and when. Use the button at the bottom of the screen.']];
+    if (inLock && part === 'short') return ['short', ['How many hours less than 61 is 44? Take one from the other on the machine, and drag the slip to the new line.']];
+    if (inLock && part === 'enough') return ['enough', [
+      'For each line, set the plan beside what they can afford, or set the hours it will last beside the 61 hours they need.',
+      'One line, and only one, stops before the 61 hours are up. Look for a number of hours that is smaller than 61.'
+    ]];
+    if (inLock) return ['sums', [
+      'Each line of the sheet says which numbers to take. The card on the wall says which sum to do with them: there are two kinds, and both are dividing.',
+      'Lines 1 and 2 ask what they can AFFORD: what they have, divided by the hours they need. Line 3 asks how long something LASTS: what they have, divided by what they use each hour.',
+      'Line 5 is not a dividing sum at all: sixteen canisters, with twelve hours in each one. Work each sum on the machine, press the TOTAL key, and drag the slip to its line.'
+    ]];
+    if (seen.card && seen.slips) return ['open', ['The adding machine is the big grey thing in the middle of the desk. It is waiting for you.']];
+    return ['look', [
+      'Mrs Halloran has pinned a card to the wall above her desk. Read it before you touch the machine.',
+      'Four slips of paper from the consoles are lying under a glass weight, in the light of the lamp. All the numbers you need are on them.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function see(k) { if (!seen[k]) { seen[k] = 1; ER.flag('d-seen', seen); } paint(); }
+  function paint() {
+    $('#calc').classList.toggle('ready', !!(seen.card && seen.slips) && !nextFile);
+    ER.pips((seen.card ? 1 : 0) + (seen.slips ? 1 : 0) + (nextFile ? 1 : 0), 3);
+    if (nextFile) { document.body.classList.add('done'); $('#go').classList.add('on'); }
+  }
+  function begin() {
+    paint();
+    if (ER.flag('d-in')) { busy = false; ER.say('Mrs Halloran&rsquo;s desk. The lamp is the only light in the room.'); return; }
+    ER.flag('d-in', 1);
+    ER.narrate([
+      'The car park under the window is full, at a quarter past ten at night. Nobody has gone home since Monday.',
+      '&ldquo;Sit,&rdquo; says Mrs Halloran. &ldquo;At eleven the CAPCOM reads the crew a list of everything they have left. Three other desks are working the same list. If four pieces of paper agree, he reads it out. If they do not, somebody is wrong, and it had better not be this desk.&rdquo;',
+      '&ldquo;The consoles have sent me their numbers. You have the machine. And remember: what you have, you round down. What you use, you round up.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things in the room ---------- */
+  $('#card3').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD, cls: 'cardp', clue: { id: 'card3', title: 'Mrs Halloran’s card: how long will it last?', kind: 'Card on the wall' }, done: function () { AP.learn('amp', 'amp-hour', 'power down'); see('card'); } });
+  });
+  $('#slips').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: SLIPS, cls: 'pencil', clue: { id: 'slips', title: 'Four slips from the consoles', kind: 'Pencil slips' }, done: function () { AP.learn('consumables', 'lithium hydroxide', 'canister'); see('slips'); } });
+  });
+  AP.thing('#win', null, 'A full car park, and a television truck with its dish pointed at the sky. On Monday morning nobody was much interested in a third landing on the Moon. Tonight the whole world is.', isBusy);
+  AP.thing('#rad', 'radiator', 'A radiator. It is warm in here. Where they are, it is getting colder by the hour.', isBusy);
+  AP.thing('#graphs', 'graph', 'A curve for each thing that three men can run out of. Every curve on the wall goes downhill.', isBusy);
+  AP.thing('#cal2', null, 'Tuesday the 14th is ringed. Wednesday the 15th says TAXES, with two exclamation marks. Even Mrs Halloran has not done hers.', isBusy);
+  AP.thing('#cab', 'filing cabinet', null, isBusy);
+  AP.thing('#spk', 'speaker', function () { return nextFile ? 'The speaker has said its numbers. They were the same as yours.' : 'A speaker on top of the filing cabinet. At eleven it will read out a list, and you will know whether your sums were right.'; }, isBusy);
+  AP.thing('#hallo', null, function () { return nextFile ? 'Mrs Halloran is already working on Wednesday.' : 'Mrs Halloran is checking somebody else&rsquo;s numbers on her slide rule. She has not looked up for ten minutes.'; }, isBusy);
+  AP.thing('#lamp', 'lamp', 'A green lamp. Everything outside its circle of light is somebody else&rsquo;s problem.', isBusy);
+  AP.thing('#mug', null, 'Tea, quite cold. In this building even the tea is three days old.', isBusy);
+  AP.thing('#srule', 'slide rule', 'Her slide rule, in its leather case. She uses the adding machine for other people&rsquo;s sums and the slide rule for her own.', isBusy);
+  AP.thing('#sheetS', null, 'The sheet for the CAPCOM. Five lines, and nearly all of them empty.', isBusy);
+  $('#calc').addEventListener('click', function (e) {
+    if (busy) return;
+    if (nextFile) { ER.say('The adding machine, with a long tail of paper. Four sums, five answers of enough or not enough, and one line that fell ' + ((ER.flag('d-ans') || {}).s || 'some') + ' hours short.'); return; }
+    if (!seen.card || !seen.slips) { ER.wordAt(e.clientX, e.clientY, 'adding machine'); ER.say(seen.card ? 'A machine will divide anything by anything. First you need numbers: the slips under the glass weight.' : 'A machine will divide anything by anything. First read the card on the wall, so that you know what to ask it.'); return; }
+    openSheet();
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; AP.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+
+  /* ---------- the adding machine and the sheet ---------- */
+  function build() {
+    var box = ER.el('div', 'cs'), s, msgEl, tray, goBtn, cur = '', a = null, op = null, last = null, tape = [], got = {}, raw = {}, yn = [0, 0, 0, 0, 0, 0], ynOk = {};
+    var KEYS = ['7', '8', '9', '÷', '4', '5', '6', '×', '1', '2', '3', '−', '0', '.', 'C', '+'];
+    s = '<div><div class="am"><div class="am-tape"></div><div class="am-reg"></div><div class="am-keys">' +
+      KEYS.map(function (k) { return '<button type="button" class="am-k' + (/[0-9.]/.test(k) ? '' : ' op') + '" data-k="' + k + '">' + k + '</button>'; }).join('') +
+      '<button type="button" class="am-k eq" data-k="=">TOTAL</button></div><div class="am-brand">ADDING MACHINE &middot; MODEL 10</div></div><div class="cs-tray"></div></div>' +
+      '<div><div class="sheet"><h5><span>AQUARIUS &middot; WHAT IS LEFT</span><span>81:46 &middot; 61 HOURS TO GO</span></h5><span class="yh">ENOUGH FOR 61 HOURS?</span>' +
+      '<div class="ln"><i>1</i><span>ELECTRICITY. 1498 amp-hours for 61 hours.<br>We can afford <span class="cs-slot open" data-p="1"></span> amps. <small>The plan is 14 amps.</small></span><span class="yn" data-g="1"></span></div>' +
+      '<div class="ln"><i>2</i><span>WATER. 215 lb for 61 hours.<br>We can afford <span class="cs-slot open" data-p="2"></span> lb an hour. <small>The plan is up to 3.2 lb an hour.</small></span><span class="yn" data-g="2"></span></div>' +
+      '<div class="ln"><i>3</i><span>OXYGEN. 44 lb, used at 0.36 lb an hour.<br>Good for <span class="cs-slot open" data-p="3"></span> hours.</span><span class="yn" data-g="3"></span></div>' +
+      '<div class="ln"><i>4</i><span>LITHIUM HYDROXIDE, Aquarius&rsquo;s own canisters.<br>Good for 44 hours.</span><span class="yn" data-g="4"></span></div>' +
+      '<div class="ln"><i>5</i><span>LITHIUM HYDROXIDE, Odyssey&rsquo;s canisters. 16, at 12 hours each.<br>Good for <span class="cs-slot open" data-p="4"></span> hours.</span><span class="yn" data-g="5"></span></div>' +
+      '<div class="ln sh"><i>!</i><span class="red">One line is short by <span class="cs-slot open" data-p="5"></span> hours.</span></div>' +
+      '<button type="button" class="btn cs-go" disabled>Give the sheet to Mrs Halloran</button></div><p class="pmsg"></p></div>';
+    box.innerHTML = s;
+    ER.$$('.yn', box).forEach(function (y) { y.innerHTML = '<button type="button" data-v="yes">YES</button><button type="button" data-v="no">NO</button>'; });
+    msgEl = box.querySelector('.pmsg'); tray = box.querySelector('.cs-tray'); goBtn = box.querySelector('.cs-go');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function fmt(v) { return String(Math.round(v * 1000) / 1000); }
+    function reg() { box.querySelector('.am-reg').innerHTML = '<small>' + (a !== null && op ? fmt(a) + ' ' + op : '') + '</small>' + (cur !== '' ? cur : (last !== null && a === null ? fmt(last) : (a !== null ? '' : '0'))); }
+    function drawTape() { box.querySelector('.am-tape').innerHTML = tape.slice(-4).map(function (t) { return '<div>' + t + '</div>'; }).join(''); }
+    function key(k) {
+      var b, r;
+      if (part === 'done') return;
+      AP.sfx.key();
+      if (/^[0-9]$/.test(k)) { if (cur.replace('.', '').length < 6) cur = (cur === '0' ? '' : cur) + k; }
+      else if (k === '.') { if (cur.indexOf('.') < 0) cur = (cur === '' ? '0' : cur) + '.'; }
+      else if (k === 'C') { cur = ''; a = null; op = null; last = null; }
+      else if (k === 'back') { cur = cur.slice(0, -1); }
+      else if (k === '=') {
+        if (a === null || !op || cur === '') { reg(); return; }
+        b = parseFloat(cur);
+        r = op === '+' ? a + b : op === '−' ? a - b : op === '×' ? a * b : (b === 0 ? NaN : a / b);
+        if (isNaN(r)) { cur = ''; a = null; op = null; last = null; msg('The machine grinds, and prints nothing. It will divide anything by anything, except by nothing.'); reg(); return; }
+        tape.push(fmt(a) + ' ' + op + ' ' + fmt(b) + ' = ' + fmt(r)); drawTape(); AP.sfx.print(); slip(a, op, b, r);
+        last = r; a = null; op = null; cur = '';
+      } else {
+        if (a !== null && op && cur !== '') key('=');            /* a second sign: finish the first sum, and go on from its answer */
+        if (cur !== '') a = parseFloat(cur); else if (last !== null && a === null) a = last;
+        if (a !== null) { op = k; cur = ''; }
+      }
+      reg();
+    }
+    function slip(x, o, y, r) {
+      var d = ER.el('div', 'sl dnd-item', '<b>' + fmt(r) + '</b><small>' + fmt(x) + ' ' + o + ' ' + fmt(y) + '</small>'), loose;
+      d.setAttribute('data-v', r); d.setAttribute('data-a', x); d.setAttribute('data-b', y); d.setAttribute('data-op', o);
+      tray.appendChild(d);
+      loose = ER.$$('.sl', tray);
+      if (loose.length > 6) tray.removeChild(loose[0]);
+      box.setAttribute('data-slips', ER.$$('.sl', box).length);
+    }
+    box.querySelector('.am-keys').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('.am-k') : null; if (b) { b.blur(); key(b.getAttribute('data-k')); } });
+    document.addEventListener('keydown', function (e) {
+      var k = e.key;
+      if (!inLock || !box.parentNode || e.ctrlKey || e.metaKey || e.altKey || document.querySelector('.ov-top.on')) return;
+      if (/^[0-9.]$/.test(k)) key(k);
+      else if (k === '+' ) key('+'); else if (k === '-') key('−'); else if (k === '*' || k === 'x' || k === 'X') key('×'); else if (k === '/') { e.preventDefault(); key('÷'); }
+      else if (k === 'Enter' || k === '=') { e.preventDefault(); key('='); }
+      else if (k === 'Backspace') key('back'); else if (k === 'Delete' || k === 'c' || k === 'C') key('C');
+    });
+    function slotOf(p) { return box.querySelector('.cs-slot[data-p="' + p + '"]'); }
+    function ready() {
+      var n, ok = true;
+      if (part === 'sums') { for (n = 1; n <= 4; n++) if (!got[n] && !slotOf(n).querySelector('.sl')) ok = false; }
+      else if (part === 'enough') { for (n = 1; n <= 5; n++) if (!yn[n]) ok = false; }
+      else if (part === 'short') ok = !!slotOf(5).querySelector('.sl');
+      goBtn.disabled = !ok;
+    }
+    ER.dnd(box, { item: '.sl.dnd-item', slot: '.cs-slot.open', home: tray, lock: function () { return part === 'enough' || part === 'done'; }, change: ready });
+    ER.$$('.yn', box).forEach(function (y) {
+      y.addEventListener('click', function (e) {
+        var b = e.target.closest ? e.target.closest('button') : null, g = +y.getAttribute('data-g'); if (!b || part !== 'enough' || ynOk[g]) return;
+        yn[g] = b.getAttribute('data-v'); ER.$$('button', y).forEach(function (o) { o.classList.toggle('on', o === b); }); ER.sfx.click(); ready();
+      });
+    });
+    /* what the sheet wants in each gap: tenths for what can be afforded, whole hours for what lasts; always rounded down */
+    function cand(p, v) { return p <= 2 ? (Math.floor(v * 10 + 1e-7) / 10).toFixed(1) : String(Math.floor(v + 1e-7)); }
+    function tens(h) { return String(Math.floor(+h / 10) * 10); }
+    function whySum(p, sl) {
+      var x = +sl.getAttribute('data-a'), y = +sl.getAttribute('data-b'), o = sl.getAttribute('data-op'), v = +sl.getAttribute('data-v');
+      if (p === 4) return o === '÷' ? 'Line 5 is not a dividing sum. Sixteen canisters, and twelve hours in each one.' : o === '+' ? 'You have added them. Sixteen canisters, and <b>each</b> one is good for twelve hours.' : 'Line 5 does not come out. Sixteen canisters, and twelve hours in each one.';
+      if (o !== '÷') return 'Line ' + p + ' is a dividing sum. Read my card again: what you have, divided by something.';
+      if (v < 1 && x < y) return 'Line ' + p + ' is upside down. You have divided the small number by the big one. What they <b>have</b> goes into the machine first.';
+      if (p === 1 && x === 1498 && y === 14) return 'That is how long the batteries would last at 14 amps. It is good news, and it is not what line 1 asks. What can they <b>afford</b>? Divide by the hours.';
+      if (p === 2 && x === 215 && (y === 3.2 || y === 2.7)) return 'That is how many hours the water will last at that rate. Line 2 asks the other sum: what can they <b>afford</b> to use each hour?';
+      if (p === 3 && x === 44 && y === 61) return 'That is what they could afford to breathe. But we know what they breathe: 0.36 lb an hour. How long will 44 lb <b>last</b> at that rate?';
+      return 'Line ' + p + ' does not come out. Check which two numbers the line asks for, and which of my two sums it wants.';
+    }
+    goBtn.addEventListener('click', function () {
+      var wrong = [], first = '', n, sl, v, file, fresh = [];
+      if (part === 'sums') {
+        for (n = 1; n <= 4; n++) {
+          if (got[n]) continue;
+          sl = slotOf(n).querySelector('.sl'); v = +sl.getAttribute('data-v');
+          if (ER.check('p' + n, cand(n, v))) { got[n] = cand(n, v); raw[n] = v; fresh.push(n); slotOf(n).classList.remove('open'); slotOf(n).classList.add('ok'); slotOf(n).textContent = n === 3 ? tens(got[n]) : got[n]; }
+          else { wrong.push(n); if (!first) first = whySum(n, sl); tray.appendChild(sl); }
+        }
+        box.setAttribute('data-ok', Object.keys(got).length);
+        if (wrong.length) {
+          AP.slip(); ER.sfx.no(); ready();
+          msg('Mrs Halloran works it on her slide rule in about four seconds. &ldquo;' + first + '&rdquo;' + (wrong.length > 1 ? ' She hands back ' + (wrong.length === 2 ? 'one more slip' : (wrong.length - 1) + ' more slips') + ' too.' : '') + ' What is right, she writes in.');
+          return;
+        }
+        part = 'enough'; ER.sfx.ok(); box.classList.add('stB'); ready();
+        msg('&ldquo;The machine says ' + fmt(raw[1]) + ', and I say ' + got[1] + ': what you can afford, you round <b>down</b>. And ' + got[3] + ' hours of oxygen we shall call ' + tens(got[3]) + '.&rdquo; She writes the four numbers in. &ldquo;Now the question that matters. For each of the five lines: is it enough for 61 hours? Yes or no.&rdquo;');
+        return;
+      }
+      if (part === 'enough') {
+        for (n = 1; n <= 5; n++) {
+          if (ynOk[n]) continue;
+          if (ER.check('g' + n, yn[n])) { ynOk[n] = 1; box.querySelector('.yn[data-g="' + n + '"]').classList.add('ok'); if (yn[n] === 'no') box.querySelector('.yn[data-g="' + n + '"]').classList.add('bad'); }
+          else {
+            wrong.push(n);
+            if (!first) first = ['', 'The plan is 14 amps, and they can afford ' + got[1] + '. That is enough, with room to spare.', 'The plan is 3.2 at the most, and they can afford ' + got[2] + '. It is close, and close is still enough. Do not frighten three tired men with a sum that came out right.',
+              tens(got[3]) + ' hours, and they need 61. They could breathe it nearly twice.', 'Forty-four hours, and sixty-one to go. Read line 4 again, slowly.', got[4] + ' hours is three times what they need. On paper, that is enough.'][n];
+            yn[n] = 0; ER.$$('button', box.querySelector('.yn[data-g="' + n + '"]')).forEach(function (o) { o.classList.remove('on'); });
+          }
+        }
+        if (wrong.length) { AP.slip(); ER.sfx.no(); ready(); msg('&ldquo;' + first + '&rdquo;' + (wrong.length > 1 ? ' She rubs out ' + (wrong.length === 2 ? 'one more answer' : (wrong.length - 1) + ' more answers') + ' as well.' : '')); return; }
+        part = 'short'; ER.sfx.ok(); box.classList.add('stC'); ready();
+        msg('&ldquo;Four lines reach Friday,&rdquo; says Mrs Halloran. &ldquo;One does not. By how much?&rdquo; She draws a new line at the bottom of the sheet, in red.');
+        return;
+      }
+      if (part !== 'short') return;
+      sl = slotOf(5).querySelector('.sl'); v = +sl.getAttribute('data-v');
+      if (ER.check('p5', cand(5, v))) {
+        file = ER.exitOk([[got[1], got[2], got[3], got[4]].join('|') + '|' + [1, 2, 3, 4, 5].map(function (n) { return yn[n]; }).join('-') + '|' + cand(5, v)]);
+        if (!file) { msg('Mrs Halloran turns the sheet over, and nothing happens. Something is wrong: tell your teacher.'); return; }
+        part = 'done'; slotOf(5).classList.remove('open'); slotOf(5).classList.add('ok'); slotOf(5).textContent = cand(5, v);
+        nextFile = file; ER.flag('d-file', file); ER.flag('d-ans', { a: got, yn: yn.slice(1), s: cand(5, v) });
+        var st = ER.state(); st.done = st.done || {}; st.done.desk = 1; ER.flag('d-out', 1);
+        ER.sfx.ok(); goBtn.style.display = 'none'; msg('&ldquo;' + cand(5, v) + ' hours short,&rdquo; says Mrs Halloran. She underlines it twice.');
+        setTimeout(function () { ER.closeAll(); after(); }, 2400);
+        return;
+      }
+      AP.slip(); ER.sfx.no(); tray.appendChild(sl); ready();
+      msg(sl.getAttribute('data-op') === '+' ? '&ldquo;You have added. I asked how much <b>less</b> forty-four is than sixty-one.&rdquo;' : '&ldquo;No. The hours they need, less the hours that those canisters have left in them.&rdquo;');
+    });
+    reg(); drawTape();
+    msg('The machine has keys for the four sums and a red key marked TOTAL. Work a sum (your own keyboard will do it too), press TOTAL, and a slip comes off the tape. Drag the slip to the gap where it belongs. Nothing is judged until the four gaps are full.');
+    return box;
+  }
+  function openSheet() {
+    if (!csBox) csBox = build();
+    inLock = true;
+    ER.open('ov-lock', csBox, function () { inLock = false; });
+  }
+  function after() {
+    var ans = ER.flag('d-ans') || { a: {}, yn: [], s: '' }, oxy = String(Math.floor(+ans.a[3] / 10) * 10);
+    function V(i) { return ans.yn[i] === 'yes' ? 'Enough.' : 'Not enough.'; }
+    busy = true; paint(); AP.learn('carbon dioxide');
+    AP.mine('sheet', 'Aquarius: what is left', '<p>Tuesday night, 61 hours to go.</p><p><b>Electricity:</b> they can afford ' + ans.a[1] + ' amps. The plan is 14. ' + V(0) + '</p><p><b>Water:</b> they can afford ' + ans.a[2] + ' lb an hour. The plan is up to 3.2. ' + V(1) + '</p>' +
+      '<p><b>Oxygen:</b> ' + oxy + ' hours. ' + V(2) + '</p><p><b>Lithium hydroxide, Aquarius&rsquo;s own canisters:</b> 44 hours. ' + V(3) + ' <b>' + ans.s + ' hours short.</b></p><p><b>Lithium hydroxide, Odyssey&rsquo;s canisters:</b> ' + ans.a[4] + ' hours. ' + V(4) + ' But they are square.</p>', true);
+    ER.narrate([
+      '&ldquo;Everybody in this building is afraid that those men will run out of air to breathe,&rdquo; says Mrs Halloran. &ldquo;They will not. There is oxygen for ' + oxy + ' hours. What they will run out of is a way to get rid of what they breathe <em>out</em>.&rdquo;',
+      '&ldquo;Carbon dioxide. A canister of lithium hydroxide takes it out of the air, until the canister is full. Aquarius has 44 hours of canisters. Odyssey has ' + ans.a[4] + ' hours of them, sitting in the dark and doing nothing.&rdquo;',
+      'She takes your pencil and draws a square. Beside it she draws a circle. &ldquo;Odyssey&rsquo;s canisters are square. The holes for them in Aquarius are round.&rdquo;',
+      'At one minute to eleven the speaker on the filing cabinet clicks. It is tonight&rsquo;s CAPCOM, Vance Brand, with the list.'
+    ], function () {
+      AP.sfx.squawk();
+      ER.narrate([
+        AP.said('Houston', 'In the LM, you have 1498 - that is 1 4 9 8 amp-hours remaining. That means over 61 hours you&rsquo;d - That would average out to 24.5 amps.'),
+        AP.said('Houston', 'In the LM, you have 215, that is 2 1 5, pounds of water, usable. That would average out over 61 hours to 3.5 pounds per hour available.'),
+        AP.said('Houston', 'Using the CSM cans, you will have 16 cans at 12 hours per can to give you 19 2, or 192 hours, of LiOH. And, in the LM, using its cans, you have 44 hours remaining.'),
+        'Four desks, four pieces of paper, one answer. Mrs Halloran does not smile. She puts a small tick beside your first line, and from her that is a good deal more than a smile.',
+        '&ldquo;The Crew Systems people have had those square canisters since this morning,&rdquo; she says. &ldquo;They are building something out of what is on board. When it works, it has to be put into words. Then somebody who has never seen it has to try the words. Building 7, co-op. Before it gets light.&rdquo;'
+      ], function () {
+        AP.mine('readup', 'Heard on the speaker, Tuesday night', '<p>22:59, Houston to the crew:</p><p><span class="said">&ldquo;In the LM, you have 1498 - that is 1 4 9 8 amp-hours remaining. That means over 61 hours you&rsquo;d - That would average out to 24.5 amps.&rdquo;</span></p>' +
+          '<p><span class="said">&ldquo;Using the CSM cans, you will have 16 cans at 12 hours per can to give you 19 2, or 192 hours, of LiOH. And, in the LM, using its cans, you have 44 hours remaining.&rdquo;</span></p><p>(CSM = Odyssey and her service module. LiOH = lithium hydroxide.)</p>', true);
+        busy = false; paint();
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

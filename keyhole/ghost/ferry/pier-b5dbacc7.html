@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Old Pier · When the Tide Serves</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ferry.css">
+<style>
+  body{--bg:#0b1626;--accent:#ffd98a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(10,20,34,.95);--tc-ink:#eef0e6;--cap-bg:rgba(10,20,34,.94);--panel:#12213a;--face-bg:#1a2630;--q-ink:#ffd98a;--fade:#050b14;--hud-bg:rgba(9,18,30,.76)}
+  .tc-room{font-size:clamp(44px,6.4vw,88px)}
+  .star{animation:tw 4.6s ease-in-out infinite}
+  .star.s2{animation-delay:-1.700s}.star.s3{animation-delay:-3.100s}
+  @keyframes tw{50%{opacity:.25}}
+  .rag{animation:rag 38s steps(48,end) infinite}
+  .rag.r2{animation-duration:52s;animation-direction:reverse}
+  @keyframes rag{0%{transform:translateX(-140px)}50%{transform:translateX(140px)}100%{transform:translateX(-140px)}}
+  #pglow{animation:pg 4.8s steps(1,end) infinite}
+  @keyframes pg{0%{opacity:1}58%{opacity:.88}61%{opacity:1}}
+  #nancy.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.3)}}
+  #wet,#e-pier{display:none}
+  #scene.gone #ghost,#scene.gone #e-deck{display:none}
+  #scene.gone #wet,#scene.gone #e-pier{display:block}
+
+  /* what goes in the log */
+  .cd{width:min(860px,94vw);display:grid;grid-template-columns:230px 1fr;background:#f3ecd6;color:#2a2218;box-shadow:0 26px 70px rgba(0,0,0,.6);border-left:22px solid #141a1c}
+  .cd .face{background:#0b1416;display:grid;align-items:end}
+  .cd .face svg{display:block;width:100%;height:auto}
+  .cd .say{padding:20px 26px 18px}
+  .cd h5{margin:0 0 2px;font-family:'Abril Fatface',serif;font-weight:normal;font-size:23px}
+  .cd h6{margin:0 0 10px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#8c2f24}
+  .cd p{margin:0 0 12px;font-family:'EB Garamond',serif;font-size:20px;line-height:1.4}
+  .cd .opt{display:block;width:100%;margin:0 0 8px;padding:8px 14px 5px;border:0;border-bottom:2px solid #8a7a55;text-align:left;font-family:'Caveat',cursive;font-size:26px;line-height:1.16;color:#30343a;background:rgba(255,255,255,.4)}
+  .cd .opt:hover{background:#fffbe9;border-bottom-color:#8c2f24}
+  .cd .back{min-height:78px;margin:10px 0 0;font-size:18.5px;font-style:italic;color:#4a4436}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#081220"/><stop offset=".6" stop-color="#16293f"/><stop offset="1" stop-color="#2c4558"/></linearGradient>
+  <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a3147"/><stop offset="1" stop-color="#08121c"/></linearGradient>
+  <linearGradient id="stoneG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34424a"/><stop offset="1" stop-color="#1a242a"/></linearGradient>
+  <radialGradient id="moonG"><stop offset="0" stop-color="#f4f1e0" stop-opacity=".6"/><stop offset=".3" stop-color="#cfd8dc" stop-opacity=".16"/><stop offset="1" stop-color="#cfd8dc" stop-opacity="0"/></radialGradient>
+  <radialGradient id="warmG"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".95"/><stop offset=".25" stop-color="#ffc46a" stop-opacity=".4"/><stop offset="1" stop-color="#f3a55a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="ragG"><stop offset="0" stop-color="#d6e2e6" stop-opacity=".26"/><stop offset=".6" stop-color="#d6e2e6" stop-opacity=".1"/><stop offset="1" stop-color="#d6e2e6" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="48%" r="80%"><stop offset="0" stop-color="#02060c" stop-opacity="0"/><stop offset=".65" stop-color="#02060c" stop-opacity=".26"/><stop offset="1" stop-color="#02060c" stop-opacity=".85"/></radialGradient>
+</defs>
+
+<!-- the sky clearing: stars, and a moon that was there all the time -->
+<rect x="-1000" y="-400" width="3600" height="840" fill="url(#skyG)"/>
+<g id="stars" fill="#eef4f8"></g>
+<g id="moon" class="hot"><circle cx="300" cy="150" r="190" fill="url(#moonG)"/><circle cx="300" cy="150" r="46" fill="#f4f1e0"/><path d="M300 104a46 46 0 0 0 0 92a37 46 0 0 1 0 -92z" fill="#101d30" opacity=".85"/><g fill="#d9d6c4" opacity=".7"><circle cx="312" cy="136" r="9"/><circle cx="322" cy="166" r="6"/><circle cx="296" cy="172" r="4.500"/></g></g>
+
+<!-- Marram: the hill, Harbour Row, and a mile along the shore the New Slip -->
+<path d="M-1000 440V404Q-300 336 260 388T900 352Q1220 300 1520 342T2600 384V440Z" fill="#0b1620"/>
+<g id="row" class="hot"></g>
+<g id="slip" class="hot"><rect x="96" y="398" width="170" height="40" fill="#fff" opacity="0"/><g fill="#ffd98a"><circle cx="130" cy="420" r="3.500"/><circle cx="162" cy="418" r="3"/><circle cx="196" cy="421" r="3.500"/><circle cx="226" cy="419" r="2.500"/></g></g>
+
+<!-- the water, with the moon on it; the last of the fog -->
+<rect x="-1000" y="436" width="3600" height="900" fill="url(#seaG)"/>
+<g id="glit" stroke="#f4f1e0" stroke-linecap="round"></g>
+<g stroke="#ffd98a" stroke-linecap="round" opacity=".35"><path d="M124 446h14M156 452h18M190 446h12M148 462h26" stroke-width="3"/></g>
+<g pointer-events="none"><ellipse class="rag" cx="230" cy="478" rx="480" ry="34" fill="url(#ragG)"/><ellipse class="rag r2" cx="1260" cy="668" rx="560" ry="40" fill="url(#ragG)"/><ellipse class="rag" cx="420" cy="700" rx="460" ry="34" fill="url(#ragG)" opacity=".7"/></g>
+
+<!-- the Old Pier -->
+<path d="M640 500H2600V544H640Z" fill="#5a6a72"/><path d="M640 544H2600V640H640Z" fill="url(#stoneG)"/><path d="M640 612H2600V640H640Z" fill="#23402c"/>
+<g id="blocks" stroke="#121a1f" stroke-width="2" opacity=".8"></g>
+<path d="M640 500V640H560V620H580V596H600V572H620V548H640" fill="#2a363c"/><path d="M560 620H580V596H600V572H620V548H640V500" fill="none" stroke="#5a6a72" stroke-width="3"/>
+<g id="tide" class="hot"><rect x="640" y="508" width="34" height="132" fill="#0c1216"/><g stroke="#f1ede2" stroke-width="2.500"><path d="M644 528h14M644 548h8M644 568h14M644 588h8M644 608h14"/></g>
+  <text x="662" y="573" class="fO" font-size="12" font-weight="600" fill="#f1ede2">2</text><text x="656" y="604" class="fO" font-size="12" font-weight="600" fill="#ffd98a">1.5</text><path d="M560 640H700" stroke="#9fb8c4" stroke-width="3" opacity=".7"/></g>
+<circle id="pglow" cx="800" cy="330" r="230" fill="url(#warmG)" pointer-events="none"/>
+<g id="lampp" class="hot"><path d="M770 500V300q0 -18 18 -18h14" stroke="#141a1c" stroke-width="8" fill="none"/><path d="M800 282v16" stroke="#141a1c" stroke-width="3"/><rect x="788" y="298" width="24" height="34" rx="4" fill="#2a2f33"/><rect x="792" y="304" width="16" height="22" fill="#ffe9b0"/><path d="M790 298q10 -12 20 0" fill="none" stroke="#2a2f33" stroke-width="4"/></g>
+<g id="man" class="hot" transform="translate(1000 500) scale(.6)"></g>
+<g id="nancy" class="hot" transform="translate(900 500) scale(.66)"></g>
+<g id="e-pier" class="hot" transform="translate(826 500) scale(.58)"></g>
+
+<!-- the gangway, and the after deck of the Curlew -->
+<path d="M668 800L800 800L756 562L700 562Z" fill="#6b5a3a"/><g stroke="#4a3d26" stroke-width="3"><path d="M672 780h124M678 750h112M684 720h100M688 690h90M692 660h80M696 630h70M699 600h62"/></g>
+<path d="M668 800V740L700 520V562M800 800V740L756 520V562" stroke="#b9ad8c" stroke-width="4" fill="none"/>
+<rect x="-1000" y="800" width="3600" height="500" fill="#161d1f"/><path d="M-1000 800H2600" stroke="#2c3638" stroke-width="5"/>
+<ellipse id="wet" cx="592" cy="872" rx="62" ry="10" fill="#6f8a96" opacity=".4"/>
+<g id="rudge" class="hot" transform="translate(250 884) scale(1.120)"></g>
+<g id="ghost" class="hot" transform="translate(592 880) scale(1.100)"></g>
+<g id="e-deck" class="hot" transform="translate(900 884) scale(1.100)"></g>
+<g id="prowse" class="hot" transform="translate(1110 886) scale(1.120)"></g>
+<g id="purser" class="hot" transform="translate(1370 890) scale(1.160)"></g>
+<g id="posy" class="hot" transform="translate(1530 888) scale(.7)"></g>
+<g id="rail" pointer-events="none" stroke="#e6dcc0" fill="none" stroke-linecap="round"><path d="M-1000 730H660M808 730H2600M-1000 766H660M808 766H2600" stroke-width="5"/><path d="M60 800V730M200 800V730M340 800V730M480 800V730M660 800V722M808 800V722M990 800V730M1130 800V730M1270 800V730M1410 800V730M1550 800V730" stroke-width="4"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">MADE FAST 22.45</div>
+  <h6>When the Tide Serves</h6>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <p class="last">In the log of the <i>Curlew</i>: &ldquo;Landed two passengers at Marram Old Pier, 22.45: Miss E. Coombes, and Miss E. Coombes. One fare paid, 1953.&rdquo;</p>
+  <div class="row"><button type="button" class="btn" id="b-task">Twelve words</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the stories</button></div>
+  <small>When the Tide Serves &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="ferry.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, coda = null, told = {};
+
+  (function () {
+    var s = '', i, x;
+    for (i = 0; i < 46; i++) s += '<circle class="star' + (i % 3 === 1 ? ' s2' : i % 3 === 2 ? ' s3' : '') + '" cx="' + ((i * 397) % 2200 - 300) + '" cy="' + (10 + (i * 131) % 300) + '" r="' + (1 + (i % 3) * 0.6) + '"/>';
+    $('#stars').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) {
+      x = 1150 + i * 58;
+      s += '<path d="M' + x + ' 372v-26l24 -16 24 16v26z" fill="#0f1c26"/><rect x="' + (x + 30) + '" y="324" width="8" height="14" fill="#0f1c26"/>' + (i === 5 ? '<rect x="' + (x + 14) + '" y="350" width="12" height="12" fill="#ffd98a"/><rect x="' + (x + 32) + '" y="350" width="9" height="12" fill="#ffc46a" opacity=".6"/>' : '<rect x="' + (x + 16) + '" y="352" width="9" height="9" fill="#16293f"/>');
+    }
+    s += '<rect x="1140" y="318" width="370" height="60" fill="#fff" opacity="0"/>';
+    $('#row').innerHTML = s; s = '';
+    for (i = 0; i < 22; i++) s += '<path d="M' + (300 - 60 + (i * 53) % 120 - i * 2) + ' ' + (446 + i * 9) + 'h' + (16 + (i * 7) % 30) + '" stroke-width="' + (2 + (i % 3)) + '" opacity="' + (0.6 - i * 0.022).toFixed(2) + '"/>';
+    $('#glit').innerHTML = s; s = '';
+    for (i = 0; i < 20; i++) s += '<path d="M' + (700 + i * 96) + ' 544v34M' + (748 + i * 96) + ' 578v34"/>';
+    s += '<path d="M640 578H2600"/>';
+    $('#blocks').innerHTML = s;
+    $('#nancy').innerHTML = FY.sit({ skin: '#ecd2bd', hair: '#f1f3f3', style: 'bun', coat: '#4a5f6a', legs: '#3a3026', lap: '#7d2f3a', collar: '#7d2f3a', hold: true,
+      under: '<circle cx="-34" cy="-46" r="46" fill="none" stroke="#8f959a" stroke-width="7"/><circle cx="-34" cy="-46" r="8" fill="#8f959a"/><circle cx="40" cy="-14" r="14" fill="none" stroke="#8f959a" stroke-width="5"/><path d="M-46 -98V-216h-22" stroke="#2a2f33" stroke-width="8" fill="none" stroke-linecap="round"/><rect x="-44" y="-104" width="80" height="12" fill="#2a2f33"/>',
+      extra: '<path d="M-36 -108h72l6 62h-84z" fill="#7d2f3a"/><path d="M-34 -92h70M-37 -70h76" stroke="#e9c46a" stroke-width="2" opacity=".7"/>' });
+    $('#man').innerHTML = FY.who('man', {});
+    $('#e-pier').innerHTML = FY.who('elsie', { extra: '<rect x="34" y="-60" width="44" height="56" rx="4" fill="#6b4a2a"/><path d="M34 -42h44" stroke="#3a2414" stroke-width="3"/>' });
+    $('#rudge').innerHTML = FY.who('dougie', { back: true, hat: null, extra: '<path d="M-58 -112q14 -12 30 -2q-14 8 -30 2z" fill="#5a5a4a"/>' });
+    $('#ghost').innerHTML = FY.who('elsie', { back: true, shadow: 0.12 });
+    $('#e-deck').innerHTML = FY.who('elsie', { back: true, extra: '<rect x="46" y="-66" width="50" height="62" rx="4" fill="#6b4a2a"/><path d="M46 -44h50" stroke="#3a2414" stroke-width="3"/><path d="M60 -66q11 -14 22 0" fill="none" stroke="#3a2414" stroke-width="4"/>' });
+    $('#prowse').innerHTML = FY.who('lionel', { back: true, extra: '<rect x="38" y="-116" width="26" height="36" rx="3" fill="#2a2f33"/><rect x="42" y="-110" width="18" height="24" fill="#4a4f53"/>' });
+    $('#purser').innerHTML = FY.who('purser', { hold: true, extra: '<rect x="-16" y="-170" width="32" height="24" rx="6" fill="#c9ced3"/><rect x="-10" y="-165" width="20" height="14" fill="#10151a"/>' });
+    $('#posy').innerHTML = FY.who('posy', {});
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'ferry', storyTitle: 'When the Tide Serves', id: 'pier', no: 'V', title: 'The Old Pier',
+    go: 'Go to the rail',
+    intro: [
+      'The two pages of the log came out side by side. In 1953 the <i>Curlew</i> came up to the Old Pier at ten o&rsquo;clock with one foot of water where she needed five: she lay off for her thirty minutes, and was back at Lantern Quay at a quarter past eleven. Tonight she comes up at 22.25, the tide board shows a metre and a half at 22.45, and twenty minutes is not more than thirty.',
+      'So the skipper has not taken her to the New Slip. For twenty minutes she has lain off in the fog with her engine muttering, sounding two long blasts every two minutes, with a small yellow light swinging somewhere ahead of her.',
+      'It is a quarter to eleven.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"log":["a365b48d"]},
+    sound: ['hush', { scale: [0, 2, 4, 5, 7, 9, 11], root: 48, bpm: 56, drop: ['bass'], beds: [['sea', 0.6]] }],      /* the same slow tune, in a major key at last */
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('p-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('p-told', told); return true; }
+  function paint() {
+    $('#scene').classList.toggle('gone', !!told.nancy);
+    $('#nancy').classList.toggle('ready', !told.nancy);
+    ER.pips((told.nancy ? 1 : 0) + (ER.flag('p-done') ? 1 : 0), 2);
+  }
+  function hints() {
+    if (ER.flag('p-done')) return null;
+    if (coda && coda.parentNode) return ['coda', [
+      'A ship&rsquo;s log says what the ship did: where, when, and how many. It does not guess, and it does not hide things.',
+      'One of the three is true in every word, and says only what was done: who was landed, where, and at what time.'
+    ]];
+    if (!told.nancy) return ['nancy', [
+      'You have the form in your hand, and the person it was written to is on the pier. Take it to her.',
+      'Click the old woman in the wheelchair, under the lamp on the pier.'
+    ]];
+    return ['skipper', ['The skipper is calling down from the wheelhouse. Wait for him.']];
+  }
+
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    paint();
+    if (ER.flag('p-done')) { busy = false; finish(true); return; }
+    if (told.nancy) { busy = false; ask(); return; }
+    if (told.in) { busy = false; ER.say('The Old Pier, at a quarter to eleven.'); return; }
+    tell('in');
+    ER.narrate([
+      'The fog is lifting off the water in rags. Above it there is a moon, very nearly full, which has been there all the time.',
+      'And there is the Old Pier: black stone, green weed, and a tide board on the steps with the water standing at 1.5 exactly. The <i>Curlew</i> comes alongside it as if she had done so yesterday.',
+      'On the pier, under a storm lamp that somebody has hung on the old post, a very old woman is sitting in a wheelchair with a rug over her knees. A man in a woolly hat stands behind her, looking at the boat as if it were a whale.',
+      'Nobody on the after deck moves. Then Miss Coombes, the one with the suitcase, says: &ldquo;Gran?&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- Nancy ---------- */
+  $('#nancy').addEventListener('click', function () {
+    if (busy) return;
+    if (told.nancy) { ER.say(ER.flag('p-done') ? 'She has the form folded in one hand and four brown pennies in the other. She is not going to let go of either.' : 'She is still holding the form up to the lamp.'); return; }
+    ER.talk({
+      who: 'Mrs Coombes', role: 'Harbour Row, Marram · ninety-seven', face: window.FACE('nancy'),
+      lines: [
+        { note: 'You go down the gangway with the form, and put it into her hands. She holds it up to the lamp. It is only twelve words, and she reads them for a long time.', a: '&ldquo;Cannot land. Ring safe. Coming Monday. Wait. Elsie.&rdquo;' },
+        { note: 'She turns the form over, as if there might be more on the back.', a: '&ldquo;She told me that she had sent it. On my wedding day, in my own kitchen, with the cake not cut. I said that no wire had come. I said a good deal more than that, and so did she. Then she put the ring on the table and went for the boat, and neither of us would be the first to say sorry. That was forty-five years.&rdquo;' },
+        { q: 'She gave it to the purser. It slipped down behind the box.', a: 'Behind the box.</p><p>She laughs, once, and stops.</p><p>&ldquo;Seventy-three years I have said that she never sent me word. And here it is, in her own hand, telling me to wait.&rdquo;' },
+        { q: 'You did wait.', a: 'I did, didn&rsquo;t I? I have met the last boat on this Saturday every year since. I came down here even when the boats stopped coming. I never could have told you what I thought would happen.' },
+        { note: 'She looks past you, up at the after deck, at the head of the gangway. She looks for some time.', a: '&ldquo;You are late, Elsie,&rdquo; she says. &ldquo;Come home.&rdquo;' }
+      ],
+      clue: { id: 'nancy', title: 'Mrs Nancy Coombes, on the Old Pier', kind: 'What she said' },
+      done: function (seen) {
+        if (!seen || !tell('nancy')) return;
+        paint(); busy = true;
+        ER.narrate([
+          'You turn round. Mr Rudge is at the rail with his cap in his hand. Mr Prowse has put out his lantern. At the head of the gangway there is nobody: only the rail, and a wet place on the deck where somebody has stood for a long time.',
+          'Then Miss Coombes, the one with the suitcase, goes down the gangway to her great-grandmother, slowly, like somebody walking into a room where people have been talking about her.',
+          'Ms Pargeter goes round the deck and through the saloon with her counter. She does it twice. &ldquo;Seven aboard,&rdquo; she says, &ldquo;and one ashore, with her label on. Eight.&rdquo; She looks at the counter as if it had paid her a compliment.',
+          'A window slides open above you. Captain Skerritt has the log open on the sill, and a pencil.'
+        ], function () { busy = false; ask(); });
+      }
+    });
+  });
+
+  /* ---------- people and things ---------- */
+  function say(sel, word, fn) { $(sel).addEventListener('click', function (e) { if (busy) return; if (word) ER.wordAt(e.clientX, e.clientY, word); ER.say(fn()); }); }
+  say('#ghost', null, function () { return 'She is standing at the head of the gangway with the parcel in both hands. She is looking at the lamp.'; });
+  say('#e-deck', null, function () { return '&ldquo;Gran?&rdquo; says Miss Coombes again. &ldquo;What are we doing here? The boat does not come here.&rdquo;'; });
+  say('#e-pier', null, function () { return '&ldquo;She had a sister called Elsie,&rdquo; says Miss Coombes slowly. &ldquo;I am called Elsie. Nobody ever told me that those were the same fact.&rdquo;'; });
+  say('#rudge', null, function () {
+    return told.nancy ? '&ldquo;I was the boy on the gangway that Monday in fifty-three,&rdquo; says Mr Rudge. &ldquo;She came ashore at a quarter past twelve with the ring in her fist, and she went back at a quarter to one without her coat. I have wondered about it for seventy-three years.&rdquo;' :
+      'Mr Rudge has turned right round. He is looking at the head of the gangway for the first time tonight, and he has taken off his cap.';
+  });
+  say('#prowse', null, function () { return told.nancy ? 'Mr Prowse has switched off his lantern. &ldquo;I shall have to do the tour differently,&rdquo; he says, to nobody.' : 'Mr Prowse has lowered his lantern. For once the Keeper of the Lamp is looking at somebody else&rsquo;s.'; });
+  say('#purser', null, function () {
+    return ER.flag('p-done') ? '&ldquo;Eight,&rdquo; says Ms Pargeter. She has said it several times now. She seems to like the sound of it.' :
+      told.nancy ? '&ldquo;Seven aboard and one ashore,&rdquo; says Ms Pargeter. &ldquo;Eight. I shall count them again at the Slip, all the same.&rdquo;' :
+      '&ldquo;The form, Trainee,&rdquo; says Ms Pargeter quietly. &ldquo;It was handed to the purser of this boat, to be sent. I am the purser of this boat. Take it down to her.&rdquo;';
+  });
+  say('#posy', null, function () { return told.nancy ? '&ldquo;The other lady has gone home,&rdquo; says Posy Brimble, from the saloon door. Nobody tells her that she is wrong.' : '&ldquo;Why have we stopped at the wrong place?&rdquo; says Posy Brimble, from the saloon door. &ldquo;Is it the right place?&rdquo;'; });
+  say('#man', null, function () { return 'Her grandson: the father of the bride. He has pushed that chair down Harbour Row on this Saturday for nineteen years, and he has never once asked why.'; });
+  say('#tide', 'tide board', function () { return 'The tide board on the pier steps: white figures on black. The water stands at 1.5 exactly, and it is still climbing.'; });
+  say('#moon', null, function () { return 'The moon, very nearly full. It has been up there behind the fog all evening, pulling the tide in.'; });
+  say('#row', null, function () { return 'Harbour Row: six cottages above the Old Pier. There is a light in the end one.'; });
+  say('#slip', null, function () { return 'A mile along the shore, the lights of the New Slip, where nobody at all is waiting.'; });
+  say('#lampp', 'storm lamp', function () { return 'A storm lamp, hung on the old lamp post. It has been lit on this one Saturday in every October since 1953. For most of those years it was the only light on the pier.'; });
+
+  /* ---------- what goes in the log ---------- */
+  function ask() {
+    if (ER.flag('p-done') || busy) return;
+    if (!coda) {
+      coda = ER.el('div', 'cd');
+      coda.innerHTML = '<div class="face">' + window.FACE('skerritt') + '</div><div class="say"><h5>Captain Skerritt</h5><h6>at the wheelhouse window, with the log</h6>' +
+        '<p>&ldquo;Trainee. You did the sum. What do I put?&rdquo;</p>' +
+        '<button type="button" class="opt" data-v="1">Counted nine at Lantern Quay. Miscount.</button>' +
+        '<button type="button" class="opt" data-v="2">Landed two passengers at Marram Old Pier, 22.45: Miss E. Coombes, and Miss E. Coombes. One fare paid, 1953.</button>' +
+        '<button type="button" class="opt" data-v="3">Carried a ghost to Marram.</button><p class="back"></p></div>';
+      ER.$$('.opt', coda).forEach(function (b) {
+        b.addEventListener('click', function () {
+          var v = b.getAttribute('data-v'), back = coda.querySelector('.back');
+          if (ER.flag('p-done')) return;
+          if (!ER.check('log', v)) {
+            ER.sfx.no(); ER.shake(b);
+            back.innerHTML = ER.gloss(v === '1' ? '&ldquo;That is what my father wrote, and what I wrote after him,&rdquo; says the skipper. &ldquo;It was the only word that the form had room for. A log has room. Try again.&rdquo;' :
+              '&ldquo;A log says what the ship did, Trainee,&rdquo; says the skipper. &ldquo;It does not say what her master thinks he carried. What did the ship do?&rdquo;');
+            return;
+          }
+          FY.solved(true); ER.closeAll(); busy = true;
+          ER.narrate([
+            'He writes it in pencil, in a hand very like his grandfather&rsquo;s: <i>Landed two passengers at Marram Old Pier, 22.45: Miss E. Coombes, and Miss E. Coombes. One fare paid, 1953.</i> Then he signs it.',
+            'On the pier the old woman has taken the other Elsie by the wrist, and is looking at the cuff of the raincoat. &ldquo;On Monday you shall have the gold one,&rdquo; she says. &ldquo;It was a day late for my wedding. It can be in time for yours.&rdquo;',
+            'Ms Pargeter comes down the gangway with four large brown pennies in her hand. &ldquo;These are yours, I think, Mrs Coombes. Your sister paid for her tea.&rdquo;</p><p>&ldquo;Fourpence,&rdquo; says the old woman. &ldquo;It was threepence at Easter.&rdquo;',
+            'Then the <i>Curlew</i> sounds one long blast and backs away from the Old Pier for the New Slip, with seven passengers and a cello. The lamp on the post is still burning. The tide is still coming in.'
+          ], function () { busy = false; FY.sfx.horn(0.8); ER.flag('p-done', 1); finish(false); });
+        });
+      });
+    }
+    ER.open('ov-lock', coda);
+  }
+
+  /* ---------- the end ---------- */
+  function finish(quick) {
+    var st = ER.state(), mins = FY.minutesPlayed(), hn = ER.hintsUsed();
+    paint();
+    $('#d-time').textContent = 'From Lantern Quay to the Old Pier: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+    if (quick) ER.say('The Old Pier, after the boat has gone. The lamp is still burning.');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>When the Tide Serves &middot; in your own words</h4><h3>Twelve words</h3>' +
+      '<p>On Monday 26 October 1953 no telegram came to Harbour Row. Suppose that it had. Write the telegram that Nancy sends back to her sister. A telegram cost one shilling and sixpence for twelve words, the address was counted, and Nancy was careful with money: use twelve words exactly.</p>' +
+      '<p>The address is written for you: that is four words. Write eight more, and let the last one be NANCY.</p><p class="addr">ELSIE COOMBES LANTERN QUAY</p>' +
+      '<textarea id="r1"></textarea><div class="count" id="c1"></div>' +
+      '<p>Then, in 60 to 90 words, tell a friend why the two sisters did not speak for forty-five years. Use <i>because</i>, <i>so</i> and <i>although</i>.</p>' +
+      '<textarea id="r2"></textarea><div class="count" id="c2"></div><label for="r3">Name</label><input type="text" id="r3" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || ''; box.querySelector('#r3').value = saved.r3 || '';
+    function words(t) { return (t.match(/[A-Za-z’']+/g) || []).length; }
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value, r3: box.querySelector('#r3').value }, n = words(o.r1), m = words(o.r2), c1 = box.querySelector('#c1');
+      c1.textContent = n === 8 ? '8 words here and 4 in the address: twelve. One and six, please.' : n + (n === 1 ? ' word' : ' words') + ' here and 4 in the address: ' + (n + 4) + ' in all. Nancy wants twelve.';
+      c1.classList.toggle('ok', n === 8);
+      box.querySelector('#c2').textContent = m + (m === 1 ? ' word' : ' words');
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

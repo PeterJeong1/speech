@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Churchyard · Your Place Is Laid</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="orchard.css">
+<style>
+  body{--bg:#1c1a10;--accent:#f1c46a;--font-display:'Cinzel',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(28,25,14,.96);--tc-ink:#f3ead0;--cap-bg:rgba(26,23,13,.95);--panel:#221f12;--face-bg:#2c3a34;--q-ink:#f1c46a;--fade:#0c0a05;--hud-bg:rgba(26,23,13,.8)}
+  .tc-room{font-size:clamp(40px,5.6vw,78px);font-weight:700;letter-spacing:.06em}
+  #sun{animation:sun 8s steps(1,end) infinite}
+  @keyframes sun{0%{opacity:1}50%{opacity:.93}}
+  .rook{animation:rook 2.6s steps(2,end) infinite}
+  .rook.r2{animation-delay:-1.100s}
+  @keyframes rook{50%{transform:translateY(5px)}}
+  #lumley.ready,#sheet.ready,#fair.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.25)}}
+  #fairnear{display:none}
+  #scene.met #fairfar{display:none}
+  #scene.met #fairnear{display:block}
+
+  /* the pedigree: a printed sheet, nine cards read off the stones, and one that has to be made */
+  .pg{width:1120px;max-width:96vw;-webkit-user-select:none;user-select:none}
+  .pg-sheet{position:relative;height:384px;background:#fbfaf4 linear-gradient(175deg,rgba(255,255,255,.7),rgba(150,140,110,.14));border-top:10px solid #7b2c22;box-shadow:0 22px 60px rgba(0,0,0,.6)}
+  .pg-sheet svg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+  .pg-sheet h5{position:absolute;left:18px;top:8px;margin:0;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.22em;color:#7b2c22;line-height:1.5}
+  .pg-sheet h5 small{display:block;font-family:'Special Elite',monospace;font-weight:400;font-size:12.5px;letter-spacing:.02em;color:#4d4a40;text-transform:none}
+  .pslot{position:absolute;width:150px;height:54px;border:1.5px dashed #a39c8a;border-radius:3px;background:rgba(123,44,34,.05)}
+  .pslot:after{content:attr(data-lab);position:absolute;left:4px;right:4px;top:50%;transform:translateY(-50%);text-align:center;font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.14em;line-height:1.3;color:#8a8474;text-transform:uppercase}
+  .pslot.bad{outline:3px solid #d2452f;outline-offset:1px}
+  .pc{position:relative;z-index:1;display:block;width:150px;height:54px;padding:8px 6px 3px;text-align:center;color:#2a2c2a;background:#dcdad0 linear-gradient(160deg,#eceae0,#c3c1b6);border:1px solid #8a887c;border-radius:16px 16px 2px 2px;
+    box-shadow:0 3px 6px rgba(0,0,0,.35)}
+  .pc b{display:block;font-family:'Cinzel',serif;font-weight:700;font-size:15px;letter-spacing:.08em;line-height:1.15}
+  .pc i{display:block;font-style:normal;font-family:'Special Elite',monospace;font-size:13px;line-height:1.4}
+  .pslot .pc{width:147px;height:51px;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+  .pc.fix{position:absolute;z-index:0;background:#f6f1dc;border:1.5px solid #7b2c22;border-radius:3px;box-shadow:none;padding-top:5px}
+  .pc.fix b{font-size:13.5px}.pc.fix i{font-size:11.5px;line-height:1.25}
+  .pc.new{background:#fffdf2;border:1.5px dashed #262a44;border-radius:3px;padding:4px 5px 2px}
+  .pc.new button{display:inline-block;padding:1px 8px 0;border:1px solid #b9b39a;border-radius:3px;background:#f1ecdc;font-family:'Caveat',cursive;font-size:21px;line-height:1.05;color:#262a44}
+  .pc.new button:hover{border-color:#7b2c22;color:#7b2c22}
+  .pc.new i{font-size:12.5px;line-height:1.1;margin-top:3px}
+  .pc.new i button{font-size:19px;padding:0 6px}
+  .pg-tray{display:flex;flex-wrap:wrap;gap:8px;min-height:132px;margin-top:8px;padding:9px 10px;background:#8a8c80 linear-gradient(#a3a598,#74766a);border-radius:3px;box-shadow:inset 0 2px 0 rgba(255,255,255,.25);align-content:flex-start}
+  .pg .pmsg{font-size:17.5px;line-height:1.34;min-height:72px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6f8fa6"/><stop offset=".55" stop-color="#c9c3a6"/><stop offset="1" stop-color="#f4d79a"/></linearGradient>
+  <linearGradient id="grassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a9a4c"/><stop offset=".4" stop-color="#5f7438"/><stop offset="1" stop-color="#27321a"/></linearGradient>
+  <linearGradient id="towerG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6b5648"/><stop offset=".7" stop-color="#b08a6a"/><stop offset="1" stop-color="#e2b98a"/></linearGradient>
+  <linearGradient id="stoneG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6f7268"/><stop offset=".65" stop-color="#a9ab9c"/><stop offset="1" stop-color="#d9d2b0"/></linearGradient>
+  <linearGradient id="paleG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9c9e94"/><stop offset=".65" stop-color="#d6d6ca"/><stop offset="1" stop-color="#f4ecd0"/></linearGradient>
+  <radialGradient id="sunG"><stop offset="0" stop-color="#fff6d6" stop-opacity="1"/><stop offset=".12" stop-color="#ffe9a8" stop-opacity=".85"/><stop offset=".45" stop-color="#f6c66a" stop-opacity=".28"/><stop offset="1" stop-color="#f6c66a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="60%" cy="42%" r="84%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#140f04" stop-opacity=".22"/><stop offset="1" stop-color="#0a0702" stop-opacity=".8"/></radialGradient>
+</defs>
+
+<!-- a low sun over the hill, the tower of St Michael's, an old yew -->
+<rect x="-1000" y="-400" width="3600" height="880" fill="url(#skyG)"/>
+<circle id="sun" cx="1440" cy="372" r="330" fill="url(#sunG)"/>
+<path d="M-1000 480V430Q-200 380 300 420T1100 400Q1500 380 2600 430V480Z" fill="#6b7a4a"/><g id="far" fill="#55663c"></g>
+<g id="rooks" fill="none" stroke="#1c1a14" stroke-width="3" stroke-linecap="round"><path class="rook" d="M400 96q8 -9 16 0q8 -9 16 0"/><path class="rook r2" d="M462 132q7 -8 14 0q7 -8 14 0"/><path class="rook" d="M350 150q6 -7 12 0q6 -7 12 0"/><path class="rook r2" d="M520 84q6 -7 12 0q6 -7 12 0"/></g>
+<g id="church" class="hot"><rect x="96" y="96" width="196" height="386" fill="url(#towerG)"/><path d="M84 96h220v-22h-30v12h-28v-12h-30v12h-28v-12h-30v12h-28v-12h-30z" fill="#8a6c56"/>
+  <path d="M168 176h52v84h-52z" fill="#2a2018"/><g stroke="#6b5648" stroke-width="4"><path d="M168 196h52M168 216h52M168 236h52"/></g><circle cx="194" cy="330" r="30" fill="#27344a"/><circle cx="194" cy="330" r="30" fill="none" stroke="#d9c08a" stroke-width="5"/><path d="M194 330H172M194 330l2 15" stroke="#f1dc9a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M292 300L440 230L590 300V482H292Z" fill="#9c7c62"/><path d="M276 304L440 222L606 304" stroke="#5a463a" stroke-width="12" fill="none"/><path d="M360 380h34v102h-34zM470 380h34v102h-34z" fill="#2a2018"/><path d="M360 380q17 -22 34 0M470 380q17 -22 34 0" fill="#2a2018"/></g>
+<g id="yew" class="hot"><path d="M690 486V400" stroke="#2a2018" stroke-width="26"/><path d="M560 430q-30 -70 30 -110q-10 -70 70 -84q60 -40 110 10q70 10 66 84q44 50 -6 100q-130 30 -270 0z" fill="#1f2c1c"/><path d="M620 330q40 -30 90 -10M700 280q40 -10 70 20" stroke="#2f4028" stroke-width="8" fill="none" stroke-linecap="round"/></g>
+<rect x="-1000" y="462" width="3600" height="30" fill="#7a6a56"/><g id="wallst" stroke="#5a4c3c" stroke-width="2"></g>
+<g id="lych" class="hot"><path d="M1196 492V392h16v100zM1312 492V392h16v100z" fill="#4a3826"/><path d="M1176 398L1262 340L1348 398Z" fill="#5a4630"/><path d="M1176 398L1262 340L1348 398" stroke="#33230f" stroke-width="6" fill="none"/><path d="M1212 492v-56h100v56" fill="none" stroke="#4a3826" stroke-width="6"/><path d="M1212 452h100M1245 436v56M1279 436v56" stroke="#4a3826" stroke-width="4"/></g>
+
+<!-- the grass, and the long shadows of the stones -->
+<rect x="-1000" y="490" width="3600" height="850" fill="url(#grassG)"/>
+<g id="shadows" fill="#1c2412" opacity=".42"></g>
+<g id="stones"></g>
+<g id="gap" class="hot"><rect x="508" y="690" width="124" height="96" fill="#000" opacity="0"/><path d="M516 778q54 -10 108 0" stroke="#a9b86a" stroke-width="3" fill="none" opacity=".7"/></g>
+
+<!-- the table tomb, with Miss Lumley's sheet held down by four pebbles -->
+<g id="tomb"><path d="M1080 800V690H1336V800Z" fill="url(#stoneG)"/><path d="M1064 690H1352L1330 660H1088Z" fill="#c3c4b4"/><path d="M1064 690H1352V702H1064Z" fill="#8f9184"/><path d="M1120 716v70M1208 716v70M1296 716v70" stroke="#6f7268" stroke-width="3"/><g fill="#c9a23a" opacity=".55"><circle cx="1104" cy="740" r="9"/><circle cx="1250" cy="772" r="7"/><circle cx="1312" cy="724" r="6"/></g></g>
+<g id="sheet" class="hot"><path d="M1130 686L1150 664H1296L1310 686Z" fill="#fbfaf4" stroke="#b9b39a" stroke-width="1.500"/><path d="M1160 672h120M1154 679h136" stroke="#7b2c22" stroke-width="2" opacity=".7"/><g fill="#5f6258"><circle cx="1138" cy="683" r="4.500"/><circle cx="1302" cy="683" r="4.500"/><circle cx="1154" cy="667" r="3.500"/><circle cx="1292" cy="667" r="3.500"/></g></g>
+
+<!-- the living -->
+<g id="fair" class="hot"><g id="fairfar" transform="translate(806 622) scale(.78)"></g><g id="fairnear" transform="translate(1010 868) scale(1.100)"></g></g>
+<g id="lumley" class="hot" transform="translate(1440 866) scale(1.150)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go back to the orchard</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="orchard.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, pg = null, told = {};
+
+  /* what can still be read on each stone: a first name and two dates. [id, name, dates, x, foot, width, height, lean, pale] */
+  var STONES = [
+    ['edward', 'EDWARD', '1840–1911', 430, 606, 132, 150, -2, 0], ['abel', 'ABEL', '1868–1934', 590, 606, 84, 126, 3, 0], ['ellen', 'ELLEN', '1903–1988', 700, 606, 72, 92, -1, 0],
+    ['silas', 'SILAS', '1870–1919', 930, 606, 68, 160, 1, 0], ['esther', 'ESTHER', '1876–1958', 1012, 606, 74, 104, -8, 0],
+    ['amos', 'AMOS OAKES', '1866–1941', 250, 786, 156, 176, 2, 0], ['catherine', 'CATHERINE', '1898–1979', 426, 786, 124, 142, -2, 0],
+    ['george', 'GEORGE', '1907–1986', 706, 786, 94, 140, 2, 0], ['charlotte', 'CHARLOTTE', '1910–2003', 836, 786, 96, 128, -1, 1]
+  ];
+  var SAY = {
+    edward: 'EDWARD WINTERBOURNE of Hill End, 1840&ndash;1911. Below him, in smaller letters: MARY, wife of the above, 1845&ndash;1902. The rest is under the grass.',
+    abel: 'ABEL, 1868&ndash;1934. His second name has flaked away with the face of the stone. Somebody put a jam jar at the foot of it, a long time ago.',
+    ellen: 'ELLEN, 1903&ndash;1988. A small plain stone. One more line can still be read: OF SWEETINGS DAIRY.',
+    silas: 'SILAS, 1870&ndash;1919. A tall thin stone, with an envelope carved at the top of it, which is not usual. POSTMASTER OF THIS PARISH. His second name is under the lichen.',
+    esther: 'ESTHER, 1876&ndash;1958. The stone leans towards the tall one beside it, as if the two were still talking.',
+    amos: 'AMOS OAKES of Sweetings, 1866&ndash;1941. Also HANNAH his wife, 1872&ndash;1951. Under her name there is one line more: SHE LOOKETH WELL TO THE WAYS OF HER HOUSEHOLD.',
+    catherine: 'CATHERINE, 1898&ndash;1979, and HARRY, 1896&ndash;1968. Their second name is behind a rose bush that somebody still cuts back every winter.',
+    george: 'GEORGE, 1907&ndash;1986. FARMER. Nothing else.',
+    charlotte: 'CHARLOTTE, 1910&ndash;2003. The newest of the old stones, and the only one that the lichen has not found yet.'
+  };
+
+  (function () {
+    var s = '', sh = '', i, x;
+    for (i = 0; i < 26; i++) s += '<circle cx="' + (i * 94 - 300 + (i % 3) * 11) + '" cy="' + (424 - (i % 4) * 5) + '" r="' + (15 + (i % 3) * 4) + '"/>';
+    $('#far').innerHTML = s + '<circle cx="1068" cy="420" r="15" fill="#a8452f"/>'; s = '';
+    for (i = -10; i < 30; i++) s += '<path d="M' + (i * 62 + 14) + ' 462v14M' + (i * 62 + 44) + ' 477v14"/>';
+    $('#wallst').innerHTML = s + '<path d="M-1000 477H2600"/>'; s = '';
+    STONES.forEach(function (t) {
+      var id = t[0], x = t[3], f = t[4], w = t[5], h = t[6], r = Math.min(w / 2, 42), l = x - w / 2, top = f - h, ty = top + (id === 'silas' ? 62 : 44), fs = w > 120 ? 13.500 : w > 80 ? 12 : 11;
+      sh += '<path d="M' + l + ' ' + f + 'H' + (x + w / 2) + 'L' + OY.num(x + w / 2 - h * 1.700) + ' ' + OY.num(f + h * 0.240) + 'H' + OY.num(l - h * 1.700) + 'Z"/>';
+      s += '<g id="st-' + id + '" class="hot" transform="rotate(' + t[7] + ' ' + x + ' ' + f + ')">' +
+        '<path d="M' + l + ' ' + f + 'V' + (top + r) + 'Q' + l + ' ' + top + ' ' + x + ' ' + top + 'Q' + (x + w / 2) + ' ' + top + ' ' + (x + w / 2) + ' ' + (top + r) + 'V' + f + 'Z" fill="url(#' + (t[8] ? 'paleG' : 'stoneG') + ')"/>' +
+        (t[8] ? '' : '<g opacity=".55"><circle cx="' + (l + w * 0.240) + '" cy="' + (top + h * 0.720) + '" r="' + OY.num(w * 0.110) + '" fill="#c9a23a"/><circle cx="' + (l + w * 0.740) + '" cy="' + (top + h * 0.300) + '" r="' + OY.num(w * 0.080) + '" fill="#d9c98a"/><circle cx="' + (l + w * 0.620) + '" cy="' + (top + h * 0.860) + '" r="' + OY.num(w * 0.140) + '" fill="#7d8a6a"/></g>') +
+        (id === 'silas' ? '<rect x="' + (x - 16) + '" y="' + (top + 22) + '" width="32" height="22" fill="none" stroke="#3a3c38" stroke-width="2"/><path d="M' + (x - 16) + ' ' + (top + 22) + 'l16 12 16 -12" fill="none" stroke="#3a3c38" stroke-width="2"/>' : '') +
+        '<text x="' + x + '" y="' + ty + '" class="fZ" font-size="' + fs + '" font-weight="700" text-anchor="middle" fill="#2a2c2a" opacity=".85">' + t[1] + '</text>' +
+        '<text x="' + x + '" y="' + (ty + 17) + '" class="fZ" font-size="' + (fs - 1.500) + '" text-anchor="middle" fill="#2a2c2a" opacity=".8">' + t[2] + '</text>' +
+        (id === 'edward' ? '<text x="' + x + '" y="' + (ty + 46) + '" class="fZ" font-size="11.500" font-weight="700" text-anchor="middle" fill="#2a2c2a" opacity=".8">MARY</text><text x="' + x + '" y="' + (ty + 61) + '" class="fZ" font-size="10.500" text-anchor="middle" fill="#2a2c2a" opacity=".75">1845–1902</text>' : '') +
+        (id === 'amos' ? '<text x="' + x + '" y="' + (ty + 50) + '" class="fZ" font-size="13" font-weight="700" text-anchor="middle" fill="#2a2c2a" opacity=".85">HANNAH</text><text x="' + x + '" y="' + (ty + 66) + '" class="fZ" font-size="11.500" text-anchor="middle" fill="#2a2c2a" opacity=".8">1872–1951</text><path d="M' + (x - 50) + ' ' + (ty + 84) + 'h100M' + (x - 40) + ' ' + (ty + 94) + 'h80" stroke="#2a2c2a" stroke-width="1.500" opacity=".5"/>' : '') +
+        (id === 'catherine' ? '<text x="' + x + '" y="' + (ty + 44) + '" class="fZ" font-size="12" font-weight="700" text-anchor="middle" fill="#2a2c2a" opacity=".85">HARRY</text><text x="' + x + '" y="' + (ty + 59) + '" class="fZ" font-size="10.500" text-anchor="middle" fill="#2a2c2a" opacity=".8">1896–1968</text><g fill="#3d5a30"><circle cx="' + (x - 28) + '" cy="' + (f - 16) + '" r="20"/><circle cx="' + x + '" cy="' + (f - 22) + '" r="24"/><circle cx="' + (x + 30) + '" cy="' + (f - 14) + '" r="19"/></g><g fill="#c9455a"><circle cx="' + (x - 22) + '" cy="' + (f - 24) + '" r="5"/><circle cx="' + (x + 12) + '" cy="' + (f - 34) + '" r="5"/><circle cx="' + (x + 34) + '" cy="' + (f - 18) + '" r="4"/></g>' : '') +
+        (id === 'abel' ? '<rect x="' + (x - 34) + '" y="' + (f - 20) + '" width="14" height="20" rx="3" fill="#cfe0e0" opacity=".7"/>' : '') + '</g>';
+    });
+    s += '<g id="dora" class="hot"><path d="M960 786V690M940 716h40" stroke="#8a6a44" stroke-width="9" stroke-linecap="round"/><rect x="982" y="762" width="18" height="24" rx="3" fill="#cfe0e0" opacity=".8"/><g fill="#e9b93a"><circle cx="986" cy="752" r="7"/><circle cx="998" cy="748" r="7"/><circle cx="992" cy="740" r="7"/></g><g fill="#c9742a"><circle cx="986" cy="752" r="2.500"/><circle cx="998" cy="748" r="2.500"/><circle cx="992" cy="740" r="2.500"/></g></g>';
+    sh += '<path d="M1064 800H1352L1160 846H872Z"/>';
+    $('#stones').innerHTML = s; $('#shadows').innerHTML = sh;
+    $('#fairfar').innerHTML = OY.who('fair', { back: true });
+    $('#fairnear').innerHTML = OY.who('fair', {});
+    $('#lumley').innerHTML = OY.who('lumley', { hold: true, extra: '<rect x="-24" y="-184" width="48" height="40" rx="2" fill="#8a6a44"/><rect x="-20" y="-180" width="40" height="32" fill="#fbfaf4"/>' });
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'orchard', storyTitle: 'Your Place Is Laid', id: 'churchyard', no: 'III', title: 'The Churchyard',
+    go: 'Go in at the lychgate',
+    intro: [
+      'Six letters went into their order behind the one with the note pinned to it. He went at Michaelmas, at nineteen. The cider came before Lady Day; &ldquo;tomorrow I go to sea&rdquo; came before &ldquo;I have been a year at sea&rdquo;; Kate was to be married, then had been married a year and a half, then had a boy; and after &ldquo;I shall not write again&rdquo; there was nothing more from him.',
+      'Then his mother&rsquo;s letter, with only &ldquo;Sunday&rdquo; at the top of it. Seven years on from Michaelmas 1924 gave the year. The blossom and his birthday gave the month. And the Sunday before Tuesday the twelfth was the tenth of May 1931.',
+      'It is ten minutes by the field path to St Michael&rsquo;s. The sun is low, and every stone in the churchyard has a shadow three times as long as itself.'
+    ],
+    exit: {"next":"orchard","w":{"19451a57":"1d5a9dbe"}}, tags: {"gp":["310ccf7c"],"gm":["586fd006"],"bro":["dc60e6ea"],"sis":["4ead4b70"],"hus":["c12a0977"],"niece":["7cbeebb6"],"s1":["61fa0d5f"],"s2":["254fa449"],"s3":["47905013"],"s4":["c62bf652"],"name":["7f3e7f3d"],"year":["ff465bcc"]},
+    sound: ['hush', { root: 50, bpm: 50, drop: ['mel'], beds: [['birds', 0.45], ['wind', 0.3]] }],      /* out of doors at the end of the afternoon: birds, a little wind, and no bell anywhere */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#lumley').classList.toggle('ready', !told.lumley);
+    $('#sheet').classList.toggle('ready', !!(told.lumley && !nextFile));
+    $('#fair').classList.toggle('ready', !!(nextFile && !told.fair));
+    $('#scene').classList.toggle('met', !!nextFile);
+    ER.pips((told.lumley ? 1 : 0) + (nextFile ? 1 : 0) + (told.fair ? 1 : 0), 3);
+  }
+
+  function hints() {
+    if (nextFile && told.fair) return ['go', ['Somebody has come for the letter after all. Go back to the orchard: the button at the bottom of the screen.']];
+    if (nextFile) return ['fair', [
+      'The woman in the green jacket knows whose birthday is the twelfth of May. Ask her how.',
+      'Click her: she is standing beside you now, by the table tomb.'
+    ]];
+    if (pg && pg.isOpen()) return ['tree', [
+      'Begin with the Winterbournes. Hannah had a father, a brother and a sister, and Ned names all three in his letters: Grandfather Winterbourne, Uncle Abel, Aunt Esther. That leaves one man over. Whose husband was he?',
+      '&ldquo;Her late husband&rdquo; means that he was dead when the letter was written, and it was written two months after Michaelmas 1924. And Ellen is &ldquo;his girl&rdquo;, Uncle Abel&rsquo;s: so she is not one of Hannah&rsquo;s children, though her dates would fit very well.',
+      'The four children stand in the order of their birth, and one place among them has no stone to fill it: the same place as the strip of paper in the Bible. The card that you make goes there. He was &ldquo;christened for Grandfather Winterbourne&rdquo;. He was nineteen at Michaelmas 1924, and his birthday is in May.'
+    ]];
+    if (!told.lumley) return ['lumley', [
+      'Miss Lumley is at the table tomb, on the right, with a printed sheet. She has read the stones already.',
+      'Click Miss Lumley: the tall woman in the long dark coat.'
+    ]];
+    return ['sheet', [
+      'The sheet is on the lid of the table tomb, with a pebble on each corner. You can read the stones first if you like: click them.',
+      'Click the white sheet of paper on the table tomb.'
+    ]];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile && told.fair) { busy = false; showGo(); ER.say('The pedigree is finished, and somebody has come for the letter.'); return; }
+    if (nextFile) { busy = false; ER.say('The woman in the green jacket is standing by the table tomb.'); return; }
+    if (told.in) { busy = false; ER.say('St Michael&rsquo;s churchyard, at a quarter to six.'); return; }
+    tell('in');
+    ER.narrate([
+      'St Michael&rsquo;s, Stoke Pomeroy: a red stone tower, an old yew, and rooks going round and round the top of it.',
+      'Miss Lumley has spread a printed sheet on the lid of a table tomb, and put a pebble on each corner. She does this, you feel, in a great many churchyards.',
+      'Further off, among the older stones, the woman in the green jacket is reading the names, one after another. She has not seen you.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- the living ---------- */
+  $('#lumley').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;The Record Office has no rule against granddaughters,&rdquo; says Miss Lumley. &ldquo;I have looked.&rdquo;'); return; }
+    ER.talk({
+      who: 'Miss Lumley', role: 'County Record Office', face: window.FACE('lumley'),
+      lines: [
+        { note: 'She smooths the sheet flat with the side of her hand.', a: '&ldquo;A pedigree. Two families: the Winterbournes of Hill End, where Hannah came from, and the Oakeses of Sweetings. I have put Amos and Hannah in myself. The Bible gave me those two.&rdquo;' },
+        { a: 'And I have read the stones. Nine names, and a card for each. A stone tells you a name and two dates, and very little else. &ldquo;Beloved wife of&rdquo;: whose? The lichen has had it. But we have seven letters that say who was what to whom. &ldquo;Your sister and not his.&rdquo; &ldquo;Her late husband.&rdquo; &ldquo;His girl.&rdquo; Put each card where the letters say that it belongs.' },
+        { q: 'And the one who wrote the letters?', a: 'There is no stone for him here, so there is no card. You will have to make one: the blank one. A name, and the year he was born. Not the name they called him by: the name he was christened. I shall want a reason for both.' }
+      ],
+      clue: { id: 'cards', title: 'Miss Lumley: nine stones and a blank card', kind: 'What she said' },
+      done: function (seen) {
+        if (!seen || !tell('lumley')) return;
+        paint();
+        ER.addClue('stones', 'What the stones say', '<h4>St Michael&rsquo;s churchyard: what can still be read</h4><table>' + STONES.map(function (t) { return '<tr><td>' + t[1] + (t[0] === 'edward' ? ' and MARY' : t[0] === 'amos' ? ' and HANNAH' : t[0] === 'catherine' ? ' and HARRY' : '') + '</td><td>' + t[2] + (t[0] === 'edward' ? '; she 1845–1902' : t[0] === 'amos' ? '; she 1872–1951' : t[0] === 'catherine' ? '; he 1896–1968' : '') + '</td></tr>'; }).join('') + '</table><p>Also a wooden marker: Dora Oakes, 1932–2025. And a space in the row, between Catherine and George.</p>', 'slip', 'Your notes', true);
+        ER.say('The sheet is on the lid of the table tomb.');
+      }
+    });
+  });
+  $('#fair').addEventListener('click', function () {
+    if (busy) return;
+    if (!nextFile) { ER.say('&ldquo;I have read every stone in this corner twice,&rdquo; says the woman in the green jacket, without turning round. &ldquo;The name I want isn&rsquo;t on any of them. I may have come twelve thousand miles to read the wrong churchyard.&rdquo;'); return; }
+    if (told.fair) { ER.say('Ms Fairweather is reading the letter for the third time. &ldquo;Pass two trees,&rdquo; she says. &ldquo;She writes like him. He never used two words where one would do.&rdquo;'); return; }
+    ER.talk({
+      who: 'Raewyn Fairweather', role: 'of Hawke’s Bay, New Zealand', face: window.FACE('fair'),
+      lines: [
+        { q: 'Whose birthday is the twelfth of May?', a: 'My grandfather&rsquo;s. Ned Oakes, of Hawke&rsquo;s Bay. He came out in 1931 on a meat boat, and he never went home. He planted apples, and he called the orchard Sweetings. I always thought that he had made the name up. Then last month I saw it in a farm sale, on the internet.' },
+        { a: 'I&rsquo;m Raewyn Fairweather. My mother was his daughter. He called her Hannah, and he never said who for.' },
+        { q: 'What did he tell you about England?', a: 'Nothing. If you asked him where he came from, he said: &ldquo;I went out on an errand once, and I&rsquo;m still on it.&rdquo; So in our family, if you are late, you have gone for the rent. He died in 1996, at ninety-one, and I never did find out what rent.' },
+        { note: 'Miss Lumley takes the last letter out of her box, and holds it out without a word. Ms Fairweather reads it standing up. Then she reads it again.', a: '&ldquo;&lsquo;For my son, when he comes.&rsquo;&rdquo;</p><p>She folds it along its old folds.</p><p>&ldquo;Well. He isn&rsquo;t coming. Will a granddaughter do?&rdquo;' }
+      ],
+      clue: { id: 'fair', title: 'Raewyn Fairweather: gone for the rent', kind: 'What she said' },
+      done: function (seen) {
+        if (!seen || !tell('fair')) return;
+        paint(); busy = true;
+        ER.narrate([
+          'Nobody answers her. The rooks go round the tower once more.',
+          '&ldquo;The light is going,&rdquo; says Miss Lumley. &ldquo;She says &lsquo;at dusk&rsquo;. I see no reason to keep a lady waiting who has waited since 1931.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }
+    });
+  });
+
+  /* ---------- the stones ---------- */
+  STONES.forEach(function (t) { OY.thing('#st-' + t[0], t[0] === 'silas' ? 'lichen' : null, SAY[t[0]], isBusy); });
+  OY.thing('#dora', null, 'A wooden marker and a jar of chrysanthemums: DORA OAKES, 1932&ndash;2025. Her stone has been ordered.', isBusy);
+  OY.thing('#gap', null, 'Between Catherine and George there is a space in the row, wide enough for one more stone. The grass on it is mown like the rest.', isBusy);
+  OY.thing('#church', null, 'The tower of St Michael&rsquo;s. The clock says a quarter to six, and for once a church clock is right.', isBusy);
+  OY.thing('#yew', 'yew', 'A yew, a good deal older than the tower. The rooks do not sit in it.', isBusy);
+  OY.thing('#lych', 'lychgate', 'The lychgate, and beyond it the field path back to Sweetings. You can see the orchard from here: four rows of trees, and one tree that is red.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile && told.fair) ER.leave(nextFile); });
+  $('#sheet').addEventListener('click', function (e) {
+    if (busy) return;
+    if (nextFile) { ER.say('The pedigree, with every place on it filled. Miss Lumley has put a fifth pebble on it, in the middle.'); return; }
+    if (!told.lumley) { ER.wordAt(e.clientX, e.clientY, 'pedigree'); ER.say('A printed sheet with boxes and lines on it, held down with four pebbles. Miss Lumley will tell you what it is for.'); return; }
+    if (!pg) pg = makeTree();
+    pg.open();
+  });
+
+  /* ---------- the pedigree ---------- */
+  function makeTree() {
+    var CARDS = { edward: ['EDWARD', '1840–1911'], mary: ['MARY', '1845–1902'], abel: ['ABEL', '1868–1934'], silas: ['SILAS', '1870–1919'], esther: ['ESTHER', '1876–1958'], ellen: ['ELLEN', '1903–1988'],
+      catherine: ['CATHERINE', '1898–1979'], george: ['GEORGE', '1907–1986'], charlotte: ['CHARLOTTE', '1910–2003'] };
+    var TRAY = ['george', 'esther', 'edward', 'ellen', 'silas', 'new', 'charlotte', 'mary', 'abel', 'catherine'];
+    /* [slot, left, top, what is printed in the empty place] */
+    var SLOTS = [['gp', 360, 34, 'her father'], ['gm', 560, 34, 'her mother'], ['bro', 40, 150, 'their son'], ['sis', 790, 150, 'their younger daughter'], ['hus', 960, 150, 'her husband'],
+      ['niece', 40, 300, 'his daughter'], ['s1', 210, 300, 'the eldest'], ['s2', 380, 300, ''], ['s3', 550, 300, ''], ['s4', 720, 300, 'the youngest']];
+    var CHK = ['gp', 'gm', 'bro', 'hus', 'sis', 'niece', 's1', 's3', 's4', 's2'];
+    var NAMES = [['', 'name?'], ['ned', 'Ned'], ['edwin', 'Edwin'], ['edmund', 'Edmund'], ['edward', 'Edward'], ['edgar', 'Edgar']], YEARS = ['', '1899', '1900', '1901', '1902', '1903', '1904', '1905', '1906'];
+    var WHY = {
+      gp: 'The head of the Winterbournes was a grown man before anybody else on this sheet was born. And one of his grandsons was christened for him.',
+      gm: 'The stone says &lsquo;MARY, wife of the above&rsquo;, and the name above hers is the oldest in the churchyard.',
+      bro: 'This is the Winterbourne who had a farm to give up, and a daughter to send to the dairy. Ned names him in the letter of the twentieth of August.',
+      hus: '&lsquo;Her late husband.&rsquo; Late means dead, and dead before that letter was written, which was two months after Michaelmas 1924. Which of these men was dead by then? And which of them kept a post office?',
+      sis: '&lsquo;She is your sister and not his.&rsquo; A sister of Hannah&rsquo;s was born a Winterbourne, whatever name the lichen has left on her stone. And her own note says which of the two sisters was the younger.',
+      niece: 'Somebody is &lsquo;his girl&rsquo;: Uncle Abel&rsquo;s. She came to the dairy at Sweetings when her father gave up Hill End, and one stone here still has the word DAIRY on it.',
+      s1: 'The eldest stands on the left. &lsquo;She was seven when I was born, and she has ordered me about ever since.&rsquo;',
+      s3: 'After the place that has no stone comes &lsquo;the younger of us two&rsquo;: the brother who never thought to have the farm.',
+      s4: 'The youngest stands on the right. Look at the dates on the cards.'
+    };
+    var placed = ER.flag('c-placed') || {}, made = ER.flag('c-made') || [0, 0], wait = false, box = ER.el('div', 'pg'), s;
+    s = '<div class="pg-sheet"><svg viewBox="0 0 1120 384" preserveAspectRatio="none"><g stroke="#4d4a40" stroke-width="2" fill="none"><path d="M535 80V118M115 118H865M115 118V150M435 118V150M865 118V150M115 204V300M535 196V262M285 262H795M285 262V300M455 262V300M625 262V300M795 262V300"/></g>' +
+      '<g font-family="Special Elite, monospace" font-size="22" fill="#4d4a40" text-anchor="middle"><text x="535" y="70">=</text><text x="535" y="185">=</text><text x="950" y="185">=</text></g>' +
+      '<text x="812" y="258" font-family="Oswald, sans-serif" font-size="11" letter-spacing="1.500" fill="#8a8474">THEIR CHILDREN, IN THE ORDER</text><text x="812" y="273" font-family="Oswald, sans-serif" font-size="11" letter-spacing="1.500" fill="#8a8474">OF THEIR BIRTH</text></svg>' +
+      '<h5>COUNTY RECORD OFFICE · PEDIGREE<small>Winterbourne of Hill End, and Oakes of Sweetings.<br>Parish of Stoke Pomeroy.</small></h5>' +
+      '<span class="pc fix" style="left:360px;top:150px"><b>HANNAH</b><i>née Winterbourne<br>1872–1951</i></span><span class="pc fix" style="left:560px;top:150px"><b>AMOS OAKES</b><i>of Sweetings<br>1866–1941</i></span>';
+    SLOTS.forEach(function (t) { s += '<div class="pslot" data-s="' + t[0] + '" data-lab="' + t[3] + '" style="left:' + t[1] + 'px;top:' + t[2] + 'px"></div>'; });
+    s += '</div><div class="pg-tray"></div><div class="pfoot"><p class="pmsg"></p><button type="button" class="btn" id="p-go">Show Miss Lumley</button></div>';
+    box.innerHTML = s;
+    var tray = box.querySelector('.pg-tray'), msgEl = box.querySelector('.pmsg'), nmB, yrB;
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function slot(k) { return box.querySelector('.pslot[data-s="' + k + '"]'); }
+    function at(id) { var k; for (k in placed) if (placed[k] === id) return k; return null; }
+    TRAY.forEach(function (id) {
+      var n, k = at(id);
+      if (id === 'new') n = ER.el('span', 'pc new dnd-item', '<button type="button" class="nm"></button><i>born <button type="button" class="yr"></button></i>');
+      else n = ER.el('span', 'pc dnd-item', '<b>' + CARDS[id][0] + '</b><i>' + CARDS[id][1] + '</i>');
+      n.setAttribute('data-c', id);
+      (k && slot(k) ? slot(k) : tray).appendChild(n);
+    });
+    nmB = box.querySelector('.pc.new .nm'); yrB = box.querySelector('.pc.new .yr');
+    function paintNew() { nmB.textContent = NAMES[made[0]][1]; yrB.textContent = YEARS[made[1]] || 'year?'; box.setAttribute('data-made', NAMES[made[0]][0] + '.' + YEARS[made[1]]); }
+    [nmB, yrB].forEach(function (b, i) {
+      b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
+      b.addEventListener('click', function (e) {
+        e.stopPropagation(); if (wait || nextFile) return;
+        made[i] = (made[i] + 1) % (i ? YEARS.length : NAMES.length); ER.flag('c-made', made); OY.sfx.wheel(); paintNew(); msg('');
+      });
+    });
+    function key() { return SLOTS.map(function (t) { return placed[t[0]] || 'none'; }).join('|'); }
+    function read() {
+      placed = {};
+      SLOTS.forEach(function (t) { var c = slot(t[0]).querySelector('.pc'); if (c) placed[t[0]] = c.getAttribute('data-c'); });
+      ER.flag('c-placed', placed); box.setAttribute('data-tree', key());
+    }
+    ER.dnd(box, { item: '.pc.dnd-item', slot: '.pslot', home: tray, lock: function () { return wait || !!nextFile; }, change: function () { read(); OY.sfx.card(); msg(''); } });
+    OY.swapClick(box, '.pc.dnd-item', '.pslot');
+    function label(id) { return id === 'new' ? NAMES[made[0]][1] + ' (born ' + YEARS[made[1]] + '; no stone here)' : CARDS[id][0].charAt(0) + CARDS[id][0].slice(1).toLowerCase() + ' (' + CARDS[id][1] + ')'; }
+    function treeHtml() {
+      return '<h4>Pedigree: Winterbourne of Hill End, and Oakes of Sweetings</h4><p>' + label(placed.gp) + ' = ' + label(placed.gm) + '. Their children:</p>' +
+        '<p>' + label(placed.bro) + ', whose daughter was ' + label(placed.niece) + ';</p><p>Hannah, née Winterbourne (1872–1951) = Amos Oakes of Sweetings (1866–1941);</p><p>' + label(placed.sis) + ', the younger daughter = ' + label(placed.hus) + ', postmaster.</p>' +
+        '<p>The children of Amos and Hannah, in the order of their birth:</p><p>1. ' + label(placed.s1) + '</p><p>2. ' + label(placed.s2) + '</p><p>3. ' + label(placed.s3) + '</p><p>4. ' + label(placed.s4) + '</p>';
+    }
+    box.querySelector('#p-go').addEventListener('click', function () {
+      var left = tray.querySelectorAll('.pc').length, i, k, v, why, file, nm = NAMES[made[0]][0], yr = YEARS[made[1]];
+      if (wait || nextFile) return;
+      read();
+      if (left) { msg('&ldquo;' + (left === 10 ? 'Ten cards, and none of them on my sheet' : left === 1 ? 'One card is still lying on the tomb' : left + ' cards are still lying on the tomb') + ',&rdquo; says Miss Lumley. &ldquo;Ten places, ten cards. The blank one is a card like any other.&rdquo;'); return; }
+      k = null;
+      ['s1', 's2', 's3', 's4'].forEach(function (q) { if (placed[q] === 'ellen') k = q; });
+      if (k || placed.niece === 'new') {
+        why = k ? 'Ellen, born in 1903, among Hannah&rsquo;s children: she fits the gap like a hand in a glove, and that is all she does. How does Ned name her? &lsquo;His girl&rsquo;: Uncle Abel&rsquo;s. And she came to Sweetings to work, when her father gave up his farm.' :
+          'You have made him Abel&rsquo;s child. But he writes to Hannah as &lsquo;Dear Mother&rsquo;, and he calls Abel &lsquo;Uncle&rsquo;.';
+        k = k || 'niece'; ER.sfx.no(); OY.flash(slot(k));
+        msg('Miss Lumley takes one card off the sheet again. &ldquo;' + why + '&rdquo;'); tray.appendChild(slot(k).querySelector('.pc')); read();
+        return;
+      }
+      for (i = 0; i < CHK.length; i++) {
+        k = CHK[i]; v = placed[k] || 'none';
+        if (!ER.check(k, v)) {
+          why = v === 'new' ? 'The card that you made is for somebody who has no stone here. Where on this sheet is there a place that no stone can fill? The Bible in the kitchen has the same place in it, under a strip of paper.' :
+            k === 's2' ? 'Every card with two dates on it is a stone that I have read. Between Catherine and George there are nine years, a strip of paper in the Bible, and a space in the row of stones. No stone goes there.' : WHY[k];
+          ER.sfx.no(); OY.flash(slot(k));
+          msg('Miss Lumley takes one card off the sheet again. &ldquo;' + why + '&rdquo;'); tray.appendChild(slot(k).querySelector('.pc')); read();
+          return;
+        }
+      }
+      if (!ER.check('name', nm)) {
+        ER.sfx.no(); OY.flash(slot('s2'));
+        msg(nm === '' ? '&ldquo;Your card has no name on it,&rdquo; says Miss Lumley. &ldquo;Click the name until it is the one you can give me a reason for.&rdquo;' :
+          nm === 'ned' ? '&ldquo;Ned is what they called him at home,&rdquo; says Miss Lumley. &ldquo;No parson ever christened a child Ned. He says himself whom he was christened for.&rdquo;' :
+          '&ldquo;A reason, please,&rdquo; says Miss Lumley. &ldquo;He was &lsquo;christened for Grandfather Winterbourne&rsquo;. You have put Grandfather Winterbourne on this sheet yourself.&rdquo;');
+        return;
+      }
+      if (!ER.check('year', yr)) {
+        ER.sfx.no(); OY.flash(slot('s2'));
+        msg(yr === '' ? '&ldquo;And the year he was born,&rdquo; says Miss Lumley. &ldquo;Click the year on your card.&rdquo;' :
+          '&ldquo;Count again,&rdquo; says Miss Lumley. &ldquo;He was nineteen at Michaelmas 1924, and his birthday is in May. And Kate, who was born in March 1898, was seven when he was born. Both roads lead to the same year.&rdquo;');
+        return;
+      }
+      file = ER.exit([key() + '>' + nm + '.' + yr], { wait: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('c-file', file);
+      msg('Miss Lumley goes over the sheet with the blunt end of her pencil: the Winterbournes, the Oakeses, and the card in your handwriting.');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.addClue('tree', 'The pedigree, finished', treeHtml(), 'slip', 'Your notes', true);
+        ER.narrate([
+          '&ldquo;' + NAMES[made[0]][1] + ' Oakes, born in May ' + yr + ',&rdquo; says Miss Lumley. &ldquo;Second child, elder son. Christened for his grandfather, called Ned at home, and not named in that house since Michaelmas 1924. He is on paper now.&rdquo;',
+          'Behind you, somebody says: &ldquo;The twelfth of May.&rdquo;',
+          'It is the woman in the green jacket. She has been standing at the end of the row for some time, with her rucksack in her hand.',
+          '&ldquo;His birthday was the twelfth of May. He always said that it was a poor sort of birthday with no blossom on it. Where I come from, May is the end of autumn.&rdquo;'
+        ], function () { busy = false; OY.terms(['née', 'late', 'pedigree', 'christen']); ER.say('Ask her whose birthday.'); });
+      }, 2600);
+    });
+    read(); paintNew();
+    msg(Object.keys(placed).length ? 'The pedigree, with some of the cards on it. Drag a card to a place, or click the card and then the place.' :
+      'Ten places and ten cards: nine from the stones, and a blank one. Drag each card to its place, or click the card and then the place. On the blank card, click the name and the year to change them.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

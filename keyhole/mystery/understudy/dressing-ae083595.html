@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Dressing Room 1 · The Understudy</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="understudy.css">
+<style>
+  body{--bg:#4a1c28;--accent:#f0c35a;--font-display:'Pacifico',cursive;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(52,18,32,.96);--tc-ink:#f6ead6;--cap-bg:rgba(46,16,28,.94);--panel:#3a1624;--face-bg:#bcd0d3;--q-ink:#f3cf9a;--fade:#1c0810;--hud-bg:rgba(46,16,28,.84);--ov-bg:rgba(24,8,14,.84)}
+  .tc-room{font-size:clamp(34px,5vw,66px);line-height:1.2;margin:4px 0 20px}
+  .tk-name{font-family:'IM Fell English SC',serif}
+  .bulbglow{animation:bulb 3.6s steps(1,end) infinite}
+  .bulbglow.b{animation-duration:5.3s;animation-delay:-1.7s}.bulbglow.c{animation-duration:4.4s;animation-delay:-2.9s}
+  @keyframes bulb{0%{opacity:.95}34%{opacity:.8}52%{opacity:1}81%{opacity:.88}}
+  #rain4{animation:rain4 .8s linear infinite}
+  @keyframes rain4{from{transform:translate(0,0)}to{transform:translate(-12px,80px)}}
+  #steam4{animation:steam4 3.2s ease-in-out infinite;transform-origin:1360px 560px}
+  @keyframes steam4{0%{opacity:0;transform:translateY(10px)}35%{opacity:.6}100%{opacity:0;transform:translateY(-36px)}}
+  #qcbook.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.25)}}
+
+  /* the tape measure as a clock, four pins, and her book */
+  .bx.tp{width:min(1160px,96vw)}
+  .tp-frame{box-shadow:0 20px 50px rgba(0,0,0,.6);border-radius:3px;overflow:hidden}
+  .tp-tick{stroke:#3a3024;stroke-width:1.400}
+  .tp-num{font-family:'Oswald',sans-serif;font-weight:500;font-size:13.5px;fill:#3a3024;text-anchor:middle}
+  .tp-note{font-family:'Patrick Hand',cursive;font-size:16px;fill:#dfe6f7}
+  .pin{cursor:grab}
+  .pin.on{cursor:grabbing}
+  .pin text{font-family:'Patrick Hand',cursive;font-size:15.5px;fill:#2a2440;text-anchor:middle}
+  .pin.cur .flag{stroke-width:3.500}
+  .tp-two{display:grid;grid-template-columns:680px 1fr;gap:0 18px;align-items:start;margin-top:10px}
+  .tp-two .doc{width:100%;max-height:none;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .tp-side .pmsg{min-height:150px;margin:0 0 8px}
+  .tp-nudge{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#d9c9b0}
+  .tp-nudge button{width:38px;height:30px;border:1px solid rgba(255,255,255,.35);border-radius:3px;background:rgba(0,0,0,.4);color:#f6ead6;font-size:14px}
+  .tp-nudge button:hover{border-color:#f0c35a;color:#f0c35a}
+  .tp-sums{display:none;margin:0 0 10px}
+  .tp-side.two .tp-sums{display:block}
+  .tp-side.two .tp-nudge{display:none}
+  .tp-sums .wls{display:flex;margin:0 0 7px;justify-content:space-between}
+  .tp-sums .wls small{font-size:12.5px;text-align:left;flex:1}
+  .tp-side .btn{float:right}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="wallP" width="88" height="40" patternUnits="userSpaceOnUse"><rect width="88" height="40" fill="#b47c7e"/><rect width="34" height="40" fill="#c08c8d"/><rect x="33" width="3" height="40" fill="#a26c6f"/><rect x="60" width="2" height="40" fill="#c69b9b"/></pattern>
+  <linearGradient id="wallSh" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a0c16" stop-opacity=".6"/><stop offset=".3" stop-color="#2a0c16" stop-opacity="0"/><stop offset=".85" stop-color="#2a0c16" stop-opacity="0"/><stop offset="1" stop-color="#2a0c16" stop-opacity=".22"/></linearGradient>
+  <linearGradient id="carpG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a2a36"/><stop offset="1" stop-color="#2a0e18"/></linearGradient>
+  <linearGradient id="mirrG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d3e2e1"/><stop offset="1" stop-color="#9dbabb"/></linearGradient>
+  <radialGradient id="bulbG"><stop offset="0" stop-color="#fff6d6" stop-opacity=".95"/><stop offset=".3" stop-color="#ffe9a8" stop-opacity=".4"/><stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/></radialGradient>
+  <linearGradient id="nightG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1224"/><stop offset="1" stop-color="#26345a"/></linearGradient>
+  <linearGradient id="satG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3d8a7a"/><stop offset=".3" stop-color="#8fd3c4"/><stop offset=".55" stop-color="#5fb3a1"/><stop offset=".8" stop-color="#a9e0d3"/><stop offset="1" stop-color="#4a9a89"/></linearGradient>
+  <radialGradient id="vig4" cx="45%" cy="48%" r="78%"><stop offset="0" stop-color="#1c0810" stop-opacity="0"/><stop offset=".65" stop-color="#1c0810" stop-opacity=".2"/><stop offset="1" stop-color="#12050a" stop-opacity=".8"/></radialGradient>
+  <clipPath id="glassC"><rect x="398" y="208" width="244" height="319"/></clipPath>
+  <clipPath id="winC4"><rect x="1000" y="140" width="180" height="270"/></clipPath>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1146" fill="url(#wallP)"/><rect x="-1000" y="-400" width="3600" height="1146" fill="url(#wallSh)"/>
+<rect x="-1000" y="96" width="3600" height="8" fill="#e9dcc6" opacity=".7"/><rect x="-1000" y="724" width="3600" height="22" fill="#e9dcc6"/><rect x="-1000" y="724" width="3600" height="4" fill="#f6ead6"/>
+<rect x="-1000" y="746" width="3600" height="600" fill="url(#carpG)"/>
+<g id="trellis" stroke="#7d3a46" stroke-width="2" opacity=".5"></g>
+
+<!-- the window: rain, and the lights of Thornsea -->
+<g id="window4" class="hot"><rect x="988" y="128" width="204" height="294" fill="#e9dcc6"/><rect x="1000" y="140" width="180" height="270" fill="url(#nightG)"/>
+  <g clip-path="url(#winC4)"><g fill="#ffd98a"><circle cx="1030" cy="372" r="4"/><circle cx="1080" cy="388" r="3"/><circle cx="1128" cy="366" r="4"/><circle cx="1160" cy="392" r="3"/><circle cx="1054" cy="350" r="2.500"/></g>
+    <g id="rain4" stroke="#9fb4d9" stroke-width="1.600" opacity=".55"></g></g>
+  <path d="M1090 140v270M1000 270h180" stroke="#e9dcc6" stroke-width="6"/>
+  <path d="M980 120h44q10 150 -14 310h-30z" fill="#7d1f24"/><path d="M1200 120h-44q-10 150 14 310h30z" fill="#7d1f24"/><rect x="970" y="112" width="240" height="12" rx="6" fill="#b08a35"/></g>
+
+<!-- the speaker on the wall -->
+<g id="speaker" class="hot"><path d="M842 150V-400" stroke="#3a2717" stroke-width="3"/><rect x="800" y="150" width="84" height="62" rx="6" fill="#6b4a2a"/><rect x="808" y="158" width="68" height="46" rx="3" fill="#3a2717"/><g stroke="#8a6a45" stroke-width="3"><path d="M814 168h56M814 180h56M814 192h56"/></g></g>
+
+<!-- the basin, with the first-night flowers in it -->
+<g id="flowers" class="hot"><path d="M70 510h170l-16 56H86z" fill="#f4f1e8"/><path d="M70 510h170" stroke="#d6d1c2" stroke-width="6"/><path d="M150 510v-30h20" stroke="#c9ced3" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="140" y="566" width="30" height="170" fill="#e9e6da"/>
+  <path d="M120 512L92 330L214 344L176 512Z" fill="#f6ead6"/><path d="M120 512L92 330l56 100z" fill="#eadcc0"/>
+  <g stroke="#3f8a3a" stroke-width="4"><path d="M146 470L120 350M152 470L156 340M158 470L196 356"/></g>
+  <g fill="#f6b6c8"><circle cx="116" cy="340" r="20"/><circle cx="196" cy="350" r="18"/></g><g fill="#fbf8ee"><circle cx="156" cy="326" r="22"/><circle cx="136" cy="376" r="15"/></g><g fill="#e98aa4"><circle cx="116" cy="340" r="8"/><circle cx="196" cy="350" r="7"/></g><g fill="#f0c35a"><circle cx="156" cy="326" r="8"/><circle cx="136" cy="376" r="5"/></g></g>
+
+<!-- the dressing table and its mirror -->
+<rect x="330" y="565" width="130" height="150" fill="#5a3d20"/><rect x="620" y="565" width="130" height="150" fill="#5a3d20"/><g fill="#b08a35"><circle cx="395" cy="610" r="6"/><circle cx="395" cy="670" r="6"/><circle cx="685" cy="610" r="6"/><circle cx="685" cy="670" r="6"/></g>
+<path d="M338 640h114M628 640h114" stroke="#3a2717" stroke-width="3"/><path d="M338 715v58M452 715v58M628 715v58M742 715v58" stroke="#3a2717" stroke-width="10"/>
+<rect x="300" y="545" width="480" height="22" rx="4" fill="#7a5632"/><rect x="300" y="545" width="480" height="5" fill="#9a7245"/>
+<rect x="380" y="190" width="280" height="356" fill="#b08a35"/><rect x="388" y="198" width="264" height="340" fill="#7a5f22"/>
+<g clip-path="url(#glassC)">
+  <rect x="398" y="208" width="244" height="319" fill="url(#mirrG)"/><path d="M398 208H530L398 430Z" fill="#fff" opacity=".2"/>
+  <path d="M384 546Q388 470 438 452L456 446H486L504 452Q554 470 558 546Z" fill="#6a2a4a"/><path d="M450 446L471 498L492 446Z" fill="#e2b999"/><path d="M440 456q32 34 31 90M502 456q-32 34 -31 90" stroke="#8f4468" stroke-width="14" fill="none"/>
+  <rect x="461" y="416" width="20" height="34" fill="#e2b999"/><circle cx="440" cy="398" r="4.500" fill="#f7f4ea"/><circle cx="502" cy="398" r="4.500" fill="#f7f4ea"/>
+  <ellipse cx="471" cy="332" rx="25" ry="16" fill="#e6e9ee"/><ellipse cx="471" cy="384" rx="31" ry="37" fill="#ecc7a8"/>
+  <path d="M438 390Q431 338 471 334Q511 338 504 390Q500 362 471 359Q442 362 438 390Z" fill="#e6e9ee"/>
+  <path d="M448 378q8 -9 17 -2M477 376q9 -7 17 2" stroke="#3a2a32" stroke-width="2.600" fill="none" stroke-linecap="round"/>
+  <ellipse cx="457" cy="388" rx="5.500" ry="3.600" fill="#f7f1e6"/><ellipse cx="485" cy="388" rx="5.500" ry="3.600" fill="#f7f1e6"/><circle cx="458" cy="388" r="2.600" fill="#2a3a5a"/><circle cx="486" cy="388" r="2.600" fill="#2a3a5a"/>
+  <path d="M472 388q-6 14 -1 18q5 2 7 -2" stroke="#c9a084" stroke-width="2.200" fill="none" stroke-linecap="round"/><path d="M461 412q5 -4 10 -1q5 -3 10 1q-10 7 -20 0z" fill="#a3221b"/>
+</g>
+<g id="strips" class="hot">
+  <g fill="#fbf8ee" stroke="#c9c2ae" stroke-width="1"><rect x="402" y="232" width="30" height="120" transform="rotate(-2 417 292)"/><rect x="404" y="370" width="30" height="112" transform="rotate(2 419 426)"/><rect x="608" y="226" width="30" height="110" transform="rotate(2 623 281)"/><rect x="484" y="212" width="112" height="26" transform="rotate(-1 540 225)"/></g>
+  <g stroke="#1f1c18" stroke-width="2.200"><path d="M408 246h18M408 258h18M408 270h18M408 282h18M408 294h18M408 306h18M408 318h18M408 330h14"/><path d="M410 384h18M410 396h18M410 408h18M410 420h18M410 432h18M410 444h18M410 456h12"/>
+    <path d="M614 240h18M614 252h18M614 264h18M614 276h18M614 288h18M614 300h18M614 312h12"/><path d="M492 221h96M492 230h70"/></g></g>
+<g id="cards" class="hot"><rect x="602" y="356" width="42" height="54" fill="#dfe8f7" stroke="#9fb4d9" stroke-width="2" transform="rotate(7 623 383)"/><rect x="596" y="424" width="48" height="60" fill="#f6ead6" stroke="#b08a35" stroke-width="3" transform="rotate(-5 620 454)"/><path d="M606 444h28M606 454h28M606 464h18" stroke="#a3221b" stroke-width="2" transform="rotate(-5 620 454)"/></g>
+<g id="bulbs"></g>
+<g id="chocbox" class="hot"><path d="M308 520h74v26h-74z" fill="#5a2a1c"/><path d="M308 520l8 -34h74l-8 34z" fill="#7d3a26"/><path d="M322 494h56" stroke="#e6c873" stroke-width="2"/><rect x="314" y="526" width="62" height="14" fill="#fbf8ee"/><path d="M324 530q22 12 44 0" stroke="#d6d1c2" stroke-width="3" fill="none"/></g>
+<g><rect x="690" y="518" width="26" height="27" rx="4" fill="#f6b6c8"/><rect x="690" y="514" width="26" height="8" rx="3" fill="#b08a35"/><rect x="722" y="524" width="34" height="21" rx="4" fill="#f4f1e8"/><rect x="722" y="520" width="34" height="7" rx="3" fill="#7d1f24"/><path d="M664 541l18 -40" stroke="#5a3d20" stroke-width="6" stroke-linecap="round"/><ellipse cx="686" cy="494" rx="9" ry="12" fill="#f6ead6"/></g>
+
+<!-- Miss Lascelles, with her back to you -->
+<g id="lascelles" class="hot">
+  <ellipse cx="582" cy="854" rx="96" ry="10" fill="#000" opacity=".3"/>
+  <path d="M548 722L540 850M616 722L624 850" stroke="#5a3d20" stroke-width="9" stroke-linecap="round"/><ellipse cx="582" cy="718" rx="54" ry="13" fill="#7d1f24"/>
+  <path d="M496 852Q498 640 528 566Q582 538 636 566Q666 640 668 852Z" fill="#6a2a4a"/><path d="M540 650q-10 100 -14 200M624 650q10 100 14 200M582 600V852" stroke="#551f3c" stroke-width="3" fill="none"/>
+  <path d="M526 568Q582 594 638 568Q622 548 582 546Q542 548 526 568Z" fill="#8f4468"/>
+  <path d="M634 584q36 -8 52 -30" stroke="#6a2a4a" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="689" cy="550" r="10" fill="#ecc7a8"/>
+  <rect x="571" y="526" width="22" height="26" fill="#e2b999"/><ellipse cx="547" cy="506" rx="4.500" ry="8" fill="#e2b999"/><ellipse cx="617" cy="506" rx="4.500" ry="8" fill="#e2b999"/><circle cx="546" cy="518" r="4" fill="#f7f4ea"/><circle cx="618" cy="518" r="4" fill="#f7f4ea"/>
+  <ellipse cx="582" cy="500" rx="34" ry="38" fill="#e6e9ee"/><ellipse cx="582" cy="460" rx="25" ry="19" fill="#eef0f4"/>
+  <path d="M566 460q16 -12 32 0M558 494q24 16 48 0M562 514q20 12 40 0" stroke="#b9bec9" stroke-width="2.400" fill="none"/><path d="M598 450l17 -10M602 458l17 -10" stroke="#b08a35" stroke-width="3" stroke-linecap="round"/>
+</g>
+
+<!-- the chair by the door, and the book on it -->
+<g id="qcbook" class="hot"><ellipse cx="905" cy="854" rx="70" ry="8" fill="#000" opacity=".3"/>
+  <path d="M852 718Q850 560 905 556Q960 560 958 718" stroke="#7a5632" stroke-width="10" fill="none"/><path d="M880 716Q880 600 905 598Q930 600 930 716" stroke="#7a5632" stroke-width="6" fill="none"/>
+  <path d="M856 722L846 852M954 722L964 852M880 728v100M930 728v100" stroke="#6b4a2a" stroke-width="9" stroke-linecap="round"/><ellipse cx="905" cy="720" rx="58" ry="15" fill="#8a6a45"/>
+  <path d="M870 702l64 -4 4 14 -64 4z" fill="#8f7fb5"/><path d="M872 716l64 -4" stroke="#f7f1e3" stroke-width="4"/><path d="M920 700v20" stroke="#7d1f24" stroke-width="3"/></g>
+
+<!-- Mrs Greaves, the ironing board, the ball gown -->
+<g id="greaves" class="hot" transform="translate(1300 852) scale(1.6)" data-fig="greaves"></g>
+<path d="M1060 604L1340 850M1340 604L1060 850" stroke="#8d949c" stroke-width="8" stroke-linecap="round"/>
+<g id="gown" class="hot"><path d="M1004 600Q1004 580 1030 580H1392Q1420 580 1420 592Q1420 604 1392 604H1030Q1004 604 1004 600Z" fill="#e9e2cf"/>
+  <path d="M1020 584H1250Q1262 700 1300 852H1070Q1010 760 1020 584Z" fill="url(#satG)"/><path d="M1060 590q-10 130 30 262M1120 590q0 140 40 262M1180 590q10 140 60 262" stroke="#3d8a7a" stroke-width="3" fill="none" opacity=".7"/>
+  <path d="M1020 584h230l4 22h-232z" fill="#a9e0d3"/></g>
+<g><path d="M1330 578h66l-10 -28h-40q-16 6 -16 28z" fill="#8d949c"/><path d="M1344 548q22 -22 44 0" stroke="#17171b" stroke-width="7" fill="none" stroke-linecap="round"/><path id="steam4" d="M1352 546q-8 -10 0 -20q8 -10 0 -20M1372 546q-8 -10 0 -20" stroke="#f6ead6" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+
+<!-- the screen, and the blue velvet over it -->
+<g><path d="M1440 310L1522 296V866L1440 852Z" fill="#3d5a55"/><path d="M1522 296L1604 312V852L1522 866Z" fill="#324b47"/><path d="M1604 312L1686 296V866L1604 852Z" fill="#3d5a55"/>
+  <g fill="none" stroke="#b08a35" stroke-width="2.500" opacity=".7"><path d="M1452 700q30 -60 10 -130q30 20 46 -30M1540 760q20 -80 50 -100"/></g><g fill="#e98aa4" opacity=".8"><circle cx="1462" cy="566" r="9"/><circle cx="1508" cy="538" r="7"/><circle cx="1592" cy="656" r="9"/></g></g>
+<g id="velvet" class="hot"><path d="M1446 300Q1500 270 1560 296L1572 640Q1510 660 1452 636Z" fill="#26345a"/><path d="M1446 300Q1500 270 1560 296L1556 356Q1500 330 1450 358Z" fill="#35477a"/><path d="M1480 340q-6 140 4 300M1524 334q6 150 -2 314" stroke="#1c2742" stroke-width="3" fill="none"/></g>
+
+<g id="glow4" pointer-events="none"></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig4)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go down to the stage</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="understudy.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  /* the bulbs round the mirror, the carpet, the rain */
+  (function () {
+    var s = '', g = '', i, B = [[392, 176], [456, 176], [520, 176], [584, 176], [648, 176], [366, 250], [366, 334], [366, 418], [366, 502], [674, 250], [674, 334], [674, 418], [674, 502]];
+    B.forEach(function (b, j) {
+      s += '<circle cx="' + b[0] + '" cy="' + b[1] + '" r="12" fill="#fff6d6" stroke="#e6c873" stroke-width="2"/>';
+      g += '<circle class="bulbglow' + (j % 3 === 1 ? ' b' : j % 3 === 2 ? ' c' : '') + '" cx="' + b[0] + '" cy="' + b[1] + '" r="46" fill="url(#bulbG)"/>';
+    });
+    $('#bulbs').innerHTML = s; $('#glow4').innerHTML = g; s = '';
+    for (i = -30; i < 40; i++) s += '<path d="M' + (i * 90) + ' 746L' + (i * 90 + 420) + ' 1320M' + (i * 90) + ' 746L' + (i * 90 - 420) + ' 1320"/>';
+    $('#trellis').innerHTML = s; s = '';
+    for (i = 0; i < 26; i++) s += '<path d="M' + (1004 + (i * 53) % 180) + ' ' + (60 + (i * 97) % 340) + 'l-5 30"/>';
+    $('#rain4').innerHTML = s;
+  })();
+  US.figs();
+
+  ER.init({
+    theme: 'mystery', story: 'understudy', storyTitle: 'The Understudy', id: 'dressing', no: 'IV', title: 'Dressing Room 1',
+    go: 'Knock, and wait',
+    intro: [
+      'Mr Mossop&rsquo;s list says where each of his fifteen things ought to be at any minute. At the interval, outline 5 ought to be full and is empty, and outline 6 ought to be empty and is full: the Countess&rsquo;s fan is lying in the paper knife&rsquo;s place. It was on the stage until the end of Scene 2, and it was on the table when the lights came up on Scene 3. So it was put down in the second dark, and only one person had it: Miss Lascelles.',
+      'But she never puts her fan down. She gives it to Mrs Greaves at the quick-change chair. Tonight she stopped at the table, in the dark, a hand&rsquo;s width from the necklace case.',
+      'Up the stairs on the far side, one door has a gold star on it, and a card: MISS LASCELLES. Behind it somebody is being very quiet. The landing smells of violets. You have smelt violets once before tonight.'
+    ],
+    exit: {"next":"stage","w":{"704a2725":"6377d724"}}, tags: {"pa":["aa16ce93"],"pb":["8d2d8dad"],"pc":["607f9672"],"pd":["34ab02c2"],"hand":["34c62b05"],"lost":["fc8b264c"]},
+    sound: ['noir', { root: 48, bpm: 56, drop: ['mel', 'ost'], beds: [['rain', 0.45]] }],      /* upstairs, with the door shut: no house to be heard, only rain on the window; seconds are counted here, so nothing with a beat */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#qcbook').classList.toggle('ready', !!(told.gre && !nextFile));
+    ER.pips((told.las ? 1 : 0) + (told.gre ? 1 : 0) + ((ER.flag('d-stage') || 0) > 0 ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['Ms Tindall has called everybody to the stage. The stairs are just outside the door.']];
+    if (bench && bench.isOpen()) return [['pins', [
+      'The tape is the time: one centimetre for one second. It starts at nought, when the blue lamp goes out. Each pin is a moment. Two of the four moments are written in Mrs Greaves&rsquo;s book.',
+      'Her book gives times in minutes and seconds, as the running order does: 1.05 would be one minute and five seconds, which is 65 seconds. The other two pins need papers from other rooms: how long the second dark lasts, and when the Countess comes out on to the terrace.',
+      'The lights come up when the dark is over: you worked out its length in the lighting box, and it is in your notes. The running order says that the Countess walks on at 1.10 after that. Add the two together.'
+    ]], ['sums', [
+      'In hand: from the moment when she is dressed and &ldquo;gone&rdquo; at a rehearsal, to the moment when she must walk on. Count the centimetres between those two pins.',
+      'Lost: &ldquo;gone&rdquo; tonight against &ldquo;gone&rdquo; on Wednesday. Or count it another way: tonight she reached the chair on 15, and she is always there on 3.'
+    ]]][bench.stage()];
+    if (!told.las) return ['las', ['It is Miss Lascelles&rsquo;s room, and she will talk to you in the mirror. Click on her.']];
+    if (!told.gre) return ['gre', ['The person with a stopwatch round her neck is Mrs Greaves, at the ironing board. She is waiting to be asked.']];
+    return ['book', ['Mrs Greaves&rsquo;s book is lying on the chair in the middle of the room: the small lilac one.']];
+  }
+  function begin() {
+    US.file('call', true); US.file('run', true); US.file('key', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('The speaker over the door has called everybody to the stage.'); return; }
+    if (told.in) { busy = false; ER.say('Dressing room 1. Mrs Greaves is still pressing the ball gown, and Miss Lascelles is still not dressing.'); return; }
+    tell('in');
+    ER.narrate([
+      'It is the warmest room in the building. There are bulbs all round the mirror, flowers standing in the basin, and cards stuck into the frame. In front of the mirror, with her back to you, sits Miss Lascelles in a plum-coloured dressing gown. She is not getting ready for Act Two.',
+      'At an ironing board a grey-haired woman is pressing a ball gown with a small iron, slowly, as if there were all the time in the world. She has a tape measure round her neck and a stopwatch on a ribbon. This is Mrs Greaves, who has dressed Miss Lascelles for twenty-six years.',
+      '&ldquo;The child from the stool,&rdquo; says Miss Lascelles, to the mirror. &ldquo;Ms Tindall has sent you to ask where I was. I was on the stage, dear. A hundred and eighty-six people will tell you so.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#lascelles').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Miss Lascelles is looking at herself in the glass, and for once she does not seem to like the audience.'); return; }
+    ER.talk({
+      who: 'Miss Verity Lascelles', role: 'The Countess · fifty years on the stage', face: window.FACE('lascelles'),
+      lines: [
+        { note: 'She speaks to you in the mirror, without turning round. In the glass she looks like a queen on a coin.', a: '&ldquo;My grandmother wore those stones, and my mother after her. I have worn them on every first night for fifty years. I shall not go on in Mossop&rsquo;s glass. If the stones cannot be found, there is no second act, and nobody can blame the Jackdaw for that. Things are stolen. It is nobody&rsquo;s fault.&rdquo;' },
+        { q: 'Where were you in the second dark?', a: 'Changing my dress, dear. I say my last line down by the window. I go off on the prompt side, and I walk straight to my chair, where Greaves is waiting. I stop for nothing and I touch nothing. Out of the grey silk, into the blue velvet, and on again for the terrace.' },
+        { q: 'How long does that take?', a: 'All the time there is. Ask Greaves: she holds a watch on me as if I were a horse. In a quick change one has not a second to spare, child. Not one. One does not go shopping on the way.' },
+        { q: 'Who do you think took it?', a: 'I do not think about it at all. Hugo Crane thinks it was that girl who follows me about with a book. I dare say he is wrong. He usually is.</p><p class="note">For a moment her eyes go to the long strips of paper round the mirror. Then they come back to you.</p><p>But I shall not go on in glass.' },
+        { note: 'She turns her head a very little, towards the ironing board.', a: '&ldquo;Greaves. You may fetch the grey silk up from the wings. It will crease.&rdquo;</p><p>&ldquo;Ms Tindall says that nothing is to be moved, Madam.&rdquo;</p><p class="note">A very small silence.</p><p>&ldquo;Then let it crease.&rdquo;' }
+      ],
+      clue: { id: 'las1', title: 'Miss Lascelles, at her mirror', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('las')) { paint(); ER.say('At the ironing board, Mrs Greaves has not looked up once.'); } }
+    });
+  });
+  $('#greaves').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;I did not tell you,&rdquo; says Mrs Greaves. &ldquo;You counted it.&rdquo; She seems to want that to be quite clear.'); return; }
+    if (!told.las) { ER.say('&ldquo;Madam first,&rdquo; says Mrs Greaves, without looking up from the iron. &ldquo;It is her room.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mrs Greaves', role: 'Dresser · wardrobe', face: window.FACE('greaves'),
+      lines: [
+        { note: 'She stands the iron on its end before she speaks, and she looks at you for some time first.', a: '&ldquo;I dress her. I have dressed her since before you were born, and I do not talk about her. But I will tell you how I work, because that is in my book, and what is in my book is true.&rdquo;' },
+        { q: 'How do you time a quick change?', a: 'The watch starts when the blue lamp goes out. It stops when she leaves my hands, dressed, and I say &ldquo;gone&rdquo;. Hooks, sleeves, the velvet, the slippers, the comb in her hair. I have never told a lie about a quick change. A dresser who does is no use to anybody.' },
+        { q: 'Was tonight the same as the rehearsals?', a: 'The work was the same. I counted it as I did it: seventy-two seconds, the same as on Wednesday.</p><p class="note">She picks the iron up again.</p><p>Madam is at my chair by the count of three. She has four steps to walk, past the props table. Tonight I stood there with the velvet open in my arms, and I had counted fifteen before she came.' },
+        { q: 'Did she give you her fan?', a: 'She had no fan. She always gives me the fan. Tonight her hands were empty when they came to me.</p><p class="note">She thinks about the word &ldquo;empty&rdquo; for a moment, and does not change it.' },
+        { q: 'Is there anything else?', a: 'I answer what I am asked.</p><p class="note">She turns the ball gown over.</p><p>On Wednesday night she had me sew a pocket into the grey silk. For a handkerchief, she said. In twenty-six years Madam has never carried her own handkerchief. I carry it. That is in my book too, under Wednesday. The book is on the chair. You can read, I suppose.' }
+      ],
+      clue: { id: 'gre1', title: 'Mrs Greaves, at the ironing board', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('gre')) { US.words(['dresser', 'quick change', 'stopwatch']); paint(); ER.say('Her book is lying on the chair in the middle of the room: a small lilac one, with a red ribbon in it.'); } }
+    });
+  });
+
+  /* ---------- things in the room ---------- */
+  US.thing('#strips', null, function () {
+    return nextFile ? 'They are not first-night cards. It is the Countess&rsquo;s long speech from Act Two, every word of it, in letters two centimetres high.' :
+      'Long strips of paper are stuck round the mirror, between the cards, covered with large black writing. You are too far away to read them, and it does not seem polite to go nearer.';
+  }, isBusy);
+  US.thing('#cards', null, 'First-night cards. BREAK A LEG, VERITY. H.C. In a theatre nobody wishes anybody good luck: that would be bad luck. They tell each other to break a leg.', isBusy);
+  US.thing('#flowers', null, 'First-night flowers, still in their paper, standing in the basin. Nobody has had time to look for a vase.', isBusy);
+  US.thing('#chocbox', null, 'A chocolate box, lined with cotton wool. In the cotton wool is the shape of a necklace, and nothing else. This is where the understudy has slept since Tuesday.', isBusy);
+  US.thing('#gown', 'ball gown', 'The ball gown for Act Two: sea-green satin, cut low at the neck to show a necklace. Mrs Greaves is pressing it as if Act Two were certain.', isBusy);
+  US.thing('#velvet', 'velvet', 'The blue velvet from Scenes 3 and 4, hanging over the screen. It has a collar as high as her ears.', isBusy);
+  US.thing('#speaker', null, 'A small speaker on the wall. Ms Tindall&rsquo;s voice comes out of it into every dressing room: every call, every night.', isBusy);
+  US.thing('#window4', null, 'Rain on the glass, and the lights of Thornsea running down it.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#qcbook').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Four lines of times, and one line about a pocket. Nothing in it is a lie.'); return; }
+    if (!told.gre) { ER.say('A small lilac book on a chair, with a red ribbon to keep the place. Its owner is standing three steps away with a hot iron in her hand.'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the tape: four moments, and then two sums ---------- */
+  function makeBench() {
+    var PINS = [['a', 'the lights come up on the terrace', '#4f7fe0', 8], ['b', 'the Countess must walk on', '#e3a92b', 104], ['c', '“gone”, on Wednesday', '#f4f1e8', 40], ['d', '“gone”, tonight', '#d23b2e', 72]],
+      stage = ER.flag('d-stage') || 0, pos = ER.flag('d-pins') || [null, null, null, null], cur = -1, wait = false, wl = [], pins = [], box = ER.el('div', 'bx tp'), s, i, x, G = '&rdquo; says Mrs Greaves. &ldquo;';
+    s = '<div class="tp-frame"><svg viewBox="0 0 1100 214"><rect width="1100" height="214" fill="#26345a"/><g stroke="#1c2742" stroke-width="18" opacity=".6"><path d="M120 0v214M380 0v214M640 0v214M900 0v214"/></g>' +
+      '<rect x="36" y="150" width="1028" height="40" rx="3" fill="#f0d24a" stroke="#b99a1a" stroke-width="2"/>';
+    for (i = 0; i <= 100; i++) {
+      x = 50 + i * 10;
+      s += '<path class="tp-tick" d="M' + x + ' 150v' + (i % 10 === 0 ? 20 : i % 5 === 0 ? 14 : 8) + '"/>';
+      if (i % 10 === 0) s += '<text class="tp-num" x="' + x + '" y="185">' + i + '</text>';
+    }
+    s += '<text class="tp-note" x="40" y="207">0: the blue lamp goes out</text><text class="tp-note" x="1062" y="207" text-anchor="end">one centimetre for one second</text>';
+    PINS.forEach(function (p, j) {
+      s += '<g class="pin" data-i="' + j + '"><path d="M0 ' + (p[3] + 26) + 'V148" stroke="#c9ced3" stroke-width="2.500"/><circle cx="0" cy="150" r="8" fill="' + p[2] + '" stroke="#1c2742" stroke-width="2"/>' +
+        '<g class="fl"><rect class="flag" x="-136" y="' + p[3] + '" width="272" height="26" rx="3" fill="#fbf8ee" stroke="' + (p[2] === '#f4f1e8' ? '#8d949c' : p[2]) + '" stroke-width="2"/><text x="0" y="' + (p[3] + 18.5) + '"></text></g></g>';
+    });
+    s += '</svg></div><div class="tp-two"><div class="doc qc">' + ER.gloss(US.DOC.qc) + '</div><div class="tp-side"><p class="pmsg"></p>' +
+      '<div class="tp-nudge"><button type="button" data-d="-1" title="one second earlier">&#9664;</button><button type="button" data-d="1" title="one second later">&#9654;</button><span>move the last pin by one second</span></div>' +
+      '<div class="tp-sums"></div><button type="button" class="btn" id="d-go"></button></div></div>';
+    box.innerHTML = s;
+    var svg = box.querySelector('svg'), msgEl = box.querySelector('.pmsg'), go = box.querySelector('#d-go'), side = box.querySelector('.tp-side'), sums = box.querySelector('.tp-sums');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() {
+      pins.forEach(function (g, j) {
+        var px = pos[j] == null ? 170 + j * 255 : 50 + pos[j] * 10, fx = US.clamp(px, 140, 960) - px;
+        g.setAttribute('transform', 'translate(' + px + ' ' + (pos[j] == null ? -6 : 0) + ')');
+        g.setAttribute('class', 'pin' + (cur === j ? ' cur' : ''));
+        g.querySelector('.fl').setAttribute('transform', 'translate(' + fx + ' 0)');
+        g.querySelector('text').textContent = PINS[j][1] + (pos[j] == null ? '' : ' · ' + pos[j] + ' s');
+      });
+      side.classList.toggle('two', stage === 1);
+      go.textContent = stage ? 'That is the sum' : 'Show Mrs Greaves';
+    }
+    ER.$$('.pin', box).forEach(function (g, j) {
+      pins[j] = g;
+      ER.drag(g, {
+        start: function () { if (wait || stage) return false; cur = j; },
+        move: function (e, moved) { if (!moved) return; pos[j] = Math.round((US.clamp(ER.pt(svg, e).x, 50, 1050) - 50) / 10); draw(); },
+        end: function (e, moved) { if (moved) { ER.flag('d-pins', pos); US.sfx.pin(); } draw(); }
+      });
+    });
+    box.querySelector('.tp-nudge').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('button') : null;
+      if (!b || wait || stage) return;
+      if (cur < 0 || pos[cur] == null) { msg('Drag a pin on to the tape first. Then these two arrows move it by one second at a time.'); return; }
+      pos[cur] = US.clamp(pos[cur] + (+b.getAttribute('data-d')), 0, 100); ER.flag('d-pins', pos); US.sfx.key(); draw();
+    });
+    wl[0] = US.wheels(sums, { label: 'In hand, at a rehearsal', n: 2, unit: 'seconds', start: (ER.flag('d-w') || [])[0], change: keep });
+    wl[1] = US.wheels(sums, { label: 'Lost tonight', n: 2, unit: 'seconds', start: (ER.flag('d-w') || [])[1], change: keep });
+    function keep() { ER.flag('d-w', wl.map(function (w) { return w.at(); })); }
+    function whyPin(j, v) {
+      if (j === 0) return v === 25 ? '&ldquo;Twenty-five is counted from Ms Tindall&rsquo;s &lsquo;go&rsquo;,' + G + 'My watch starts when the blue lamp goes out: when it is black. How long was it black?&rdquo;' :
+        '&ldquo;My tape starts where my watch starts: when the blue lamp goes out,' + G + 'How long did that boy in the lighting box say the second dark lasts? The lights come up at the end of it.&rdquo;';
+      if (j === 1) return v === 70 ? '&ldquo;Seventy seconds after the lights come UP,' + G + 'My tape does not start at the light. It starts at the dark.&rdquo;' :
+        v === 95 ? '&ldquo;You have counted from Ms Tindall&rsquo;s &lsquo;go&rsquo;,' + G + 'My watch starts later than that: when the lamp is out.&rdquo;' :
+        '&ldquo;The running order says when the Countess comes out on to the terrace,' + G + 'It gives minutes and seconds, counted from the moment when the lights come up. And the lights come up where your blue pin is.&rdquo;';
+      if (j === 2) return v === 76 ? '&ldquo;That was Tuesday,' + G + 'The last rehearsal was Wednesday.&rdquo;' :
+        v === 72 ? '&ldquo;Seventy-two is the work alone,' + G + 'The watch has started before she reaches me. Read the &lsquo;gone&rsquo; column.&rdquo;' :
+        '&ldquo;Wednesday is in my book,' + G + 'The &lsquo;gone&rsquo; column is in minutes and seconds, not in seconds.&rdquo;';
+      return '&ldquo;Tonight is the last of the four,' + G + 'Minutes and seconds.&rdquo;';
+    }
+    go.addEventListener('click', function () {
+      var j, hand, lost, file;
+      if (wait || nextFile) return;
+      if (!stage) {
+        for (j = 0; j < 4; j++) if (pos[j] == null) { msg('Four pins, four moments. Drag every one of them down on to the tape.'); return; }
+        for (j = 0; j < 4; j++) if (!ER.check('p' + PINS[j][0], pos[j])) { ER.sfx.no(); cur = j; draw(); msg('<b>' + PINS[j][1].charAt(0).toUpperCase() + PINS[j][1].slice(1) + '.</b> ' + whyPin(j, pos[j])); return; }
+        stage = 1; ER.flag('d-stage', 1); cur = -1; US.sfx.pin(); draw(); paint();
+        msg('&ldquo;That is my quick change, from the lamp going out to the Countess on the terrace,' + G + 'Now the sums. At the last rehearsal, how many seconds had she in hand between &lsquo;gone&rsquo; and her entrance? And how many seconds did tonight lose?&rdquo;');
+        return;
+      }
+      hand = +wl[0].get(); lost = +wl[1].get();
+      if (!ER.check('hand', hand)) {
+        ER.sfx.no();
+        msg('<b>In hand.</b> ' + (hand === pos[1] - pos[3] ? '&ldquo;That is what she had left TONIGHT,' + G + 'I asked what she has in hand at a rehearsal: from &lsquo;gone&rsquo; on Wednesday to the moment when she must walk on.&rdquo;' :
+          '&ldquo;In hand: from the white pin to the gold one,' + G + 'Count the centimetres.&rdquo;'));
+        return;
+      }
+      if (!ER.check('lost', lost)) {
+        ER.sfx.no();
+        msg('<b>Lost.</b> ' + (lost === 15 ? '&ldquo;She was at my chair on fifteen. But she is never there before three: it is four steps,' + G + 'How many of the fifteen are new?&rdquo;' :
+          lost === hand ? '&ldquo;That is what she HAS, at a rehearsal,' + G + 'How much of it did tonight take away?&rdquo;' :
+          lost === pos[1] - pos[3] ? '&ldquo;That is what was left,' + G + 'What was lost?&rdquo;' :
+          '&ldquo;From the white pin to the red one,' + G + 'Or the count of fifteen against the count of three. It comes to the same.&rdquo;'));
+        return;
+      }
+      file = ER.exit([pos.join('-') + '-' + hand + '-' + lost], { wait: true });
+      if (!file) { msg('The tape has slipped. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('d-file', file); wl.forEach(function (w) { w.lock(true); });
+      US.mine('tape', 'The quick change, in seconds', '<p>0: the blue lamp goes out.</p><p>' + pos[0] + ': the lights come up on the terrace.</p><p>' + pos[2] + ': &ldquo;gone&rdquo; at the last rehearsal. ' + pos[3] + ': &ldquo;gone&rdquo; tonight.</p><p>' + pos[1] + ': the Countess must walk on.</p>' +
+        '<p>So she has ' + hand + ' seconds in hand, and tonight she lost <b>' + lost + '</b> of them between the stage and the chair: four steps, past the props table. She was at the chair on 15, not on 3, and she had no fan.</p>' +
+        '<p>On Wednesday Mrs Greaves sewed a pocket into the grey silk.</p>', true);
+      msg('&ldquo;' + hand + ' seconds in hand, at the last rehearsal. ' + lost + ' of them gone tonight, between the edge of the stage and my chair. Four steps, past one table,&rdquo; says Mrs Greaves. She winds the tape measure round her hand. &ldquo;I did not tell you that. You counted it.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'Miss Lascelles has not moved. In the mirror her face is perfectly still. &ldquo;Greaves,&rdquo; she says, &ldquo;you hold that watch on me as if I were a horse.&rdquo; &ldquo;Yes, Madam,&rdquo; says Mrs Greaves. &ldquo;And tonight the horse stopped on the way.&rdquo;',
+          'You are near enough now to read one of the long strips of paper that are stuck round the mirror. They are not first-night cards. It is the Countess&rsquo;s long speech from Act Two, every word of it, in letters two centimetres high.',
+          'The speaker on the wall crackles. &ldquo;This is the stage manager. Everybody to the stage, please. Miss Lascelles. Mr Crane. Mr Ashdown. Miss Okeke. Mrs Greaves. And the stool. Stand by.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      }, 4600);
+    });
+    draw();
+    msg(stage ? 'The four pins are in. Now the two sums: seconds in hand at a rehearsal, and seconds lost tonight.' :
+      'Mrs Greaves unrolls her tape measure along the ironing board and takes four pins out of her collar. &ldquo;One centimetre for one second. My watch starts at nought. Put each pin where it belongs.&rdquo; Drag the pins down on to the tape.');
+    return {
+      open: function () { ER.open('ov-lock', box); if (tell('qc')) { US.file('qc'); US.words(['tape measure', 'stopwatch']); } },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return stage; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Props Table · The Understudy</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-mystery.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="understudy.css">
+<style>
+  body{--bg:#0b0e16;--accent:#9fc2ff;--font-display:'Amatic SC',cursive;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(8,11,18,.95);--tc-ink:#e9eef7;--cap-bg:rgba(8,11,18,.93);--panel:#121723;--face-bg:#0e1524;--q-ink:#b9d0ff;--fade:#04060a;--hud-bg:rgba(8,11,18,.8)}
+  .tc-room{font-weight:700;font-size:clamp(52px,8vw,104px);letter-spacing:.06em;line-height:.95;margin-bottom:20px}
+  .tk-name{font-family:'IM Fell English SC',serif}
+  .paintD{font-family:'Amatic SC',cursive;font-weight:700;fill:#231d14;text-anchor:middle}
+  .sten{font-family:'Stardos Stencil',serif;font-weight:700;fill:#f6ead0;text-anchor:middle}
+  .flick{animation:flick 4.1s steps(1,end) infinite}
+  @keyframes flick{0%{opacity:.95}21%{opacity:.84}44%{opacity:1}69%{opacity:.9}86%{opacity:.98}}
+  .mote{animation:mote 10s linear infinite;opacity:0}
+  .mote.b{animation-duration:13s;animation-delay:-5s}.mote.c{animation-duration:11s;animation-delay:-8s}
+  @keyframes mote{0%{transform:translate(0,0);opacity:0}15%{opacity:.7}85%{opacity:.5}100%{transform:translate(-30px,110px);opacity:0}}
+  #dress{transform-origin:1450px 352px;animation:sway 6s ease-in-out infinite alternate}
+  @keyframes sway{from{transform:rotate(-.7deg)}to{transform:rotate(.7deg)}}
+  #table.ready #tabtop{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.12)}}
+
+  /* the table: painted outlines, and the things that lie in them */
+  .ol{fill:none;stroke:#1b1b1f;stroke-width:3.200;stroke-linejoin:round;stroke-linecap:round}
+  .plab{font-family:'Amatic SC',cursive;font-weight:700;font-size:42px;fill:#1b1b1f;text-anchor:middle}
+  .spot{fill:#fff;fill-opacity:0;stroke:none;cursor:pointer}
+  .spot:hover{stroke:#4f7fe0;stroke-width:2;stroke-dasharray:6 5}
+  .spot.sel{stroke:#2f5fd0;stroke-width:4;fill:#4f7fe0;fill-opacity:.14}
+  .bx.tb{width:min(1200px,96vw)}
+  .tb-two{display:grid;grid-template-columns:520px 1fr;gap:0 16px;align-items:start}
+  .tb-frame{border:10px solid #3a2717;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .tb-two .doc{width:100%;max-height:none;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+  .tb-left .bx-foot{display:block;margin-top:8px;overflow:hidden}
+  .tb-left .pmsg{min-height:72px}
+  .tb-pick{display:none;margin:6px 0 2px}
+  .tb-left.two .tb-pick{display:block}
+  .tb-pick h6{margin:0 0 3px;font-family:'Oswald',sans-serif;font-weight:500;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:#9fc2ff}
+  .tb-row{display:grid;gap:5px;margin:0 0 7px}
+  .tb-row.who{grid-template-columns:repeat(3,1fr)}
+  .tb-row.when{grid-template-columns:repeat(7,1fr)}
+  .tb-row button{padding:6px 2px 5px;font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:#e9eef7;border:1px solid rgba(255,255,255,.3);border-radius:3px;background:rgba(0,0,0,.45);white-space:nowrap}
+  .tb-row button:hover{border-color:#9fc2ff}
+  .tb-row button.sel{background:#9fc2ff;color:#0b0e16;border-color:#9fc2ff}
+  .tb-left .btn{float:right}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="floorW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1712"/><stop offset=".4" stop-color="#120e0b"/><stop offset="1" stop-color="#060504"/></linearGradient>
+  <linearGradient id="gapG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fb2c9"/><stop offset=".5" stop-color="#d6dde6"/><stop offset=".56" stop-color="#b9a47a"/><stop offset="1" stop-color="#6b5a3c"/></linearGradient>
+  <radialGradient id="blueW"><stop offset="0" stop-color="#9fc2ff" stop-opacity=".6"/><stop offset=".45" stop-color="#4f7fe0" stop-opacity=".2"/><stop offset="1" stop-color="#4f7fe0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig3" cx="50%" cy="62%" r="74%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".6" stop-color="#000" stop-opacity=".36"/><stop offset="1" stop-color="#000" stop-opacity=".9"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#0b0e16"/>
+<g id="bricksW" stroke="#141a28" stroke-width="2"></g>
+<path d="M-1000 620H2600V1320H-1000Z" fill="url(#floorW)"/>
+<g id="boardsW" stroke="#050403" stroke-width="2.500" opacity=".9"></g>
+
+<!-- the gap to the stage: the terrace, standing in the working light -->
+<g id="stagegap" class="hot">
+  <rect x="-1000" y="-400" width="1092" height="1720" fill="url(#gapG)"/>
+  <rect x="-1000" y="516" width="1092" height="14" fill="#efe9d8"/><g id="balus" fill="#e2dac4"></g><rect x="-1000" y="596" width="1092" height="20" fill="#d6cdb4"/>
+  <path d="M8 510l74 -6" stroke="#2a2d36" stroke-width="7" stroke-linecap="round"/><path d="M26 508.500v-2M60 506v-2" stroke="#c9a24a" stroke-width="9"/>
+  <path d="M-260 700h340v14h-340zM60 714v66M-240 714v66" fill="#d6cdb4" stroke="#b9ad90" stroke-width="3"/><path d="M-20 692l92 -8" stroke="#d98ca0" stroke-width="11" stroke-linecap="round"/><path d="M-20 692l-22 2" stroke="#5a3d20" stroke-width="4" stroke-linecap="round"/>
+</g>
+<rect x="90" y="-400" width="62" height="1720" fill="#04050a"/><path d="M152 -400V1320" stroke="#1a2030" stroke-width="3"/>
+<path d="M152 640L470 1320H152Z" fill="#ffd98a" opacity=".05"/>
+
+<!-- a pair of steps, and Miss Okeke on them -->
+<g id="ladder" class="hot"><path d="M176 862L222 318M338 862L292 318" stroke="#6b4a2a" stroke-width="12" stroke-linecap="round"/>
+  <g stroke="#7a5632" stroke-width="13"><path d="M186 760h142M195 664h124M204 568h106M213 472h88M221 384h72"/></g>
+  <g fill="#c2452f"><circle cx="200" cy="758" r="4"/><circle cx="296" cy="470" r="3"/></g><g fill="#e9eef7"><circle cx="310" cy="762" r="5"/><circle cx="224" cy="566" r="3.500"/></g><circle cx="286" cy="382" r="4" fill="#3f8a3a"/></g>
+<g id="okeke" class="hot"><ellipse cx="257" cy="660" rx="62" ry="120" fill="#fff" opacity="0"/>
+  <path d="M240 652L236 754M274 652L278 754" stroke="#17171b" stroke-width="13" stroke-linecap="round"/><path d="M224 750h22v9h-24zM268 750h22v9h-20z" fill="#0b0b0e"/>
+  <path d="M216 664q4 -86 41 -92t41 92z" fill="#1c1c22"/><path d="M236 664q2 -40 21 -44t21 44z" fill="#f4f1e8"/>
+  <path d="M226 596q-18 40 24 60M288 596q18 40 -24 60" stroke="#24242c" stroke-width="13" fill="none" stroke-linecap="round"/><circle cx="250" cy="657" r="7.500" fill="#6b4423"/><circle cx="264" cy="657" r="7.500" fill="#6b4423"/>
+  <path d="M243 584q14 10 28 0l3 9q-17 9 -34 0z" fill="#f4f1e8"/><rect x="251" y="568" width="12" height="16" fill="#5a3a1f"/><circle cx="257" cy="552" r="21" fill="#6b4423"/>
+  <path d="M236 550q0 -24 21 -24t21 24q-9 -12 -21 -12t-21 12z" fill="#15100c"/><circle cx="257" cy="526" r="9" fill="#15100c"/><path d="M241 531q16 -14 32 0q-16 -5 -32 0z" fill="#f4f1e8"/>
+  <path d="M248 554q3 2 6 0M260 554q3 2 6 0" stroke="#15100c" stroke-width="2" fill="none"/><path d="M252 564h9" stroke="#3a1f12" stroke-width="2"/>
+</g>
+
+<!-- Mr Mossop, his list on the wall, the blue lamp -->
+<g id="mossop3" class="hot" transform="translate(520 664)" data-fig="mossop"></g>
+<g id="list" class="hot" transform="rotate(1.500 770 404)"><rect x="686" y="300" width="168" height="216" fill="#e8dcc0"/><rect x="686" y="300" width="168" height="15" fill="#5a3d20"/>
+  <text x="770" y="350" class="paintD" font-size="32" letter-spacing="2">THE TABLE</text>
+  <g stroke="#4a3a22" stroke-width="2"><path d="M700 368h140M700 380h126M700 398h140M700 410h104M700 428h140M700 440h130M700 458h140M700 470h96M700 488h140M700 500h74"/></g></g>
+<path d="M800 -400V214" stroke="#03040a" stroke-width="4"/>
+<g id="lamp3" class="hot"><path d="M766 214h68l22 46h-112z" fill="#1c2b4a"/><path d="M766 214h68" stroke="#3a5388" stroke-width="3"/><ellipse cx="800" cy="262" rx="56" ry="9" fill="#b9d0ff"/></g>
+
+<!-- the props table -->
+<g id="table" class="hot">
+  <path d="M372 778v130M1228 778v130" stroke="#1d130b" stroke-width="14"/><path d="M430 778v64M1170 778v64" stroke="#130c07" stroke-width="10"/>
+  <rect x="350" y="596" width="900" height="168" fill="#3a2717"/><rect x="350" y="762" width="900" height="18" fill="#241710"/>
+  <g id="tabtop" transform="translate(360 604) scale(1.1282 .2885)"></g>
+</g>
+<ellipse class="flick" cx="800" cy="640" rx="640" ry="340" fill="url(#blueW)" pointer-events="none"/>
+<g fill="#b9d0ff"><circle class="mote" cx="740" cy="330" r="1.600"/><circle class="mote b" cx="860" cy="380" r="1.300"/><circle class="mote c" cx="800" cy="300" r="1.400"/></g>
+
+<!-- your stool -->
+<g id="stool3" class="hot"><ellipse cx="300" cy="888" rx="40" ry="6" fill="#000" opacity=".4"/><path d="M276 806L268 886M324 806L332 886M300 806V890" stroke="#3a2717" stroke-width="7" stroke-linecap="round"/><path d="M272 856h56" stroke="#3a2717" stroke-width="5"/><ellipse cx="300" cy="804" rx="34" ry="9" fill="#5a3d20"/><ellipse cx="300" cy="801" rx="34" ry="9" fill="#6b4a2a"/></g>
+
+<!-- the quick-change chair, a mirror, a rail, one dress -->
+<g id="mirror" class="hot"><rect x="1282" y="428" width="54" height="70" fill="#8a6a45"/><rect x="1288" y="434" width="42" height="58" fill="#7f95c0"/><path d="M1293 482l30 -40" stroke="#dfe8f7" stroke-width="3" opacity=".6"/></g>
+<g id="chair" class="hot"><path d="M1268 604V872M1340 742V872M1268 742h74M1268 800h72" stroke="#7a5632" stroke-width="10" stroke-linecap="round"/><rect x="1260" y="734" width="90" height="13" rx="3" fill="#8a6a45"/><path d="M1256 598h24v74h-24z" fill="#f4f1e8"/><path d="M1256 660h24" stroke="#c2452f" stroke-width="3"/></g>
+<path d="M1392 340V876M1578 340V876" stroke="#2a2d36" stroke-width="8"/><path d="M1384 352H1586" stroke="#3a3d46" stroke-width="8"/>
+<g stroke="#8d949c" stroke-width="3" fill="none"><path d="M1516 352v12M1492 380l24 -16 24 16"/><path d="M1546 352v10M1526 376l20 -14 20 14"/></g>
+<g id="dress" class="hot">
+  <path d="M1450 352v14" stroke="#8d949c" stroke-width="3"/><path d="M1414 388l36 -22 36 22" stroke="#8d949c" stroke-width="3" fill="none"/>
+  <path d="M1420 386q30 -14 60 0l6 100h-72z" fill="#9aa1ab"/><path d="M1414 486h72l34 318h-140z" fill="#8a919c"/>
+  <path d="M1434 500l-18 302M1450 500v304M1468 500l20 302" stroke="#737a86" stroke-width="3"/><path d="M1414 480h72v12h-72z" fill="#5f6672"/>
+  <path d="M1428 400q8 40 0 78" stroke="#c3c9d2" stroke-width="3" fill="none"/><path d="M1462 548h24l3 36h-25z" fill="none" stroke="#5f6672" stroke-width="2" stroke-dasharray="4 3"/>
+</g>
+<g id="buckets" class="hot"><path d="M1388 810h44l-6 62h-32z" fill="#b3271f"/><path d="M1386 810h48" stroke="#7d1f24" stroke-width="5"/><path d="M1440 816h44l-6 62h-32z" fill="#b3271f"/><path d="M1438 816h48" stroke="#7d1f24" stroke-width="5"/>
+  <text x="1410" y="850" class="sten" font-size="13">FIRE</text><text x="1462" y="856" class="sten" font-size="13">FIRE</text></g>
+
+<!-- Mr Crane -->
+<g id="crane" class="hot" transform="translate(1528 888) scale(1.1)" data-fig="crane"></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig3)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Cross the stage, and go up</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="understudy.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bench = null, told = {};
+
+  /* fifteen painted outlines: [number, name, the outline, the thing that is lying in it now, where its label goes, what a click takes hold of] */
+  var SP = [
+    [2, 'BREAKFAST TRAY', '<rect x="28" y="34" width="192" height="112" rx="14"/>',
+      '<rect x="34" y="40" width="180" height="100" rx="12" fill="#c9ced3" stroke="#8d949c" stroke-width="3"/><rect x="44" y="50" width="160" height="80" rx="8" fill="#dfe3e6"/>' +
+      '<path d="M60 92q-18 0 -16 16" stroke="#f4f1e8" stroke-width="6" fill="none"/><path d="M108 82l24 -11" stroke="#f4f1e8" stroke-width="9" stroke-linecap="round"/><circle cx="86" cy="90" r="26" fill="#f4f1e8" stroke="#b9b4a4" stroke-width="2"/><circle cx="86" cy="90" r="7" fill="#b9b4a4"/>' +
+      '<circle cx="152" cy="70" r="14" fill="#f4f1e8" stroke="#b9b4a4" stroke-width="2"/><circle cx="152" cy="70" r="8" fill="#7a4a2a"/><path d="M146 100v22M158 100v22M170 100v22" stroke="#c98f4a" stroke-width="7"/><rect x="134" y="98" width="52" height="26" rx="3" fill="none" stroke="#8d949c" stroke-width="3"/>',
+      [124, 186], [20, 22, 210, 170]],
+    [1, 'HAND BELL', '<path d="M286 46v26M262 134q2 -50 24 -62q22 12 24 62z"/><circle cx="286" cy="40" r="7"/>',
+      '<path d="M264 132q2 -46 22 -58q20 12 22 58z" fill="#c9a24a" stroke="#8a6a26" stroke-width="2"/><rect x="282" y="46" width="8" height="28" fill="#5a3d20"/><circle cx="286" cy="40" r="6" fill="#5a3d20"/><ellipse cx="286" cy="133" rx="24" ry="5" fill="#8a6a26"/>',
+      [286, 186], [240, 22, 92, 170]],
+    [3, 'SALVER', '<ellipse cx="402" cy="92" rx="60" ry="46"/><rect x="380" y="78" width="44" height="28" transform="rotate(-8 402 92)"/>', '', [402, 186], [336, 22, 132, 170]],
+    [4, 'NEWSPAPER', '<rect x="486" y="36" width="118" height="110"/><path d="M486 91h118"/>', '', [545, 186], [476, 22, 138, 170]],
+    [7, 'DECANTER', '<circle cx="668" cy="104" r="34"/><rect x="658" y="42" width="20" height="30"/><circle cx="728" cy="70" r="15"/><circle cx="744" cy="118" r="15"/>', '', [706, 186], [624, 22, 148, 170]],
+    [8, 'TELESCOPE', '<path d="M28 246h150v-8h66v36h-66v-8H28z"/>', '', [136, 326], [18, 210, 236, 124]],
+    [11, 'PARASOL', '<path d="M302 250H496l18 8 -18 8H302z"/><path d="M302 258h-20q-14 0 -14 16"/>', '', [392, 326], [258, 210, 266, 124]],
+    [14, 'CHAMPAGNE', '<circle cx="596" cy="250" r="50"/><path d="M546 250h-12M646 250h12"/>',
+      '<circle cx="596" cy="250" r="46" fill="#c9ced3" stroke="#8d949c" stroke-width="3"/><circle cx="596" cy="250" r="36" fill="#e9f1f5"/>' +
+      '<g fill="#fff" stroke="#b7cddb" stroke-width="1.500"><rect x="570" y="232" width="16" height="14" rx="3"/><rect x="606" y="262" width="16" height="14" rx="3"/><rect x="608" y="226" width="14" height="13" rx="3"/><rect x="572" y="262" width="14" height="13" rx="3"/></g><circle cx="596" cy="250" r="13" fill="#1d6a3a"/><circle cx="596" cy="250" r="7" fill="#e6c873"/>',
+      [596, 346], [536, 192, 120, 160]],
+    [15, 'OPERA GLASSES', '<circle cx="700" cy="250" r="24"/><circle cx="746" cy="250" r="24"/><path d="M716 234h14M716 266h14"/>',
+      '<circle cx="700" cy="250" r="21" fill="#17171b"/><circle cx="746" cy="250" r="21" fill="#17171b"/><rect x="716" y="242" width="14" height="16" fill="#c9a24a"/><circle cx="700" cy="250" r="12" fill="#3a4a6a"/><circle cx="746" cy="250" r="12" fill="#3a4a6a"/><circle cx="696" cy="246" r="3" fill="#9fb4d9"/><circle cx="742" cy="246" r="3" fill="#9fb4d9"/>',
+      [723, 326], [666, 210, 110, 124]],
+    [5, 'FAN', '<path d="M36 420l138 -10v38l-138 -10z"/><path d="M36 429q-18 6 -12 28"/>', '', [104, 512], [12, 388, 172, 128]],
+    [6, 'PAPER KNIFE', '<rect x="200" y="420" width="52" height="18" rx="6"/><rect x="252" y="414" width="10" height="30"/><path d="M262 422l76 4q8 3 0 6l-76 4z"/>',
+      '<g transform="rotate(-10 270 430)"><path d="M210 444q-18 8 -12 28" stroke="#c2452f" stroke-width="3" fill="none"/><path d="M194 470l4 13 7 -11z" fill="#c2452f"/>' +
+      '<path d="M206 418l126 -9v42l-126 -9z" fill="#f1e6c8" stroke="#b9a878" stroke-width="2"/><path d="M206 424l126 -7M206 430h126M206 436l126 7" stroke="#b9a878" stroke-width="1.200"/><circle cx="213" cy="430" r="4" fill="#b08a35"/></g>',
+      [270, 512], [190, 388, 160, 128]],
+    [9, 'NECKLACE', '<rect x="360" y="376" width="124" height="100" rx="6"/>',
+      '<rect x="366" y="372" width="112" height="24" rx="4" fill="#26345a"/><rect x="366" y="398" width="112" height="72" rx="5" fill="#1c2742" stroke="#0f1830" stroke-width="2"/><path d="M382 418q40 44 80 0" stroke="#e6c873" stroke-width="2" fill="none"/>' +
+      '<g fill="#3fbf6a" stroke="#1d6a3a" stroke-width="1.200"><circle cx="390" cy="425.900" r="4.200"/><circle cx="398" cy="432.100" r="4.200"/><circle cx="406" cy="436.500" r="4.200"/><circle cx="414" cy="439.100" r="4.200"/><circle cx="422" cy="440" r="5"/><circle cx="430" cy="439.100" r="4.200"/><circle cx="438" cy="436.500" r="4.200"/><circle cx="446" cy="432.100" r="4.200"/><circle cx="454" cy="425.900" r="4.200"/></g><path d="M462 418q7 -6 2 -11" stroke="#b08a35" stroke-width="2.600" fill="none"/>',
+      [422, 514], [352, 364, 140, 152]],
+    [10, 'GLOVES', '<path d="M506 374q10 -8 20 0v96q-10 10 -20 0zM536 374q10 -8 20 0v96q-10 10 -20 0z"/>',
+      '<path d="M508 376q8 -6 16 0v92q-8 8 -16 0zM538 376q8 -6 16 0v92q-8 8 -16 0z" fill="#fbf8ee" stroke="#cfc8b4" stroke-width="2"/><path d="M512 452v14M516 454v14M520 452v14M542 452v14M546 454v14M550 452v14" stroke="#cfc8b4" stroke-width="1.500"/><g fill="#e6c873"><circle cx="516" cy="386" r="2"/><circle cx="516" cy="396" r="2"/><circle cx="546" cy="386" r="2"/><circle cx="546" cy="396" r="2"/></g>',
+      [531, 514], [496, 364, 70, 152]],
+    [12, 'DANCE CARD', '<rect x="590" y="384" width="56" height="78" rx="3"/><path d="M654 390v64"/>',
+      '<rect x="594" y="388" width="48" height="70" rx="2" fill="#f7efd4" stroke="#b9a878" stroke-width="2"/><path d="M602 406h32M602 418h32M602 430h32M602 442h20" stroke="#8a7f66" stroke-width="1.600"/><circle cx="618" cy="393" r="3" fill="#c2452f"/><path d="M654 394v54" stroke="#e3a92b" stroke-width="5" stroke-linecap="round"/><path d="M654 450v6" stroke="#2a1a12" stroke-width="3"/>',
+      [622, 514], [580, 364, 84, 152]],
+    [13, 'MASK', '<path d="M676 420q22 -22 44 -2q22 -20 44 2q0 32 -30 30q-14 -2 -14 -14q0 12 -14 14q-30 2 -30 -30z"/>',
+      '<path d="M680 422q20 -18 40 0q20 -18 40 0q0 26 -26 25q-12 -2 -14 -13q-2 11 -14 13q-26 1 -26 -25z" fill="#101014"/><ellipse cx="702" cy="428" rx="9" ry="6" fill="#eef2f8"/><ellipse cx="738" cy="428" rx="9" ry="6" fill="#eef2f8"/>',
+      [720, 514], [668, 364, 104, 152]]
+  ];
+  function tableSVG(full) {
+    var s = '<rect width="780" height="520" fill="#eef2f8"/><path d="M0 0h780v520H0z" fill="none" stroke="#c9d3e6" stroke-width="6"/>';
+    SP.forEach(function (p) { s += '<g class="ol">' + p[2] + '</g>' + (full ? '<text class="plab" x="' + p[4][0] + '" y="' + p[4][1] + '">' + p[0] + '</text>' : ''); });
+    SP.forEach(function (p) { s += p[3]; });
+    if (full) SP.forEach(function (p) { s += '<rect class="spot" data-n="' + p[0] + '" x="' + p[5][0] + '" y="' + p[5][1] + '" width="' + p[5][2] + '" height="' + p[5][3] + '" rx="6"/>'; });
+    return s;
+  }
+
+  /* the wall, the boards, the balustrade seen through the gap, the table as it lies under the lamp */
+  (function () {
+    var s = '', x, y, i;
+    for (y = -380, i = 0; y < 620; y += 34, i++) {
+      s += '<path d="M152 ' + y + 'H2600"/>';
+      for (x = 160 + (i % 2) * 44; x < 2600; x += 88) s += '<path d="M' + x + ' ' + y + 'v34"/>';
+    }
+    $('#bricksW').innerHTML = s; s = '';
+    for (i = -12; i <= 24; i++) s += '<path d="M' + (800 + i * 90) + ' 620L' + (800 + i * 250) + ' 1320"/>';
+    $('#boardsW').innerHTML = s; s = '';
+    for (x = -990; x < 90; x += 26) s += '<rect x="' + x + '" y="530" width="12" height="66" rx="5"/>';
+    $('#balus').innerHTML = s;
+    $('#tabtop').innerHTML = tableSVG(false);
+  })();
+  US.figs();
+
+  ER.init({
+    theme: 'mystery', story: 'understudy', storyTitle: 'The Understudy', id: 'wings', no: 'III', title: 'The Props Table',
+    go: 'Go up to the table',
+    intro: [
+      'Three cues on Samir&rsquo;s sheet say BLACKOUT, and after each of them comes a cue that starts by itself. A blackout is not black until its time is up, so the seconds of fading do not count. That left eight seconds of dark at the end of Scene 1, twenty-one at the end of Scene 2, and six at the end of Scene 3. Only the second is long enough for twelve seconds&rsquo; work.',
+      'So the necklace was changed at two minutes to eight, in the twenty-one seconds that Mr Mossop needs to turn a drawing room into a terrace. And nobody crosses the stage in the dark in less than eight seconds.',
+      'The pass door shuts behind you. After the gold paint, the wings are black walls, bare boards and one blue lamp. Under the lamp is the table. Mr Mossop is standing behind it with his arms folded, like a man guarding a cake.'
+    ],
+    exit: {"next":"dressing","w":{"980bfe7c":"eba94977"}}, tags: {"thing":["e6447e0e"],"gap":["f874b060"],"who":["1f38f60c"],"when":["4cc11b4b"]},
+    sound: ['noir', { root: 45, bpm: 52, drop: ['mel', 'ost'], level: 0.9, beds: [['crowd', 0.22], ['rain', 0.3]] }],      /* the lowest and slowest: black walls, rain on a high roof, the house far off through the curtain */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('w-file') || null; told = ER.flag('w-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('w-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#table').classList.toggle('ready', !!(told.mos && !nextFile));
+    ER.pips((told.mos ? 1 : 0) + ((ER.flag('w-stage') || 0) > 0 ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['Mr Mossop has sent you to Mrs Greaves. The stairs are on the far side, and with the curtain down you can walk straight across the stage.']];
+    if (bench && bench.isOpen()) return [['thing', [
+      'Mr Mossop&rsquo;s list is beside the table. For each number it says where the thing goes during the play. Work out, for each outline, whether it should be full or empty NOW, at the interval, with nothing moved since the curtain came down.',
+      'L is this side, and what comes off on this side goes back into its outline. R is the far side: what goes off there stays there. And what is still on the stage is not on the table either.',
+      'One outline is empty that should be full. The outline beside it is full, and it should be empty. Look hard at the thing that is lying there. Is it the thing whose shape was painted?'
+    ]], ['who', [
+      'Read number 5 on the list again. Who has the fan during Scene 2? Who is meant to lay it in its outline, and when?',
+      'Mr Mossop told you when he first saw it in the wrong place: at the moment when the lights came up on Scene 3. So it was put there before that. And until the end of Scene 2 it was on the stage.',
+      'Between the end of Scene 2 and the lights coming up on Scene 3 there is only the second dark. Who had the fan in her hand when the lights went out?'
+    ]]][bench.stage()];
+    if (!told.mos) return ['mossop', ['Mr Mossop is standing behind his table. He has something to say before anybody looks at it.']];
+    return ['table', ['Now the table itself, under the blue lamp. Mr Mossop wants to know if you can see what he saw.']];
+  }
+  function begin() {
+    US.file('call', true); US.file('run', true); US.file('key', true);
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('A fan in the wrong place, a hand&rsquo;s width from the necklace case. Mrs Greaves is upstairs.'); return; }
+    if (told.in) { busy = false; ER.say('The wings, on the prompt side. Mr Mossop has not moved, and neither has anything on his table.'); return; }
+    tell('in');
+    ER.narrate([
+      'The table is covered with white paper, and on the paper somebody has painted the shape of every single thing in black, with a number beside it. Where a thing is lying in its shape, you see the thing. Where it is away, you see only its ghost.',
+      '&ldquo;Fifteen outlines, new for this play,&rdquo; says Mr Mossop, &ldquo;and a list on the wall that says where each of the fifteen is at any minute of the night. Forty-one years I have kept a props table, and I have never once had a thing in the wrong place.&rdquo; He breathes in through his nose. &ldquo;Until tonight.&rdquo;',
+      'On a pair of steps sits a young woman in a maid&rsquo;s black dress, with her arms round her knees. By the fire buckets a very tall man in a scarlet jacket is explaining to nobody what he saw with his own eyes.'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- people ---------- */
+  $('#mossop3').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;I am not saying anything,&rdquo; says Mr Mossop. He has now said it three times.'); return; }
+    ER.talk({
+      who: 'Mr Mossop', role: 'Props and scene changes', face: window.FACE('mossop'),
+      lines: [
+        { note: 'He does not unfold his arms.', a: '&ldquo;Nobody touches it. That is Ms Tindall&rsquo;s order, and it is mine. Everything on this table is where it was when the curtain came down. Use your eyes, and use my list. I am not going to tell you what is wrong: I want to know if anybody else can see it.&rdquo;' },
+        { q: 'When do you look at the table?', a: 'At beginners, with Ms Tindall. And then every time the lights come up after a dark. I come off the stage, and the first thing I do is run my eye along the outlines. When the lights came up on Scene 2: all right. When they came up on Scene 3: NOT all right. It was the first thing I saw. When they came up on Scene 4: the same as Scene 3.' },
+        { q: 'Why didn&rsquo;t you put it right?', a: 'In Scene 3 I hold the moon. It is a lamp on a pole, and it wants two hands.</p><p class="note">He looks a little ashamed, and then decides not to be.</p><p>And after that I left it on purpose. Somebody had been at my table in the dark. I wanted Ms Tindall to see it at the interval, and I wanted that somebody spoken to.' },
+        { q: 'Where was the copy kept?', a: 'The understudy? On this table, in number 9, all through rehearsals. Then on Tuesday night Madam asked me for it. To get used to the weight, she said. Glass weighs next to nothing. I did not say so. It has been upstairs in dressing room 1 ever since. Well. Until tonight.' },
+        { q: 'Who do you think did it?', a: 'I think that real stones should never have come on to a stage. But nobody asks the props man.' }
+      ],
+      clue: { id: 'mos3', title: 'Mr Mossop, guarding his table', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('mos')) { US.words(['props table', 'outline']); paint(); ER.say('The table is under the blue lamp, and his list is pinned to the wall behind it.'); } }
+    });
+  });
+  $('#crane').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Mr Hugo Crane', role: 'The Colonel', face: window.FACE('crane'),
+      lines: [
+        { note: 'He is very tall, in a scarlet jacket with gold buttons, and he speaks as if the back row had paid to hear him.', a: '&ldquo;I accuse nobody. I merely say what I saw with my own eyes. Just after the quarter was called, I came down for my newspaper. And there was Miss Okeke, alone at this table, with that case OPEN in her hands. She jumped like a cat.&rdquo;' },
+        { q: 'Where was Mr Mossop?', a: 'Out in the yard, filling the decanter. Our sherry is cold tea, I am sorry to say, and tonight there was not even sugar in it. He was gone for two minutes. Two minutes is a long time.' },
+        { q: 'Why would she take it?', a: 'My dear child, think. If Verity will not go on in glass, who plays the Countess in Act Two? The understudy. For two years that girl has stood in the wings with the whole part in her head, waiting. I do not say that she did it. I say only that I should like to know who else is better off tonight.' },
+        { q: 'Where were you in the second dark?', a: 'I? On the far side. I went off by the door, up right, at the end of Scene 2, as I have at every rehearsal, and there I stayed until Scene 4. Young Ashdown was beside me, falling over the fire buckets. Ask him.</p><p class="note">He holds out a long hand, palm upwards.</p><p>You have not got five pounds until Saturday, I suppose? No. Nobody ever has.' }
+      ],
+      clue: { id: 'cra1', title: 'Mr Crane, by the fire buckets', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('cra')) US.words(['the quarter', 'understudy']); }
+    });
+  });
+  $('#okeke').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Miss Nneka Okeke', role: 'The Maid · understudy to Miss Lascelles', face: window.FACE('okeke'),
+      lines: [
+        { note: 'She is about twenty-two, in a maid&rsquo;s black dress and white cap. She has been crying, and she is angry that anybody can tell.', a: '&ldquo;Yes. I opened it. Mr Mossop went out to fill the decanter, and he said: mind my table, girl. So I minded it. And I looked. For two years I have understudied the woman who wears that necklace, and I have never once been allowed to touch it.&rdquo;' },
+        { q: 'What did you see?', a: 'Nine green stones, and a clasp like a swan with its neck bent. I did not even take it out of the case. Then Mr Crane came round the corner, and I shut the lid so fast that I caught my finger in it.</p><p class="note">She shows you the finger. There is a small red line across it.</p><p>That was at the quarter. At beginners Mr Mossop opened the case himself. Ask him what he saw.' },
+        { q: 'Do you know the whole part?', a: 'Every word. I could do the long speech in Act Two in my sleep. I have it written out on my fan, in pencil, along the folds: the understudy&rsquo;s fan, the old black one that I rehearse with by myself. I have never needed to open it.' },
+        { q: 'Where were you in the second dark?', a: 'Where rule four puts me. On the far side, watching her. She said her last line down by the window, and went off towards the prompt corner with her fan in her hand, as she always does. I could not have got across if I had wanted to. Mr Mossop was in the middle of the stage with a sofa.' }
+      ],
+      clue: { id: 'oke1', title: 'Miss Okeke, on the steps', kind: 'What she said' },
+      done: function (seen) { if (seen) tell('oke'); }
+    });
+  });
+
+  /* ---------- things in the wings ---------- */
+  $('#list').addEventListener('click', function () {
+    if (busy) return;
+    US.read('plist', function () { US.words(['salver', 'decanter', 'paper knife', 'parasol', 'opera glasses']); if (tell('plist')) ER.say('Fifteen things, and for each of them a small journey: on, off, left or right.'); });
+  });
+  US.thing('#dress', 'rail', 'The grey silk that the Countess wears in Scenes 1 and 2. It came off her at two minutes to eight, and it has hung on this rail ever since. Nothing is to be moved.', isBusy);
+  US.thing('#chair', null, 'The quick-change chair: a kitchen chair with a towel over its back, four steps from the edge of the stage. Mrs Greaves stands here with the next dress open in her arms.', isBusy);
+  US.thing('#mirror', null, 'A mirror the size of a book, hung where the blue lamp can just reach it.', isBusy);
+  US.thing('#buckets', 'fire bucket', 'Two red buckets of sand, with FIRE painted on them. There is another pair on the far side, and Mr Ashdown has fallen over both.', isBusy);
+  US.thing('#stool3', null, 'Your stool, a metre from the table. You sat here for fifty minutes, and for thirty-five seconds of them you could not see your own hands.', isBusy);
+  US.thing('#lamp3', 'blue lamp', 'The blue lamp. Slider 48 on Samir&rsquo;s desk. When the stage goes black, so does this.', isBusy);
+  US.thing('#ladder', null, 'A pair of steps with paint on every rung: forty years of scenery, in layers.', isBusy);
+  US.thing('#stagegap', 'terrace', 'Through the gap you can see the terrace, standing in the plain white working light: a balustrade, and on it a telescope that nobody has been allowed to tidy away. A pink parasol is lying on the bench.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+  $('#table').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('One outline is empty that should be full. In outline ' + ER.flag('w-sel') + ', beside the necklace case, lies a fan.'); return; }
+    if (!told.mos) { ER.say('A table covered with white paper and black shapes. The man behind it has folded his arms, and he looks as if he would like to be asked first.'); return; }
+    if (!bench) bench = makeBench();
+    bench.open();
+  });
+
+  /* ---------- the table: the one thing in the wrong outline; whose hand put it there, and when ---------- */
+  function makeBench() {
+    var WHO = [['mossop', 'Mr Mossop'], ['greaves', 'Mrs Greaves'], ['lascelles', 'Miss Lascelles'], ['okeke', 'Miss Okeke'], ['crane', 'Mr Crane'], ['ashdown', 'Mr Ashdown']],
+      WHEN = [['s1', 'Scene 1'], ['d1', '1st dark'], ['s2', 'Scene 2'], ['d2', '2nd dark'], ['s3', 'Scene 3'], ['d3', '3rd dark'], ['s4', 'Scene 4']],
+      stage = ER.flag('w-stage') || 0, sel = stage ? +ER.flag('w-sel') : 0, who = '', when = '', wait = false, box = ER.el('div', 'bx tb'), M = '&rdquo; says Mr Mossop. &ldquo;',
+      NOT = {
+        1: '&ldquo;The hand bell. I brought that off myself, in the first dark,' + M + 'Read number 1 on my list. Where should it be by now?&rdquo;',
+        2: '&ldquo;I carried that tray off with these two hands,' + M + 'Number 2. Where does the list say it should be?&rdquo;',
+        3: '&ldquo;Empty: yes,' + M + 'Which way did the Maid go with the salver? Read number 3, and then read what the list says about R.&rdquo;',
+        4: '&ldquo;Empty: yes,' + M + 'Read what happens to the sofa in the second dark, and what was lying on the sofa.&rdquo;',
+        7: '&ldquo;Empty: yes,' + M + 'Read what happens to the desk in the second dark, and what was standing on the desk.&rdquo;',
+        8: '&ldquo;Empty: yes. It is out there on the balustrade,' + M + 'I have not been allowed to change the stage. Read number 8.&rdquo;',
+        11: '&ldquo;Empty: yes. It is out there on the terrace,' + M + 'I have not been allowed to change the stage. Read number 11.&rdquo;',
+        9: '&ldquo;The case is where the case lives: number 9,' + M + 'It is what is INSIDE it that is wrong, and we knew that before you came.&rdquo;'
+      };
+    box.innerHTML = '<div class="tb-two"><div class="tb-left"><div class="tb-frame"><svg viewBox="0 0 780 520">' + tableSVG(true) + '</svg></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><div class="tb-pick"><h6>Whose hand?</h6><div class="tb-row who">' + WHO.map(function (w) { return '<button type="button" data-w="' + w[0] + '">' + w[1] + '</button>'; }).join('') + '</div>' +
+      '<h6>When?</h6><div class="tb-row when">' + WHEN.map(function (w) { return '<button type="button" data-t="' + w[0] + '">' + w[1] + '</button>'; }).join('') + '</div></div>' +
+      '<button type="button" class="btn" id="w-go"></button></div></div><div class="doc plist">' + ER.gloss(US.DOC.plist) + '</div></div>';
+    var msgEl = box.querySelector('.pmsg'), go = box.querySelector('#w-go'), left = box.querySelector('.tb-left'), spots = ER.$$('.spot', box);
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function nameOf(n) { for (var i = 0; i < SP.length; i++) if (SP[i][0] === n) return SP[i][1].toLowerCase(); return ''; }
+    function draw() {
+      left.classList.toggle('two', stage === 1);
+      spots.forEach(function (r) { r.setAttribute('class', 'spot' + (+r.getAttribute('data-n') === sel ? ' sel' : '')); });
+      ER.$$('.tb-row.who button', box).forEach(function (b) { b.classList.toggle('sel', b.getAttribute('data-w') === who); });
+      ER.$$('.tb-row.when button', box).forEach(function (b) { b.classList.toggle('sel', b.getAttribute('data-t') === when); });
+      go.textContent = stage ? 'That hand, at that time' : 'This is in the wrong place';
+    }
+    box.addEventListener('click', function (e) {
+      var r = e.target.closest ? e.target.closest('.spot') : null, b = e.target.closest ? e.target.closest('.tb-row button') : null;
+      if (wait || (e.target.closest && e.target.closest('.w'))) return;
+      if (r && stage === 0) { sel = +r.getAttribute('data-n'); ER.sfx.click(); draw(); }
+      else if (b && stage === 1) { if (b.hasAttribute('data-w')) who = b.getAttribute('data-w'); else when = b.getAttribute('data-t'); ER.sfx.click(); draw(); }
+    });
+    go.addEventListener('click', function () {
+      var file, wn;
+      if (wait || nextFile) return;
+      if (!stage) {
+        if (!sel) { msg('Click on one of the fifteen outlines first: on the thing that is lying in it, or on the empty shape.'); return; }
+        if (ER.check('gap', sel)) { ER.sfx.no(); msg('&ldquo;Number ' + sel + ' is empty, and it should not be. Good: you can read a list,' + M + 'But I asked for the THING that is in the wrong place. If it is not in ' + sel + ', where is it?&rdquo;'); return; }
+        if (!ER.check('thing', sel)) { ER.sfx.no(); msg(NOT[sel] || '&ldquo;That is for Act Two,' + M + 'It has not left its outline since the half. Look again.&rdquo;'); return; }
+        stage = 1; ER.flag('w-stage', 1); ER.flag('w-sel', sel); US.sfx.thud(); draw(); paint();
+        msg('&ldquo;That is it. Look at it properly: it is not a ' + nameOf(sel) + ' at all. It is a fan. The ' + nameOf(sel) + ' went off on the far side with the desk, so number ' + sel + ' ought to be empty until tomorrow,' + M + 'Now tell me the rest. Whose hand put it there? And when?&rdquo;');
+        return;
+      }
+      if (!who || !when) { msg('Two questions, two answers: choose a name, and choose a time.'); return; }
+      if (!ER.check('when', when)) {
+        ER.sfx.no();
+        msg(/^(s1|d1|s2)$/.test(when) ? '&ldquo;All through Scene 2 that fan was on the stage, in Madam&rsquo;s hand, in front of the whole house,' + M + 'Read number 5 again.&rdquo;' :
+          '&ldquo;I told you when I saw it,' + M + 'When the lights came UP on Scene 3: it was the first thing I saw. So it was lying there before Scene 3 began.&rdquo;');
+        return;
+      }
+      if (!ER.check('who', who)) {
+        ER.sfx.no(); wn = WHO.filter(function (w) { return w[0] === who; })[0][1];
+        msg(who === 'mossop' ? '&ldquo;In that dark I was in the middle of the stage with a sofa,' + M + 'And if I had put it down, I should have put it in number 5. With my eyes shut.&rdquo;' :
+          who === 'greaves' ? '&ldquo;Read number 5 to the end,' + M + 'Mrs Greaves lays the fan down when the quick change is DONE. That is a good minute into Scene 3, with the lamp on. This fan was here when the lights came up. And she has never once missed number 5.&rdquo;' :
+          '&ldquo;' + wn + ' was on the far side,' + M + 'with the whole stage in between, and me in the middle of it with a sofa. And who had the fan?&rdquo;');
+        return;
+      }
+      file = ER.exit([sel + '-' + who + '-' + when], { wait: true });
+      if (!file) { msg('The lamp has gone out. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('w-file', file);
+      US.mine('fan', 'The fan', '<p>Outline 5, the fan&rsquo;s, is empty. The fan is lying in outline ' + sel + ', a hand&rsquo;s width from the necklace case.</p>' +
+        '<p>It was on the stage until the end of Scene 2. Mr Mossop saw it in the wrong place when the lights came up on Scene 3. So it was put down in the second dark, and only Miss Lascelles had it.</p>' +
+        '<p>But she never puts her fan down. She gives it to Mrs Greaves at the chair.</p><p>The copy of the necklace has been in dressing room 1 since Tuesday.</p>', true);
+      msg('&ldquo;Madam herself. She came off with it in her hand, as she always does. And when the lights came up it was lying in the wrong place, where she had felt for an empty shape in the dark,' + M + 'But she never puts that fan down. She carries it four steps to her chair and gives it to Mrs Greaves. Every rehearsal.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'Mr Mossop looks at outline ' + sel + ', and then at outline 9, which is the next one along. The fan is lying a hand&rsquo;s width from the necklace case. &ldquo;Now why,&rdquo; he says slowly, &ldquo;would a woman with a quick change to make stop at my table and put down her fan?&rdquo;',
+          '&ldquo;I am not saying anything.&rdquo; He says it twice. &ldquo;Go up and ask Mrs Greaves. She had Madam in her hands for the whole of that quick change, and Mrs Greaves holds a watch on everything. The stairs are on the far side. You can walk across now: the curtain is down. And do not whistle on the stairs.&rdquo;',
+          'On your way you pass the quick-change chair: a kitchen chair, a mirror the size of a book, and a rail with one dress on it. Grey silk. It has hung there since two minutes to eight.'
+        ], function () { busy = false; showGo(); });
+      }, 4400);
+    });
+    draw();
+    msg(stage ? 'A fan, lying in the wrong outline. Whose hand put it there, and when?' :
+      'The table, exactly as it was when the curtain came down, and Mr Mossop&rsquo;s list of where each thing ought to be. One thing is in the wrong outline. Click on it, and tell him.');
+    return {
+      open: function () { ER.open('ov-lock', box); if (tell('plist')) { US.file('plist'); US.words(['salver', 'decanter', 'paper knife', 'parasol', 'opera glasses']); } },
+      isOpen: function () { return !!box.parentNode; },
+      stage: function () { return stage; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

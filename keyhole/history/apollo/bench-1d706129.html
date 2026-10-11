@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Bench · Lots and Lots of People</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-history.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="apollo.css">
+<style>
+  body{--bg:#12161a;--accent:#ff8a6a;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'Libre Caslon Text',serif;
+    --tc-bg:rgba(15,20,24,.97);--tc-ink:#eef1f2;--cap-bg:rgba(15,20,24,.94);--panel:#1c252c;--face-bg:#27333c;--q-ink:#ffb39c;--fade:#080b0d;--hud-bg:rgba(15,20,24,.82)}
+  .lb{font-family:'Oswald',sans-serif;font-weight:500;text-anchor:middle;letter-spacing:.16em}
+  .hw{font-family:'Architects Daughter',cursive;text-anchor:middle}
+  #swing{animation:swing 5.4s ease-in-out infinite alternate;transform-origin:520px -400px}
+  @keyframes swing{from{transform:rotate(-.5deg)}to{transform:rotate(.5deg)}}
+  #dawn{animation:dawn 40s linear forwards}
+  @keyframes dawn{from{opacity:.15}to{opacity:.9}}
+  #cards.ready{animation:nudge 1.6s ease-in-out infinite}
+  @keyframes nudge{50%{transform:translateY(-6px)}}
+  #made{display:none}
+  body.done #made{display:block}
+  body.done #bare{display:none}
+
+  /* the bench: the thing as it grows, and nine cards */
+  .bn{display:grid;grid-template-columns:392px minmax(0,628px);gap:20px;width:min(1040px,96vw);align-items:start}
+  .bn-pic{background:#e9edee linear-gradient(#f4f6f6,#cfd5d6);border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.6)}
+  .bn-pic svg{display:block;width:100%;height:auto}
+  .bn-pic .pt{display:none}
+  .bn-pic .pt.on{display:block}
+  .bn-pic .skirt.off{display:none}
+  .bn .pmsg{margin-top:12px;font-size:16.5px;min-height:150px}
+  .bn-ch{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .bn-ch .btn{font-size:13px;padding:8px 14px}
+  .bn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .cdx{position:relative;min-height:140px;padding:13px 12px 8px;background:#fbf8ee;color:#22231e;font-family:'Architects Daughter',cursive;font-size:14.5px;line-height:1.24;text-align:left;
+    border-top:4px solid #b3261c;box-shadow:0 4px 9px rgba(0,0,0,.5);cursor:pointer}
+  .cdx:nth-child(3n+1){transform:rotate(-.7deg)}.cdx:nth-child(3n){transform:rotate(.6deg)}
+  .cdx:hover{box-shadow:0 8px 14px rgba(0,0,0,.6)}
+  .cdx.sel{outline:3px solid #ff8a6a;outline-offset:2px}
+  .cdx u{text-decoration:none;font-weight:bold;color:#b3261c}
+  .cdx.did{background:#dfe9d8;cursor:default;opacity:.92}
+  .cdx.did:after{content:attr(data-o);position:absolute;right:6px;top:-13px;width:28px;height:28px;border-radius:50%;background:#2f6a4a;color:#fff;font-family:'Oswald',sans-serif;font-size:15px;line-height:28px;text-align:center}
+  .cdx.torn{cursor:default;opacity:.5;text-decoration:line-through;text-decoration-color:#b3261c;clip-path:polygon(0 0,100% 0,100% 100%,62% 100%,56% 70%,48% 88%,42% 52%,36% 76%,30% 40%,24% 60%,18% 22%,12% 40%,0 30%)}
+  .bn-do{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .bn-do .btn{width:100%}
+  .bn-do .btn.out{--accent:#c9c3ae}
+  .bn-st{margin:8px 0 0;font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#aab2b6;text-align:right}
+  @media (max-width:900px){.bn{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfd5d4"/><stop offset=".8" stop-color="#b3bbb9"/><stop offset="1" stop-color="#99a2a0"/></linearGradient>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7d8684"/><stop offset="1" stop-color="#4c5352"/></linearGradient>
+  <linearGradient id="dawnG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1e44"/><stop offset=".55" stop-color="#4a3a6a"/><stop offset=".85" stop-color="#b86a70"/><stop offset="1" stop-color="#f0b08a"/></linearGradient>
+  <linearGradient id="benchG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f7f4"/><stop offset="1" stop-color="#d6dad6"/></linearGradient>
+  <linearGradient id="steelG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8e979b"/><stop offset=".4" stop-color="#dfe5e7"/><stop offset="1" stop-color="#737b7f"/></linearGradient>
+  <linearGradient id="coneG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe6" stop-opacity=".5"/><stop offset="1" stop-color="#fffbe6" stop-opacity="0"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".65" stop-color="#00060a" stop-opacity=".22"/><stop offset="1" stop-color="#00060a" stop-opacity=".78"/></radialGradient>
+  <pattern id="pegP" width="26" height="26" patternUnits="userSpaceOnUse"><rect width="26" height="26" fill="#c9a877"/><circle cx="13" cy="13" r="2.6" fill="#7b5f3a"/></pattern>
+  <pattern id="scrP" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#c9cfd1"/><path d="M0 0H7M0 0V7" stroke="#6c7478" stroke-width="1.4"/></pattern>
+  <clipPath id="w4C"><rect x="96" y="96" width="248" height="168"/></clipPath>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1110" fill="url(#wallG)"/>
+<g stroke="#a3acaa" stroke-width="2" opacity=".7"><path d="M-1000 300H2600M-1000 520H2600"/></g>
+<rect x="-1000" y="700" width="3600" height="16" fill="#5c6462"/>
+<rect x="-1000" y="714" width="3600" height="620" fill="url(#floorG)"/>
+
+<!-- a high window: it is not yet light -->
+<g id="win4" class="hot"><rect x="84" y="84" width="272" height="192" fill="#59625f"/><g clip-path="url(#w4C)"><rect x="96" y="96" width="248" height="168" fill="url(#dawnG)"/><rect id="dawn" x="96" y="200" width="248" height="64" fill="#ffd9a8" opacity=".15"/>
+  <path d="M96 264v-40q20-30 44-20t30-24t40 10t26-18t40 26t30-6t38 30v42z" fill="#0f1220"/><g fill="#f3f1dc"><circle cx="150" cy="120" r="1.6"/><circle cx="240" cy="110" r="1.3"/><circle cx="300" cy="136" r="1.6"/></g></g>
+  <path d="M220 96v168M96 180h248" stroke="#59625f" stroke-width="8"/></g>
+
+<!-- the hanging lamps -->
+<path d="M450 86h140l230 620H220z" fill="url(#coneG)" opacity=".5" pointer-events="none"/>
+<g id="swing" pointer-events="none"><path d="M520 -400V40" stroke="#3d4446" stroke-width="4"/><path d="M450 86q0-50 70-50t70 50z" fill="#2c3236"/><ellipse cx="520" cy="86" rx="70" ry="10" fill="#fffbe6"/></g>
+<g pointer-events="none"><path d="M1120 -400V40" stroke="#3d4446" stroke-width="4"/><path d="M1050 86q0-50 70-50t70 50z" fill="#2c3236"/><ellipse cx="1120" cy="86" rx="70" ry="10" fill="#fffbe6"/><path d="M1050 86h140l230 620H820z" fill="url(#coneG)" opacity=".5"/></g>
+
+<!-- clock: half past four -->
+<g id="clock4" class="hot"><circle cx="456" cy="190" r="46" fill="#3d4446"/><circle cx="456" cy="190" r="39" fill="#fbf8ee"/><g stroke="#22231e" stroke-width="3"><path d="M456 156v8M456 216v8M422 190h8M482 190h8"/></g>
+  <path d="M456 190l16 14" stroke="#22231e" stroke-width="6" stroke-linecap="round"/><path d="M456 190v30" stroke="#22231e" stroke-width="3.5" stroke-linecap="round"/><circle cx="456" cy="190" r="4" fill="#b3261c"/></g>
+<!-- the telephone -->
+<g id="phone4" class="hot"><rect x="552" y="140" width="66" height="92" rx="8" fill="#1b1d1d"/><rect x="542" y="128" width="86" height="26" rx="12" fill="#2c3030"/><circle cx="585" cy="194" r="23" fill="#33383a"/><circle cx="585" cy="194" r="8" fill="#1b1d1d"/><path d="M556 152q-36 70-8 120t-10 90" stroke="#1b1d1d" stroke-width="4" fill="none"/></g>
+
+<!-- the pegboard, with the page pinned to it -->
+<g id="peg" class="hot"><rect x="676" y="110" width="470" height="360" fill="#8f7450"/><rect x="686" y="120" width="450" height="340" fill="url(#pegP)"/>
+  <g fill="none" stroke="#3d4446" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M880 160v120M860 160h40"/><path d="M950 160l20 60l-10 60M990 160l-20 60l10 60"/><path d="M1040 170h70l-6 30h-58z"/><path d="M1060 200v84"/></g>
+  <g stroke="#8e979b" stroke-width="5" fill="none" stroke-linecap="round"><path d="M880 330l50 80M930 330l-50 80"/><circle cx="872" cy="420" r="12"/><circle cx="938" cy="420" r="12"/></g>
+  <g><circle cx="1030" cy="380" r="34" fill="#9aa0a2"/><circle cx="1030" cy="380" r="34" fill="none" stroke="#6c7274" stroke-width="3"/><circle cx="1030" cy="380" r="15" fill="#c9a877"/><circle cx="1096" cy="388" r="26" fill="#aab0b2"/><circle cx="1096" cy="388" r="11" fill="#c9a877"/></g>
+</g>
+<g id="page4" class="hot"><rect x="706" y="146" width="128" height="170" fill="#fbf8ee" transform="rotate(-2 770 231)"/><g transform="rotate(-2 770 231)"><rect x="706" y="146" width="128" height="5" fill="#b3261c"/><text x="770" y="176" class="hw" font-size="14" fill="#22231e">WHAT A</text><text x="770" y="194" class="hw" font-size="14" fill="#22231e">CANISTER DOES</text>
+  <rect x="736" y="220" width="68" height="40" fill="url(#scrP)" stroke="#22231e" stroke-width="2"/><path d="M770 282v-18M764 270l6-8l6 8M770 218v-12M764 212l6-8l6 8" stroke="#b3261c" stroke-width="2.4" fill="none"/>
+  <g stroke="#9db3cf" stroke-width="1.5"><path d="M718 294h104M718 304h80"/></g><circle cx="770" cy="154" r="5" fill="#1d2a52"/></g></g>
+
+<!-- the slate, the speaker -->
+<g id="slate" class="hot"><rect x="1190" y="116" width="220" height="160" fill="#7b5a36"/><rect x="1200" y="126" width="200" height="140" fill="#22302a"/>
+  <g font-family="'Architects Daughter',cursive" fill="#f4f7f0"><text x="1300" y="156" text-anchor="middle" font-size="17">CO2 IN AQUARIUS</text><text x="1216" y="194" font-size="20">00:05</text><text x="1384" y="194" font-size="24" text-anchor="end" fill="#ffd97a">11.3</text><text x="1216" y="238" font-size="20">LIMIT</text><text x="1384" y="238" font-size="24" text-anchor="end" fill="#ff8a6a">15</text></g></g>
+<g id="spk4" class="hot"><rect x="1452" y="130" width="88" height="80" rx="5" fill="#59645f"/><rect x="1452" y="130" width="88" height="80" rx="5" fill="none" stroke="#2c3331" stroke-width="3"/><circle cx="1496" cy="168" r="25" fill="#1b201f"/><g stroke="#59645f" stroke-width="3"><path d="M1475 158h42M1472 168h48M1475 178h42"/></g></g>
+
+<!-- the two hoses -->
+<g id="hoses" class="hot"><rect x="1210" y="330" width="230" height="130" rx="6" fill="#aab2b6"/><rect x="1210" y="330" width="230" height="130" rx="6" fill="none" stroke="#6c7478" stroke-width="3"/><text x="1325" y="356" class="lb" font-size="12" fill="#22231e">SUIT HOSES &#183; TRAINING UNIT</text>
+  <circle cx="1270" cy="410" r="24" fill="#3d4446"/><circle cx="1380" cy="410" r="24" fill="#3d4446"/><circle cx="1270" cy="410" r="14" fill="#b3261c"/><circle cx="1380" cy="410" r="14" fill="#2f5b8f"/>
+  <path d="M1270 430q-10 110-50 150t-20 60" stroke="#b3261c" stroke-width="20" fill="none" stroke-linecap="round"/><path d="M1270 430q-10 110-50 150t-20 60" stroke="#7a1810" stroke-width="20" fill="none" stroke-dasharray="3 9"/>
+  <path d="M1380 430q10 120 50 150t10 60" stroke="#2f5b8f" stroke-width="20" fill="none" stroke-linecap="round"/><path d="M1380 430q10 120 50 150t10 60" stroke="#1d3c63" stroke-width="20" fill="none" stroke-dasharray="3 9"/></g>
+
+<!-- shelves of boxes -->
+<g id="shelf4" class="hot"><rect x="1520" y="260" width="400" height="12" fill="#6c7478"/><rect x="1520" y="430" width="400" height="12" fill="#6c7478"/><rect x="1520" y="600" width="400" height="12" fill="#6c7478"/><path d="M1524 240v470" stroke="#6c7478" stroke-width="8"/>
+  <rect x="1540" y="330" width="120" height="100" fill="#b08a5a"/><rect x="1552" y="366" width="96" height="30" fill="#fbf8ee"/><text x="1600" y="386" class="lb" font-size="11" fill="#22231e">FLIGHT SPARES</text><rect x="1540" y="500" width="120" height="100" fill="#a17c4e"/><rect x="1552" y="536" width="96" height="30" fill="#fbf8ee"/><text x="1600" y="556" class="lb" font-size="11" fill="#22231e">LiOH &#183; SQUARE</text></g>
+
+<!-- Mr Pereira -->
+<g id="per" class="hot">
+  <path d="M316 660q-8-160 84-170t92 170z" fill="#2f5b8f"/><path d="M372 494l28 46l28-46z" fill="#e9e6da"/><path d="M372 494l16 60l12-14l12 14l16-60" fill="none" stroke="#244a76" stroke-width="7" stroke-linejoin="round"/>
+  <rect x="430" y="560" width="40" height="32" fill="#2a5282" stroke="#1f3f66" stroke-width="2"/><path d="M440 552v14" stroke="#f2b23a" stroke-width="4" stroke-linecap="round"/>
+  <rect x="386" y="452" width="28" height="46" fill="#b9825c"/>
+  <ellipse cx="353" cy="412" rx="6" ry="11" fill="#ad7650"/><ellipse cx="447" cy="412" rx="6" ry="11" fill="#ad7650"/>
+  <path d="M354 400q0-44 46-46t46 46l-1 26q-4 34-45 40q-41-6-45-40z" fill="#c48e66"/>
+  <path d="M352 402q-8-60 50-60q56 2 48 60q-8-28-34-36q-32 12-52 4q-8 12-12 32z" fill="#17120f"/>
+  <path d="M366 400q12-8 24-2M410 398q12-6 24 2" stroke="#17120f" stroke-width="4.6" fill="none" stroke-linecap="round"/>
+  <ellipse cx="378" cy="414" rx="6.5" ry="4.6" fill="#f7f1e6"/><ellipse cx="422" cy="414" rx="6.5" ry="4.6" fill="#f7f1e6"/><circle cx="379" cy="414" r="3.2" fill="#1b1512"/><circle cx="423" cy="414" r="3.2" fill="#1b1512"/>
+  <path d="M400 416q-6 16 0 20q5 2 8-2" stroke="#9a6a48" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M378 444q11-10 22-3q11-7 22 3q-11 6-22 1q-11 5-22-1z" fill="#17120f"/>
+  <path d="M330 540q-40 60 10 100" stroke="#2f5b8f" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M474 540q44 50 20 96" stroke="#2f5b8f" stroke-width="30" fill="none" stroke-linecap="round"/>
+</g>
+
+<!-- the bench -->
+<ellipse cx="800" cy="884" rx="760" ry="20" fill="#000" opacity=".25"/>
+<path d="M190 700v190M1410 700v190" stroke="url(#steelG)" stroke-width="22"/><path d="M190 800h1220" stroke="#6c7478" stroke-width="10"/>
+<rect x="130" y="640" width="1340" height="34" rx="4" fill="url(#benchG)"/><rect x="130" y="672" width="1340" height="30" fill="#aeb5b2"/><path d="M130 640h1340" stroke="#fff" stroke-width="3"/>
+<g id="perHand"><circle cx="346" cy="640" r="15" fill="#c48e66"/><circle cx="492" cy="636" r="15" fill="#c48e66"/><g id="tapeR" class="hot"><ellipse cx="500" cy="622" rx="34" ry="24" fill="#9aa0a2"/><ellipse cx="500" cy="622" rx="34" ry="24" fill="none" stroke="#6c7274" stroke-width="3"/><ellipse cx="500" cy="622" rx="16" ry="11" fill="#c9a877"/><ellipse cx="500" cy="622" rx="12" ry="8" fill="#2f5b8f"/></g></g>
+<g id="towel" class="hot"><path d="M210 610h110l10 30H200z" fill="#f4f7f8"/><path d="M214 618h104M212 628h110" stroke="#9db3cf" stroke-width="3"/></g>
+<g id="stow" class="hot"><rect x="580" y="530" width="112" height="112" rx="4" fill="#7b5a36" transform="rotate(-8 636 586)"/><rect x="590" y="544" width="92" height="92" fill="#f6f3e8" transform="rotate(-8 636 586)"/><g transform="rotate(-8 636 586)"><rect x="614" y="524" width="44" height="16" rx="4" fill="url(#steelG)"/><text x="636" y="564" class="lb" font-size="11" fill="#22231e">ON BOARD</text><g stroke="#55585c" stroke-width="2"><path d="M600 578h72M600 590h72M600 602h56M600 614h66"/></g></g></g>
+<g id="can" class="hot">
+  <g id="bare"><path d="M770 566l26-22h110l-26 22z" fill="url(#scrP)" stroke="#6c7478" stroke-width="2"/><rect x="770" y="566" width="110" height="74" fill="#9aa0a2"/><path d="M880 566l26-22v74l-26 22z" fill="#7d8386"/><path d="M800 548q26-16 80-8" stroke="#3d4446" stroke-width="5" fill="none"/><rect x="786" y="590" width="78" height="24" fill="#cfd6d8"/><text x="825" y="607" class="lb" font-size="10" fill="#22231e">LiOH</text></g>
+  <g id="made"><rect x="770" y="566" width="110" height="74" fill="#9aa0a2"/><path d="M880 566l26-22v74l-26 22z" fill="#7d8386"/><path d="M756 640v-80q70-70 160-16v76l-30 20z" fill="#dfeaf2" opacity=".6" stroke="#fff" stroke-width="2"/><path d="M768 590h114l26-22M768 618h114l26-22" stroke="#aab0b2" stroke-width="9" fill="none"/>
+    <path d="M900 536q60-60 150-20t170 104" stroke="#b3261c" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M900 536q60-60 150-20t170 104" stroke="#7a1810" stroke-width="16" fill="none" stroke-dasharray="3 8"/></g>
+</g>
+<g id="cards" class="hot"><rect x="950" y="606" width="96" height="34" fill="#fbf8ee" stroke="#b9b39c" transform="rotate(-8 998 623)"/><rect x="972" y="602" width="96" height="34" fill="#fbf8ee" stroke="#b9b39c" transform="rotate(3 1020 619)"/><rect x="1000" y="604" width="96" height="34" fill="#fbf8ee" stroke="#b9b39c" transform="rotate(11 1048 621)"/>
+  <g transform="rotate(3 1020 619)"><rect x="972" y="602" width="96" height="4" fill="#b3261c"/><path d="M980 616h80M980 626h60" stroke="#55585c" stroke-width="2"/></g></g>
+<g id="bag" class="hot"><path d="M1090 640q-8-50 30-56t56 8q20 30 4 48z" fill="#dfeaf2" opacity=".55" stroke="#fff" stroke-width="2"/><path d="M1110 600q20 10 40 0" stroke="#fff" stroke-width="2" fill="none"/></g>
+
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Friday</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="apollo.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, bnBox = null, inLock = false, seen = {};
+
+  ER.init({
+    theme: 'history', story: 'apollo', storyTitle: 'Lots and Lots of People', id: 'bench', no: 'IV', title: 'The Bench',
+    go: 'Go in', back: '../index.html', backLabel: 'Archive',
+    intro: [
+      'The machine did the dividing, but you had to tell it what to divide by what. Amp-hours by hours gave the amps they could afford: 24.5. Pounds of water by hours gave 3.5 pounds an hour. The oxygen would last 120 hours. Only one line stopped short: the round canisters that clean the air in Aquarius had 44 hours left in them, with 61 hours to go. Seventeen hours short. At eleven the CAPCOM read out the list, and his numbers were the numbers on your sheet.',
+      'Soon after midnight Houston had better news for the crew: Aquarius was using only 12.3 amps, less than the plan. But the carbon dioxide in her cabin was climbing.',
+      'It is now Wednesday 15 April, half past four in the morning. Building 7 belongs to the Crew Systems Division, the people who look after everything that an astronaut wears and breathes. On a bench under a lamp sits a square grey canister. Beside it stands a man with a roll of grey tape on his wrist.'
+    ],
+    exit: {"next":"splash","w":{"2af9d75f":"3bd3fd51","0fac35e8":"4bd6d678","2738d7b8":"b03c80db"}}, tags: {"seq":["aeb56a22","a1366663","4631ee07","8404ac20","0b2527b4","c72561a1","e9bd006b","b4c6cf46","c4f35de3","4917d3f4","3800f150","af0b2bc9","b52df011","846cb3c7","44bb6d64","232a7d40","f8be3093","074eddaf","7b87091b","9dabfae5"],"bad":["b8fec43f","729a5b39"],"c1":["8c19b626"],"c2":["d7d3eae7"],"c3":["a1d29621"]},
+    sound: ['archive', { root: 45, bpm: 60, mood: 'tense', drop: ['mel'], beds: [['hum', 0.4]] }],
+    hints: hints, onBegin: begin
+  });
+  nextFile = ER.flag('e-file') || null; seen = ER.flag('e-seen') || {};
+
+  /* ---------- the papers ---------- */
+  var PAGE = '<h4>What a canister does</h4>' +
+    '<p>Every breath out has <b>carbon dioxide</b> in it. In a closed cabin it has nowhere to go. A little does no harm. With more, a man gets a headache. Then he grows slow and sleepy, and makes mistakes. In the end he cannot think at all. Three men make it faster than two.</p>' +
+    '<p>The cure is a can of white grains: <b>lithium hydroxide</b>. A fan pulls the cabin air through the grains. The grains take hold of the carbon dioxide and keep it, and clean air comes out. When the grains are full, the canister is finished.</p>' +
+    '<svg viewBox="0 0 560 120"><rect x="1" y="1" width="558" height="118" fill="#f1ead6" stroke="#22231e" stroke-width="1.5"/>' +
+    '<rect x="200" y="22" width="150" height="76" fill="#fff" stroke="#22231e" stroke-width="2.5"/><g id="gr" fill="#9aa0a2"></g><path d="M200 22v76M350 22v76" stroke="#22231e" stroke-width="5" stroke-dasharray="5 4"/>' +
+    '<path d="M70 60h112M168 50l16 10l-16 10" stroke="#b3261c" stroke-width="3" fill="none"/><path d="M366 60h84M436 50l16 10l-16 10" stroke="#2f6a4a" stroke-width="3" fill="none"/>' +
+    '<circle cx="486" cy="60" r="22" fill="none" stroke="#22231e" stroke-width="2.5"/><path d="M486 60l14-12M486 60l-14 12M486 60l12 14M486 60l-12-14" stroke="#22231e" stroke-width="3"/>' +
+    '<g font-family="\'Architects Daughter\',cursive" font-size="14" text-anchor="middle"><text x="112" y="44" fill="#b3261c">cabin air IN</text><text x="112" y="84" fill="#b3261c">(with CO2)</text><text x="275" y="16" fill="#22231e">grains</text><text x="408" y="44" fill="#2f6a4a">clean air</text><text x="408" y="84" fill="#2f6a4a">OUT</text><text x="486" y="104" fill="#22231e">fan</text></g></svg>' +
+    '<p class="rule">One rule runs the whole machine: AIR TAKES THE EASIEST WAY.</p>' +
+    '<p>If there is any way round the grains, the air will go round them, and nothing is cleaned. So: one way in, one way out, and no gaps.</p>' +
+    '<p>In Aquarius, the fan sucks air in through the <b>RED</b> hoses and blows it out through the <b>BLUE</b> ones.</p>';
+  PAGE = PAGE.replace('<g id="gr" fill="#9aa0a2"></g>', (function () { var s = '<g fill="#9aa0a2">', i, j; for (i = 0; i < 9; i++) for (j = 0; j < 5; j++) s += '<circle cx="' + (214 + i * 15 + (j % 2) * 6) + '" cy="' + (32 + j * 14) + '" r="3.4"/>'; return s + '</g>'; })());
+  var STOW = '<h4>On board (what matters for this job)</h4><p>If it is not on this list, they have not got it.</p><ul>' +
+    '<li>Lithium hydroxide canisters, <b>SQUARE</b> (Odyssey&rsquo;s): 16, not yet used. Each is a box with a screen at the top and a screen at the bottom. The top is the end with the strap.</li>' +
+    '<li>Lithium hydroxide canisters, <b>ROUND</b> (Aquarius&rsquo;s): the second one is in use now.</li>' +
+    '<li>Grey tape: 1 roll.</li><li>Cue cards: stiff card, about 11 inches by 6.</li>' +
+    '<li>Liquid cooling garments: 2. (Underwear with thin water pipes in it, for the two men who were going to walk on the Moon.) Each is packed in two plastic bags, one inside the other.</li>' +
+    '<li>Towels. Socks. Scissors.</li><li>In Aquarius: suit hoses, red and blue, and electricity for the fan that drives them.</li></ul>' +
+    '<p class="no">ODYSSEY IS SWITCHED OFF. Nothing in her has any electricity: no lights, no heaters, no fans.</p><p class="no">NOT ON BOARD: glue, string, rubber bands, wire, corks.</p>';
+  var CARDS = {
+    z: 'No need to build anything. Carry the square canisters back up into Odyssey, where they fit, and let Odyssey clean the air.',
+    s: 'Wrap one more belt of tape round the outside of the bag, to make a tight seal.',
+    a: 'Bend a cue card into an arch over the top of the canister, and tape its ends down to the belts. The arch keeps the bag from being sucked flat against the top screen.',
+    h: 'Last of all, cut a small hole in one corner of the bag, near the arch. Push a suit hose in through it<u data-c="3"></u>, and tape the bag to the hose.',
+    x: 'Tape over the screen at the bottom of the canister as well, so that nothing can leak out there.',
+    p: 'There is a small hole in the middle of the bottom of the canister. Before the bag goes on, stop this hole up<u data-c="2"></u>, or some of the air will by-pass the grains.',
+    b: 'Wrap two belts of grey tape round the sides of the canister, one near the top and one near the bottom. Pull them tight.<u data-c="1"></u>',
+    t: 'When the bag is sealed, cut off the spare plastic that hangs below the canister, so that it cannot be sucked across the bottom screen.',
+    g: 'Slip the plastic bag over the top of the canister, arch and all, and press it on to the sticky belts.'
+  };
+  var CHOICE = {
+    b: { n: 1, q: 'You pull a length of tape off the roll. Which way round does it go?', o: [['in', 'Sticky side in'], ['out', 'Sticky side out']], pre: ' ', post: '.' },
+    p: { n: 2, q: 'You turn the canister over, and there is the hole. Stop it up with what?', o: [['cork', 'A cork'], ['towel', 'A piece of towel'], ['glue', 'A lump of glue']], pre: ' WITH ', post: '' },
+    h: { n: 3, q: 'Two hoses hang from the wall. Which one goes into the bag?', o: [['red', 'The red hose'], ['blue', 'The blue hose']], pre: ' (', post: ')' }
+  };
+  /* the words that Mr Pereira adds to a card in red: whatever the player rightly chose (it is not written in this page) */
+  function mended(c, said) { var ch = CHOICE[c]; return ch && said[ch.n] ? ch.pre + said[ch.n].toUpperCase() + ch.post : ''; }
+  var NO = {
+    'c1:in': 'You wrap it sticky side in, and it holds itself on beautifully. &ldquo;And the bag?&rdquo; says Pereira. &ldquo;Read the card about the bag. What is the bag supposed to stick to?&rdquo; He peels the tape off again.',
+    'c2:cork': '&ldquo;A cork,&rdquo; says Pereira. &ldquo;Out of what bottle? Read the list.&rdquo;',
+    'c2:glue': '&ldquo;Glue is not on the list. If it is not on the list, they have not got it.&rdquo;',
+    'c3:blue': 'You push the blue hose in, and Pereira switches on the fan. The bag swells up like a balloon. &ldquo;Blue blows,&rdquo; he says. &ldquo;Read the last line of the page on the wall.&rdquo;'
+  };
+
+  function hints() {
+    if (nextFile) return ['go', ['The words have gone up to the spacecraft, and they have worked. Use the button at the bottom of the screen.']];
+    if (inLock) return ['build', [
+      'Read every card to the end before you choose one. Most of them say why, or when: &ldquo;the arch keeps the bag from&hellip;&rdquo;, &ldquo;before the bag goes on&rdquo;, &ldquo;when the bag is sealed&rdquo;, &ldquo;last of all&rdquo;. The reasons give you the order.',
+      'Two cards would stop the thing working. One of them shuts a way that must stay open: think where the air comes <b>in</b>. The other forgets something about Odyssey that you chalked on a blackboard on Monday night.',
+      'The bag needs something to stick to and something to hold it up, so two cards must come before it; and the hole in the bottom is stopped up before the bag as well. After the bag comes its seal, then the scissors. The hose goes in last.'
+    ]];
+    if (seen.page && seen.stow) return ['open', ['The nine cards are lying on the bench, on the right of the square canister.']];
+    return ['look', [
+      'Before the bench, three things: the page pinned to the brown board on the wall, the list on the clipboard, and what Mr Pereira has to say.',
+      'The page on the wall says what a canister does, and which hose does what. The clipboard says what is on board, and one thing about Odyssey that you know already.'
+    ]];
+  }
+  function isBusy() { return busy; }
+  function see(k) { if (!seen[k]) { seen[k] = 1; ER.flag('e-seen', seen); } paint(); }
+  function paint() {
+    $('#cards').classList.toggle('ready', !!(seen.page && seen.stow) && !nextFile);
+    ER.pips((seen.page ? 1 : 0) + (seen.stow ? 1 : 0) + (nextFile ? 1 : 0), 3);
+    if (nextFile) { document.body.classList.add('done'); $('#go').classList.add('on'); }
+  }
+  function begin() {
+    paint(); AP.mood('tense');
+    if (ER.flag('e-in')) { busy = false; ER.say('The bench in Building 7. Mr Pereira is still winding tape.'); return; }
+    ER.flag('e-in', 1);
+    ER.narrate([
+      '&ldquo;You are the one who has never seen it,&rdquo; says the man with the tape. &ldquo;Good. Luis Pereira. Do not shake hands. I am sticky.&rdquo;',
+      '&ldquo;Mr Smylie&rsquo;s people worked this out yesterday, and it works. Now it has to go up to three tired, cold men as <em>words</em>, on a bad radio. So the words have to be good.&rdquo;',
+      '&ldquo;These cards came down the telephone in the night, in the order that people thought of them. Nine cards. Seven of them build the thing. Two of them would stop it working, and I want to know if you can tell which. If you cannot build it from the words, the words are wrong.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- things in the room ---------- */
+  $('#page4').addEventListener('click', function (e) {
+    e.stopPropagation(); if (busy) return;
+    ER.read({ html: PAGE, cls: 'cardp', clue: { id: 'page4', title: 'What a canister does', kind: 'Page on the wall' }, done: function () { AP.learn('carbon dioxide', 'lithium hydroxide', 'canister'); see('page'); } });
+  });
+  $('#stow').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: STOW, cls: 'clip', clue: { id: 'stow', title: 'On board: the list', kind: 'Clipboard' }, done: function () { see('stow'); } });
+  });
+  $('#per').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Luis Pereira', role: 'technician, Crew Systems Division · Building 7, Wednesday before dawn', face: window.FACE('pereira'),
+      lines: [
+        { note: 'He is winding grey tape back on to its roll, and he does not stop.', a: '&ldquo;Ask. But I am listening for the telephone with one ear.&rdquo;' },
+        { q: 'Who worked this out?', a: 'Mr Smylie and his people. He is the chief of this division. They took a square canister and the list of everything on board, and they did not go home. It works. I have watched it work, on a test rig, with my own eyes.' },
+        { q: 'Then why do you need me?', a: 'Because they know what it looks like, and so do I. The three men up there do not, and nobody can send them a picture. All they will get is a voice, one step at a time. So I want to watch somebody build it from the words alone.' },
+        { q: 'How much time is there?', a: 'They changed to their second round canister at about three o&rsquo;clock this morning. When that one is full, the square ones have to be working. Hours. Not many.' },
+        { q: 'What do the numbers on the slate mean?', a: 'Carbon dioxide is measured in millimetres of mercury. The doctors have said fifteen and no more. At five past midnight, the gauge in Mission Control read 11.3.' }
+      ],
+      clue: { id: 'per1', title: 'Mr Pereira, at the bench', kind: 'What he said' }, last: 'Let him listen'
+    });
+  });
+  AP.thing('#win4', null, 'A high window. The sky outside is still dark blue, with one thin line of pink along the bottom.', isBusy);
+  AP.thing('#clock4', null, 'Half past four in the morning. In mission time: 87 hours and 17 minutes.', isBusy);
+  AP.thing('#phone4', 'telephone', 'A black telephone. The nine cards came down it in the night, one at a time, from nine tired people.', isBusy);
+  AP.thing('#peg', 'pegboard', 'A board full of holes, with a hook and a painted outline for every tool. Two outlines are empty. One is the scissors.', isBusy);
+  AP.thing('#slate', null, 'CO2 IN AQUARIUS. At 00:05, 11.3. LIMIT, 15. Nobody has rubbed out the 11.3, and nobody wants to write the next number.', isBusy);
+  AP.thing('#spk4', 'speaker', function () { return nextFile ? 'The speaker has read your seven cards to three men who are a very long way from this bench.' : 'A speaker, like the one in Mr Voss&rsquo;s room. This one is quiet. The crew are asleep, or trying to be.'; }, isBusy);
+  AP.thing('#hoses', 'hose', 'Two hoses like the ones in Aquarius, joined to a fan behind the wall. One red, one blue. The page on the board says which does what.', isBusy);
+  AP.thing('#shelf4', null, 'Boxes of flight spares. Everything that flies has a twin that stays behind, in a cardboard box, in case somebody on the ground needs to try something.', isBusy);
+  AP.thing('#tapeR', 'tape', 'Grey tape, as sticky as it is ugly. The same tape holds the speaker to its shelf in Mr Voss&rsquo;s room. There is one roll of it in the spacecraft.', isBusy);
+  AP.thing('#towel', 'towel', 'A towel. They have those up there. It is on the list.', isBusy);
+  AP.thing('#bag', null, 'A plastic bag. A liquid cooling garment came out of it: underwear with water pipes, for walking on the Moon. Nobody will be wearing it this week.', isBusy);
+  $('#can').addEventListener('click', function (e) {
+    if (busy) return;
+    ER.wordAt(e.clientX, e.clientY, 'canister');
+    ER.say(nextFile ? 'The square canister, in its bag, with a hose in its ear. It is the ugliest thing you have ever made, and it works.' : 'A square grey box, as big as a thick book, with a screen at each end and a strap on the top. It is full of white grains. Odyssey has sixteen of them.');
+  });
+  $('#cards').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Seven cards in order, with three words added in red. Two cards torn in half.'); return; }
+    if (!seen.page) { ER.say('&ldquo;Read the page on the wall first,&rdquo; says Pereira. &ldquo;You cannot build a thing if you do not know what it is for.&rdquo;'); return; }
+    if (!seen.stow) { ER.say('&ldquo;And the list,&rdquo; says Pereira. &ldquo;On the clipboard. If it is not on the list, they have not got it.&rdquo;'); return; }
+    openBench();
+  });
+  $('#go').addEventListener('click', function () {
+    if (!nextFile || busy) return;
+    busy = true; AP.solved(true);
+    setTimeout(function () { ER.leave(nextFile); }, 1100);
+  });
+
+  /* ---------- the build ---------- */
+  function build() {
+    var box = ER.el('div', 'bn'), s, msgEl, sel = '', done = [], gone = {}, said = {}, strikes = 0, wait = null, fin = false, k;
+    s = '<div><div class="bn-pic"><svg viewBox="0 0 392 330">' +
+      '<defs><pattern id="scr2" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#c9cfd1"/><path d="M0 0H8M0 0V8" stroke="#6c7478" stroke-width="1.5"/></pattern></defs>' +
+      '<ellipse cx="190" cy="298" rx="150" ry="14" fill="#000" opacity=".16"/>' +
+      '<path d="M96 150l44-36h176l-44 36z" fill="url(#scr2)" stroke="#6c7478" stroke-width="2"/><rect x="96" y="150" width="176" height="130" fill="#9aa0a2"/><path d="M272 150l44-36v130l-44 36z" fill="#7d8386"/>' +
+      '<path d="M150 122q40-22 120-10" stroke="#3d4446" stroke-width="6" fill="none"/><rect x="120" y="198" width="128" height="34" fill="#cfd6d8"/><text x="184" y="221" text-anchor="middle" font-family="Oswald,sans-serif" font-size="14" letter-spacing="2" fill="#22231e">LiOH &#183; CM</text>' +
+      '<g class="pt" data-p="b"><path d="M94 166h180l44-36M94 258h180l44-36" stroke="#b7bcbe" stroke-width="15" fill="none"/><path d="M94 166h180l44-36M94 258h180l44-36" stroke="#fff" stroke-width="15" fill="none" stroke-dasharray="2 7" opacity=".5"/></g>' +
+      '<g class="pt" data-p="a"><path d="M106 148q98-150 196-22" stroke="#f1ead6" stroke-width="22" fill="none"/><path d="M106 148q98-150 196-22" stroke="#b9b39c" stroke-width="22" fill="none" stroke-dasharray="1 30" opacity=".6"/><path d="M96 160l22-18M292 138l22-18" stroke="#b7bcbe" stroke-width="12"/></g>' +
+      '<g class="pt" data-p="p"><circle cx="54" cy="262" r="34" fill="#fff" stroke="#22231e" stroke-width="2"/><rect x="32" y="240" width="44" height="44" fill="url(#scr2)" stroke="#6c7478"/><circle cx="54" cy="262" r="9" fill="#dfeaf5" stroke="#2f5b8f" stroke-width="2.5"/><path d="M48 258l12 8M60 258l-12 8" stroke="#2f5b8f" stroke-width="2"/><text x="54" y="312" text-anchor="middle" font-family="\'Architects Daughter\',cursive" font-size="13" fill="#22231e">underneath</text></g>' +
+      '<g class="pt" data-p="g"><path d="M82 262V132Q196-52 330 104v140l-46 38H82z" fill="#dfeaf2" fill-opacity=".5" stroke="#fff" stroke-width="2.5"/><path d="M82 132l-16-22M330 104l18-20" stroke="#fff" stroke-width="2.5"/><path class="skirt" d="M82 280q20 30 44 24t40 8t50-10t44 6t24-28" fill="#dfeaf2" fill-opacity=".5" stroke="#fff" stroke-width="2.5"/></g>' +
+      '<g class="pt" data-p="s"><path d="M80 258h204l48-40" stroke="#8e9496" stroke-width="15" fill="none"/></g>' +
+      '<g class="pt" data-p="h"><path d="M392 20q-60 4-78 50t-40 40" stroke="#b3261c" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M392 20q-60 4-78 50t-40 40" stroke="#7a1810" stroke-width="26" fill="none" stroke-dasharray="3 9"/><path d="M300 88l34 22" stroke="#b7bcbe" stroke-width="13"/></g>' +
+      '</svg></div><p class="pmsg"></p><div class="bn-ch"></div></div><div><div class="bn-grid">';
+    for (k in CARDS) s += '<button type="button" class="cdx" data-c="' + k + '">' + CARDS[k] + '</button>';
+    s += '</div><div class="bn-do"><button type="button" class="btn do" disabled>Do this next</button><button type="button" class="btn out" disabled>This card is wrong: throw it out</button></div><p class="bn-st"></p></div>';
+    box.innerHTML = s;
+    ER.glossIn(box, '.cdx');
+    msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function card(c) { return box.querySelector('.cdx[data-c="' + c + '"]'); }
+    function has(c) { return done.indexOf(c) >= 0; }
+    function draw() {
+      ER.$$('.pt', box).forEach(function (g) { g.classList.toggle('on', has(g.getAttribute('data-p'))); });
+      box.querySelector('.skirt').classList.toggle('off', has('t'));
+      ER.$$('.cdx', box).forEach(function (b) {
+        var c = b.getAttribute('data-c'), i = done.indexOf(c);
+        b.classList.toggle('did', i >= 0); b.classList.toggle('torn', !!gone[c]); b.classList.toggle('sel', c === sel);
+        if (i >= 0) b.setAttribute('data-o', i + 1); else b.removeAttribute('data-o');
+      });
+      box.querySelector('.do').disabled = !sel || !!wait || fin; box.querySelector('.out').disabled = !sel || !!wait || fin;
+      box.querySelector('.bn-st').textContent = done.length + ' of 7 done' + (strikes ? ' · ' + strikes + (strikes === 1 ? ' mistake' : ' mistakes') + ' on this canister' : '');
+      box.setAttribute('data-done', done.join('-')); box.setAttribute('data-strikes', strikes);
+    }
+    function choices(list, fn) {
+      var c = box.querySelector('.bn-ch'); c.innerHTML = '';
+      (list || []).forEach(function (o) { var b = ER.el('button', 'btn', o[1]); b.type = 'button'; b.setAttribute('data-v', o[0]); b.addEventListener('click', function () { fn(o[0]); }); c.appendChild(b); });
+    }
+    function bad(t) {
+      AP.slip(); ER.sfx.no(); strikes++; wait = null; choices(null);
+      if (strikes >= 3) {
+        strikes = 0; done = []; sel = ''; AP.sfx.tape();
+        t += ' <b>That is three.</b> Pereira strips everything off again, down to the bare canister. &ldquo;Again,&rdquo; he says. &ldquo;From the words.&rdquo;';
+      }
+      msg(t); draw();
+    }
+    function early(c) {
+      if (c === 'a') return '&ldquo;Tape its ends down to <b>what</b>?&rdquo; says Pereira. The card springs off the canister and hits the lamp.';
+      if (c === 'g') return !has('b') ? 'The bag slides straight off again. &ldquo;What is it supposed to stick to?&rdquo; says Pereira.'
+        : !has('a') ? 'The bag goes on. Pereira puts a hose to it and switches on the fan, and the plastic snaps flat against the top screen. &ldquo;No air is coming through that,&rdquo; he says. &ldquo;What was going to hold it up?&rdquo;'
+        : '&ldquo;Read the card about the hole in the bottom,&rdquo; says Pereira. &ldquo;<b>When</b> does it say?&rdquo;';
+      if (c === 's') return '&ldquo;Round the outside of <b>what</b> bag?&rdquo; says Pereira.';
+      if (c === 't') return has('g') ? '&ldquo;It says: when the bag is sealed. Is the bag sealed?&rdquo;' : '&ldquo;Cut off the spare plastic of what? There is no bag on it yet.&rdquo;';
+      if (c === 'h') return '&ldquo;Last of all, it says. Is everything else done?&rdquo; Pereira takes the hose out of your hand.';
+      return '&ldquo;Not yet,&rdquo; says Pereira. &ldquo;Read it again. Something else has to be there first.&rdquo;';
+    }
+    function tear(c, quiet) {
+      gone[c] = 1; if (sel === c) sel = ''; AP.sfx.tear();
+      if (!quiet) msg(c === 'x' ? 'Pereira tears the card across. &ldquo;Right. The hose pulls the air <b>out</b> at the top, so it has to come <b>in</b> at the bottom. Tape over the bottom screen, and you have made a very good box, with no air going through it at all.&rdquo;'
+        : 'Pereira tears the card across. &ldquo;Right. The square canisters fit Odyssey, yes. But Odyssey is switched off. No electricity, no fan. And air does not walk through a canister by itself.&rdquo;');
+      draw();
+    }
+    function perform(c) {
+      done.push(c); sel = ''; wait = null; choices(null);
+      if (c === 'b' || c === 's') AP.sfx.tape(); else if (c === 't' || c === 'h') AP.sfx.snip(); else ER.sfx.paper();
+      if (done.length === 7) { finish(); return; }
+      msg(c === 'b' ? 'Two belts of tape, pulled tight. They pick up every hair on the bench.' : c === 'a' ? 'The card bends into an arch over the top screen. Two short pieces of tape hold its ends to the belts.' :
+        c === 'p' ? 'The hole is stopped up, and hard. Nothing will get through that.' : c === 'g' ? 'The bag goes over the arch and down the sides, and you press it on to the sticky belts. A few inches of spare plastic hang out below the canister.' :
+        c === 's' ? 'One more belt, round the outside of the bag. Now the plastic is held between two layers of tape.' : 'The scissors go round the bottom edge. The bottom screen is clear, with nothing left to flap across it.');
+      draw();
+    }
+    function act(c) {
+      var ch = CHOICE[c];
+      if (ER.check('bad', c)) {
+        tear(c, true);
+        bad(c === 'x' ? 'You tape over the bottom screen. Pereira puts the red hose to the bag and switches on the fan. The bag sucks itself flat, and that is all. &ldquo;Where does the air come <b>in</b>?&rdquo; he says. &ldquo;The hose pulls it out at the top. Shut the bottom too, and nothing moves.&rdquo; He tears the card across.'
+          : '&ldquo;Odyssey is switched off,&rdquo; says Pereira. &ldquo;You chalked it on a blackboard yourself. No electricity, no fan. And air does not walk through a canister by itself.&rdquo; He tears the card across.');
+        return;
+      }
+      if (!ER.check('seq', done.concat(c).join('-'))) { bad(early(c)); return; }
+      if (ch && !said[ch.n]) {
+        wait = c; msg(ch.q); draw();
+        choices(ch.o, function (v) {
+          if (ER.check('c' + ch.n, v)) {
+            said[ch.n] = ch.o.filter(function (o) { return o[0] === v; })[0][1];
+            var u = card(c).querySelector('u'); if (u) u.textContent = mended(c, said);
+            box.setAttribute('data-said', Object.keys(said).length);
+            perform(c);
+            if (!fin) msg(msgEl.innerHTML + ' Pereira takes the card and writes on it in red. &ldquo;The words did not say. Now they do.&rdquo;');
+          } else bad(NO['c' + ch.n + ':' + v]);
+        });
+        return;
+      }
+      perform(c);
+    }
+    box.querySelector('.bn-grid').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.cdx') : null, c; if (!b || wait || fin) return;
+      c = b.getAttribute('data-c'); if (has(c) || gone[c]) return;
+      sel = sel === c ? '' : c; ER.sfx.click(); draw();
+    });
+    box.querySelector('.do').addEventListener('click', function () { if (sel && !wait && !fin) act(sel); });
+    box.querySelector('.out').addEventListener('click', function () {
+      if (!sel || wait || fin) return;
+      if (ER.check('bad', sel)) tear(sel); else bad('&ldquo;That one we need,&rdquo; says Pereira, and he takes it out of the bin. &ldquo;Read it again. What would go wrong without it?&rdquo;');
+    });
+    function finish() {
+      var file = ER.exitOk([done.join('-')]);
+      if (!file) { msg('The hose goes in, and nothing happens. Something is wrong: tell your teacher.'); return; }
+      fin = true; ['x', 'z'].forEach(function (c) { if (!gone[c]) { gone[c] = 1; } });
+      nextFile = file; ER.flag('e-file', file); ER.flag('e-ans', { o: done.slice(), w: said });
+      var st = ER.state(); st.done = st.done || {}; st.done.bench = 1; ER.flag('e-out', 1);
+      draw(); ER.sfx.ok();
+      msg('The hose goes in through the corner of the bag, and a last piece of tape goes round the join. Seven cards. It looks like something a child has made, and Pereira is looking at it as if it were beautiful.');
+      setTimeout(function () { ER.closeAll(); after(); }, 3000);
+    }
+    draw();
+    msg('Nine cards, in no order at all. Click a card to pick it up. Then either do what it says, or throw it out. Three mistakes on one canister, and Mr Pereira starts you again with a bare one.');
+    return box;
+  }
+  function openBench() {
+    if (!bnBox) bnBox = build();
+    inLock = true;
+    ER.open('ov-lock', bnBox, function () { inLock = false; });
+  }
+  function after() {
+    var ans = ER.flag('e-ans') || { o: [], w: {} }, note = '';
+    busy = true; paint(); AP.learn('procedure');
+    ans.o.forEach(function (c, i) { note += '<p>' + (i + 1) + '. ' + CARDS[c].replace(/<u[^>]*><\/u>/, '<b>' + mended(c, ans.w) + '</b>') + '</p>'; });
+    AP.mine('words', 'The good words', note + '<p>Two cards were torn in half: they are not here.</p>', true);
+    ER.narrate([
+      'Pereira switches on the fan, and holds a strip of thin paper under the bottom of the canister. The paper lifts, and sticks to the screen.',
+      '&ldquo;In at the bottom,&rdquo; he says. &ldquo;Through the grains. Out at the top, and away down the hose. One way in, one way out.&rdquo;',
+      '&ldquo;And three places where a tired man would have had to guess. ' + [1, 2, 3].map(function (n) { return ans.w[n] || ''; }).join('. ') + '. Now he will not have to.&rdquo; He picks up the telephone.',
+      'At twenty-two minutes past seven the speaker on the wall clicks. This morning&rsquo;s CAPCOM is Joe Kerwin, who is an astronaut and a doctor as well. He begins with a list of things to find.'
+    ], function () {
+      AP.sfx.squawk();
+      ER.narrate([
+        AP.said('Houston', '&hellip; two command module lithium hydroxide canisters, a roll of the gray tape, the two LCGs, because we&rsquo;re going to use the bags from the LCGs, and one - one LM cue card &hellip;'),
+        'And then, before the first step:',
+        AP.said('Houston', 'Okay, Jack. Did anybody ever tell you that you got a 60-day extension on your income tax. Over.'),
+        '&ldquo;The fifteenth of April,&rdquo; says Pereira. &ldquo;Tax day. Jack Swigert joined this crew two days before lift-off, and he never sent his form in.&rdquo; It is the first time since Monday that you have heard anybody laugh.',
+        'Then Kerwin reads, one step at a time, and three men who cannot see this bench build the thing with their hands. It takes them three quarters of an hour.',
+        AP.said('Swigert', 'Okay. Our do-it-yourself lithium hydroxide canister change is complete.')
+      ], function () {
+        ER.narrate([
+          'They build a second one. At twenty to eleven a warning light comes on in Aquarius: too much carbon dioxide. By a quarter past eleven the air in the cabin is going through two square canisters. Half an hour later Fred Haise asks how they are doing.',
+          AP.said('Houston', 'We are reading 0.2 on our CO2 sets here, and we&rsquo;re all delighted. It seems to be working fine.'),
+          AP.said('Haise', 'Boy, that is great.'),
+          'One more thing. When Kerwin came to the hole in the bottom, he had to say: ' + AP.said('', '&hellip; and I forgot to tell you to get something to stick in that hole.') + ' So Jack Swigert cut a piece off a towel.',
+          '&ldquo;Even good words lose something on the way up,&rdquo; says Pereira. &ldquo;That is why you want good men at the other end.&rdquo; He peels a last piece of tape off his sleeve. &ldquo;Go and sleep, co-op. They have two days still to go.&rdquo;'
+        ], function () {
+          AP.mine('heard3', 'Heard on the speaker, Wednesday morning', '<p>08:23, Jack Swigert:</p><p><span class="said">&ldquo;Okay. Our do-it-yourself lithium hydroxide canister change is complete.&rdquo;</span></p><p>11:46, Houston, on the carbon dioxide in the cabin:</p>' +
+            '<p><span class="said">&ldquo;We are reading 0.2 on our CO2 sets here, and we&rsquo;re all delighted. It seems to be working fine.&rdquo;</span></p>', true);
+          busy = false; paint();
+        });
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>

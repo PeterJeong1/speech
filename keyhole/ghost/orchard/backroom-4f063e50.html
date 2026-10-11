@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Room over the Back Stairs · Your Place Is Laid</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="orchard.css">
+<style>
+  body{--bg:#151b20;--accent:#f1d98a;--font-display:'Special Elite',monospace;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(18,24,30,.96);--tc-ink:#e9eef0;--cap-bg:rgba(16,22,28,.95);--panel:#1a222a;--face-bg:#232a36;--q-ink:#f1d98a;--fade:#080b0e;--hud-bg:rgba(16,22,28,.8)}
+  .tc-room{font-size:clamp(34px,4.6vw,62px)}
+  .mote{animation:mote 7s ease-in-out infinite}
+  .mote.m2{animation-delay:-2.400s}.mote.m3{animation-delay:-4.700s}
+  @keyframes mote{0%{opacity:0;transform:translate(0,0)}30%{opacity:.8}100%{opacity:0;transform:translate(26px,54px)}}
+  #box.ready,#lumley.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.4)}}
+  #bundle{display:none}
+  #scene.out #bundle{display:block}
+
+  /* the bundle: one letter open on the left, the order of all of them on the right */
+  .lt{width:min(1180px,96vw);display:flex;gap:18px;align-items:flex-start;-webkit-user-select:none;user-select:none}
+  .lt .doc{flex:1 1 0;width:auto;max-height:none;min-height:560px}
+  .lt .doc.ned{font-size:17.5px;line-height:1.46;padding:22px 32px 18px}
+  .lt .doc.ned .pin{font-size:15px;line-height:1.66;margin-bottom:12px}
+  .lt .doc.han{font-size:20.5px;line-height:1.14;padding:16px 30px 12px}
+  .lt .doc.han .env{font-size:21px;margin-bottom:8px;padding:4px 14px 3px}
+  .lt .doc.han p{margin:0 0 6px}
+  .lt .doc.han .ps{font-size:18.5px}
+  .lt-side{flex:0 0 492px}
+  .lt-row{padding:8px 10px 4px;background:#3b2c22 linear-gradient(170deg,#4d3a2c,#2c2018);border:2px solid #1c140e;border-radius:3px;box-shadow:0 22px 60px rgba(0,0,0,.6)}
+  .lline{display:flex;align-items:center;gap:10px;margin-bottom:5px}
+  .lline i{flex:0 0 38px;font-style:normal;font-family:'Oswald',sans-serif;font-weight:500;font-size:13px;letter-spacing:.12em;color:#d9c9a8;text-align:right}
+  .lslot{flex:1;min-height:42px;border:1.5px dashed rgba(233,217,176,.35);border-radius:3px;background:rgba(0,0,0,.18)}
+  .lt-item,.lt-fixed{display:block;min-height:40px;padding:9px 14px 6px;background:#e9e2cc linear-gradient(168deg,rgba(255,255,255,.5),rgba(120,100,60,.16));color:#2b3148;font-family:'Architects Daughter',cursive;font-size:16.5px;line-height:1.2;
+    border:1px solid #a89f86;box-shadow:0 3px 6px rgba(0,0,0,.4)}
+  .lt-item.cur,.lt-fixed.cur{box-shadow:0 0 0 3px #f1d98a,0 3px 6px rgba(0,0,0,.4)}
+  .lt-fixed{position:relative;cursor:pointer}
+  .lt-fixed:after{content:'';position:absolute;right:12px;top:9px;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f7e7ae,#8a6a26);box-shadow:0 2px 2px rgba(0,0,0,.4)}
+  .lt-tray{display:flex;flex-wrap:wrap;gap:6px;min-height:100px;margin-top:8px;padding:8px;background:#aab6b4 linear-gradient(#b9c5c3,#93a09e);border-radius:3px;align-content:flex-start}
+  .lt-tray .lt-item{width:calc(50% - 3px)}
+  .lt .pmsg{font-size:17.5px;line-height:1.34;min-height:96px}
+  .lt-slip{padding:16px 20px 14px;background:#fbfaf4;color:#20242b;border-top:10px solid #7b2c22;box-shadow:0 22px 60px rgba(0,0,0,.6);font-family:'Special Elite',monospace;font-size:15.5px;line-height:1.5}
+  .lt-slip h5{margin:0 0 6px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.24em;color:#7b2c22}
+  .lt-slip p{margin:0 0 4px}
+  .wheels{display:flex;gap:12px;justify-content:center;margin:10px 0 2px}
+  .whl{display:flex;flex-direction:column;align-items:center}
+  .whl button{width:100%;height:26px;font-size:13px;color:#7b2c22;border:1px solid #b9b39a;background:#f1ecdc;border-radius:3px}
+  .whl button:hover{background:#7b2c22;color:#f1ecdc}
+  .whl span{display:block;min-width:74px;margin:4px 0;padding:7px 10px 4px;text-align:center;font-family:'Caveat',cursive;font-size:28px;line-height:1;color:#262a44;border-bottom:2px solid #20242b}
+  .whl[data-w=month] span{min-width:148px}
+  .whl.bad span{color:#d2452f;border-bottom-color:#d2452f}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9bcc4"/><stop offset=".7" stop-color="#8ea2ac"/><stop offset="1" stop-color="#6f828c"/></linearGradient>
+  <linearGradient id="boardG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a6850"/><stop offset="1" stop-color="#352c20"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4ecc8"/><stop offset=".45" stop-color="#d9d6a0"/><stop offset="1" stop-color="#7a9460"/></linearGradient>
+  <linearGradient id="ironG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f4f4ee"/><stop offset="1" stop-color="#b9bcb6"/></linearGradient>
+  <linearGradient id="marbG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef0ee"/><stop offset="1" stop-color="#c3c9c9"/></linearGradient>
+  <radialGradient id="vig" cx="46%" cy="44%" r="82%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".62" stop-color="#0a1014" stop-opacity=".2"/><stop offset="1" stop-color="#05080a" stop-opacity=".82"/></radialGradient>
+</defs>
+
+<!-- a blue wall, the slope of the roof, bare boards -->
+<rect x="-1000" y="-400" width="3600" height="1042" fill="url(#wallG)"/>
+<path d="M820 -400H2600V470L1240 120Z" fill="#74868f"/><path d="M1240 120L2600 470" stroke="#5a6a72" stroke-width="6"/><g stroke="#65767f" stroke-width="4" opacity=".8"><path d="M1010 -400L1420 166M1300 -400L1740 248M1600 -400L2060 330"/></g>
+<rect x="-1000" y="640" width="3600" height="700" fill="url(#boardG)"/><g id="boards" stroke="#2a2218" stroke-width="3" opacity=".75"></g>
+<rect x="-1000" y="626" width="3600" height="16" fill="#56666e"/>
+
+<!-- the calendar that was never turned, and the washstand -->
+<g id="alman" class="hot"><rect x="104" y="184" width="112" height="150" fill="#f4efdc"/><rect x="104" y="184" width="112" height="26" fill="#2f4a36"/><path d="M124 204l14 -10h30l-8 10z" fill="#d9c08a"/><circle cx="172" cy="202" r="5" fill="none" stroke="#d9c08a" stroke-width="2"/>
+  <text x="160" y="232" class="fA" font-size="11.500" text-anchor="middle" fill="#231c12">SEPTEMBER</text><text x="160" y="248" class="fO" font-size="10" text-anchor="middle" fill="#7b2c22" letter-spacing="2">1924</text>
+  <g id="almgrid" stroke="#b9ad90" stroke-width="1"></g><ellipse cx="121" cy="318" rx="9" ry="7" fill="none" stroke="#262a44" stroke-width="2"/><circle cx="160" cy="178" r="4" fill="#3a3428"/></g>
+<g id="wstand" class="hot"><rect x="60" y="474" width="200" height="14" fill="url(#marbG)"/><path d="M72 488v152M248 488v152" stroke="#5a4630" stroke-width="12"/><rect x="72" y="560" width="176" height="10" fill="#5a4630"/>
+  <path d="M146 474q-18 -4 -18 -30q0 -22 14 -30v-14h28v14q14 8 14 30q0 26 -18 30z" fill="#f1efe6"/><path d="M184 424q22 2 20 22q-2 14 -18 16" stroke="#f1efe6" stroke-width="7" fill="none"/><path d="M130 440h52" stroke="#3d5a8c" stroke-width="4"/>
+  <path d="M188 474q2 -16 34 -16t34 16z" fill="#e3e1d6"/><path d="M42 500h22M42 500v64" stroke="#5a4630" stroke-width="6"/><rect x="34" y="504" width="24" height="70" fill="#eef0ee"/><path d="M34 528h24M34 552h24" stroke="#c9ced0" stroke-width="2"/></g>
+
+<!-- a jacket on a chair, and his Sunday boots -->
+<g id="chairj" class="hot"><path d="M444 790V470h16V640h72V470h16V790h-14V668h-76V790z" fill="#4a3826"/><rect x="440" y="640" width="112" height="16" rx="4" fill="#5a4630"/>
+  <path d="M436 470q60 -22 120 0l8 126q-68 16 -136 0z" fill="#3a3028"/><path d="M496 462v140" stroke="#2a221c" stroke-width="3"/><path d="M448 500q-12 44 -4 86M544 500q12 44 4 86" stroke="#2a221c" stroke-width="3" fill="none"/>
+  <path d="M452 786v-46h26v30q16 2 22 16zM508 786v-46h26v30q16 2 22 16z" fill="#15130f"/><path d="M456 752h18M512 752h18" stroke="#3a3428" stroke-width="2"/></g>
+
+<!-- the window on the orchard side -->
+<g id="window" class="hot"><rect x="552" y="172" width="256" height="306" fill="#56666e"/><rect x="570" y="190" width="220" height="270" fill="url(#glassG)"/>
+  <clipPath id="wclip"><rect x="570" y="190" width="220" height="270"/></clipPath><g id="wtrees" clip-path="url(#wclip)"></g>
+  <g stroke="#e9eef0" stroke-width="8" fill="none"><rect x="570" y="190" width="220" height="270"/><path d="M680 190v270M570 325h220"/></g><rect x="540" y="472" width="280" height="18" fill="#c9d4d8"/></g>
+<path d="M570 460L790 460L1120 900L420 900Z" fill="#f4ecc8" opacity=".1" pointer-events="none"/>
+<g fill="#fff6d0" pointer-events="none"><circle class="mote" cx="640" cy="500" r="2"/><circle class="mote m2" cx="720" cy="560" r="1.600"/><circle class="mote m3" cx="690" cy="620" r="2.200"/><circle class="mote m2" cx="800" cy="680" r="1.800"/><circle class="mote" cx="760" cy="520" r="1.500"/></g>
+
+<!-- a shelf: two books, an atlas, a boat cut out of apple wood -->
+<g id="shelf" class="hot"><rect x="850" y="150" width="230" height="130" fill="#000" opacity="0"/><rect x="846" y="266" width="238" height="12" fill="#5a4630"/><path d="M866 278l-10 30M1064 278l10 30" stroke="#4a3826" stroke-width="7"/>
+  <rect x="866" y="196" width="22" height="70" fill="#7b2c22"/><rect x="890" y="204" width="18" height="62" fill="#2f4a36"/><rect x="910" y="190" width="26" height="76" fill="#27344a"/><path d="M914 206h18M914 250h18" stroke="#d9c08a" stroke-width="2"/>
+  <rect x="944" y="250" width="70" height="16" fill="#8a6a44"/><rect x="946" y="253" width="66" height="4" fill="#ead9b0"/>
+  <path d="M1020 262q26 10 52 0l-6 -14h-40z" fill="#b98d58"/><path d="M1046 248v-52" stroke="#5a4630" stroke-width="3"/><path d="M1048 198l22 40h-22z" fill="#f4efdc"/></g>
+
+<!-- the bed, made up; and under it a tin box -->
+<rect x="968" y="660" width="494" height="150" fill="#0c0f11" opacity=".55"/>
+<g id="box" class="hot"><rect x="1092" y="708" width="128" height="72" rx="3" fill="#15171a"/><rect x="1092" y="708" width="128" height="14" rx="3" fill="#24272b"/><rect x="1146" y="716" width="20" height="14" rx="2" fill="#8a7a55"/>
+  <text x="1156" y="764" class="fZ" font-size="20" font-weight="700" text-anchor="middle" fill="#e9eef0" opacity=".85">A. O.</text><path d="M1092 780h128" stroke="#000" stroke-width="3" opacity=".5"/></g>
+<g id="bed" class="hot"><path d="M962 800V470M1456 800V380" stroke="url(#ironG)" stroke-width="12" stroke-linecap="round"/><path d="M962 500h0M1456 420h0" stroke="#fff" stroke-width="1"/>
+  <g stroke="#dfe2dc" stroke-width="5"><path d="M1456 420v160M1432 430v150M1408 440v140"/></g><path d="M1400 440q28 -30 56 -34" stroke="url(#ironG)" stroke-width="9" fill="none"/><circle cx="962" cy="466" r="9" fill="#f4f4ee"/><circle cx="1456" cy="376" r="9" fill="#f4f4ee"/>
+  <rect x="962" y="646" width="494" height="14" fill="#c9ccc6"/><rect x="968" y="590" width="486" height="58" fill="#e9e6da"/>
+  <path d="M1330 592q4 -40 60 -42q54 2 58 42z" fill="#f6f4ec"/><path d="M1340 590q40 -10 100 0" stroke="#d6d2c6" stroke-width="2" fill="none"/><rect x="1374" y="558" width="30" height="20" fill="#fbfaf4" transform="rotate(-6 1389 568)"/>
+  <g id="quilt"></g></g>
+<g id="bundle" class="hot" transform="translate(1150 586) rotate(-8)"><rect x="-38" y="-24" width="76" height="46" fill="#e9e2cc" stroke="#a89f86" stroke-width="1.500"/><rect x="-34" y="-28" width="76" height="46" fill="#f1ead6" stroke="#a89f86" stroke-width="1.500"/><path d="M-34 -6h76M4 -28v46" stroke="#7b2c22" stroke-width="4"/></g>
+
+<g id="lumley" class="hot" transform="translate(360 868) scale(1.150)"></g>
+
+<rect x="-1000" y="-400" width="3600" height="1740" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go to the churchyard</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="orchard.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, lt = null, told = {};
+
+  /* Seven letters in one hand. The id says what the letter is about, and nothing about when it was written. */
+  var L = {
+    f: { head: 'Tuesday night', body:
+      '<p>Dear Mother,</p><p>I do not know how to begin, so I shall begin with the worst. The rent is gone. I never reached the Talbot. There was a man at the fair with three thimbles and a pea, and I thought to turn one pound into two. I am nineteen years old, and I have lost forty-two pounds ten in an afternoon.</p>' +
+      '<p>I cannot come home without it. I do not know yet what Father will say, and I am in no hurry to hear it.</p>' +
+      '<p>I send this under cover to Aunt Esther. She is your sister and not his, and may keep a thing from him with a clear conscience.</p><p class="sig">Your sorry son, Ned</p>' },
+    d: { head: 'Saturday', body:
+      '<p>Dear Mother,</p><p>Aunt&rsquo;s letter found me. She says she has kept the Post Office alone since her late husband&rsquo;s time and never lost a letter yet, so I am to write through her.</p>' +
+      '<p>So Father has sold Duke and Bonny to pay it, and I am not to be named in the house until that errand is done. I have earned both.</p>' +
+      '<p>As I told you in my last, I will not come home with empty hands. I have been two months at the docks, carrying other men&rsquo;s sacks. I have never yet been further out than the end of the pier.</p>' +
+      '<p>You will be making the cider now. Do not give George my boots.</p><p class="sig">Your loving son, Ned</p>' },
+    l: { head: 'Lady Day', body:
+      '<p>Dear Mother,</p><p>Rent day again, and you will know what I am thinking of.</p>' +
+      '<p>Tomorrow I go to sea. A steamer in the New Zealand trade wants a deck hand who can lift, and the mate did not ask what else I could do. They pay better than the docks, and there is nothing to spend it on.</p>' +
+      '<p>Father will be grafting this week, with George to hold the string. George is a steady lad. He is the younger of us two, and he never thought to have the farm. He may have to think of it now.</p><p class="sig">Your loving son, Ned</p>' },
+    s: { head: 'At sea, a Sunday', body:
+      '<p>Dear Mother,</p><p>I had been six months at the docks when this ship took me, and now I have been a year at sea. I shall be one-and-twenty on the twelfth of May. There will be no blossom where I am going, and nobody to say that I have grown.</p>' +
+      '<p>I was christened for Grandfather Winterbourne, and he kept the name clean for seventy years. I have made a poor start with it.</p>' +
+      '<p>So Kate is to be married in June. Tell her that Harry Bellamy is a brave man. She was seven when I was born, and she has ordered me about ever since.</p><p class="sig">Your loving son, Ned</p>' },
+    w: { head: 'Old Twelfth Night', body:
+      '<p>Dear Mother,</p><p>You will all be out in the orchard tonight with the cider and the toast. Here it is midsummer, and the apples on the trees are half grown. I cannot get used to it.</p>' +
+      '<p>Your last was four months finding me. So Kate has been Mrs Bellamy for a year and a half, and I have only now drunk her health.</p>' +
+      '<p>It is more than three years since I went. I have twenty pounds put by. It is not yet the half.</p>' +
+      '<p>This may be my last for some time: we are to go on up the coast.</p><p class="sig">Your loving son, Ned</p>' },
+    p: { head: 'August, the 20th', body:
+      '<p>Dear Mother,</p><p>You will be picking the first apples, and Father will be saying that they are not what they were.</p>' +
+      '<p>I am four-and-twenty, and second mate of nothing.</p>' +
+      '<p>So Kate has a boy, and Uncle Abel has given up Hill End, and his girl has had the dairy at Sweetings since Lady Day. Ellen will do well. She always had more sense than I had.</p>' +
+      '<p>Does Father ever speak of me? You never say, so I know the answer. By the time the keepers are in, I shall have been gone five years.</p><p class="sig">Your loving son, Ned</p>' },
+    g: { head: 'The first week of March', body:
+      '<p>Dear Mother,</p><p>You will be grafting, and George will hold the knife as if it might bite him.</p>' +
+      '<p>I have it. Forty-two pounds ten, the same that I went out with. It was six years last Michaelmas, and I had thought to be home long before.</p>' +
+      '<p>But Kate has told me what Father says: that I may sit at his table when I have paid that rent and brought him the receipt. The rent was paid years ago. Then the errand cannot be done, and he knows it.</p>' +
+      '<p>I shall not write again. If ever I see a way to do it, I shall come to Aunt&rsquo;s door first, and I shall send no word before me.</p><p class="sig">Your loving son, Ned</p>' }
+  };
+  var PIN = '<div class="pin">Hannah. This came for you under cover to me, <b>Thursday 2nd October 1924</b>. I have not read it, and I do not need to. Keep it or burn it, but do not let Amos see it. I shall take in any more that come. I am the younger of us two, but I was never the sillier. E.</div>';
+  var MOTHER = '<div class="env">For my son, when he comes</div><h4>Sunday. The blossom is out.</h4><p>My dear boy,</p>' +
+    '<p>Your father has my promise that I will not say your name, and I do not write it. He never asked me not to feed you. Your place has been laid every night since you went, and it will be seven years this Michaelmas. You will be six-and-twenty on Tuesday.</p>' +
+    '<p>He says you may sit at his table when you have paid that rent and brought him the receipt. He says it because he thinks it cannot be done. It can. He was laid up, and I carried the price of Duke and Bonny to the Estate Office myself. The receipt came home in my pocket. He has never asked for it, and it has never been put into his hand.</p>' +
+    '<p>So come by the field path, at dusk. Do not come to the door. Go in at the orchard gate and take the row nearest the house. Pass two trees. The third is yours: one of the two that he grafted the spring you were born, and the nearer to the gate. Do not look under it: George mows there. Go round behind it, so that it stands between you and the kitchen window, and walk straight on as far as the bee wall, and no further. At the foot of the wall lie three flat stones. It is under the one between the other two. You will need no spade.</p>' +
+    '<p>Bring it in at the back door. Put it by your father&rsquo;s plate, sit down in your own place, and let him speak first.</p><p class="sig">Your loving Mother</p>' +
+    '<p class="ps">I leave this with your aunt, since you say you will come to her door first.</p>';
+  var ALMAN = '<h4>SEPTEMBER 1924</h4><h5>LEDMINSTER SEED STORES · EVERYTHING FOR THE FARM</h5><table><tr><th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th><th>SUN</th></tr>' +
+    '<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr><tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td></tr><tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr>' +
+    '<tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr><tr><td class="ring">29</td><td>30</td><td></td><td></td><td></td><td></td><td></td></tr></table>' +
+    '<p class="ink">29th. Michaelmas. Rent, at the Talbot. N. to go, my back being bad. A. O.</p>';
+
+  (function () {
+    var s = '', i, x, r, c, COL = ['#8c3a34', '#3d5a7a', '#d9cdb0', '#6b7a52', '#c9a66a', '#5a4a6a', '#e9e3d2', '#a8584a'];
+    for (i = -14; i < 30; i++) { x = i * 104 - 300; s += '<path d="M' + x + ' 640L' + OY.num(800 + (x - 800) * 3.26) + ' 1340"/>'; }
+    $('#boards').innerHTML = s; s = '';
+    for (i = 0; i < 6; i++) s += '<path d="M110 ' + (258 + i * 12.500) + 'h100"/>';
+    for (i = 0; i < 8; i++) s += '<path d="M' + OY.num(110 + i * 14.300) + ' 258v62.500"/>';
+    $('#almgrid').innerHTML = s; s = '';
+    for (r = 0; r < 3; r++) for (c = 0; c < 5; c++) {
+      x = 588 + c * 48 + r * 9;
+      if (r === 1 && c === 2) s += '<circle cx="' + x + '" cy="' + (368 + r * 36) + '" r="24" fill="#8c3a2c"/><g fill="#d2452f"><circle cx="' + (x - 8) + '" cy="' + (362 + r * 36) + '" r="3.500"/><circle cx="' + (x + 7) + '" cy="' + (372 + r * 36) + '" r="3.500"/><circle cx="' + (x + 2) + '" cy="' + (356 + r * 36) + '" r="3"/></g>';
+      else s += '<circle cx="' + x + '" cy="' + (368 + r * 36) + '" r="24" fill="' + ['#5f7a4a', '#6b8a52', '#557044'][(r + c) % 3] + '"/>';
+    }
+    $('#wtrees').innerHTML = s; s = '';
+    for (r = 0; r < 3; r++) for (c = 0; c < 9; c++) s += '<rect x="' + (964 + c * 42) + '" y="' + (582 + r * 38) + '" width="42" height="38" fill="' + COL[(c * 3 + r * 5) % 8] + '"/>';
+    s += '<g stroke="#2a221c" stroke-width="1.500" opacity=".35" fill="none"><path d="M964 620h378M964 658h378"/></g><path d="M964 696h378" stroke="#2a221c" stroke-width="3" opacity=".4"/>';
+    $('#quilt').innerHTML = s;
+    $('#lumley').innerHTML = OY.who('lumley', { extra: '<rect x="18" y="-176" width="50" height="62" rx="2" fill="#8f959a"/><rect x="18" y="-176" width="50" height="14" fill="#6f757a"/><rect x="30" y="-150" width="26" height="14" fill="#f1ecdc"/>' });
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'orchard', storyTitle: 'Your Place Is Laid', id: 'backroom', no: 'II', title: 'The Room over the Back Stairs',
+    go: 'Open the door',
+    intro: [
+      'Hannah&rsquo;s book gave three real dates: Old Twelfth Night in January, Lady Day in March and Michaelmas in September. Everything else hung from those: the graft-wood a month before the grafting, a bare peg after it, then the blossom, the mowing, the thinning, the earlies, the rent, the keepers, the cider, and the pruning last of all.',
+      'When the eleventh tag was on its peg, the latch of the back-stairs door lifted by itself. Mrs Bellamy did not turn round to look.',
+      'Twelve steep stairs, and at the top a door that nobody has opened for a long time. It opens now without a sound.'
+    ],
+    exit: {"next":"churchyard","w":{"e3afacb3":"db610db1"}}, tags: {"order":["be48453c"],"adj":["1eb674d6","c7addcd5","a9224222","503ff99a","ea955b97","1af679e6"],"day":["96387ece"],"month":["7cebf3ac"],"year":["7d5689ad"]},
+    sound: ['hush', { root: 48, bpm: 48, drop: ['mel', 'bass'], beds: [['wind', 0.22]] }],      /* the room with most to read: no tune, only the slow chords and the wind under the tiles */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#box').classList.toggle('ready', !told.box);
+    $('#lumley').classList.toggle('ready', !!(told.box && !told.lumley));
+    $('#scene').classList.toggle('out', !!told.box);
+    ER.pips((told.lumley ? 1 : 0) + (ER.flag('b-stage') ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+
+  function hints() {
+    if (nextFile) return ['go', ['Miss Lumley wants him on paper: who he was, and when he was born. Go to the churchyard: the button at the bottom of the screen.']];
+    if (lt && lt.isOpen() && ER.flag('b-stage')) return ['date', [
+      'She gives no date, only &ldquo;Sunday&rdquo;. But she says three things about time: the blossom is out, it will be seven years this Michaelmas, and he will be six-and-twenty on Tuesday.',
+      'The year: the calendar on the wall tells you which Michaelmas he went, and &ldquo;it will be seven years&rdquo;. The month: when is the blossom out? The day: in the letter that he wrote at sea, he says what day of the month his birthday is. She is writing on the Sunday before that Tuesday.'
+    ]];
+    if (lt && lt.isOpen()) return ['order', [
+      'Every letter says what they are doing in the orchard at home: making cider, grafting, wassailing, picking the first apples. Your note of the orchard year gives you the month. That is not the year yet, but it is a start.',
+      'He was nineteen when he went. So where he says how old he is, you can work out how long he has been gone; and where he says how long he has been gone, you can work out how old he is. Do it for every letter.',
+      'Three things move on through the bundle. His work: the docks, then &ldquo;tomorrow I go to sea&rdquo;, then a year at sea. His sister Kate: to be married, then married a year and a half, then with a boy. The time since he went: more than three years, then nearly five, then six and more. And somebody who writes &ldquo;I shall not write again&rdquo; has written his last.'
+    ]];
+    if (!told.box) return ['box', [
+      'Miss Lumley has told you where people keep such things. Look under the bed.',
+      'Click the black tin box under the bed, on the right.'
+    ]];
+    return ['bundle', ['The bundle is lying on the quilt. Click the tin box, or Miss Lumley, to go on with it.']];
+  }
+
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; showGo(); ER.say('Seven letters from him, and one of hers that he never had.'); return; }
+    if (told.in) { busy = false; ER.say('The room over the back stairs. The light in the window is going yellow.'); return; }
+    tell('in');
+    ER.narrate([
+      'A small room under the roof, with its window on the orchard side. It is cold, and very clean, and it has been cold and clean for a long time.',
+      'A boy&rsquo;s room. An iron bed, made up. A jacket on the back of a chair. On the wall, a calendar from a seed shop.',
+      'Miss Lumley stands in the doorway with her box. &ldquo;Kept as it was,&rdquo; she says. &ldquo;People do that. Look under the bed. They do that too.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- Miss Lumley, and the tin box ---------- */
+  function talkLumley() {
+    ER.talk({
+      who: 'Miss Lumley', role: 'County Record Office', face: window.FACE('lumley'),
+      lines: [
+        { note: 'She unties the tape and lays the letters out on the quilt, without hurrying.', a: '&ldquo;Seven letters in one hand, and not one of them has a year on it. And no envelopes. An envelope has a postmark, and a postmark says where. Somebody in this house did not want that known.&rdquo;' },
+        { a: 'And an eighth, in another hand, in an envelope that never had a stamp. &ldquo;For my son, when he comes.&rdquo; We do not read that one yet.' },
+        { q: 'Why not?', a: 'Because a letter is an answer to everything that came before it. Read the last one first and you understand nothing: you only think that you do. So we read them in the order in which they were written.' },
+        { q: 'But there are no dates.', a: 'He tells you the order himself, if you listen. What does he know in this letter that he did not know in that one? How old is he? What are they doing in the orchard at home? Had been, has been, will have been: that is all a date is.' },
+        { a: 'The first is easy. Somebody has pinned a note to it, and she pinned it to the first that came. Put the other six in their order behind it. I shall tell you when you are wrong. I shall not tell you where.' }
+      ],
+      clue: { id: 'lumley', title: 'Miss Lumley: how to read a bundle', kind: 'What she said' },
+      done: function (seen) { if (!seen) return; tell('lumley'); paint(); openLock(); }
+    });
+  }
+  function openLock() { if (!lt) lt = makeBundle(); lt.open(); }
+  $('#bundle').addEventListener('click', function () { if (busy) return; if (nextFile) ER.say('Seven letters and an eighth, in their order, with a slip of paper round them.'); else if (!told.lumley) talkLumley(); else openLock(); });
+  $('#box').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The tin box. Miss Lumley has put every letter back in it, in its order, and written a number on a slip for each.'); return; }
+    if (!told.box) {
+      tell('box'); paint(); busy = true;
+      ER.narrate([
+        'A black tin box, with A. O. painted on the lid in white. It is not locked.',
+        'Inside there is nothing but a bundle of letters, tied up with the tape of an apron. The top one has a note pinned to it.'
+      ], function () { busy = false; talkLumley(); });
+      return;
+    }
+    if (!told.lumley) talkLumley(); else openLock();
+  });
+  $('#lumley').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Churchyard,&rdquo; says Miss Lumley. &ldquo;The dead are very reliable about dates. It is the only thing they are reliable about.&rdquo;'); return; }
+    if (!told.box) { ER.say('&ldquo;Under the bed,&rdquo; says Miss Lumley. &ldquo;I have been doing this for twenty-six years. It is always under the bed.&rdquo;'); return; }
+    if (!told.lumley) talkLumley(); else openLock();
+  });
+
+  /* ---------- things in the room ---------- */
+  $('#alman').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: ALMAN, cls: 'alman', clue: { id: 'alman', title: 'The calendar on the wall: September 1924', kind: 'From his room' },
+      done: function () { if (tell('alman')) ER.say('Michaelmas 1924 was a Monday. Somebody has drawn a ring round it, and nobody has ever turned the page.'); } });
+  });
+  OY.thing('#wstand', 'washstand', 'A washstand, with a jug and a basin. The jug is dry. There is a clean towel on the rail, folded in three.', isBusy);
+  OY.thing('#chairj', null, 'A jacket over the back of a chair, and under the chair a pair of Sunday boots. They have been polished a great many times since anybody wore them.', isBusy);
+  OY.thing('#window', null, 'From this window you look straight down on the orchard: the tops of the trees, in their rows. One tree in the old row is red with apples.', isBusy);
+  OY.thing('#shelf', null, 'A shelf: <i>The Coral Island</i>, a school atlas that falls open at the Pacific Ocean, and a boat cut out of a piece of apple wood, with a paper sail.', isBusy);
+  OY.thing('#bed', 'quilt', 'An iron bed with a patchwork quilt. The sheets are clean. &ldquo;Aired every spring,&rdquo; says Miss Lumley, reading a label pinned to the pillow. &ldquo;In three different hands, one after another.&rdquo;', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+
+  /* ---------- the bundle: six letters to put in order behind the first, and then a date for the eighth ---------- */
+  function makeBundle() {
+    var TRAY = ['w', 'g', 'l', 'p', 'd', 's'], ORD = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th'];
+    var MONTHN = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    /* what Miss Lumley says when two letters that belong next to each other are the wrong way round (the key is the one that should come second) */
+    var AFTER = {
+      f: 'The first of them has Aunt Esther&rsquo;s note pinned to it.',
+      d: 'One letter says &lsquo;as I told you in my last&rsquo;, and knows what his father has said. Then it is not the first, and somebody has had time to answer him.',
+      l: 'In one letter he &lsquo;has been two months at the docks&rsquo;, and they are making cider at home. In another it is Lady Day, and tomorrow he goes to sea. He went at Michaelmas. Which comes first after Michaelmas: the cider, or Lady Day?',
+      s: 'In one letter it is &lsquo;tomorrow I go to sea&rsquo;. In another he &lsquo;has been a year at sea&rsquo;, and he &lsquo;had been six months at the docks&rsquo; before that. Had been is over and done with. Which of the two letters is still on dry land?',
+      w: 'In one letter Kate &lsquo;is to be married in June&rsquo;. In another she &lsquo;has been Mrs Bellamy for a year and a half&rsquo;. A wedding cannot be behind her before it is in front of her.',
+      p: 'In one letter it is &lsquo;more than three years&rsquo; since he went, and he was nineteen when he went. In another he is four-and-twenty. How old was he in the first of those two?',
+      g: 'In one letter, by the time the keepers are in, he &lsquo;will have been gone five years&rsquo;. In another &lsquo;it was six years last Michaelmas&rsquo;. Will have been is still to come. Was is behind him.'
+    };
+    var slots = ER.flag('b-slots') || [], date = ER.flag('b-date') || [1, 1, 1924], wait = false;
+    var box = ER.el('div', 'lt'), paper = ER.el('div', 'doc ned'), side = ER.el('div', 'lt-side'), tray = null;
+    box.appendChild(paper); box.appendChild(side);
+    function msg(t) { var m = side.querySelector('.pmsg'); if (m) m.innerHTML = ER.gloss(t); }
+    function slot(i) { return side.querySelector('.lslot[data-i="' + i + '"]'); }
+    function show(id) {
+      paper.className = 'doc ned';
+      paper.innerHTML = ER.gloss((id === 'f' ? PIN : '') + '<h4>' + L[id].head + '</h4>' + L[id].body);
+      paper.scrollTop = 0; box.setAttribute('data-cur', id);
+      ER.$$('.lt-item,.lt-fixed', side).forEach(function (n) { n.classList.toggle('cur', n.getAttribute('data-l') === id); });
+    }
+    function read() {
+      var i, n; slots = [];
+      for (i = 1; i <= 6; i++) { n = slot(i).querySelector('.lt-item'); slots.push(n ? n.getAttribute('data-l') : ''); }
+      ER.flag('b-slots', slots); box.setAttribute('data-order', slots.map(function (v) { return v || 'none'; }).join('-'));
+    }
+    function bundleHtml() {
+      return ['f'].concat(slots).map(function (id, i) { return (i ? '' : PIN) + '<h4>' + (i + 1) + '. &ldquo;' + L[id].head + '&rdquo;</h4>' + L[id].body; }).join('<p>&nbsp;</p>');
+    }
+    function buildOrder() {
+      var s = '<div class="lt-row"><div class="lline"><i>1st</i><div style="flex:1"><span class="lt-fixed" data-l="f">' + L.f.head + '</span></div></div>', i;
+      for (i = 1; i <= 6; i++) s += '<div class="lline"><i>' + ORD[i] + '</i><div class="lslot" data-i="' + i + '"></div></div>';
+      s += '</div><div class="lt-tray"></div><div class="pfoot"><p class="pmsg"></p><button type="button" class="btn" id="l-go">Show Miss Lumley</button></div>';
+      side.innerHTML = s; tray = side.querySelector('.lt-tray');
+      TRAY.forEach(function (id) {
+        var n = ER.el('span', 'lt-item dnd-item', L[id].head), at = slots.indexOf(id);
+        n.setAttribute('data-l', id);
+        (at >= 0 ? slot(at + 1) : tray).appendChild(n);
+      });
+      ER.dnd(side, { item: '.lt-item', slot: '.lslot', home: tray, lock: function () { return wait || !!ER.flag('b-stage'); }, change: function () { read(); OY.sfx.card(); msg(''); } });
+      OY.swapClick(side, '.lt-item', '.lslot');
+      read(); show('f');
+      msg(slots.join('') ? 'The bundle, as far as you have got with it. Click a letter to read it. Drag it to its place, or click it and then the place.' :
+        'Seven letters. The first has a note pinned to it. Click a letter to read it; then drag it to its place in the bundle, or click it and then the place.');
+    }
+    function wheel(k) { return '<div class="whl" data-w="' + k + '"><button type="button" data-d="1" title="up">&#9650;</button><span></span><button type="button" data-d="-1" title="down">&#9660;</button></div>'; }
+    function paintDate() {
+      side.querySelector('.whl[data-w=day] span').textContent = date[0];
+      side.querySelector('.whl[data-w=month] span').textContent = MONTHN[date[1]];
+      side.querySelector('.whl[data-w=year] span').textContent = date[2];
+      box.setAttribute('data-date', date.join('.'));
+    }
+    function buildDate() {
+      paper.className = 'doc han'; paper.innerHTML = ER.gloss(MOTHER); paper.scrollTop = 0;
+      side.innerHTML = '<div class="lt-slip"><h5>COUNTY RECORD OFFICE</h5><p>Sweetings Farm, tin box, item 8.</p><p>Letter in another hand: H. O. to her son. No stamp, no postmark, no date.</p><p>Written on <b>Sunday</b> the</p>' +
+        '<div class="wheels">' + wheel('day') + wheel('month') + wheel('year') + '</div></div><div class="pfoot"><p class="pmsg"></p><button type="button" class="btn" id="l-go2">Show Miss Lumley</button></div>';
+      paintDate();
+      msg('&ldquo;Now hers,&rdquo; says Miss Lumley. &ldquo;She has written <i>Sunday</i> at the top, and nothing else. I want a day, a month and a year on my slip. It is all in there.&rdquo;');
+    }
+    side.addEventListener('click', function (e) {
+      var it = e.target.closest ? e.target.closest('.lt-item,.lt-fixed') : null, b = e.target.closest ? e.target.closest('.whl button') : null, w, d;
+      if (it) { show(it.getAttribute('data-l')); return; }
+      if (b && !wait && !nextFile) {
+        w = b.parentNode.getAttribute('data-w'); d = +b.getAttribute('data-d'); OY.sfx.wheel();
+        if (w === 'day') date[0] = (date[0] - 1 + d + 31) % 31 + 1;
+        else if (w === 'month') date[1] = (date[1] - 1 + d + 12) % 12 + 1;
+        else date[2] = (date[2] - 1924 + d + 11) % 11 + 1924;
+        ER.flag('b-date', date); paintDate(); msg('');
+        return;
+      }
+      if (e.target.id === 'l-go') tryOrder(); else if (e.target.id === 'l-go2') tryDate();
+    });
+    function tryOrder() {
+      var left = tray.querySelectorAll('.lt-item').length, full, i, j;
+      if (wait || ER.flag('b-stage')) return;
+      read();
+      if (left) { msg('&ldquo;' + (left === 6 ? 'Six letters are lying loose on the quilt' : left === 1 ? 'One letter is still lying loose on the quilt' : left + ' letters are still lying loose on the quilt') + ',&rdquo; says Miss Lumley. &ldquo;I do not file half a bundle.&rdquo;'); return; }
+      if (!ER.check('order', slots.join('-'))) {
+        ER.sfx.no(); full = ['f'].concat(slots);
+        for (i = 0; i < full.length; i++) for (j = i + 1; j < full.length; j++) if (ER.check('adj', full[j] + '>' + full[i])) {
+          msg('Miss Lumley reads down your bundle and stops. &ldquo;Two of these are the wrong way round. ' + AFTER[full[i]] + '&rdquo;'); return;
+        }
+        msg('&ldquo;Not yet,&rdquo; says Miss Lumley.'); return;
+      }
+      wait = true; OY.solved(true); ER.flag('b-stage', 1); paint();
+      ER.addClue('bundle', 'The bundle: seven letters from Ned', bundleHtml(), 'ned', 'From the tin box');
+      msg('Miss Lumley reads down the bundle from the first to the seventh, and nods once. Then she picks up the envelope that never had a stamp.');
+      setTimeout(function () { wait = false; buildDate(); }, 2600);
+    }
+    function tryDate() {
+      var file, w = null, why = '';
+      if (wait || nextFile) return;
+      if (!ER.check('year', String(date[2]))) { w = 'year'; why = '&lsquo;It will be seven years this Michaelmas&rsquo; since he went. The calendar on that wall tells you which Michaelmas he went. Seven years on from that.'; }
+      else if (!ER.check('month', String(date[1]))) { w = 'month'; why = '&lsquo;The blossom is out.&rsquo; You hung the blossom on its peg not an hour ago. And she says that his birthday is on Tuesday: he tells her himself, in one of his letters, when his birthday is.'; }
+      else if (!ER.check('day', String(date[0]))) { w = 'day'; why = '&lsquo;You will be six-and-twenty on Tuesday.&rsquo; In the letter that he wrote at sea, he gives the day of the month. She is writing on the Sunday before that Tuesday.'; }
+      if (w) { ER.sfx.no(); OY.flash(side.querySelector('.whl[data-w=' + w + ']')); msg('Miss Lumley holds her pencil over the slip, and does not write. &ldquo;' + why + '&rdquo;'); return; }
+      file = ER.exit([slots.join('-') + '>' + date.join('.')], { wait: true });
+      if (!file) { msg('The door will not open. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('b-file', file);
+      msg('Miss Lumley writes it on the slip, and reads the letter through once more before she folds it.');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          '&ldquo;Sunday ' + date[0] + ' ' + MONTHN[date[1]] + ' ' + date[2] + ',&rdquo; says Miss Lumley. &ldquo;Seven years of his letters, and then one of hers, which he never had. She left it with the aunt at the Post Office, for him to call for. He never called.&rdquo;',
+          '&ldquo;So that is the errand. He was sent to pay the Michaelmas rent in 1924, at nineteen, and he lost it at a fair. His father would not have him named until the errand was done.&rdquo; She looks at the bed, which is made. &ldquo;And they kept that word, all of them. I have seldom seen a word so well kept.&rdquo;',
+          'You look at the last letter again. <i>The third is yours. Under the one between the other two.</i> Whatever she put under that stone, nobody has ever come for it.',
+          '&ldquo;Not yet,&rdquo; says Miss Lumley. &ldquo;A letter that begins <i>My dear boy</i> is not evidence of a name. I want him on paper first: who he was, and when he was born. She says &lsquo;the spring you were born&rsquo;. Which spring? The people who could tell us are all in the churchyard.&rdquo;'
+        ], function () {
+          busy = false;
+          ER.addClue('last', 'Hannah’s letter: “For my son, when he comes”', MOTHER + '<p class="ps">Record Office slip: written on Sunday ' + date[0] + ' ' + MONTHN[date[1]] + ' ' + date[2] + '. Never posted.</p>', 'han', 'From the tin box');
+          OY.terms(['errand', 'receipt', 'bee wall', 'as far as']); showGo();
+        });
+      }, 2600);
+    }
+    if (ER.flag('b-stage')) buildDate(); else buildOrder();
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

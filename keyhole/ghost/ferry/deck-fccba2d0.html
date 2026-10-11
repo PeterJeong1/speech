@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The After Deck · When the Tide Serves</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ghost.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="ferry.css">
+<style>
+  body{--bg:#0d171b;--accent:#cfe6ea;--font-display:'Abril Fatface',serif;--font-ui:'Oswald',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(11,20,24,.95);--tc-ink:#e6eef0;--cap-bg:rgba(10,19,23,.94);--panel:#13232a;--face-bg:#27363a;--q-ink:#a9d0d8;--fade:#050b0e;--hud-bg:rgba(9,17,21,.76)}
+  .tc-room{font-size:clamp(44px,6.4vw,88px)}
+  .hbtn b{color:#0d171b}
+  .fog{animation:drift 52s steps(60,end) infinite}
+  .fog.f2{animation-duration:71s;animation-direction:reverse}
+  .fog.f3{animation-duration:90s}
+  @keyframes drift{0%{transform:translateX(-170px)}50%{transform:translateX(170px)}100%{transform:translateX(-170px)}}
+  #halo{animation:halo 7s steps(1,end) infinite}
+  @keyframes halo{0%{opacity:1}63%{opacity:.9}66%{opacity:1}}
+  #wake{animation:wake 4.6s ease-in-out infinite}
+  @keyframes wake{50%{opacity:.5}}
+  #lglow{animation:lant 2.9s steps(1,end) infinite}
+  @keyframes lant{50%{opacity:.72}}
+  #purser.ready{animation:rdy 1.7s steps(1,end) infinite}
+  @keyframes rdy{50%{filter:brightness(1.3)}}
+
+  /* the purser's notebook: what four people said, in four blocks */
+  .pn{width:min(1080px,96vw);-webkit-user-select:none;user-select:none}
+  .pn-book{display:grid;grid-template-columns:1fr 1fr;background:#f6f3e6 linear-gradient(90deg,transparent 49.6%,rgba(0,0,0,.22) 50%,transparent 50.6%);box-shadow:0 22px 60px rgba(0,0,0,.6);border-top:16px solid #1d2f4a;color:#1d2b4a}
+  .pg{padding:10px 20px 12px 24px}
+  .pn h6{margin:6px 0 1px;font-family:'Oswald',sans-serif;font-weight:600;font-size:13px;letter-spacing:.18em;color:#8c2f24}
+  .pn h6 small{font-weight:400;letter-spacing:.1em;color:#4d5a5e;margin-left:8px}
+  .rm{display:block;width:100%;text-align:left;padding:1px 5px 0;margin:0 0 1px;border-radius:2px;border-bottom:3px solid transparent;font-family:'Architects Daughter',cursive;font-size:15.5px;line-height:22px;color:#1d2b4a}
+  .rm:hover{background:rgba(233,189,122,.4)}
+  .rm.on{border-bottom-color:#c9302a;background:rgba(201,48,42,.07)}
+  .rm.bad{background:rgba(216,67,42,.4)}
+  .pn.st1 .rm{cursor:default}.pn.st1 .rm:hover{background:none}.pn.st1 .rm.on:hover{background:rgba(201,48,42,.07)}
+  .whose{display:none;margin:2px 0 0;padding:1px 10px 0;border:1.5px solid #8c2f24;border-radius:3px;font-family:'Oswald',sans-serif;font-weight:500;font-size:12.5px;letter-spacing:.14em;color:#8c2f24;background:#fffbe9}
+  .whose:hover{background:#8c2f24;color:#fffbe9}
+  .pn.st1 .whose{display:inline-block}
+  .lbl{display:none;position:relative;margin:8px 0 0 24px;padding:5px 12px 3px 28px;background:#e8d5a4;color:#23211c;border-radius:2px 10px 10px 2px;box-shadow:0 2px 0 #b79c5e,0 4px 8px rgba(0,0,0,.3);font-family:'Special Elite',monospace;font-size:15.5px;transform:rotate(-2deg)}
+  .lbl:before{content:'';position:absolute;left:9px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#1b1712;box-shadow:0 0 0 2.5px #b79c5e}
+  .pn.st1 .lbl{display:inline-block}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1418"/><stop offset=".55" stop-color="#1c2e35"/><stop offset="1" stop-color="#2c4148"/></linearGradient>
+  <linearGradient id="deckG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4442"/><stop offset="1" stop-color="#181f1f"/></linearGradient>
+  <radialGradient id="fogG"><stop offset="0" stop-color="#c6d8db" stop-opacity=".28"/><stop offset=".6" stop-color="#c6d8db" stop-opacity=".12"/><stop offset="1" stop-color="#c6d8db" stop-opacity="0"/></radialGradient>
+  <radialGradient id="whiteG"><stop offset="0" stop-color="#f6fdfd" stop-opacity=".95"/><stop offset=".2" stop-color="#d6eaec" stop-opacity=".42"/><stop offset=".6" stop-color="#c6d8db" stop-opacity=".12"/><stop offset="1" stop-color="#c6d8db" stop-opacity="0"/></radialGradient>
+  <radialGradient id="warmG"><stop offset="0" stop-color="#ffd98a" stop-opacity=".9"/><stop offset=".4" stop-color="#f3a55a" stop-opacity=".25"/><stop offset="1" stop-color="#f3a55a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="doorG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffd98a" stop-opacity="0"/><stop offset="1" stop-color="#ffd98a" stop-opacity=".5"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="46%" r="78%"><stop offset="0" stop-color="#02080a" stop-opacity="0"/><stop offset=".6" stop-color="#02080a" stop-opacity=".34"/><stop offset="1" stop-color="#02080a" stop-opacity=".92"/></radialGradient>
+</defs>
+
+<!-- fog, where the sea ought to be, and the wake going back into it -->
+<rect x="-1000" y="-400" width="3600" height="1300" fill="url(#skyG)"/>
+<g id="wake" opacity=".3"><path d="M740 552q20 -70 -30 -120h180q-50 50 -30 120z" fill="#dfeef0" opacity=".35"/><g fill="none" stroke="#dfeef0" stroke-linecap="round" stroke-width="4"><path d="M752 530h34M806 516h46M764 498h30M812 482h36M776 466h44M790 448h26"/></g></g>
+<circle id="halo" cx="800" cy="318" r="230" fill="url(#whiteG)" pointer-events="none"/>
+
+<!-- the stern: rail, lamp, ensign, a lifebelt -->
+<path d="M320 556H1280L1760 900H-160Z" fill="url(#deckG)"/>
+<g id="planks" stroke="#0e1414" stroke-width="2.500" opacity=".7"></g>
+<g id="lamp" class="hot"><rect x="776" y="296" width="48" height="260" fill="#fff" opacity="0"/><path d="M800 556V336" stroke="#b9ad8c" stroke-width="7"/><rect x="786" y="304" width="28" height="34" rx="5" fill="#e6dcc0"/><rect x="791" y="310" width="18" height="22" fill="#fff"/><path d="M782 304h36" stroke="#b9ad8c" stroke-width="6"/></g>
+<g id="ensign" class="hot"><path d="M874 556L912 372" stroke="#b9ad8c" stroke-width="5"/><path d="M912 378q26 36 14 84q-16 30 -34 14q14 -42 20 -98z" fill="#a3241a"/><path d="M912 378q12 16 12 34l-18 -8z" fill="#1d2f4a"/></g>
+<g id="rail" stroke="#e6dcc0" fill="none" stroke-linecap="round"><path d="M320 470H1280M320 512H1280" stroke-width="5"/><path d="M320 470L60 880M1280 470L1540 880" stroke-width="6"/><path d="M320 512L32 900M1280 512L1568 900" stroke-width="4"/>
+  <path d="M320 556V470M440 556V470M560 556V470M680 556V470M920 556V470M1040 556V470M1160 556V470M1280 556V470M236 664V602M150 800V738M1364 664V602M1450 800V738" stroke-width="4"/></g>
+<g id="buoy" class="hot"><circle cx="1100" cy="512" r="27" fill="none" stroke="#f1ede2" stroke-width="13"/><path d="M1100 485v14M1100 525v14M1073 512h14M1113 512h14" stroke="#c9302a" stroke-width="13"/></g>
+
+<!-- the lit door of the saloon, on the right -->
+<g id="sdoor" class="hot"><rect x="1480" y="230" width="1200" height="700" fill="#e6dcc0"/><rect x="1480" y="230" width="1200" height="14" fill="#1f4a3d"/><rect x="1520" y="280" width="700" height="620" fill="#10201c"/><rect x="1534" y="294" width="700" height="606" fill="#ffd98a" opacity=".85"/>
+  <path d="M1534 560h700" stroke="#b98d4a" stroke-width="6" opacity=".6"/><rect x="1538" y="600" width="12" height="46" rx="5" fill="#b8923a"/></g>
+<path d="M1500 620L1180 900H1500Z" fill="url(#doorG)" opacity=".5" pointer-events="none"/>
+
+<!-- the locker with the old word on it, and the lamp over it -->
+<circle cx="150" cy="210" r="260" fill="url(#warmG)" opacity=".55" pointer-events="none"/><rect x="128" y="178" width="44" height="30" rx="8" fill="#ffe9b0"/><path d="M120 176h60" stroke="#b9ad8c" stroke-width="7"/>
+<g id="locker" class="hot"><rect x="40" y="716" width="300" height="100" fill="#e6dcc0"/><rect x="34" y="704" width="312" height="16" fill="#cfc4a0"/><rect x="40" y="716" width="300" height="100" fill="none" stroke="#8f8468" stroke-width="3"/>
+  <text x="190" y="780" class="fS" font-size="34" font-weight="700" text-anchor="middle" fill="#1f4a3d" letter-spacing="4">LIFEBELTS</text></g>
+
+<!-- four passengers -->
+<g id="dougie" class="hot" transform="translate(356 660) scale(.86)"></g>
+<g id="lionel" class="hot" transform="translate(620 740) scale(.98)"></g>
+<circle id="lglow" cx="668" cy="520" r="90" fill="url(#warmG)" pointer-events="none"/>
+<g id="stern" class="hot" transform="translate(1000 606) scale(.76)"></g>
+<g id="edoor" class="hot" transform="translate(1340 856) scale(1.080)"></g>
+
+<!-- the purser, writing it all down -->
+<g id="purser" class="hot" transform="translate(470 884) scale(1.220)"></g>
+
+<g pointer-events="none"><ellipse class="fog" cx="520" cy="410" rx="900" ry="120" fill="url(#fogG)"/><ellipse class="fog f2" cx="1120" cy="590" rx="950" ry="110" fill="url(#fogG)"/><ellipse class="fog f3" cx="430" cy="760" rx="1000" ry="100" fill="url(#fogG)"/></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Go up to the wheelhouse</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="ferry.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, book = null, told = {}, stopWhistle = null;
+
+  (function () {
+    var s = '', i;
+    for (i = 1; i < 14; i++) s += '<path d="M' + (320 + i * 68.6).toFixed(0) + ' 556L' + (-160 + i * 137.1).toFixed(0) + ' 900"/>';
+    $('#planks').innerHTML = s;
+    $('#dougie').innerHTML = FY.who('dougie', { back: true, extra: '<path d="M44 -116L52 0" stroke="#3a2a18" stroke-width="5" stroke-linecap="round"/>' });
+    $('#lionel').innerHTML = FY.who('lionel', { extra: '<path d="M34 -206q26 -10 20 -52" stroke="#b8922e" stroke-width="15" fill="none" stroke-linecap="round"/><circle cx="54" cy="-262" r="8" fill="#f0cfae"/><rect x="38" y="-252" width="30" height="42" rx="3" fill="#2a2f33"/><rect x="43" y="-245" width="20" height="29" fill="#ffd98a"/><path d="M53 -245v29" stroke="#2a2f33" stroke-width="2"/>' });
+    $('#stern').innerHTML = FY.who('elsie', { back: true });
+    $('#edoor').innerHTML = FY.seated('elsie', { lap: '#b9a57a', under: '<ellipse cx="0" cy="4" rx="80" ry="10" fill="#000" opacity=".35"/><rect x="-62" y="-98" width="124" height="98" rx="6" fill="#6b4a2a"/><path d="M-62 -66h124" stroke="#3a2414" stroke-width="4"/><g fill="#c9a24a"><rect x="-40" y="-74" width="16" height="16"/><rect x="24" y="-74" width="16" height="16"/></g>' });
+    $('#purser').innerHTML = FY.who('purser', { hold: true, extra: '<g transform="rotate(-6 0 -160)"><rect x="-24" y="-186" width="48" height="60" rx="3" fill="#1d2f4a"/><rect x="-20" y="-180" width="40" height="50" fill="#f6f3e6"/><path d="M-15 -170h30M-15 -162h30M-15 -154h30M-15 -146h20" stroke="#1d2b4a" stroke-width="2"/></g><path d="M18 -152l16 -26" stroke="#e9c93a" stroke-width="4" stroke-linecap="round"/>' });
+  })();
+
+  ER.init({
+    theme: 'ghost', story: 'ferry', storyTitle: 'When the Tide Serves', id: 'deck', no: 'III', title: 'The After Deck',
+    go: 'Go out on deck',
+    intro: [
+      'Under every brass plate that had stopped being true, you put tonight&rsquo;s card: tea at £1.80 under TEAS 4d, the Wi-Fi under TELEGRAMS, the trolleys under PORTERS. The plate about the whistle in fog needed nothing under it. And the card about CCTV went where the wireless used to be, because nothing on this boat was watching anybody in 1950.',
+      'The purser&rsquo;s rule is on a card in your notebook: an old word can still be true; an old price cannot. Somebody on this boat has paid fourpence for a cup of tea tonight.',
+      'It is five to ten. Four people are standing out on the after deck in the fog, and two of them are Miss Coombes.'
+    ],
+    exit: {"next":"wheel","w":{"7bdb40a9":"4f022fc1"}}, tags: {"mark":["e4490d3c","3cf90a32","fcb4039f","2705e7e9","5518ac23"],"whose":["6e30ba40"]},
+    sound: ['hush', { root: 43, bpm: 48, drop: ['bass'], beds: [['sea', 0.85], ['wind', 0.3]] }],      /* out of doors: the sea, the fog, and the whistle every two minutes */
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function heard() { return (told.rudge ? 1 : 0) + (told.prowse ? 1 : 0) + (told.door ? 1 : 0) + (told.stern ? 1 : 0); }
+  function showGo() { $('#go').classList.add('on'); }
+  function paint() {
+    $('#purser').classList.toggle('ready', heard() === 4 && !nextFile);
+    ER.pips(heard() + (nextFile ? 1 : 0) + (told.wire ? 1 : 0), 6);
+  }
+
+  function hints() {
+    var left = [];
+    if (told.wire) return ['go', ['The form has to go to the skipper. Go up to the wheelhouse.']];
+    if (nextFile) return null;
+    if (book && book.isOpen()) return ['book' + (ER.flag('d-stage') || 0), ER.flag('d-stage') ? [
+      'All five lines that you underlined are on one page of the notebook. That page belongs to one of the two Miss Coombeses. So which of them is on tonight&rsquo;s list? Click the button under her name.',
+      'The one who spoke about dead plates as if they were alive is not the one who booked a ticket for tonight. Hang the label on the other.'
+    ] : [
+      'Take the plates on your card one at a time, and ask: did anybody out here talk tonight as if this plate were still true? Not &ldquo;it was&rdquo;, and not &ldquo;Gran says&rdquo;: as if it were true now. The card from the saloon is in your notebook.',
+      'Three things spoil a remark as proof. If the speaker says WAS or COULD, he is remembering. If she says &ldquo;she says&rdquo;, she is passing on what somebody told her. And if the remark does not agree with the plate (the price, the place), the speaker never lived by that plate at all.',
+      'There are five. Nobody out here believes in the porters or the smoking; the whistle is still true; and a wedding on Monday, or somebody on a pier with a lamp, could be true of tonight. Look for the present tense: is, does, have given, will have gone.'
+    ]];
+    if (heard() < 4) {
+      if (!told.rudge) left.push('the old man at the rail on the left');
+      if (!told.prowse) left.push('the man with the lantern');
+      if (!told.door) left.push('the Miss Coombes sitting on her suitcase by the lit door');
+      if (!told.stern) left.push('the Miss Coombes at the stern rail, under the lamp');
+      return ['talk', [
+        'Four passengers are out here. Do not ask them who they are: ask about small things, and hear each of them to the end.',
+        'You have still to hear ' + left.join(', and ') + '.'
+      ]];
+    }
+    return ['purser', ['Ms Pargeter has written it all down. She is standing in the middle of the deck with her notebook. Click her.']];
+  }
+
+  function begin() {
+    paint();
+    stopWhistle = FY.whistle(34000, 120000, 1);
+    if (told.wire) { busy = false; showGo(); ER.say('Twelve words in pencil, seventy-three years old. The wheelhouse is up the ladder.'); return; }
+    if (nextFile) { busy = true; setTimeout(found, 600); return; }
+    if (told.in) { busy = false; ER.say('The after deck, at five to ten.'); return; }
+    tell('in');
+    ER.narrate([
+      'The after deck. The fog is so thick that the stern lamp has a ball of light round it, and beyond the rail there is no sea at all: only the sound of one.',
+      'An old man is leaning on the rail on the left, exactly as if it had been built for him. Nearer to you, a man in a keeper&rsquo;s cap is holding up a lantern and talking to nobody.',
+      'By the lit door of the saloon a young woman in a headscarf and a long belted raincoat is sitting on her suitcase. At the stern rail, under the lamp, stands another young woman in a headscarf and a long belted raincoat, with her back to you.',
+      '&ldquo;Do not ask them who they are,&rdquo; says Ms Pargeter, low. &ldquo;They have told me that. Ask them about their evening: tea, telephones, buses. Small things. I shall write down what they say. Then you and I will go through it with the card from the saloon.&rdquo;'
+    ], function () { busy = false; });
+  }
+
+  /* ---------- four people ---------- */
+  function person(sel, key, o) {
+    $(sel).addEventListener('click', function () {
+      if (busy) return;
+      if (nextFile && o.after) { ER.say(o.after); return; }
+      o.done = function (seen) { if (seen && tell(key)) { paint(); if (heard() === 4) ER.say('That is all four. Ms Pargeter shuts her pencil in her notebook, and looks at you.'); } };
+      ER.talk(o);
+    });
+  }
+  person('#dougie', 'rudge', {
+    who: 'Mr Rudge', role: 'Marram · at the port rail', face: window.FACE('rudge'),
+    after: 'Mr Rudge has his back to the stern. &ldquo;The skipper,&rdquo; he says. &ldquo;Go on.&rdquo;',
+    lines: [
+      { note: 'He does not turn round. He talks to the fog, which is used to it.', a: '&ldquo;Dougie Rudge. Eighty-eight. I was deck boy on this boat when I was fifteen: nineteen fifty-three, that was. She was three years old then, and I thought she was ancient.&rdquo;' },
+      { q: 'What was it like, in those days?', a: 'It cost half a crown to cross. Tea was fourpence at that hatch. You could hand a telegram to the purser, and he would send it from the post office for you. And there was no boat on a Sunday: chapel saw to that.' },
+      { q: 'Did you know that the fog was coming?', a: 'I heard the fog was coming on the wireless, a bit before six. My granddaughter tells me that nobody has said &ldquo;wireless&rdquo; since the war. I tell her that is when I learnt it.' },
+      { q: 'Why do you stand out here in it?', a: 'I have stood at this rail every Saturday night for sixty years, and on most of them I have looked at the whole deck. Not tonight. Tonight I look ahead, and I mind my own business.' },
+      { q: 'What is different about tonight?', a: 'The date. You ask the skipper what the twenty-fourth of October is, when it falls on a Saturday. He has it written down. I only have it remembered.' }
+    ],
+    clue: { id: 'rudge', title: 'Mr Rudge, at the port rail', kind: 'What he said' }
+  });
+  person('#lionel', 'prowse', {
+    who: 'Mr Prowse', role: 'Marram Museum · “Keeper of the Lamp”', face: window.FACE('prowse'),
+    after: 'Mr Prowse has put his lantern down on the deck. For once he has nothing to say.',
+    lines: [
+      { note: 'He lifts the lantern to his face before he speaks, like an actor finding his light.', a: '&ldquo;Welcome aboard, shipmate, and welcome to nineteen fifty-three! Tea is a shilling a cup, gentlemen may smoke in the saloon, and the island omnibus is waiting for us at the New Slip!&rdquo;' },
+      { q: 'Is all of that true?', a: 'It is all in the tour. Lamplight Evenings at Marram Museum, every Saturday until Christmas: I am the Keeper of the Lamp. The lantern has a battery in it, and the pipe is a prop. I have never smoked in my life.' },
+      { q: 'What did it cost to cross in 1953?', a: 'Half a crown: that is twelve and a half pence, to you and me. I have it on a slide.' },
+      { q: 'Have you been out here since the quay?', a: 'I am practising my Night of the Great Fog. It goes down very well with the eleven-year-olds. You can book on the museum website: there is a family ticket.' }
+    ],
+    clue: { id: 'prowse', title: 'Mr Prowse, with the lantern', kind: 'What he said' }
+  });
+  person('#edoor', 'door', {
+    who: 'Miss Coombes', role: 'By the saloon door', face: window.FACE('door'),
+    after: 'The Miss Coombes by the door is holding her label in both hands. &ldquo;Sorry,&rdquo; she says. &ldquo;Who did you say that was, at the back?&rdquo;',
+    lines: [
+      { note: 'She is sitting on a small brown suitcase, with her hands pushed up her sleeves.', a: '&ldquo;I know, I know. I have no ticket that I can show you. It is on my phone, and my phone died at the station, and the charger is at the bottom of this case under a wedding dress.&rdquo;' },
+      { q: 'A wedding dress?', a: 'Mine. The wedding is on Monday, on Marram: the hall is half price on a Monday. Gran is giving me away. She is ninety-seven, and she says that she will do it sitting down.' },
+      { q: 'Is she the one who is meeting you?', a: 'She will be at the Old Pier with her lamp. She always is, on this one Saturday in October. I do not know why, and nobody has ever told me: the boats have not gone there since before my mother was born. Then somebody will have to drive her round to the New Slip, and she will not say a word all the way.' },
+      { q: 'Could you not have telephoned her?', a: 'Gran does not hold with mobiles. I wrote her a proper letter, with a stamp on it, to say which boat. She likes a letter. And she says tea was fourpence on this boat when she was a girl: she says it every single time I buy one.' },
+      { q: 'That is an old coat.', a: 'It was her sister&rsquo;s. It has hung in Gran&rsquo;s wardrobe since nineteen fifty-three, and it fits me as if I had been measured for it. Gran asked me to wear it on the boat tonight. She did not say why about that, either.' }
+    ],
+    clue: { id: 'cdoor', title: 'Miss Coombes, by the saloon door', kind: 'What she said' }
+  });
+  person('#stern', 'stern', {
+    who: 'Miss Coombes', role: 'At the stern rail', face: window.FACE('stern'),
+    after: 'She is still at the stern rail, with the parcel in both hands, looking for the pier light. You find that you do not want to disturb her.',
+    lines: [
+      { note: 'She is standing where the gangway goes out, as if she meant to be the first ashore. She holds a small parcel in both hands, as you would hold a bird.', a: '&ldquo;Is there any sign of the pier light? They say there may not be the water to go in. If there is not five feet at the Old Pier he will wait his half hour, and then he will take us all back.&rdquo;' },
+      { q: 'Have you had a cup of tea?', a: 'I have. Fourpence for a cup of tea! It was threepence at Easter. And half a crown for the single: it is all going up. But it was hot, and I took the cup back to the hatch, as it says.' },
+      { q: 'What is in the parcel?', a: 'Mother&rsquo;s ring. Mr Hocking has made it smaller for my sister, and he charged seven and six, and he would not be hurried. The wedding is on Monday. If we are turned back tonight there is no boat tomorrow: she does not sail on a Sunday.' },
+      { q: 'Can you telephone your sister?', a: 'We are not on the telephone at Harbour Row. So I have given my wire to the purser, in case. Twelve words with the address, for one and six: I counted twice. He says he will see that it goes.</p><p>She turns her head for the first time. &ldquo;It has gone, hasn&rsquo;t it? You would know.&rdquo;' },
+      { q: 'How will you get home from the pier?', a: 'The omnibus will have gone by now, but it is no distance. And Nancy will be on the pier with the lamp. She said she would wait.' },
+      { note: 'Over your heads the whistle sounds: one long blast. She does not jump.', a: '&ldquo;They will sound the whistle every two minutes in this. I do not mind it. It is the quiet I mind.&rdquo;' }
+    ],
+    clue: { id: 'cstern', title: 'Miss Coombes, at the stern rail', kind: 'What she said' }
+  });
+
+  /* ---------- things on deck ---------- */
+  FY.thing('#lamp', 'stern lamp', 'The stern lamp: a white light at the very back of the boat, so that anything behind her can see which way she is going. Tonight it shows the fog to itself.', isBusy);
+  FY.thing('#ensign', null, 'The flag at the stern, wet through, hanging straight down like washing.', isBusy);
+  FY.thing('#buoy', 'lifebelt', 'CURLEW, LANTERN QUAY, in black letters round a red and white ring.', isBusy);
+  FY.thing('#locker', 'lifebelt', 'A locker with LIFEBELTS stencilled on it. An old word, and still true: there are lifejackets inside, and they would do the same job.', isBusy);
+  FY.thing('#sdoor', 'saloon', 'The door of the saloon, and the warm light of it lying across the deck. None of the four out here will go in.', isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile && told.wire) { if (stopWhistle) stopWhistle(); ER.leave(nextFile); } });
+  $('#purser').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;The wheelhouse,&rdquo; says Ms Pargeter. She is holding the form by its edges, like something hot.'); return; }
+    if (heard() < 4) { ER.say('&ldquo;I have ' + ['nobody', 'one of them', 'two of them', 'three of them'][heard()] + ' written down so far,&rdquo; says Ms Pargeter. &ldquo;I want all four. Small things, remember: tea, telephones, buses.&rdquo;'); return; }
+    if (!book) book = makeBook();
+    book.open();
+  });
+
+  /* ---------- the notebook: underline what could only be true of another year ---------- */
+  var WIRE = '<h4>POST OFFICE TELEGRAPHS</h4><h5>INLAND TELEGRAM</h5>' +
+    '<div class="row"><span><b>CHARGE</b><i class="pen">1/6</i></span><span><b>WORDS</b><i class="pen">12</i></span><span><b>HANDED IN</b><i class="pen">m.v. Curlew, 24 Oct. 1953</i></span></div>' +
+    '<div class="row"><span><b>TO</b><i class="pen">COOMBES HARBOUR ROW MARRAM</i></span></div>' +
+    '<div class="body">CANNOT LAND RING SAFE COMING MONDAY WAIT ELSIE</div>' +
+    '<div class="row"><span><b>FROM (not to be telegraphed)</b><i class="pen">E. Coombes</i></span></div>' +
+    '<p class="foot">Write in BLOCK LETTERS. The address is counted and charged for.</p><div class="stamp">OFFICE<br>STAMP</div>';
+  function makeBook() {
+    var BLOCKS = [
+      ['rudge', 'MR RUDGE', 'port rail', [['r1', '&ldquo;It cost half a crown to cross.&rdquo;'], ['r2', '&ldquo;Tea was fourpence at that hatch.&rdquo;'], ['r3', '&ldquo;You could hand a telegram to the purser.&rdquo;'], ['r4', '&ldquo;There was no boat on a Sunday.&rdquo;'], ['r5', '&ldquo;I heard the fog was coming on the wireless.&rdquo;']]],
+      ['prowse', 'MR PROWSE', 'with the lantern', [['p1', '&ldquo;Tea is a shilling a cup.&rdquo;'], ['p2', '&ldquo;Gentlemen may smoke in the saloon.&rdquo;'], ['p3', '&ldquo;The island omnibus is waiting for us at the New Slip.&rdquo;'], ['p4', '&ldquo;Half a crown: that is twelve and a half pence.&rdquo;'], ['p5', '&ldquo;You can book on the museum website.&rdquo;']]],
+      ['door', 'MISS COOMBES', 'by the saloon door', [['m1', '&ldquo;My phone died at the station.&rdquo;'], ['m2', '&ldquo;The wedding is on Monday.&rdquo;'], ['m3', '&ldquo;She will be at the Old Pier with her lamp.&rdquo;'], ['m4', '&ldquo;I wrote her a proper letter, with a stamp on it.&rdquo;'], ['m5', '&ldquo;She says tea was fourpence on this boat when she was a girl.&rdquo;'], ['m6', '&ldquo;The coat has hung in Gran&rsquo;s wardrobe since 1953.&rdquo;']]],
+      ['stern', 'MISS COOMBES', 'at the stern rail', [['g1', '&ldquo;Fourpence for a cup of tea! It was threepence at Easter.&rdquo;'], ['g2', '&ldquo;And half a crown for the single: it is all going up.&rdquo;'], ['g3', '&ldquo;The wedding is on Monday.&rdquo;'], ['g4', '&ldquo;There is no boat tomorrow: she does not sail on a Sunday.&rdquo;'], ['g5', '&ldquo;I have given my wire to the purser.&rdquo;'], ['g6', '&ldquo;The omnibus will have gone by now.&rdquo;'], ['g7', '&ldquo;Nancy will be on the pier with the lamp.&rdquo;'], ['g8', '&ldquo;They will sound the whistle every two minutes.&rdquo;']]]
+    ];
+    var NOT = {
+      r1: 'Listen to his verb: it COST. He is telling you about 1953, and he knows that it is 1953 he is telling you about. He was there. That is remembering, and people who are alive do a great deal of it.',
+      r2: 'Tea WAS fourpence. Was. He paid one pound eighty tonight like everybody else, and he had something to say about that, too. He is remembering.',
+      r3: 'You COULD hand a telegram to the purser. He does not think that you can. He is remembering.',
+      r4: 'There WAS no boat on a Sunday. He does not think that there is none tomorrow. He is remembering.',
+      r5: 'He says &ldquo;wireless&rdquo;, and he means the radio in his kitchen, this evening. An old word in an old mouth. Look at your card: an old word can still be true.',
+      p1: 'He says IS, I grant you. But look at the card: TEAS 4d. He says a shilling. Anybody who really lived by that plate would know what tea cost. He is doing his tour, and he has not done his homework.',
+      p2: 'Look at the card. The plate asks gentlemen NOT to smoke in the saloon: only on the after deck. He has it the wrong way round. He is acting 1953. He was never in it.',
+      p3: 'The plate says that the omnibus met the boats at the OLD PIER. He says the New Slip. Somebody who believed that plate would know which.',
+      p4: 'He can turn half a crown into our money in his head. So he knows perfectly well that it is old money. He is talking about then, from now.',
+      p5: 'A website. That is tonight, all right.',
+      m1: 'A dead phone is as 2026 as anything on this boat.',
+      m2: 'Monday is the twenty-sixth, and there is a cello in my saloon which is booked to play at it. True of tonight.',
+      m3: 'It is an odd thing to say, I agree. But it is tonight&rsquo;s grandmother that she is talking about, and I cannot tell you that it is untrue.',
+      m4: 'A letter with a stamp on it is old-fashioned, and you could post one tomorrow morning. An old habit is not a dead plate.',
+      m5: 'SHE SAYS tea WAS fourpence. That is somebody else&rsquo;s memory, handed on, and she knows whose it is.',
+      m6: 'An old coat can be worn on any night you like. Things last longer than prices do.',
+      g3: 'The Miss Coombes by the door says the same, word for word, and her Monday is the day after tomorrow. Whichever Monday this one means, the words would be true tonight.',
+      g7: 'The other Miss Coombes also says that somebody will be on the Old Pier with a lamp. I cannot call that untrue of tonight. I rather wish that I could.',
+      g8: 'Listen. That is the one plate that you left bare. In fog the whistle is sounded every two minutes: still true.'
+    };
+    var marks = ER.flag('d-marks') || [], wait = false, box = ER.el('div', 'pn'), s = '<div class="pn-book">';
+    function stage() { return ER.flag('d-stage') || 0; }
+    function page(list) {
+      return '<div class="pg">' + list.map(function (b) {
+        return '<h6>' + b[1] + '<small>' + b[2] + '</small></h6>' + b[3].map(function (r) { return '<button type="button" class="rm" data-r="' + r[0] + '"><!--nogloss-->' + r[1] + '<!--/nogloss--></button>'; }).join('') +
+          (b[0] === 'door' || b[0] === 'stern' ? '<button type="button" class="whose" data-w="' + b[0] + '">HANG THE LABEL HERE</button>' : '');
+      }).join('') + '</div>';
+    }
+    s += page(BLOCKS.slice(0, 2)).replace('</div>', '<span class="lbl">COOMBES, E. &middot; AD &middot; S &middot; to be met</span></div>') + page(BLOCKS.slice(2)) + '</div>' +
+      '<div class="wk-foot"><p class="pmsg"></p><button type="button" class="btn" id="n-go">Show the purser</button></div>';
+    box.innerHTML = s;
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() {
+      ER.$$('.rm', box).forEach(function (n) { n.classList.toggle('on', marks.indexOf(n.getAttribute('data-r')) >= 0); });
+      box.classList.toggle('st1', stage() > 0); box.setAttribute('data-marks', marks.slice().sort().join('+'));
+      box.querySelector('#n-go').style.display = stage() ? 'none' : '';
+    }
+    ER.$$('.rm', box).forEach(function (n) {
+      n.addEventListener('click', function () {
+        var r = n.getAttribute('data-r'), at = marks.indexOf(r);
+        if (wait || stage() > 0 || nextFile) return;
+        if (at >= 0) { marks.splice(at, 1); FY.sfx.rub(); } else { marks.push(r); FY.sfx.pencil(); }
+        ER.flag('d-marks', marks); draw(); msg('');
+      });
+    });
+    box.querySelector('#n-go').addEventListener('click', function () {
+      var order = [], i, r;
+      if (wait || stage() > 0 || nextFile) return;
+      ER.$$('.rm', box).forEach(function (n) { if (marks.indexOf(n.getAttribute('data-r')) >= 0) order.push(n); });
+      if (!order.length) { msg('&ldquo;You have underlined nothing,&rdquo; says Ms Pargeter. &ldquo;Somebody out here paid fourpence for a cup of tea tonight. It is in there somewhere.&rdquo;'); return; }
+      for (i = 0; i < order.length; i++) {
+        r = order[i].getAttribute('data-r');
+        if (!ER.check('mark', r)) {
+          ER.sfx.no(); FY.flash(order[i], 'bad', 1100);
+          marks.splice(marks.indexOf(r), 1); ER.flag('d-marks', marks); draw();
+          msg('Ms Pargeter rubs one line out with the end of her pencil. &ldquo;' + NOT[r] + '&rdquo;');
+          return;
+        }
+      }
+      if (marks.length < 5) { msg('&ldquo;Every line that you have underlined, I agree with. But I make it five, and you have ' + ['', 'one', 'two', 'three', 'four'][marks.length] + '. Somebody out here spoke of a dead plate as if it were alive, and you have let it go by.&rdquo;'); return; }
+      ER.flag('d-stage', 1); FY.sfx.label(); draw();
+      msg('&ldquo;Five. Tea at fourpence, half a crown for a single, no boat on a Sunday, a wire for the purser, an omnibus at the pier.&rdquo; Ms Pargeter takes the last luggage label out of her pocket. &ldquo;Now hang this for me. Which Miss Coombes is on tonight&rsquo;s list? Click under her name.&rdquo;');
+    });
+    ER.$$('.whose', box).forEach(function (n) {
+      n.addEventListener('click', function () {
+        var w = n.getAttribute('data-w'), file;
+        if (wait || stage() !== 1 || nextFile) return;
+        if (!ER.check('whose', w)) { ER.sfx.no(); msg('&ldquo;You have just shown me five reasons why not,&rdquo; says Ms Pargeter. &ldquo;Look where your five lines are. All of them are on that page.&rdquo;'); return; }
+        file = ER.exit([marks.slice().sort().join('+') + '>' + w], { wait: true });
+        if (!file) { msg('The ladder to the wheelhouse is not there. Something is wrong with this page: tell your teacher.'); return; }
+        wait = true; nextFile = file; ER.flag('d-file', file);
+        FY.mine('which', 'Which Miss Coombes', '<p>Mr Rudge: half a crown, fourpence, telegrams, no Sunday boat. But he says WAS and COULD. He remembers.</p><p>Mr Prowse: says IS, and gets it wrong (a shilling, the New Slip). He is acting.</p>' +
+          '<p>Miss Coombes by the door: &ldquo;Gran says&rdquo;. A dead phone. On the list.</p><p>Miss Coombes at the stern: tea IS fourpence. A single IS half a crown. She DOES not sail on a Sunday. A wire, an omnibus.</p><p>She says IS, and she gets it right.</p>', true);
+        msg('Ms Pargeter ties the label to the page of the Miss Coombes by the saloon door. Then she looks at the other page for some time.');
+        setTimeout(function () { ER.closeAll(); paint(); found(); }, 2800);
+      });
+    });
+    draw();
+    msg(stage() ? 'Five lines, and all on one page. Now the label: which Miss Coombes is on tonight&rsquo;s list? Click under her name.' :
+      marks.length ? 'The purser&rsquo;s notebook, with ' + marks.length + (marks.length === 1 ? ' line' : ' lines') + ' underlined. Click a line to underline it; click it again to rub the line out.' :
+      '&ldquo;Underline every remark that could only be true of another year, and that the speaker meant as plain fact about tonight,&rdquo; says Ms Pargeter. &ldquo;Your card from the saloon says what is dead and what is not.&rdquo; Click a line to underline it; click it again to rub the line out.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+
+  /* ---------- what was behind the telegram box ---------- */
+  function found() {
+    busy = true;
+    ER.narrate([
+      '&ldquo;Tea at fourpence. Half a crown for a single. No boat on a Sunday. A wire, handed to the purser. An omnibus at the pier. Five dead plates,&rdquo; says Ms Pargeter, &ldquo;and one person who believes in every one of them.&rdquo;',
+      '&ldquo;Mr Rudge said all of that too: but he said <i>was</i>. Mr Prowse said <i>is</i>, and got it wrong, because he was never there. She says <i>is</i>, and she gets it right.&rdquo; She shuts the notebook. &ldquo;The young woman by the door is on my list. She has her label.&rdquo;',
+      'Then she looks at the stern rail for a long moment, and she does not go over to it. &ldquo;She asked you whether her wire had gone. A wire, handed to the purser of this boat. There is only one place on this boat where that could be.&rdquo;',
+      'She goes into the saloon with a screwdriver. Through the lit door you watch her take the little brass box off the bulkhead, under the plate about telegrams. Something that has been lying behind it for a very long time slides down the panel, and falls at her feet.'
+    ], function () {
+      FY.sfx.screw();
+      ER.read({ html: WIRE, cls: 'wire', clue: { id: 'wire', title: 'The telegram form from behind the box', kind: 'Never sent' }, done: function () {
+        FY.terms(['wire', 'telegram']);
+        if (!tell('wire')) { busy = false; showGo(); return; }
+        paint();
+        ER.narrate([
+          '&ldquo;The twenty-fourth of October, nineteen fifty-three,&rdquo; says Ms Pargeter. &ldquo;No office stamp. It was never sent. It slipped down behind the box, and it has been there for seventy-three years.&rdquo; She is holding the form by its edges, like something hot.',
+          'Mr Rudge has turned round at last. He looks at the form, and not at the stern. &ldquo;Take that up to the skipper,&rdquo; he says. &ldquo;Tell him Dougie Rudge says the twenty-fourth has come round again. And this time there is a bit of paper.&rdquo;'
+        ], function () { busy = false; showGo(); });
+      } });
+    });
+  }
+})();
+</script>
+</body>
+</html>
