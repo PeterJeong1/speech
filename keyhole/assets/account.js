@@ -14,16 +14,17 @@
    story begun now has a true record on the day the record book is switched on.) With an address but no connection,
    a player this computer has seen before can still come in, and what was not sent is sent later.
 
-   A record is the time really played plus two minutes for every hint. Only the first time a player finishes a story
+   A record is the time really played plus one minute for every hint, up to the door of the last room (the last room
+   is the story's ending: engine.js fixes the record as it is reached). Only the first time a player finishes a story
    counts, and a run that skipped a room does not count at all.
 
    The password itself is never stored or sent: only a one-way hash of it (the "key"). */
 (function () {
 'use strict';
 var D = document, A = window.Account = {}, BASE = 'keyhole.v2';
-var API = "";
+var API = "https://script.google.com/macros/s/AKfycbxkEzrS8fABaGrejF7WrMTyp8r_5V_HsQ2_yzaY33Y6zoFP0dgw0oMsjpC28fxmjKP5/exec";
 if (window.KEYHOLE_API_OVERRIDE != null) API = String(window.KEYHOLE_API_OVERRIDE);
-A.HINT = 120;                    /* one hint counts as two minutes */
+A.HINT = 60;                     /* one hint counts as one minute */
 
 /* ---------- small things ---------- */
 function get(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
@@ -225,8 +226,12 @@ var CSS = '.ac-veil{position:fixed;top:0;right:0;bottom:0;left:0;z-index:95;disp
   '.ac-board tr.me td{background:#f4e04d}.ac-board .ac-none{margin:18px 0;color:#6b6457}' +
   '.ac-board .ac-foot{margin:16px 0 0;font-size:15.5px;color:#6b6457;line-height:1.4}' +
   '.ac-board button{display:block;margin:14px 0 0 auto;padding:9px 22px;border:1px solid #27231d;border-radius:0;background:transparent;color:#27231d;font-family:"Oswald",Arial,sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer}.ac-board button:hover{background:#27231d;color:#f3ecd9}' +
-  '.ac-note{position:fixed;left:50%;top:60px;transform:translateX(-50%);z-index:66;max-width:92vw;padding:10px 20px 9px;border:1px solid #27231d;background:#f3ecd9;color:#27231d;box-shadow:0 12px 34px rgba(0,0,0,.5);font-family:"Special Elite","Courier New",monospace;font-size:17px;line-height:1.35;text-align:center;cursor:pointer}' +
-  '.ac-note b{font-weight:normal;background:#f4e04d;padding:0 4px}';
+  '.ac-note{position:fixed;left:50%;top:60px;transform:translateX(-50%);z-index:66;max-width:92vw;padding:10px 20px 9px;border:1px solid #27231d;background:#f3ecd9;color:#27231d;box-shadow:0 12px 34px rgba(0,0,0,.5);font-family:"Special Elite","Courier New",monospace;font-size:17px;line-height:1.35;text-align:center;pointer-events:none}' +
+  '.ac-note b{font-weight:normal;background:#f4e04d;padding:0 4px}' +
+  '.ac-card textarea{display:block;width:100%;box-sizing:border-box;height:118px;margin:0;padding:9px 11px;border:1px solid #27231d;border-radius:0;background:#fffdf6;color:#27231d;font:17px/1.35 "EB Garamond",Georgia,serif;resize:vertical;-webkit-user-select:text;user-select:text}' +
+  '.ac-stars{display:flex;gap:4px}.ac-card .ac-stars button{width:auto;margin:0;padding:0 4px;border:0;background:transparent;color:#c9bfa8;font-size:30px;line-height:1;letter-spacing:0}.ac-card .ac-stars button.on{color:#d39b12}.ac-card .ac-stars button:hover{background:transparent;color:#8c6a0a}' +
+  '.ac-kinds{display:flex;flex-wrap:wrap;gap:6px}.ac-card .ac-kinds button{width:auto;margin:0;padding:6px 10px;border:1px solid #27231d;background:transparent;color:#27231d;font-size:12px;letter-spacing:.1em}.ac-card .ac-kinds button.on,.ac-card .ac-kinds button:hover{background:#27231d;color:#f3ecd9}' +
+  '.ac-card .ac-where{font-size:15.5px;color:#6b6457;margin:10px 0 0}';
 function css() { if (D.getElementById('ac-css')) return; var s = el('style'); s.id = 'ac-css'; s.textContent = CSS; D.head.appendChild(s); }
 A.ui = {};
 /* The card that asks who is playing. done(user or null) is called when it closes with an answer (null = without a name).
@@ -236,7 +241,7 @@ A.ui.card = function (done, o) {
   var veil = el('div', 'ac-veil'), card = el('form', 'ac-card'), step = 0, working = false;
   card.setAttribute('autocomplete', 'off');
   card.innerHTML = '<h2>Who is playing?</h2><p>A name and a password of your own keep your game for you, on this computer and on any other.</p>' +
-    '<label for="ac-name">Name</label><input id="ac-name" type="text" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false">' +
+    '<label for="ac-name">Name or nickname</label><input id="ac-name" type="text" maxlength="20" autocomplete="off" autocapitalize="off" spellcheck="false">' +
     '<label for="ac-pass">Password</label><input id="ac-pass" type="password" maxlength="40" autocomplete="off">' +
     '<div class="ac-again" style="display:none"><label for="ac-pass2">The same password once more</label><input id="ac-pass2" type="password" maxlength="40" autocomplete="off"></div>' +
     '<div class="ac-msg"></div><button type="submit" class="ac-go">Come in</button><button type="button" class="ac-quiet ac-guest">Play without a name</button>' +
@@ -279,7 +284,7 @@ A.ui.card = function (done, o) {
 A.ui.board = function () {
   css();
   var veil = el('div', 'ac-veil'), box = el('div', 'ac-board', '<h2>This week’s records</h2><div class="ac-week">…</div><div class="ac-list"><p class="ac-none">Opening the record book …</p></div>' +
-    '<p class="ac-foot">Time is the time really played, and every hint adds two minutes. Only your first time through a story counts. The list starts again every Monday.</p><button type="button">Close</button>');
+    '<p class="ac-foot">Time is the time really played, and every hint adds one minute. Only your first time through a story counts. The list starts again every Monday.</p><button type="button">Close</button>');
   veil.appendChild(box); D.body.appendChild(veil);
   function close() { if (veil.parentNode) veil.parentNode.removeChild(veil); }
   box.querySelector('button').addEventListener('click', close);
@@ -301,6 +306,52 @@ A.ui.board = function () {
   });
   return veil;
 };
+/* where the player is, for a message: "corridor", "the list of <theme>", or "<theme>/<story>/<room> (<title>)" */
+function where() {
+  if (inRoom()) return ER.cfg.theme + '/' + ER.cfg.story + '/' + ER.cfg.id + (ER.cfg.title ? ' (' + String(ER.cfg.title).replace(/<[^>]*>/g, '') + ')' : '');
+  var m = location.pathname.match(/\/([a-z0-9_-]+)\/(index\.html)?$/);
+  return m && m[1] !== 'keyhole' ? 'story list: ' + m[1] : 'corridor';
+}
+var KINDS = [['broken', 'Something is broken'], ['hard', 'Too hard'], ['easy', 'Too easy'], ['english', 'A mistake in the English'], ['idea', 'An idea'], ['other', 'Something else']];
+/* a message to the people who make the site (it goes to the record book's "피드백" tab) */
+A.ui.feedback = function () {
+  css();
+  var veil = el('div', 'ac-veil'), card = el('form', 'ac-card'), stars = 0, kind = '', u = A.user(), here = where(), working = false;
+  card.className = 'ac-card ac-fb';
+  card.innerHTML = '<h2>Tell us</h2><p>Was it fun? Too hard? Did something break? Every message is read.</p>' +
+    '<label>How was it?</label><div class="ac-stars">' + [1, 2, 3, 4, 5].map(function (i) { return '<button type="button" data-s="' + i + '" aria-label="' + i + ' of 5">★</button>'; }).join('') + '</div>' +
+    '<label>What is it about?</label><div class="ac-kinds">' + KINDS.map(function (k) { return '<button type="button" data-k="' + k[0] + '">' + k[1] + '</button>'; }).join('') + '</div>' +
+    '<label for="ac-msg">Your message</label><textarea id="ac-msg" maxlength="1500" placeholder="What happened, and where? What would make it better?"></textarea>' +
+    '<p class="ac-where">From: ' + esc(here) + (u ? ' · sent as ' + esc(u.name) : ' · sent without a name') + '</p>' +
+    '<div class="ac-msg"></div><button type="submit" class="ac-go">Send</button><button type="button" class="ac-quiet ac-stay">Close</button>';
+  veil.appendChild(card); D.body.appendChild(veil);
+  var msg = card.querySelector('.ac-msg'), text = card.querySelector('#ac-msg'), go = card.querySelector('.ac-go');
+  function close() { if (veil.parentNode) veil.parentNode.removeChild(veil); }
+  function paint() {
+    Array.prototype.forEach.call(card.querySelectorAll('.ac-stars button'), function (b) { b.classList.toggle('on', +b.getAttribute('data-s') <= stars); });
+    Array.prototype.forEach.call(card.querySelectorAll('.ac-kinds button'), function (b) { b.classList.toggle('on', b.getAttribute('data-k') === kind); });
+  }
+  card.querySelector('.ac-stars').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { stars = +b.getAttribute('data-s'); paint(); } });
+  card.querySelector('.ac-kinds').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { kind = b.getAttribute('data-k') === kind ? '' : b.getAttribute('data-k'); paint(); } });
+  card.querySelector('.ac-stay').addEventListener('click', close);
+  veil.addEventListener('pointerdown', function (e) { if (e.target === veil) close(); });
+  veil.addEventListener('keydown', function (e) { e.stopPropagation(); });
+  card.addEventListener('submit', function (e) {
+    e.preventDefault(); if (working) return;
+    var body = text.value.trim();
+    if (!body && !stars) { msg.textContent = 'Choose some stars or write a few words first.'; text.focus(); return; }
+    working = true; go.disabled = true; msg.textContent = 'Sending …';
+    var q = { a: 'feedback', stars: stars, kind: kind, msg: body, where: here, ua: navigator.userAgent.slice(0, 120) };
+    if (u) { q.name = u.name; q.key = u.key; }
+    call(q, 20000).then(function (r) {
+      working = false; go.disabled = false;
+      if (r && r.ok) { card.innerHTML = '<h2>Thank you</h2><p>Your message has arrived.</p><button type="button" class="ac-go">Close</button>'; card.querySelector('button').addEventListener('click', close); return; }
+      msg.textContent = r && r.err === 'busy' ? 'A lot of messages are arriving just now. Try again in a minute.' : 'The message could not be sent. Try again in a moment.';
+    }, function () { working = false; go.disabled = false; msg.textContent = 'The message could not be sent. Try again in a moment.'; });
+  });
+  setTimeout(function () { try { text.focus(); } catch (e) {} }, 60);
+  return veil;
+};
 /* the small plate in the corner of the corridor and of the story lists: who is playing, the records, another player */
 A.ui.chip = function () {
   if (!API) return null;
@@ -309,6 +360,8 @@ A.ui.chip = function () {
   if (old) old.parentNode.removeChild(old);
   chip.appendChild(el('b', '', esc(u ? u.name : 'No name')));
   b = el('button', 'ac-rec', 'Records'); b.type = 'button'; b.addEventListener('click', A.ui.board); chip.appendChild(b);
+  b = el('button', 'ac-pp', 'Passport'); b.type = 'button'; b.addEventListener('click', function () { if (window.Passport) Passport.open(); }); chip.appendChild(b);
+  b = el('button', 'ac-fbk', 'Feedback'); b.type = 'button'; b.addEventListener('click', A.ui.feedback); chip.appendChild(b);
   b = el('button', 'ac-who', u ? 'Change' : 'Sign in'); b.type = 'button';
   b.addEventListener('click', function () { A.ui.card(function () { location.reload(); }, { cancel: true }); });      /* another player: the page reads that player's game */
   chip.appendChild(b); D.body.appendChild(chip);
@@ -322,12 +375,12 @@ A.ui.welcome = function (ready) {
   if (A.user() || guest) { go(); return; }
   A.ui.card(function (u) { if (u) location.reload(); else go(); });        /* a new player: the page reads that player's own game */
 };
-/* a line at the top of a room, put away with a click (or by itself) */
+/* a line at the top of a room, which goes away by itself. A click goes through it to the room: it never takes one. */
 function note(html, ms) {
   css();
   var n = el('div', 'ac-note', html);
   function gone() { if (n.parentNode) n.parentNode.removeChild(n); }
-  n.addEventListener('click', gone); setTimeout(gone, ms || 14000);
+  setTimeout(gone, ms || 14000);
   (function show() { if (D.querySelector('.tc')) { setTimeout(show, 400); return; } D.body.appendChild(n); })();      /* after the title card */
 }
 
@@ -339,7 +392,10 @@ function room() {
   window.addEventListener('pagehide', function () { farewell(k); });
   if (ER.cfg.exit && ER.cfg.exit.last) {                                 /* the last room has a way to the records */
     var hud = D.querySelector('.hud-tr'), b;
-    if (hud && !hud.querySelector('.rec')) { b = el('button', 'hbtn rec', 'Records'); b.type = 'button'; b.addEventListener('click', A.ui.board); hud.insertBefore(b, hud.firstChild); }
+    if (hud && !hud.querySelector('.rec')) {
+      b = el('button', 'hbtn rec', 'Records'); b.type = 'button'; b.addEventListener('click', A.ui.board); hud.insertBefore(b, hud.firstChild);
+      b = el('button', 'hbtn fbk', 'Feedback'); b.type = 'button'; b.addEventListener('click', A.ui.feedback); hud.insertBefore(b, hud.firstChild);
+    }
   }
   if (!f || f.skipped || f.sent || (!u && f.told)) return;
   var mine = A.clock(f.secs) + (f.hints ? ' + ' + hintWord(f.hints) + ' = <b>' + A.clock(A.score(f.secs, f.hints)) + '</b>' : ', no hints');
@@ -354,4 +410,10 @@ function room() {
   });
 }
 if (API && inRoom() && !ER.cfg.transient) room();
+
+/* the passport (stamps and badges) lives in its own file beside this one, on every page */
+if (!(inRoom() && ER.cfg.transient)) {
+  var me = D.currentScript || D.querySelector('script[src*="account.js"]'), pp = D.createElement('script');
+  if (me && me.src) { pp.src = me.src.replace(/account\.js.*$/, 'passport.js'); D.head.appendChild(pp); }
+}
 })();

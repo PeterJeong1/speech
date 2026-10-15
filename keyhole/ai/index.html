@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>A.I. · KEYHOLE</title>
+<link rel="stylesheet" href="../assets/fonts-base.css">
+<link rel="stylesheet" href="../assets/fonts-ai.css">
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%}
+  body{color:#16202c;font-family:'Inter',sans-serif;-webkit-user-select:none;user-select:none;background:#3a2c22;
+    background-image:radial-gradient(ellipse 900px 500px at 50% 0,rgba(255,220,160,.28),transparent 70%),repeating-linear-gradient(90deg,rgba(0,0,0,.06) 0 2px,transparent 2px 140px),linear-gradient(#5a4232,#3a2a20)}
+  .back{position:fixed;left:14px;top:12px;z-index:3;height:36px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid rgba(255,255,255,.3);
+    background:rgba(20,27,38,.85);color:#e9f6f4;border-radius:18px;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}
+  .back:hover{border-color:#7fe0d6;color:#7fe0d6}
+  /* a laptop on a desk, with the school's chatbot open */
+  .laptop{position:relative;max-width:1120px;margin:56px auto 0;padding:18px 18px 0;background:#1d232c;border-radius:18px 18px 0 0;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+  .laptop:before{content:'';position:absolute;left:50%;top:7px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:#3a4452}
+  .base{max-width:1220px;height:22px;margin:0 auto 0;background:linear-gradient(#c9ced4,#8f969e);border-radius:0 0 22px 22px;box-shadow:0 18px 40px rgba(0,0,0,.45)}
+  .base:after{content:'';display:block;width:160px;height:8px;margin:0 auto;background:#7a8088;border-radius:0 0 10px 10px}
+  .win{background:#f4f7f9;border-radius:6px 6px 0 0;overflow:hidden;min-height:560px}
+  .bar{display:flex;align-items:center;gap:12px;padding:10px 18px;background:#141b26;color:#e9f6f4;font-family:'Roboto Mono',monospace;font-size:13px;letter-spacing:.06em}
+  .bar svg{width:30px;height:30px;flex:0 0 auto}
+  .bar span{flex:1}
+  .bar i{font-style:normal;color:#7fe0d6}
+  .chat{display:flex;flex-direction:column;gap:14px;padding:22px 26px 26px}
+  .msg{max-width:78%;padding:12px 16px 13px;border-radius:16px;font-size:16px;line-height:1.45}
+  .msg b.who{display:block;font-family:'Roboto Mono',monospace;font-weight:500;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:3px}
+  .msg.me{align-self:flex-end;background:#d9ecff;border-bottom-right-radius:4px;font-family:'Kalam',cursive;font-size:19px}
+  .msg.bot{align-self:flex-start;background:#fff;border:1px solid #d6dde3;border-bottom-left-radius:4px}
+  .msg.bot h1{margin:0 0 4px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(36px,4.6vw,56px);line-height:1;color:#141b26}
+  .msg.bot p{margin:0}
+  .list{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;margin-top:12px;align-items:start}
+  .story{position:relative;display:block;text-align:left;padding:14px 16px 14px;border:1px solid #c9d6de;border-left:6px solid #1f7a80;border-radius:10px;background:#f8fbfc;color:#16202c;cursor:pointer;font:inherit;transition:transform .15s,box-shadow .15s}
+  .story:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(20,27,38,.18);border-left-color:#d4a017}
+  .story small{display:block;font-family:'Roboto Mono',monospace;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#5a6670}
+  .story h2{margin:3px 0 4px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:25px;line-height:1.08}
+  .stars{font-family:Arial,sans-serif;font-size:19px;letter-spacing:3px;color:#d4a017;line-height:1}
+  .meta{margin:6px 0 8px;font-family:'Roboto Mono',monospace;font-size:12.5px;color:#1f7a80}
+  .story em{display:block;font-style:normal;font-family:'Literata',serif;font-size:15px;line-height:1.45;color:#2a3440}
+  .stamp{position:absolute;right:12px;top:12px;padding:3px 9px 2px;border:2px solid;border-radius:4px;font-family:'Roboto Mono',monospace;font-weight:500;font-size:12px;letter-spacing:.1em;transform:rotate(4deg);display:none;background:#fff}
+  .story.going .stamp{display:block;color:#2f6fd0}
+  .story.solved .stamp{display:block;color:#2f7d4a}
+  .more{margin-top:12px;padding:12px 14px;border:1px dashed #9fb3c4;border-radius:10px;font-size:15px;line-height:1.45;color:#4a5566}
+  .more span{display:block;margin-top:4px;font-family:'Roboto Mono',monospace;font-size:12px;color:#7a8490}
+  .typing{display:flex;gap:5px;align-self:flex-start;padding:12px 16px;background:#fff;border:1px solid #d6dde3;border-radius:16px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:#9aa5ae;animation:dot 1.4s steps(2,end) infinite}
+  .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+  @keyframes dot{50%{opacity:.25}}
+  footer{max-width:1120px;margin:0 auto;padding:18px 24px 40px;font-family:'Inter',sans-serif;font-size:14px;color:#f3e9d6;text-align:center;line-height:1.8}
+  footer b{color:#f6d32b;font-weight:normal;letter-spacing:2px;font-family:Arial,sans-serif}
+  @media (max-width:700px){.laptop{margin:56px 10px 0;padding:10px 10px 0}.msg{max-width:100%}.chat{padding:16px}}
+</style>
+</head>
+<body>
+<a class="back" href="../index.html">&larr; Corridor</a>
+<div class="laptop">
+  <div class="win">
+    <div class="bar"><svg viewBox="0 0 100 100" id="logo"></svg><span>MAGPIE &middot; the school&rsquo;s homework helper</span><i>online</i></div>
+    <div class="chat" id="chat">
+      <div class="msg me"><b class="who">You</b>Which stories are there?</div>
+      <div class="msg bot"><b class="who">Magpie</b><h1>A.I.</h1><p>Stories about machines that learn: the ones you already use. Every one of them is fluent, confident and usually helpful. Pick a story, and find out when to trust them and when to check.</p>
+        <div class="list" id="files"></div></div>
+    </div>
+  </div>
+</div>
+<div class="base"></div>
+<footer><b>&#9733;&#9733;&#9733;</b> one evening &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;</b> longer, and the simple answer is the wrong one &nbsp;&middot;&nbsp; <b>&#9733;&#9733;&#9733;&#9733;&#9733;</b> long, and nobody tells you which voice to trust</footer>
+
+<script src="../assets/account.js"></script>
+<script src="../assets/shelf.js"></script>
+<script>
+(function () {
+  var STORIES = Shelf.visible([{"id":"helper","title":"Sounds About Right","stars":3,"minutes":"35-45","hold":false,"level":"B1+ to B2","blurb":"Revision Night at Sallowfield School, the evening before the Year 8 science test. Leo spent the afternoon asking Magpie, the school's homework chatbot, about space, and at six o'clock he gave the whole year a copy of its answers. Number 7 is very sure of itself. By quarter past eight the head must decide whether to switch Magpie off. You are the one who wants to know how it got its answers.","rooms":5,"first":"computers.html","firstId":"computers","last":"friday"}]), box = document.getElementById('files');
+  document.getElementById('logo').innerHTML = '<rect width="100" height="100" rx="24" fill="#e9f6f4"/><path d="M34 60L6 80l4 6 30 -18z" fill="#1d4f63"/><ellipse cx="48" cy="56" rx="22" ry="14" fill="#141b26"/>' +
+    '<path d="M38 62q14 12 30 -2q-6 -8 -18 -7z" fill="#fff"/><path d="M34 51q11 -7 22 0q-9 6 -22 0z" fill="#fff"/><circle cx="70" cy="41" r="11" fill="#141b26"/><path d="M80 39l12 3 -12 4z" fill="#141b26"/><circle cx="73" cy="38.5" r="2.4" fill="#fff"/>';
+  Shelf.init();
+  STORIES.forEach(function (s, i) {
+    var st = Shelf.status('ai', s), b = document.createElement('button');
+    b.type = 'button'; b.className = 'story ' + st.state; b.setAttribute('data-story', s.id);
+    b.innerHTML = '<span class="stamp"></span><small class="no"></small><h2></h2><span class="stars"></span><div class="meta"></div><em></em>';
+    b.querySelector('.no').textContent = 'Story ' + (i + 1);
+    b.querySelector('h2').textContent = s.title;
+    b.querySelector('.stars').textContent = Shelf.stars(s.stars);
+    b.querySelector('.stars').title = s.stars + ' out of 5 for difficulty';
+    b.querySelector('.meta').textContent = s.minutes + ' min · ' + s.rooms + ' rooms' + (s.level ? ' · ' + s.level : '');
+    b.querySelector('em').textContent = s.blurb;
+    b.querySelector('.stamp').textContent = st.state === 'solved' ? 'CHECKED' : 'IN PROGRESS';
+    b.addEventListener('click', function () { Shelf.open('ai', s); });
+    box.appendChild(b);
+  });
+  if (STORIES.length < 5) {
+    var m = document.createElement('div'), left = 5 - STORIES.length; m.className = 'more';
+    m.innerHTML = (STORIES.length ? (left === 1 ? 'One more story is' : (left === 4 ? 'Four' : left === 3 ? 'Three' : 'Two') + ' more stories are') : 'All five stories are') +
+      ' still being written. I&rsquo;m fairly sure about that.<span>I can be wrong. Check me.</span>';
+    box.appendChild(m);
+  }
+  var t = document.createElement('div'); t.className = 'typing'; t.innerHTML = '<i></i><i></i><i></i>';
+  document.getElementById('chat').appendChild(t);
+})();
+</script>
+</body>
+</html>

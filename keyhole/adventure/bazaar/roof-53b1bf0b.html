@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Roof · The Third Arch After the Fountain</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="bazaar.css">
+<style>
+  body{--bg:#c4a070;--accent:#f6d67a;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(52,34,20,.95);--tc-ink:#f7ecd2;--cap-bg:rgba(44,28,16,.93);--panel:#33220f;--face-bg:#4a3018;--q-ink:#f2d08a;--fade:#22140a;--hud-bg:rgba(44,28,16,.82)}
+  .rf-e{cursor:pointer}
+  .rf-e:hover{stroke-opacity:.28;fill-opacity:.28}
+  .bob{animation:bob 2.1s steps(2,end) infinite}
+  .bob.b{animation-delay:-.8s;animation-duration:2.9s}
+  @keyframes bob{50%{transform:translateY(-3px)}}
+  .wash{animation:wash 5s ease-in-out infinite alternate;transform-origin:1300px 520px}
+  @keyframes wash{from{transform:skewX(-2deg)}to{transform:skewX(2.500deg)}}
+  #desk.ready{animation:glowd 1.6s steps(1,end) infinite}
+  @keyframes glowd{50%{filter:brightness(1.3)}}
+
+  /* the note */
+  .bx.pnote{width:min(930px,95vw)}
+  .paper{margin-top:8px;padding:10px 20px 8px;background:#fbf7e6;color:#1d2a55;font-family:'Caveat',cursive;font-size:21.5px;line-height:1.36;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  .paper p{margin:0}
+  .dial{display:inline-block;min-width:54px;padding:0 9px;margin:1px 2px;border-bottom:2.500px solid #a8432a;background:#f3e3b4;color:#7a1f1f;font:inherit;font-weight:700;line-height:1.18;border-radius:3px 3px 0 0;text-align:center}
+  .dial:hover{background:#ecd28a}
+  .dial.none{color:#a8432a;opacity:.75}
+  .bx.pnote .bx-foot{align-items:flex-start;min-height:74px}
+  .bx.pnote .pmsg{font-size:17px;line-height:1.3}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="tileD" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9895a"/><stop offset="1" stop-color="#8a5432"/></linearGradient>
+  <radialGradient id="vigD" cx="50%" cy="46%" r="82%"><stop offset="0" stop-color="#2a1608" stop-opacity="0"/><stop offset=".75" stop-color="#2a1608" stop-opacity=".1"/><stop offset="1" stop-color="#2a1608" stop-opacity=".55"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#c4a070"/>
+<rect x="-1000" y="-400" width="3600" height="500" fill="#e9c98f"/><rect x="-1000" y="98" width="3600" height="36" fill="#fbf6e6"/>
+<!-- all of Ombra, looking south from the roof: drawn from the same streets that were walked in room one -->
+<g id="city" class="hot" transform="translate(0 -20) scale(1.600)"></g>
+<!-- the wall round the roof, and the roof -->
+<path d="M-1000 652H2600V716H-1000Z" fill="#dcc092"/><path d="M-1000 652H2600" stroke="#f1e2bb" stroke-width="8"/><path d="M-1000 716H2600" stroke="#a88a5e" stroke-width="6"/>
+<rect x="-1000" y="716" width="3600" height="604" fill="url(#tileD)"/><g id="tiles" stroke="#7a4a2a" stroke-width="2" opacity=".5"></g>
+<!-- looking down into the lane -->
+<g id="below" class="hot"><path d="M560 652h200v64H560z" fill="#b89a6a"/><path d="M572 664h176v52H572z" fill="#2a1c10"/><path d="M590 664l-10 52M650 664l-4 52M710 664l6 52" stroke="#5a4426" stroke-width="6"/><path d="M600 700l30 -30M690 704l20 -34" stroke="#ffe9a8" stroke-width="5" opacity=".5"/></g>
+<!-- the pigeon loft -->
+<g id="loft" class="hot"><path d="M90 880V560M330 880V560" stroke="#5a3a1a" stroke-width="12"/><path d="M60 420h300v170H60z" fill="#8a6a44"/><path d="M40 430l170 -70 170 70z" fill="#6b4420"/>
+  <g fill="#2a1c10"><path d="M92 560v-50q0 -22 22 -22t22 22v50zM166 560v-50q0 -22 22 -22t22 22v50zM240 560v-50q0 -22 22 -22t22 22v50z"/></g><path d="M60 560h300v12H60z" fill="#5a3a1a"/>
+  <g id="birds"></g></g>
+<!-- washing -->
+<g><path d="M1180 880V470M1560 880V470" stroke="#5a3a1a" stroke-width="9"/><path d="M1176 482q190 26 388 0" stroke="#3a2a1a" stroke-width="4" fill="none"/>
+  <g class="wash"><path d="M1210 488h90v150q-45 12 -90 0z" fill="#f1ecdf"/><path d="M1320 492h70v110h-22v-60h-26v60h-22z" fill="#a8437a"/><path d="M1410 490h100v180q-50 14 -100 0z" fill="#e2b521"/></g></g>
+<!-- Mistress Veck, with a pigeon -->
+<g id="veck" class="hot"><g id="pveck"></g><g class="bob"><ellipse cx="962" cy="752" rx="20" ry="13" fill="#9aa6b0"/><circle cx="978" cy="742" r="9" fill="#8a96a0"/><path d="M986 742l8 2 -8 3z" fill="#e2b521"/><path d="M944 750l-14 6 14 2z" fill="#7a8690"/></g></g>
+<!-- a crate, a pen, a pot of ink and a strip of thin paper -->
+<g id="desk" class="hot"><path d="M1010 770h150v100h-150z" fill="#8a5f34"/><path d="M1010 800h150M1010 836h150M1048 770v100M1122 770v100" stroke="#5a3a1a" stroke-width="3"/>
+  <path d="M1030 752l90 -8 4 20 -90 8z" fill="#fbf7e6"/><path d="M1040 758l60 -5M1041 765l40 -3" stroke="#1d2a55" stroke-width="1.500"/><rect x="1130" y="748" width="18" height="22" rx="3" fill="#22283c"/><path d="M1138 748l16 -34" stroke="#f1ecdf" stroke-width="3.500" stroke-linecap="round"/></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vigD)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Run</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="bazaar.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, told = {}, bench = null;
+
+  (function () {
+    var s = '', i;
+    $('#city').innerHTML = BZ.roof();
+    for (i = 0; i < 16; i++) s += '<path d="M' + (-1000 + i * 240) + ' 1320L' + (700 + (i - 7) * 50) + ' 716"/>';
+    $('#tiles').innerHTML = s + '<path d="M-1000 770h3600M-1000 850h3600"/>'; s = '';
+    [[114, 548, 0], [262, 548, 1], [150, 408, 1], [300, 414, 0]].forEach(function (g) {
+      s += '<g class="bob' + (g[2] ? ' b' : '') + '"><ellipse cx="' + g[0] + '" cy="' + g[1] + '" rx="15" ry="10" fill="' + (g[2] ? '#9aa6b0' : '#e9ecef') + '"/><circle cx="' + (g[0] + 12) + '" cy="' + (g[1] - 9) + '" r="7" fill="' + (g[2] ? '#8a96a0' : '#d8dde2') + '"/><path d="M' + (g[0] + 18) + ' ' + (g[1] - 9) + 'l7 2 -7 3z" fill="#e2b521"/></g>';
+    });
+    $('#birds').innerHTML = s;
+    $('#pveck').innerHTML = BZ.person(900, 880, 1.25, { coat: '#5a4030', skin: '#b98558', hair: '#9b9b98', top: 'bun', apron: '#7a5632' });
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'bazaar', storyTitle: 'The Third Arch After the Fountain', id: 'roof', no: 'IV', title: 'The Roof',
+    go: 'Climb the ladder',
+    intro: [
+      'Nobody in the square would sell you anything that you needed, except lemons. So you bought lemons: a basket for eighteen coppers, because a moon and a half is paid in coppers, and two more with the four that were left. The basket bought Tansy&rsquo;s blue. The two lemons bought Zeb&rsquo;s spare mirror. The mirror bought the lark, and the blue went over her cage, because a Pale lark sings only if she thinks that she is under the sky. The cheap mirror was cracked, and Zeb would gladly have taken the blue: either would have left you with a bird-woman and no bird.',
+      'The lark sang all the way through Mistress Veck&rsquo;s door. The compass was in your hands for about as long as it takes to say so. Then she took it back.',
+      '&ldquo;Rule 9,&rdquo; she said. It is five past eleven.'
+    ],
+    exit: {"next":"yard","w":{"61d9a7b5":"0f37c974"}}, tags: {"far":["511f402c"]},
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('r-file') || null; told = ER.flag('r-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('r-told', told); return true; }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#desk').classList.toggle('ready', !!(told.veck && !nextFile));
+    $('#go').classList.toggle('on', !!nextFile);
+    ER.pips((told.veck ? 1 : 0) + (told.sent ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['Number 41 is inside a red coat, and it is twenty to twelve. Run.']];
+    if (!told.veck) return ['veck', ['Mistress Veck has a pigeon in her hand, and a reason for it. Ask her.']];
+    if (!bench || !bench.isOpen()) return ['desk', ['There is paper, a pen and a pot of ink on the crate beside her.']];
+    return ['note', [
+      'Follow the road with your eyes: from the gate of the Yard, at the far side of the city, to the roof you are standing on. Click on a street in the picture to see who works in it.',
+      'She is walking TOWARDS you. When somebody is facing you, their left hand is on your right. Turn the picture round in your head before you write &ldquo;left&rdquo; or &ldquo;right&rdquo;.',
+      'She will be facing the bricked-up arch when she turns, so it is not beside her road at all: and Ombra does not count an arch full of bricks in any case. Count only the arches that she walks past after she has turned. Yours is the last one before the fish.'
+    ]];
+  }
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; ER.say('The roof. Master Solheim is looking at the city as if she would like to see a map of it, and knows that there is none.'); return; }
+    if (told.intro) { busy = false; ER.say('Mistress Veck&rsquo;s roof, a little after eleven. The whole of Ombra is laid out below the wall.'); return; }
+    ER.narrate([
+      'A ladder, a trap door, and then more sky than you have seen all morning. Mistress Veck&rsquo;s roof is flat, with a low wall round it, a line of washing, and a wooden house full of pigeons.',
+      'For the first time, you can see all of Ombra at once: every street that you walked this morning, and a great many that you did not, with their awnings in the colours of what they sell.',
+      'Down in the lane, under your feet, a door bangs. A tall woman comes out of the red shop, fast: a yellow umbrella under one arm, a birdcage in one hand, and something small and shiny in the other. She is running before the door has shut.',
+      'It cannot be your compass. Yours is on the shelf downstairs. So what has she bought, and where is she taking it in such a hurry?'
+    ], function () { busy = false; tell('intro'); });
+  }
+
+  $('#veck').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Tell Hob Trundle,&rdquo; says Mistress Veck, &ldquo;that his way works in both directions. He will pretend that he knew.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mistress Veck', role: 'Scale-maker · on her roof', face: window.FACE('veck'),
+      lines: [
+        { note: 'She is holding a grey pigeon in one hand, as calmly as if it were a cup of tea.', a: '&ldquo;Rule 9. You read it yourself, on my card: handed only to the name that is written against it in the Guild&rsquo;s book. The name against Number 41 is Solheim. You are Solheim&rsquo;s apprentice, which is a different word.&rdquo;' },
+        { q: 'She is at the Yard, on the other side of the city.', a: 'Twenty minutes on foot, for somebody who knows the way. You do not know it from here, and she does not know it at all: caravan people come in at the Yard gate and go out at it, and never set foot in the bazaar. But my pigeons know the Yard&rsquo;s loft, and they are there in two minutes. So: write her the way.' },
+        { q: 'How shall I write it?', a: 'As Hob told you yours. No street names: there are none. Only what she will pass, and what she will see in front of her at the place where she must turn. Look over the wall. You can see every step of it from here. That is the Yard, at the far side, with the red flag.' },
+        { q: 'Is there anything that I should know?', a: 'Two things. We are looking south from this roof, so the gate that you came in by is away on your right hand. And she will be walking towards us. Think whose left you mean, before you write the word.' }
+      ],
+      clue: { id: 'veck2', title: 'Mistress Veck, on her roof', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('veck')) { paint(); BZ.words(['loft', 'pigeon']); ER.say('Paper, a pen and a pot of ink are waiting on the crate beside her.'); } }
+    });
+  });
+  BZ.thing('#loft', 'loft', 'A pigeon loft: a wooden house on legs, with three round doors. In Ombra a note goes across the city faster by pigeon than a person does on foot. Everybody knows it except the people on foot.', isBusy);
+  BZ.thing('#below', null, function () { return 'You look down through a gap in the reed mats. The lane of the scale-makers, from above: five shop-fronts, a black cat, and the place by the red door where a yellow umbrella was leaning.'; }, isBusy);
+  function openNote() {
+    if (busy) return;
+    if (nextFile) { ER.say('The note has been there and back. It has flour on it.'); return; }
+    if (!told.veck) { ER.say('All of Ombra, from above. You could look at it all day. Mistress Veck has a pigeon in her hand, and does not look as if she has all day.'); return; }
+    if (!bench) bench = makeNote();
+    bench.open();
+  }
+  $('#desk').addEventListener('click', openNote);
+  $('#city').addEventListener('click', openNote);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+
+  /* ---------- the note: eight words to choose, and then she walks what you wrote ---------- */
+  function makeNote() {
+    var TRD = [['bread', 'the bakers'], ['potters', 'the potters'], ['leather', 'the leather-workers'], ['saddle', 'the rope-makers'], ['cloth', 'the drapers'], ['paper', 'the letter-writers']],
+      OPT = { past: TRD, cross: TRD, between: TRD,
+        facing: [['bricked', 'an arch that is bricked up'], ['fountain', 'the fountain'], ['arch', 'an open arch'], ['river', 'the river']],
+        turn: [['left', 'left'], ['right', 'right']], nth: [['1', 'first'], ['2', 'second'], ['3', 'third'], ['4', 'fourth']], side: [['left', 'left'], ['right', 'right']],
+        far: [['fish', 'the fish'], ['fountain', 'the fountain'], ['yard', 'the Yard'], ['gate', 'the Salt Gate']] },
+      ORDER = ['past', 'cross', 'between', 'facing', 'turn', 'nth', 'side', 'far'],
+      note = ER.flag('r-note') || {}, wait = false, box = ER.el('div', 'bx pnote'), svg, msgEl, dot;
+    function D(k) { return '<button type="button" class="dial" data-k="' + k + '"></button>'; }
+    box.innerHTML = '<div class="frame"><svg viewBox="0 0 1000 420">' + BZ.roof() + '</svg></div>' +
+      '<div class="paper"><p>Master Solheim: the compass is found. You must come for it yourself. Come out of the Yard gate and walk straight on, past ' + D('past') + '. Cross the street of ' + D('cross') + ' and go on between ' + D('between') +
+      ' until you are facing ' + D('facing') + '. There turn ' + D('turn') + '. Take the ' + D('nth') + ' arch on your ' + D('side') + '. If you reach ' + D('far') + ', you have gone too far.</p></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="n-go">Send the pigeon</button></div>';
+    svg = box.querySelector('svg'); msgEl = box.querySelector('.pmsg'); dot = svg.querySelector('#rf-s');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function word(k) { var v = note[k], o = OPT[k].filter(function (x) { return x[0] === v; })[0]; return o ? o[1] : null; }
+    function draw() { ER.$$('.dial', box).forEach(function (b) { var w = word(b.getAttribute('data-k')); b.textContent = w || '?'; b.classList.toggle('none', !w); }); }
+    box.querySelector('.paper').addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.dial') : null, k, i;
+      if (!b || wait) return;
+      k = b.getAttribute('data-k'); i = -1; OPT[k].forEach(function (x, j) { if (x[0] === note[k]) i = j; });
+      note[k] = OPT[k][(i + 1) % OPT[k].length][0]; ER.flag('r-note', note); BZ.sfx.pen(); draw();
+    });
+    var SPOT = {
+      fountain: 'The fountain, in its square. The yellow dot beside it is a cart of lemons.', fishm: 'The fish market, beside the river. With the wind where it is, you can smell it from here.',
+      yard: 'The Yard, with its red flag: mules, salt carts, and one small figure walking up and down. Its gate is on this side.', gate: 'The Salt Gate, where you came in this morning. The brown dot beside it has a handcart.',
+      you: 'The roof that you are standing on. The lane of the scale-makers runs under it, and comes out through an arch into the street below you.', bricked: 'An arch that has been filled in with bricks. Nothing comes out of it, and nothing goes in.',
+      storkt: 'The tower with the stork&rsquo;s nest. The stork is at home.', alley: 'A blind alley, with washing hung across it. Three cats are asleep on a wall.', tailors: 'A lane roofed with reed mats, behind an arch. You cannot see into it from above.', lamps: 'A lane roofed with reed mats, behind an arch. You cannot see into it from above.', scales: 'A lane roofed with reed mats, behind an arch: this one runs under your feet.'
+    };
+    svg.addEventListener('click', function (e) {
+      var n = e.target.closest ? e.target.closest('.rf-e') : null, t;
+      if (!n || wait) return;
+      t = n.getAttribute('data-t');
+      msg(SPOT[t] || 'Down there: ' + BZ.TR[t].side + '. That is where you find ' + BZ.TR[t].who + '.');
+    });
+    function walk(path, done) {
+      var i = 0;
+      dot.style.display = '';
+      (function step() {
+        var p = BZ.rp(path[i]);
+        dot.setAttribute('transform', 'translate(' + p[0].toFixed(1) + ' ' + (p[1] - 4).toFixed(1) + ')');
+        if (i) BZ.sfx.step();
+        if (++i < path.length) setTimeout(step, 520); else setTimeout(done, 700);
+      })();
+    }
+    function ord(n) { return ['', 'first', 'second', 'third', 'fourth'][n]; }
+    function answer(r) {
+      var S = function (t) { return BZ.TR[t] ? BZ.TR[t].side : 'a wall'; }, H = 'The pigeon is back in four minutes, with her answer on the other side of the paper. ';
+      if (r.stop === 'past') return H + '&ldquo;I am standing outside the gate. You say that I shall pass ' + word('past') + '. What I can see is ' + S(r.saw) + '. I have not moved. S.&rdquo;';
+      if (r.stop === 'cross') return H + '&ldquo;I passed the bakers. Now a street crosses my road, and it is all ' + S(r.saw) + '. That is not ' + word('cross') + '. I do not cross streets that I have not been told about. S.&rdquo;';
+      if (r.stop === 'between') return H + '&ldquo;I am across the leather. The way on is all ' + S(r.saw) + ', and your note says ' + word('between') + '. I shall stand here until one of us is right. S.&rdquo;';
+      if (r.stop === 'facing') return H + '&ldquo;I walked between the potters until the lane ended. I am facing an arch that has been filled in with bricks. Your note says that I should be facing ' + word('facing') + '. I am waiting for it to arrive. S.&rdquo;';
+      if (r.end === 'tailors') return H + '&ldquo;I turned ' + note.turn + ' and took the ' + ord(+note.nth) + ' arch on my ' + note.side + '. I am in a roofed lane full of tailors, and one of them is measuring me for a coat. S.&rdquo;';
+      if (r.end === 'lamps') return H + '&ldquo;I turned ' + note.turn + ' and took the ' + ord(+note.nth) + ' arch on my ' + note.side + '. I am in a roofed lane with several hundred lamps in it, all lit, and no scales. S.&rdquo;';
+      return H + '&ldquo;I turned ' + note.turn + ' and looked for the ' + ord(+note.nth) + ' arch on my ' + note.side + '. I counted ' + (r.cnt ? r.cnt === 1 ? 'one arch' : r.cnt + ' arches' : 'no arches at all') + ', and then ' +
+        (r.saw === 'fish' ? 'the street ran out. I have reached the fish. A very large cat is looking at me. S.&rdquo;' : 'I came to a fountain, and a man who wants to sell me lemons. I do not think that this is it. S.&rdquo;');
+    }
+    box.querySelector('#n-go').addEventListener('click', function () {
+      var i, r, file;
+      if (wait || nextFile) return;
+      for (i = 0; i < ORDER.length; i++) if (!note[ORDER[i]]) { msg('The note still has a hole in it. A pigeon cannot carry a question mark: click on each brown word until it says what you mean.'); return; }
+      if (!ER.check('far', note.far)) { ER.sfx.no(); msg('Mistress Veck reads the note before she ties it on. &ldquo;&lsquo;If you reach ' + word('far') + ', you have gone too far.&rsquo; Beyond my arch, that street goes on to something else. Look where it ends. A warning about the wrong thing is worse than no warning.&rdquo;'); return; }
+      wait = true; BZ.sfx.flap(); tell('sent'); paint();
+      msg('The pigeon goes over the roofs like a thrown stone. A red dot comes out of the Yard gate, with your note in its hand.');
+      r = BZ.walkNote({ past: note.past, cross: note.cross, between: note.between, facing: note.facing, turn: note.turn, nth: +note.nth, side: note.side });
+      setTimeout(function () {
+        walk(r.path, function () {
+          if (r.end !== 'scales') { ER.sfx.no(); wait = false; msg(answer(r)); return; }
+          file = ER.exit([ORDER.map(function (k) { return note[k]; }).join('|')], { wait: true });
+          if (!file) { wait = false; msg('The pigeon has come back with nothing. Something is wrong with this page: tell your teacher.'); return; }
+          nextFile = file; ER.flag('r-file', file);
+          BZ.mine('note', 'The way from the Yard', '<p>Come out of the Yard gate and walk straight on, past the bakers. Cross the street of the leather-workers and go on between the potters until you are facing an arch that is bricked up. There turn right. Take the second arch on your left. If you reach the fish, you have gone too far.</p>', true);
+          msg('The red dot turns: to her right, which is your left. It passes one arch. At the second it stops, and goes in under your feet.');
+          setTimeout(function () {
+            ER.closeAll(); paint(); busy = true;
+            ER.narrate([
+              'Sixteen minutes after the pigeon left, the trap door of the roof opens, and Master Solheim comes up through it, with your note in her hand and flour on one elbow.',
+              'She signs the Guild&rsquo;s book with a pen that Mistress Veck has to go and find. Number 41 goes inside the red coat, and she buttons the coat over it.',
+              '&ldquo;You lost it at the gate,&rdquo; she says. &ldquo;It was lifted, Master.&rdquo; &ldquo;Mm,&rdquo; says Master Solheim. It is the longest &ldquo;Mm&rdquo; that you have ever heard.',
+              '&ldquo;Twenty to twelve. Now: which of us knows the way back?&rdquo; You look at the note in her hand. Every line of it works backwards, as long as you change each left into a right.'
+            ], function () { busy = false; });
+          }, 3000);
+        });
+      }, 900);
+    });
+    draw();
+    msg('Eight words are missing from the note. Click on a brown word to change it. Click on a street in the picture to see who works there.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

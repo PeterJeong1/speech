@@ -136,11 +136,39 @@ var SCAPES = {
     { k: 'pad', i: 'glass' }, { k: 'pad', i: 'pad', o: -1, v: 0.6 }, { k: 'bass', i: 'bass', v: 0.6 },
     { k: 'mel', i: 'reed', o: 1, c: 4, every: 4, len: 2, pr: 0.65 },
     { k: 'arp', i: 'harp', o: 1, p: [0, null, null, null, 2, null, null, null], pr: 0.6, v: 0.6 },
-    { k: 'ost', i: 'pulse', o: -1, p: [0, null, null, null, 0, null, null, null], when: 'tense' }] }
+    { k: 'ost', i: 'pulse', o: -1, p: [0, null, null, null, 0, null, null, null], when: 'tense' }] },
+  /* economics: a counting house that never quite stops. Brisk, bright, plucked */
+  ledger: { level: 1.12, bpm: 96, root: 50, scale: MAJ, prog: [[0, 2], [4, 2], [5, 2], [3, 2]], lead: 'vibes', voices: [
+    { k: 'pad', i: 'glass', v: 0.5 }, { k: 'bass', i: 'pizz', o: -1, alt: true, v: 1.0 },
+    { k: 'arp', i: 'pizz', o: 1, p: [0, 2, 1, 2, 0, 2, 1, 3], v: 0.45, pr: 0.9 },
+    { k: 'mel', i: 'vibes', o: 1, c: 4, every: 4, len: 2, pr: 0.6 },
+    { k: 'ost', i: 'pulse', o: -1, p: [0, null, 0, null, 0, null, 0, 0], v: 0.6, when: 'tense' }] },
+  /* languages: a quiet reading room where every shelf is in a different alphabet. Curious and light */
+  babel: { level: 0.96, bpm: 76, root: 52, scale: LYD, prog: [[0, 2], [1, 2], [5, 2], [4, 2]], lead: 'harp', sting: 'run', voices: [
+    { k: 'pad', i: 'pad', v: 0.7 }, { k: 'bass', i: 'bass', o: -1, v: 0.6 },
+    { k: 'arp', i: 'harp', o: 1, p: [0, null, 2, null, 1, null, 3, null], pr: 0.85, v: 0.7 },
+    { k: 'mel', i: 'ping', o: 2, c: 4, every: 4, len: 1, pr: 0.55, cells: [[2, 2, 4], [4, 4], [3, 1, 4]] }] },
+  /* literature: a story read aloud by somebody who is enjoying the nasty bits. A sly waltz */
+  storybook: { level: 1.3, bpm: 126, beats: 3, root: 45, scale: DOR, prog: [[0, 2], [3, 2], [0, 2], [4, 2]], lead: 'harp', sting: 'run', voices: [
+    { k: 'bass', i: 'pizz', o: -1, v: 0.9 }, { k: 'hit', i: 'pizz', o: 1, p: [0, 0, 1, 0, 1, 0], v: 0.4 },
+    { k: 'mel', i: 'reed', o: 1, c: 3, every: 4, len: 2, pr: 0.7 }, { k: 'pad', i: 'glass', o: 1, v: 0.4 }] },
+  /* together: two or three people talking all the time, so the music stays low, warm and out of the way */
+  duet: { level: 0.8, bpm: 84, root: 50, scale: MAJ, prog: [[0, 2], [5, 2], [3, 2], [4, 2]], lead: 'vibes', voices: [
+    { k: 'pad', i: 'glass', v: 0.7 }, { k: 'bass', i: 'bass', o: -1, v: 0.6 },
+    { k: 'arp', i: 'harp', p: [0, null, null, 2, null, null, 1, null], v: 0.6, pr: 0.85 },
+    { k: 'mel', i: 'vibes', o: 1, c: 4, every: 4, len: 2, pr: 0.55 },
+    { k: 'ost', i: 'pulse', o: -1, p: [0, null, null, null, 0, null, null, null], v: 0.6, when: 'tense' }] },
+  /* AI: a machine room that hums to itself and is very sure of everything. Glassy and even */
+  circuit: { level: 0.86, bpm: 90, root: 49, scale: LYD, prog: [[0, 4], [2, 2], [4, 2]], lead: 'ping', voices: [
+    { k: 'pad', i: 'glass' }, { k: 'bass', i: 'bass', o: -1, v: 0.6 },
+    { k: 'arp', i: 'vibes', o: 1, p: [0, 1, 2, 3, 2, 1, 0, null], v: 0.45, pr: 0.95 },
+    { k: 'mel', i: 'ping', o: 2, c: 4, every: 4, len: 1, pr: 0.5, cells: [[4, 4], [8], [2, 2, 4]] },
+    { k: 'ost', i: 'pulse', o: -1, p: [0, null, null, 0, null, null, 0, null], v: 0.6, when: 'tense' }] }
 };
 
 var THEME = { mystery: 'noir', scifi: 'orbit', fantasy: 'candle', ghost: 'hush', adventure: 'nighttrain', cipher: 'wire',
-  forensic: 'lab', history: 'archive', court: 'bench', news: 'desk', wild: 'trail' };
+  forensic: 'lab', history: 'archive', court: 'bench', news: 'desk', wild: 'trail',
+  econ: 'ledger', lang: 'babel', lit: 'storybook', ai: 'circuit', duo: 'duet' };
 
 /* Room by room. A room that already makes its own rain, wind or hum gets music only. */
 var ROOMS = {
@@ -282,11 +310,100 @@ var ROOMS = {
   'fantasy/hours/weights': ['candle', { root: 45, bpm: 54, drop: ['mel', 'arp'], beds: [['wind', 0.45]] }],
   'fantasy/hours/dial': ['candle', { root: 48, bpm: 56, drop: ['mel', 'arp'], beds: [['wind', 0.6], ['night', 0.3]] }],
   'fantasy/hours/workroom': ['candle', { root: 52, bpm: 66, drop: ['mel'], beds: [['fire', 0.6]] }],
-  'fantasy/hours/loft': ['candle', { root: 50, bpm: 50, drop: ['mel', 'arp', 'bass'], beds: [['wind', 0.7], ['night', 0.4]], then: ['morning', { root: 50, bpm: 66, drop: ['mel'], beds: [['night', 0.4]] }] }],   /* eleven strokes are counted here: held notes and wind only */
+  'fantasy/hours/loft': ['candle', { root: 50, bpm: 50, drop: ['mel', 'arp', 'bass'], level: 1.15, beds: [['wind', 0.7], ['night', 0.4]], then: ['morning', { root: 50, bpm: 66, drop: ['mel'], beds: [['night', 0.4]] }] }],   /* eleven strokes are counted here: held notes and wind only */
   'ghost/orchard/kitchen': ['hush', { bpm: 52, drop: ['bass'], beds: [['wind', 0.3]] }],                    /* a cold stone kitchen with the range out */
   'ghost/orchard/backroom': ['hush', { root: 48, bpm: 48, drop: ['mel', 'bass'], beds: [['wind', 0.22]] }],  /* the room with most to read: no tune */
   'ghost/orchard/churchyard': ['hush', { root: 50, bpm: 50, drop: ['mel'], beds: [['birds', 0.45], ['wind', 0.3]] }],
   'ghost/orchard/orchard': ['hush', { root: 43, bpm: 50, drop: ['bass'], beds: [['night', 0.5], ['wind', 0.35]] }],
+  /* adventure/bazaar: a market city on foot. The village band with its tune left out and a harp for the solved phrase, so that nothing rings like the noon bell */
+  'adventure/bazaar/gate': ['village', { root: 48, bpm: 96, drop: ['mel'], lead: 'harp', beds: [['crowd', 0.75], ['wind', 0.2]] }],    /* a gate at opening time: a busy crowd, a plucked bass, no tune (there is a way to read) */
+  'adventure/bazaar/scales': ['village', { root: 45, bpm: 84, drop: ['mel', 'hit'], lead: 'harp', level: 1.15, beds: [['crowd', 0.3], ['hum', 0.18]] }],    /* a roofed lane: the crowd is a long way off, the music slower and lower; much to read, so no tune */
+  'adventure/bazaar/square': ['village', { root: 50, bpm: 100, drop: ['mel'], lead: 'harp', beds: [['crowd', 0.6], ['drips', 0.4]] }],    /* the square: people, and water falling into the fountain. No birds in the sound: a bird's song matters here, and it is drawn */
+  'adventure/bazaar/roof': ['village', { root: 52, bpm: 80, drop: ['mel', 'hit'], lead: 'harp', level: 1.15, beds: [['wind', 0.45], ['birds', 0.3], ['crowd', 0.12]] }],    /* a roof: wind, pigeons, and the city a long way down. The quietest room, with a note to write */
+  'adventure/bazaar/yard': ['village', { root: 55, bpm: 92, drop: ['mel'], lead: 'harp', beds: [['crowd', 0.45], ['wind', 0.25]], then: ['village', { root: 55, bpm: 104, lead: 'harp', beds: [['crowd', 0.4], ['wind', 0.2]] }] }],    /* the Yard at noon, in a bright key. A bell rings in this room, so nothing in the music is struck like one: no tune until the story is over */
+  /* mystery/maze: a June afternoon, so not the theme's wet night. No tune until the end: the stable clock strikes in the last room */
+  'mystery/maze/gate': ['village', { root: 48, bpm: 92, drop: ['mel', 'hit'], level: 1.4, beds: [['birds', 0.5], ['crowd', 0.45]] }],    /* a lawn full of people on a June afternoon: birds, voices, a slow plucked bass; no tune, because there is a good deal to read */
+  'mystery/maze/rhymes': ['village', { root: 45, bpm: 70, drop: ['mel', 'hit'], level: 1.45, beds: [['birds', 0.75], ['wind', 0.3], ['crowd', 0.12]] }],    /* inside the hedges: birds, a little wind in the yew, the lawn far away; slower and lower, and no tune to count against */
+  'mystery/maze/dial': ['village', { root: 50, bpm: 78, drop: ['mel', 'hit'], level: 1.45, beds: [['birds', 0.6], ['wind', 0.2]] }],    /* the stillest place in the garden: birds and a little wind, and nothing else; a tone higher than the lanes */
+  'mystery/maze/tent': ['village', { root: 53, bpm: 96, drop: ['mel'], beds: [['crowd', 0.6], ['hum', 0.22]] }],    /* canvas, voices, teacups, an urn humming: busier and warmer than the hedges; still no tune, because five cards have to be read */
+  'mystery/maze/four': ['village', { root: 48, bpm: 100, drop: ['mel'], beds: [['birds', 0.5], ['crowd', 0.35]], then: ['village', { root: 48, bpm: 104, beds: [['birds', 0.5], ['crowd', 0.4]] }] }],    /* the clock strikes four here, so the tune (small bright notes) waits until it has finished; then the whole village tune, in its own major key */
+  /* court/violin: a Crown Court trial. The bench scape with every tune and every pulse taken out, because Ezra's playing exists only in words */
+  'court/violin/cells': ['bench', { root: 43, bpm: 56, drop: ['mel', 'ost'], beds: [['hum', 0.4]] }],    /* the cells: a ventilation hum under the music, and no tune at all */
+  'court/violin/row': ['bench', { root: 47, bpm: 63, drop: ['mel', 'ost'], beds: [['crowd', 0.25], ['birds', 0.3]] }],    /* a city lane at eleven in the morning, and nobody busking: no tune in the music either */
+  'court/violin/cafe': ['bench', { root: 50, bpm: 58, drop: ['mel', 'ost'], beds: [['rain', 0.3], ['crowd', 0.2]] }],    /* rain on the café window and a few voices; the piano upstairs is only ever read about, never played */
+  'court/violin/court': ['bench', { root: 45, bpm: 60, drop: ['mel', 'ost'], level: 0.85 }],    /* the court room itself: the theme's music with every tune and every pulse taken out */
+  'court/violin/jury': ['bench', { root: 41, bpm: 54, drop: ['mel', 'ost'], level: 0.85 }],    /* waiting for a jury: low and slow, nothing that moves, nothing that could be a tune */
+  'court/violin/verdict': ['bench', { scale: MAJ, root: 48, bpm: 66, drop: ['mel', 'ost'], beds: [['birds', 0.35], ['crowd', 0.2]] }],    /* the same music in a major key, on the steps in the evening: still no tune, because Ezra is about to play one, and his is only ever read */
+  /* forensic/forgery: an auction house on viewing day. The lab scape, with the tune or the plucking taken out wherever there is much to read or water is poured; the sale is a morning in a major key */
+  'forensic/forgery/saleroom': ['lab', { root: 50, bpm: 72, drop: ['mel'], beds: [['crowd', 0.55]] }],    /* a viewing crowd under a glass roof, and much to read: no tune */
+  'forensic/forgery/stores': ['lab', { root: 47, bpm: 66, drop: ['arp'], beds: [['rain', 0.5]] }],    /* rain at the loading door, and water poured and read: nothing plucked, nothing like a drip */
+  'forensic/forgery/studio': ['lab', { root: 52, bpm: 76, drop: ['mel'], beds: [['hum', 0.35]] }],    /* north light, a microscope lamp humming, much to read: no tune */
+  'forensic/forgery/office': ['lab', { root: 45, bpm: 62, drop: ['mel', 'arp'], beds: [['rain', 0.3]] }],    /* dust, rain on the window, a long chart to compare: the quietest room */
+  'forensic/forgery/director': ['lab', { root: 45, bpm: 70, mood: 'tense', drop: ['arp'], beds: [['wind', 0.3]] }],    /* everybody in one room, and somebody's job at stake: tense, but nothing struck */
+  'forensic/forgery/sale': ['morning', { root: 53, bpm: 72, beds: [['crowd', 0.5]] }],    /* a full saleroom, and the story resolved: the major key. No knock in the music: the gavel is the story's */
+  /* econ/stall: a school market on the hottest day. The ledger scape: loud in the playground, cool and tuneless in the kitchen, tense in the cupboard */
+  'econ/stall/playground': ['ledger', { bpm: 104, beds: [['crowd', 0.6], ['birds', 0.25]] }],    /* a playground full of people: brisk, and a crowd under it */
+  'econ/stall/kitchen': ['ledger', { root: 45, bpm: 88, drop: ['mel'], beds: [['hum', 0.5]] }],    /* the cool of a kitchen, a fridge humming, much to read: no tune */
+  'econ/stall/carpark': ['ledger', { root: 47, bpm: 96, beds: [['crowd', 0.3], ['wind', 0.25]] }],    /* out in the open, hot and slow: fewer people, a little air */
+  'econ/stall/cupboard': ['ledger', { root: 43, bpm: 80, mood: 'tense', drop: ['arp', 'mel'], level: 1.25 }],    /* a quiet little room, a clock running on Kit's complaint: the pulse and the bass, nothing bright */
+  'econ/stall/table': ['ledger', { root: 50, bpm: 92, beds: [['crowd', 0.4], ['birds', 0.3]] }],    /* the end of the afternoon, the job done: the theme's own major key, people and birds */
+  /* lit/sweets: an old sweet factory on its last night. The storybook waltz: no tune where there is much to read, a fire under the pans, drips in the cellar, birds on the roof at dawn */
+  'lit/sweets/shop': ['storybook', { root: 45, bpm: 112, drop: ['mel'], level: 1.15 }],    /* much to read in here, and a bell on the counter: no tune on top */
+  'lit/sweets/boil': ['storybook', { root: 43, bpm: 120, beds: [['fire', 0.4], ['hum', 0.35]] }],    /* gas burners and a range that hums */
+  'lit/sweets/wrap': ['storybook', { root: 48, bpm: 126, drop: ['mel'], level: 1.15, beds: [['hum', 0.45]] }],    /* belts that rattle along all night; this room is about sounds, so no tune on top */
+  'lit/sweets/cellar': ['storybook', { root: 41, bpm: 100, drop: ['hit'], level: 1.3, beds: [['drips', 0.6]] }],    /* a damp cellar, a pipe that drips; much to read, so the plucked chords go */
+  'lit/sweets/roof': ['storybook', { root: 48, bpm: 116, scale: [0, 2, 4, 5, 7, 9, 11], beds: [['birds', 0.55], ['wind', 0.3]] }],    /* the same waltz in a major key, on a roof at dawn, with birds */
+  /* lit/alice: inside Carroll's book. The storybook waltz, tuneless wherever words are being mended, and in a major key when Alice wakes on the bank */
+  'lit/alice/hall': ['storybook', { root: 45, bpm: 100, drop: ['mel'], level: 1.15 }],
+  'lit/alice/pool': ['storybook', { root: 43, bpm: 108, drop: ['hit'], beds: [['drips', 0.45]] }],
+  'lit/alice/tea': ['storybook', { root: 48, bpm: 124, drop: ['mel'] }],
+  'lit/alice/croquet': ['storybook', { root: 50, bpm: 120, beds: [['birds', 0.35], ['crowd', 0.25]] }],
+  'lit/alice/court': ['storybook', { root: 45, bpm: 104, drop: ['mel'], level: 1.2, beds: [['crowd', 0.4]], then: ['storybook', { root: 48, bpm: 112, scale: [0, 2, 4, 5, 7, 9, 11], beds: [['birds', 0.5], ['wind', 0.25]] }] }],
+  /* duo/dive-a: Together, the diver's part: drips under everything, no tune while two people talk */
+  'duo/dive-a/steps': ['duet', { root: 45, bpm: 70, drop: ['mel'], beds: [['drips', 0.7]] }],
+  'duo/dive-a/store': ['duet', { root: 43, bpm: 66, drop: ['mel', 'arp'], beds: [['drips', 0.5], ['sea', 0.3]] }],
+  'duo/dive-a/bay': ['duet', { root: 48, bpm: 72, mood: 'tense', drop: ['mel'], beds: [['drips', 0.4]] }],
+  'duo/dive-a/boiler': ['duet', { root: 41, bpm: 76, mood: 'tense', drop: ['mel'], beds: [['sea', 0.45], ['drips', 0.3]] }],
+  'duo/dive-a/landing': ['duet', { root: 50, bpm: 80, drop: ['mel'], beds: [['drips', 0.25]], then: ['duet', { root: 53, bpm: 84, drop: ['ost'] }] }],
+  /* duo/dive-b: Together, the operator's part: the Lodge, rain and the radio */
+  'duo/dive-b/lodge': ['duet', { root: 50, bpm: 78, drop: ['mel'], beds: [['hum', 0.5], ['rain', 0.4]] }],
+  'duo/dive-b/catalogue': ['duet', { root: 47, bpm: 72, drop: ['mel'], beds: [['hum', 0.4], ['static', 0.25]] }],
+  'duo/dive-b/clock': ['duet', { root: 45, bpm: 74, mood: 'tense', drop: ['mel'], beds: [['hum', 0.4], ['rain', 0.3]] }],
+  'duo/dive-b/drains': ['duet', { root: 43, bpm: 78, mood: 'tense', drop: ['mel'], beds: [['static', 0.3], ['rain', 0.4]] }],
+  'duo/dive-b/topside': ['duet', { root: 52, bpm: 80, drop: ['mel'], beds: [['rain', 0.2]], then: ['duet', { root: 53, bpm: 84, drop: ['ost'] }] }],
+  /* lit/carol: inside Dickens's book: the waltz, quiet where the bells ring */
+  'lit/carol/counting': ['storybook', { root: 45, bpm: 104, drop: ['mel'], level: 1.15, beds: [['crowd', 0.2]] }],
+  'lit/carol/chambers': ['storybook', { root: 41, bpm: 92, drop: ['hit', 'mel'], level: 1.3, beds: [['wind', 0.3]] }],
+  'lit/carol/fezziwig': ['storybook', { root: 50, bpm: 126, beds: [['fire', 0.3], ['crowd', 0.3]] }],
+  'lit/carol/cratchit': ['storybook', { root: 48, bpm: 116, drop: ['mel'], beds: [['fire', 0.5]] }],
+  'lit/carol/churchyard': ['storybook', { root: 40, bpm: 84, drop: ['hit', 'mel'], level: 1.3, beds: [['wind', 0.5]] }],
+  'lit/carol/street': ['storybook', { root: 48, bpm: 116, scale: [0, 2, 4, 5, 7, 9, 11], drop: ['hit'], beds: [['birds', 0.4], ['wind', 0.2]] }],
+  /* ai/helper: a school at night: keys instead of the ping tune, so nothing sounds like a notification */
+  'ai/helper/computers': ['circuit', { root: 49, bpm: 88, drop: ['mel'], lead: 'keys', beds: [['hum', 0.45]] }],
+  'ai/helper/servers': ['circuit', { root: 47, bpm: 80, drop: ['mel', 'arp'], lead: 'keys', level: 1.1, beds: [['hum', 0.85]] }],
+  'ai/helper/library': ['circuit', { root: 52, bpm: 70, drop: ['mel', 'arp'], lead: 'keys', level: 1.05, beds: [['rain', 0.55]] }],
+  'ai/helper/hall': ['circuit', { root: 49, bpm: 96, mood: 'tense', drop: ['mel'], lead: 'keys', beds: [['crowd', 0.5]] }],
+  'ai/helper/friday': ['circuit', { root: 52, bpm: 84, scale: [0, 2, 4, 5, 7, 9, 11], drop: ['mel'], lead: 'keys', beds: [['birds', 0.45]] }],
+  /* lang/phrasebook: an island where nobody speaks English: sea, market, stove, lighthouse */
+  'lang/phrasebook/quay': ['babel', { bpm: 70, drop: ['mel'], beds: [['sea', 0.8], ['wind', 0.4]] }],
+  'lang/phrasebook/market': ['babel', { root: 55, bpm: 84, beds: [['crowd', 0.5], ['birds', 0.35]] }],
+  'lang/phrasebook/kitchen': ['babel', { root: 50, bpm: 66, drop: ['mel'], beds: [['fire', 0.6]] }],
+  'lang/phrasebook/school': ['babel', { root: 53, bpm: 62, drop: ['arp'], level: 1.2, beds: [['birds', 0.3]] }],
+  'lang/phrasebook/lighthouse': ['babel', { root: 52, bpm: 72, beds: [['wind', 0.6], ['sea', 0.4]] }],
+  /* news/photo: news/photo: the night picture desk, desk theme varied per room */
+  'news/photo/desk': ['desk', { bpm: 100, drop: ['mel'], beds: [['hum', 0.5]] }],    /* a newsroom at night: the pulse of the desk, the hum of the machines, no tune */
+  'news/photo/table': ['desk', { root: 43, bpm: 78, drop: ['mel', 'ost'], beds: [['hum', 0.3]] }],    /* the basement: slow and low, no pulse, the hum of the light table */
+  'news/photo/roof': ['desk', { root: 47, bpm: 88, drop: ['mel'], beds: [['wind', 0.6], ['night', 0.4]] }],    /* out on the roof: the desk's pulse, slower, with wind and the night */
+  'news/photo/van': ['desk', { root: 45, bpm: 96, drop: ['mel'], beds: [['night', 0.45], ['hum', 0.25]] }],    /* the yard at night: the desk's pulse, the night outside, the van's engine ticking as it cools */
+  'news/photo/box': ['desk', { root: 48, bpm: 112, mood: 'tense', drop: ['mel'], beds: [['hum', 0.4]] }],    /* six minutes to midnight: the desk's music tightens, still with no tune */
+  'news/photo/step': ['morning', { root: 53, bpm: 66, beds: [['night', 0.4]] }],    /* out in the street after midnight, the job done: a major key, and the night */
+  /* wild/dune: wild/dune: the trail scape across a desert night, day and dawn */
+  'wild/dune/truck': ['trail', { root: 46, bpm: 50, drop: ['mel', 'arp'], beds: [['wind', 0.45], ['night', 0.4]] }],    /* dusk; a voice and the time pips come over the radio here: no tune and no plucked notes */
+  'wild/dune/crest': ['trail', { root: 50, bpm: 46, drop: ['mel', 'arp'], level: 0.92, beds: [['wind', 0.5], ['night', 0.55]] }],    /* the stillest room: pads, the wind over the crest, and the insects */
+  'wild/dune/creek': ['trail', { root: 52, bpm: 52, drop: ['mel'], beds: [['birds', 0.4], ['wind', 0.3]] }],    /* a bright, hot morning with birds in the gums; much to read, so no tune */
+  'wild/dune/overhang': ['trail', { root: 45, bpm: 48, drop: ['mel', 'arp', 'ost'], level: 0.95, beds: [['wind', 0.35]] }],    /* the hottest, stillest hour: slow pads and a little wind, and sums to do */
+  'wild/dune/pan': ['trail', { root: 48, bpm: 56, mood: 'tense', drop: ['mel', 'arp', 'ost', 'bass'], beds: [['wind', 0.55]] }],    /* dawn on the salt; the radio speaks and an engine is listened for: no tune, no plucked notes, nothing low or with a beat */
+  'wild/dune/wings': ['trail', { root: 53, bpm: 60, beds: [['wind', 0.3], ['birds', 0.35]] }],    /* the morning after: the theme's own tune comes back, in a major key */
   'ghost/orchard/supper': ['hush', { scale: MAJ, root: 48, bpm: 56, beds: [['fire', 0.6]] }]                 /* the same slow tune in a major key, and a fire in the range */
 };
 

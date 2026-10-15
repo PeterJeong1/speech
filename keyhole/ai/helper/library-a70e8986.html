@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Old Chapel Library · Sounds About Right</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ai.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="helper.css">
+<style>
+  body{--bg:#1c1a2c;--accent:#e8b04a;--font-display:'Literata',serif;--font-ui:'Inter',sans-serif;--font-body:'Literata',serif;
+    --tc-bg:rgba(28,24,40,.96);--tc-ink:#f3e9d6;--cap-bg:rgba(30,26,40,.94);--cap-ink:#f3e9d6;--panel:#f7f0e2;--panel-ink:#2a2418;--face-bg:#5a2a36;--q-ink:#9b3b4a;
+    --fade:#100e18;--hud-bg:rgba(30,26,40,.82);--hud-ink:#f3e9d6;--hud-line:rgba(243,233,214,.25);--ov-bg:rgba(12,10,20,.72)}
+  .tc-room{font-family:'Literata',serif;font-weight:700;font-size:clamp(36px,5.2vw,72px);color:#e8b04a}
+  .tc-theme{color:#c9a0d8}
+  .tk-role{color:#9b3b4a}
+  .tk .btn{--accent:#5a2a36}
+  .tk .btn:hover:not([disabled]){color:#f7f0e2}
+  .hbtn b{color:#1c1a2c}
+  .rain{animation:rain 1.1s linear infinite}
+  .rain.r2{animation-duration:1.5s;animation-delay:-.5s}.rain.r3{animation-duration:.9s;animation-delay:-.3s}
+  @keyframes rain{from{transform:translateY(-120px)}to{transform:translateY(320px)}}
+  #cards.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3) drop-shadow(0 0 10px #e8b04a)}}
+
+  /* Mrs Ibarra's index cards */
+  .ck{width:min(1120px,96vw)}
+  .ck-in{background:#5b3a26 linear-gradient(170deg,#6b4630,#4a2e1e);border-radius:6px;padding:14px 16px;box-shadow:0 26px 70px rgba(0,0,0,.6)}
+  .ck-row{display:grid;grid-template-columns:1fr 330px 250px;gap:12px;align-items:center;margin:0 0 8px;padding:8px 12px 8px 16px;background:#fffdf5 repeating-linear-gradient(transparent 0 25px,#d3dde8 25px 26px);border-top:4px solid #9b3b4a;border-radius:2px;color:#1f2a3a}
+  .ck-row:nth-child(odd){transform:rotate(-.25deg)}.ck-row:nth-child(even){transform:rotate(.2deg)}
+  .ck-row.bad{outline:3px solid #ff6b5a}
+  .ck-c{font-family:'Kalam',cursive;font-size:16.5px;line-height:1.3}
+  .ck-c i{font-style:normal;font-family:'Roboto Mono',monospace;font-size:12px;color:#9b3b4a;margin-right:6px}
+  .ck h6{margin:0 0 3px;font-family:'Roboto Mono',monospace;font-weight:400;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#7a6a5a}
+  .ck-s,.ck-v{display:flex;flex-wrap:wrap;gap:4px}
+  .ck-s button{padding:3px 7px;border:1px solid #b9ad94;border-radius:3px;background:#f3ecdc;font-family:'Inter',sans-serif;font-size:11.5px;color:#4a3c2a}
+  .ck-s button.on{background:#2a4a6a;border-color:#2a4a6a;color:#fff}
+  .ck-v button{padding:3px 7px;border:2px solid #b9ad94;border-radius:3px;font-family:'Roboto Mono',monospace;font-size:11px;letter-spacing:.04em;color:#7a6a5a;transform:rotate(-1deg)}
+  .ck-v button.on.t{border-color:#2f7d4a;color:#2f7d4a;background:#e7f4ea}
+  .ck-v button.on.m{border-color:#c0392b;color:#c0392b;background:#fbe9e6}
+  .ck-v button.on.l{border-color:#b06a00;color:#b06a00;background:#fdf1dc}
+  .ck .pmsg{color:#f7f0e2}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2540"/><stop offset="1" stop-color="#3a3048"/></linearGradient>
+  <linearGradient id="glassG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3a6a"/><stop offset="1" stop-color="#14203e"/></linearGradient>
+  <clipPath id="arch"><path d="M650 530V230A150 150 0 0 1 950 230V530z"/></clipPath>
+  <radialGradient id="lampP" cx="50%" cy="20%" r="60%"><stop offset="0" stop-color="#ffd27a" stop-opacity=".5"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="woodG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a4e2e"/><stop offset="1" stop-color="#4a2e1a"/></linearGradient>
+  <pattern id="boards" width="120" height="40" patternUnits="userSpaceOnUse"><rect width="120" height="40" fill="#4a3020"/><path d="M0 0H120M60 0V20M0 20H120M100 20V40" stroke="#3a2416" stroke-width="2"/></pattern>
+  <radialGradient id="vig" cx="50%" cy="50%" r="75%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#0a0814" stop-opacity=".2"/><stop offset="1" stop-color="#0a0814" stop-opacity=".65"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1300" fill="url(#wallG)"/>
+<!-- the window -->
+<g id="window" class="hot"><path d="M636 544V230A164 164 0 0 1 964 230V544z" fill="#8a7a6a"/>
+  <g clip-path="url(#arch)"><rect x="650" y="60" width="300" height="480" fill="url(#glassG)"/><g id="panes"></g>
+    <g stroke="#9fc0ff" stroke-width="1.5" opacity=".5"><path class="rain" d="M680 100v40M760 60v30M840 120v50M910 80v36"/><path class="rain r2" d="M700 20v34M790 70v44M870 10v30M930 140v40"/><path class="rain r3" d="M720 150v30M820 30v40M890 110v26M670 200v34"/></g>
+    <path d="M725 60V540M800 60V540M875 60V540M650 320H950M650 430H950" stroke="#5a4a3e" stroke-width="7"/></g>
+  <path d="M636 544h328v14H636z" fill="#6a5a4a"/></g>
+<!-- the shelves and the gallery -->
+<g id="shelvesL"></g><g id="shelvesR"></g>
+<rect x="-1000" y="196" width="3600" height="16" fill="#5a3a22"/><g id="balus" fill="#5a3a22"></g><rect x="-1000" y="150" width="3600" height="10" fill="#6a4a2e"/>
+<g id="ladder" class="hot"><path d="M1480 160l-60 620M1540 160l-60 620" stroke="#8a5a32" stroke-width="9"/><g id="rungs" stroke="#8a5a32" stroke-width="7"></g></g>
+
+<!-- Book of the week -->
+<g id="eliza" class="hot"><path d="M560 640l30 -190M640 640l-30 -190M600 450v190" stroke="#6a4a2e" stroke-width="6"/><rect x="556" y="452" width="88" height="112" fill="#f3e9d6" stroke="#c9a24a" stroke-width="3"/>
+  <text x="600" y="474" class="cG" font-size="10" font-weight="800" text-anchor="middle" fill="#5a2a36">BOOK OF</text><text x="600" y="486" class="cG" font-size="10" font-weight="800" text-anchor="middle" fill="#5a2a36">THE WEEK</text>
+  <rect x="574" y="494" width="52" height="62" fill="#1d3a5a"/><text x="600" y="520" class="cM" font-size="8" text-anchor="middle" fill="#cfe8e4">&gt; HELLO</text><text x="600" y="534" class="cM" font-size="8" text-anchor="middle" fill="#cfe8e4">&gt; WHY?</text></g>
+<!-- the museum case -->
+<g id="case" class="hot"><rect x="1110" y="380" width="130" height="270" fill="#9fc0d8" opacity=".18" stroke="#c9d8e4" stroke-width="3"/><rect x="1104" y="640" width="142" height="30" fill="#4a2e1a"/>
+  <path d="M1128 520l90 -60" stroke="#8a5a2e" stroke-width="12" stroke-linecap="round"/><path d="M1128 520l90 -60" stroke="#c9a24a" stroke-width="3" stroke-dasharray="10 14"/><path d="M1170 492v60M1150 552h40" stroke="#5a3a1a" stroke-width="4"/>
+  <rect x="1124" y="590" width="102" height="40" fill="#f3f1ec"/><g fill="#7a7a7a"><rect x="1132" y="598" width="70" height="4"/><rect x="1132" y="608" width="86" height="3"/><rect x="1132" y="616" width="80" height="3"/></g>
+  <path d="M1118 390l20 120" stroke="#fff" stroke-width="3" opacity=".25"/></g>
+
+<!-- the librarian's desk -->
+<rect x="70" y="566" width="470" height="18" fill="#7a4e2e"/><rect x="84" y="584" width="442" height="170" fill="url(#woodG)"/><path d="M84 640H526" stroke="#3a2416" stroke-width="2"/>
+<g id="catalogue" class="hot"><rect x="140" y="440" width="160" height="120" rx="8" fill="#d8d0c0"/><rect x="152" y="452" width="136" height="90" rx="4" fill="#101820"/>
+  <g class="cM" font-size="9.5" fill="#7fe0d6"><text x="160" y="470">CATALOGUE</text><text x="160" y="486" fill="#ffd27a">&gt; hot planets</text><text x="160" y="502" fill="#ff9a8a">0 results</text><text x="160" y="518">&gt; _</text></g>
+  <rect x="200" y="560" width="40" height="8" fill="#b8b0a0"/></g>
+<g id="bookmark" class="hot"><path d="M330 566l12 -20h40l12 20z" fill="#3a2a1a"/><rect x="340" y="470" width="50" height="80" fill="#fffdf5" stroke="#9b3b4a" stroke-width="3" transform="rotate(-4 365 510)"/>
+  <g fill="#9b3b4a" transform="rotate(-4 365 510)"><rect x="346" y="480" width="38" height="5"/><rect x="346" y="494" width="30" height="3"/><rect x="346" y="502" width="34" height="3"/><rect x="346" y="510" width="28" height="3"/><rect x="346" y="518" width="33" height="3"/><rect x="346" y="526" width="26" height="3"/></g></g>
+<g id="globe" class="hot"><circle cx="460" cy="510" r="38" fill="#2a5a7a"/><path d="M440 490q14 6 10 20t10 18M470 480q-6 14 8 22" fill="none" stroke="#7aa05a" stroke-width="8" stroke-linecap="round"/><path d="M460 470a40 40 0 0 1 0 80" fill="none" stroke="#c9a24a" stroke-width="3"/><path d="M460 548v18M440 566h40" stroke="#3a2a1a" stroke-width="5"/></g>
+
+<!-- the trolley -->
+<g id="trolley"><rect x="1270" y="580" width="200" height="12" fill="#7a7a7a"/><rect x="1270" y="690" width="200" height="12" fill="#7a7a7a"/><path d="M1276 592v190M1464 592v190" stroke="#7a7a7a" stroke-width="7"/><circle cx="1284" cy="796" r="13" fill="#2a2a2a"/><circle cx="1456" cy="796" r="13" fill="#2a2a2a"/><g id="tbooks"></g></g>
+<g id="book" class="hot"><path d="M1296 578l8 -26h78l-6 26z" fill="#1d4f8a"/><path d="M1298 572l78 0" stroke="#e8b04a" stroke-width="2"/><text x="1340" y="568" class="cL" font-size="9.5" font-weight="700" text-anchor="middle" fill="#fff" transform="skewX(-10)">THE PLANETS</text></g>
+
+<!-- the reading table, and Leo behind it -->
+<ellipse cx="880" cy="600" rx="420" ry="120" fill="url(#lampP)" pointer-events="none"/>
+<g id="leo" class="hot" transform="translate(880 826) scale(1.02)"></g>
+<g id="laptop" pointer-events="none"><path d="M826 640l8 -44h92l8 44z" fill="#3a424c"/><path d="M832 636l7 -36h82l7 36z" fill="#4a535e"/><g id="lplogo"></g></g>
+<rect x="500" y="640" width="760" height="20" fill="#6a4228"/><rect x="510" y="660" width="740" height="90" fill="url(#woodG)"/><path d="M530 750v80M1230 750v80" stroke="#3a2416" stroke-width="16"/>
+<g><path d="M600 640v-40" stroke="#c9a24a" stroke-width="4"/><path d="M570 604q30 -22 60 0z" fill="#1f6a3a"/><path d="M1160 640v-40" stroke="#c9a24a" stroke-width="4"/><path d="M1130 604q30 -22 60 0z" fill="#1f6a3a"/></g>
+<g id="handout" class="hot"><path d="M640 646l10 -22 84 6 -8 22z" fill="#fff" stroke="#c9ced3"/><path d="M652 628l-2 14" stroke="#c0392b" stroke-width="6"/><path d="M664 632l56 4M662 638l50 3" stroke="#7a8490" stroke-width="1.5"/></g>
+<g id="oldbook" class="hot"><path d="M720 652l6 -18h70l-4 18z" fill="#7a3a1a"/><path d="M724 646h68" stroke="#e8d0a0" stroke-width="2"/></g>
+<g id="website" class="hot"><path d="M990 646l4 -24 84 2 -2 24z" fill="#fff" stroke="#c9ced3"/><rect x="994" y="622" width="84" height="7" fill="#ff3c7a"/><path d="M1000 636l60 1M1000 641l50 1" stroke="#7a8490" stroke-width="1.5"/></g>
+<g id="cards" class="hot"><path d="M1090 648l2 -20h50l-2 20z" fill="#fffdf5" stroke="#9b3b4a" stroke-width="2"/><path d="M1086 644l4 -20h50l-4 20z" fill="#fffdf5" stroke="#9b3b4a" stroke-width="2"/><path d="M1094 630h36" stroke="#9b3b4a" stroke-width="2"/><path d="M1146 618l14 -10" stroke="#e8b04a" stroke-width="4" stroke-linecap="round"/></g>
+
+<!-- the floor -->
+<rect x="-1000" y="830" width="3600" height="500" fill="url(#boards)"/><rect x="-1000" y="826" width="3600" height="6" fill="#2a1a10"/>
+<g id="ibarra" class="hot" transform="translate(1530 884) scale(1.1)"></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">To the hall</button>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="helper.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, told = {}, lock = null;
+  var SRC = ['handout', 'book', 'label', 'website', 'oldbook', 'catalogue'];
+
+  (function () {
+    var s = '', x, y, w, i = 0, cols = ['#7a2a2a', '#2a4a6a', '#3a5a2a', '#8a6a2a', '#4a2a4a', '#2a2a2a', '#9a4a2a', '#5a6a7a'];
+    function shelf(x0, x1) {
+      var o = '';
+      for (y = 60; y < 560; y += 74) {
+        if (y > 130 && y < 210) continue;
+        o += '<rect x="' + x0 + '" y="' + (y + 60) + '" width="' + (x1 - x0) + '" height="10" fill="#5a3a22"/>';
+        for (x = x0 + 4; x < x1 - 14; x += w + 1) { w = 10 + (i * 7) % 12; o += '<rect x="' + x + '" y="' + (y + 12 + (i * 5) % 10) + '" width="' + w + '" height="' + (48 - (i * 5) % 10) + '" fill="' + cols[i % cols.length] + '"/>'; i++; }
+      }
+      return o;
+    }
+    $('#shelvesL').innerHTML = shelf(-900, 540);
+    $('#shelvesR').innerHTML = shelf(1060, 2500);
+    s = ''; for (x = -1000; x < 2600; x += 40) s += '<rect x="' + x + '" y="160" width="8" height="36"/>'; $('#balus').innerHTML = s;
+    s = ''; for (i = 0; i < 9; i++) { y = 220 + i * 64; s += '<path d="M' + (1474 - i * 6.2) + ' ' + y + 'h60"/>'; } $('#rungs').innerHTML = s;
+    s = ''; [['#8a2a4a', 690, 90], ['#e8b04a', 760, 110], ['#2a8a6a', 840, 250], ['#6a3a9a', 700, 360], ['#c0392b', 870, 380], ['#2a6a9a', 760, 470]].forEach(function (p) { s += '<rect x="' + p[1] + '" y="' + p[2] + '" width="70" height="80" fill="' + p[0] + '" opacity=".55"/>'; });
+    $('#panes').innerHTML = s;
+    s = ''; for (i = 0; i < 9; i++) s += '<rect x="' + (1282 + i * 20) + '" y="' + (640 + (i % 3) * 4) + '" width="16" height="' + (50 - (i % 3) * 4) + '" fill="' + cols[(i + 3) % cols.length] + '"/>';
+    $('#tbooks').innerHTML = s;
+    $('#lplogo').innerHTML = MG.logo(864, 604, 0.3);
+    $('#leo').innerHTML = MG.who('leo', { smile: 1 });
+    $('#ibarra').innerHTML = MG.who('ibarra', { smile: 3, extra: '<path d="M-24 -276q0 20 12 30M24 -276q0 20 -12 30" fill="none" stroke="#c9a24a" stroke-width="1.5" stroke-dasharray="2 2"/><rect x="28" y="-140" width="26" height="36" fill="#2a6a3a" transform="rotate(10 41 -122)"/>' });
+  })();
+
+  ER.init({
+    theme: 'ai', story: 'helper', storyTitle: 'Sounds About Right', id: 'library', no: 'III', title: 'The Old Chapel Library',
+    go: 'Into the library',
+    intro: [
+      'Mr Moreno searched Magpie&rsquo;s training data. Seven homework answers said Mercury, and every one had a cross in the markbook; but the marks were never in the training data. Trained only on what was marked right, written by people who knew, and still up to date, Magpie would have said Venus. And not one page mentioned The Hot Planets.',
+      'The school library is in the old chapel. At night, with the lamps on, it looks as if it is thinking.',
+      'Mrs Ibarra has been the librarian here for twenty-six years. She does not like a book she cannot find.'
+    ],
+    exit: {"next":"hall","w":{"08aa100a":"e7be60e2"}}, tags: {"s1":["b03bd7dd","61bf9810"],"s2":["bd77eb82"],"s3":["81052f58"],"s4":["ad07ffa4","a611b755"],"s5":["dc393f56"],"v1":["bfbc83d1"],"v2":["15a61c1c"],"v3":["a3b9ea5b"],"v4":["f0bb2d05"],"v5":["a4c54d8c"]},
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('c-file') || null; told = ER.flag('c-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('c-told', told); return true; }
+  function isBusy() { return busy; }
+  function unread() { return SRC.filter(function (k) { return !told[k]; }); }
+  function ready() { return told.ibarra && told.bookmark && told.log && !unread().length; }
+  function paint() {
+    $('#cards').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.ibarra ? 1 : 0) + (told.bookmark ? 1 : 0) + (told.log ? 1 : 0) + (unread().length ? 0 : 1) + (nextFile ? 1 : 0), 5);
+  }
+  var WHERE = { handout: 'Dr Fairley&rsquo;s handout (the paper with a red edge, on the reading table, left)', book: 'the library book THE PLANETS (blue, on top of the trolley)',
+    label: 'the museum label (in the glass case by the window, on the right)', website: 'the website printout (pink top, on the reading table, right)',
+    oldbook: 'the brown textbook on the reading table', catalogue: 'the catalogue (the computer on Mrs Ibarra&rsquo;s desk, on the left)' };
+  function hints() {
+    if (nextFile) return ['go', ['The head decides at quarter past eight. Go to the hall: the button at the bottom of the screen.']];
+    if (lock && lock.isOpen()) return ['lock', [
+      'Each card needs the source that settles it, and a verdict. Use Mrs Ibarra&rsquo;s five questions: a source must exist, have somebody behind it who knows, and be up to date. Then read what each source actually says.',
+      'Two sources never count: one has no author and no date, and one was printed before 2006. The catalogue is only good for the card about a book. The museum label is only about Galileo. The handout has the planets and the Moon; the library book has Venus, Mercury and Galileo.',
+      'For the verdicts, read Leo&rsquo;s log. If Magpie said it and it is wrong, it is Magpie&rsquo;s mistake. If Magpie said something right and Leo wrote it down wrong, it is Leo&rsquo;s. One of the five lines is simply true.'
+    ]];
+    if (!told.ibarra) return ['ibarra', ['Mrs Ibarra, the librarian, has already been looking for that book.', 'Mrs Ibarra is on the right, beside the returns trolley, in a red cardigan.']];
+    if (!told.bookmark) return ['bookmark', ['Mrs Ibarra mentioned her five questions.', 'The card in a little stand on her desk, between the catalogue computer and the globe.']];
+    if (!told.log) return ['log', ['Leo has his whole chat with Magpie on his laptop.', 'Leo is sitting behind the long reading table in the middle.']];
+    var u = unread();
+    if (u.length) return ['sources', ['Read everything you might check Leo&rsquo;s sheet against. ' + (u.length === 1 ? 'One thing is' : u.length + ' things are') + ' still unread.', 'Still to read: ' + u.map(function (k) { return WHERE[k]; }).join('; ') + '.']];
+    return ['cards', ['Now Mrs Ibarra&rsquo;s index cards.', 'The small pile of white cards with a pencil, on the right-hand end of the reading table.']];
+  }
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; $('#go').classList.add('on'); ER.say('Nine lines right. Two wrong by Magpie, one by Leo. And no such book.'); return; }
+    if (told.in) { busy = false; ER.say('The old chapel library, with the rain on the window.'); return; }
+    tell('in');
+    ER.narrate([
+      'Shelves climb the walls of the old chapel up to a wooden gallery, and rain runs down the tall coloured window. It smells of floor polish and old paper.',
+      'Mrs Ibarra is beside the returns trolley, shelving books at a speed that suggests she has done it for twenty-six years.',
+      'Leo has gone straight to the long reading table and opened his laptop. Papers are spread over the table: somebody has been revising here, or trying to.'
+    ], function () { busy = false; });
+  }
+
+  $('#ibarra').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Go on,&rdquo; says Mrs Ibarra. &ldquo;The hall. And take the cards. I want them back.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mrs Ibarra', role: 'Librarian · twenty-six years', face: MG.face('ibarra'),
+      lines: [
+        { note: 'She puts a book on a shelf without looking, and it goes exactly where it should.', a: '&ldquo;A book called The Hot Planets, by a Dr A. Burrows, page 42. Leo asked me about it at ten to six, for his sheet. I said I would look. I have looked.&rdquo;' },
+        { q: 'Does it exist?', a: 'See for yourself. The catalogue is on my desk. It searches every book in this library, and every library in the county if I ask it to. I asked it to.' },
+        { q: 'How do we check the rest of the sheet?', a: 'The way we check anything. My five questions are on the card by the catalogue. Then put each line of the sheet next to something that knows.' },
+        { q: 'What can we use?', a: 'Dr Fairley&rsquo;s handout, which Leo should have read on Monday. The library book on my trolley. The case by the window, which the museum lent us. And whatever is lying about on that table. Not everything lying about counts.' },
+        { note: 'She hands you a small pile of index cards and a pencil.', a: '&ldquo;One card for each line we are not sure of. Every card gets a source and a verdict. In pencil, please. This is a library.&rdquo;' }
+      ],
+      clue: { id: 'ibarra', title: 'Mrs Ibarra: a source and a verdict', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('ibarra')) { paint(); ER.say('Her five questions are on her desk. Leo has the chat. The sources are all round the room.'); } }
+    });
+  });
+
+  var CARD5 = '<h4>Five questions before you believe it</h4>' +
+    '<p><b>1. Where does it come from?</b> A claim with no source is only a claim, however well it is written.</p>' +
+    '<p><b>2. Does the source exist?</b> Find the book in the catalogue, and open it at the page. A citation (a book and a page) is only useful if the book is real.</p>' +
+    '<p><b>3. Who wrote it, and how do they know?</b> A reliable source has somebody behind it who knows: a scientist&rsquo;s book, a museum, your teacher&rsquo;s notes. A page with no author and no date, or a friend&rsquo;s homework, is not reliable.</p>' +
+    '<p><b>4. When was it written?</b> Knowledge changes. An old book can be out of date.</p>' +
+    '<p><b>5. Do two good sources agree?</b> Then you can be fairly sure.</p>' +
+    '<p class="hand">P. Ibarra, Librarian. Please return this card.</p>';
+  $('#bookmark').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: CARD5, cls: 'mg-card', clue: { id: 'five', title: 'Mrs Ibarra’s five questions', kind: 'On her desk' }, done: function () {
+      MG.terms(['claim', 'source', 'citation', 'catalogue', 'reliable']);
+      if (tell('bookmark')) { paint(); ER.say('Where from? Does it exist? Who knows? When? Do two agree?'); }
+    } });
+  });
+
+  var LOG = '<h4>Leo&rsquo;s chat with Magpie &middot; Thursday afternoon (part of it)</h4>' + MG.chat([
+    ['me', 'how far is the moon from earth'], ['bot', 'The Moon is about 384,000 km (384 thousand kilometres) from the Earth, on average.'],
+    ['me', 'when did galileo see the phases of venus'], ['bot', 'Galileo saw the phases of Venus in 1609, soon after he made his first telescope. This helped to show that Venus goes round the Sun.'],
+    ['me', 'which planet is the hottest'], ['bot', 'The hottest planet is Mercury. It is the closest planet to the Sun.'],
+    ['me', 'why is mercury the hottest planet'], ['bot', 'Mercury is the hottest planet because it is the closest planet to the Sun. As one astronomer put it, &ldquo;Mercury is the furnace of the Solar System.&rdquo; (Source: The Hot Planets, Dr A. Burrows, 2014, page 42)'],
+    ['me', 'how many planets are there'], ['bot', 'There are eight planets in the Solar System. Pluto was called a planet until 2006. It is now a dwarf planet.']]);
+  $('#leo').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Three hundred and eighty-four thousand,&rdquo; says Leo, to his laptop. &ldquo;Thousand.&rdquo;'); return; }
+    ER.read({ html: LOG, cls: 'mg-log', clue: { id: 'log', title: 'Leo’s chat with Magpie (the log)', kind: 'On Leo’s laptop' }, done: function () {
+      if (tell('log')) { paint(); ER.say('&ldquo;That&rsquo;s everything it said,&rdquo; says Leo. &ldquo;Word for word. Mr Ruskin calls it the log.&rdquo;'); }
+    } });
+  });
+
+  var DOCS = {
+    handout: { cls: 'mg-handout', title: 'Dr Fairley’s handout', kind: 'On the reading table', html: '<h4>Year 8 &middot; The Solar System &middot; revision notes</h4><h5>Dr H. Fairley &middot; given out on Monday &middot; READ THESE</h5><table>' +
+      '<tr><td class="n">1</td><td>The Sun is a star, about 150 million km from the Earth. Its light takes about 8 minutes to reach us.</td></tr>' +
+      '<tr><td class="n">2</td><td>There are eight planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus and Neptune. Since 2006 Pluto has been called a dwarf planet.</td></tr>' +
+      '<tr><td class="n">3</td><td>Venus is the hottest planet: about 465 °C at the surface. Its thick atmosphere, mostly carbon dioxide, traps the heat.</td></tr>' +
+      '<tr><td class="n">4</td><td>Mercury is the closest planet to the Sun. It has almost no atmosphere, so it cannot keep its heat: up to 430 °C by day, about &minus;180 °C at night.</td></tr>' +
+      '<tr><td class="n">5</td><td>The Moon is about 384,000 km from the Earth. It goes round the Earth about once a month.</td></tr>' +
+      '<tr><td class="n">6</td><td>We have seasons because the Earth&rsquo;s axis is tilted.</td></tr></table>' },
+    book: { cls: 'mg-book', title: 'Library book: The Planets (2019)', kind: 'On the trolley', html: '<h4>The Planets</h4><h5>Dr Anita Rao &middot; Brightwater Press, 2019 &middot; library number 523.4 RAO</h5><div class="two"><div>' +
+      '<p>In 1609 Galileo Galilei heard about a Dutch invention, a tube that made far things look near, and built telescopes of his own. In 1610 he saw that Venus has phases, like the Moon: sometimes a thin crescent, sometimes nearly full. That could only happen if Venus goes round the Sun.</p><span class="pg">page 12</span></div><div>' +
+      '<p>Venus is the hottest planet in the Solar System. At the surface it is about 465 °C, hot enough to melt lead, by day and by night. Its thick atmosphere, mostly carbon dioxide, traps the Sun&rsquo;s heat like a blanket.</p>' +
+      '<p>Mercury is closer to the Sun, but it has almost no atmosphere to hold the heat, so its night side cools to about &minus;180 °C.</p><span class="pg">page 31</span></div></div>' },
+    label: { cls: 'mg-label', title: 'Museum label: Galileo’s telescope', kind: 'In the glass case', html: '<h4>A telescope like Galileo&rsquo;s</h4><h5>COPY, MADE 1990 &middot; LENT BY THE COUNTY MUSEUM SCHOOLS SERVICE</h5>' +
+      '<p>Galileo Galilei (1564&ndash;1642) built his first telescope in 1609, after hearing of a Dutch one.</p><p>In January 1610 he saw four moons going round Jupiter. Later in 1610 he saw that Venus has phases, like our Moon.</p><p>Both were evidence that not everything in the sky goes round the Earth.</p><p><i>Please do not lean on the glass.</i></p>' },
+    website: { cls: 'mg-web', title: 'A website printout', kind: 'On the reading table', html: '<h4>TOP 100 AMAZING SPACE FACTS!!!</h4>' +
+      '<p><b>17.</b> Mercury is the HOTTEST planet because it&rsquo;s closest to the Sun!!</p><p><b>18.</b> Galileo invented the telescope in 1609!</p><p><b>19.</b> The Sun is a giant ball of fire!</p>' +
+      '<p class="ad">YOU WON&rsquo;T BELIEVE FACT 54!!! CLICK HERE</p><small>No author. No date. At the bottom: &ldquo;Copy and share these facts with your friends!&rdquo; Printed in the library at 17.42.</small>' },
+    oldbook: { cls: 'mg-old', title: 'Science Today (1998)', kind: 'On the reading table', html: '<h4>The nine planets</h4><h5>Science Today, Book 2 &middot; printed 1998 &middot; page 112</h5>' +
+      '<p>The Sun has nine planets. In order from the Sun they are Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune and Pluto.</p><p>Pluto is the smallest planet, and usually the farthest from the Sun.</p><p><i>Stamped inside the cover: SALLOWFIELD SCHOOL &middot; STORE ROOM.</i></p>' },
+    catalogue: { cls: 'mg-cat', title: 'The catalogue: no Hot Planets', kind: 'On Mrs Ibarra’s desk', html: '<h4>SALLOWFIELD SCHOOL LIBRARY &middot; CATALOGUE</h4>' +
+      '<p class="q">&gt; title: The Hot Planets</p><p class="none">0 results in this library.<br>0 results in the county libraries (31 libraries searched).</p>' +
+      '<p class="q">&gt; author: Burrows</p><p class="none">0 results.</p><p>Did you mean: Burrell, J. &mdash; Rivers of Britain (1987)?</p>' +
+      '<p class="q">&gt; subject: planets</p><p>4 results. The Planets &middot; Rao, A. &middot; 2019 &middot; 523.4 RAO &middot; on the returns trolley<br>Our Solar System &middot; 2021 &middot; 523.2 &middot; on loan<br>Science Now &middot; 2016 &middot; 500 &middot; class sets, Lab S2<br>Stargazing for Beginners &middot; 2018 &middot; 520 &middot; on the shelf</p>' }
+  };
+  var SAY = { handout: 'Six numbered lines, and READ THESE at the top in red.', book: 'Pages 12 and 31, with a library number on the spine.', label: 'A museum label: who made it, and when.',
+    website: 'No author, no date, and fact 54 that you won&rsquo;t believe.', oldbook: 'SCIENCE TODAY, printed in 1998. Nine planets.', catalogue: 'Nothing called The Hot Planets. Not here, not in thirty-one libraries.' };
+  SRC.forEach(function (k) {
+    var sel = { handout: '#handout', book: '#book', label: '#case', website: '#website', oldbook: '#oldbook', catalogue: '#catalogue' }[k];
+    $(sel).addEventListener('click', function () {
+      if (busy) return;
+      var d = DOCS[k];
+      ER.read({ html: d.html, cls: d.cls, clue: { id: k, title: d.title, kind: d.kind }, done: function () { if (tell(k)) { paint(); ER.say(SAY[k]); } } });
+    });
+  });
+  var ELIZA = '<h4>Book of the week</h4><h5>JOSEPH WEIZENBAUM &middot; COMPUTER POWER AND HUMAN REASON (1976)</h5>' +
+    '<p>In 1966 Joseph Weizenbaum, a computer scientist in America, published ELIZA, one of the first chatbots. ELIZA understood nothing. It turned your own words round into questions: type &ldquo;I am worried about my test&rdquo; and it might answer &ldquo;Why are you worried about your test?&rdquo;</p>' +
+    '<p>People trusted it anyway. Weizenbaum&rsquo;s own secretary, who had watched him write it, asked him to leave the room so that she could talk to it in private.</p>' +
+    '<p>He spent years afterwards warning people not to trust a machine just because it talks like a person.</p>';
+  $('#eliza').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: ELIZA, cls: 'mg-label', clue: { id: 'eliza', title: 'Book of the week: ELIZA, 1966', kind: 'On a stand' }, done: function () {
+      if (tell('eliza')) ER.say('&ldquo;Why are you worried about your test?&rdquo; A good question, from a program that understood nothing.');
+    } });
+  });
+  MG.thing('#window', null, 'Rain runs down the coloured glass. On a fine day this window throws red and blue squares all over the poetry shelves.', isBusy);
+  MG.thing('#ladder', 'ladder', 'The rolling ladder for the top shelves. A sign on it says LIBRARIAN ONLY, and under it, smaller: I MEAN IT.', isBusy);
+  MG.thing('#globe', 'globe', 'An old globe. It still has a country on it that stopped existing in 1991. Old things can be out of date too.', isBusy);
+  $('#cards').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Five index cards, in pencil, every one with a source and a verdict.'); return; }
+    if (!told.ibarra) { ER.say('A pile of blank index cards. Mrs Ibarra is watching you. Ask her first.'); return; }
+    if (!told.bookmark) { ER.say('&ldquo;My five questions first,&rdquo; says Mrs Ibarra. &ldquo;On my desk.&rdquo;'); return; }
+    if (!told.log) { ER.say('&ldquo;You&rsquo;ll want to see exactly what Magpie said,&rdquo; says Mrs Ibarra. &ldquo;Leo has it.&rdquo;'); return; }
+    if (unread().length) { var u = unread().length; ER.say('&ldquo;You haven&rsquo;t read everything yet,&rdquo; says Mrs Ibarra. &ldquo;' + (u === 1 ? 'One more thing' : u + ' more things') + '. You can&rsquo;t check against a source you haven&rsquo;t read.&rdquo;'); return; }
+    if (!lock) lock = makeLock();
+    lock.open();
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+
+  /* ---------- the index cards: a source and a verdict for each line ---------- */
+  function makeLock() {
+    var K = [
+      { n: 7, t: 'The hottest planet is Mercury, because it is the closest to the Sun.' },
+      { n: 7, t: '(Source: The Hot Planets, Dr A. Burrows, 2014, page 42)' },
+      { n: 9, t: 'There are eight planets. Pluto is a dwarf planet.' },
+      { n: 10, t: 'Galileo saw the phases of Venus in 1609.' },
+      { n: 11, t: 'The Moon is about 384 km from the Earth.' }
+    ];
+    var NAMES = { a: 'handout', b: 'library book', c: 'museum label', d: 'website', e: 'Science Today', f: 'catalogue' };
+    var VNAMES = { t: 'TRUE', m: 'MAGPIE&rsquo;S MISTAKE', l: 'LEO&rsquo;S MISTAKE' };
+    var saved = ER.flag('c-ck') || {}, s = saved.s || {}, v = saved.v || {}, wait = false;
+    var box = ER.el('div', 'pz ck');
+    box.innerHTML = '<div class="ck-in">' + K.map(function (k, i) {
+      return '<div class="ck-row" data-i="' + (i + 1) + '"><div class="ck-c"><i>card ' + (i + 1) + ' &middot; line ' + k.n + '</i>' + k.t + '</div>' +
+        '<div><h6>checked against</h6><div class="ck-s">' + Object.keys(NAMES).map(function (x) { return '<button type="button" data-s="' + x + '">' + NAMES[x] + '</button>'; }).join('') + '</div></div>' +
+        '<div><h6>verdict</h6><div class="ck-v">' + Object.keys(VNAMES).map(function (x) { return '<button type="button" class="' + x + '" data-v="' + x + '">' + VNAMES[x] + '</button>'; }).join('') + '</div></div></div>';
+    }).join('') + '</div><div class="pz-foot"><p class="pmsg"></p><button type="button" class="btn" id="ck-go">Give Mrs Ibarra the cards</button></div>';
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function keep() { ER.flag('c-ck', { s: s, v: v }); }
+    function paintK() {
+      ER.$$('.ck-row', box).forEach(function (r) {
+        var i = r.getAttribute('data-i');
+        ER.$$('.ck-s button', r).forEach(function (b) { b.classList.toggle('on', s[i] === b.getAttribute('data-s')); });
+        ER.$$('.ck-v button', r).forEach(function (b) { b.classList.toggle('on', v[i] === b.getAttribute('data-v')); });
+      });
+    }
+    ER.$$('.ck-row', box).forEach(function (r) {
+      var i = r.getAttribute('data-i');
+      ER.$$('.ck-s button', r).forEach(function (b) { b.addEventListener('click', function () { if (wait || nextFile) return; s[i] = b.getAttribute('data-s'); keep(); MG.sfx.pencil(); paintK(); }); });
+      ER.$$('.ck-v button', r).forEach(function (b) { b.addEventListener('click', function () { if (wait || nextFile) return; v[i] = b.getAttribute('data-v'); keep(); MG.sfx.stamp(); paintK(); }); });
+    });
+    paintK();
+    function bad(i) { var r = box.querySelector('.ck-row[data-i="' + i + '"]'); r.classList.add('bad'); setTimeout(function () { r.classList.remove('bad'); }, 1300); }
+    box.querySelector('#ck-go').addEventListener('click', function () {
+      var i, missing = 0, file;
+      if (wait || nextFile) return;
+      for (i = 1; i <= 5; i++) if (!s[i] || !v[i]) missing++;
+      if (missing) { ER.sfx.no(); msg('&ldquo;Every card gets a source and a verdict,&rdquo; says Mrs Ibarra. &ldquo;' + (missing === 1 ? 'One card is' : missing + ' cards are') + ' not finished.&rdquo;'); return; }
+      for (i = 1; i <= 5; i++) {
+        if (ER.check('s' + i, s[i])) continue;
+        ER.sfx.no(); bad(i);
+        if (s[i] === 'd') msg('Card ' + i + ': Mrs Ibarra holds the website printout at arm&rsquo;s length. &ldquo;Who wrote this? How do they know? There isn&rsquo;t even a date on it. It doesn&rsquo;t count, whatever it says.&rdquo;');
+        else if (s[i] === 'e') msg('Card ' + i + ': &ldquo;Science Today,&rdquo; says Mrs Ibarra. &ldquo;Printed in 1998. Look at question 4 on my card. Is it still true?&rdquo;');
+        else if (i === 2) msg('Card 2: &ldquo;How do you check that a book exists?&rdquo; says Mrs Ibarra. &ldquo;You look for it. Where would you look?&rdquo;');
+        else if (s[i] === 'f') msg('Card ' + i + ': &ldquo;The catalogue tells you whether a book exists,&rdquo; says Mrs Ibarra. &ldquo;It can&rsquo;t tell you what is in one.&rdquo;');
+        else msg('Card ' + i + ': &ldquo;Does the ' + NAMES[s[i]] + ' say anything about that?&rdquo; says Mrs Ibarra. &ldquo;Read it again.&rdquo;');
+        return;
+      }
+      for (i = 1; i <= 5; i++) {
+        if (ER.check('v' + i, v[i])) continue;
+        ER.sfx.no(); bad(i);
+        if (i === 5 && v[i] === 't') msg('Card 5: &ldquo;Three hundred and eighty-four kilometres?&rdquo; says Mrs Ibarra. &ldquo;I drive further than that to see my sister.&rdquo;');
+        else if (i === 5) msg('Card 5: &ldquo;Before you blame Magpie,&rdquo; says Leo quietly, &ldquo;look at what it actually said. It&rsquo;s in the log.&rdquo;');
+        else if (v[i] === 'l') msg('Card ' + i + ': Leo shakes his head. &ldquo;I copied that exactly. Look at the log.&rdquo;');
+        else if (i === 2 && v[i] === 't') msg('Card 2: &ldquo;You found the book, did you?&rdquo; says Mrs Ibarra. &ldquo;On which shelf?&rdquo;');
+        else if (v[i] === 't') msg('Card ' + i + ': &ldquo;Does your source agree with it?&rdquo; says Mrs Ibarra. &ldquo;Read it again, word by word.&rdquo;');
+        else msg('Card ' + i + ': &ldquo;Is that line actually wrong?&rdquo; says Mrs Ibarra. &ldquo;What does your source say?&rdquo;');
+        return;
+      }
+      file = ER.exit([[1, 2, 3, 4, 5].map(function (j) { return v[j]; }).join('-')], { wait: true });
+      if (!file) { msg('The pencil breaks. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('c-file', file);
+      MG.mine('checked', 'Leo’s sheet, checked', '<p>Nine of the twelve lines are right.</p><p>Line 7: wrong (Magpie). Venus is the hottest: the handout, line 3, and the library book, page 31.</p><p>Line 7, the source: no such book (the catalogue, 31 libraries). Magpie made it up, and the quotation too.</p><p>Line 10: wrong (Magpie). 1610, not 1609 (the museum label, the library book). 1609 was the first telescope.</p><p>Line 11: wrong (Leo). Magpie said 384,000 km; Leo left out the thousand.</p><p>Not sources: the website (no author, no date), Science Today (1998: out of date).</p>', true);
+      msg('Mrs Ibarra reads the cards with her pencil, one by one. She does not rub anything out.');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          '&ldquo;Twelve lines,&rdquo; says Mrs Ibarra. &ldquo;Nine right. Three wrong: two of them Magpie&rsquo;s, and one of them yours, Leo.&rdquo;',
+          'Leo looks at line 11 for a long time. &ldquo;Three hundred and eighty-four thousand,&rdquo; he says. &ldquo;I was in a hurry.&rdquo;',
+          '&ldquo;There is no book called The Hot Planets,&rdquo; says Mrs Ibarra. &ldquo;There is no Dr Burrows. But I would bet there are hundreds of homework answers on that portal that end with a source in brackets.&rdquo;',
+          '&ldquo;Source: my brother,&rdquo; says Leo. &mdash; &ldquo;Exactly,&rdquo; says Mrs Ibarra. &ldquo;Your Magpie learnt that an answer like that ends with a book and a page number. So it wrote one. A very good-looking one. And a quotation to go with it.&rdquo;',
+          'Leo is staring at his laptop. &ldquo;The second time, I didn&rsquo;t ask it which planet,&rdquo; he says. &ldquo;I asked it why Mercury was the hottest. I put Mercury in the question.&rdquo;',
+          'Mr Ruskin puts his head round the door. &ldquo;The head&rsquo;s in the hall. Quarter past eight. Dr Fairley wants Magpie switched off for good. Bring everything.&rdquo;'
+        ], function () { busy = false; $('#go').classList.add('on'); });
+      }, 2600);
+    });
+    msg('For each card: click the source that settles it, and stamp a verdict. Then give Mrs Ibarra the cards.');
+    return { open: function () { ER.open('ov-lock', box); }, isOpen: function () { return !!box.parentNode; } };
+  }
+})();
+</script>
+</body>
+</html>

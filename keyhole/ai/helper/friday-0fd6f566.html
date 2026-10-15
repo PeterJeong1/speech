@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lab S2, Friday Morning · Sounds About Right</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ai.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="helper.css">
+<style>
+  body{--bg:#eaf0ec;--accent:#1f7a80;--font-display:'Bricolage Grotesque',sans-serif;--font-ui:'Inter',sans-serif;--font-body:'Literata',serif;
+    --tc-bg:rgba(246,250,247,.97);--tc-ink:#16202c;--cap-bg:rgba(250,252,250,.96);--cap-ink:#16202c;--panel:#fbfdfb;--panel-ink:#16202c;--face-bg:#2a4a5a;--q-ink:#1f7a80;
+    --fade:#ffffff;--hud-bg:rgba(250,252,250,.88);--hud-ink:#16202c;--hud-line:rgba(22,32,44,.25);--ov-bg:rgba(20,40,40,.5)}
+  .tc-room{font-size:clamp(36px,5.2vw,74px);color:#1f7a80}
+  .tc-theme{color:#d4a017}
+  .hbtn b{color:#fff}
+  #model g.pl{animation:sway 6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0}
+  #model g.pl:nth-child(2n){animation-duration:7.5s;animation-delay:-2s}#model g.pl:nth-child(3n){animation-duration:5.2s;animation-delay:-1s}
+  @keyframes sway{50%{transform:rotate(4deg)}}
+  .sun{animation:sun 7s steps(4,end) infinite}
+  @keyframes sun{50%{opacity:.75}}
+  #paper.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.05) drop-shadow(0 0 12px #1f7a80)}}
+
+  /* question 7 */
+  .tp{width:min(820px,95vw)}
+  .tp-in{background:#fff;color:#16202c;padding:22px 30px 18px;box-shadow:0 26px 70px rgba(0,0,0,.4);border-top:10px solid #16202c}
+  .tp h4{margin:0 0 2px;font-family:'Inter',sans-serif;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#5a6670}
+  .tp h3{margin:0 0 12px;font-family:'Literata',serif;font-weight:700;font-size:21px;line-height:1.3}
+  .tp h3 small{font-family:'Roboto Mono',monospace;font-weight:400;font-size:13px;color:#5a6670;margin-left:8px}
+  .tp-pl{display:flex;justify-content:space-between;align-items:flex-end;gap:6px;margin:6px 0 14px;padding:10px 6px;border-bottom:1px solid #d6dde3}
+  .tp-pl button{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:'Inter',sans-serif;font-size:12.5px;color:#16202c;padding:4px;border-radius:50%}
+  .tp-pl button svg{display:block}
+  .tp-pl button.on{outline:3px solid #1f3a8a;outline-offset:2px}
+  .tp-why{display:flex;flex-direction:column;gap:6px}
+  .tp-why button{text-align:left;padding:6px 10px;border:1px solid #d6dde3;border-radius:4px;font-family:'Literata',serif;font-size:16px;color:#16202c}
+  .tp-why button:hover{background:#f4f7f9}
+  .tp-why button.on{border-color:#1f3a8a;background:#eef2fb}
+  .tp-ans{margin-top:12px;min-height:36px;font-family:'Kalam',cursive;font-size:22px;color:#1f3a8a}
+  .tp .pmsg{color:#fff}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="tiles" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#dfe9e4"/><path d="M0 0H40V40" fill="none" stroke="#c4d4cc" stroke-width="2"/></pattern>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8cc4ea"/><stop offset="1" stop-color="#d8eef8"/></linearGradient>
+  <linearGradient id="beamG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff6d0" stop-opacity=".55"/><stop offset="1" stop-color="#fff6d0" stop-opacity="0"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="45%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".75" stop-color="#2a3a30" stop-opacity=".06"/><stop offset="1" stop-color="#2a3a30" stop-opacity=".3"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="830" fill="#f3efe2"/><rect x="-1000" y="420" width="3600" height="220" fill="url(#tiles)"/><rect x="-1000" y="414" width="3600" height="8" fill="#9ab8aa"/>
+<!-- windows -->
+<g id="window" class="hot"><rect x="20" y="90" width="420" height="390" fill="#e9e4d6"/><rect x="34" y="104" width="392" height="362" fill="url(#sky)"/>
+  <g fill="#5a9a5a"><circle cx="110" cy="420" r="70"/><circle cx="190" cy="400" r="60"/><circle cx="340" cy="430" r="80"/></g><circle cx="380" cy="160" r="26" fill="#fff6c0"/>
+  <path d="M164 104v362M296 104v362M34 284H426" stroke="#e9e4d6" stroke-width="10"/></g>
+<path class="sun" d="M440 120L1300 620H1600L440 300z" fill="url(#beamG)" pointer-events="none"/>
+<!-- the whiteboard, the clock, the poster, the door -->
+<g id="board" class="hot"><rect x="556" y="146" width="552" height="262" rx="4" fill="#c9d2d8"/><rect x="566" y="156" width="532" height="242" fill="#fbfdff"/>
+  <text x="590" y="200" class="cK" font-size="28" font-weight="700" fill="#1f3a8a">Y8 Science test</text><text x="590" y="240" class="cK" font-size="24" fill="#1f3a8a">The Solar System · 9.05 &#8211; 9.50</text>
+  <text x="590" y="290" class="cK" font-size="22" fill="#c0392b">No talking. No phones.</text><text x="590" y="330" class="cK" font-size="22" fill="#c0392b">No Magpie.</text><text x="880" y="376" class="cK" font-size="20" fill="#1f3a8a">Good luck! &#8212; Dr F.</text></g>
+<g id="clock" class="hot"><circle cx="1178" cy="170" r="30" fill="#fff" stroke="#3a4a5a" stroke-width="5"/><path d="M1178 170l14 -8M1178 170l3 -24" stroke="#16202c" stroke-width="3" stroke-linecap="round"/><circle cx="1178" cy="170" r="3" fill="#c0392b"/></g>
+<g id="ptable" class="hot"><rect x="1236" y="180" width="232" height="160" fill="#fff" stroke="#c9d2d8" stroke-width="4"/><g id="pcells"></g></g>
+<rect x="1500" y="160" width="140" height="470" fill="#6a8a7a"/><rect x="1528" y="196" width="40" height="100" fill="#cfe0d8" stroke="#3a5a4a" stroke-width="4"/>
+<g id="notice" class="hot"><rect x="1516" y="320" width="74" height="96" fill="#fff" stroke="#c9d2d8" transform="rotate(2 1553 368)"/><g fill="#26324a" transform="rotate(2 1553 368)"><rect x="1524" y="330" width="56" height="6"/><rect x="1524" y="344" width="50" height="3"/><rect x="1524" y="352" width="54" height="3"/><rect x="1524" y="360" width="44" height="3"/><rect x="1524" y="368" width="52" height="3"/><rect x="1524" y="384" width="56" height="5" fill="#1f7a80"/></g></g>
+<!-- the planets hanging from the ceiling -->
+<g id="model" class="hot"></g>
+<!-- the front bench, and Dr Fairley -->
+<g id="fairley" class="hot" transform="translate(830 604) scale(.84)"></g>
+<rect x="580" y="476" width="500" height="18" fill="#1d1f22"/><rect x="590" y="494" width="480" height="150" fill="#d8d2c2"/><path d="M640 476v-40q0 -16 16 -16h20" fill="none" stroke="#9aa5ae" stroke-width="7"/>
+<!-- benches and Year 8 -->
+<rect x="-1000" y="640" width="3600" height="400" fill="#c9c2b0"/>
+<rect x="-1000" y="652" width="3600" height="14" fill="#1d1f22"/><rect x="-1000" y="666" width="3600" height="46" fill="#a89e88"/>
+<g id="row1"></g>
+<g id="leo" class="hot" transform="translate(720 868) scale(.78)"></g>
+<rect x="-1000" y="742" width="3600" height="16" fill="#1d1f22"/><rect x="-1000" y="758" width="3600" height="60" fill="#a89e88"/>
+<g id="row2"></g>
+<!-- your own bench and the paper -->
+<rect x="-1000" y="846" width="3600" height="20" fill="#1d1f22"/><rect x="-1000" y="866" width="3600" height="200" fill="#8a826e"/>
+<g id="paper" class="hot"><path d="M560 900l30 -78h420l30 78z" fill="#fff" stroke="#c9d2d8" stroke-width="2"/><text x="800" y="848" class="cI" font-size="15" font-weight="800" text-anchor="middle" fill="#16202c">YEAR 8 SCIENCE TEST</text>
+  <g fill="#9aa5ae"><rect x="620" y="858" width="360" height="4"/><rect x="612" y="870" width="376" height="4"/><rect x="604" y="882" width="392" height="4"/></g>
+  <path d="M1040 880l120 -40" stroke="#1f3a8a" stroke-width="8" stroke-linecap="round"/><path d="M1150 843l14 -5" stroke="#16202c" stroke-width="8" stroke-linecap="round"/></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="okstamp">CHECKED</div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <h6>What you now know</h6>
+  <ol>
+    <li>A language model writes one word at a time. It predicts a likely next word from patterns in the text it was trained on.</li>
+    <li>Likely is not the same as true. Its sentences are fluent, and it sounds just as sure when it is wrong.</li>
+    <li>It can join true pieces into something false, or invent a quotation, a date or a book that does not exist: a hallucination.</li>
+    <li>A system knows only what is in its training data. If most examples are wrong, it learns the wrong answer; labels let it learn the right one. A test only checks what is in the test.</li>
+    <li>To check a claim: find the source, make sure it exists, ask who wrote it and how they know, look at the date, and look for two good sources that agree.</li>
+    <li>Ask a better question: no answer in it, the right context to read, &ldquo;where does that come from?&rdquo;, and &ldquo;tell me if you are not sure&rdquo;.</li>
+    <li>Trust a helper for small things you can easily check. Check it whenever it matters, whenever it gives no source, and whenever the answer sounds too neat. Not every mistake is the machine&rsquo;s.</li>
+  </ol>
+  <div class="row"><button type="button" class="btn" id="b-task">Have your say</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the story list</button></div>
+  <small>Sounds About Right &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="helper.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, tp = null, fN = 0;
+
+  (function () {
+    var s = '', i, x, cols = ['#2f5d3a', '#2f5d3a', '#3a4a5a', '#2f5d3a'], hair = ['#191414', '#6a3a1a', '#c4672a', '#2a1a10', '#d9b060', '#3a2a1a'];
+    var P = [[300, 'Mercury', '#9a9a9a', 6], [420, 'Venus', '#e8b04a', 10], [560, 'Earth', '#3a7ac8', 10], [660, 'Mars', '#c0502a', 7], [1000, 'Jupiter', '#c9a07a', 22], [1150, 'Saturn', '#e0c890', 18], [1290, 'Uranus', '#8ad0d8', 13], [1400, 'Neptune', '#3a5ac8', 13]];
+    s = '<path d="M-200 10H1800" stroke="#9aa5ae" stroke-width="3"/><g><path d="M820 10v40" stroke="#9aa5ae" stroke-width="2"/><circle cx="820" cy="80" r="32" fill="#f6c02b"/></g>';
+    P.forEach(function (p, k) { var y = 60 + (k % 3) * 22; s += '<g class="pl" id="pl-' + p[1].toLowerCase() + '"><path d="M' + p[0] + ' 10V' + (y - p[3]) + '" stroke="#9aa5ae" stroke-width="2"/><circle cx="' + p[0] + '" cy="' + y + '" r="' + p[3] + '" fill="' + p[2] + '"/>' + (p[1] === 'Saturn' ? '<ellipse cx="' + p[0] + '" cy="' + y + '" rx="30" ry="6" fill="none" stroke="#b09a6a" stroke-width="3"/>' : '') + '</g>'; });
+    $('#model').innerHTML = s;
+    s = ''; for (i = 0; i < 18; i++) { x = (i % 6); s += '<rect x="' + (1246 + (i % 9) * 24) + '" y="' + (192 + Math.floor(i / 9) * 22 + (i % 9 > 1 && i % 9 < 7 ? 22 : 0)) + '" width="20" height="18" fill="' + ['#f6b0a0', '#a0d0f6', '#c0f0a0', '#f6e0a0', '#d0b0f6', '#a0f0e0'][x] + '"/>'; }
+    for (i = 0; i < 18; i++) s += '<rect x="' + (1246 + (i % 9) * 24) + '" y="' + (258 + Math.floor(i / 9) * 22) + '" width="20" height="18" fill="' + ['#a0d0f6', '#f6e0a0', '#c0f0a0'][i % 3] + '"/>';
+    $('#pcells').innerHTML = s;
+    function heads(y, n, x0, step, sc) {
+      var o = '';
+      for (i = 0; i < n; i++) { x = x0 + i * step; if (y >= 700 && Math.abs(x - 720) < 90) continue; o += '<g transform="translate(' + x + ' ' + y + ') scale(' + sc + ')"><path d="M-46 80q4 -56 46 -60t46 60z" fill="' + cols[i % cols.length] + '"/><circle cx="0" cy="-6" r="27" fill="' + hair[(i * 3) % hair.length] + '"/></g>'; }
+      return o;
+    }
+    $('#row1').innerHTML = heads(612, 12, -80, 150, .62);
+    $('#row2').innerHTML = heads(700, 10, -20, 170, .8);
+    $('#fairley').innerHTML = MG.who('fairley', { smile: 1, extra: '<rect x="26" y="-150" width="36" height="46" fill="#fff" stroke="#c9d2d8" transform="rotate(6 44 -127)"/>' });
+    $('#leo').innerHTML = MG.who('leo', { smile: 8 });
+  })();
+
+  ER.init({
+    theme: 'ai', story: 'helper', storyTitle: 'Sounds About Right', id: 'friday', no: 'V', title: 'Lab S2, Friday Morning',
+    go: 'Five past nine',
+    intro: [
+      'The better prompt had no answer in its question, gave Magpie Dr Fairley&rsquo;s notes to read, asked where each answer came from, and let it say that it was not sure. On the big screen Magpie said Venus, gave lines 3 and 4 of the notes, and said it did not know about the night.',
+      'Mrs Achterberg decided at seventeen minutes past eight. Year 8 heard it in the hall. The rest of the school hears it this morning.',
+      'Friday, four minutes past nine. Lab S2. The test starts in one minute.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"coda":["ea3af970"],"why":["f2ea6925"]},
+    hints: hints, onBegin: begin
+  });
+
+  function isBusy() { return busy; }
+  function hints() {
+    if (ER.flag('e-done')) return null;
+    if (tp && tp.isOpen()) return ['tp', [
+      'Question 7 is the one Leo&rsquo;s sheet got wrong. What did Dr Fairley&rsquo;s handout say, in line 3?',
+      'Circle Venus, then choose the reason the handout and the library book gave: it is about the air, not the distance.'
+    ]];
+    return ['paper', ['Your test paper is on the bench in front of you. Click it.']];
+  }
+  function begin() {
+    if (!ER.flag('tEnd')) ER.flag('tEnd', Date.now());
+    if (ER.flag('e-done')) { busy = false; finish(true); return; }
+    if (ER.flag('e-in')) { busy = false; $('#paper').classList.add('ready'); ER.say('Your paper is on the bench. Question 7.'); return; }
+    ER.flag('e-in', 1);
+    ER.narrate([
+      'Lab S2, four minutes past nine. The sun comes in sideways through the tall windows, and the model planets hanging from the ceiling turn very slowly in the warm air.',
+      'Mrs Achterberg&rsquo;s decision is pinned to the door. Magpie stays on. From Monday it learns again, only from homework that a teacher has marked right, and every answer must say where it comes from. And every answer now begins: I CAN BE WRONG. CHECK ME.',
+      'At half past eight last night Leo sent a new sheet to everybody in Year 8: MAGPIE&rsquo;S TWELVE, CHECKED. It had three crossings-out, and a new line at the bottom: &ldquo;Number 11 was me. Sorry.&rdquo;',
+      'Two benches ahead, Leo turns round and gives you a very small thumbs up. Dr Fairley looks at him. He turns back.',
+      '&ldquo;You may turn over your papers,&rdquo; says Dr Fairley. &ldquo;You have forty-five minutes. Begin.&rdquo;'
+    ], function () { busy = false; $('#paper').classList.add('ready'); openTp(); });
+  }
+
+  function openTp() { if (ER.flag('e-done')) return; if (!tp) tp = makeTp(); tp.open(); }
+  $('#paper').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('e-done')) { ER.say('Question 7: Venus, because its thick atmosphere traps the heat. Two marks, if Dr Fairley is feeling generous. She is not, usually.'); return; }
+    openTp();
+  });
+  function makeTp() {
+    var PL = [['mercury', 'Mercury', '#9a9a9a', 9], ['venus', 'Venus', '#e8b04a', 14], ['earth', 'Earth', '#3a7ac8', 14], ['mars', 'Mars', '#c0502a', 10], ['jupiter', 'Jupiter', '#c9a07a', 24]];
+    var WHY = [['near', 'because it is the closest planet to the Sun.'], ['air', 'because its thick atmosphere traps the heat.'], ['big', 'because it is the biggest planet.']];
+    var pick = null, why = null, done = false, box = ER.el('div', 'pz tp');
+    box.innerHTML = '<div class="tp-in"><h4>Year 8 Science &middot; The Solar System &middot; page 2</h4><h3>7. Which planet has the hottest surface? Give one reason.<small>(2 marks)</small></h3>' +
+      '<div class="tp-pl">' + PL.map(function (p) { return '<button type="button" data-p="' + p[0] + '"><svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="' + p[3] + '" fill="' + p[2] + '"/></svg>' + p[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="tp-why">' + WHY.map(function (w) { return '<button type="button" data-w="' + w[0] + '">' + w[1] + '</button>'; }).join('') + '</div><div class="tp-ans"></div></div>' +
+      '<div class="pz-foot"><p class="pmsg"></p><button type="button" class="btn" id="tp-go">Write it down</button></div>';
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    ER.$$('.tp-pl button', box).forEach(function (b) { b.addEventListener('click', function () { if (done) return; pick = b.getAttribute('data-p'); MG.sfx.pencil(); ER.$$('.tp-pl button', box).forEach(function (o) { o.classList.toggle('on', o === b); }); }); });
+    ER.$$('.tp-why button', box).forEach(function (b) { b.addEventListener('click', function () { if (done) return; why = b.getAttribute('data-w'); MG.sfx.pencil(); ER.$$('.tp-why button', box).forEach(function (o) { o.classList.toggle('on', o === b); }); }); });
+    box.querySelector('#tp-go').addEventListener('click', function () {
+      if (done) return;
+      if (!pick || !why) { msg('Circle a planet, and choose a reason.'); return; }
+      if (!ER.check('coda', pick)) { ER.sfx.no(); msg(pick === 'mercury' ? 'Your pen stops over Mercury. Not this year.' : 'Your pen stops. Is that what Dr Fairley&rsquo;s notes said, in line 3?'); return; }
+      if (!ER.check('why', why)) { ER.sfx.no(); msg(why === 'near' ? 'Closest is not hottest. Dr Fairley has crossed that out every year for twelve years, and she has a red pen ready.' : 'Your pen stops. Is that the reason in the notes and in the library book?'); return; }
+      done = true; MG.solved();
+      box.querySelector('.tp-ans').textContent = 'Venus, because its thick atmosphere traps the heat.';
+      msg('Eleven seconds. Two marks.');
+      setTimeout(ending, 2400);
+    });
+    msg('Circle a planet and choose a reason. Then write it down.');
+    return { open: function () { ER.open('ov-lock', box); }, isOpen: function () { return !!box.parentNode; } };
+  }
+  function ending() {
+    ER.closeAll(); busy = true;
+    ER.narrate([
+      'You write it down: Venus, because its thick atmosphere traps the heat. It takes eleven seconds.',
+      'Somewhere behind you a pencil rubs something out, and writes something else.',
+      'Forty-four minutes later Dr Fairley collects the papers. At Leo&rsquo;s bench she stops, reads one line, and says nothing at all. From Dr Fairley, that is the highest praise there is.',
+      'On the door, under Mrs Achterberg&rsquo;s notice, somebody has written in pencil: SOUNDING RIGHT IS NOT THE SAME AS BEING RIGHT. It looks a lot like Mr Ruskin&rsquo;s handwriting.'
+    ], function () { busy = false; ER.flag('e-done', 1); finish(false); });
+  }
+
+  /* ---------- after it all ---------- */
+  function line(sel, before, after) { $(sel).addEventListener('click', function () { if (!busy) ER.say(ER.flag('e-done') ? after : before); }); }
+  line('#fairley', '&ldquo;Eyes on your own paper,&rdquo; says Dr Fairley, to everybody and to nobody.', '&ldquo;Pens down at ten to ten,&rdquo; says Dr Fairley. &ldquo;And Venus, everybody. I want to see Venus.&rdquo;');
+  line('#leo', 'Leo is writing very fast, with his tongue between his teeth.', '&ldquo;Three hundred and eighty-four THOUSAND,&rdquo; Leo whispers, as you pass. &ldquo;I wrote the thousand. Twice.&rdquo;');
+  MG.thing('#model', null, 'The model planets, made by Year 7 out of polystyrene balls. Somebody has painted Venus a furious orange this morning. The paint is still wet.', isBusy);
+  MG.thing('#notice', null, 'MAGPIE, FROM MONDAY: it learns again, only from homework marked right. Every answer says where it comes from. Every answer begins I CAN BE WRONG. CHECK ME. Use it for homework, never in a test. &mdash; H. Achterberg, Head', isBusy);
+  MG.thing('#clock', null, 'Four minutes past nine. No more Revision Night. Just the test.', isBusy);
+  MG.thing('#board', null, 'Y8 SCIENCE TEST. No talking. No phones. No Magpie.', isBusy);
+  MG.thing('#window', null, 'Blue sky and a playing field. It is going to be a fine day, the sort of day that makes a science test feel even longer.', isBusy);
+  MG.thing('#ptable', 'periodic table', null, isBusy);
+
+  function finish(quick) {
+    var st = ER.state(), mins = MG.minutesPlayed(), hn = ER.hintsUsed();
+    $('#paper').classList.remove('ready');
+    $('#d-time').textContent = 'From the computer room to the test: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' clues and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on');
+    if (quick) ER.say('Friday morning. Question 7 is answered, and Magpie has a new first line.');
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>Sounds About Right &middot; in your own words</h4><h3>Have your say</h3>' +
+      '<p>Should a school let students use a homework chatbot like Magpie? Give one reason for and one reason against, and a rule you would make.</p>' +
+      '<p>Then say when you would trust a helper like this, and when you would check it. Say it aloud, or write 60 to 100 words. Use: because, but, unless, so.</p>' +
+      '<textarea id="r1"></textarea><div class="count"></div><label for="r2">Name</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

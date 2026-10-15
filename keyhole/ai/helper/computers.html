@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Computer Room IT2 · Sounds About Right</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ai.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="helper.css">
+<style>
+  body{--bg:#aebbc7;--accent:#2f6fd0;--font-display:'Bricolage Grotesque',sans-serif;--font-ui:'Inter',sans-serif;--font-body:'Literata',serif;
+    --tc-bg:rgba(226,234,242,.97);--tc-ink:#132233;--cap-bg:rgba(243,247,251,.96);--cap-ink:#132233;--panel:#f6f9fc;--panel-ink:#132233;--face-bg:#3a5a7a;--q-ink:#1b4fa0;
+    --fade:#dfe7ee;--hud-bg:rgba(243,247,251,.88);--hud-ink:#132233;--hud-line:rgba(19,34,51,.28);--ov-bg:rgba(14,26,40,.66)}
+  .tc-room{font-size:clamp(38px,5.6vw,78px);color:#1b4fa0}
+  .tc-theme{color:#c2185b}
+  .hbtn b{color:#fff}
+  .tk-role{color:#1b4fa0}
+  #tube{animation:tube 6s steps(1,end) infinite}
+  @keyframes tube{0%{opacity:.95}3%{opacity:.35}5%{opacity:.95}47%{opacity:.6}48%{opacity:.95}}
+  .sleep{animation:breathe 4s steps(8,end) infinite}
+  @keyframes breathe{50%{opacity:.25}}
+  #pcglow{animation:breathe 5s steps(6,end) infinite}
+  #board.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.12) drop-shadow(0 0 10px #7fb2ff)}}
+
+  /* Tiny Magpie on the whiteboard */
+  .tm{width:min(1120px,96vw)}
+  .tm-in{display:grid;grid-template-columns:1fr 400px;gap:16px;background:#f8fbff;color:#132233;border:12px solid #c5ced8;border-radius:6px;padding:16px 18px;box-shadow:0 26px 70px rgba(0,0,0,.55)}
+  .tm h4{margin:0 0 8px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;color:#1b4fa0}
+  .tm h4 small{font-family:'Kalam',cursive;font-weight:400;font-size:17px;color:#c2185b;margin-left:8px}
+  .tm h5{margin:0 0 6px;font-family:'Inter',sans-serif;font-weight:800;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#1b4fa0}
+  .tm-s{margin:0;padding-left:30px;font-family:'Kalam',cursive;font-size:19px;line-height:1.48;color:#1a2a6a}
+  .tm-s li::marker{font-family:'Roboto Mono',monospace;font-size:13px;color:#8a96a6}
+  .tw{cursor:pointer;border-radius:3px;padding:0 2px}
+  .tw:hover{background:#ffe9a8}
+  .tw.stop{display:inline-block;min-width:14px;text-align:center;background:#eef2f8;margin-left:1px}
+  .tm-rules{background:#fff;border:2px dashed #9fb3cc;border-radius:6px;padding:10px 14px 8px}
+  .tm-rules ol{margin:0;padding-left:20px;font-family:'Inter',sans-serif;font-size:14.5px;line-height:1.38}
+  .tm-rules li{margin:0 0 3px}
+  .tm-out{margin-top:12px;background:#132233;color:#e9f6f4;border-radius:6px;padding:10px 14px 10px}
+  .tm-out h5{color:#7fe0d6}
+  .tm-line{margin:0 0 8px;min-height:62px;font-family:'Roboto Mono',monospace;font-size:17px;line-height:1.5}
+  .tm-line .g{color:#8aa0b4}
+  .tm-line .caret{display:inline-block;width:9px;height:18px;margin-left:3px;vertical-align:-3px;background:#7fe0d6;animation:breathe 1s steps(1,end) infinite}
+  .tm-btns{display:flex;gap:8px}
+  .tm-btns button{padding:5px 10px;border:1px solid #4a6a88;border-radius:4px;font-family:'Inter',sans-serif;font-size:12.5px;color:#cfe8e4}
+  .tm-btns button:hover{border-color:#7fe0d6;color:#7fe0d6}
+  .tm-steps{margin-top:12px;max-height:300px;overflow:auto;font-family:'Roboto Mono',monospace;font-size:12.5px;line-height:1.3}
+  .tm-steps .st{margin:0 0 6px;padding:5px 8px;background:#fff;border:1px solid #d6dde3;border-radius:4px}
+  .tm-steps .st b{font-weight:500;color:#1b4fa0}
+  .tm-steps .pb{display:grid;grid-template-columns:78px 1fr 46px;gap:6px;align-items:center}
+  .tm-steps .pb i{display:block;height:9px;background:#b9c6d4;border-radius:2px}
+  .tm-steps .pb.pick i{background:#1f7a80}.tm-steps .pb.pick span{color:#1f7a80;font-weight:500}
+  .tm .pmsg{color:#f4f7f8}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="ceil" width="100" height="62" patternUnits="userSpaceOnUse"><rect width="100" height="62" fill="#e3e8ec"/><path d="M0 0H100M0 0V62" stroke="#b8c2cb" stroke-width="3"/><g fill="#cdd5dc"><circle cx="20" cy="18" r="1.4"/><circle cx="64" cy="40" r="1.4"/><circle cx="80" cy="12" r="1.2"/><circle cx="38" cy="50" r="1.2"/></g></pattern>
+  <pattern id="carpet" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="#46566e"/><rect width="40" height="40" fill="#4c5d77"/><rect x="40" y="40" width="40" height="40" fill="#4c5d77"/></pattern>
+  <linearGradient id="wallG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7d2dc"/><stop offset="1" stop-color="#aab7c3"/></linearGradient>
+  <radialGradient id="street" cx="40%" cy="60%" r="70%"><stop offset="0" stop-color="#ffb347"/><stop offset=".5" stop-color="#c46a1c"/><stop offset="1" stop-color="#0d1a2e"/></radialGradient>
+  <radialGradient id="scrG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#bfe6ff" stop-opacity=".55"/><stop offset="1" stop-color="#bfe6ff" stop-opacity="0"/></radialGradient>
+  <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4fbff" stop-opacity=".35"/><stop offset="1" stop-color="#f4fbff" stop-opacity="0"/></linearGradient>
+  <radialGradient id="vig" cx="50%" cy="45%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#0a1626" stop-opacity=".1"/><stop offset="1" stop-color="#0a1626" stop-opacity=".5"/></radialGradient>
+</defs>
+
+<rect x="-1000" y="-400" width="3600" height="1000" fill="url(#wallG)"/>
+<rect x="-1000" y="-400" width="3600" height="470" fill="url(#ceil)"/><rect x="-1000" y="66" width="3600" height="12" fill="#9aa7b3"/>
+<g fill="#f4fbff"><rect x="250" y="22" width="280" height="30" rx="3"/><rect id="tube" x="1060" y="22" width="280" height="30" rx="3"/></g>
+<path d="M250 52L120 600H660L530 52z" fill="url(#cone)" pointer-events="none"/><path d="M1060 52L930 600H1470L1340 52z" fill="url(#cone)" pointer-events="none"/>
+
+<!-- the window and its blinds -->
+<g id="blinds" class="hot"><rect x="30" y="126" width="350" height="344" fill="#e9edf0"/><rect x="44" y="140" width="322" height="316" fill="url(#street)"/>
+  <circle cx="160" cy="330" r="10" fill="#fff4c2"/><path d="M160 340v110" stroke="#1b2738" stroke-width="5"/>
+  <g id="slats" fill="#cfd8df"></g><path d="M58 140v316M352 140v316" stroke="#9aa7b3" stroke-width="2"/></g>
+<rect x="20" y="468" width="372" height="16" fill="#e9edf0"/>
+<g id="plant" class="hot"><path d="M300 466h56l-6 -34h-44z" fill="#c4672a"/><g fill="none" stroke="#3f8a3a" stroke-width="4" stroke-linecap="round"><path d="M328 434q-40 -30 -70 -6"/><path d="M328 434q-14 -50 -2 -70"/><path d="M328 434q30 -40 58 -30"/><path d="M328 434q44 -6 54 24"/><path d="M328 434q-30 -6 -44 20"/></g></g>
+
+<!-- the posters -->
+<g id="poster" class="hot"><rect x="420" y="150" width="172" height="232" fill="#e9f3fb" stroke="#fff" stroke-width="4"/><rect x="420" y="150" width="172" height="34" fill="#2f6fd0"/>
+  <text x="506" y="173" class="cG" font-size="14" font-weight="800" text-anchor="middle" fill="#fff">HOW MAGPIE WRITES</text>
+  <g fill="#9fb3cc"><rect x="434" y="196" width="140" height="6"/><rect x="434" y="210" width="120" height="6"/><rect x="434" y="224" width="134" height="6"/></g>
+  <g fill="#2f6fd0"><rect x="436" y="250" width="96" height="11"/><rect x="436" y="268" width="40" height="11"/><rect x="436" y="286" width="22" height="11"/><rect x="436" y="304" width="10" height="11"/></g>
+  <g class="cI" font-size="10" fill="#132233"><text x="540" y="259">81%</text><text x="484" y="277">7%</text><text x="466" y="295">4%</text></g>
+  <text x="506" y="350" class="cG" font-size="12" font-weight="700" text-anchor="middle" fill="#c2185b">sounds sure.</text><text x="506" y="366" class="cG" font-size="12" font-weight="700" text-anchor="middle" fill="#c2185b">isn't always.</text></g>
+<g id="algo" class="hot"><rect x="1392" y="150" width="150" height="206" fill="#fff6dc" stroke="#fff" stroke-width="4"/><rect x="1392" y="150" width="150" height="30" fill="#e2a400"/>
+  <text x="1467" y="171" class="cG" font-size="15" font-weight="800" text-anchor="middle" fill="#3a2a00">ALGORITHM</text>
+  <g fill="none" stroke="#7a5200" stroke-width="2.5"><rect x="1428" y="194" width="78" height="22" rx="10"/><rect x="1428" y="234" width="78" height="22"/><rect x="1428" y="274" width="78" height="22"/><rect x="1428" y="314" width="78" height="22" rx="10"/><path d="M1467 216v18M1467 256v18M1467 296v18"/></g>
+  <g class="cK" font-size="11" fill="#7a5200" text-anchor="middle"><text x="1467" y="209">start</text><text x="1467" y="249">bread in</text><text x="1467" y="289">wait</text><text x="1467" y="329">toast!</text></g></g>
+<g id="clock" class="hot"><circle cx="1310" cy="140" r="30" fill="#fff" stroke="#3a4a5a" stroke-width="5"/><path d="M1310 140l-5 13M1310 140l-18 10" stroke="#132233" stroke-width="3" stroke-linecap="round"/><circle cx="1310" cy="140" r="3" fill="#c2185b"/></g>
+
+<!-- the whiteboard -->
+<g id="board" class="hot"><rect x="636" y="106" width="568" height="338" rx="6" fill="#c5ced8"/><rect x="648" y="118" width="544" height="314" fill="#f8fbff"/>
+  <text x="668" y="150" class="cG" font-size="24" font-weight="800" fill="#1b4fa0">TINY MAGPIE</text><text x="848" y="150" class="cK" font-size="16" fill="#c2185b">has read twelve sentences</text>
+  <g fill="#3a4a8a" opacity=".55" id="blines"></g>
+  <rect x="980" y="300" width="196" height="112" rx="5" fill="#132233"/><text x="992" y="326" class="cM" font-size="13" fill="#7fe0d6">Mercury is ...</text><rect x="992" y="336" width="10" height="16" fill="#7fe0d6" class="sleep"/>
+  <rect x="700" y="444" width="440" height="12" rx="3" fill="#9aa7b3"/><rect x="760" y="438" width="40" height="8" rx="3" fill="#c2185b"/><rect x="812" y="438" width="40" height="8" rx="3" fill="#1b4fa0"/></g>
+
+<!-- the door -->
+<g id="exit" class="hot"><rect x="1574" y="94" width="120" height="36" rx="3" fill="#1f9a4a"/><text x="1650" y="119" class="cI" font-size="18" font-weight="800" text-anchor="middle" fill="#fff">EXIT</text><path d="M1592 124l8 -12 6 4 -4 8M1600 112l2 -6" stroke="#fff" stroke-width="3" fill="none"/></g>
+<rect x="1568" y="140" width="170" height="440" fill="#5f7d99"/><rect x="1600" y="170" width="44" height="110" fill="#bfd6ea" stroke="#3a5a7a" stroke-width="4"/><rect x="1580" y="360" width="22" height="8" rx="3" fill="#c9d2da"/>
+
+<!-- trunking along the wall -->
+<rect x="-1000" y="520" width="3600" height="24" fill="#e9edf0"/><g id="sockets" fill="#fff" stroke="#b8c2cb"></g>
+
+<!-- the desk and its computers -->
+<rect x="-1000" y="598" width="3600" height="18" fill="#d8cbb4"/><rect x="-1000" y="616" width="3600" height="96" fill="#b9ab92"/><path d="M-1000 616H2600" stroke="#9a8b72" stroke-width="2"/>
+<g id="printer" class="hot"><rect x="90" y="530" width="150" height="70" rx="6" fill="#e3e6e8" stroke="#9aa7b3" stroke-width="2"/><rect x="110" y="520" width="110" height="14" fill="#c9d2da"/><rect x="104" y="560" width="122" height="8" fill="#5a6470"/><circle cx="222" cy="546" r="5" fill="#ff7a2f" class="sleep"/></g>
+<g id="mons"></g>
+<g id="pc" class="hot"><ellipse id="pcglow" cx="1060" cy="520" rx="170" ry="110" fill="url(#scrG)" pointer-events="none"/><rect x="1052" y="566" width="16" height="30" fill="#2a3240"/><rect x="1020" y="592" width="80" height="8" rx="3" fill="#2a3240"/>
+  <rect x="976" y="452" width="168" height="114" rx="6" fill="#2a3240"/><rect x="984" y="460" width="152" height="98" fill="#f4f7f9"/><rect x="984" y="460" width="152" height="16" fill="#141b26"/>
+  <rect x="1060" y="484" width="68" height="14" rx="7" fill="#d9ecff"/><rect x="992" y="504" width="100" height="22" rx="7" fill="#fff" stroke="#d6dde3"/><rect x="1060" y="532" width="54" height="12" rx="6" fill="#d9ecff"/><g id="pclogo"></g></g>
+<g id="sheet" class="hot"><path d="M1170 598l8 -16 70 4 -6 16z" fill="#fbfbf7" stroke="#c9ced3"/><path d="M1166 596l10 -18 70 8 -8 14z" fill="#fff" stroke="#c9ced3"/><path d="M1180 586l50 5M1182 590l40 4" stroke="#7a8490" stroke-width="1.5"/></g>
+<g fill="#2a3240"><rect x="640" y="606" width="130" height="8" rx="3"/><rect x="996" y="606" width="130" height="8" rx="3"/><rect x="300" y="606" width="130" height="8" rx="3"/></g>
+
+<!-- the floor -->
+<rect x="-1000" y="712" width="3600" height="700" fill="url(#carpet)"/><rect x="-1000" y="708" width="3600" height="6" fill="#2a3240"/>
+<g id="chairs"></g>
+<g id="ruskin" class="hot" transform="translate(560 866) scale(1.16)"></g>
+<g id="leo" class="hot" transform="translate(1300 872) scale(1.04)"></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">To the server cupboard</button>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="helper.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, told = {}, lock = null;
+  var SENT = ['Mercury is the closest planet to the Sun.', 'Venus is the hottest planet in the Solar System.', 'Mars is the red planet.',
+    'Venus is the brightest planet in the night sky.', 'Jupiter is the biggest planet in the Solar System.', 'Venus is the hottest planet because its thick air traps heat.',
+    'Mercury has no moons.', 'The Sun is a star.', 'The Moon goes round the Earth.', 'The Earth goes round the Sun.', 'Saturn has rings of ice and rock.',
+    'Mars is cold because it is far from the Sun.'];
+
+  (function () {
+    var s = '', i, x;
+    for (i = 0; i < 19; i++) s += '<rect x="44" y="' + (142 + i * 16.6) + '" width="322" height="10"/>';
+    $('#slats').innerHTML = s;
+    s = ''; for (x = -400; x < 2400; x += 220) s += '<rect x="' + x + '" y="524" width="30" height="16" rx="2"/>';
+    $('#sockets').innerHTML = s;
+    s = '';
+    [[-180, 0], [330, 0], [610, 0], [1380, 0], [1640, 0]].forEach(function (m) {
+      x = m[0];
+      s += '<g class="mon hot"><rect x="' + (x + 76) + '" y="566" width="14" height="30" fill="#2a3240"/><rect x="' + (x + 44) + '" y="592" width="78" height="8" rx="3" fill="#2a3240"/>' +
+        '<rect x="' + x + '" y="458" width="166" height="110" rx="6" fill="#2a3240"/><rect x="' + (x + 8) + '" y="466" width="150" height="94" fill="#141b26"/>' +
+        '<circle class="sleep" cx="' + (x + 150) + '" cy="552" r="3" fill="#4aa8ff"/></g>';
+    });
+    $('#mons').innerHTML = s;
+    s = ''; for (i = 0; i < 12; i++) s += '<rect x="668" y="' + (170 + i * 21) + '" width="' + (180 + (i * 53) % 120) + '" height="5" rx="2"/>';
+    $('#blines').innerHTML = s;
+    s = ''; [200, 520, 1500].forEach(function (cx) { s += '<path d="M' + (cx - 40) + ' 760q40 -30 80 0v40h-80z" fill="#2c3d5a"/><path d="M' + cx + ' 800v40M' + (cx - 30) + ' 850h60" stroke="#1d2838" stroke-width="7"/>'; });
+    $('#chairs').innerHTML = s;
+    $('#pclogo').innerHTML = MG.logo(988, 462, 0.12, false);
+    $('#ruskin').innerHTML = MG.who('ruskin', { extra: '<rect x="30" y="-134" width="22" height="26" rx="3" fill="#fff" stroke="#9aa7b3" stroke-width="2"/><path d="M52 -128q9 0 9 7t-9 7" fill="none" stroke="#9aa7b3" stroke-width="3"/>' });
+    $('#leo').innerHTML = MG.who('leo', { smile: -2, extra: '<rect x="-74" y="-156" width="36" height="46" fill="#fff" stroke="#c9ced3" transform="rotate(-10 -56 -133)"/>' });
+  })();
+
+  ER.init({
+    theme: 'ai', story: 'helper', storyTitle: 'Sounds About Right', id: 'computers', no: 'I', title: 'Computer Room IT2',
+    go: 'Into the computer room',
+    intro: [
+      'Thursday, twenty to seven. It is Revision Night at Sallowfield School: the doors are open until half past eight, there is pizza in the hall, and the Year 8 science test is tomorrow morning at five past nine.',
+      'Leo Takeda spent the afternoon asking Magpie, the school&rsquo;s homework chatbot, about space. At six o&rsquo;clock he gave everybody in Year 8 a copy of its answers.',
+      'At twenty-five past six Dr Fairley, who wrote tomorrow&rsquo;s test, read number 7. She has gone to find the head.'
+    ],
+    exit: {"next":"servers","w":{"2a33dda5":"4e6fec8d"}}, tags: {"p3":["53d418d9"],"p4":["30181f7f"],"p5":["45fee358"],"p6":["c12b1565"],"p7":["b53cd37e"],"p8":["9b8e2bc6"],"p9":["5007cf88"],"p10":["9e38ea0d"]},
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('a-file') || null; told = ER.flag('a-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('a-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.ruskin && told.sheet && told.poster; }
+  function paint() {
+    $('#board').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.ruskin ? 1 : 0) + (told.sheet ? 1 : 0) + (told.poster ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['Mr Moreno trained Magpie. Go to the server cupboard: the button at the bottom of the screen.']];
+    if (lock && lock.isOpen()) return ['lock', [
+      'Tiny Magpie starts with &ldquo;Mercury is&rdquo;. Find every place in the twelve sentences where &ldquo;Mercury is&rdquo; comes together, and see which word comes next. Click that word. Then do the same with the last two words you have.',
+      'Three steps need care. After &ldquo;is the&rdquo; there are five different words: count each one. After &ldquo;hottest planet&rdquo; two words come next once each: rule 4 decides. After &ldquo;in the&rdquo;, count again.',
+      'Tiny Magpie does not copy a sentence, and it does not know what is true. It starts like sentence 1 and then follows whatever came next most often, so it ends up saying something that none of the twelve sentences says.'
+    ]];
+    if (!told.ruskin) return ['ruskin', ['Mr Ruskin, by the whiteboard, has something to say.', 'Click Mr Ruskin: the man with the coffee mug, on the left of the big whiteboard.']];
+    if (!told.sheet) return ['sheet', ['Read what Leo gave everybody in Year 8.', 'The printed sheets on the desk, just to the right of Leo&rsquo;s glowing computer.']];
+    if (!told.poster) return ['poster', ['Mr Ruskin told you to read his poster first.', 'The blue poster on the wall to the left of the whiteboard: HOW MAGPIE WRITES.']];
+    return ['board', ['Now the whiteboard. Tiny Magpie is waiting.', 'Click the big whiteboard in the middle of the wall.']];
+  }
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; $('#go').classList.add('on'); ER.say('Tiny Magpie said the same thing about Mercury and about Venus.'); return; }
+    if (told.in) { busy = false; ER.say('Computer room IT2. Twenty-nine computers asleep, and Leo&rsquo;s awake.'); return; }
+    tell('in');
+    ER.narrate([
+      'Computer room IT2. Thirty computers, and twenty-nine of them asleep. The thirtieth is Leo&rsquo;s, with Magpie&rsquo;s little black-and-white bird on the screen.',
+      'Mr Ruskin, who teaches computing, is standing by the whiteboard with a cold cup of coffee. He has the face of a man who has explained something three times today and is about to explain it a fourth time.',
+      'Leo is by his computer, holding a copy of his sheet as if it might bite him.'
+    ], function () { busy = false; });
+  }
+
+  $('#ruskin').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Server cupboard,&rdquo; says Mr Ruskin. &ldquo;Under the stairs. Knock. He wears headphones.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mr Ruskin', role: 'Computing · fourteen years at Sallowfield', face: MG.face('ruskin'),
+      lines: [
+        { note: 'He looks into his coffee, which is cold, and drinks it anyway.', a: '&ldquo;Dr Fairley wants Magpie switched off before the test tomorrow. For the whole school, not just Year 8. She&rsquo;s gone to find the head, and the head decides at quarter past eight.&rdquo;' },
+        { q: 'What is wrong with Magpie?', a: 'Read Leo&rsquo;s sheet. Number 7. Dr Fairley says she crosses that one out every year, in red, twice.' },
+        { q: 'So Magpie is broken?', a: 'No. That&rsquo;s the interesting part. I think it did exactly what it was built to do. The question is what that was.' },
+        { q: 'How does it work?', a: 'Read my poster first: the blue one by the door. I put it up in September. You would be the first person to read it.' },
+        { note: 'He taps the whiteboard with the cup.', a: '&ldquo;Then come to the board. I made a tiny Magpie for my Year 9s. It has read twelve sentences, that&rsquo;s all. Work out what it writes, and you&rsquo;ll understand what the big one did.&rdquo;' }
+      ],
+      clue: { id: 'ruskin', title: 'Mr Ruskin: what was it built to do?', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('ruskin')) { paint(); ER.say('Leo&rsquo;s sheet is on the desk. The poster is by the door. Then the whiteboard.'); } }
+    });
+  });
+
+  $('#leo').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Thirty copies,&rdquo; says Leo, to nobody in particular. &ldquo;Thirty.&rdquo;'); return; }
+    ER.talk({
+      who: 'Leo Takeda', role: 'Year 8 · 8F', face: MG.face('leo'),
+      lines: [
+        { note: 'Leo has his sheet in one hand and a slice of cold pizza in the other.', a: '&ldquo;It&rsquo;s not my fault. Well. It&rsquo;s a bit my fault. I asked Magpie about space all afternoon and wrote down the best bits. Everybody wanted a copy.&rdquo;' },
+        { q: 'What did you ask it?', a: 'Loads. Which planet&rsquo;s the hottest, and why. How far away the Moon is. Galileo stuff. It answers anything in about a second. It&rsquo;s read the whole internet, probably.' },
+        { note: 'Mr Ruskin, from the whiteboard, without looking round:', a: '&ldquo;It hasn&rsquo;t.&rdquo;' },
+        { q: 'How many copies did you make?', a: 'Thirty. One for everybody in 8F and 8R, and one for me. They&rsquo;re all in the hall learning it now.' },
+        { q: 'Did you check any of it?', a: 'Check it against what? It even gave a source for number 7. A book, and a page number. You don&rsquo;t make up a page number.' },
+        { a: '&ldquo;Mr Ruskin switched on something called &lsquo;show working&rsquo; on my screen. It&rsquo;s got numbers. I don&rsquo;t know what they mean.&rdquo;' }
+      ],
+      clue: { id: 'leo', title: 'Leo: it gave a page number', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('leo')) ER.say('Leo&rsquo;s screen, with Magpie on it, is on the desk beside him.'); }
+    });
+  });
+
+  var SHEET = '<h4>MAGPIE&rsquo;S TWELVE</h4><h5>Things for tomorrow&rsquo;s test!! All from Magpie, so they&rsquo;re right. &mdash; Leo T., 8F</h5><ol>' +
+    '<li>The Sun is a star. It is about 150 million km from the Earth.</li>' +
+    '<li>Light from the Sun takes about 8 minutes to reach the Earth.</li>' +
+    '<li>The Earth goes round the Sun once a year (365¼ days).</li>' +
+    '<li>The Earth spins once a day. That gives us day and night.</li>' +
+    '<li>We have seasons because the Earth&rsquo;s axis is tilted.</li>' +
+    '<li>The Moon goes round the Earth about once a month.</li>' +
+    '<li>The hottest planet is Mercury, because it is the closest to the Sun. &ldquo;Mercury is the furnace of the Solar System.&rdquo; <span class="src">(Source: The Hot Planets, Dr A. Burrows, 2014, page 42)</span></li>' +
+    '<li>Jupiter is the biggest planet.</li>' +
+    '<li>There are eight planets. Pluto is a dwarf planet.</li>' +
+    '<li>Galileo saw the phases of Venus in 1609.</li>' +
+    '<li>The Moon is about 384 km from the Earth.</li>' +
+    '<li>Saturn&rsquo;s rings are made of ice and rock.</li></ol>' +
+    '<p class="foot">Good luck everyone!!! Learn these and you&rsquo;ll be fine. &mdash; Leo</p>';
+  $('#sheet').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: SHEET, cls: 'mg-sheet', clue: { id: 'sheet', title: 'Leo’s sheet: Magpie’s Twelve', kind: 'Given to all of Year 8' }, done: function () {
+      MG.terms(['chatbot']);
+      if (tell('sheet')) { paint(); ER.say('Twelve lines, and every one of them sure of itself. Number 7 even has a page number.'); }
+    } });
+  });
+
+  var DIA = '<svg viewBox="0 0 250 230"><g font-family="Inter,sans-serif" font-size="13" fill="#132233">' +
+    '<text x="4" y="16" font-weight="700" fill="#1b4fa0">What comes next?</text><text x="4" y="40" font-family="Roboto Mono,monospace" font-size="14">Fish and ...</text>' +
+    '<rect x="4" y="54" width="150" height="16" fill="#2f6fd0"/><text x="162" y="67">chips 81%</text>' +
+    '<rect x="4" y="78" width="14" height="16" fill="#9fb3cc"/><text x="24" y="91">rice 7%</text>' +
+    '<rect x="4" y="102" width="8" height="16" fill="#9fb3cc"/><text x="18" y="115">peas 4%</text>' +
+    '<rect x="4" y="126" width="4" height="16" fill="#9fb3cc"/><text x="14" y="139">other words 8%</text>' +
+    '<text x="4" y="172" font-family="Kalam,cursive" font-size="15" fill="#c2185b">The bar is the probability of</text><text x="4" y="190" font-family="Kalam,cursive" font-size="15" fill="#c2185b">each word coming next.</text>' +
+    '<text x="4" y="216" font-family="Kalam,cursive" font-size="15" fill="#c2185b">Not whether it is true!</text></g></svg>';
+  var POSTER = '<h4>How Magpie writes</h4><div class="two"><div>' +
+    '<p>Magpie does not look anything up. It writes <b>one word at a time</b>.</p>' +
+    '<p>Each time, it asks: in all the text I learnt from, which word usually comes next after words like these? Then it writes one of the likeliest. A program that does this is called a <b>language model</b>: it <b>predicts</b> the next word.</p>' +
+    '<p>It has read a great deal, so its sentences are <b>fluent</b>: they sound right. But likely is not the same as true. If a wrong idea was common in the text it learnt from, the wrong word can be the likeliest one.</p>' +
+    '<p>It can also join true pieces together into something false, or write a quotation, a date or a book that never existed. This is called a <b>hallucination</b>.</p>' +
+    '<p class="big">Magpie sounds just as sure when it is wrong as when it is right.</p></div>' + DIA + '</div>';
+  $('#poster').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: POSTER, cls: 'mg-poster', clue: { id: 'how', title: 'Poster: how Magpie writes', kind: 'On the wall' }, done: function () {
+      MG.terms(['language model', 'predict', 'fluent', 'hallucination', 'probability']);
+      if (tell('poster')) { paint(); ER.say('One word at a time. Likely is not the same as true.'); }
+    } });
+  });
+
+  var ALGO = '<h4>Algorithm</h4>' +
+    '<p><b>algorithm</b> (noun): a list of steps that solves a problem. You follow the steps exactly, in order.</p>' +
+    '<p>A recipe is an algorithm. So is the way you do long division. A computer program is a set of algorithms written so that a machine can follow them.</p>' +
+    '<p>The word comes from the name of al-Khwarizmi, a mathematician who worked in Baghdad about 1,200 years ago. When his books were put into Latin, his name was written Algoritmi.</p>' +
+    '<p class="big">A computer follows the steps. It does not ask whether they make sense.</p>';
+  $('#algo').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: ALGO, cls: 'mg-poster algo', clue: { id: 'algo', title: 'Poster: algorithm', kind: 'On the wall' }, done: function () {
+      MG.terms(['algorithm']);
+      if (tell('algo')) ER.say('A list of steps, followed exactly. Like toast.');
+    } });
+  });
+
+  function pb(w, n, pick) { return '<div class="pb' + (pick ? ' pick' : '') + '"><span>' + w + '</span><i style="width:' + n + '%"></i><span>' + n + '%</span></div>'; }
+  var WORK = '<div class="bar">' + '<svg viewBox="0 0 100 100">' + MG.logo(0, 0, 1) + '</svg>' + 'MAGPIE &middot; show working (a staff setting, switched on by Mr Ruskin)</div><div class="in">' +
+    '<h4>Leo&rsquo;s questions this afternoon</h4><div class="hist">how far is the moon from earth<br>when did galileo see the phases of venus<br>which planet is the hottest<br>why is mercury the hottest planet<br>how many planets are there<br>&hellip; and 25 more</div>' +
+    '<h4>How Magpie chose a word</h4>' +
+    '<div class="step"><p>Answer to &ldquo;which planet is the hottest&rdquo;, at the word after <b>&ldquo;The hottest planet is&rdquo;</b>:</p>' + pb('Mercury', 61, 1) + pb('Venus', 35) + pb('Mars', 2) + pb('Jupiter', 1) + pb('other', 1) + '</div>' +
+    '<div class="step"><p>Answer to &ldquo;when did galileo see the phases of venus&rdquo;, at the word after <b>&ldquo;Galileo saw the phases of Venus in&rdquo;</b>:</p>' + pb('1609', 48, 1) + pb('1610', 44) + pb('1612', 4) + pb('other', 4) + '</div>' +
+    '<p class="note">Magpie writes one of the likeliest words: usually the likeliest of all, now and then the next one down. The numbers are not how sure it ought to be. They say how often words like these came next in the text it learnt from.</p></div>';
+  $('#pc').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: WORK, cls: 'mg-screen', clue: { id: 'working', title: 'Magpie’s working: 61% Mercury', kind: 'On Leo’s screen' }, done: function () {
+      if (tell('pc')) ER.say('Sixty-one per cent Mercury, thirty-five per cent Venus. And then it wrote Mercury as if it had never had a doubt.');
+    } });
+  });
+
+  MG.thing('#blinds', 'blinds', 'Orange light from the street lamp in the car park comes through the blinds in stripes.', isBusy);
+  MG.thing('#plant', null, 'A spider plant, older than any computer in the room, and better looked after.', isBusy);
+  MG.thing('#printer', 'printer', 'A small orange light says PAPER JAM. A sticker on the printer says it has said PAPER JAM since March.', isBusy);
+  MG.thing('#clock', null, 'Twenty to seven. The head decides at quarter past eight.', isBusy);
+  MG.thing('#exit', 'fire exit', null, isBusy);
+  MG.thing('#mons .mon', null, 'Asleep. A small blue light on each one breathes slowly in and out.', isBusy);
+  $('#board').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('MERCURY IS THE HOTTEST PLANET IN THE SOLAR SYSTEM. And, for Venus, exactly the same.'); return; }
+    if (!told.ruskin) { ER.say('TINY MAGPIE, says the whiteboard. Mr Ruskin is watching you look at it. Ask him first.'); return; }
+    if (!told.sheet) { ER.say('&ldquo;Leo&rsquo;s sheet first,&rdquo; says Mr Ruskin. &ldquo;You need to know what we&rsquo;re explaining.&rdquo;'); return; }
+    if (!told.poster) { ER.say('&ldquo;My poster,&rdquo; says Mr Ruskin, pointing his cup at it. &ldquo;The blue one. Five minutes of my life in September.&rdquo;'); return; }
+    if (!lock) lock = makeLock();
+    lock.open();
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+
+  /* ---------- Tiny Magpie ---------- */
+  function toks(s) { return s.replace(/\./g, ' .').split(' ').filter(Boolean); }
+  function key(t) { return t === '.' ? 'stop' : t.toLowerCase(); }
+  function makeLock() {
+    var picked = ER.flag('a-words') || [], wait = false;
+    var box = ER.el('div', 'pz tm');
+    box.innerHTML = '<div class="tm-in"><div><h4>TINY MAGPIE<small>has read these twelve sentences, and nothing else</small></h4><ol class="tm-s">' +
+      SENT.map(function (s) { return '<li>' + toks(s).map(function (t) { return '<span class="tw' + (t === '.' ? ' stop' : '') + '" data-t="' + t + '">' + t + '</span>'; }).join(' ') + '</li>'; }).join('') + '</ol></div>' +
+      '<div><div class="tm-rules"><h5>How it writes (its algorithm)</h5><ol>' +
+      '<li>Look at the last two words it has written.</li>' +
+      '<li>Find every place in the twelve sentences where those two words come together.</li>' +
+      '<li>Write the word that comes next most often. (A full stop counts as a word.)</li>' +
+      '<li>If two words come next equally often, write the one from the earlier sentence.</li>' +
+      '<li>Go back to step 1. Stop after a full stop.</li></ol></div>' +
+      '<div class="tm-out"><h5>What Tiny Magpie will write</h5><p class="tm-line"><span class="g">Mercury is</span> <span id="tm-w"></span><span class="caret"></span></p>' +
+      '<div class="tm-btns"><button type="button" id="tm-undo">Rub out the last word</button><button type="button" id="tm-clr">Start again</button></div></div>' +
+      '<div class="tm-steps" id="tm-steps" style="display:none"></div></div></div>' +
+      '<div class="pz-foot"><p class="pmsg"></p><button type="button" class="btn" id="tm-go">Run Tiny Magpie</button></div>';
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function show() { box.querySelector('#tm-w').textContent = picked.join(' ').replace(/ \./g, '.'); ER.flag('a-words', picked); }
+    ER.$$('.tw', box).forEach(function (n) {
+      n.addEventListener('click', function () {
+        if (wait || nextFile) return;
+        if (picked.length && picked[picked.length - 1] === '.') { msg('Tiny Magpie has already written a full stop, and it stops after a full stop. Rub out a word to change it.'); return; }
+        if (picked.length >= 12) { msg('That is a very long sentence for Tiny Magpie. Rub something out.'); return; }
+        picked.push(n.getAttribute('data-t')); MG.sfx.keys(1); show(); msg('');
+      });
+    });
+    box.querySelector('#tm-undo').addEventListener('click', function () { if (wait || nextFile) return; picked.pop(); show(); });
+    box.querySelector('#tm-clr').addEventListener('click', function () { if (wait || nextFile) return; picked = []; show(); });
+    show();
+    function q(t) { return '&ldquo;' + (t === '.' ? 'full stop' : t) + '&rdquo;'; }
+    box.querySelector('#tm-go').addEventListener('click', function () {
+      var all = ['Mercury', 'is'].concat(picked), k, file;
+      if (wait || nextFile) return;
+      if (!picked.length) { ER.sfx.no(); msg('&ldquo;Give it something to do,&rdquo; says Mr Ruskin. &ldquo;Click the words it will write, one at a time, in the sentences on the left.&rdquo;'); return; }
+      for (k = 0; k < picked.length; k++) {
+        if (!ER.check('p' + (k + 3), key(picked[k]))) {
+          ER.sfx.no(); ER.shake(box.querySelector('.tm-out'));
+          var a = all[k], b = all[k + 1];
+          if (k === 1 && key(picked[k]) === 'closest') msg('&ldquo;That&rsquo;s sentence 1, word for word,&rdquo; says Mr Ruskin. &ldquo;Tiny Magpie doesn&rsquo;t copy a sentence. After &lsquo;is the&rsquo;, count what comes next in all twelve.&rdquo;');
+          else if (k === 3 && key(picked[k]) === 'because') msg('&ldquo;Right as far as &lsquo;hottest planet&rsquo;,&rdquo; says Mr Ruskin. &ldquo;After those two words, two different words come next, once each. Read rule 4 again.&rdquo;');
+          else msg('Tiny Magpie agrees with you as far as ' + q(all[k + 1]) + '. Then it writes something else. After ' + q(a) + ' and ' + q(b) + ', find every place those two words come together, and count what comes next.');
+          return;
+        }
+      }
+      if (picked[picked.length - 1] !== '.') { ER.sfx.no(); msg('&ldquo;So far, so right,&rdquo; says Mr Ruskin. &ldquo;But it doesn&rsquo;t stop until a full stop is the word that comes next. Keep going.&rdquo;'); return; }
+      file = ER.exit([picked.map(key).join('-')], { wait: true });
+      if (!file) { msg('The whiteboard freezes. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('a-file', file);
+      replay(all);
+      MG.mine('tiny', 'Tiny Magpie', '<p>Started with &ldquo;Mercury is&rdquo;. It wrote: Mercury is the hottest planet in the Solar System.</p><p>Every three words in a row of that are somewhere in the twelve sentences. The whole sentence is in none of them.</p><p>Started with &ldquo;Venus is&rdquo;, it wrote the same sentence.</p><p>It writes the word that came next most often, not the true one.</p>', true);
+      msg('&ldquo;Yes,&rdquo; says Mr Ruskin, very quietly. &ldquo;That&rsquo;s what it writes. Now find that sentence in the twelve.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'Tiny Magpie writes it in a second: MERCURY IS THE HOTTEST PLANET IN THE SOLAR SYSTEM.',
+          'You look for that sentence on the board. It is not there. Sentence 1 starts it, sentence 2 finishes it, and not one of the twelve says it.',
+          'Mr Ruskin types VENUS IS. Tiny Magpie writes: VENUS IS THE HOTTEST PLANET IN THE SOLAR SYSTEM. The same words, exactly.',
+          '&ldquo;It says it about Mercury and it says it about Venus,&rdquo; says Mr Ruskin. &ldquo;They can&rsquo;t both be true. It doesn&rsquo;t know what&rsquo;s true. It knows which words come after which.&rdquo;',
+          '&ldquo;Magpie is the same thing,&rdquo; he says, &ldquo;with forty-one thousand pages instead of twelve sentences, and a much longer memory than two words. So the real question is: what did it read?&rdquo;',
+          '&ldquo;Mr Moreno trained it,&rdquo; says Leo. &ldquo;He&rsquo;s in the server cupboard.&rdquo; &mdash; &ldquo;He&rsquo;s always in the server cupboard,&rdquo; says Mr Ruskin.'
+        ], function () { busy = false; $('#go').classList.add('on'); });
+      }, 3800);
+    });
+    /* after the door has opened: every step again, with the counts as bars */
+    function replay(all) {
+      var sents = SENT.map(function (s) { return toks(s).map(key); }), out = '', i;
+      for (i = 0; i + 2 < all.length; i++) {
+        var a = key(all[i]), b = key(all[i + 1]), c = {}, order = [], tot = 0;
+        sents.forEach(function (w) { for (var j = 0; j + 2 < w.length + 1; j++) if (w[j] === a && w[j + 1] === b && w[j + 2]) { if (!c[w[j + 2]]) { c[w[j + 2]] = 0; order.push(w[j + 2]); } c[w[j + 2]]++; tot++; } });
+        out += '<div class="st"><b>' + all[i] + ' ' + all[i + 1] + ' &rarr;</b>' + order.map(function (w) {
+          return '<div class="pb' + (w === key(all[i + 2]) ? ' pick' : '') + '"><span>' + (w === 'stop' ? '.' : w) + '</span><i style="width:' + Math.round(100 * c[w] / tot) + '%"></i><span>' + c[w] + ' of ' + tot + '</span></div>';
+        }).join('') + '</div>';
+      }
+      var st = box.querySelector('#tm-steps'); st.innerHTML = out; st.style.display = 'block';
+      box.querySelector('.tm-rules').style.display = 'none';
+    }
+    msg('Click, in the sentences on the left, each word that Tiny Magpie will write after &ldquo;Mercury is&rdquo;. Then run it.');
+    return { open: function () { ER.open('ov-lock', box); }, isOpen: function () { return !!box.parentNode; } };
+  }
+})();
+</script>
+</body>
+</html>

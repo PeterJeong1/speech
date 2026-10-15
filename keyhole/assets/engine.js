@@ -416,7 +416,8 @@ function renderHints() {
     st.hintLv[d.k] = lv + 1; st.hints = (st.hints || 0) + 1; save(); ER.sfx.paper(); renderHints();
   });
 }
-ER.hintsUsed = function () { return T().hints || 0; };
+/* the number an ending shows: once the record is fixed, the hints in the record (a hint taken in the last room is free) */
+ER.hintsUsed = function () { var s = T(); return (s.fin ? s.fin.hints : s.hints) || 0; };
 
 function fmtLine(l) {
   if (typeof l === 'string') return l.charAt(0) === '<' ? l : '<p>' + l + '</p>';
@@ -645,8 +646,9 @@ ER.init = function (cfg) {
   if (!st.t0) st.t0 = Date.now();
   if (!cfg.transient) {
     /* The record of a story: the time really played (seconds with the page in front and the player doing something)
-       and the hints taken. It is fixed when the last room is reached. A room reached by a short cut leaves a gap in
-       seen, and such a run is kept out of the records. */
+       and the hints taken. It is fixed when the last room is reached: the last room is the story's ending, and what
+       is done there is not timed and not counted. A room reached by a short cut leaves a gap in seen, and such a run
+       is kept out of the records. */
     var lastAct = Date.now(), beat = 0, x = cfg.exit;
     st.seen = st.seen || []; if (st.seen.indexOf(cfg.id) < 0) st.seen.push(cfg.id);
     if (x && x.last && !st.fin) {

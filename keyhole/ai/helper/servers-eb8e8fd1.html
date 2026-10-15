@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Server Cupboard · Sounds About Right</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ai.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="helper.css">
+<style>
+  body{--bg:#15191d;--accent:#39d98a;--font-display:'Bricolage Grotesque',sans-serif;--font-ui:'Inter',sans-serif;--font-body:'Literata',serif;
+    --tc-bg:rgba(14,18,22,.96);--tc-ink:#e3efe8;--cap-bg:rgba(14,18,22,.94);--cap-ink:#e3efe8;--panel:#161c21;--panel-ink:#e3efe8;--face-bg:#1d2a26;--q-ink:#ffc069;
+    --fade:#0b0e11;--hud-bg:rgba(14,18,22,.82);--hud-ink:#e3efe8;--hud-line:rgba(227,239,232,.24);--ov-bg:rgba(4,8,10,.74)}
+  .tc-room{font-size:clamp(38px,5.6vw,78px);color:#39d98a}
+  .tc-theme{color:#ffc069}
+  .tk-role{color:#ffc069}
+  .hbtn b{color:#0b0e11}
+  .led{animation:blink 1.3s steps(1,end) infinite}
+  .led.b2{animation-duration:.7s}.led.b3{animation-duration:2.1s;animation-delay:-.6s}.led.b4{animation-duration:.45s;animation-delay:-.2s}
+  @keyframes blink{50%{opacity:.15}}
+  #fanb{animation:spin .5s linear infinite;transform-origin:640px 770px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .dust{animation:dust 9s linear infinite;opacity:0}
+  .dust:nth-child(2){animation-delay:-3s}.dust:nth-child(3){animation-delay:-6s}.dust:nth-child(4){animation-delay:-1.5s}
+  @keyframes dust{0%{opacity:0;transform:translateY(0)}10%{opacity:.7}100%{opacity:0;transform:translateY(420px)}}
+  #screen.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.3) drop-shadow(0 0 12px #39d98a)}}
+
+  /* the search, on Mr Moreno's screen */
+  .ds{width:min(1150px,97vw)}
+  .ds-in{display:grid;grid-template-columns:1fr 300px;gap:14px;background:#0e1418;color:#dfe9e4;border:10px solid #2a3036;border-radius:8px;padding:12px 14px;box-shadow:0 26px 70px rgba(0,0,0,.6)}
+  .ds-hd{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-family:'Roboto Mono',monospace;font-size:13.5px;color:#8fb3a6}
+  .ds-hd b{font-weight:500;color:#ffc069;background:#1b242a;padding:3px 8px;border-radius:4px}
+  .ds-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+  .dc{position:relative;display:flex;flex-direction:column;background:#162026;border:1px solid #2a3a40;border-radius:6px;padding:6px 9px 6px;font-family:'Inter',sans-serif;font-size:12.8px;line-height:1.28}
+  .dc p{flex:1}
+  .dc small{display:block;font-family:'Roboto Mono',monospace;font-size:11.5px;color:#8fb3a6;margin-bottom:2px}
+  .dc small b{font-weight:500;color:#e3efe8}
+  .dc p{margin:0 0 5px;color:#e3efe8}
+  .dc .st{display:flex;gap:6px}
+  .dc .st button{flex:1;padding:3px 0;border:1px solid #3a4a52;border-radius:4px;font-family:'Roboto Mono',monospace;font-size:11px;letter-spacing:.06em;color:#8fb3a6}
+  .dc .st button:hover{border-color:#e3efe8;color:#e3efe8}
+  .dc.K{border-color:#39d98a}.dc.K .k{background:#39d98a;border-color:#39d98a;color:#0b0e11}
+  .dc.B{opacity:.6}.dc.B .b{background:#5a6670;border-color:#5a6670;color:#0b0e11}
+  .dc.bad{outline:3px solid #ff6b5a}
+  .ds-mb{background:#fff;color:#1a1f24;border-radius:3px;padding:10px 12px;font-family:'Roboto Mono',monospace;font-size:12.5px;line-height:1.22;border-top:20px solid #c9d0d6;align-self:start}
+  .ds-mb h5{margin:0 0 6px;font-family:'Inter',sans-serif;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+  .ds-mb table{border-collapse:collapse;width:100%}
+  .ds-mb td{padding:2px 4px;border-bottom:1px solid #e6eaee}
+  .ds-mb td.k{font-family:'Kalam',cursive;font-size:15px;color:#c0392b}
+  .ds-mb td.c{font-family:'Kalam',cursive;font-size:13px;color:#c0392b}
+  .ds-res{margin-top:10px;font-family:'Roboto Mono',monospace;font-size:12.5px;color:#cfe0d8}
+  .ds-res .pb{display:grid;grid-template-columns:170px 1fr 90px;gap:8px;align-items:center;margin:3px 0}
+  .ds-res .pb i{display:block;height:11px;border-radius:2px}
+  .ds .pmsg{color:#e3efe8}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="brick" width="64" height="32" patternUnits="userSpaceOnUse"><rect width="64" height="32" fill="#272d32"/><path d="M0 0H64M0 16H64M0 0V16M32 16V32" stroke="#1b2024" stroke-width="3"/></pattern>
+  <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b4146"/><stop offset="1" stop-color="#23282c"/></linearGradient>
+  <radialGradient id="lampG" cx="50%" cy="0%" r="90%"><stop offset="0" stop-color="#ffd27a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="doorG" cx="0%" cy="50%" r="100%"><stop offset="0" stop-color="#fff2c8" stop-opacity=".5"/><stop offset="1" stop-color="#fff2c8" stop-opacity="0"/></radialGradient>
+  <radialGradient id="ledG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#39d98a" stop-opacity=".22"/><stop offset="1" stop-color="#39d98a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="55%" cy="50%" r="75%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#000" stop-opacity=".2"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1700" fill="url(#brick)"/>
+<!-- the underside of the stairs -->
+<path d="M-1000 -400H2600V300L-1000 -40z" fill="#3a2f27"/><g id="steps" stroke="#2a211b" stroke-width="4" fill="none"></g>
+<path d="M-1000 -40L2600 300" stroke="#55453a" stroke-width="10"/>
+<g fill="#cfc4b4"><circle class="dust" cx="980" cy="150" r="2"/><circle class="dust" cx="1210" cy="175" r="1.6"/><circle class="dust" cx="760" cy="130" r="1.8"/><circle class="dust" cx="1400" cy="196" r="1.5"/></g>
+
+<!-- the floor -->
+<rect x="-1000" y="786" width="3600" height="600" fill="url(#floorG)"/><path d="M200 830q200 -20 380 10t420 -6" fill="none" stroke="#2f7fd8" stroke-width="4" opacity=".7"/><path d="M150 860q300 -30 600 0" fill="none" stroke="#c9a24a" stroke-width="3" opacity=".6"/>
+<!-- the door to the corridor -->
+<rect x="-1000" y="140" width="1140" height="660" fill="#0f1215"/><path d="M0 150h130v640H0z" fill="#e8d9b0" opacity=".25"/><rect x="-1000" y="150" width="1130" height="640" fill="url(#doorG)" opacity=".7"/><rect x="124" y="140" width="16" height="660" fill="#4a3c30"/>
+<g id="markbook" class="hot"><path d="M190 300v20" stroke="#8a8a8a" stroke-width="3"/><rect x="160" y="318" width="64" height="92" rx="4" fill="#8a6a3a"/><rect x="168" y="330" width="48" height="74" fill="#fff"/><rect x="178" y="312" width="28" height="12" rx="3" fill="#c9d0d6"/>
+  <g stroke="#9aa5ae" stroke-width="2"><path d="M174 344h36M174 354h30M174 364h36M174 374h26M174 384h34M174 394h28"/></g><g fill="#c0392b"><circle cx="210" cy="354" r="2"/><circle cx="208" cy="374" r="2"/></g></g>
+<g id="leo" class="hot" transform="translate(70 876) scale(.96)"></g>
+
+<!-- the rack -->
+<ellipse cx="420" cy="480" rx="260" ry="320" fill="url(#ledG)" pointer-events="none"/>
+<g id="rack" class="hot"><rect x="296" y="166" width="248" height="620" rx="6" fill="#0f1215" stroke="#2c343a" stroke-width="4"/><g id="units"></g><g id="cables" fill="none" stroke="#2f7fd8" stroke-width="5" stroke-linecap="round"></g></g>
+<rect x="552" y="430" width="160" height="356" rx="4" fill="#1a1f24" stroke="#2c343a" stroke-width="3"/><rect x="566" y="404" width="132" height="26" rx="4" fill="#23292e"/><g class="led b2" fill="#39d98a"><circle cx="590" cy="417" r="3"/><circle cx="604" cy="417" r="3"/></g>
+<g id="datasheet" class="hot" transform="rotate(-3 622 540)"><rect x="568" y="470" width="110" height="140" fill="#fdfdf8" stroke="#9aa5ae" stroke-width="2"/><rect x="600" y="462" width="46" height="14" fill="#e9e2b0" opacity=".85"/>
+  <text x="623" y="494" class="cG" font-size="12" font-weight="800" text-anchor="middle" fill="#1a1f24">MAGPIE</text><text x="623" y="507" class="cM" font-size="8.5" text-anchor="middle" fill="#1a1f24">DATA SHEET</text>
+  <g fill="#9aa5ae"><rect x="578" y="516" width="90" height="4"/><rect x="578" y="526" width="76" height="4"/><rect x="578" y="536" width="86" height="4"/><rect x="578" y="546" width="66" height="4"/><rect x="578" y="556" width="88" height="4"/><rect x="578" y="566" width="70" height="4"/><rect x="578" y="576" width="82" height="4"/></g>
+  <text x="582" y="600" class="cK" font-size="11" fill="#c0392b">not bad! — M.</text></g>
+<g id="box" class="hot"><path d="M640 836l10 -94h214l10 94z" fill="#b08a5a" stroke="#7a5a32" stroke-width="3"/><path d="M650 742l-10 -22h234l-10 22" fill="#c9a26a" stroke="#7a5a32" stroke-width="3"/>
+  <g fill="#7a3a1a"><rect x="676" y="716" width="30" height="40" transform="rotate(-6 691 736)"/><rect x="712" y="712" width="30" height="40"/><rect x="750" y="716" width="30" height="40" transform="rotate(5 765 736)"/></g>
+  <text x="757" y="790" class="cK" font-size="17" font-weight="700" text-anchor="middle" fill="#2a1a0a">SCANNED.</text><text x="757" y="812" class="cK" font-size="15" text-anchor="middle" fill="#2a1a0a">DO NOT BIN</text></g>
+<g id="fan" class="hot"><path d="M640 770v54M612 830h56" stroke="#5a6670" stroke-width="7" stroke-linecap="round"/><circle cx="640" cy="770" r="42" fill="#2a3036" stroke="#5a6670" stroke-width="4"/>
+  <g id="fanb" fill="#8a96a0"><path d="M640 770l-8 -34h16z"/><path d="M640 770l34 -8v16z"/><path d="M640 770l8 34h-16z"/><path d="M640 770l-34 8v-16z"/></g><circle cx="640" cy="770" r="7" fill="#5a6670"/></g>
+
+<!-- the desk at the back -->
+<g id="turing" class="hot"><rect x="1172" y="246" width="150" height="176" fill="#2a2a2a"/><rect x="1184" y="258" width="126" height="152" fill="#f6f1e6"/>
+  <circle cx="1247" cy="312" r="26" fill="#cfc4b0"/><path d="M1213 372q34 -34 68 0z" fill="#cfc4b0"/><path d="M1225 304q22 -26 44 0q-6 -10 -22 -12t-22 12z" fill="#7a6a58"/>
+  <text x="1247" y="392" class="cL" font-size="10.5" font-style="italic" text-anchor="middle" fill="#2a2418">&#8220;Can machines think?&#8221;</text><text x="1247" y="404" class="cM" font-size="8" text-anchor="middle" fill="#6a604c">A. M. TURING · 1950</text></g>
+<ellipse cx="1430" cy="640" rx="220" ry="150" fill="url(#lampG)" pointer-events="none"/>
+<rect x="860" y="596" width="760" height="16" fill="#5a4a3a"/><rect x="880" y="612" width="14" height="180" fill="#3a3028"/><rect x="1590" y="612" width="14" height="180" fill="#3a3028"/>
+<g id="screen" class="hot"><rect x="1048" y="566" width="18" height="32" fill="#2a3036"/><rect x="1016" y="592" width="82" height="8" rx="3" fill="#2a3036"/><rect x="944" y="426" width="226" height="144" rx="6" fill="#2a3036"/><rect x="952" y="434" width="210" height="128" fill="#0e1418"/>
+  <rect x="958" y="440" width="120" height="10" rx="2" fill="#ffc069" opacity=".8"/><g id="minicards" fill="#1f2c33" stroke="#39d98a" stroke-width="1"></g></g>
+<g id="term" class="hot"><rect x="1272" y="566" width="16" height="32" fill="#2a3036"/><rect x="1186" y="452" width="190" height="118" rx="6" fill="#2a3036"/><rect x="1194" y="460" width="174" height="102" fill="#06100c"/>
+  <g class="cM" font-size="9.5" fill="#39d98a"><text x="1200" y="476">$ ping printer-2</text><text x="1200" y="490">no reply</text><text x="1200" y="504">$ ping printer-2</text><text x="1200" y="518">no reply</text><text x="1200" y="532">$ sigh</text></g><rect class="led" x="1240" y="524" width="8" height="10" fill="#39d98a"/></g>
+<g id="lamp"><path d="M1500 596l-30 -100 -50 -40" fill="none" stroke="#3a3f44" stroke-width="7"/><path d="M1396 440l50 -24 24 40 -56 22z" fill="#c0392b"/><ellipse cx="1500" cy="596" rx="30" ry="6" fill="#3a3f44"/></g>
+<g id="mugs" class="hot"><path d="M1530 594v-40h34v40z" fill="#e8e2d4"/><path d="M1564 562q12 0 12 10t-12 10" fill="none" stroke="#e8e2d4" stroke-width="4"/><path d="M1438 594v-30h26v30z" fill="#4a7ac8"/><path d="M1480 594v-30h26v30z" fill="#e2a400"/></g>
+<g id="mascot" class="hot" transform="translate(1470 884)"></g>
+
+<g id="moreno" class="hot" transform="translate(1110 874) scale(1.1)"></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">To the library</button>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="helper.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, told = {}, lock = null, leoN = 0;
+  var CARDS = [
+    { id: 'h1043', kind: 'h', src: 'Homework <b>H-1043</b> · 2019', t: 'Mercury is the hottest because it is nearest to the Sun.', says: 'm' },
+    { id: 'h1187', kind: 'h', src: 'Homework <b>H-1187</b> · 2019', t: 'Venus. Its thick atmosphere traps the heat.', says: 'v' },
+    { id: 'w07', kind: 'w', src: 'Worksheet <b>W-07</b> · Dr Fairley · 2019', t: 'Venus is the hottest planet: about 465 °C at the surface.', says: 'v' },
+    { id: 'h1502', kind: 'h', src: 'Homework <b>H-1502</b> · 2020', t: 'Mercury, it&rsquo;s the closest planet to the Sun so it&rsquo;s the hottest.', says: 'm' },
+    { id: 'h1766', kind: 'h', src: 'Homework <b>H-1766</b> · 2021', t: 'The hottest planet is Mercury.', says: 'm' },
+    { id: 'h1955', kind: 'h', src: 'Homework <b>H-1955</b> · 2021', t: 'Venus is the hottest because it is the closest planet to the Sun.', says: 'v' },
+    { id: 'h2031', kind: 'h', src: 'Homework <b>H-2031</b> · 2022', t: 'Venus is the hottest planet, even though Mercury is closer to the Sun.', says: 'v' },
+    { id: 't98', kind: 't98', src: 'Textbook <b>Science Today</b> (1998) · p. 112', t: 'There are nine planets. Pluto is the smallest, and usually the farthest from the Sun.', says: '' },
+    { id: 'h2290', kind: 'h', src: 'Homework <b>H-2290</b> · 2023', t: 'Mercury is the hottest planet because it is closest to the Sun. (Source: my brother)', says: 'm' },
+    { id: 'h2318', kind: 'h', src: 'Homework <b>H-2318</b> · 2023', t: 'Mercury, because it&rsquo;s closest.', says: 'm' },
+    { id: 'h2402', kind: 'h', src: 'Homework <b>H-2402</b> · 2024', t: 'Mercury!! Closest = hottest.', says: 'm' },
+    { id: 'h2577', kind: 'h', src: 'Homework <b>H-2577</b> · 2024', t: 'It&rsquo;s Mercury because it&rsquo;s next to the Sun.', says: 'm' },
+    { id: 'h2655', kind: 'h', src: 'Homework <b>H-2655</b> · 2024', t: 'Not Mercury: Venus. Its air is mostly carbon dioxide, which traps heat.', says: 'v' },
+    { id: 't16', kind: 't16', src: 'Textbook <b>Science Now</b> (2016) · p. 88', t: 'There are eight planets. Since 2006, Pluto has been called a dwarf planet.', says: '' }
+  ];
+  var MARKS = [['H-1043', '✗', 'Closest is not hottest.'], ['H-1101', '✓', ''], ['H-1187', '✓', 'Yes!'], ['H-1502', '✗', 'No. Look at Venus again.'], ['H-1640', '✓', ''],
+    ['H-1766', '✗', 'No: see your notes.'], ['H-1955', '✗', 'Right planet, wrong reason.'], ['H-2031', '✓', 'Good.'], ['H-2117', '✗', 'Not finished.'], ['H-2290', '✗', 'Your brother is not a source.'],
+    ['H-2318', '✗', 'No.'], ['H-2402', '✗', 'No!!'], ['H-2577', '✗', 'Closest ≠ hottest.'], ['H-2655', '✓', 'Excellent.'], ['H-2700', '✓', ''], ['H-2810', '✓', '']];
+  var MB = '<table>' + MARKS.map(function (m) { return '<tr><td>' + m[0] + '</td><td class="k">' + m[1] + '</td><td class="c">' + m[2] + '</td></tr>'; }).join('') + '</table>';
+
+  (function () {
+    var s = '', i, x, y, c;
+    for (x = -1000; x < 2600; x += 70) { y = -40 + (x + 1000) * 340 / 3600; s += '<path d="M' + x + ' ' + y + 'v-60h70"/>'; }
+    $('#steps').innerHTML = s;
+    s = '';
+    for (i = 0; i < 15; i++) {
+      y = 182 + i * 39;
+      s += '<rect x="308" y="' + y + '" width="224" height="32" rx="2" fill="' + (i % 4 === 1 ? '#20262c' : '#171c21') + '"/>';
+      for (c = 0; c < 4; c++) s += '<circle class="led b' + (1 + (i + c) % 4) + '" cx="' + (322 + c * 12) + '" cy="' + (y + 16) + '" r="3" fill="' + ((i * 7 + c * 3) % 5 === 0 ? '#ffb02e' : '#39d98a') + '"/>';
+      if (i % 4 === 1) for (c = 0; c < 10; c++) s += '<rect x="' + (380 + c * 14) + '" y="' + (y + 11) + '" width="9" height="9" fill="#05080a"/>';
+      else s += '<rect x="380" y="' + (y + 13) + '" width="140" height="5" rx="2" fill="#2a3238"/>';
+    }
+    $('#units').innerHTML = s;
+    s = '';
+    for (c = 0; c < 8; c++) { x = 384 + c * 14; y = 232; s += '<path d="M' + x + ' ' + y + 'q' + (-60 - c * 12) + ' ' + (120 + c * 30) + ' ' + (-80 - c * 6) + ' ' + (300 + c * 40) + '"/>'; }
+    for (c = 0; c < 5; c++) { x = 390 + c * 14; y = 388; s += '<path d="M' + x + ' ' + y + 'q' + (90 + c * 10) + ' ' + (80 + c * 20) + ' ' + (130 + c * 8) + ' ' + (390 - c * 10) + '" stroke="' + (c % 2 ? '#e2a400' : '#2f7fd8') + '"/>'; }
+    $('#cables').innerHTML = s;
+    s = ''; for (i = 0; i < 8; i++) s += '<rect x="' + (958 + (i % 2) * 102) + '" y="' + (456 + Math.floor(i / 2) * 25) + '" width="96" height="20" rx="2"/>';
+    $('#minicards').innerHTML = s;
+    $('#mascot').innerHTML = '<path d="M-60 0l8 -30h60l8 30z" fill="#8a6a3a"/><path d="M-8 -30v-60" stroke="#8a6a3a" stroke-width="8"/>' + MG.logo(-100, -250, 1.9, false) +
+      '<path d="M-6 -152l-12 -30M-6 -152l12 -30" stroke="#2f6fd0" stroke-width="2.5"/><rect x="-16" y="-152" width="20" height="15" rx="2" fill="#fff" stroke="#2f6fd0" stroke-width="2"/>';
+    $('#moreno').innerHTML = MG.who('moreno', { smile: 2, extra: '<path d="M-26 -290q26 -30 52 0" fill="none" stroke="#3a3f47" stroke-width="5"/><rect x="-32" y="-284" width="10" height="18" rx="4" fill="#3a3f47"/><rect x="22" y="-284" width="10" height="18" rx="4" fill="#3a3f47"/>' });
+    $('#leo').innerHTML = MG.who('leo', { smile: -1 });
+  })();
+
+  ER.init({
+    theme: 'ai', story: 'helper', storyTitle: 'Sounds About Right', id: 'servers', no: 'II', title: 'The Server Cupboard',
+    go: 'Knock on the cupboard door',
+    intro: [
+      'Tiny Magpie followed its algorithm: after the last two words, write the word that came next most often. From MERCURY IS it wrote MERCURY IS THE HOTTEST PLANET IN THE SOLAR SYSTEM, which none of its twelve sentences says. From VENUS IS, it wrote exactly the same.',
+      'The server cupboard is under the main stairs. It is warm, it hums, and it has not been tidied since it was built.',
+      'Mr Moreno, the school&rsquo;s network manager, trained Magpie in the summer holidays.'
+    ],
+    exit: {"next":"library","w":{"93df36a3":"b50fe71e"}}, tags: {"keep":["0a3c7270","fbd64e67","2e5e3bfa","634d6b0a","03dfb0ca"]},
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('b-file') || null; told = ER.flag('b-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('b-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.moreno && told.data && told.marks; }
+  function paint() {
+    $('#screen').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.moreno ? 1 : 0) + (told.data ? 1 : 0) + (told.marks ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['Is there such a book as The Hot Planets? Go to the library: the button at the bottom of the screen.']];
+    if (lock && lock.isOpen()) return ['lock', [
+      'The data sheet says what a system should learn from: examples labelled right, and nothing out of date. The homework cards have their labels in the markbook, on the right. The textbooks and the worksheet have no marks: Mr Moreno told you why.',
+      'Look up every homework number in the markbook. A tick: TEACH. A cross: LEAVE OUT. Be careful: one Venus answer has a cross, because its reason is wrong.',
+      'Two cards are not homework and are about planets, not heat. One book was printed in 1998 and one in 2016. Which one still says what astronomers say today? The worksheet was written by the science teacher.'
+    ]];
+    if (!told.moreno) return ['moreno', ['Mr Moreno trained Magpie. Talk to him.', 'Mr Moreno is at the back, by his desk, with headphones round his neck.']];
+    if (!told.data) return ['data', ['What did Magpie learn from? It is written down somewhere in here.', 'The white laminated sheet taped to the short cabinet, just right of the tall black rack.']];
+    if (!told.marks) return ['marks', ['Mr Moreno mentioned the markbook.', 'The clipboard hanging on the wall by the door, on the left.']];
+    return ['screen', ['Now Mr Moreno&rsquo;s screen: everything Magpie read about the hottest planet.', 'The left-hand monitor on the desk at the back.']];
+  }
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; $('#go').classList.add('on'); ER.say('A Magpie trained on your pile would say Venus. This one never saw a single tick.'); return; }
+    if (told.in) { busy = false; ER.say('The server cupboard, humming to itself under the stairs.'); return; }
+    tell('in');
+    ER.narrate([
+      'A cupboard under the stairs, full of humming. Green and orange lights wink up and down a tall black cabinet, and blue cables hang from it in loops.',
+      'Mr Moreno is at his desk at the back, under the slope of the stairs, with headphones round his neck. Somebody runs down the stairs overhead, and the whole ceiling drums. A little dust floats down.',
+      'On the short cabinet beside the rack a laminated sheet is taped up, slightly crooked. On the wall by the door hangs a clipboard.'
+    ], function () { busy = false; });
+  }
+
+  $('#moreno').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;Mrs Ibarra,&rdquo; says Mr Moreno, without looking up. &ldquo;The library. If that book exists, she&rsquo;ll have it. If it doesn&rsquo;t, she&rsquo;ll know why.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mr Moreno', role: 'Network manager · built Magpie', face: MG.face('moreno'),
+      lines: [
+        { note: 'He has a laptop under one arm and a cold piece of pizza balanced on top of it.', a: '&ldquo;I heard. Mercury. Look: Magpie got ninety-four per cent on its test. Four hundred and seventy-one out of five hundred. That&rsquo;s better than half of Year 8.&rdquo;' },
+        { q: 'What was the test?', a: 'Five hundred questions it had never seen: the questions at the end of every chapter in the textbooks. I kept them out while it was learning, so it couldn&rsquo;t just remember the answers. That&rsquo;s how you test a system properly.' },
+        { q: 'Was the hottest planet one of the five hundred?', a: '<p class="note">A long pause.</p><p>&ldquo;&hellip;No. Not that one.&rdquo;</p>' },
+        { q: 'What did Magpie learn from?', a: 'Everything we had. Forty-one thousand pages. It&rsquo;s all on the data sheet, on the side of the cabinet. More data, better system. Everybody knows that.' },
+        { q: 'Did it learn the marks too?', a: 'The marks? No. Teachers mark in the markbook, and the portal only keeps the answers. Different tables. The textbooks and the worksheets have no marks anyway: they were written by people who knew. Nobody marks a textbook.' },
+        { note: 'He turns his screen round.', a: '&ldquo;Want to see what it read? Search the training data for anything, and you get every page it learnt from. Try &lsquo;hottest&rsquo;. And the markbook&rsquo;s on the clipboard by the door, if you&rsquo;re curious.&rdquo;' }
+      ],
+      clue: { id: 'moreno', title: 'Mr Moreno: different tables', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('moreno')) { paint(); ER.say('The data sheet is on the cabinet. The markbook is by the door. Then the screen.'); } }
+    });
+  });
+
+  var DATA = '<h4>MAGPIE &middot; DATA SHEET<small>M. MORENO &middot; AUGUST &middot; PLEASE DO NOT REMOVE</small></h4>' +
+    '<p><b>What it is.</b> Magpie is a language model, trained by me on the school&rsquo;s own text.</p>' +
+    '<p><b>Training data.</b> 41,000 pages: our two science textbooks (Science Now, 2016, and Science Today, 1998, from the store room), every worksheet on the school network, and every homework answer on the homework portal from 2019 to 2025.</p>' +
+    '<p><b>What it can know.</b> A system knows only what is in its training data. It learns the patterns in its examples. If most of them say one thing, it says that thing too, true or not.</p>' +
+    '<p><b>Labels.</b> An example can carry a label, such as a tick or a cross. Trained only on examples labelled right, a system learns right answers. Without labels, it learns common answers.</p>' +
+    '<p><b>Dates.</b> Data goes out of date. Science Today says there are nine planets. Since 2006 astronomers have counted eight, and Pluto is a dwarf planet.</p>' +
+    '<p><b>Testing.</b> Test set: 500 questions that Magpie did not see while it learnt. Score: 471 (94%).</p>' +
+    '<p class="hand">Not bad for the summer holidays! &mdash; M.</p>';
+  $('#datasheet').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: DATA, cls: 'mg-data', clue: { id: 'data', title: 'Magpie’s data sheet', kind: 'Taped to the cabinet' }, done: function () {
+      MG.terms(['training data', 'example', 'pattern', 'label', 'test set', 'out of date']);
+      if (tell('data')) { paint(); ER.say('It knows only what is in its training data. Without labels, it learns common answers.'); }
+    } });
+  });
+  var MARKBOOK = '<h4>Markbook export</h4><h5>Year 8 science &middot; homework &ldquo;The Solar System&rdquo; &middot; 2019 to 2025 &middot; marks only</h5>' + MB.replace('<table>', '<table><tr><td><b>homework</b></td><td><b>mark</b></td><td><b>comment</b></td></tr>');
+  $('#markbook').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: MARKBOOK, cls: 'mg-marks', clue: { id: 'marks', title: 'The markbook: ticks and crosses', kind: 'On the clipboard' }, done: function () {
+      if (tell('marks')) { paint(); ER.say('Ticks and crosses, and Dr Fairley&rsquo;s comments in red. None of it ever went into Magpie.'); }
+    } });
+  });
+  var TURING = '<h4>Alan Turing (1912&ndash;1954)</h4><p class="q">&ldquo;I propose to consider the question, &lsquo;Can machines think?&rsquo;&rdquo;</p>' +
+    '<small>The first words of &ldquo;Computing Machinery and Intelligence&rdquo;, in the journal Mind, October 1950</small>' +
+    '<p style="margin-top:12px">In this paper Turing described an &ldquo;imitation game&rdquo;. A person asks questions in writing and reads the answers from two players they cannot see, one a human and one a machine. Can they tell which is which? People still argue about what the game would prove.</p>';
+  $('#turing').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: TURING, cls: 'mg-frame', clue: { id: 'turing', title: 'Alan Turing, 1950', kind: 'On the wall' }, done: function () {
+      if (tell('turing')) ER.say('&ldquo;My hero,&rdquo; says Mr Moreno. &ldquo;He asked if machines could think. More than seventy years later, mine can&rsquo;t tell Mercury from Venus.&rdquo;');
+    } });
+  });
+  $('#leo').addEventListener('click', function () {
+    if (busy) return;
+    var L = ['&ldquo;Six years of homework,&rdquo; says Leo. &ldquo;My brother&rsquo;s will be in there. He did Year 8 science four years ago. Sort of.&rdquo;',
+      '&ldquo;H-2290,&rdquo; says Leo. &ldquo;Source: my brother. That&rsquo;s brilliant. That&rsquo;s not mine. Probably.&rdquo;',
+      'Leo is reading the cables as if they might spell something.'];
+    ER.say(L[leoN++ % L.length]);
+  });
+  MG.thing('#rack', 'server', 'The school&rsquo;s network lives here: the Wi-Fi, the printers, the registers. Magpie itself runs on a much bigger computer at the county office.', isBusy);
+  MG.thing('#box', null, 'A box of old textbooks: SCIENCE TODAY, 1998, from the store room. On the side, in marker: SCANNED. DO NOT BIN.', isBusy);
+  MG.thing('#mascot', 'mascot', 'Maggie the Magpie, the school&rsquo;s mascot since 1987, in cardboard. Somebody has given her a lanyard.', isBusy);
+  MG.thing('#mugs', null, 'Three mugs, none of them washed. One says I FIXED IT. One says I BROKE IT. The third is full of pens.', isBusy);
+  MG.thing('#fan', null, 'A desk fan, pointed at the rack. The rack gets hot. So does Mr Moreno.', isBusy);
+  MG.thing('#term', null, 'The other screen. Mr Moreno has been asking printer 2 if it is there. Printer 2 has not answered.', isBusy);
+  $('#screen').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Your pile, sorted. TEACH: five cards. LEAVE OUT: nine.'); return; }
+    if (!told.moreno) { ER.say('Mr Moreno&rsquo;s screen. He would like to be asked before you touch it.'); return; }
+    if (!told.data) { ER.say('&ldquo;Read the data sheet first,&rdquo; says Mr Moreno. &ldquo;On the cabinet. I laminated it. Nobody has read it.&rdquo;'); return; }
+    if (!told.marks) { ER.say('&ldquo;You&rsquo;ll want the markbook,&rdquo; says Mr Moreno. &ldquo;Clipboard, by the door.&rdquo;'); return; }
+    if (!lock) lock = makeLock();
+    lock.open();
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+
+  /* ---------- the search: which examples should Magpie have learnt from? ---------- */
+  function makeLock() {
+    var st = ER.flag('b-st') || {}, wait = false;
+    var box = ER.el('div', 'pz ds');
+    box.innerHTML = '<div class="ds-in"><div><div class="ds-hd">SEARCH THE TRAINING DATA <b>hottest OR planets</b> 14 pages found</div><div class="ds-cards">' +
+      CARDS.map(function (c) { return '<div class="dc" data-id="' + c.id + '"><small>' + c.src + '</small><p>' + c.t + '</p><div class="st"><button type="button" class="k">TEACH</button><button type="button" class="b">LEAVE OUT</button></div></div>'; }).join('') +
+      '</div><div class="ds-res" id="ds-res"></div></div><div class="ds-mb"><h5>Markbook (clipboard)</h5>' + MB + '</div></div>' +
+      '<div class="pz-foot"><p class="pmsg"></p><button type="button" class="btn" id="ds-go">Show Mr Moreno the pile</button></div>';
+    var msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function paintC() { ER.$$('.dc', box).forEach(function (n) { var v = st[n.getAttribute('data-id')]; n.classList.toggle('K', v === 'K'); n.classList.toggle('B', v === 'B'); }); }
+    ER.$$('.dc', box).forEach(function (n) {
+      var id = n.getAttribute('data-id');
+      n.querySelector('.k').addEventListener('click', function () { if (wait || nextFile) return; st[id] = st[id] === 'K' ? '' : 'K'; ER.flag('b-st', st); MG.sfx.card(); paintC(); });
+      n.querySelector('.b').addEventListener('click', function () { if (wait || nextFile) return; st[id] = st[id] === 'B' ? '' : 'B'; ER.flag('b-st', st); MG.sfx.card(); paintC(); });
+    });
+    paintC();
+    function flash(id) { var n = box.querySelector('.dc[data-id="' + id + '"]'); n.classList.add('bad'); setTimeout(function () { n.classList.remove('bad'); }, 1200); }
+    box.querySelector('#ds-go').addEventListener('click', function () {
+      var n = 0, wk = [], wb = [], keep = [], file;
+      if (wait || nextFile) return;
+      CARDS.forEach(function (c) {
+        if (st[c.id]) n++;
+        var should = ER.check('keep', c.id);
+        if (st[c.id] === 'K' && !should) wk.push(c);
+        if (st[c.id] === 'B' && should) wb.push(c);
+        if (st[c.id] === 'K') keep.push(c.id);
+      });
+      if (n < CARDS.length) { ER.sfx.no(); msg('&ldquo;Every page goes one way or the other,&rdquo; says Mr Moreno. &ldquo;' + (CARDS.length - n) + ' still to sort.&rdquo;'); return; }
+      function first(list, kind) { for (var i = 0; i < list.length; i++) if (list[i].kind === kind) return list[i]; return null; }
+      var c;
+      if ((c = first(wk, 'h'))) { ER.sfx.no(); msg('&ldquo;One of the homework answers in your TEACH pile has a cross in the markbook,&rdquo; says Mr Moreno. &ldquo;Teach it that, and it learns the mistake all over again.&rdquo;'); return; }
+      if ((c = first(wb, 'h'))) { ER.sfx.no(); msg('&ldquo;You&rsquo;ve left out a homework answer that a teacher gave a tick,&rdquo; says Mr Moreno. &ldquo;That&rsquo;s exactly the sort of thing it should learn from.&rdquo;'); return; }
+      if ((c = first(wk, 't98'))) { ER.sfx.no(); flash(c.id); msg('&ldquo;Science Today. 1998,&rdquo; says Mr Moreno slowly. &ldquo;What does my data sheet say about data that has a date on it?&rdquo;'); return; }
+      if (wb.length) { ER.sfx.no(); flash(wb[0].id); msg('&ldquo;Why leave that one out?&rdquo; says Mr Moreno. &ldquo;It has no mark because nobody marks a textbook or a teacher&rsquo;s worksheet. Is it right, and is it up to date?&rdquo;'); return; }
+      if (wk.length) { ER.sfx.no(); flash(wk[0].id); msg('&ldquo;Not that one,&rdquo; says Mr Moreno. &ldquo;Read it again.&rdquo;'); return; }
+      file = ER.exit([keep.sort().join('-')], { wait: true });
+      if (!file) { msg('The screen freezes. Something is wrong with this page: tell your teacher.'); return; }
+      wait = true; nextFile = file; ER.flag('b-file', file);
+      var am = 0, av = 0, km = 0, kv = 0;
+      CARDS.forEach(function (x) { if (x.says === 'm') am++; if (x.says === 'v') av++; if (st[x.id] === 'K' && x.says === 'm') km++; if (st[x.id] === 'K' && x.says === 'v') kv++; });
+      function bar(lbl, a, b) { var p = Math.round(100 * a / (a + b)); return '<div class="pb"><span>' + lbl + '</span><i style="width:' + p + '%;background:' + (lbl.indexOf('Mercury') >= 0 ? '#ffb02e' : '#39d98a') + '"></i><span>' + a + ' of ' + (a + b) + ' (' + p + '%)</span></div>'; }
+      box.querySelector('#ds-res').innerHTML = '<div>Trained on everything:</div>' + bar('says Mercury', am, av) + bar('says Venus', av, am) + '<div style="margin-top:6px">Trained on your pile:</div>' + bar('says Mercury', km, kv) + bar('says Venus', kv, km);
+      MG.terms(['label']);
+      MG.mine('pile', 'What Magpie should have learnt from', '<p>Search: hottest OR planets, 14 pages. Mercury 7, Venus 5: 58% Mercury.</p><p>Keep only what is labelled right (a tick in the markbook), what was written by people who knew (the worksheet, the 2016 textbook), and nothing out of date (not the 1998 book).</p><p>Trained on that pile: Venus, 4 out of 4.</p><p>Magpie learnt the common answer, because the labels were in a different table.</p>', true);
+      msg('&ldquo;Five pages,&rdquo; says Mr Moreno. &ldquo;Out of fourteen. And every one of them says Venus.&rdquo;');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'Mr Moreno looks at the two bars for a long time.',
+          '&ldquo;Seven Mercurys and five Venuses,&rdquo; he says. &ldquo;Fifty-eight per cent. Six years of Year 8s telling it Mercury, and six years of teachers telling them no, in a table it never saw.&rdquo;',
+          '&ldquo;I gave it everything we had. I thought more was better.&rdquo; He rubs his eyes. &ldquo;More is better, if it&rsquo;s right. More wrong is just more wrong.&rdquo;',
+          '&ldquo;Can you train it again tonight?&rdquo; says Leo. &mdash; &ldquo;On your pile? It takes the big computer at the county office about three days. Not tonight.&rdquo;',
+          '&ldquo;And the book?&rdquo; says Leo. &ldquo;The Hot Planets. Page 42.&rdquo; Mr Moreno types BURROWS into the search. Nothing. Not one page in forty-one thousand.',
+          '&ldquo;Then where did it come from?&rdquo; &mdash; &ldquo;If there&rsquo;s a book like that anywhere,&rdquo; says Mr Moreno, &ldquo;Mrs Ibarra will know. Mrs Ibarra knows whether anything exists.&rdquo;'
+        ], function () { busy = false; $('#go').classList.add('on'); });
+      }, 4200);
+    });
+    msg('Sort every page: TEACH (Magpie should learn from it) or LEAVE OUT. Then show Mr Moreno the pile.');
+    return { open: function () { ER.open('ov-lock', box); }, isOpen: function () { return !!box.parentNode; } };
+  }
+})();
+</script>
+</body>
+</html>

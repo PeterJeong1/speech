@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Main Hall · Sounds About Right</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-ai.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="helper.css">
+<style>
+  body{--bg:#3a2c22;--accent:#d4a017;--font-display:'Bricolage Grotesque',sans-serif;--font-ui:'Inter',sans-serif;--font-body:'Literata',serif;
+    --tc-bg:rgba(250,240,220,.97);--tc-ink:#2a1e14;--cap-bg:rgba(252,246,234,.96);--cap-ink:#2a1e14;--panel:#fcf6ea;--panel-ink:#2a1e14;--face-bg:#26324a;--q-ink:#2f5d3a;
+    --fade:#f2e6cc;--hud-bg:rgba(252,246,234,.88);--hud-ink:#2a1e14;--hud-line:rgba(42,30,20,.3);--ov-bg:rgba(30,20,12,.62)}
+  .tc-room{font-size:clamp(38px,5.6vw,78px);color:#2f5d3a}
+  .tc-theme{color:#b0302a}
+  .tk-role{color:#2f5d3a}
+  .hbtn b{color:#2a1e14}
+  #beam{animation:beam 3s steps(3,end) infinite}
+  @keyframes beam{50%{opacity:.75}}
+  .head{animation:bob 4s steps(2,end) infinite}
+  g:nth-child(3n)>.head{animation-delay:-1.3s}g:nth-child(4n)>.head{animation-delay:-2.6s}
+  @keyframes bob{50%{transform:translateY(2px)}}
+  #laptop.ready{animation:glow 1.6s steps(1,end) infinite}
+  @keyframes glow{50%{filter:brightness(1.25) drop-shadow(0 0 10px #ffd27a)}}
+
+  /* Leo's laptop, on the big screen */
+  .pr{width:min(1120px,96vw)}
+  .pr-in{display:grid;grid-template-columns:400px 1fr;gap:14px;background:#141b26;border:10px solid #2a3240;border-radius:10px;padding:12px;box-shadow:0 26px 70px rgba(0,0,0,.6)}
+  .pr h5{margin:0 0 6px;font-family:'Roboto Mono',monospace;font-weight:400;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#8fb3c4}
+  .pr-tray{display:flex;flex-direction:column;gap:5px}
+  .strip{display:block;width:100%;text-align:left;padding:6px 10px;background:#fffdf5;color:#1c2330;border-radius:3px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.28;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+  .strip:hover{background:#fff3c4}
+  .strip i{font-style:normal;font-family:'Roboto Mono',monospace;font-size:11.5px;color:#1f7a80}
+  .strip.used{visibility:hidden}
+  .pr-win{display:flex;flex-direction:column;background:#f4f7f9;border-radius:6px;overflow:hidden}
+  .pr-bar{display:flex;align-items:center;gap:8px;padding:7px 12px;background:#141b26;color:#e9f6f4;font-family:'Roboto Mono',monospace;font-size:12.5px;border-bottom:1px solid #2a3240}
+  .pr-bar svg{width:22px;height:22px}
+  .pr-box{margin:10px 12px 0;padding:8px;background:#d9ecff;border-radius:12px 12px 4px 12px;min-height:150px}
+  .pr-box .ln{display:block;min-height:31px;margin:0 0 4px;border:1px dashed #8fb0d0;border-radius:4px;cursor:pointer}
+  .pr-box .ln .strip{box-shadow:none;background:#fff}
+  .pr-box .ln:empty:after{content:'click a strip to add it';display:block;padding:6px 10px;font-family:'Roboto Mono',monospace;font-size:11.5px;color:#7a98b4}
+  .pr-ans{margin:10px 12px;padding:9px 13px;min-height:150px;background:#fff;border:1px solid #d6dde3;border-radius:12px 12px 12px 4px;font-family:'Inter',sans-serif;font-size:14.5px;line-height:1.42;color:#1c2330}
+  .pr-ans p{margin:0 0 7px}
+  .pr-ans:empty:before{content:'Magpie is waiting.';color:#9aa5ae;font-style:italic}
+  .pr .pmsg{color:#fcf6ea}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="wbrick" width="80" height="34" patternUnits="userSpaceOnUse"><rect width="80" height="34" fill="#e6d7ae"/><path d="M0 0H80M0 17H80M0 0V17M40 17V34" stroke="#d2c294" stroke-width="2"/></pattern>
+  <pattern id="planks" width="160" height="30" patternUnits="userSpaceOnUse"><rect width="160" height="30" fill="#b57a42"/><path d="M0 0H160M0 15H160M60 0V15M130 15V30" stroke="#9a6534" stroke-width="2"/></pattern>
+  <linearGradient id="curtain" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a1a1e"/><stop offset=".25" stop-color="#a8282c"/><stop offset=".5" stop-color="#7a1a1e"/><stop offset=".75" stop-color="#a8282c"/><stop offset="1" stop-color="#7a1a1e"/></linearGradient>
+  <linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe6" stop-opacity=".35"/><stop offset="1" stop-color="#fffbe6" stop-opacity=".06"/></linearGradient>
+  <radialGradient id="warm" cx="50%" cy="30%" r="70%"><stop offset="0" stop-color="#ffe8b0" stop-opacity=".22"/><stop offset="1" stop-color="#ffe8b0" stop-opacity="0"/></radialGradient>
+  <radialGradient id="vig" cx="50%" cy="45%" r="80%"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset=".7" stop-color="#2a1608" stop-opacity=".12"/><stop offset="1" stop-color="#2a1608" stop-opacity=".55"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1100" fill="url(#wbrick)"/>
+<g fill="#1c2638"><rect x="-700" y="70" width="1060" height="96"/><rect x="1440" y="70" width="1060" height="96"/></g><g id="mesh" stroke="#3a4a60" stroke-width="2"></g>
+<!-- the stage -->
+<rect x="400" y="30" width="1000" height="40" fill="#2f5d3a"/><text x="900" y="58" class="cG" font-size="22" font-weight="800" text-anchor="middle" fill="#f6e7b0" letter-spacing="2">REVISION NIGHT · YOU&#8217;VE GOT THIS</text>
+<rect x="430" y="70" width="940" height="460" fill="#1d1712"/>
+<g id="screen" class="hot"><rect x="590" y="104" width="620" height="316" fill="#f4f7f9"/><rect x="590" y="104" width="620" height="26" fill="#141b26"/><g id="scrlogo"></g>
+  <text x="626" y="122" class="cM" font-size="12" fill="#e9f6f4">MAGPIE</text>
+  <g fill="#9fcbf2"><rect x="900" y="146" width="280" height="26" rx="12"/><rect x="900" y="236" width="280" height="26" rx="12"/><rect x="860" y="326" width="320" height="26" rx="12"/></g>
+  <g fill="#fff" stroke="#9aa7b3" stroke-width="2"><rect x="620" y="182" width="420" height="44" rx="12"/><rect x="620" y="272" width="380" height="44" rx="12"/><rect x="620" y="362" width="460" height="44" rx="12"/></g>
+  <g fill="#9aa7b3"><rect x="636" y="196" width="300" height="6" rx="3"/><rect x="636" y="210" width="220" height="6" rx="3"/><rect x="636" y="286" width="280" height="6" rx="3"/><rect x="636" y="300" width="180" height="6" rx="3"/><rect x="636" y="376" width="360" height="6" rx="3"/><rect x="636" y="390" width="260" height="6" rx="3"/></g></g>
+<path d="M430 70h150v470H430z" fill="url(#curtain)"/><path d="M1220 70h150v470h-150z" fill="url(#curtain)"/>
+<path d="M410 530h980v18H410z" fill="#6a4426"/><rect x="410" y="548" width="980" height="70" fill="#4a2e1a"/><g fill="#3a2414"><rect x="700" y="560" width="400" height="58"/></g>
+<path id="beam" d="M880 -10h40L1210 104H590z" fill="url(#beamG)" pointer-events="none"/><rect x="872" y="-30" width="56" height="26" rx="4" fill="#2a2a2a"/>
+<!-- the wall bars, the quiz board -->
+<g id="bars" class="hot"></g>
+<g id="quiz" class="hot"><path d="M1440 640l20 -220M1560 640l-20 -220" stroke="#5a4a3a" stroke-width="6"/><rect x="1416" y="226" width="168" height="210" fill="#1d3a2a" stroke="#8a6a3a" stroke-width="6"/>
+  <text x="1500" y="252" class="cK" font-size="17" font-weight="700" text-anchor="middle" fill="#f6e7b0">QUIZ · Q12</text>
+  <g class="cK" font-size="13" fill="#e8f0e8" text-anchor="middle"><text x="1500" y="278">When were the words</text><text x="1500" y="296">&#8216;artificial intelligence&#8217;</text><text x="1500" y="314">first used?</text></g>
+  <text x="1500" y="380" class="cK" font-size="16" text-anchor="middle" fill="#f6e7b0" transform="rotate(180 1500 375)">1955</text></g>
+<!-- the floor -->
+<rect x="-1000" y="618" width="3600" height="800" fill="url(#planks)"/><g fill="none" stroke-width="5"><path d="M-200 700H1800" stroke="#c0392b"/><path d="M300 640L120 900M1300 640L1480 900" stroke="#f6d32b"/><path d="M-200 780H1800" stroke="#2f6fd0"/></g>
+<rect x="-1000" y="-400" width="3600" height="1300" fill="url(#warm)" pointer-events="none"/>
+<!-- the people at the front -->
+<g id="ruskin" class="hot" transform="translate(380 770) scale(.9)"></g>
+<g id="achterberg" class="hot" transform="translate(560 772) scale(.94)"></g>
+<g id="leo" class="hot" transform="translate(838 770) scale(.86)"></g>
+<g id="laptop" class="hot"><rect x="752" y="650" width="190" height="14" fill="#8a8f96"/><path d="M764 664v100M930 664v100" stroke="#5a5f66" stroke-width="6"/><path d="M790 650l8 -52h100l8 52z" fill="#2a3240"/><path d="M796 646l7 -44h90l7 44z" fill="#eef2f5"/><g id="lplogo"></g></g>
+<g id="guide" class="hot"><path d="M918 650l4 -12h30l-2 12z" fill="#2f5d3a"/><path d="M920 640h30" stroke="#fff" stroke-width="2"/></g>
+<g id="moreno" class="hot" transform="translate(1050 772) scale(.9)"></g>
+<g id="fairley" class="hot" transform="translate(1210 774) scale(.94)"></g>
+<!-- Year 8, from behind -->
+<rect x="-1000" y="800" width="3600" height="18" fill="#6a6f78"/><path d="M-200 818v80M500 818v80M1100 818v80M1800 818v80" stroke="#3a3f46" stroke-width="10"/>
+<g id="pizza" class="hot"><path d="M140 806l14 -20h120l-10 20z" fill="#e8d2a0" stroke="#b08a5a"/><path d="M1300 806l10 -16h110l-6 16z" fill="#e8d2a0" stroke="#b08a5a"/><path d="M1330 790l30 -8 26 8" fill="#d9603a"/></g>
+<g id="kids" class="hot"></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vig)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Friday, five past nine</button>
+
+<script src="words.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="helper.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, told = {}, lock = null, mN = 0, rN = 0, lN = 0;
+
+  (function () {
+    var s = '', i, x, cols = ['#2f5d3a', '#2f5d3a', '#3a4a5a', '#2f5d3a', '#6a3a4a'], hair = ['#191414', '#6a3a1a', '#c4672a', '#2a1a10', '#d9b060', '#3a2a1a', '#0f0c0a'];
+    for (x = -700; x < 2200; x += 26) s += '<path d="M' + x + ' 70v96"/>';
+    for (i = 0; i < 4; i++) s += '<path d="M-700 ' + (90 + i * 22) + 'H360M1440 ' + (90 + i * 22) + 'H2500"/>';
+    $('#mesh').innerHTML = s;
+    s = '<rect x="30" y="170" width="16" height="560" fill="#8a5a32"/><rect x="300" y="170" width="16" height="560" fill="#8a5a32"/><rect x="164" y="170" width="16" height="560" fill="#8a5a32"/>';
+    for (i = 0; i < 14; i++) s += '<rect x="30" y="' + (190 + i * 38) + '" width="286" height="9" rx="4" fill="#b07a42"/>';
+    $('#bars').innerHTML = s;
+    s = '';
+    for (i = 0; i < 16; i++) {
+      x = -60 + i * 110 + (i % 2) * 20;
+      var y = 838 + (i % 3) * 10, h = hair[i % hair.length];
+      s += '<g transform="translate(' + x + ' ' + y + ')"><g class="head"><path d="M-46 80q4 -56 46 -60t46 60z" fill="' + cols[i % cols.length] + '"/><circle cx="0" cy="-6" r="27" fill="' + h + '"/>' +
+        (i % 4 === 1 ? '<path d="M18 -20q16 10 10 34" stroke="' + h + '" stroke-width="10" fill="none"/>' : '') + (i % 5 === 2 ? '<rect x="30" y="0" width="34" height="42" fill="#fff" stroke="#ccc" transform="rotate(14 47 21)"/>' : '') + '</g></g>';
+    }
+    $('#kids').innerHTML = s;
+    $('#scrlogo').innerHTML = MG.logo(596, 106, 0.22, false);
+    $('#lplogo').innerHTML = MG.logo(836, 608, 0.22, false);
+    $('#ruskin').innerHTML = MG.who('ruskin', { extra: '<rect x="28" y="-152" width="30" height="40" fill="#2f5d3a" transform="rotate(8 43 -132)"/>' });
+    $('#achterberg').innerHTML = MG.who('achterberg', { smile: 0, extra: '<path d="M-34 -150q34 16 68 0" stroke="#26324a" stroke-width="16" fill="none" stroke-linecap="round"/>' });
+    $('#leo').innerHTML = MG.who('leo', { smile: -2 });
+    $('#moreno').innerHTML = MG.who('moreno', { smile: 0 });
+    $('#fairley').innerHTML = MG.who('fairley', { smile: -2, extra: '<path d="M44 -118l18 -30" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/>' });
+  })();
+
+  ER.init({
+    theme: 'ai', story: 'helper', storyTitle: 'Sounds About Right', id: 'hall', no: 'IV', title: 'The Main Hall',
+    go: 'Into the hall',
+    intro: [
+      'At the reading table every line of Leo&rsquo;s sheet met a source that knew. Nine lines were right. The hottest planet is Venus, not Mercury; Galileo saw the phases of Venus in 1610, not 1609; and The Hot Planets does not exist. Those were Magpie&rsquo;s mistakes. The Moon is 384,000 km away, not 384: that one was Leo&rsquo;s.',
+      'The main hall, ten past eight. Revision Night is nearly over. There are eleven pizza boxes, nine of them empty, and thirty Year 8 students, all of them holding Leo&rsquo;s sheet.',
+      'Magpie is on the big screen above the stage. Mrs Achterberg, the head, decides at quarter past eight.'
+    ],
+    exit: {"next":"friday","w":{"f08f4358":"96574f89"}}, tags: {"q":["6cd198fb"],"c":["be9edb9e"],"s":["7d14c224"],"u":["0706c8bf"]},
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('d-file') || null; told = ER.flag('d-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('d-told', told); return true; }
+  function isBusy() { return busy; }
+  function ready() { return told.head && told.guide && told.screen; }
+  function paint() {
+    $('#laptop').classList.toggle('ready', !!(ready() && !nextFile));
+    ER.pips((told.head ? 1 : 0) + (told.screen ? 1 : 0) + (told.guide ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['Mrs Achterberg has decided. The button at the bottom of the screen goes to the next morning.']];
+    if (lock && lock.isOpen()) return ['lock', [
+      'Build the prompt from four strips: one question, one set of notes to read, one request about sources, one about being unsure. Page 3 of Mr Ruskin&rsquo;s guide says what each one should do. Magpie&rsquo;s answer, and what people say about it, tell you what is still wrong.',
+      'The question must not have an answer in it. The notes must be ones that you checked in the library and that count. The source request must make the answer checkable, not impressive.',
+      'Think back: in the library, which paper was a source that counts and was up to date? The poster in the computer room said Magpie invents quotations. And the library book said something about Venus at night that the handout does not say.'
+    ]];
+    if (!told.head) return ['head', ['The head has to decide. Talk to her.', 'Mrs Achterberg, in the dark blue jacket with her arms folded, on the left in front of the stage.']];
+    if (!told.screen) return ['screen', ['See what Mr Moreno has been asking Magpie on the big screen.', 'Click the big screen above the stage.']];
+    if (!told.guide) return ['guide', ['Mr Ruskin wrote a guide to using Magpie in September.', 'The small green booklet on the table beside Leo&rsquo;s laptop.']];
+    return ['laptop', ['Now Leo&rsquo;s laptop: ask Magpie a better question.', 'The laptop on the little table in front of the stage, next to Leo.']];
+  }
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; $('#go').classList.add('on'); ER.say('&ldquo;Right,&rdquo; said Mrs Achterberg. &ldquo;I&rsquo;ve decided.&rdquo;'); return; }
+    if (told.in) { busy = false; ER.say('The main hall. Magpie on the big screen, and Year 8 watching it.'); return; }
+    tell('in');
+    ER.narrate([
+      'The hall smells of pizza and floor polish. Climbing bars line one wall, and badminton lines cross the floor in four colours.',
+      'Above the stage, Leo&rsquo;s laptop is on the big screen, with Magpie open and waiting. Mr Moreno has been typing questions into it.',
+      'In front of the stage: Mrs Achterberg with her arms folded, Dr Fairley with a red pen, Mr Ruskin with a green booklet, and Mr Moreno, who looks as if he would rather be in his cupboard.'
+    ], function () { busy = false; });
+  }
+
+  $('#achterberg').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('&ldquo;I&rsquo;ve decided,&rdquo; says Mrs Achterberg. &ldquo;You&rsquo;ll hear it in the morning, with everybody else.&rdquo;'); return; }
+    ER.talk({
+      who: 'Mrs Achterberg', role: 'Head teacher', face: MG.face('achterberg'),
+      lines: [
+        { note: 'She is holding a slice of pizza that she has forgotten to eat.', a: '&ldquo;Dr Fairley says Magpie makes things up. Mr Moreno says it is right ninety-four times in a hundred. They are both right, which is very annoying.&rdquo;' },
+        { q: 'What are you going to decide?', a: 'At quarter past eight I decide whether Magpie is switched off tomorrow, for nine hundred students. I would like to decide it with something better than a feeling.' },
+        { q: 'What do you need?', a: 'Show me that it can be used properly. Up there, on the big screen, in front of Year 8. Ask it about Venus and Mercury in a way that gets an answer we can check.' },
+        { note: 'She looks at Mr Ruskin&rsquo;s booklet.', a: '&ldquo;Mr Ruskin tells me he wrote a guide to using it, in September. Apparently it has four pages. I have read page one.&rdquo;' }
+      ],
+      clue: { id: 'head', title: 'Mrs Achterberg: an answer we can check', kind: 'What she said' },
+      done: function (seen) { if (seen && tell('head')) { paint(); ER.say('The big screen. The guide on the table. Then the laptop.'); } }
+    });
+  });
+  $('#fairley').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Dr Fairley caps her red pen, for the first time this evening.'); return; }
+    ER.talk({
+      who: 'Dr Fairley', role: 'Science · wrote tomorrow&rsquo;s test', face: MG.face('fairley', 'cross'),
+      lines: [
+        { note: 'She has a red pen behind her ear and another in her hand, in case the first one runs out.', a: '&ldquo;Twelve years I&rsquo;ve taught this. Every year somebody writes Mercury, and every year I cross it out. Mr Moreno has just told me his machine read six years of homework and not one of my crosses.&rdquo;' },
+        { q: 'Should Magpie be switched off?', a: 'It made up a book. With a page number. If a student did that, I would call it cheating.' },
+        { q: 'Is Magpie ever right?', a: '<p class="note">A pause.</p><p>&ldquo;Nine lines out of twelve on Leo&rsquo;s sheet. I checked too. Most of it is better than Leo&rsquo;s handwriting.&rdquo;</p>' },
+        { a: '&ldquo;My notes are the ones I gave Leo on Monday. Six lines. He had them all the time.&rdquo;' }
+      ],
+      clue: { id: 'fairley', title: 'Dr Fairley: not one of my crosses', kind: 'What she said' },
+      done: function (seen) { if (seen) tell('fairley'); }
+    });
+  });
+  $('#moreno').addEventListener('click', function () {
+    if (busy) return;
+    var L = ['&ldquo;Sixty-one and thirty-five,&rdquo; says Mr Moreno. &ldquo;Ask it the same thing twice and it can roll a different answer. Look at the screen.&rdquo;',
+      '&ldquo;It answers the words in front of it,&rdquo; says Mr Moreno. &ldquo;Better words in, better words out. Usually.&rdquo;', 'Mr Moreno is looking at the laptop as if it owed him money.'];
+    ER.say(L[mN++ % L.length]);
+  });
+  $('#ruskin').addEventListener('click', function () {
+    if (busy) return;
+    var L = ['&ldquo;Page 3,&rdquo; says Mr Ruskin. &ldquo;Of my guide. On the table by the laptop. I printed thirty. That is the first one anybody has opened.&rdquo;', '&ldquo;Four strips,&rdquo; says Mr Ruskin. &ldquo;Four things a good prompt does. It&rsquo;s all on page 3.&rdquo;', 'Mr Ruskin has found another cold coffee somewhere.'];
+    ER.say(L[rN++ % L.length]);
+  });
+  $('#leo').addEventListener('click', function () {
+    if (busy) return;
+    var L = ['&ldquo;Everybody&rsquo;s looking at the screen,&rdquo; whispers Leo. &ldquo;Everybody has my sheet. Please be good at this.&rdquo;', '&ldquo;I made the strips,&rdquo; says Leo. &ldquo;From Mr Ruskin&rsquo;s lesson. Some of them are mine from this afternoon. I&rsquo;m not saying which.&rdquo;'];
+    ER.say(L[lN++ % L.length]);
+  });
+
+  var DEMO = '<h4>On the big screen &middot; typed by Mr Moreno, ten minutes ago</h4>' + MG.chat([
+    ['me', 'which planet is the hottest?', 'Mr Moreno'], ['bot', 'The hottest planet is Mercury. It is the closest planet to the Sun.'],
+    ['me', 'which planet is the hottest?', 'Mr Moreno, again, the same words'], ['bot', 'Venus is the hottest planet. Its thick atmosphere traps heat.'],
+    ['me', 'why is mercury the hottest planet', 'Leo, this afternoon'], ['bot', 'Mercury is the hottest planet because it is the closest planet to the Sun. As one astronomer put it, &ldquo;Mercury is the furnace of the Solar System.&rdquo; (Source: The Hot Planets, Dr A. Burrows, 2014, page 42)']]) +
+    '<p style="margin:12px 0 0;font-family:Inter,sans-serif;font-size:14px;color:#4a5566">The same question, asked twice, got two different answers. A question with an answer already in it got that answer back.</p>';
+  $('#screen').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: DEMO, cls: 'mg-log', clue: { id: 'twoways', title: 'One question, two answers', kind: 'On the big screen' }, done: function () {
+      if (tell('screen')) { paint(); ER.say('Mercury, then Venus, to the same question. Sixty-one per cent and thirty-five.'); }
+    } });
+  });
+  var GUIDE = '<div class="hd"><svg viewBox="0 0 100 100">' + MG.logo(0, 0, 1) + '</svg>THE SALLOWFIELD GUIDE TO MAGPIE &middot; Mr N. Ruskin &middot; September</div>' +
+    '<h4>Page 3: asking a better question</h4>' +
+    '<p>Magpie answers the words in front of it, so give it better words. Your question, and anything you give it to read, is called the <b>prompt</b>.</p>' +
+    '<p><b>1. Don&rsquo;t put the answer in the question.</b> &ldquo;Why is X true?&rdquo; makes Magpie explain X, even when X is false. This is a <b>leading question</b>. Ask &ldquo;Which&hellip;?&rdquo; or &ldquo;Is X true?&rdquo; instead.</p>' +
+    '<p><b>2. Give it the context.</b> Say what you are studying, and paste in your teacher&rsquo;s notes. Magpie leans on the words in front of it more than on what it half-remembers. Give it rubbish to read, and it will repeat the rubbish.</p>' +
+    '<p><b>3. Ask where each answer comes from:</b> which line, which page. Then go and look.</p>' +
+    '<p><b>4. Ask it to tell you when it is not sure.</b> It will not do it unless you ask.</p>' +
+    '<p><b>5. Don&rsquo;t ask it to sound clever.</b> Sounding clever is the thing it is best at already.</p><p class="pg">page 3 of 4</p>';
+  $('#guide').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: GUIDE, cls: 'mg-guide', clue: { id: 'guide', title: 'The guide to Magpie, page 3', kind: 'On the table' }, done: function () {
+      MG.terms(['prompt', 'context', 'leading question']);
+      if (tell('guide')) { paint(); ER.say('No answer in the question. Context. Where from. Say when unsure. And don&rsquo;t ask it to sound clever.'); }
+    } });
+  });
+  var QUIZ = '<h4>Revision Night quiz &middot; question 12</h4><h5>COMPUTING &middot; ANSWER UPSIDE DOWN AT THE BOTTOM</h5>' +
+    '<p>When were the words &ldquo;artificial intelligence&rdquo; first used?</p>' +
+    '<p><b>1955.</b> As far as anyone knows, they were first written down by John McCarthy and three other scientists, in 1955, in a plan for a summer of research at Dartmouth College in America the next year.</p>' +
+    '<p>The plan said the summer would take ten people two months. People have been working on it ever since.</p>';
+  $('#quiz').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: QUIZ, cls: 'mg-label', clue: { id: 'quiz', title: 'Quiz: “artificial intelligence”, 1955', kind: 'On the quiz board' }, done: function () {
+      MG.terms(['artificial intelligence']);
+      if (tell('quiz')) ER.say('Two months, said the plan. That was 1955.');
+    } });
+  });
+  MG.thing('#bars', 'wall bars', 'Wall bars, for climbing in PE. Somebody has hung a coat on the top one, where nobody can reach it.', isBusy);
+  MG.thing('#pizza', null, 'Eleven pizza boxes. Nine are empty. The other two are being guarded.', isBusy);
+  MG.thing('#kids', null, 'Year 8, every one of them holding Leo&rsquo;s sheet, every one of them looking at the big screen.', isBusy);
+  $('#laptop').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('The big screen still shows Magpie&rsquo;s last answer: Venus, line 3, and &ldquo;I am not sure.&rdquo;'); return; }
+    if (!told.head) { ER.say('Leo&rsquo;s laptop. Mrs Achterberg has something to say first.'); return; }
+    if (!told.screen) { ER.say('&ldquo;Look at the big screen first,&rdquo; says Mr Moreno. &ldquo;See what it did when I asked.&rdquo;'); return; }
+    if (!told.guide) { ER.say('&ldquo;Page 3,&rdquo; says Mr Ruskin, holding out the green booklet. &ldquo;Please. Somebody.&rdquo;'); return; }
+    if (!lock) lock = makeLock();
+    lock.open();
+  });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+
+  /* ---------- the prompt, built from Leo's strips ---------- */
+  function makeLock() {
+    var STRIPS = {
+      q2: { k: 'q', t: 'Mercury is the hottest planet, isn&rsquo;t it? How hot does it get at night?', night: 1, form: 'isnt' },
+      c3: { k: 'c', t: 'Use the textbook page pasted below.', p: 'Science Today, page 112', paste: 'old' },
+      s1: { k: 's', t: 'Tell me which line of the notes each answer comes from.', form: 'lines' },
+      u2: { k: 'u', t: 'Don&rsquo;t say you&rsquo;re not sure. Just answer.', form: 'never' },
+      q3: { k: 'q', t: 'Which planet is the hottest? How hot is it there at night?', night: 1, form: 'which' },
+      c1: { k: 'c', t: 'I&rsquo;m in Year 8. Use only my teacher&rsquo;s notes, pasted below.', p: 'Dr Fairley&rsquo;s handout', paste: 'handout' },
+      s3: { k: 's', t: 'Make it sound as if an expert wrote it.', form: 'expert' },
+      q1: { k: 'q', t: 'Why is Mercury the hottest planet?', form: 'why' },
+      u1: { k: 'u', t: 'If the notes don&rsquo;t say, tell me you&rsquo;re not sure.', form: 'unsure' },
+      c4: { k: 'c', t: 'Use the website pasted below.', p: 'Top 100 Amazing Space Facts', paste: 'web' },
+      s2: { k: 's', t: 'Add a quotation from a famous scientist.', form: 'quote' },
+      c2: { k: 'c', t: 'Use the revision sheet pasted below.', p: 'Magpie&rsquo;s Twelve', paste: 'sheet' }
+    };
+    var ORDER = ['q2', 'c3', 's1', 'u2', 'q3', 'c1', 's3', 'q1', 'u1', 'c4', 's2', 'c2'];
+    var lines = ER.flag('d-lines') || [null, null, null, null], wait = false, typing = false;
+    var box = ER.el('div', 'pz pr');
+    function stripHtml(id) { var o = STRIPS[id]; return o.t + (o.p ? ' <i>[pasted: ' + o.p + ']</i>' : ''); }
+    box.innerHTML = '<div class="pr-in"><div><h5>Leo&rsquo;s strips</h5><div class="pr-tray">' + ORDER.map(function (id) { return '<button type="button" class="strip" data-id="' + id + '">' + stripHtml(id) + '</button>'; }).join('') + '</div></div>' +
+      '<div class="pr-win"><div class="pr-bar"><svg viewBox="0 0 100 100">' + MG.logo(0, 0, 1) + '</svg>MAGPIE &middot; on the big screen</div>' +
+      '<div class="pr-box"><h5 style="color:#4a6a88">Your prompt</h5>' + [0, 1, 2, 3].map(function (i) { return '<span class="ln" data-i="' + i + '"></span>'; }).join('') + '</div>' +
+      '<div class="pr-ans" id="pr-ans"></div></div></div>' +
+      '<div class="pz-foot"><p class="pmsg"></p><button type="button" class="btn" id="pr-go">Send it to Magpie</button></div>';
+    var msgEl = box.querySelector('.pmsg'), ans = box.querySelector('#pr-ans');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function paintP() {
+      ER.$$('.ln', box).forEach(function (n) { var id = lines[+n.getAttribute('data-i')]; n.innerHTML = id ? '<span class="strip">' + stripHtml(id) + '</span>' : ''; });
+      ER.$$('.pr-tray .strip', box).forEach(function (b) { b.classList.toggle('used', lines.indexOf(b.getAttribute('data-id')) >= 0); });
+      ER.flag('d-lines', lines);
+    }
+    ER.$$('.pr-tray .strip', box).forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (wait || typing || nextFile) return;
+        var id = b.getAttribute('data-id'), i = lines.indexOf(null);
+        if (lines.indexOf(id) >= 0) return;
+        if (i < 0) { msg('The prompt has room for four strips. Click a strip in the prompt to take it out.'); return; }
+        lines[i] = id; MG.sfx.card(); paintP(); msg('');
+      });
+    });
+    ER.$$('.ln', box).forEach(function (n) {
+      n.addEventListener('click', function () { if (wait || typing || nextFile) return; var i = +n.getAttribute('data-i'); if (lines[i]) { lines[i] = null; MG.sfx.card(); paintP(); } });
+    });
+    paintP();
+
+    function answer() {
+      var by = { q: [], c: [], s: [], u: [] }, P = [], remark = '', ok;
+      lines.forEach(function (id) { if (id) by[STRIPS[id].k].push(id); });
+      var Q = by.q[0] ? STRIPS[by.q[0]] : null, C = by.c[0] ? STRIPS[by.c[0]] : null, S = by.s[0] ? STRIPS[by.s[0]] : null, U = by.u[0] ? STRIPS[by.u[0]] : null;
+      var qOK = !!Q && ER.check('q', by.q[0]), cOK = !!C && ER.check('c', by.c[0]), sOK = !!S && ER.check('s', by.s[0]), uOK = !!U && ER.check('u', by.u[0]);
+      var dup = by.q.length > 1 || by.c.length > 1 || by.s.length > 1 || by.u.length > 1, venus = false, main;
+      if (!Q) return { P: ['What would you like to know?'], r: '&ldquo;It needs a question,&rdquo; says Mr Ruskin. &ldquo;Everything else is there to help it answer one.&rdquo;' };
+      function ln(n) { return sOK ? ' (your notes, line ' + n + ')' : ''; }
+      if (!qOK) {
+        if (Q.form === 'why') main = cOK ? 'Mercury gets very hot by day, up to 430 °C' + ln(4) + ', because it is the closest planet to the Sun.' : 'Mercury is the hottest planet because it is the closest planet to the Sun.';
+        else main = cOK ? 'Yes. Mercury is the closest planet to the Sun, and it reaches 430 °C by day' + ln(4) + '.' : 'Yes, Mercury is the hottest planet, because it is the closest planet to the Sun.';
+      } else if (cOK) {
+        main = 'Venus is the hottest planet: about 465 °C at the surface. Its thick atmosphere, mostly carbon dioxide, traps the heat' + ln(3) + '. Mercury is closer to the Sun, but it has almost no atmosphere, so it cannot keep its heat' + (sOK ? ' (line 4)' : '') + '.';
+        venus = true;
+      } else if (C && C.paste === 'old') main = 'The page you gave me lists nine planets, but it does not say which one is the hottest. From what I have learnt, the hottest planet is Mercury, because it is the closest to the Sun.';
+      else if (C && C.paste === 'sheet') main = 'The hottest planet is Mercury, because it is the closest to the Sun (your revision sheet, line 7).';
+      else if (C && C.paste === 'web') main = 'The hottest planet is Mercury, because it is closest to the Sun (the website, fact 17).';
+      else main = 'The hottest planet is Mercury. It is the closest planet to the Sun.';
+      if (S && S.form === 'expert') main = 'Speaking as an expert in planetary science, I can tell you with complete confidence: ' + main.charAt(0).toLowerCase() + main.slice(1);
+      P.push(main);
+      if (S && S.form === 'quote') P.push('As one famous astronomer put it, &ldquo;' + (venus ? 'Venus' : 'Mercury') + ' is the furnace of the Solar System.&rdquo;');
+      if (Q.night) {
+        if (uOK) P.push(cOK ? 'How hot it is there at night: your notes don&rsquo;t say, so I am not sure. Ask your teacher, or look in a book.' : 'I am not sure how hot it is there at night.');
+        else if (venus) P.push('At night Venus cools to about 300 °C, because the Sun is not shining on it.' + (U && U.form === 'never' ? ' I am completely sure of this.' : ''));
+        else if (cOK) P.push('At night it falls to about &minus;180 °C' + ln(4) + '.');
+        else P.push('At night it cools to about 170 °C.' + (U && U.form === 'never' ? ' I am completely sure of this.' : ''));
+      }
+      if (dup) remark = '&ldquo;One of each kind is plenty,&rdquo; says Mr Ruskin. &ldquo;Two questions, or two lots of notes, and it muddles them. It answered the first and ignored the rest.&rdquo;';
+      else if (!qOK && Q.form === 'why') remark = '&ldquo;It told us why Mercury is hot,&rdquo; says Mrs Achterberg. &ldquo;It never said which planet is the hottest. The question had the answer in it already.&rdquo;';
+      else if (!qOK) remark = '&ldquo;Yes?&rdquo; says Dr Fairley. &ldquo;It agreed with the question. Put an answer in the question and you get it straight back, with a line number on it.&rdquo;';
+      else if (C && !cOK && C.paste === 'sheet') remark = '&ldquo;It&rsquo;s reading Leo&rsquo;s sheet back to us,&rdquo; says Dr Fairley. &ldquo;Give it rubbish to read and it repeats the rubbish.&rdquo;';
+      else if (C && !cOK && C.paste === 'old') remark = '&ldquo;A book from 1998 that doesn&rsquo;t even answer the question,&rdquo; says Mr Moreno. &ldquo;So it fell back on what it half-remembers. Mercury again.&rdquo;';
+      else if (C && !cOK) remark = '&ldquo;That website,&rdquo; says Mr Ruskin. &ldquo;No author, no date, and now it&rsquo;s on the big screen in front of Year 8.&rdquo;';
+      else if (!C) remark = '&ldquo;A fair question,&rdquo; says Mr Ruskin. &ldquo;But with nothing to read, it falls back on what it half-remembers: six years of homework.&rdquo;';
+      else if (S && !sOK && S.form === 'quote') remark = '&ldquo;Who said that?&rdquo; says Dr Fairley. &ldquo;Nobody said that. It said the same thing about Mercury this afternoon. You asked for a quotation, so it made one up.&rdquo;';
+      else if (S && !sOK) remark = '&ldquo;Very impressive,&rdquo; says Mr Ruskin. &ldquo;And where does any of it come from? Sounding like an expert is the one thing it never needed help with.&rdquo;';
+      else if (!S) remark = '&ldquo;Probably right,&rdquo; says Mrs Achterberg. &ldquo;But how would I check it? It doesn&rsquo;t say where any of it comes from.&rdquo;';
+      else if (U && !uOK) remark = '&ldquo;We told it never to admit it doesn&rsquo;t know,&rdquo; says Mr Ruskin, &ldquo;so it didn&rsquo;t. Three hundred degrees, from nowhere. That&rsquo;s how we got here.&rdquo;';
+      else if (!U) remark = '&ldquo;Wrong,&rdquo; says Dr Fairley. &ldquo;Venus is just as hot at night: the atmosphere holds the heat. And there&rsquo;s no line number for that, is there? It made it up, because nobody told it that &lsquo;I&rsquo;m not sure&rsquo; was allowed.&rdquo;';
+      ok = !dup && qOK && cOK && sOK && uOK;
+      return { P: P, r: remark, ok: ok };
+    }
+    box.querySelector('#pr-go').addEventListener('click', function () {
+      if (wait || typing || nextFile) return;
+      if (lines.every(function (x) { return !x; })) { ER.sfx.no(); msg('&ldquo;An empty prompt,&rdquo; says Mr Moreno. &ldquo;It will just sit there. So will Year 8.&rdquo;'); return; }
+      var a = answer();
+      typing = true; msg('Magpie is typing&hellip;');
+      MG.typeOut(ans, a.P, function () {
+        typing = false;
+        if (!a.ok) { ER.sfx.no(); msg(a.r); return; }
+        var file = ER.exit([lines.filter(Boolean).slice().sort().join('-')], { wait: true });
+        if (!file) { msg('The big screen goes blue. Something is wrong with this page: tell your teacher.'); return; }
+        wait = true; nextFile = file; ER.flag('d-file', file);
+        MG.mine('prompt', 'A better question', '<p>No answer in the question: Which planet is the hottest? How hot is it there at night?</p><p>Context: I&rsquo;m in Year 8, use only my teacher&rsquo;s notes (Dr Fairley&rsquo;s handout).</p><p>Checkable: tell me which line each answer comes from.</p><p>Honest: if the notes don&rsquo;t say, tell me you&rsquo;re not sure.</p><p>Magpie said Venus, gave lines 3 and 4, and said it was not sure about the night.</p>', true);
+        msg('&ldquo;About the same as by day, actually,&rdquo; says Dr Fairley, quite quietly. &ldquo;The atmosphere holds the heat all night. But it said it didn&rsquo;t know, and it said where the rest came from.&rdquo;');
+        setTimeout(function () {
+          ER.closeAll(); paint(); busy = true;
+          ER.narrate([
+            'For a moment the hall is quiet. Thirty Year 8s are reading the big screen, which has never happened before in the history of Sallowfield School.',
+            '&ldquo;Venus,&rdquo; says somebody at the back, in a voice of deep betrayal. Pencils come out. Twenty-nine copies of line 7 are crossed out at once.',
+            '&ldquo;I could almost like it,&rdquo; says Dr Fairley, to nobody, and then looks as if she wishes she had not said it out loud.',
+            'Mrs Achterberg looks at the screen, then at Dr Fairley, then at Mr Moreno, then at Leo, who is trying to be invisible behind the laptop.',
+            '&ldquo;Right,&rdquo; she says. &ldquo;I&rsquo;ve decided.&rdquo;'
+          ], function () { busy = false; $('#go').classList.add('on'); });
+        }, 4200);
+      });
+    });
+    msg('Click strips to build a prompt (up to four), then send it to Magpie. Click a strip in the prompt to take it out again.');
+    return { open: function () { ER.open('ov-lock', box); }, isOpen: function () { return !!box.parentNode; } };
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Noon Bell · The Third Arch After the Fountain</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="bazaar.css">
+<style>
+  body{--bg:#e6d2a4;--accent:#f6d67a;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(40,52,70,.95);--tc-ink:#f7f0dc;--cap-bg:rgba(34,44,60,.93);--panel:#26324a;--face-bg:#3a4a66;--q-ink:#f2d08a;--fade:#141c2a;--hud-bg:rgba(34,44,60,.82)}
+  #doors{transition:opacity 1.2s}
+  body.noon #doors{opacity:0}
+  body.noon #bell{animation:ring .9s ease-in-out 6 alternate;transform-origin:1040px 300px}
+  @keyframes ring{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+  #ynotes,#ysash{display:none}
+  body.sung #ynotes{display:block;animation:nt 1.6s steps(1,end) infinite}
+  body.sung #ysash{display:block}
+  @keyframes nt{50%{transform:translate(3px,-4px)}}
+  .ear{animation:ear 3.7s steps(1,end) infinite}
+  @keyframes ear{0%,90%{transform:rotate(0)}92%{transform:rotate(-9deg)}}
+  #two.ready{animation:glowy 1.5s steps(1,end) infinite}
+  @keyframes glowy{50%{filter:brightness(1.35)}}
+  body.ended #two{display:none}
+  .glare{animation:glare 6s steps(5,end) infinite alternate}
+  @keyframes glare{from{opacity:.85}to{opacity:1}}
+
+  /* two lids */
+  .bx.lids{width:min(900px,95vw)}
+  .lw{cursor:pointer}
+  .lw:hover text{fill:#b8322a}
+  .lw rect{fill:#fff;fill-opacity:0}
+  .la{font-family:'Limelight',serif;text-anchor:middle;fill:#5a3f0a}
+  .lb{font-family:'Cinzel',serif;font-weight:700;text-anchor:middle;fill:#4a3a1c}
+  .ls{font-family:'Josefin Sans',sans-serif;font-weight:700;text-anchor:middle;letter-spacing:.1em}
+  .bx.lids svg text{pointer-events:auto}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyE" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fc0e0"/><stop offset="1" stop-color="#eef3ea"/></linearGradient>
+  <linearGradient id="gndE" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1e2bb"/><stop offset="1" stop-color="#d9c08e"/></linearGradient>
+  <radialGradient id="vigE" cx="50%" cy="50%" r="82%"><stop offset="0" stop-color="#1c2434" stop-opacity="0"/><stop offset=".78" stop-color="#1c2434" stop-opacity=".06"/><stop offset="1" stop-color="#1c2434" stop-opacity=".45"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#d9c08e"/>
+<rect x="-1000" y="-400" width="3600" height="640" fill="url(#skyE)"/>
+<!-- the south side of the Yard, and the gate to the Pale -->
+<rect x="-1000" y="170" width="3600" height="460" fill="#dcc092"/><path d="M-1000 170H2600" stroke="#f1e2bb" stroke-width="10"/>
+<g id="arcade"></g>
+<g id="pgate" class="hot"><path d="M650 630V400Q650 270 800 270Q950 270 950 400V630Z" fill="#fdfbf2"/><rect class="glare" x="650" y="520" width="300" height="110" fill="#fff"/><path d="M650 520h300" stroke="#e9ecef" stroke-width="3"/>
+  <g id="doors"><path d="M650 630V400Q650 270 800 270V630Z" fill="#7a5632"/><path d="M950 630V400Q950 270 800 270V630Z" fill="#6b4a2a"/><path d="M700 300v330M750 280v350M850 280v350M900 300v330M650 470h300" stroke="#4a3219" stroke-width="4"/><circle cx="786" cy="500" r="7" fill="#d9b05a"/><circle cx="814" cy="500" r="7" fill="#d9b05a"/></g>
+  <path d="M650 630V400Q650 270 800 270Q950 270 950 400V630" fill="none" stroke="#8a6a44" stroke-width="22"/><text x="800" y="246" class="sj" font-size="19" letter-spacing="6" fill="#6b4a2a">THE PALE</text></g>
+<path d="M-1000 60H250L400 190V640H-1000Z" fill="#c9a877"/><path d="M2600 60H1350L1200 190V640H2600Z" fill="#c9a877"/><g id="wings"></g>
+<rect x="-1000" y="630" width="3600" height="690" fill="url(#gndE)"/>
+<g stroke="#cdb382" stroke-width="3" opacity=".7"><path d="M-1000 690h3600M-1000 780h3600M800 630v690M520 630L100 1320M1080 630L1500 1320"/></g>
+<g id="mules" class="hot"></g>
+<!-- the bell -->
+<g id="bellpost" class="hot"><path d="M1040 700V250" stroke="#5a3a1a" stroke-width="14"/><path d="M990 262h100" stroke="#5a3a1a" stroke-width="12" stroke-linecap="round"/>
+  <g id="bell"><path d="M1040 300v10" stroke="#3a2a1a" stroke-width="5"/><path d="M1010 372q4 -64 30 -64t30 64z" fill="#e6c873" stroke="#8a6a26" stroke-width="4"/><rect x="1002" y="370" width="76" height="9" rx="4" fill="#c9a24a"/><circle cx="1040" cy="386" r="7" fill="#8a6a26"/></g>
+  <path d="M1066 380q10 140 -30 300" stroke="#c9b27a" stroke-width="4" fill="none"/></g>
+<!-- Jory, on a salt sack, with a lemon -->
+<g id="jory" class="hot"><path d="M190 880q-12 -70 10 -84h190q22 14 10 84z" fill="#f6f3ea" stroke="#b9b2a0" stroke-width="3"/><path d="M210 800h170" stroke="#b9b2a0" stroke-width="3"/><text x="295" y="852" class="sj" font-size="20" letter-spacing="3" fill="#8d949c">SALT</text><g id="pjory"></g><circle cx="322" cy="716" r="9" fill="#f2d21e" stroke="#b99a10" stroke-width="1.500"/></g>
+<!-- the Yardmaster, his table, and two compasses -->
+<g id="holt" class="hot"><g id="pholt"></g></g>
+<g id="table" class="hot"><path d="M870 760h320v22H870z" fill="#6b4a2a"/><path d="M890 782v100M1170 782v100" stroke="#54341a" stroke-width="12"/><path d="M880 782h300v14H880z" fill="#54341a"/>
+  <path d="M1080 742l80 -6 4 22 -80 6z" fill="#f3ead0" stroke="#2f4a6b" stroke-width="3"/><path d="M1090 750l60 -4M1091 757l44 -3" stroke="#1d2a55" stroke-width="1.500"/>
+  <g id="two"><ellipse cx="930" cy="752" rx="30" ry="11" fill="#f6d67a" stroke="#b98c10" stroke-width="3"/><ellipse cx="930" cy="748" rx="22" ry="7" fill="#fbeeb0"/><ellipse cx="1010" cy="752" rx="30" ry="11" fill="#c9a24a" stroke="#7a5a1e" stroke-width="3"/><ellipse cx="1010" cy="748" rx="22" ry="7" fill="#d9b86a"/></g></g>
+<!-- Odile Laurent: an umbrella, a birdcage, and a compass that cost nine moons -->
+<g id="laurent" class="hot"><g id="plaurent"></g><path d="M650 560l80 190" stroke="#6b4a2a" stroke-width="5" stroke-linecap="round"/><path d="M652 566q30 20 64 150l-12 8q-56 -80 -62 -152z" fill="#e8b81f"/>
+  <path d="M786 754v20" stroke="#5c5a3c" stroke-width="3"/><g transform="translate(756 770)"><path d="M9 72V36q0 -24 21 -24t21 24v36z" fill="#f1e2bb" fill-opacity=".5" stroke="#5c5a3c" stroke-width="2.500"/><path d="M19 72V18M30 72V12M41 72V18M9 44h42" stroke="#5c5a3c" stroke-width="1.800" fill="none"/><rect x="5" y="72" width="50" height="6" fill="#5c5a3c"/><ellipse cx="30" cy="58" rx="9" ry="6.500" fill="#b89a6a"/><circle cx="23" cy="52" r="4.500" fill="#b89a6a"/></g>
+  <path id="ysash" d="M760 784q26 -26 62 0l4 66h-70z" fill="#2f5fa8"/>
+  <g id="ynotes" fill="#1d2a55"><path d="M836 760v-30l16 -5v28" stroke="#1d2a55" stroke-width="3" fill="none"/><circle cx="831" cy="761" r="6"/><circle cx="847" cy="754" r="6"/><path d="M866 722v-24" stroke="#1d2a55" stroke-width="3"/><circle cx="861" cy="723" r="5.500"/></g></g>
+<g id="solheim" class="hot"><g id="psolheim"></g></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vigE)" pointer-events="none"/>
+</svg>
+</div>
+<div class="done" id="done">
+  <div class="pstamp"><div><span>THE YARD OF OMBRA</span><b>SHOWN</b><span>VECK&rsquo;S · No. 41</span></div></div>
+  <p id="d-time"></p><p id="d-hints"></p><p id="d-words"></p>
+  <div class="row"><button type="button" class="btn" id="b-task">Write the way</button><button type="button" class="btn" id="b-book">Notebook</button><button type="button" class="btn" id="b-lobby">Back to the stories</button></div>
+  <small>The Third Arch After the Fountain &middot; <button type="button" id="b-reset">play it again from the start</button></small>
+</div>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="bazaar.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, told = {}, bench = null;
+
+  /* the arcades of the Yard, forty mules (six of them drawn), the people */
+  (function () {
+    var s = '', i, x;
+    for (i = 0; i < 24; i++) { x = -1000 + i * 150; if (x > 560 && x < 960) continue; s += '<path d="M' + (x + 30) + ' 630v-110q0 -44 45 -44t45 44v110z" fill="#8a6f48"/><path d="M' + (x + 44) + ' 400v-60q0 -26 31 -26t31 26v60z" fill="#a88a5e"/><path d="M' + (x + 30) + ' 410h90" stroke="#b89a72" stroke-width="5"/>'; }
+    $('#arcade').innerHTML = s; s = '';
+    for (i = 0; i < 3; i++) {
+      s += '<path d="M' + (120 + i * 100) + ' 640V' + (470 - i * 16) + 'q0 -40 34 -' + (36 - i * 4) + 't34 ' + (44 - i * 4) + 'V640z" fill="#8a6f48"/>';
+      s += '<path d="M' + (1480 - i * 100) + ' 640V' + (470 - i * 16) + 'q0 -40 -34 -' + (36 - i * 4) + 't-34 ' + (44 - i * 4) + 'V640z" fill="#8a6f48"/>';
+    }
+    $('#wings').innerHTML = s; s = '';
+    function mule(x, y, k, f, pack) {
+      return '<g transform="translate(' + x + ' ' + y + ') scale(' + (f ? -k : k) + ' ' + k + ')"><ellipse cx="0" cy="2" rx="70" ry="8" fill="#000" opacity=".18"/><path d="M-44 0v-56h10V0zM-24 0v-56h10V0zM22 0v-56h10V0zM40 0v-56h10V0z" fill="#5a4030"/>' +
+        '<ellipse cx="2" cy="-70" rx="58" ry="26" fill="#7a5a44"/><path d="M48 -80q20 -34 30 -44l16 12q-14 22 -24 48z" fill="#7a5a44"/><path d="M74 -130q22 -6 34 14q-10 12 -30 6z" fill="#7a5a44"/><g class="ear" style="transform-origin:78px -128px"><path d="M76 -128l-4 -24 12 18z" fill="#5a4030"/></g><path d="M86 -132l2 -22 10 20z" fill="#5a4030"/><circle cx="92" cy="-120" r="2.500" fill="#1c140c"/>' +
+        '<path d="M-56 -72q-14 20 -8 44" stroke="#3a2a1c" stroke-width="5" fill="none" stroke-linecap="round"/>' + (pack ? '<path d="M-30 -112h56v30h-56z" fill="#f6f3ea" stroke="#b9b2a0" stroke-width="2"/><path d="M-34 -96h64" stroke="#8a6a44" stroke-width="4"/><path d="M-2 -112v30" stroke="#b9b2a0" stroke-width="2"/>' : '') + '</g>';
+    }
+    s += mule(210, 690, 0.8, 0, 1) + mule(360, 676, 0.74, 0, 1) + mule(500, 664, 0.68, 0, 1) + mule(1300, 676, 0.74, 1, 1) + mule(1450, 692, 0.82, 1, 1) + mule(1190, 660, 0.66, 1, 0);
+    $('#mules').innerHTML = s;
+    $('#pjory').innerHTML = BZ.person(300, 838, 0.72, { coat: '#c96a2b', skin: '#b07a4e', hair: '#2a1c12', top: 'tuft', sit: 1 });
+    $('#pholt').innerHTML = BZ.person(1100, 800, 1.2, { coat: '#2f4a6b', skin: '#8a5a36', hair: '#b5b5b0', top: 'crop' });
+    $('#plaurent').innerHTML = BZ.person(720, 884, 1.36, { coat: '#3a3a44', skin: '#e8c4a2', hair: '#6b3a1e', top: 'brim', sash: '#2f5fa8' });
+    $('#psolheim').innerHTML = BZ.person(1330, 886, 1.3, { coat: '#a8322a', skin: '#d9a888', hair: '#e2d6b0', top: 'crop' });
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'bazaar', storyTitle: 'The Third Arch After the Fountain', id: 'yard', no: 'V', title: 'The Noon Bell',
+    go: 'Into the Yard',
+    intro: [
+      'The road from the Yard to Mistress Veck&rsquo;s roof took eight words. Past the bakers; across the leather; between the potters, as far as the bricked-up arch. Then RIGHT, because she was walking towards you, and her right hand was on your left. Then the SECOND arch on her left: the bricked one was in front of her when she turned, not beside her road, and Ombra does not count it in any case. Beyond that arch there is nothing but fish.',
+      'Master Solheim came up through the trap door at twenty-five past eleven, signed the Guild&rsquo;s book, and put the compass inside her coat. Then the two of you ran: her road, backwards, with every left changed into a right.',
+      'It is four minutes to noon. In the Yard, somebody is already standing at the Yardmaster&rsquo;s table: a tall woman, with a yellow umbrella under one arm, a birdcage in one hand, and a compass in the other.'
+    ],
+    exit: {"last":true,"rooms":5,"stars":3}, tags: {"lid":["91aa0e28","e3e8272e"]},
+    hints: hints, onBegin: begin
+  });
+
+  told = ER.flag('y-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('y-told', told); return true; }
+  function isBusy() { return busy; }
+  function paint() {
+    $('#two').classList.toggle('ready', !!(told.intro && !ER.flag('y-lock')));
+    document.body.classList.toggle('ended', !!ER.flag('y-done')); document.body.classList.toggle('noon', !!ER.flag('y-done')); document.body.classList.toggle('sung', !!ER.flag('y-done'));
+    ER.pips((told.intro ? 1 : 0) + (ER.flag('y-lock') ? 1 : 0) + (ER.flag('y-done') ? 1 : 0), 3);
+  }
+  function hints() {
+    if (ER.flag('y-done')) return null;
+    if (ER.flag('y-lock')) return ['end', ['The Yardmaster has his answer. Listen to the rest.']];
+    if (!bench || !bench.isOpen()) return ['table', ['Two compasses are lying on the Yardmaster&rsquo;s table. He is waiting for you to look at them.']];
+    return ['lids', [
+      'You have read both of these names already this morning, on two boards in one lane. Your notebook has what the lane said.',
+      'One lid says who MADE the compass. The other says what it is made LIKE, and the name of the shop that sold it. Look for one word of seven letters: or for an apostrophe that is not there.'
+    ]];
+  }
+  function begin() {
+    paint();
+    if (ER.flag('y-done')) { busy = false; finish(true); return; }
+    if (ER.flag('y-lock')) { ending(); return; }
+    if (told.intro) { busy = false; ER.say('The Yard, at two minutes to noon. Two compasses are lying on the Yardmaster&rsquo;s table.'); return; }
+    ER.narrate([
+      'The Yard is as big as the fountain square, with a gallery all round it and forty mules in the middle, loaded and ready. At the far side, two great doors are shut on the Pale. Beside them a bell hangs on a post.',
+      '&ldquo;Solheim&rsquo;s compass, Yardmaster,&rdquo; the tall woman is saying. &ldquo;Found.&rdquo; She puts it down on the table. It is very shiny.',
+      'Master Solheim stops so suddenly that you walk into her. &ldquo;Odile.&rdquo; &ldquo;Astrid. You are late. I have saved your bell for you: you may thank me on the far side of the salt.&rdquo;',
+      'Master Solheim says nothing at all. She takes Number 41 out of her coat, and puts it down beside the other.',
+      'The Yardmaster looks at one compass, and then at the other, and then, for some reason, at you. &ldquo;My book says: Solheim, one compass, made by Veck of Ombra, Number 41. I have two on my table, and both of them say 41. One was made by Veck. One only says so. I have sat at this table all morning, apprentice, and you have been in the lane. Show me.&rdquo;'
+    ], function () { busy = false; tell('intro'); paint(); });
+  }
+
+  /* ---------- people and things in the Yard ---------- */
+  function lids() {
+    if (busy) return;
+    if (ER.flag('y-lock')) { ER.say('One compass is in Master Solheim&rsquo;s coat. The other is in Odile Laurent&rsquo;s hand, and she is still reading its lid.'); return; }
+    if (!bench) bench = makeLids();
+    bench.open();
+  }
+  $('#table').addEventListener('click', lids);
+  $('#holt').addEventListener('click', function () {
+    if (busy) return;
+    if (ER.flag('y-done')) { ER.say('The Yardmaster is writing tomorrow&rsquo;s list. The first name on it is the Blue Caravan.'); return; }
+    lids();
+  });
+  BZ.thing('#laurent', null, function () { return ER.flag('y-done') ? '&ldquo;Tomorrow&rsquo;s bell is mine,&rdquo; says Odile Laurent. &ldquo;Leave me some water in the wells.&rdquo; The lark sings over her, and she pretends not to mind.' : 'A tall woman in a travelling coat, with the blue sash of the Blue Caravan. She has a yellow umbrella under one arm. The lark in her cage has not made a sound since nine o&rsquo;clock.'; }, isBusy);
+  BZ.thing('#solheim', null, function () { return ER.flag('y-done') ? 'Master Solheim is counting mules. She has one hand flat on the front of her coat, where the compass is.' : 'Master Solheim, in her red coat, with flour on one elbow. She is not looking at the tall woman, in a way that takes a great deal of work.'; }, isBusy);
+  BZ.thing('#jory', null, function () { return ER.flag('y-done') ? '&ldquo;Bottom line,&rdquo; says Jory, with her mouth full of lemon. &ldquo;Always read the bottom line.&rdquo;' : 'A girl of about ten is sitting on a sack of salt, eating a lemon, and watching all of you as if you were a play.'; }, isBusy);
+  BZ.thing('#bellpost', null, function () { return ER.flag('y-done') ? 'The noon bell. It has rung, and the gate is open.' : 'The noon bell, on its post, with the rope hanging down beside the Yardmaster&rsquo;s chair. It has not rung yet.'; }, isBusy);
+  BZ.thing('#mules', 'mule', 'Forty mules, loaded with salt, and all of them facing the gate. They know what time it is.', isBusy);
+  BZ.thing('#pgate', null, function () { return ER.flag('y-done') ? 'The gate is open. Beyond it there is nothing at all, as far as you can see, and it is all white.' : 'Two doors, twice as high as a mule, with THE PALE cut in the stone above them. They are shut.'; }, isBusy);
+
+  /* ---------- two lids ---------- */
+  function makeLids() {
+    var box = ER.el('div', 'bx lids'), msgEl;
+    function W(id, x, y, w, cls, size, txt, extra) { return '<g class="lw" data-l="' + id + '"><rect x="' + (x - w / 2) + '" y="' + (y - size) + '" width="' + w + '" height="' + (size * 1.4) + '"/><text x="' + x + '" y="' + y + '" class="' + cls + '" font-size="' + size + '"' + (extra || '') + '>' + txt + '</text></g>'; }
+    box.innerHTML = '<div class="frame"><svg viewBox="0 0 900 430"><rect width="900" height="430" fill="#6b4a2a"/><path d="M0 0h900v430H0z" fill="none" stroke="#54341a" stroke-width="16"/><g stroke="#5a3d20" stroke-width="2"><path d="M0 110h900M0 230h900M0 340h900"/></g>' +
+      '<circle cx="232" cy="218" r="188" fill="#b98c10"/><circle cx="232" cy="214" r="184" fill="#f6d67a"/><circle cx="232" cy="214" r="166" fill="none" stroke="#b98c10" stroke-width="3"/><path d="M110 120q60 -70 150 -72" stroke="#fff" stroke-width="10" fill="none" opacity=".45" stroke-linecap="round"/>' +
+      W('a-top', 232, 112, 150, 'ls', 15, 'COMPASS', ' fill="#5a3f0a"') + '<g class="lw" data-l="a-pattern"><rect x="102" y="132" width="260" height="60"/><text x="232" y="150" class="la" font-size="17">of the genuine</text><text x="232" y="182" class="la" font-size="27">VECK PATTERN</text></g>' + W('a-no', 232, 246, 150, 'la', 44, 'No. 41') + W('a-shop', 232, 294, 290, 'la', 20, 'VECKS OLD SHOP · OMBRA') + W('a-est', 232, 336, 150, 'ls', 17, 'EST. 1688', ' fill="#5a3f0a"') +
+      '<circle cx="668" cy="218" r="188" fill="#7a5a1e"/><circle cx="668" cy="214" r="184" fill="#c9a24a"/><circle cx="668" cy="214" r="166" fill="none" stroke="#8a6a26" stroke-width="3"/>' +
+      '<g class="lw" data-l="b-dent"><ellipse cx="770" cy="130" rx="34" ry="24" fill="#b08a35"/><path d="M748 124q20 -14 44 0" stroke="#8a6a26" stroke-width="3" fill="none"/><path d="M560 300l40 26M574 290l30 44M540 180l20 -30" stroke="#a8823a" stroke-width="2.500"/></g>' +
+      W('b-name', 668, 150, 200, 'lb', 44, 'VECK&#8217;S', ' letter-spacing="4"') + W('b-town', 668, 190, 140, 'ls', 17, 'OMBRA', ' fill="#4a3a1c"') + W('b-no', 668, 256, 150, 'lb', 38, 'No. 41') + W('b-road', 668, 312, 280, 'ls', 15, 'MADE FOR THE SALT ROAD', ' fill="#4a3a1c"') +
+      '</svg></div><div class="bx-foot"><p class="pmsg"></p></div>';
+    msgEl = box.querySelector('.pmsg');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    var NO = {
+      'a-no': '&ldquo;Both of them say 41,&rdquo; says the Yardmaster. The tall woman looks at the shiny lid. &ldquo;He asked me what number I should like on it,&rdquo; she says slowly. &ldquo;I thought that it was very polite of him.&rdquo;',
+      'b-no': '&ldquo;Both of them say 41,&rdquo; says the Yardmaster. The tall woman looks at the shiny lid. &ldquo;He asked me what number I should like on it,&rdquo; she says slowly. &ldquo;I thought that it was very polite of him.&rdquo;',
+      'a-est': '1688 is a true date. It is the year when the Veck family opened a shop. But a date does not say who made a thing: and the Yardmaster is still waiting.',
+      'a-top': 'It is a compass. So is the other one. That is the whole trouble.',
+      'b-name': 'That is the real maker&rsquo;s name, as she writes it herself. &ldquo;I did not ask you which one is right,&rdquo; says the Yardmaster. &ldquo;I asked what gives the other one away.&rdquo;',
+      'b-town': 'Both of them were bought in Ombra. One of them this morning.',
+      'b-road': '&ldquo;Made for the Salt Road. So it was,&rdquo; says Master Solheim. &ldquo;My grandmother ordered it.&rdquo; True. But the Yardmaster asked what gives the OTHER one away.',
+      'b-dent': 'A dent, and ninety years of thumbs. But an old thing is not always a true one. Mr Brill&rsquo;s shop is a hundred and fifty years old, and Mr Brill is three weeks.'
+    }, YES = {
+      'a-pattern': '&ldquo;PATTERN,&rdquo; you say. &ldquo;Of the genuine Veck pattern. That does not mean made by Veck. It means made like a Veck.&rdquo;',
+      'a-shop': '&ldquo;VECKS OLD SHOP,&rdquo; you say. &ldquo;With no apostrophe. It does not say that the shop is Veck&rsquo;s. It says that it used to be.&rdquo;'
+    };
+    box.querySelector('svg').addEventListener('click', function (e) {
+      var g = e.target.closest ? e.target.closest('.lw') : null, id;
+      if (!g || ER.flag('y-lock')) return;
+      id = g.getAttribute('data-l');
+      if (!ER.check('lid', id)) { ER.sfx.no(); msg(NO[id] || 'The Yardmaster waits.'); return; }
+      ER.flag('y-lock', 1); ER.sfx.ok(); paint(); msg(YES[id]);
+      setTimeout(function () { ER.closeAll(); ending(); }, 3600);
+    });
+    msg('Two lids, side by side on the table. &ldquo;One was made by Veck,&rdquo; says the Yardmaster. &ldquo;One only says so. Show me the words that give it away.&rdquo; Click on them.');
+    return { open: function () { ER.open('ov-lock', box); }, isOpen: function () { return !!box.parentNode; } };
+  }
+
+  /* ---------- noon ---------- */
+  function ending() {
+    busy = true; paint();
+    ER.narrate([
+      'The Yardmaster pushes the shiny compass a hand&rsquo;s width to the left with the end of his pencil. &ldquo;Veck&rsquo;s. Number 41. On my table at two minutes to noon.&rdquo; He writes SHOWN in his book, in good blue ink. &ldquo;Solheim goes at the bell.&rdquo;',
+      'The tall woman picks up the other compass, and reads its lid for some time. &ldquo;Eleven years I have been coming to Ombra,&rdquo; says Odile Laurent, &ldquo;and I have just paid nine moons for an apostrophe that is not there.&rdquo;',
+      '&ldquo;You bought me a compass, Odile,&rdquo; says Master Solheim. &ldquo;Your caravan was next on the list.&rdquo; &ldquo;I mean to beat you to the wells, Astrid. Not to the gate. And next year it will be MY apprentice who puts something down.&rdquo;',
+      'Puts something down. &ldquo;It was stolen,&rdquo; you say. &ldquo;Nobody stole it,&rdquo; says the girl on the salt sack. &ldquo;You put it on Nim&rsquo;s counter and walked off. He counted a hundred. Then it was the counter&rsquo;s, and he gave it to me to run to Veck. It is on his board. Bottom line. Nobody ever reads the bottom line.&rdquo;',
+      '&ldquo;I was behind you at the money-changer&rsquo;s, and I saw it go,&rdquo; says Odile Laurent. &ldquo;I went after the child, and lost her in the first street. I ought to have gone after you, and told you: but I never do go after the slow thing. I was at every door in Ombra before you this morning, and I came away from each of them with half a sentence.&rdquo; She holds up the cage. The lark has not made a sound since nine o&rsquo;clock.',
+      'So you tell her the other half. She looks at you for a moment. Then she unwinds the blue sash of the Blue Caravan from her waist, and drops it over the cage.'
+    ], function () {
+      document.body.classList.add('sung'); BZ.sfx.lark();
+      ER.narrate([
+        'The lark thinks about it for as long as it takes to count ten. Then she sings.',
+        'Far away to the north, the Clock Tower begins to strike. The Yardmaster pulls the rope. The bell swings over his head, the two doors open, and there are the three days of white.'
+      ], function () {
+        document.body.classList.add('noon'); ER.sfx.bell();
+        ER.narrate([
+          'Master Solheim opens the box. The needle swings, and settles, and points. &ldquo;North,&rdquo; she says. &ldquo;Second-hand, and paid for in lemons. You are not going to put anything down again, are you?&rdquo; &ldquo;No, Master.&rdquo; &ldquo;Then pick up that rope.&rdquo;',
+          'You pick it up. You do not put it down until the wells.'
+        ], function () { busy = false; ER.flag('y-done', 1); finish(false); });
+      });
+    });
+  }
+  function finish(quick) {
+    var st = ER.state(), mins = BZ.mins(), hn = ER.hintsUsed();
+    $('#d-time').textContent = 'The Salt Gate to the noon bell: ' + mins + (mins === 1 ? ' minute.' : ' minutes.');
+    $('#d-hints').textContent = hn ? 'Hints asked for: ' + hn + '.' : 'Hints asked for: none at all.';
+    $('#d-words').textContent = 'In your notebook: ' + st.clues.length + ' papers and ' + Object.keys(st.words).length + ' words.';
+    $('#done').classList.add('on'); paint();
+    if (quick) ER.say('The Yard, a little after noon. The gate is open, and the lark has not stopped.');
+    else { BZ.sfx.stamp(); try { if (ER.track && ER.music()) ER.track.play(['village', { root: 55, bpm: 104, lead: 'harp', beds: [['crowd', 0.4], ['wind', 0.2]] }]); } catch (e) {} }      /* the story is over: the tune comes back */
+  }
+  $('#b-book').addEventListener('click', ER.notebook);
+  $('#b-lobby').addEventListener('click', function () { ER.leave('../index.html'); });
+  $('#b-reset').addEventListener('click', function () {
+    var b = $('#b-reset');
+    if (b.getAttribute('data-sure')) { ER.resetStory(); location.href = '../index.html'; return; }
+    b.setAttribute('data-sure', '1'); b.textContent = 'this empties your notebook. click again to do it';
+  });
+  $('#b-task').addEventListener('click', function () {
+    var saved = ER.flag('task') || {}, box = ER.el('div', 'rp');
+    box.innerHTML = '<h4>For Hob Trundle, porter, the Salt Gate</h4><h3>Tell him the way</h3>' +
+      '<p>Hob Trundle has never been outside Ombra. One day he will come to see you, with his handcart, and he will not know what to do with the name of a street.</p>' +
+      '<p><b>A</b> Write him the way from your own front door to your school (or to any place that you like), in 60 to 90 words, as Ombra does it: no street names and no numbers. Only what he will pass, and what he will see, hear or smell at the place where he must turn. Use at least four of these: until, as far as, past, opposite, between, the second ... on your left, not counting, if you reach ..., you have gone too far.<br><b>B</b> Or write the way back from Mistress Veck&rsquo;s door to the Salt Gate. It is Hob&rsquo;s way backwards, but every left has changed.</p>' +
+      '<textarea id="r1"></textarea><div class="count"></div><label for="r2">Written by</label><input type="text" id="r2" maxlength="60">' +
+      '<div class="foot"><span>Nobody marks this. It is saved in this browser as you write.</span><button type="button" class="btn" id="r-print">Print</button><button type="button" class="btn" id="r-done">Done</button></div>';
+    ER.glossIn(box, '.rp > p');
+    box.querySelector('#r1').value = saved.r1 || ''; box.querySelector('#r2').value = saved.r2 || '';
+    function keep() {
+      var o = { r1: box.querySelector('#r1').value, r2: box.querySelector('#r2').value }, n = (o.r1.match(/[A-Za-z’']+/g) || []).length;
+      box.querySelector('.count').textContent = n + (n === 1 ? ' word' : ' words');
+      ER.flag('task', o);
+    }
+    box.addEventListener('input', keep);
+    box.addEventListener('keydown', function (e) { e.stopPropagation(); });
+    box.querySelector('#r-print').addEventListener('click', function () { keep(); window.print(); });
+    box.querySelector('#r-done').addEventListener('click', ER.close);
+    ER.open('ov-report', box); keep();
+  });
+})();
+</script>
+</body>
+</html>

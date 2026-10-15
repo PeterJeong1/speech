@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Salt Gate · The Third Arch After the Fountain</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="bazaar.css">
+<style>
+  body{--bg:#3a2414;--accent:#f0b85a;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(44,24,12,.95);--tc-ink:#f7ecd2;--cap-bg:rgba(38,20,10,.93);--panel:#33200f;--face-bg:#4a2f18;--q-ink:#f0c98a;--fade:#1c0f06;--hud-bg:rgba(38,20,10,.8)}
+  #goat{animation:chew 1.3s steps(2,end) infinite}
+  @keyframes chew{50%{transform:translateY(2px)}}
+  .dust{animation:dust 7s linear infinite}
+  @keyframes dust{from{transform:translateX(0)}to{transform:translateX(60px)}}
+  #emptysq{animation:blinkq 2.4s steps(1,end) infinite}
+  @keyframes blinkq{50%{opacity:.35}}
+  #go.walk{border-style:dashed}
+
+  /* the walk */
+  .bx.walk{width:min(1060px,96vw)}
+  .wgrid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:12px;align-items:start}
+  .way{background:#f6f0da;color:#1d2a55;font-family:'Caveat',cursive;font-size:19.5px;line-height:1.1;padding:12px 16px 10px;border-top:12px solid #a8432a;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+  .way h5{margin:0 0 6px;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#a8432a}
+  .way ol{margin:0;padding-left:22px}
+  .way li{margin:0 0 6px}
+  .way p{margin:4px 0 0;font-size:17.5px;opacity:.8}
+  .vw-op{cursor:default}
+  .vw-op.go{cursor:pointer}
+  .vw-op.go:hover{filter:brightness(1.12)}
+  .seen{margin:7px 0 0;padding:8px 14px 6px;background:rgba(246,240,218,.94);color:#2a2116;font-family:'EB Garamond',Georgia,serif;font-size:16.5px;line-height:1.26;border-left:5px solid #a8432a}
+  .seen p{margin:0 0 3px}
+  .seen b{font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#a8432a;margin-right:5px}
+  .seen .tw{font-style:italic;opacity:.85}
+  .mv{display:flex;gap:6px;flex:0 0 auto}
+  .mv .btn{padding:9px 12px 5px;font-size:12.5px;letter-spacing:.1em}
+  .bx.walk .bx-foot{min-height:52px;align-items:flex-start}
+  .bx.walk .pmsg{font-size:17px}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9b877"/><stop offset=".6" stop-color="#f6dca6"/><stop offset="1" stop-color="#fbeecb"/></linearGradient>
+  <linearGradient id="wallA" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a87d48"/><stop offset="1" stop-color="#cfa66a"/></linearGradient>
+  <radialGradient id="vigA" cx="52%" cy="54%" r="78%"><stop offset="0" stop-color="#3a1c08" stop-opacity="0"/><stop offset=".7" stop-color="#3a1c08" stop-opacity=".12"/><stop offset="1" stop-color="#3a1c08" stop-opacity=".62"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#d2b384"/>
+<rect x="-1000" y="-400" width="3600" height="940" fill="url(#skyA)"/>
+<circle cx="1180" cy="150" r="130" fill="#fff6d8" opacity=".55"/>
+<!-- the two towers of Ombra, and its roofs -->
+<g transform="translate(590 470) scale(2.300)"><rect x="-15" y="-112" width="30" height="112" fill="#b08d5e"/><path d="M-15 -112v112" stroke="#8f6f44" stroke-width="5"/><path d="M-20 -112h40l-20 -28z" fill="#7a3a2a"/><circle cx="0" cy="-86" r="11" fill="#f6efd9" stroke="#4a3219" stroke-width="2.500"/><path d="M0 -86v-8M0 -86l-6 -2" stroke="#22201c" stroke-width="1.800"/></g>
+<g transform="translate(905 506) scale(.9)"><path d="M-9 0v-100h18v100z" fill="#c9a877"/><rect x="-13" y="-108" width="26" height="8" fill="#8a6a44"/><ellipse cx="0" cy="-110" rx="14" ry="4.500" fill="#5a4426"/><path d="M1 -114v-13q7 -4 9 2" stroke="#f6f3ea" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+<g id="far"></g>
+<!-- the street of the coppersmiths, going straight on into the city -->
+<path d="M760 452h190v96H760z" fill="#ecd3a2"/>
+<g id="street" class="hot">
+  <path d="M470 250L760 440V548L470 800Z" fill="#c9a36c"/><path d="M1600 180L950 440V548L1600 860Z" fill="#b89260"/>
+  <g id="awn"></g>
+  <path d="M760 548h190L1600 900H300Z" fill="#d8bb8c" opacity=".001"/>
+</g>
+<path d="M300 1320L760 548h190L2200 1320Z" fill="#dcc195"/>
+<g stroke="#c4a577" stroke-width="3" opacity=".8"><path d="M700 648h330M610 730h540M500 830h800M855 548v772M800 548L560 1320M910 548L1160 1320"/></g>
+<!-- the wall of the city, and the Salt Gate -->
+<g id="gatearch" class="hot">
+  <path d="M-1000 150H470V820H-1000Z" fill="url(#wallA)"/><g id="crenel" fill="#b58a52"></g>
+  <g id="stones" stroke="#96703e" stroke-width="2" opacity=".5"></g>
+  <path d="M90 820V430Q90 250 210 250Q330 250 330 430V820Z" fill="#fdf6df"/><path d="M90 640h240v180H90z" fill="#f3e6c2"/>
+  <path d="M150 820L196 640h28L270 820Z" fill="#fbf1d2"/>
+  <g id="incoming"></g>
+  <path d="M90 820V430Q90 250 210 250Q330 250 330 430V820" fill="none" stroke="#7a5a30" stroke-width="26"/><path d="M90 820V430Q90 250 210 250Q330 250 330 430V820" fill="none" stroke="#b08a54" stroke-width="6"/>
+  <path d="M186 236h48v40h-48z" fill="#b08a54" stroke="#7a5a30" stroke-width="4"/><text x="210" y="216" class="sj" font-size="20" letter-spacing="5" fill="#5a3f1e">SALT GATE</text>
+</g>
+<g id="notice" class="hot" transform="rotate(-1.500 404 540)"><rect x="356" y="470" width="96" height="136" fill="#f3ead0" stroke="#2f4a6b" stroke-width="3"/><rect x="356" y="470" width="96" height="30" fill="#2f4a6b"/><g stroke="#f3ead0" stroke-width="2.500"><path d="M370 481h68M380 491h48"/></g><g stroke="#3a3024" stroke-width="2"><path d="M366 514h76M366 526h70M366 540h76M366 552h60"/></g><g stroke="#1d2a55" stroke-width="2.600"><path d="M366 572h58M366 586h70"/></g><path d="M452 606l-22 0 22 -20z" fill="#d2b384"/></g>
+<!-- the crowd -->
+<g id="crowd"></g>
+<!-- a goat, eating the corner of the notice -->
+<g id="goat" class="hot"><path d="M424 770q-4 -28 20 -30h46q16 2 14 30v36h-9v-28h-44v28h-9z" fill="#efe6d2"/><path d="M430 742q-12 -40 0 -62q14 4 16 30z" fill="#efe6d2"/><path d="M430 684l-10 -18M440 682l2 -20" stroke="#8a7a5a" stroke-width="4" stroke-linecap="round"/><circle cx="436" cy="694" r="2.500" fill="#22201c"/><path d="M432 712q-4 16 2 22" stroke="#cfc3a4" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M504 746q10 -4 12 -14" stroke="#efe6d2" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+<!-- Hob Trundle and his handcart -->
+<g id="cart" class="hot"><circle cx="820" cy="846" r="44" fill="none" stroke="#4a3219" stroke-width="9"/><path d="M820 802v88M776 846h88M789 815l62 62M851 815l-62 62" stroke="#4a3219" stroke-width="4"/><circle cx="820" cy="846" r="8" fill="#4a3219"/>
+  <path d="M730 760h220l-14 62H744z" fill="#8a5f34"/><path d="M730 760h220" stroke="#5a3a1a" stroke-width="7"/><path d="M730 764L640 742" stroke="#5a3a1a" stroke-width="8" stroke-linecap="round"/><path d="M930 822v52" stroke="#5a3a1a" stroke-width="7"/>
+  <rect x="756" y="694" width="96" height="64" rx="5" fill="#6b3f1e"/><path d="M756 716h96M804 694v64" stroke="#3f2410" stroke-width="3"/><rect x="862" y="712" width="70" height="46" rx="5" fill="#2f5fa8"/><rect x="778" y="656" width="64" height="38" rx="5" fill="#b8322a"/>
+  <text x="840" y="800" class="sj" font-size="17" letter-spacing="1.500" fill="#f0dcae">HOB TRUNDLE · PORTER</text></g>
+<g id="hob" class="hot" transform="translate(610 866)">
+  <ellipse cx="0" cy="3" rx="70" ry="9" fill="#000" opacity=".3"/>
+  <path d="M-20 0v-104h17V0zM5 0v-104h17V0z" fill="#4a3a2a"/><path d="M-27 0h26v10h-30zM2 0h26v10h-22z" fill="#2a1a0c"/>
+  <path d="M-44 -90q-10 -150 44 -164t46 164z" fill="#eadfc4"/><path d="M-40 -96q-8 -110 22 -150l-2 150zM44 -96q8 -110 -22 -150l2 150z" fill="#6b4a2a"/>
+  <path d="M30 -226q30 20 42 100" stroke="#eadfc4" stroke-width="17" fill="none" stroke-linecap="round"/><circle cx="74" cy="-122" r="10" fill="#b07a4e"/>
+  <path d="M-30 -226q-26 44 -16 96" stroke="#eadfc4" stroke-width="17" fill="none" stroke-linecap="round"/><circle cx="-46" cy="-126" r="10" fill="#b07a4e"/>
+  <rect x="-6" y="-274" width="14" height="18" fill="#a06c42"/><circle cx="2" cy="-292" r="25" fill="#b07a4e"/>
+  <path d="M-14 -284q16 -8 32 0q-16 8 -32 0z" fill="#4a3626"/><path d="M-10 -298h8M8 -298h8" stroke="#2a1a0c" stroke-width="3" stroke-linecap="round"/>
+  <ellipse cx="2" cy="-312" rx="62" ry="12" fill="#d9b05a"/><path d="M-24 -314q0 -30 26 -30t26 30z" fill="#e6c373"/><path d="M-24 -318q26 8 52 0" stroke="#8a2f22" stroke-width="5" fill="none"/>
+</g>
+<!-- the money-changer's table, his awning, and his board -->
+<g id="awnpole"><path d="M1090 880V470M1450 880V470" stroke="#5a3a1a" stroke-width="10"/><path d="M1060 474h420l24 70q-234 30 -468 0z" fill="#f3ead0"/><g fill="#8a2f22"><path d="M1108 474h56l-4 86q-30 -2 -58 -6zM1220 474h56v92q-28 1 -56 0zM1332 474h56l8 80q-28 5 -58 7zM1444 474h36l24 70q-22 3 -44 6z"/></g></g>
+<g id="nim" class="hot">
+  <path d="M1196 700q-8 -96 72 -100t74 100z" fill="#2c3a34"/><rect x="1258" y="560" width="22" height="26" fill="#b98558"/><circle cx="1268" cy="540" r="33" fill="#c99a6e"/>
+  <path d="M1232 522q36 -22 72 0l8 14q-44 -16 -88 0z" fill="#3f7a5a"/><path d="M1236 520q32 -34 66 0" stroke="#22201c" stroke-width="5" fill="none"/>
+  <g fill="none" stroke="#4a4a56" stroke-width="3"><circle cx="1256" cy="546" r="9"/><circle cx="1282" cy="546" r="9"/><path d="M1265 546h8"/></g><path d="M1258 566h20" stroke="#7a3f30" stroke-width="3" stroke-linecap="round"/>
+  <path d="M1206 660q-18 20 0 40" stroke="#2c3a34" stroke-width="20" fill="none" stroke-linecap="round"/><path d="M1332 660q18 20 0 40" stroke="#2c3a34" stroke-width="20" fill="none" stroke-linecap="round"/>
+</g>
+<g id="counter" class="hot">
+  <path d="M1100 700h340v26h-340z" fill="#8a5f34"/><path d="M1112 726h316v150h-316z" fill="#6b4420"/><path d="M1112 760h316M1112 820h316" stroke="#54341a" stroke-width="3"/>
+  <g id="coins"></g>
+  <rect id="emptysq" x="1128" y="678" width="72" height="20" fill="none" stroke="#fdf6df" stroke-width="3" stroke-dasharray="7 5"/>
+</g>
+<g id="board" class="hot" transform="rotate(3 1520 640)"><path d="M1470 880L1500 520M1576 880L1540 520M1520 880V540" stroke="#5a3a1a" stroke-width="8" stroke-linecap="round"/><rect x="1456" y="520" width="130" height="190" fill="#23272a" stroke="#8a2f22" stroke-width="11"/>
+  <text x="1521" y="556" class="sg" font-size="24" fill="#ffd98a">NIM</text><text x="1521" y="596" class="sc" font-size="27" fill="#ffd98a">1 = 12</text><g stroke="#f1efe6" stroke-width="2.500" opacity=".85"><path d="M1474 616h94M1480 632h82M1474 648h94"/></g><g stroke="#f1efe6" stroke-width="1.500" opacity=".6"><path d="M1474 676h94M1478 686h86M1490 696h62"/></g></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vigA)" pointer-events="none"/>
+</svg>
+</div>
+<button type="button" class="gobtn" id="go">Walk into the city</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="bazaar.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, walk = null, told = {};
+
+  /* the roofs of the city, the awnings and pots of the coppersmiths, the stones of the wall, the crowd */
+  (function () {
+    var s = '', i, x, h, f, y0, y1, r = 0;
+    function rnd() { r = (r * 9301 + 49297) % 233280; return r / 233280; }
+    for (x = -1000; x < 2600; x += 58) { h = 20 + rnd() * 66; s += '<rect x="' + x + '" y="' + (512 - h).toFixed(0) + '" width="' + (40 + rnd() * 30).toFixed(0) + '" height="' + (h + 40).toFixed(0) + '" fill="' + (rnd() < 0.5 ? '#dfc291' : '#d2b27e') + '"/>'; }
+    $('#far').innerHTML = s; s = '';
+    for (i = 0; i < 5; i++) {
+      f = i / 5; x = 470 + 290 * f; y0 = 250 + 190 * f + 70 * (1 - f); y1 = y0 + 46 * (1 - f) + 12;
+      s += '<path d="M' + x.toFixed(0) + ' ' + y0.toFixed(0) + 'l' + (62 * (1 - f) + 12).toFixed(0) + ' ' + (30 * (1 - f) + 6).toFixed(0) + 'l' + (40 * (1 - f) + 10).toFixed(0) + ' ' + (36 * (1 - f) + 6).toFixed(0) + 'l-' + (40 * (1 - f) + 10).toFixed(0) + ' -4z" fill="' + (i % 2 ? '#c96a2b' : '#dd8a44') + '"/>';
+      s += '<circle cx="' + (x + 40 * (1 - f) + 8).toFixed(0) + '" cy="' + (y1 + 60 * (1 - f) + 10).toFixed(0) + '" r="' + (20 * (1 - f) + 4).toFixed(0) + '" fill="#c96a2b" stroke="#7d3b14" stroke-width="2"/>';
+      x = 1600 - 650 * f; y0 = 180 + 260 * f + 80 * (1 - f);
+      s += '<path d="M' + x.toFixed(0) + ' ' + y0.toFixed(0) + 'l-' + (110 * (1 - f) + 14).toFixed(0) + ' ' + (44 * (1 - f) + 6).toFixed(0) + 'l-' + (60 * (1 - f) + 10).toFixed(0) + ' ' + (50 * (1 - f) + 6).toFixed(0) + 'l' + (60 * (1 - f) + 10).toFixed(0) + ' -6z" fill="' + (i % 2 ? '#dd8a44' : '#c96a2b') + '"/>';
+      s += '<ellipse cx="' + (x - 90 * (1 - f) - 10).toFixed(0) + '" cy="' + (y0 + 170 * (1 - f) + 30).toFixed(0) + '" rx="' + (30 * (1 - f) + 5).toFixed(0) + '" ry="' + (22 * (1 - f) + 4).toFixed(0) + '" fill="#d9813a" stroke="#7d3b14" stroke-width="2"/>';
+    }
+    $('#awn').innerHTML = s; s = '';
+    for (i = 0; i < 26; i++) { x = -60 + (i * 97) % 480; h = 170 + (i * 61) % 620; if (x > 50 && x < 370 && h > 200) continue; s += '<path d="M' + x + ' ' + h + 'h' + (50 + (i * 13) % 40) + 'M' + (x + 20) + ' ' + h + 'v30"/>'; }
+    $('#stones').innerHTML = s; s = '';
+    for (x = -1000; x < 470; x += 70) s += '<rect x="' + x + '" y="116" width="38" height="36"/>';
+    $('#crenel').innerHTML = s;
+    $('#incoming').innerHTML = BZ.crowd('in', 5, 130, 290, 700, 810, 0.75, 1.15);
+    $('#crowd').innerHTML = BZ.crowd('gate', 9, 500, 1080, 610, 730, 0.8, 1.35) + BZ.crowd('gate2', 3, 940, 1060, 760, 860, 1.5, 1.8);
+    s = '';
+    [1230, 1262, 1294, 1338, 1372].forEach(function (cx, j) { for (i = 0; i < 3 + (j * 2) % 4; i++) s += '<ellipse cx="' + cx + '" cy="' + (696 - i * 5) + '" rx="13" ry="4.500" fill="' + (j === 4 ? '#e9ecef' : '#c96a2b') + '" stroke="' + (j === 4 ? '#8d949c' : '#7d3b14') + '" stroke-width="1.500"/>'; });
+    $('#coins').innerHTML = s;
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'bazaar', storyTitle: 'The Third Arch After the Fountain', id: 'gate', no: 'I', title: 'The Salt Gate',
+    go: 'Go back for it',
+    intro: [
+      'Ombra, the market city on the edge of the Pale, at seven o&rsquo;clock on a market morning. You are the newest apprentice of the Solheim caravan. For six days you have carried the caravan&rsquo;s compass from the coast, in a flat wooden box under your arm, and you were told not to put it down.',
+      'The Pale is three days of white salt with nothing on it: no tree, no hill, no road. No caravan may go out on it without a compass. Today&rsquo;s noon bell belongs to Master Solheim: if her compass is on the Yardmaster&rsquo;s table when the bell rings, the gate opens for her. If it is not, the gate opens for the next name on the list: the Blue Caravan, whose pathfinder is Odile Laurent.',
+      'At the Salt Gate you changed your silver at a money-changer&rsquo;s table. You read his board. You counted your coppers twice. Then you picked up your bag and walked on, and it was a hundred steps before you noticed that there was nothing under your arm.'
+    ],
+    exit: {"next":"scales","w":{"8d1b476f":"8af17f86"}}, tags: {},
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('g-file') || null; told = ER.flag('g-told') || {};
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('g-told', told); return true; }
+  function isBusy() { return busy; }
+  function paint() {
+    var b = $('#go');
+    b.classList.toggle('on', !!(told.hob || nextFile)); b.classList.toggle('walk', !nextFile);
+    b.textContent = nextFile ? 'Into the lane' : 'Walk into the city';
+    $('#emptysq').style.display = nextFile ? 'none' : '';
+    ER.pips((told.hob ? 1 : 0) + (told.moved ? 1 : 0) + (nextFile ? 1 : 0), 3);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['You are through the third arch, and everything in this lane weighs or points. Go in.']];
+    if (!told.hob) return ['hob', ['The man with the handcart has watched this gate for thirty years. He knows where a lifted thing goes. Ask him.']];
+    return ['walk', [
+      'Hob&rsquo;s way has six parts. Do one part at a time, and do not begin the next until the first has happened: &ldquo;when&rdquo;, &ldquo;as far as&rdquo; and &ldquo;so that&rdquo; tell you how you will know.',
+      'Left and right change when you turn. You come to the fountain facing the Clock Tower. Turn until the words under the picture say that the tower is at your left shoulder: that is the way to walk.',
+      'After the fountain, look at the opening on your left each time you walk on. An arch that you could walk through counts as one. An arch full of bricks counts as nothing. The arch you want is the last one before the fish.'
+    ]];
+  }
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; ER.say('The lane of the scale-makers. Somewhere behind you, Hob Trundle is still at his gate.'); return; }
+    if (told.intro) { busy = false; ER.say('The Salt Gate, a little after seven. The place on the counter where you put the box down is still empty.'); return; }
+    ER.addClue('purse', 'Your purse', '<h4>Your purse</h4><p>Two silver moons, changed at the table by the Salt Gate. The board says 1 moon = 12 coppers, and the changer keeps one copper in every moon for his trouble.</p><p>24 less 2: <b>22 coppers</b>.</p>', 'mine', 'Your own note', true);
+    ER.narrate([
+      'The Salt Gate at opening time. Half of Ombra is coming in, the other half is going out, and every one of them is carrying something. You are the only person here with nothing under your arm.',
+      'You run back to the money-changer&rsquo;s table. The table is there. The money-changer is there. The place on the counter where you put the box down is there too, and it is empty.',
+      '&ldquo;Lifted,&rdquo; says a man with a handcart, kindly. &ldquo;It happens at this gate about once a minute. Was it brass? Had it a maker&rsquo;s name on it?&rdquo; You tell him: a compass, and the name on the lid is VECK, OMBRA.',
+      '&ldquo;Then it has not gone far, and I can tell you where. You are the second stranger to ask me that this morning. The first one did not wait for the end.&rdquo; He looks you up and down. &ldquo;You look like somebody who waits for the end.&rdquo;'
+    ], function () { busy = false; tell('intro'); });
+  }
+
+  /* ---------- people ---------- */
+  var WAY = '<ol><li>Go in at the gate and keep straight on, through the coppersmiths. There are turnings. Leave them alone.</li>' +
+    '<li>When you can see the leather-workers in front of you, stop: do not go in among them. Turn there, towards the Clock Tower. (Ombra has two towers. The other one has a stork&rsquo;s nest on it, and tells you nothing.)</li>' +
+    '<li>Go on between the baskets as far as the fountain.</li>' +
+    '<li>Stand at the fountain so that the Clock Tower is at your left shoulder. Then walk straight on.</li>' +
+    '<li>Count the arches on your left, and take the third: not counting the one that is bricked up.</li>' +
+    '<li>If you reach the fish, you have gone too far.</li></ol>' +
+    '<p>Lost count? Come back to the gate. I am always at the gate.</p>';
+  $('#hob').addEventListener('click', function () {
+    if (busy) return;
+    if (nextFile) { ER.say('Hob Trundle is a long way behind you, at his gate, where he always is.'); return; }
+    ER.talk({
+      who: 'Hob Trundle', role: 'Porter · the Salt Gate', face: window.FACE('hob'),
+      lines: [
+        { note: 'He has a straw hat, a moustache, and a handcart with his name painted on the side.', a: '&ldquo;Hob Trundle. I carry things from this gate to wherever they are going, and in thirty years I have never lost one. I only mention it.&rdquo;' },
+        { q: 'Where does a stolen compass go?', a: 'Brass with a maker&rsquo;s name on it goes home. The scale-makers of Ombra have a Guild, and the Guild has a rule: a maker must buy back her own work from anybody who brings it to her door, at a fixed price, and ask no questions. So nobody in this city keeps lifted brass for as long as an hour. They walk it to the maker&rsquo;s door and come away with silver. Yours says VECK. It has gone to Veck.' },
+        { q: 'Where is Veck? What street?', a: 'Street? The streets of Ombra have no names. There are four hundred of them, and nobody could remember four hundred names. We go by what we pass. I shall tell you the way once, slowly, and you will write it on your arm, because that is what the inside of an arm is for. One thing more: mind that you knock at the family&rsquo;s door. It is the family that the rule is about, not the shop.' },
+        '<div class="note">You write it down as he says it.</div>' + WAY,
+        { q: 'Who was the other stranger?', a: 'Tall. A travelling coat, a blue sash, and a yellow umbrella, which nobody needs here: it has not rained in Ombra since the spring. She asked what you asked. I had just said &ldquo;take the third&rdquo; when she said &ldquo;Third arch, thank you,&rdquo; and was gone. She did not hear about the bricks. She did not hear about the fish. People who will not wait for the end of a sentence see a great deal of Ombra.</p><p class="note">A blue sash. The drivers of the Blue Caravan wear blue sashes.' }
+      ],
+      clue: { id: 'hob', title: 'Hob Trundle, at the Salt Gate', kind: 'What he said' },
+      done: function (seen) {
+        if (!seen) return;
+        ER.addClue('way', 'The way, as Hob told it', '<h4>The way, as Hob Trundle told it</h4>' + WAY, 'cuff', 'On the inside of your arm', true);
+        BZ.words(['lift', 'guild', 'buy back', 'turning', 'arch']);
+        if (tell('hob')) { paint(); ER.say('Six lines of blue ink, from your wrist to your elbow. The street of the coppersmiths begins just behind him.'); }
+      }
+    });
+  });
+  $('#nim').addEventListener('click', function () {
+    if (busy) return;
+    ER.talk({
+      who: 'Nim', role: 'Changer of money · the Salt Gate', face: window.FACE('nim'),
+      lines: [
+        { note: 'He does not look up. He is building coppers into towers of twelve.', a: '&ldquo;Moons into coppers, coppers into moons. I gave you twenty-two for two, and you counted them twice. They have not changed since.&rdquo;' },
+        { q: 'Did you see who took my box?', a: 'I saw nobody take anything.</p><p class="note">He says it slowly, like a man putting down exactly the right coin.' },
+        { q: 'It was on your counter!', a: 'It was. Then I counted, as I always do. Then it was not. Read the board, stranger. Everything I have to say is on the board.' }
+      ],
+      clue: { id: 'nim', title: 'Nim, the money-changer', kind: 'What he said' },
+      done: function (seen) { if (seen && tell('nim')) ER.say('His board stands on three legs at the end of the table.'); }
+    });
+  });
+
+  /* ---------- papers ---------- */
+  var BOARD = '<h4>NIM · changer of money</h4><p class="rate">1 MOON = 12 COPPERS</p><p>Silver into copper. Copper into silver.</p><p>For my trouble: one copper in every moon.</p><p>No clipped moons. No buttons.</p>' +
+    '<p class="small">Anything left on this counter while I count a hundred belongs to the counter. N.</p>';
+  $('#board').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: BOARD, cls: 'board', clue: { id: 'board', title: 'Nim’s board', kind: 'Chalk on a slate' }, done: function () {
+      BZ.words(['moon', 'copper', 'clipped']);
+      if (tell('board')) ER.say('You read it this morning, too. Twelve coppers to the moon: that was the part you were looking for.');
+    } });
+  });
+  var LIST = '<h4><small>THE YARD OF OMBRA</small>The Noon Bell</h4>' +
+    '<ol><li>One caravan goes out on the Pale each day, at the noon bell. The wells on the salt can water one caravan, and no more.</li>' +
+    '<li>No caravan goes out without a compass. It is shown to the Yardmaster, and it is on the Yardmaster&rsquo;s table when the bell rings.</li>' +
+    '<li>If the first name on the list has no compass on the table at the bell, the gate opens for the second.</li></ol>' +
+    '<p>Today&rsquo;s list:</p><p class="hand">1. Solheim. Compass: Veck, No. 41. NOT YET SHOWN.<br>2. The Blue Caravan. Pathfinder O. Laurent. Compass shown.</p>' +
+    '<p class="foot">A copy of this list hangs at every gate. Holt, Yardmaster</p>';
+  $('#notice').addEventListener('click', function () {
+    if (busy) return;
+    ER.read({ html: LIST, cls: 'yardlist', clue: { id: 'list', title: 'The noon bell', kind: 'A notice of the Yard' }, done: function () {
+      BZ.words(['caravan', 'compass', 'pathfinder']);
+      if (tell('list')) ER.say('NOT YET SHOWN. Somebody at the Yard wrote that this morning, in good blue ink, about you.');
+    } });
+  });
+
+  /* ---------- things at the gate ---------- */
+  BZ.thing('#gatearch', 'arch', 'The Salt Gate: an arch as high as a house. Outside it the road is white, and it goes on being white for three days.', isBusy);
+  BZ.thing('#goat', null, 'A goat is eating the corner of the Yard&rsquo;s notice. It has got as far as the word LIST.', isBusy);
+  BZ.thing('#cart', 'handcart', 'A handcart with three trunks on it, tied down with enough rope to moor a ship. HOB TRUNDLE, PORTER is painted on the side.', isBusy);
+  BZ.thing('#counter', 'counter', function () { return nextFile ? 'The money-changer&rsquo;s counter. You are not going to put anything on it again.' : 'The place on the counter where you put the box down. There is a clean square in the dust, exactly the size of a compass box.'; }, isBusy);
+  $('#street').addEventListener('click', function () { if (!busy) startWalk(); });
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); else if (!busy) startWalk(); });
+  function startWalk() {
+    if (nextFile) { ER.say('You have walked it once. Once is enough.'); return; }
+    if (!told.hob) { ER.say('A street full of hammering goes straight on into the city, and splits, and splits again. You do not know which way to go. The man with the handcart does.'); return; }
+    if (!walk) walk = makeWalk();
+    walk.open();
+  }
+
+  /* ---------- the walk: Hob's way on one side, and what is in front of you on the other ---------- */
+  function makeWalk() {
+    var st = ER.flag('g-pos') || { id: '0,3', h: 1, t: null }, wait = false, box = ER.el('div', 'bx walk'), svg, msgEl;
+    box.innerHTML = '<div class="wgrid"><div class="way"><h5>On the inside of your arm</h5>' + WAY + '</div>' +
+      '<div><div class="frame"><svg viewBox="0 0 720 430"></svg></div><div class="seen"></div></div></div>' +
+      '<div class="bx-foot"><p class="pmsg"></p><span class="mv"><button type="button" class="btn" data-m="L">&#8630; Turn left</button><button type="button" class="btn" data-m="A">&#8593; Walk on</button><button type="button" class="btn" data-m="R">Turn right &#8631;</button><button type="button" class="btn" data-m="B">Turn round</button></span></div>';
+    svg = box.querySelector('svg'); msgEl = box.querySelector('.pmsg');
+    ER.glossIn(box, '.way li, .way p');
+    function msg(t) { msgEl.innerHTML = ER.gloss(t); }
+    function draw() {
+      var L = BZ.lines(st.id, st.h, st.t);
+      svg.innerHTML = BZ.view(st.id, st.h);
+      svg.setAttribute('data-at', st.id + '/' + st.h);
+      box.querySelector('.seen').innerHTML = ER.gloss('<p>' + L.here + '</p><p><b>On your left</b>' + L.left + '.</p><p><b>Ahead</b>' + L.ahead + '.</p><p><b>On your right</b>' + L.right + '.</p><p class="tw">' + L.towers + '</p>');
+      ER.flag('g-pos', st);
+    }
+    var WRONG = {
+      'arch:3,0': 'Through the arch the lane is roofed, and full of tailors sewing in their doorways. Nobody here weighs anything. One of them looks at you over his needle. &ldquo;The scale-makers? Not this arch. You have lost count, and there is only one cure for that: go back to the last place where you were sure.&rdquo; The last place where you were sure is the gate.',
+      'arch:5,0': 'Through the arch the lane is roofed, and hung with brass lamps: hundreds of them, all lit, at eight in the morning. No scales. &ldquo;You are the second stranger today,&rdquo; says an old lamp-maker. &ldquo;The first was tall, and in a hurry. She counted the arch that is bricked up as well. In Ombra we do not count what is not there.&rdquo; You go back to the gate, and begin again.'
+    };
+    function through(to) {
+      var file = ER.exit(['arch:' + to], { wait: true });
+      if (!file) {
+        ER.sfx.no(); st = { id: '0,3', h: 1, t: null }; draw();
+        msg(WRONG['arch:' + to] || 'That was not the arch. You go back to the gate, and begin again.');
+        return;
+      }
+      wait = true; nextFile = file; ER.flag('g-file', file);
+      msg('Through the arch the lane is roofed, and the light comes down in stripes. Something on your left is weighing something. So is something on your right.');
+      setTimeout(function () {
+        ER.closeAll(); paint(); busy = true;
+        ER.narrate([
+          'The lane is roofed with reed mats, and the sun comes down through them in stripes. On both sides, brass pans hang on brass chains and turn slowly: scales, hundreds of them, weighing nothing at all.',
+          'You have crossed half a city without knowing the name of one street, because not one of them has a name.',
+          'A little way down the lane there is a red shop-front, with a name on it in gold letters as high as your hand. The name is VECK.'
+        ], function () { busy = false; });
+      }, 2600);
+    }
+    function move(m) {
+      var d, w;
+      if (wait) return;
+      if (m !== 'A') { st.h = (st.h + (m === 'L' ? 3 : m === 'R' ? 1 : 2)) % 4; draw(); msg(m === 'B' ? 'You turn right round.' : 'You turn to your ' + (m === 'L' ? 'left' : 'right') + '.'); return; }
+      d = st.h; w = BZ.way(st.id, d);
+      if (!w) { ER.sfx.no(); msg('There is no way on here. Ahead of you: ' + BZ.lines(st.id, st.h, st.t).ahead + '.'); return; }
+      BZ.sfx.step();
+      if (w.arch) { through(w.to); return; }
+      st.id = w.to; st.t = w.trade; if (tell('moved')) paint();
+      draw();
+      msg(BZ.mid(st.id) === 'fish' ? 'You have reached the fish. Hob had a line about that.' : BZ.mid(st.id) === 'fountain' ? 'You have come as far as the fountain.' : 'You walk on.');
+    }
+    box.querySelector('.mv').addEventListener('click', function (e) { var b = e.target.closest ? e.target.closest('button') : null; if (b) move(b.getAttribute('data-m')); });
+    svg.addEventListener('click', function (e) {
+      var o = e.target.closest ? e.target.closest('.vw-op') : null, k;
+      if (!o || wait) return;
+      k = o.getAttribute('data-d');
+      if (!o.classList.contains('go')) { msg('No way through there: ' + BZ.lines(st.id, st.h, st.t)[k === 'L' ? 'left' : k === 'R' ? 'right' : 'ahead'] + '.'); return; }
+      if (k !== 'A') st.h = (st.h + (k === 'L' ? 3 : 1)) % 4;
+      move('A');
+    });
+    draw();
+    msg(st.id === '0,3' ? 'You are standing just inside the Salt Gate, with your back to it. Turn with the buttons, and walk with &ldquo;Walk on&rdquo;: or click an opening in the picture to go that way.' : 'You are where you stopped. Hob&rsquo;s way is on your arm.');
+    return {
+      open: function () { ER.open('ov-lock', box); },
+      isOpen: function () { return !!box.parentNode; }
+    };
+  }
+})();
+</script>
+</body>
+</html>

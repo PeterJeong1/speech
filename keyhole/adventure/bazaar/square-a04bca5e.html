@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Nobody Sells · The Third Arch After the Fountain</title>
+<link rel="stylesheet" href="../../assets/fonts-base.css">
+<link rel="stylesheet" href="../../assets/fonts-adventure.css">
+<link rel="stylesheet" href="../../assets/engine.css">
+<link rel="stylesheet" href="bazaar.css">
+<style>
+  body{--bg:#d9c092;--accent:#f2c14e;--font-display:'Limelight',serif;--font-ui:'Josefin Sans',sans-serif;--font-body:'EB Garamond',serif;
+    --tc-bg:rgba(60,34,16,.95);--tc-ink:#f7ecd2;--cap-bg:rgba(48,26,12,.93);--panel:#3a2412;--face-bg:#5a3a1c;--q-ink:#f2d08a;--fade:#2a1608;--hud-bg:rgba(48,26,12,.82)}
+  .jet{animation:jet 1.1s steps(3,end) infinite}
+  @keyframes jet{50%{opacity:.55}}
+  .flap{animation:flap 4.4s ease-in-out infinite alternate;transform-origin:1390px 470px}
+  @keyframes flap{from{transform:skewX(-1.500deg)}to{transform:skewX(1.800deg)}}
+  .hop{animation:hop 2.7s steps(1,end) infinite}
+  @keyframes hop{0%{transform:translate(0,0)}40%{transform:translate(4px,-3px)}60%{transform:translate(-3px,0)}}
+  #notes{display:none;animation:hop 1.6s steps(1,end) infinite}
+  body.sung #notes{display:block}
+  body.sung #larkcloth{display:block}
+  #larkcloth{display:none}
+  .glint{animation:jet 2.3s steps(2,end) infinite}
+
+  /* what you are holding */
+  #hands{position:fixed;left:14px;top:58px;z-index:31;width:214px;padding:9px 13px 9px;background:rgba(48,26,12,.86);color:#f7ecd2;border:1px solid rgba(255,255,255,.22);border-radius:3px;font-family:'EB Garamond',Georgia,serif;font-size:16.5px;line-height:1.24}
+  #hands b{display:block;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#f2c14e;margin-bottom:4px}
+  #hands p{margin:0 0 2px}
+  #hands button{margin-top:7px;font-family:'Josefin Sans',sans-serif;font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-decoration:underline;opacity:.8}
+  #hands button:hover{opacity:1;color:#f2c14e}
+
+  /* a bargain */
+  .bx.deal{width:min(780px,94vw);background:#f6f0da;color:#2a2116;padding:18px 26px 14px;border-top:14px solid #a8432a;box-shadow:0 26px 70px rgba(0,0,0,.6)}
+  .deal h5{margin:0 0 2px;font-family:'Limelight',serif;font-weight:normal;font-size:25px}
+  .deal .has{margin:0 0 12px;font-family:'EB Garamond',Georgia,serif;font-size:17.5px;font-style:italic;color:#5a4a34}
+  .deal h6{margin:10px 0 6px;font-family:'Josefin Sans',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#a8432a}
+  .deal .opts{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+  .pick{padding:8px 13px 6px;border:1.500px solid #6b4a2a;border-radius:3px;font-family:'EB Garamond',Georgia,serif;font-size:17.5px;background:#fbf7e6;color:#2a2116}
+  .pick:hover{background:#f0e2b4}
+  .pick.on{background:#a8432a;color:#fbf7e6;border-color:#a8432a}
+  .deal .cnt{margin-left:2px}
+  .deal .bx-foot{margin-top:12px;align-items:flex-start}
+  .deal .pmsg{color:#2a2116;font-size:18px;min-height:74px}
+  .deal .btn{--accent:#a8432a;background:none}
+  .deal .btn:hover:not([disabled]){color:#fbf7e6}
+</style>
+</head>
+<body>
+<div class="stage">
+<svg id="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="skyC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fb4d6"/><stop offset=".7" stop-color="#cfe3ea"/><stop offset="1" stop-color="#f1e6c4"/></linearGradient>
+  <linearGradient id="gndC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6cfa0"/><stop offset="1" stop-color="#c7a876"/></linearGradient>
+  <radialGradient id="vigC" cx="50%" cy="54%" r="80%"><stop offset="0" stop-color="#3a1c08" stop-opacity="0"/><stop offset=".72" stop-color="#3a1c08" stop-opacity=".08"/><stop offset="1" stop-color="#3a1c08" stop-opacity=".5"/></radialGradient>
+</defs>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="#c7a876"/>
+<rect x="-1000" y="-400" width="3600" height="940" fill="url(#skyC)"/>
+<!-- the Clock Tower, far behind the houses on the north side of the square -->
+<g id="tower" class="hot" transform="translate(800 470) scale(3)"><rect x="-15" y="-112" width="30" height="112" fill="#b08d5e"/><path d="M-15 -112v112" stroke="#8f6f44" stroke-width="5"/><path d="M-20 -112h40l-20 -28z" fill="#7a3a2a"/><circle cx="0" cy="-86" r="11" fill="#f6efd9" stroke="#4a3219" stroke-width="2.500"/><path d="M0 -86l-6.500 -2.300" stroke="#22201c" stroke-width="2" stroke-linecap="round"/><path d="M0 -86l-7.800 4.500" stroke="#22201c" stroke-width="1.400" stroke-linecap="round"/></g>
+<g id="houses"></g>
+<!-- the two ways out: the spice-sellers on the left, the drapers on the right -->
+<path d="M-1000 140H250V560H-1000Z" fill="#cba873"/><path d="M250 140v420l-110 60V110z" fill="#b8935f"/>
+<g fill="#d99a1c"><path d="M250 300l-130 -24v44l130 30zM110 276l-150 -30v50l150 30z"/></g><g id="sacks"></g>
+<path d="M2600 120H1350V560H2600Z" fill="#cba873"/><path d="M1350 120v440l110 60V90z" fill="#b8935f"/>
+<g fill="#a8437a"><path d="M1350 290l130 -24v44l-130 30zM1490 262l150 -30v50l-150 30z"/></g>
+<rect x="-1000" y="540" width="3600" height="780" fill="url(#gndC)"/>
+<g stroke="#bfa06c" stroke-width="3" opacity=".7"><path d="M-1000 600h3600M-1000 690h3600M-1000 800h3600M800 540v780M560 540L200 1320M1040 540L1400 1320M330 540L-500 1320M1270 540L2100 1320"/></g>
+<g id="crowd"></g>
+<!-- the fountain -->
+<g id="fount" class="hot"><ellipse cx="800" cy="664" rx="210" ry="48" fill="#a8946c"/><ellipse cx="800" cy="650" rx="194" ry="38" fill="#5f93b0"/><ellipse cx="800" cy="646" rx="150" ry="24" fill="#7fb0c8" opacity=".6"/>
+  <path d="M780 652v-92h40v92z" fill="#b8a47a"/><ellipse cx="800" cy="560" rx="70" ry="15" fill="#a8946c"/><ellipse cx="800" cy="556" rx="56" ry="10" fill="#5f93b0"/><path d="M792 556v-40h16v40z" fill="#b8a47a"/>
+  <g class="jet" stroke="#e3f1f7" stroke-width="5" fill="none" stroke-linecap="round"><path d="M800 514q-50 -44 -64 34M800 514q50 -44 64 34"/><path d="M740 566q-50 10 -60 76M860 566q50 10 60 76"/></g></g>
+<!-- Zeb, barber -->
+<g id="zeb" class="hot"><path d="M96 880V470" stroke="#5a3a1a" stroke-width="9"/><ellipse cx="96" cy="440" rx="40" ry="48" fill="#cfe1e6" stroke="#8a6a26" stroke-width="7"/><path class="glint" d="M78 420l22 -12M82 440l30 -16" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M250 820h130v-110q-65 -30 -130 0z" fill="#8a2f22"/><path d="M240 820h150v30h-150zM262 850v40M368 850v40" fill="#5a3a1a" stroke="#5a3a1a" stroke-width="8"/><path d="M250 700v-90h18v90zM362 700v-90h18v90z" fill="#5a3a1a"/>
+  <path d="M410 800h60v70h-60z" fill="#6b4420"/><path d="M410 830h60" stroke="#3a2412" stroke-width="3"/><circle cx="440" cy="850" r="4" fill="#d9b05a"/><path d="M424 800q-8 -40 16 -44t16 44z" fill="#e9ecef"/><path d="M456 770q14 0 12 16" stroke="#e9ecef" stroke-width="5" fill="none"/><g id="pzeb"></g></g>
+<!-- Dabb, lemons -->
+<g id="dabb" class="hot"><g id="pdabb"></g><circle cx="470" cy="770" r="40" fill="none" stroke="#4a3219" stroke-width="8"/><path d="M470 730v80M430 770h80" stroke="#4a3219" stroke-width="4"/><circle cx="640" cy="770" r="40" fill="none" stroke="#4a3219" stroke-width="8"/><path d="M640 730v80M600 770h80" stroke="#4a3219" stroke-width="4"/>
+  <path d="M410 690h290l-18 66H428z" fill="#8a5f34"/><path d="M410 690h290" stroke="#5a3a1a" stroke-width="7"/><g id="lemons"></g>
+  <path d="M556 300v390" stroke="#5a3a1a" stroke-width="7"/><path d="M420 330q136 -90 272 0z" fill="#f2c14e"/><path d="M420 330q136 -90 272 0" fill="none" stroke="#c9952a" stroke-width="4"/><path d="M488 330q20 -60 68 -76M624 330q-20 -60 -68 -76" stroke="#c9952a" stroke-width="3" fill="none"/></g>
+<!-- Neva, birds -->
+<g id="neva" class="hot"><path d="M990 880V420M1220 880V420M970 430h270M990 560h230" stroke="#5a3a1a" stroke-width="9" stroke-linecap="round"/><g id="cages"></g>
+  <g id="larkcage"><path d="M1160 430v30" stroke="#5c5a3c" stroke-width="3"/><g transform="translate(1124 456) scale(1.200)"><path d="M9 72V36q0 -24 21 -24t21 24v36z" fill="#f1e2bb" fill-opacity=".4" stroke="#5c5a3c" stroke-width="2.500"/><path d="M19 72V18M30 72V12M41 72V18M9 44h42" stroke="#5c5a3c" stroke-width="1.800" fill="none"/><rect x="5" y="72" width="50" height="6" fill="#5c5a3c"/><g class="hop"><ellipse cx="30" cy="56" rx="9" ry="6.500" fill="#b89a6a"/><circle cx="23" cy="50" r="4.500" fill="#b89a6a"/><path d="M19 50l-5 1 5 2z" fill="#4a3219"/><path d="M38 58l9 4" stroke="#8a6a44" stroke-width="3"/></g></g>
+    <path id="larkcloth" d="M1128 466q32 -30 72 0l6 86h-84z" fill="#2f5fa8"/></g>
+  <g id="hookn"><path d="M1054 430v20q0 10 10 10t8 -10" stroke="#1a1208" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+  <g id="notes" fill="#1d2a55"><path d="M1216 440v-30l16 -5v28" stroke="#1d2a55" stroke-width="3" fill="none"/><circle cx="1211" cy="441" r="6"/><circle cx="1227" cy="434" r="6"/><path d="M1250 400v-24" stroke="#1d2a55" stroke-width="3"/><circle cx="1245" cy="401" r="5.500"/></g>
+  <g id="pneva"></g></g>
+<!-- Tansy, dyer -->
+<g id="tansy" class="hot"><path d="M1262 880V430M1524 880V430" stroke="#5a3a1a" stroke-width="9"/><path d="M1256 440q134 20 274 0" stroke="#3a2a1a" stroke-width="4" fill="none"/>
+  <g class="flap"><g id="clothblue"><path d="M1280 446h66v236q-33 14 -66 0z" fill="#2f5fa8"/><path d="M1300 446v236M1326 446v238" stroke="#000" stroke-opacity=".12" stroke-width="3"/></g><path d="M1362 450h62v260q-31 14 -62 0z" fill="#b8322a"/><path d="M1384 450v262" stroke="#000" stroke-opacity=".12" stroke-width="3"/><g id="clothyellow"><path d="M1440 446h62v214q-31 14 -62 0z" fill="#d9c21e"/><path d="M1462 446v216" stroke="#000" stroke-opacity=".12" stroke-width="3"/></g></g>
+  <ellipse cx="1310" cy="850" rx="44" ry="14" fill="#8a7a5a"/><rect x="1266" y="806" width="88" height="44" fill="#a8946c"/><ellipse cx="1310" cy="806" rx="44" ry="13" fill="#2f5fa8" stroke="#8a7a5a" stroke-width="5"/><g id="ptansy"></g></g>
+<!-- Mungo, tinker -->
+<g id="mungo" class="hot"><path d="M650 812h330l40 80H620z" fill="#8a3a2a"/><path d="M660 822h312l32 62H636z" fill="none" stroke="#e2b521" stroke-width="3" stroke-dasharray="10 7"/>
+  <g id="crackedm"><ellipse cx="860" cy="846" rx="34" ry="16" fill="#cfe1e6" stroke="#8a6a26" stroke-width="5"/><path d="M832 852l28 -8 10 6 18 -10" stroke="#5a6a70" stroke-width="2" fill="none"/></g>
+  <path d="M754 866q-8 -30 20 -30t20 30z" fill="#c96a2b"/><path d="M794 846q14 -2 14 12" stroke="#c96a2b" stroke-width="5" fill="none"/><path d="M920 872l30 -30M930 842l10 30" stroke="#6f7a7c" stroke-width="5" stroke-linecap="round"/><rect x="950" y="852" width="26" height="20" fill="#5a3a1a"/><g id="pmungo"></g></g>
+<rect x="-1000" y="-400" width="3600" height="1720" fill="url(#vigC)" pointer-events="none"/>
+</svg>
+</div>
+<div id="hands"><b>In your hands</b><div id="hlist"></div><button type="button" id="again">Start the morning again</button></div>
+<button type="button" class="gobtn" id="go">Back to the lane</button>
+
+<script src="words.js"></script>
+<script src="cast.js"></script>
+<script src="../../assets/engine.js"></script>
+<script src="bazaar.js"></script>
+<script>
+(function () {
+  var $ = ER.$, busy = true, nextFile = null, told = {}, inv, FRESH = { c: 22, basket: 0, lemon: 0, blue: 0, yellow: 0, mirror: 0, cracked: 0, lark: 0, out: {} };
+
+  /* the houses on the north side, sacks of spice, lemons, cages, the people */
+  (function () {
+    var s = '', i, x;
+    for (i = 0; i < 9; i++) {
+      x = 250 + i * 122;
+      s += '<rect x="' + x + '" y="' + (250 + (i * 37) % 60) + '" width="124" height="320" fill="' + ['#d8b986', '#e2c89a', '#cba873'][i % 3] + '"/>' +
+        '<path d="M' + (x + 26) + ' 560v-70q0 -34 36 -34t36 34v70z" fill="#6b5234"/><rect x="' + (x + 30) + '" y="350" width="24" height="36" fill="#5a7a6a"/><rect x="' + (x + 72) + '" y="350" width="24" height="36" fill="#5a7a6a"/>';
+    }
+    $('#houses').innerHTML = s; s = '';
+    ['#c8402c', '#e2b521', '#8a5a2a'].forEach(function (c, j) { x = 60 + j * 58; s += '<path d="M' + x + ' 560q-6 -44 4 -52h36q10 8 4 52z" fill="#cdb78c" stroke="#8f7a52" stroke-width="2"/><path d="M' + (x + 4) + ' 510l18 -24 18 24z" fill="' + c + '"/>'; });
+    $('#sacks').innerHTML = s + '<g transform="translate(1372 470) scale(1.300)">' + BZ.item('cloth') + '</g>'; s = '';
+    for (i = 0; i < 26; i++) s += '<circle cx="' + (432 + (i % 9) * 30 + (Math.floor(i / 9) % 2) * 15) + '" cy="' + (682 - Math.floor(i / 9) * 20) + '" r="14" fill="' + (i % 4 ? '#f2d21e' : '#e6c010') + '" stroke="#b99a10" stroke-width="1.500"/>';
+    $('#lemons').innerHTML = s; s = '';
+    [[1010, 444, 0.9, '#e2b521'], [1070, 590, 0.8, '#c8402c'], [1130, 590, 0.85, '#3f7a5a']].forEach(function (g) {
+      s += '<g transform="translate(' + g[0] + ' ' + g[1] + ') scale(' + g[2] + ')">' + BZ.item('cages') + '<g class="hop"><ellipse cx="30" cy="58" rx="8" ry="6" fill="' + g[3] + '"/><circle cx="24" cy="52" r="4" fill="' + g[3] + '"/></g></g>';
+    });
+    $('#cages').innerHTML = s;
+    $('#crowd').innerHTML = BZ.crowd('sq', 9, 280, 1320, 570, 620, 0.7, 0.95);
+    $('#pzeb').innerHTML = BZ.person(190, 870, 1.15, { coat: '#eadfc4', skin: '#b98558', hair: '#2a2420', top: 'bald', apron: '#f6f3ea' });
+    $('#pdabb').innerHTML = BZ.person(560, 770, 1.05, { coat: '#e9dfc4', skin: '#c99a6e', hair: '#5a4426', top: 'straw', apron: '#e2b521' });
+    $('#pneva').innerHTML = BZ.person(1100, 876, 1.1, { coat: '#3f7a5a', skin: '#8a5a36', hair: '#1c1410', top: 'plait', sit: 1 });
+    $('#ptansy').innerHTML = BZ.person(1420, 878, 1.12, { coat: '#22407a', skin: '#6b4423', hair: '#2f5fa8', top: 'scarf', hand: '#2f5fa8', apron: '#b8322a' });
+    $('#pmungo').innerHTML = BZ.person(690, 868, 1, { coat: '#4a4a56', skin: '#e2bc94', hair: '#8f8f8f', top: 'cap', sit: 1 });
+  })();
+
+  ER.init({
+    theme: 'adventure', story: 'bazaar', storyTitle: 'The Third Arch After the Fountain', id: 'square', no: 'III', title: 'Nobody Sells',
+    go: 'Count your coppers',
+    intro: [
+      'Two doors said Veck, and you knocked at the small dark one. The red shop gave itself away: a card in its window said UNDER NEW MANAGEMENT, and VECKS OLD SHOP only means the shop that used to be Veck&rsquo;s. The small shop&rsquo;s card said where the family had moved from, and a slate beside its door showed one stroke of chalk: one piece bought back today.',
+      'The compass is on Mistress Veck&rsquo;s shelf. She may not sell it before tomorrow: Rule 8. She may swap it today, for a Pale lark that is singing when it comes through her door.',
+      'The bird-woman sits by the fountain. It is twenty to ten. You have twenty-two coppers in your purse, and you are about to find out that in this square almost nobody takes money.'
+    ],
+    exit: {"next":"roof","w":{"da043495":"92414810"}}, tags: {"deal":["46a7f281","dda87384","bf9045d6","35408bde","91e9a21e","751a7d49","23530bbe","46a6b1d5"]},
+    hints: hints, onBegin: begin
+  });
+
+  nextFile = ER.flag('q-file') || null; told = ER.flag('q-told') || {}; inv = ER.flag('q-inv') || JSON.parse(JSON.stringify(FRESH));
+  function tell(k) { if (told[k]) return false; told[k] = 1; ER.flag('q-told', told); return true; }
+  function isBusy() { return busy; }
+  var WHO = ['neva', 'dabb', 'tansy', 'zeb', 'mungo'];
+  function heard() { return WHO.filter(function (k) { return told[k]; }).length; }
+  var NAME = { basket: 'a basket of lemons, sewn shut', blue: 'a length of Tansy&rsquo;s blue', yellow: 'a length of yellow cloth', mirror: 'Zeb&rsquo;s spare mirror', cracked: 'a cracked mirror', lark: 'a Pale lark, under a blue cloth' };
+  function paint() {
+    var s = '<p>' + inv.c + (inv.c === 1 ? ' copper' : ' coppers') + '</p>', k;
+    if (inv.lemon) s += '<p>' + inv.lemon + (inv.lemon === 1 ? ' lemon' : ' lemons') + '</p>';
+    for (k in NAME) if (inv[k] && !(k === 'blue' && inv.lark)) s += '<p>' + NAME[k] + '</p>';
+    $('#hlist').innerHTML = s;
+    $('#again').style.display = nextFile ? 'none' : '';
+    $('#clothblue').style.display = inv.out.blue ? 'none' : ''; $('#clothyellow').style.display = inv.out.yellow ? 'none' : '';
+    $('#crackedm').style.display = inv.out.cracked ? 'none' : '';
+    document.body.classList.toggle('sung', !!nextFile);
+    $('#go').classList.toggle('on', !!nextFile);
+    ER.pips((heard() === 5 ? 1 : 0) + (inv.blue ? 1 : 0) + (inv.mirror ? 1 : 0) + (nextFile ? 1 : 0), 4);
+  }
+  function hints() {
+    if (nextFile) return ['go', ['She is singing. Take her to Mistress Veck before she changes her mind.']];
+    if (heard() < 5) return ['talk', [
+      'Five people work in this square: a barber, a lemon-seller, a bird-woman, a dyer and a tinker. Hear all five before you offer anybody anything.',
+      'Listen for three things from each of them: what they have, what they will take for it, and what they will NOT take. Their words are kept in your notebook.'
+    ]];
+    return ['deal', [
+      'Work backwards. Mistress Veck wants the lark. What does Neva want for the lark, and what must be over the cage when it leaves her? Who has each of those two things, and what does each of THEM want?',
+      'Two people want lemons, and only Dabb has any. A basket is a moon and a half, and a moon is twelve coppers: Nim&rsquo;s board said so. One lemon by itself is two coppers. Now count what is in your purse.',
+      'Zeb and Neva would both like the blue cloth, and there is only one. Nothing else will do for Neva. Zeb will take two lemons instead. And a cracked mirror, however cheap, is a mirror that Neva will not take.'
+    ]];
+  }
+  function begin() {
+    paint();
+    if (nextFile) { busy = false; ER.say('The fountain square. Under her blue cloth, the lark is still telling everybody about the weather.'); return; }
+    if (told.intro) { busy = false; ER.say('The fountain square, a little before ten. In your purse: ' + inv.c + ' coppers.'); return; }
+    ER.narrate([
+      'You come back out of the arch, with the Clock Tower on your right this time, and walk until you reach the fountain. It is a much better fountain when you are not counting arches.',
+      'Five people have set up shop round it. A barber with a mirror on a pole. A man with a cart of lemons. A woman on a stool among forty birdcages. A dyer, whose hands are blue to the elbow. And a tinker, sitting on a rug of things that have nearly been mended.',
+      'One of the bird-woman&rsquo;s hooks is empty. Somebody has been here before you.'
+    ], function () { busy = false; tell('intro'); });
+  }
+
+  /* ---------- five people, and what each of them will and will not do ---------- */
+  var TALK = {
+    neva: { who: 'Neva', role: 'Bird-woman · by the fountain', title: 'Neva, the bird-woman', lines: [
+      { note: 'She is sitting among forty cages, with a finch on her shoulder. One hook on her stand is empty.', a: '&ldquo;Neva. I had two larks when the sun came up. Now I have one, and you are looking at her like somebody who knows of a hook with nothing on it.&rdquo;' },
+      { q: 'How much is the lark?', a: 'I do not sell birds. A bird that can be bought has no opinion of you. I swap. For the lark I want a mirror: my finches fight over the one I have. A good one. I would not part with her for less, and I will not take a mirror that is cracked: a finch that sees two of itself wants feeding twice.' },
+      { q: 'And then I can take her?', a: 'On one condition. She leaves this stall under a blue cloth, or she does not leave it. A Pale lark sings only if she thinks that she is under the sky. Put blue over her cage, and she will sing all day. Put any other colour over it, or nothing at all, and she will sit and sulk until tomorrow: and I will not have a sulking bird carried round Ombra in a cage with my name on it.' },
+      { q: 'Who took the other lark?', a: 'A tall woman, an hour ago. She gave me a little brass mirror, the kind that travellers flash at each other across the salt, and a very good mirror it is. I said: now, about the cloth. I said it to her back. The lark went off down the drapers&rsquo; street with nothing over her at all. She will not sing a note today.' }] },
+    dabb: { who: 'Dabb', role: 'Lemons · by the fountain', title: 'Dabb, the lemon-seller', lines: [
+      { note: 'A cart of lemons, a straw hat, and a man who is whistling.', a: '&ldquo;Dabb. Lemons. I sell them: for money. They tell me that it is a strange way to do business, in this square.&rdquo;' },
+      { q: 'How much are they?', a: 'A basket is a moon and a half: a full dozen, and I sew the lid shut with a rush. One lemon by itself is two coppers. I say moons because it sounds less. I take coppers, because I have nothing to weigh silver with, and a clipped moon looks like any other.' },
+      { q: 'Would you swap them for something?', a: 'For what? I know what I look like, so I do not need a mirror. I have a hat. No: coppers.' }] },
+    tansy: { who: 'Tansy', role: 'Dyer · by the fountain', title: 'Tansy, the dyer', lines: [
+      { note: 'Three lengths of cloth hang on her line: blue, red and yellow. Her hands are blue to the elbow.', a: '&ldquo;Tansy. The blue is mine: nobody else in Ombra gets it so dark. I would not part with a length of it for less than three moons, and nobody who looks like you has three moons.&rdquo;' },
+      { q: 'Is there anything else that you would take?', a: 'Lemons. It is lemon juice that makes a colour stay, and I have none left. I will give you a length of blue in exchange for a basket of Dabb&rsquo;s: as long as it is a full basket, a dozen, with his rush still through the lid. I count.' },
+      { q: 'What about the yellow?', a: 'The yellow went wrong. Take it, if you like, for nothing. I should be glad not to look at it.' }] },
+    zeb: { who: 'Zeb', role: 'Barber · by the fountain', title: 'Zeb, the barber', lines: [
+      { note: 'A chair, a jug, and a pole with a mirror on it. He has no hair at all, and a beard like a hedge.', a: '&ldquo;Zeb. Shaves, and news. The mirror on the pole is not to be had: it is how the square knows that I am open. The spare one in my drawer is another matter.&rdquo;' },
+      { q: 'What do you want for the spare mirror?', a: 'Not coppers. Everybody pays a barber in coppers: I have a jar of them. I will swap it for two lemons. A shave without lemon water is only scraping, and I used my last lemon on the baker.' },
+      { q: 'Only lemons?', a: 'Unless you have a length of Tansy&rsquo;s blue about you. I would take that sooner than lemons: for a year I have wanted a blue cloth to put round my customers&rsquo; necks, and she will not sell me one. One or the other, though. I am not greedy.' }] },
+    mungo: { who: 'Mungo', role: 'Tinker · by the fountain', title: 'Mungo, the tinker', lines: [
+      { note: 'He sits on a red rug, among things that have nearly been mended.', a: '&ldquo;Mungo. I sell. Dabb and I are the only two in this square who take money, and my prices are lower than his.&rdquo;' },
+      { q: 'Have you a mirror?', a: 'I have a very fine mirror: four coppers. It is hardly cracked at all.' }] }
+  };
+  var GOODS = { dabb: ['basket', 'lemon'], tansy: ['blue', 'yellow'], zeb: ['mirror'], mungo: ['cracked'], neva: ['lark'] },
+    ASKN = { basket: 'a basket of lemons', lemon: 'one lemon', blue: 'a length of blue', yellow: 'the yellow length', mirror: 'the spare mirror', cracked: 'the cracked mirror', lark: 'the lark' },
+    HAS = { dabb: 'He has lemons: by the basket, or one at a time.', tansy: 'She has one length of blue on her line, and one of yellow.', zeb: 'He has a spare mirror in his drawer.', mungo: 'He has a mirror with a crack across it.', neva: 'She has one Pale lark left.' },
+    GIVEN = { basket: 'a basket of lemons', blue: 'the blue cloth', yellow: 'the yellow cloth', mirror: 'Zeb&rsquo;s spare mirror', cracked: 'the cracked mirror' };
+  WHO.forEach(function (k) {
+    $('#' + k).addEventListener('click', function () {
+      var t = TALK[k];
+      if (busy) return;
+      if (nextFile) { ER.say(k === 'neva' ? '&ldquo;Keep the cloth on her,&rdquo; says Neva, &ldquo;all the way to wherever that empty hook is.&rdquo;' : 'You have what you came for, and the Clock Tower has not stopped.'); return; }
+      if (told[k]) { deal(k); return; }
+      ER.talk({ who: t.who, role: t.role, face: window.FACE(k), lines: t.lines, clue: { id: k, title: t.title, kind: 'What ' + (k === 'neva' || k === 'tansy' ? 'she' : 'he') + ' will take' }, last: 'Close',
+        done: function (seen) {
+          if (!seen) return;
+          tell(k); paint(); BZ.words(k === 'neva' ? ['part with', 'on one condition', 'sulk'] : k === 'tansy' ? ['in exchange for', 'as long as', 'dye'] : k === 'zeb' ? ['unless', 'shave'] : k === 'dabb' ? ['dozen', 'rush'] : ['tinker']);
+          ER.say(heard() < 5 ? 'Click on ' + t.who + ' again when you have something to offer.' : 'That is all five. Click on any of them to make an offer.');
+        } });
+    });
+  });
+
+  /* ---------- a bargain ---------- */
+  function refuse(t, g, n, a) {
+    if (t === 'dabb') {
+      if (g !== 'c') return '&ldquo;What would I do with that?&rdquo; says Dabb. &ldquo;I sell. I am the only one in this square who does, except Mungo, and they think that we are both strange.&rdquo;';
+      if (a === 'basket') return n < 18 ? 'Dabb counts them into his hat. &ldquo;' + n + '. That is not a moon and a half. What did the changer&rsquo;s board say a moon was?&rdquo; He counts them back to you.' :
+        'Dabb counts them into his hat, and stops. &ldquo;' + n + ' is too many. A moon and a half, I said. I will not take a copper that I am not owed: it is bad for trade.&rdquo; He counts them back to you.';
+      return '&ldquo;One lemon, two coppers,&rdquo; says Dabb. &ldquo;Not ' + n + '.&rdquo;';
+    }
+    if (t === 'tansy') {
+      if (a === 'yellow') return '&ldquo;For the yellow? Keep that,&rdquo; says Tansy. &ldquo;I will not take anything for the yellow. Offer me nothing, and it is yours.&rdquo;';
+      if (g === 'c') return '&ldquo;Three moons is the price of my blue,&rdquo; says Tansy, &ldquo;and there are not three moons in that purse: I can hear it from here. I told you what I would take in exchange.&rdquo;';
+      if (g === 'lemon') return '&ldquo;A basket, I said. A full dozen, sewn shut by Dabb, so that I know nobody has been at them. Not ' + (n === 1 ? 'one lemon' : 'two lemons') + ' out of somebody&rsquo;s pocket.&rdquo;';
+      if (g === 'nothing') return '&ldquo;The blue, for nothing?&rdquo; says Tansy. &ldquo;The YELLOW is for nothing.&rdquo;';
+      return '&ldquo;I am a dyer,&rdquo; says Tansy. &ldquo;I have no use for that. Lemons: a full basket.&rdquo;';
+    }
+    if (t === 'zeb') {
+      if (g === 'c') return '&ldquo;I have a jar of coppers,&rdquo; says Zeb. &ldquo;Everybody pays a barber in coppers. I cannot shave a man with coppers.&rdquo;';
+      if (g === 'lemon') return '&ldquo;One lemon is half a jug of lemon water,&rdquo; says Zeb. &ldquo;Two, I said.&rdquo;';
+      if (g === 'basket') return '&ldquo;A whole basket? I am a barber, not a lemonade stall. Two lemons. And I think that Tansy wants that basket more than I do.&rdquo;';
+      if (g === 'yellow') return '&ldquo;Yellow? Round a customer&rsquo;s neck?&rdquo; says Zeb. &ldquo;He would look like a cheese.&rdquo;';
+      if (g === 'cracked') return '&ldquo;I have a mirror,&rdquo; says Zeb. &ldquo;I do not need half of another one.&rdquo;';
+      return '&ldquo;Nothing is what I have already,&rdquo; says Zeb.';
+    }
+    if (t === 'mungo') return g === 'c' ? '&ldquo;Four coppers,&rdquo; says Mungo. &ldquo;Not ' + n + '. It was five before it cracked.&rdquo;' : '&ldquo;I only sell,&rdquo; says Mungo. &ldquo;Swapping is how a man ends up with a rug like this one.&rdquo;';
+    if (g === 'c') return '&ldquo;I do not sell birds,&rdquo; says Neva. &ldquo;A bird that can be bought has no opinion of you.&rdquo;';
+    if (g === 'cracked') return 'Neva holds it up, and two of her look back out of it. &ldquo;Not cracked, I said. A finch that sees two of itself wants feeding twice.&rdquo;';
+    if (g === 'mirror') return '&ldquo;That is a good mirror,&rdquo; says Neva. &ldquo;And the blue? She leaves this stall under a blue cloth, or she does not leave it. I would have told the tall woman the same, if she had stood still.&rdquo;';
+    if (g === 'blue') return '&ldquo;That is her sky,&rdquo; says Neva. &ldquo;Keep it: it goes over the cage. What I want for her is a mirror.&rdquo;';
+    if (g === 'yellow') return '&ldquo;Blue, I said. Under yellow she would think that the world was on fire.&rdquo;';
+    if (g === 'nothing') return '&ldquo;For nothing?&rdquo; says Neva. &ldquo;Then nothing is what I shall give you.&rdquo;';
+    return '&ldquo;Larks do not eat lemons,&rdquo; says Neva. &ldquo;Nothing eats lemons, except barbers.&rdquo;';
+  }
+  var DONE = {
+    'dabb>basket': 'Eighteen coppers: a moon and a half. Dabb fills a basket with twelve lemons and sews the lid shut with a rush. &ldquo;So that she knows nobody has been at them.&rdquo;',
+    'dabb>lemon': 'Two coppers. Dabb throws you a lemon, and you very nearly catch it.',
+    'tansy>blue': 'Tansy cuts the rush, counts twelve lemons aloud, and unpins the blue from her line. It is the colour of the sky at the very top, where it is darkest.',
+    'tansy>yellow': '&ldquo;Take it,&rdquo; says Tansy. &ldquo;It is the colour of a mistake.&rdquo; You are now the owner of a length of yellow cloth.',
+    'zeb>mirror:lemon': 'Zeb smells both lemons, one after the other, and opens the drawer under his chair. The spare mirror is as big as a plate, and has not a mark on it.',
+    'zeb>mirror:blue': '&ldquo;Tansy&rsquo;s blue!&rdquo; says Zeb, and puts it round his own neck at once. The spare mirror is yours. So is the feeling that you have just given away something you needed.',
+    'mungo>cracked': 'Four coppers. Mungo wraps the mirror in a page of last week&rsquo;s news. The crack runs from corner to corner. &ldquo;You hardly see it,&rdquo; he says, &ldquo;if you stand to one side.&rdquo;'
+  };
+  function deal(t) {
+    var box = ER.el('div', 'bx deal'), give = null, ask = GOODS[t].length === 1 ? GOODS[t][0] : null, cnt = null, msgEl;
+    function msg(x) { msgEl.innerHTML = ER.gloss(x); }
+    function build() {
+      var s = '<h5>' + TALK[t].who + '</h5><p class="has">' + HAS[t] + '</p><h6>You offer</h6><div class="opts" id="o-give">', k;
+      s += '<button type="button" class="pick" data-g="nothing">nothing</button><button type="button" class="pick" data-g="c">coppers:</button><span id="o-cnt"></span>';
+      if (inv.lemon >= 1) s += '<button type="button" class="pick" data-g="lemon1">one lemon</button>';
+      if (inv.lemon >= 2) s += '<button type="button" class="pick" data-g="lemon2">two lemons</button>';
+      for (k in GIVEN) if (inv[k]) s += '<button type="button" class="pick" data-g="' + k + '">' + GIVEN[k] + '</button>';
+      s += '</div><h6>You ask for</h6><div class="opts" id="o-ask">';
+      GOODS[t].forEach(function (g) { if (g === 'basket' || g === 'lemon' || !inv.out[g]) s += '<button type="button" class="pick" data-a="' + g + '">' + ASKN[g] + '</button>'; });
+      s += '</div><div class="bx-foot"><p class="pmsg"></p><button type="button" class="btn" id="o-go">Offer it</button></div>';
+      box.innerHTML = s; msgEl = box.querySelector('.pmsg');
+      cnt = BZ.count(box.querySelector('#o-cnt'), { max: inv.c, start: 0, unit: 'of ' + inv.c, change: function () { give = 'c'; mark(); } });
+      if (ask && !box.querySelector('[data-a="' + ask + '"]')) ask = null;
+      mark();
+    }
+    function mark() {
+      ER.$$('.pick', box).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-g') ? b.getAttribute('data-g') === give : b.getAttribute('data-a') === ask); });
+    }
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('.pick') : null;
+      if (b) { if (b.getAttribute('data-g')) give = b.getAttribute('data-g'); else ask = b.getAttribute('data-a'); mark(); return; }
+      if (e.target.id === 'o-go') offer();
+    });
+    function offer() {
+      var g, n = 0, cand, file;
+      if (!box.querySelector('#o-ask .pick')) { msg(TALK[t].who + ' has nothing more that you want.'); return; }
+      if (!give || !ask) { msg('Choose what you offer, and what you ask for. Then offer it.'); return; }
+      g = give; if (g === 'c') n = cnt.get(); if (g === 'lemon1' || g === 'lemon2') { n = +g.slice(5); g = 'lemon'; }
+      if (g === 'c' && !n) { msg('You hold out an empty hand. ' + TALK[t].who + ' looks at it politely. (Set the number of coppers with the arrows.)'); return; }
+      cand = t + ':' + (g === 'c' || g === 'lemon' ? g + n : g) + (t === 'neva' && g === 'mirror' && inv.blue ? '+blue' : '') + '>' + ask;
+      if (!ER.check('deal', cand)) { ER.sfx.no(); msg(refuse(t, g, n, ask)); return; }
+      if (g === 'c') inv.c -= n; else if (g === 'lemon') inv.lemon -= n; else if (g !== 'nothing') inv[g] = 0;
+      if (ask === 'lemon') inv.lemon++; else { inv[ask] = 1; if (ask !== 'basket') inv.out[ask] = 1; }
+      ER.flag('q-inv', inv); (g === 'c' ? BZ.sfx.coin : BZ.sfx.swap)();
+      if (ask === 'lark') {
+        file = ER.exit(['lark' + (inv.blue ? '+blue' : '')], { wait: true });
+        if (!file) { msg('The lark looks at you and says nothing. Something is wrong with this page: tell your teacher.'); return; }
+        nextFile = file; ER.flag('q-file', file); paint();
+        msg('Neva takes the mirror, and four finches come at once to look at themselves in it. She lifts the last cage off its hook.');
+        setTimeout(function () {
+          ER.closeAll(); busy = true; BZ.sfx.lark();
+          ER.narrate([
+            'You drop Tansy&rsquo;s blue over the cage. For as long as it takes to count ten, nothing happens.',
+            'Then, under the cloth, the lark decides that it is a fine morning with a clear sky, and says so, at great length.',
+            'You have an empty purse, one bird, and the first thing that anybody in Ombra has been glad to give you. The Clock Tower says ten.',
+            'You carry her back the way you came: out of the square with the tower at your left shoulder, past one arch, and one that is not an arch, and one more, and in at the next. She sings the whole way.'
+          ], function () { busy = false; });
+        }, 2600);
+        return;
+      }
+      cand = DONE[t + '>' + ask + (t === 'zeb' ? ':' + g : '')] || 'Done.';
+      give = null; paint(); build(); msg(cand);
+    }
+    build();
+    msg(t === 'dabb' ? 'Dabb takes coppers. Choose what you want, set the number of coppers with the arrows, and offer it.' : 'What will you offer ' + TALK[t].who + ', and for what?');
+    ER.open('ov-lock', box);
+  }
+  $('#again').addEventListener('click', function () {
+    if (busy || nextFile) return;
+    inv = JSON.parse(JSON.stringify(FRESH)); ER.flag('q-inv', inv); ER.closeAll(); paint(); BZ.sfx.swap();
+    ER.say('By the custom of the square, any swap can be undone before the noon bell. Everything goes back to where it was at twenty to ten, and nobody is surprised. In your purse: 22 coppers.');
+  });
+
+  BZ.thing('#fount', 'fountain', 'The fountain: a stone bowl as wide as a cart. Four streets of people have been meeting each other &ldquo;at the fountain&rdquo; for longer than anybody can remember.', isBusy);
+  BZ.thing('#tower', null, function () { return nextFile ? 'The Clock Tower, far away to the north, over the roofs. Ten o&rsquo;clock.' : 'The Clock Tower, far away to the north, over the roofs. Twenty to ten. Noon is when the bell rings in the Yard.'; }, isBusy);
+  $('#go').addEventListener('click', function () { if (nextFile) ER.leave(nextFile); });
+})();
+</script>
+</body>
+</html>
