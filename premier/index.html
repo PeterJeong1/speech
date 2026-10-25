@@ -984,7 +984,7 @@ function pausesCapped(st) {
 /* The band is deliberately narrow and a sideways step costs extra. Given a free hand,
    the warp will bend any English sentence onto any other - a different line of this very
    script scored in the nineties before this was tightened. */
-const BAND = 0.06, SIDESTEP = 0.4;
+const BAND = 0.12, SIDESTEP = 0.4;
 
 function dtw(a, b) {
   const A = a.length, B = b.length, W = B + 1;
@@ -1187,7 +1187,9 @@ function showScore(i) {
         t.range.toFixed(1) + "</b> of the guide&rsquo;s " + t.guideRange.toFixed(1) + " semitones" +
         (t.range < t.guideRange * 0.65 ? " &middot; move your voice more" : "") + "</span>"
       : "") +
-    "<span>" + timing + "</span>" +
+    (t.dur < S[i].dur * 0.65
+      ? '<span class="low">much shorter than the part &middot; did you say all of it?</span>'
+      : "<span>" + timing + "</span>") +
     '<button class="link" data-do="mine" type="button">Play mine</button>' +
     '<button class="link" data-do="guide" type="button">Play the guide</button>' +
     '<button class="link" data-do="save" type="button">Save this take</button>' +
