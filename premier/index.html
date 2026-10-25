@@ -1,0 +1,2145 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Fingerprint Practice Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap">
+<style>
+:root{
+  --ground:#F3F1EE; --surface:#FFFFFF; --ink:#1B1D22; --muted:#5B5F6A; --faint:#8E929C;
+  --rule:#DAD6D0; --track:#C9C4BC; --lantern:#1F6F78; --lantern-ink:#185A61;
+  --glow:#CFEDEE; --glow-soft:#EEF6F6; --btn-ink:#FFFFFF; --wrong:#B3382B;
+  --display:"Fraunces","Iowan Old Style",Georgia,serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --gutter:clamp(16px,4vw,40px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111416; --surface:#1A1E21; --ink:#E7EAEC; --muted:#A4ACB2; --faint:#6E777E;
+    --rule:#2A3034; --track:#3A4247; --lantern:#5BC0C7; --lantern-ink:#86D6DB;
+    --glow:#173F43; --glow-soft:#142326; --btn-ink:#0B1B1D; --wrong:#E0705F;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111416; --surface:#1A1E21; --ink:#E7EAEC; --muted:#A4ACB2; --faint:#6E777E;
+  --rule:#2A3034; --track:#3A4247; --lantern:#5BC0C7; --lantern-ink:#86D6DB;
+  --glow:#173F43; --glow-soft:#142326; --btn-ink:#0B1B1D; --wrong:#E0705F;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-inline:var(--gutter);padding-block:0 72px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--lantern);outline-offset:2px}
+
+/* header */
+.top{padding-block:48px 28px;display:grid;gap:14px}
+.eyebrow{margin:0;font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(40px,7.4vw,68px);line-height:1;letter-spacing:-.005em;text-wrap:balance}
+.lede{margin:0;max-width:62ch;color:var(--muted);font-size:17px}
+.facts{display:flex;flex-wrap:wrap;gap:14px 36px;margin:8px 0 0;padding-top:18px;border-top:1px solid var(--rule)}
+.facts div{display:grid;gap:2px}
+.facts dt{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font:500 21px/1.2 var(--mono);font-variant-numeric:tabular-nums}
+.facts small{font-size:13px;font-weight:400;color:var(--muted)}
+
+/* player */
+.player{position:sticky;top:0;z-index:10;margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);
+  padding-block:12px 10px;background:var(--ground);border-block:1px solid var(--rule)}
+@supports (backdrop-filter:blur(4px)){.player{background:color-mix(in srgb,var(--ground) 86%,transparent);backdrop-filter:blur(10px)}}
+.controls{display:flex;align-items:center;gap:10px 16px;flex-wrap:wrap}
+.play{flex:none;width:50px;height:50px;border:0;border-radius:50%;background:var(--lantern);color:var(--btn-ink);display:grid;place-items:center;cursor:pointer}
+.play svg{width:20px;height:20px;fill:currentColor}
+.clock{font:500 16px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.clock .of{color:var(--muted)}
+.hint{font-size:14px;color:var(--muted)}
+.turn{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--lantern-ink)}
+.turn-bar{width:96px;height:6px;border-radius:3px;background:var(--rule);overflow:hidden}
+.turn-bar i{display:block;height:100%;width:0;background:var(--lantern)}
+.mode{margin:0 0 0 auto;padding:3px;border:1px solid var(--rule);border-radius:999px;display:flex;gap:2px;background:var(--surface)}
+.mode input{position:absolute;opacity:0;pointer-events:none}
+.mode label{padding:6px 14px;border-radius:999px;font-size:14px;cursor:pointer;color:var(--muted);white-space:nowrap}
+.mode input:checked + label{background:var(--ink);color:var(--ground)}
+.mode input:focus-visible + label{outline:2px solid var(--lantern);outline-offset:2px}
+.track{position:relative;height:22px;margin-top:12px;cursor:pointer;touch-action:none}
+.blocks{position:absolute;inset:6px 0}
+.blk{position:absolute;top:0;bottom:0;border-radius:2px;background:var(--track)}
+.blk.done{background:var(--faint)}
+.blk.live{background:var(--lantern)}
+.margin{position:absolute;top:6px;bottom:6px;right:0;background:repeating-linear-gradient(135deg,var(--track) 0 1.5px,transparent 1.5px 6px)}
+.wall{position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--ink)}
+.head{position:absolute;top:0;bottom:0;left:0;width:2px;margin-left:-1px;background:var(--ink)}
+.ticks{display:flex;justify-content:space-between;margin-top:3px;font:12px var(--mono);color:var(--muted)}
+
+/* script */
+.sec{padding-block:40px 10px;padding-left:62px}
+.sec h2{margin:0;font:italic 400 28px/1.1 var(--display)}
+.sec p{margin:4px 0 0;font-size:15px;color:var(--muted)}
+.line{display:grid;grid-template-columns:44px minmax(0,1fr) 156px;gap:6px 18px;padding:16px 10px;margin-inline:-10px;border-top:1px solid var(--rule);cursor:pointer}
+.line:hover{background:var(--surface)}
+.line.live{background:var(--glow-soft)}
+.num{width:38px;height:38px;border:1px solid var(--rule);border-radius:50%;background:transparent;font:500 14px var(--mono);color:var(--muted);cursor:pointer}
+.line.live .num{border-color:var(--lantern);color:var(--lantern-ink)}
+.say{margin:0;font-size:clamp(18px,2.3vw,21px);line-height:1.7}
+.w{border-radius:3px}
+.w.s{font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px;text-decoration-color:var(--faint)}
+.w.on{background:var(--glow);box-shadow:0 0 0 3px var(--glow)}
+.bk{margin-left:5px;font:500 .78em var(--mono);color:var(--lantern-ink)}
+.bk.long{font-weight:700}
+.sec .part-n{margin:0 0 4px;font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--lantern-ink)}
+.tune svg + svg{margin-top:4px}
+.turn[hidden]{display:none}
+.score .low{color:var(--wrong)}
+.note{margin:4px 0 0;max-width:62ch;font-size:15px;line-height:1.45;color:var(--muted)}
+.tune{margin:10px 0 0}
+.tune svg{display:block;width:100%;height:auto}
+.tune .grid{stroke:var(--rule);stroke-dasharray:3 5}
+.tune .zero{stroke:var(--track)}
+.tune .area{fill:var(--glow-soft)}
+.tune .curve{fill:none;stroke:var(--lantern);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:.7}
+.line.live .tune .curve{opacity:1}
+.tune .band{fill:transparent}
+.tune .band.s{fill:var(--glow);opacity:.6}
+.tune .band.miss{fill:var(--wrong);opacity:.16}
+.tune .band.on{fill:var(--lantern);opacity:.3}
+.tune .mine{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:5 4;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.tune .ax{font:8px var(--mono);fill:var(--faint)}
+.tune .lab{font-family:var(--mono);fill:var(--faint)}
+.tune .lab.s{fill:var(--lantern-ink);font-weight:500}
+.meta{display:grid;gap:12px;align-content:start;padding-top:8px;font:13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.tempo b{font-weight:500;color:var(--ink)}
+.rest{display:flex;align-items:center;gap:8px}
+.rest i{flex:none;height:7px;border-radius:1px;background:var(--ink)}
+
+/* your own take */
+.take{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:10px 0 0}
+.mic{display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border:1px solid var(--rule);border-radius:999px;
+  background:var(--surface);color:var(--muted);font-size:14px;cursor:pointer}
+.mic:hover{border-color:var(--lantern);color:var(--ink)}
+.mic svg{width:12px;height:12px;fill:currentColor}
+.mic.rec{background:var(--wrong);border-color:transparent;color:#fff}
+.mic.rec svg{border-radius:2px}
+.mic[disabled]{opacity:.45;cursor:default}
+@keyframes blink{50%{opacity:.35}}
+.mic.rec svg{animation:blink 1s steps(1,end) infinite}
+.score{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;font:13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.score b{font-size:16px;font-weight:500;color:var(--ink)}
+.score .bad{color:var(--wrong)}
+.score .link{border:0;background:none;padding:0;font:13px var(--mono);color:var(--muted);text-decoration:underline;
+  text-underline-offset:3px;cursor:pointer}
+.score .link:hover{color:var(--ink)}
+.legend{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:16px;height:0;border-top:2px dashed var(--ink)}
+
+/* the name gate */
+.gate{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:var(--gutter);background:var(--ground)}
+@supports (backdrop-filter:blur(4px)){.gate{background:color-mix(in srgb,var(--ground) 88%,transparent);backdrop-filter:blur(8px)}}
+.gate[hidden]{display:none}
+.gate form{width:min(430px,100%);display:grid;gap:15px;padding:30px;background:var(--surface);
+  border:1px solid var(--rule);border-radius:16px}
+.gate h2{margin:0;font:400 31px/1.05 var(--display)}
+.gate p{margin:0;max-width:44ch;font-size:15px;color:var(--muted)}
+.gate label{display:grid;gap:7px;font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.gate input{font-family:var(--body);font-size:18px;padding:11px 13px;color:var(--ink);
+  background:var(--ground);border:1px solid var(--rule);border-radius:9px}
+.gate button{justify-self:start;padding:11px 24px;border:0;border-radius:999px;background:var(--lantern);
+  color:var(--btn-ink);font-weight:700;cursor:pointer}
+.gate .again{font-size:13px;color:var(--faint)}
+
+/* the run you have just recorded */
+.run{margin-top:44px;padding:24px 26px;border:1px solid var(--rule);border-radius:14px;background:var(--surface);display:grid;gap:12px}
+.run[hidden]{display:none}
+.run h2{margin:0;font:400 27px/1.1 var(--display)}
+.run p{margin:0;color:var(--muted);font-size:15px}
+.run #run-line{font-family:var(--mono);font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.run-buttons{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:2px}
+.run-go{padding:10px 20px;border:0;border-radius:999px;background:var(--lantern);color:var(--btn-ink);font-weight:700;cursor:pointer}
+.run-go[disabled],.run-alt[disabled]{opacity:.5;cursor:default}
+.run-alt{padding:9px 18px;border:1px solid var(--rule);border-radius:999px;background:var(--surface);color:var(--ink);cursor:pointer}
+.run-alt:hover{border-color:var(--lantern)}
+.run-status{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font:14px var(--mono);color:var(--ink)}
+.run-status[hidden]{display:none}
+.run-status .bad{color:var(--wrong)}
+.run-status .good{color:var(--lantern-ink);font-weight:500}
+.run audio{width:100%}
+.run audio[hidden]{display:none}
+.score .pick{color:var(--lantern-ink)}
+.score .pick b{font-size:13px}
+.run .link{border:0;background:none;padding:0;font:13px var(--mono);color:var(--muted);text-decoration:underline;
+  text-underline-offset:3px;cursor:pointer}
+.run .link:hover{color:var(--ink)}
+.run-note{font-size:13px}
+.onego{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-top:12px;border-top:1px solid var(--rule)}
+.onego span{font:13px var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.use{margin:0;padding:0;border:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;font-size:15px}
+.use[hidden]{display:none}
+.use legend{float:left;margin-right:4px;padding:0;font:500 12px/2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.use label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.use input{accent-color:var(--lantern)}
+
+/* the whole speech in one go: the script on one screen, no guide playing */
+.stage{position:fixed;inset:0;z-index:40;overflow-y:auto;background:var(--ground);padding:0 var(--gutter) 40px}
+.stage[hidden]{display:none}
+.stage-bar{position:sticky;top:0;z-index:1;margin-inline:calc(-1 * var(--gutter));padding:12px var(--gutter) 10px;
+  background:var(--ground);border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px}
+.stage-bar h2{margin:0;font:400 24px/1.1 var(--display)}
+.stage-clock{font:500 22px var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stage-clock small{font-size:14px;color:var(--muted)}
+.stage-clock.over{color:var(--wrong)}
+.stage-meter{position:relative;flex:1 1 160px;height:8px;border-radius:4px;background:var(--rule);overflow:hidden}
+.stage-meter i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--lantern)}
+.stage-meter.over i{background:var(--wrong)}
+.stage-meter b{position:absolute;top:0;bottom:0;width:2px;background:var(--ink)}
+.stage .run-go.rec{background:var(--wrong);color:#fff}
+.stage .link{border:0;background:none;padding:0;font:14px var(--mono);color:var(--muted);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.stage-msg{margin:10px 0 0;font-size:14px;color:var(--muted)}
+.stage-msg .bad{color:var(--wrong)}
+.stage-msg .good{color:var(--lantern-ink);font-weight:700}
+.stage audio{display:block;width:100%;margin-top:10px}
+.stage audio[hidden]{display:none}
+.stage-script{max-width:1400px;margin:14px auto 0;columns:2 21em;column-gap:40px;font-size:clamp(16px,1.45vw,21px);line-height:1.4}
+.stage-script h3{margin:10px 0 2px;font:500 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);break-after:avoid}
+.stage-script h3:first-child{margin-top:0}
+.stage-script p{margin:0 0 5px;padding-left:2em;text-indent:-2em;break-inside:avoid}
+.stage-script .n{display:inline-block;width:2em;text-indent:0;font:500 12px var(--mono);color:var(--faint)}
+.stage-script .s{font-weight:700;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;text-decoration-color:var(--faint)}
+.stage-script .r{margin-left:6px;font:500 .8em var(--mono);color:var(--lantern-ink);white-space:nowrap}
+.stage-script .e{margin-left:4px;font:500 .8em var(--mono);color:var(--muted)}
+.stage-script p{margin-bottom:10px}
+.stage-script.blind .hw{color:transparent;background:var(--rule);border-radius:3px;text-decoration-color:transparent}
+.stage-script.blind .hw *{color:transparent}
+
+/* rubric */
+.rubric{margin-top:64px;padding-top:28px;border-top:2px solid var(--ink);display:grid;gap:30px}
+.rubric h2{margin:0;font:400 clamp(30px,4.6vw,40px)/1.05 var(--display);text-wrap:balance}
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px 44px}
+.groups h3,.steps h3{margin:0 0 12px;font:500 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.groups dl{margin:0;display:grid;gap:16px}
+.groups dt{font-weight:700}
+.groups dd{margin:2px 0 0;max-width:60ch;color:var(--muted)}
+.steps ol{margin:0;padding-left:22px;display:grid;gap:8px;max-width:64ch}
+footer{margin-top:52px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+
+@media (max-width:640px){
+  .line{grid-template-columns:38px minmax(0,1fr);gap:8px 12px}
+  .num{width:34px;height:34px}
+  .meta{grid-column:2;grid-template-columns:1fr 1fr;gap:12px;padding-top:2px}
+  .sec{padding-left:50px}
+  .mode{margin-left:0}
+  .hint{flex-basis:100%}
+}
+</style>
+
+<div class="gate" id="gate" hidden>
+  <form id="gate-form">
+    <h2>Before you start</h2>
+    <p>Type your name so your teacher can see when you practised and how each take went.</p>
+    <label for="who">Your name
+      <input id="who" name="who" type="text" autocomplete="name" maxlength="40" required spellcheck="false">
+    </label>
+    <button type="submit">Start practising</button>
+    <p class="again" id="again" hidden></p>
+  </form>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">2026 YBM English Speech Contest &middot; Premier Stage &middot; Middle School</p>
+    <h1>Fingerprint Not Recognized</h1>
+    <p class="lede">Your final script read in British English, one part at a time. Practise whole parts, not single sentences: the judges listen for a voice that carries one feeling from sentence to sentence, and that is what the guide does.</p>
+    <dl class="facts">
+      <div><dt>Length</dt><dd><span id="f-len"></span><small> / 2:00</small></dd></div>
+      <div><dt>Words</dt><dd id="f-words"></dd></div>
+      <div><dt>Average pace</dt><dd><span id="f-avg"></span><small> WPM</small></dd></div>
+      <div><dt>Parts</dt><dd id="f-parts"></dd></div>
+          </dl>
+  </header>
+</div>
+
+<div class="player" id="player">
+  <div class="wrap">
+    <div class="controls">
+      <button id="play" class="play" type="button" aria-label="Play">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path id="icon" d="M5 3.5v13l11-6.5z"></path></svg>
+      </button>
+      <div class="clock"><span id="now">0:00</span><span class="of"> / <span id="dur"></span></span></div>
+      <div class="turn" id="turn" hidden><span id="turn-label">Your turn</span><span class="turn-bar"><i id="turn-fill"></i></span></div>
+      <span class="hint" id="hint"></span>
+      <fieldset class="mode">
+        <legend class="sr">Playback mode</legend>
+        <input type="radio" name="mode" id="mode-listen" value="listen" checked><label for="mode-listen">Listen</label>
+        <input type="radio" name="mode" id="mode-repeat" value="repeat"><label for="mode-repeat">Repeat after me</label>
+      </fieldset>
+    </div>
+    <div class="track" id="track" role="slider" tabindex="0" aria-label="Position in the recording" aria-valuemin="0" aria-valuemax="120" aria-valuenow="0">
+      <div class="blocks" id="blocks"></div>
+      <div class="margin" id="margin"></div>
+      <div class="wall"></div>
+      <div class="head" id="head"></div>
+    </div>
+    <div class="ticks"><span>0:00</span><span>1:00</span><span>2:00 limit</span></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="script"></div>
+
+  <section class="run" id="run">
+    <h2>Your speech</h2>
+    <p id="run-line"></p>
+    <p id="run-missing" class="run-note"></p>
+    <div class="onego">
+      <button class="run-alt" id="onego-open" type="button">Record it in one go</button>
+      <span id="onego-line">The whole script on one screen, read straight through, no guide playing.</span>
+    </div>
+    <fieldset class="use" id="use" hidden>
+      <legend>Send</legend>
+      <label><input type="radio" name="use" value="whole" id="use-whole"> my one-go recording</label>
+      <label><input type="radio" name="use" value="lines" id="use-lines"> the speech put together part by part</label>
+    </fieldset>
+    <div class="run-buttons">
+      <button class="run-go" id="run-send" type="button">Send it to my teacher</button>
+      <button class="run-alt" id="run-listen" type="button">Listen to the whole speech</button>
+      <button class="link" id="run-save" type="button">Save a copy</button>
+      <button class="link" id="run-clear" type="button">Clear my takes</button>
+    </div>
+    <div class="run-status" id="run-status" hidden></div>
+    <audio id="run-audio" controls preload="none" hidden></audio>
+    <p class="run-note">Each part uses its closest take so far, not simply the last one, so a retake only
+      changes your speech when it beats the one already there. The rests between parts follow the guide.
+      Your soft parts stay soft; only a part that is much louder or softer than its neighbours is evened out.
+      On the day you speak live, so the one-go recording is the real rehearsal: send that one when you can.
+      Your takes stay on this computer, so they are still here when you come back.</p>
+  </section>
+
+  <section class="rubric">
+    <h2>What the judges listen for</h2>
+    <div class="groups">
+      <div>
+        <h3>Delivery &middot; how it feels in the room</h3>
+        <dl>
+          <div><dt>Feeling that carries</dt><dd>Professors judge the Premier Stage live, not a computer. A speech read one sentence at a time sounds like a list. Keep one feeling across a whole part, then change it at the next heading.</dd></div>
+          <div><dt>Contrast between parts</dt><dd>The guide is quickest in Project and Message, slowest in Turning point and Closing. The judges hear that change as emotion. If every part sounds the same, the speech sounds flat.</dd></div>
+          <div><dt>Pauses</dt><dd><b>/</b> is a short breath, <b>//</b> a real stop. The long stops after &ldquo;devotion&rdquo; and &ldquo;someone like me&rdquo; always feel too long to you and just right to the audience.</dd></div>
+          <div><dt>Eyes and hands</dt><dd>Look up at the questions, show your hands on &ldquo;tiny ridges&rdquo;, point to yourself on &ldquo;someone like me&rdquo;. Practise them now, so they are natural on the day.</dd></div>
+        </dl>
+      </div>
+      <div>
+        <h3>Voice &middot; what this page measures</h3>
+        <dl>
+          <div><dt>Melody match</dt><dd>Your rise and fall laid over the guide&rsquo;s, sentence by sentence. Copy the shape, not the exact notes: a higher or lower voice is never marked down, only a flatter one.</dd></div>
+          <div><dt>Voice range</dt><dd>How far your voice moves, from its low notes to its high notes, next to the guide&rsquo;s. This is the number for feeling: a reading that moves less than the guide sounds calm and flat, which costs the most marks in empathy. Aim to match it or go past it.</dd></div>
+          <div><dt>Stress</dt><dd>Bold, underlined words carry the stress. Make them louder, longer and higher than the words around them. Shaded columns under the curve are the same words.</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="steps">
+      <h3>How to practise</h3>
+      <ol>
+        <li>Listen once all the way through with your eyes on the script. Do not speak yet.</li>
+        <li>Switch to <strong>Repeat after me</strong> and allow the microphone. The guide stops after every part and records you while you say the whole part back, then lays your melody over its own and shows your voice range.</li>
+        <li>A part with a low match or a small range: press <strong>Play the guide</strong>, listen for where the voice rises and slows, and record it again. To drill one part on its own, press <strong>Record this part</strong>.</li>
+        <li>When the parts feel easy, press <strong>Record it in one go</strong>. Read straight through and finish between 1:45 and 1:58.</li>
+        <li>Learning it by heart: in the one-go screen, press <strong>Hide the words</strong>. Only the first words of each part stay, so you practise remembering it as you will on stage.</li>
+        <li>Send your best one-go recording to your teacher from <strong>Your speech</strong>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>Voice: Microsoft Libby, British English neural text-to-speech. Final script of 24 October 2026. The same recording is saved as Fingerprint_Guide_Recording_British.mp3.</footer>
+</main>
+
+<div class="stage" id="stage" hidden role="dialog" aria-modal="true" aria-labelledby="stage-title">
+  <div class="stage-bar">
+    <h2 id="stage-title">In one go</h2>
+    <div class="stage-clock" id="stage-clock"><span id="stage-now">0:00</span><small> / 2:00</small></div>
+    <div class="stage-meter" id="stage-meter"><i id="stage-fill"></i><b style="left:98.33%"></b></div>
+    <button class="run-go" id="stage-go" type="button">Start recording</button>
+    <button class="link" id="stage-hide" type="button" aria-pressed="false">Hide the words</button>
+    <button class="link" id="stage-close" type="button">Close</button>
+  </div>
+  <p class="stage-msg" id="stage-msg"></p>
+  <audio id="stage-audio" controls preload="none" hidden></audio>
+  <div class="stage-script" id="stage-script"></div>
+</div>
+
+<audio id="aud" preload="auto" src="guide.mp3"></audio>
+
+<script>
+const D = {"voice": "en-GB-LibbyNeural", "limit": 120.0, "duration": 110.12, "words": 229, "speaking": 98.8, "silence": -1.1, "avg_wpm": 139, "longest": 1.9, "sections": {"Hook": "A machine, then a person. Win the room in two lines.", "Story": "Warm, then honest about yourself.", "Project": "Clear and a little quicker. You are proud of this work.", "Discovery": "Slow down and explain. Show your hands.", "Turning point": "The heart of the speech. Slowest and deepest.", "Message": "Strong. Look straight at the judges.", "Change in me": "Calm, then a small smile. Ask the audience.", "Closing": "Soft, slowing to the very end. Then bow."}, "sentences": [{"n": 1, "section": "Hook", "text": "“Fingerprint not recognized.” Have you ever been locked out of your own phone? Frustrating, isn’t it?", "tokens": ["“Fingerprint", "not", "recognized.”", "Have", "you", "ever", "been", "locked", "out", "of", "your", "own", "phone?", "Frustrating,", "isn’t", "it?"], "times": [[0.314, 1.11], [1.53, 1.885], [2.305, 3.157], [4.057, 4.257], [4.282, 4.407], [4.457, 4.657], [4.669, 4.844], [4.882, 5.132], [5.182, 5.382], [5.419, 5.482], [5.494, 5.632], [5.682, 5.894], [5.944, 6.294], [6.714, 7.414], [7.639, 7.952], [7.964, 8.127]], "stress": ["frustrating", "locked", "out", "own"], "stress_at": [false, false, false, false, false, false, false, true, true, false, false, true, false, true, false, false], "breaks": [1, 1, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 2], "note": "Say line one flat and slow, like the phone. Then smile at the audience: a real person is talking now. Let “isn’t it?” fall - you are not really asking.", "end": "fall", "words": 16, "dur": 7.94, "band": "", "start": 0.4, "stop": 8.337, "pause": 1.3, "pitch": [{"st": 3.11, "head": 6.06, "tail": -4.71, "dir": "fall"}, {"st": 1.94, "head": 1.15, "tail": 2.84, "dir": "rise"}, {"st": -0.49, "head": 3.24, "tail": -5.18, "dir": "fall"}, {"st": 6.41, "head": 5.67, "tail": 7.48, "dir": "rise"}, {"st": 9.01, "head": 9.13, "tail": 7.52, "dir": "fall"}, {"st": 1.98, "head": 7.06, "tail": 1.16, "dir": "fall"}, {"st": 1.31, "head": 1.38, "tail": 1.32, "dir": "flat"}, {"st": -0.48, "head": -0.9, "tail": 3.17, "dir": "rise"}, {"st": -2.9, "head": 0.12, "tail": -3.22, "dir": "fall"}, {"st": -2.97, "head": -2.82, "tail": -3.32, "dir": "flat"}, {"st": -2.74, "head": -1.97, "tail": -2.19, "dir": "flat"}, {"st": 0.17, "head": -2.01, "tail": 0.36, "dir": "rise"}, {"st": -0.78, "head": 3.35, "tail": -3.07, "dir": "fall"}, {"st": 6.07, "head": 6.15, "tail": 4.85, "dir": "fall"}, {"st": 3.21, "head": 3.02, "tail": 4.74, "dir": "rise"}, {"st": 1.44, "head": 3.9, "tail": -1.83, "dir": "fall"}]}, {"n": 2, "section": "Story", "text": "For my grandmother, it’s more than frustrating. She’s greeted by these three words every single day. And honestly? I was completely oblivious. Not until this autumn.", "tokens": ["For", "my", "grandmother,", "it’s", "more", "than", "frustrating.", "She’s", "greeted", "by", "these", "three", "words", "every", "single", "day.", "And", "honestly?", "I", "was", "completely", "oblivious.", "Not", "until", "this", "autumn."], "times": [[9.543, 9.747], [9.786, 9.926], [10.003, 10.628], [10.844, 11.15], [11.189, 11.418], [11.431, 11.533], [11.571, 12.311], [12.731, 12.999], [13.012, 13.458], [13.497, 13.65], [13.739, 13.943], [13.968, 14.224], [14.287, 14.721], [14.823, 15.167], [15.218, 15.576], [15.576, 15.805], [16.705, 16.845], [16.922, 17.458], [17.878, 17.903], [18.031, 18.146], [18.171, 18.796], [18.86, 19.345], [19.764, 20.032], [20.083, 20.504], [20.517, 20.67], [20.696, 21.117]], "stress": ["autumn", "completely", "day", "every", "grandmother", "greeted", "more", "oblivious"], "stress_at": [false, false, true, false, true, false, false, false, true, false, false, false, false, true, false, true, false, false, false, false, true, true, false, false, false, true], "breaks": [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 2], "note": "Warm on “grandmother”. Slow right down on “completely oblivious” - you are admitting something.", "end": "fall", "words": 26, "dur": 11.7, "band": "", "start": 9.637, "stop": 21.341, "pause": 1.3, "pitch": [null, {"st": 6.86, "head": 6.88, "tail": 6.36, "dir": "flat"}, {"st": 1.31, "head": 4.46, "tail": -3.19, "dir": "fall"}, null, {"st": 1.67, "head": 1.56, "tail": 2.02, "dir": "flat"}, {"st": 3.27, "head": 3.13, "tail": 1.2, "dir": "fall"}, {"st": 3.28, "head": 5.34, "tail": -3.19, "dir": "fall"}, {"st": 6.47, "head": 6.46, "tail": 6.49, "dir": "flat"}, {"st": 6.38, "head": 6.28, "tail": 7.19, "dir": "rise"}, {"st": -0.89, "head": 1.41, "tail": -1.87, "dir": "fall"}, {"st": -2.94, "head": -3.05, "tail": -2.02, "dir": "rise"}, {"st": 0.2, "head": -2.18, "tail": 2.64, "dir": "rise"}, {"st": -0.79, "head": 5.67, "tail": -3.92, "dir": "fall"}, {"st": 1.43, "head": 1.65, "tail": 0.06, "dir": "fall"}, {"st": 3.56, "head": 4.27, "tail": 2.91, "dir": "fall"}, {"st": -0.81, "head": 3.36, "tail": -3.02, "dir": "fall"}, {"st": 2.93, "head": 1.76, "tail": 2.93, "dir": "rise"}, {"st": 3.54, "head": 3.49, "tail": 4.69, "dir": "rise"}, null, {"st": 4.68, "head": 3.7, "tail": 4.78, "dir": "rise"}, {"st": 5.55, "head": 5.97, "tail": 7.07, "dir": "rise"}, {"st": -2.76, "head": -2.77, "tail": -3.65, "dir": "fall"}, {"st": 3.84, "head": 2.08, "tail": 6.71, "dir": "rise"}, {"st": 1.46, "head": 9.65, "tail": 0.59, "dir": "fall"}, {"st": -0.84, "head": -0.56, "tail": -0.63, "dir": "flat"}, {"st": -0.99, "head": 0.68, "tail": -2.35, "dir": "fall"}]}, {"n": 3, "section": "Project", "text": "So I launched a project to dig into why. First, I interviewed my grandmother. Then I surveyed adults over fifty. Guess what? Out of thirty people, twenty-one were struggling too.", "tokens": ["So", "I", "launched", "a", "project", "to", "dig", "into", "why.", "First,", "I", "interviewed", "my", "grandmother.", "Then", "I", "surveyed", "adults", "over", "fifty.", "Guess", "what?", "Out", "of", "thirty", "people,", "twenty-one", "were", "struggling", "too."], "times": [[22.571, 22.784], [22.846, 22.871], [22.971, 23.271], [23.309, 23.384], [23.384, 23.871], [23.971, 24.146], [24.146, 24.334], [24.371, 24.659], [24.684, 24.934], [25.354, 25.841], [26.141, 26.304], [26.429, 26.904], [26.954, 27.079], [27.154, 27.766], [28.186, 28.386], [28.436, 28.524], [28.624, 29.099], [29.149, 29.624], [29.686, 29.974], [29.999, 30.411], [30.831, 30.994], [31.044, 31.306], [32.206, 32.369], [32.406, 32.494], [32.531, 32.869], [32.919, 33.319], [33.444, 34.206], [34.269, 34.406], [34.444, 34.906], [34.981, 35.206]], "stress": ["interviewed", "launched", "surveyed", "thirty", "too", "twentyone", "why"], "stress_at": [false, false, true, false, false, false, false, false, true, false, false, true, false, false, false, false, true, false, false, false, false, false, false, false, true, false, true, false, false, true], "breaks": [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 1, 1, 0, 0, 2], "note": "Pick up the pace. Lift “Guess what?”, wait a beat, then give the numbers clearly.", "end": "fall", "words": 30, "dur": 12.83, "band": "", "start": 22.641, "stop": 35.473, "pause": 1.3, "pitch": [null, {"st": 5.54, "head": 5.54, "tail": 5.54, "dir": "flat"}, {"st": 6.22, "head": 6.11, "tail": 8.79, "dir": "rise"}, null, {"st": 0.85, "head": 3.07, "tail": -3.96, "dir": "fall"}, null, {"st": 1.69, "head": 2.0, "tail": 1.73, "dir": "flat"}, {"st": 0.47, "head": 1.3, "tail": 0.47, "dir": "fall"}, {"st": 0.18, "head": 1.32, "tail": -1.09, "dir": "fall"}, {"st": -1.25, "head": 7.14, "tail": -3.0, "dir": "fall"}, null, {"st": 3.27, "head": 2.35, "tail": 2.72, "dir": "flat"}, {"st": -1.25, "head": -2.51, "tail": 0.38, "dir": "rise"}, {"st": -1.46, "head": -0.22, "tail": -2.92, "dir": "fall"}, {"st": 2.01, "head": 0.63, "tail": 3.21, "dir": "rise"}, {"st": 5.51, "head": 5.07, "tail": 6.16, "dir": "rise"}, {"st": 1.43, "head": 4.84, "tail": -0.51, "dir": "fall"}, {"st": -1.35, "head": 1.07, "tail": -3.55, "dir": "fall"}, {"st": -0.24, "head": 0.16, "tail": -0.73, "dir": "fall"}, {"st": 2.47, "head": 1.14, "tail": 5.6, "dir": "rise"}, {"st": 3.47, "head": 3.67, "tail": 3.43, "dir": "flat"}, {"st": 0.3, "head": 6.18, "tail": -1.78, "dir": "fall"}, {"st": 3.66, "head": 3.48, "tail": 3.92, "dir": "flat"}, {"st": 8.01, "head": 7.04, "tail": 7.98, "dir": "rise"}, {"st": 5.06, "head": 6.66, "tail": 5.0, "dir": "fall"}, {"st": -1.65, "head": 1.83, "tail": -3.07, "dir": "fall"}, {"st": 6.46, "head": 6.8, "tail": 2.04, "dir": "fall"}, {"st": -2.8, "head": -2.85, "tail": -2.69, "dir": "flat"}, {"st": 0.1, "head": -0.13, "tail": -0.73, "dir": "flat"}, {"st": -3.01, "head": -2.97, "tail": -0.51, "dir": "rise"}]}, {"n": 4, "section": "Discovery", "text": "Then I uncovered the reason. Fingerprints are made of tiny ridges. After decades of endless washing, cooking, and working, those ridges gradually wear away.", "tokens": ["Then", "I", "uncovered", "the", "reason.", "Fingerprints", "are", "made", "of", "tiny", "ridges.", "After", "decades", "of", "endless", "washing,", "cooking,", "and", "working,", "those", "ridges", "gradually", "wear", "away."], "times": [[36.706, 36.918], [36.972, 37.104], [37.237, 37.756], [37.783, 37.902], [37.916, 38.315], [39.215, 39.919], [39.959, 40.092], [40.159, 40.465], [40.478, 40.558], [40.611, 41.023], [41.063, 41.502], [41.922, 42.307], [42.307, 42.813], [42.839, 42.932], [42.986, 43.385], [43.424, 43.863], [44.103, 44.661], [44.847, 45.047], [45.087, 45.592], [46.012, 46.238], [46.265, 46.61], [46.637, 47.142], [47.196, 47.355], [47.462, 47.754]], "stress": ["away", "cooking", "endless", "gradually", "ridges", "uncovered", "working"], "stress_at": [false, false, true, false, false, false, false, false, false, false, true, false, false, false, true, false, true, false, true, false, false, true, false, true], "breaks": [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 0, 2], "note": "Explaining voice. Hold your hands up on “tiny ridges” and slow down on “gradually wear away”.", "end": "fall", "words": 24, "dur": 11.23, "band": "", "start": 36.773, "stop": 48.004, "pause": 1.4, "pitch": [{"st": 1.27, "head": -0.85, "tail": 2.9, "dir": "rise"}, {"st": 5.16, "head": 4.46, "tail": 5.3, "dir": "rise"}, {"st": 1.01, "head": 1.15, "tail": -0.67, "dir": "fall"}, {"st": -3.05, "head": -2.16, "tail": -4.24, "dir": "fall"}, {"st": -0.76, "head": -2.25, "tail": -0.17, "dir": "rise"}, {"st": 7.18, "head": 9.23, "tail": -3.43, "dir": "fall"}, null, {"st": 0.8, "head": -0.23, "tail": 2.05, "dir": "rise"}, {"st": 2.86, "head": 2.73, "tail": 0.67, "dir": "fall"}, {"st": 1.03, "head": 1.34, "tail": 0.86, "dir": "flat"}, {"st": 1.52, "head": 2.18, "tail": -4.28, "dir": "fall"}, {"st": 5.52, "head": 3.49, "tail": 7.93, "dir": "rise"}, {"st": -0.53, "head": 2.93, "tail": -3.45, "dir": "fall"}, {"st": -4.36, "head": -4.36, "tail": -4.66, "dir": "flat"}, {"st": 3.46, "head": -2.88, "tail": 4.16, "dir": "rise"}, {"st": 3.92, "head": 4.69, "tail": -0.89, "dir": "fall"}, {"st": 5.89, "head": 5.89, "tail": -0.93, "dir": "fall"}, null, {"st": 1.55, "head": -0.88, "tail": 5.4, "dir": "rise"}, {"st": -0.32, "head": 0.18, "tail": -0.47, "dir": "flat"}, {"st": 3.5, "head": -0.35, "tail": 4.92, "dir": "rise"}, {"st": -0.39, "head": 6.3, "tail": -2.56, "dir": "fall"}, {"st": -3.57, "head": -3.56, "tail": -2.69, "dir": "rise"}, {"st": -1.77, "head": -1.85, "tail": -0.4, "dir": "rise"}]}, {"n": 5, "section": "Turning point", "text": "So the phone wasn’t failing to read my grandmother. It was failing to read seventy years of devotion. The same hands that raised my mom, and then me, were being told they didn’t count.", "tokens": ["So", "the", "phone", "wasn’t", "failing", "to", "read", "my", "grandmother.", "It", "was", "failing", "to", "read", "seventy", "years", "of", "devotion.", "The", "same", "hands", "that", "raised", "my", "mom,", "and", "then", "me,", "were", "being", "told", "they", "didn’t", "count."], "times": [[49.311, 49.57], [49.647, 49.738], [49.753, 50.15], [50.18, 50.607], [50.638, 51.08], [51.125, 51.308], [51.323, 51.674], [51.735, 51.888], [51.964, 52.726], [53.146, 53.253], [53.283, 53.436], [53.466, 53.984], [54.03, 54.213], [54.228, 54.548], [54.625, 55.158], [55.219, 55.57], [55.585, 55.737], [55.768, 56.423], [57.323, 57.415], [57.43, 57.735], [57.796, 58.253], [58.284, 58.482], [58.512, 58.863], [58.954, 59.076], [59.153, 59.473], [59.717, 59.991], [60.022, 60.265], [60.296, 60.509], [60.921, 61.119], [61.134, 61.424], [61.47, 61.851], [61.866, 62.019], [62.095, 62.415], [62.415, 62.903]], "stress": ["count", "devotion", "didn't", "grandmother", "me", "mom", "seventy", "years"], "stress_at": [false, false, false, false, false, false, false, false, true, false, false, false, false, false, true, true, false, true, false, false, false, false, false, false, true, false, false, true, false, false, false, false, true, true], "breaks": [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 2], "note": "Slowest part of the speech. Let “seventy years of devotion” land, then a long pause before “The same hands”. End low on “didn’t count”.", "end": "fall", "words": 34, "dur": 13.69, "band": "", "start": 49.404, "stop": 63.096, "pause": 1.9, "pitch": [null, {"st": 5.77, "head": 5.68, "tail": 5.93, "dir": "flat"}, {"st": 5.66, "head": 7.06, "tail": 5.49, "dir": "fall"}, {"st": 0.24, "head": -2.16, "tail": 2.5, "dir": "rise"}, {"st": 2.57, "head": 3.86, "tail": -0.58, "dir": "fall"}, {"st": -2.74, "head": -2.65, "tail": -3.37, "dir": "flat"}, {"st": -0.11, "head": 0.36, "tail": -0.86, "dir": "fall"}, {"st": -1.94, "head": -4.52, "tail": -1.65, "dir": "rise"}, {"st": -3.3, "head": -2.53, "tail": -3.87, "dir": "fall"}, null, {"st": 4.03, "head": 4.23, "tail": 2.41, "dir": "fall"}, {"st": 7.08, "head": 5.36, "tail": 6.45, "dir": "rise"}, {"st": -2.6, "head": -1.9, "tail": -3.25, "dir": "fall"}, {"st": -0.47, "head": -1.65, "tail": 0.59, "dir": "rise"}, {"st": 2.1, "head": 1.6, "tail": 2.89, "dir": "rise"}, {"st": 0.2, "head": 3.64, "tail": -2.52, "dir": "fall"}, {"st": -3.81, "head": -3.61, "tail": -4.47, "dir": "fall"}, {"st": -1.28, "head": -3.43, "tail": -0.28, "dir": "rise"}, null, {"st": 6.79, "head": 1.89, "tail": 7.71, "dir": "rise"}, {"st": 2.2, "head": 7.32, "tail": -3.08, "dir": "fall"}, {"st": -2.9, "head": -3.05, "tail": -1.78, "dir": "rise"}, {"st": 0.63, "head": -2.73, "tail": 1.8, "dir": "rise"}, null, {"st": -0.94, "head": -2.03, "tail": -0.03, "dir": "rise"}, null, {"st": -1.27, "head": -1.3, "tail": -0.47, "dir": "rise"}, {"st": 2.29, "head": 1.42, "tail": 2.43, "dir": "rise"}, null, {"st": -0.35, "head": -0.6, "tail": 0.54, "dir": "rise"}, {"st": 1.93, "head": 0.29, "tail": 4.97, "dir": "rise"}, {"st": 5.62, "head": 5.8, "tail": 2.5, "dir": "fall"}, {"st": -1.69, "head": -0.86, "tail": -1.92, "dir": "fall"}, {"st": -4.16, "head": -1.93, "tail": -4.96, "dir": "fall"}]}, {"n": 6, "section": "Message", "text": "That’s what my project means to me. I used to assume technology was designed with everyone in mind. Now I realize it’s often built around an “average” user: someone young, someone like me. But people like my grandmother shouldn’t be an afterthought.", "tokens": ["That’s", "what", "my", "project", "means", "to", "me.", "I", "used", "to", "assume", "technology", "was", "designed", "with", "everyone", "in", "mind.", "Now", "I", "realize", "it’s", "often", "built", "around", "an", "“average”", "user:", "someone", "young,", "someone", "like", "me.", "But", "people", "like", "my", "grandmother", "shouldn’t", "be", "an", "afterthought."], "times": [[64.923, 65.194], [65.246, 65.465], [65.503, 65.632], [65.709, 66.186], [66.251, 66.547], [66.573, 66.715], [66.727, 66.856], [67.276, 67.302], [67.418, 67.702], [67.766, 67.882], [67.934, 68.269], [68.32, 68.99], [69.119, 69.325], [69.325, 69.828], [69.892, 69.995], [70.047, 70.575], [70.614, 70.743], [70.781, 71.207], [71.627, 71.872], [71.962, 72.013], [72.129, 72.645], [72.658, 72.812], [72.825, 73.186], [73.225, 73.482], [73.508, 73.856], [73.908, 73.998], [74.075, 74.436], [74.578, 75.003], [75.286, 76.021], [76.06, 76.356], [76.601, 77.219], [77.258, 77.503], [77.542, 77.671], [78.57, 78.686], [78.751, 79.137], [79.15, 79.382], [79.421, 79.537], [79.601, 80.233], [80.284, 80.645], [80.684, 80.787], [80.864, 80.903], [80.954, 81.599]], "stress": ["afterthought", "assume", "average", "everyone", "grandmother", "like", "me", "means", "realize", "young"], "stress_at": [false, false, false, false, true, false, false, false, false, false, true, false, false, false, false, true, false, false, false, false, true, false, false, false, false, false, true, false, false, true, false, true, true, false, false, false, false, true, false, false, false, true], "breaks": [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 0, 2], "note": "Stand tall and look at the judges. Point to yourself on “someone like me”.", "end": "fall", "words": 42, "dur": 16.82, "band": "", "start": 64.996, "stop": 81.817, "pause": 1.5, "pitch": [{"st": 3.33, "head": 2.93, "tail": 8.95, "dir": "rise"}, {"st": 5.05, "head": 3.49, "tail": 6.06, "dir": "rise"}, null, {"st": -0.87, "head": -0.93, "tail": -3.26, "dir": "fall"}, {"st": -2.07, "head": -1.28, "tail": -2.74, "dir": "fall"}, {"st": -2.9, "head": -2.53, "tail": -3.42, "dir": "fall"}, {"st": -2.04, "head": -0.78, "tail": -2.23, "dir": "fall"}, null, {"st": 4.4, "head": 4.14, "tail": 8.92, "dir": "rise"}, null, {"st": 1.7, "head": 4.21, "tail": 0.72, "dir": "fall"}, {"st": -1.97, "head": -0.96, "tail": -3.06, "dir": "fall"}, {"st": -4.12, "head": -4.32, "tail": -3.9, "dir": "flat"}, {"st": 2.26, "head": 0.25, "tail": 4.39, "dir": "rise"}, {"st": 5.26, "head": 6.44, "tail": 4.45, "dir": "fall"}, {"st": 3.27, "head": 3.87, "tail": -0.11, "dir": "fall"}, {"st": -3.02, "head": -3.02, "tail": -4.27, "dir": "fall"}, {"st": -2.06, "head": -1.27, "tail": -4.06, "dir": "fall"}, {"st": 3.63, "head": 2.28, "tail": 5.35, "dir": "rise"}, {"st": 9.54, "head": 9.42, "tail": 9.36, "dir": "flat"}, {"st": 0.6, "head": 0.96, "tail": -3.54, "dir": "fall"}, {"st": -3.35, "head": -3.55, "tail": -2.12, "dir": "rise"}, {"st": 2.3, "head": -3.62, "tail": 2.25, "dir": "rise"}, {"st": 0.72, "head": 3.71, "tail": -0.94, "dir": "fall"}, {"st": -2.44, "head": -2.14, "tail": -2.99, "dir": "fall"}, {"st": -3.06, "head": -3.06, "tail": -3.18, "dir": "flat"}, {"st": 1.76, "head": -2.11, "tail": 2.08, "dir": "rise"}, {"st": 2.9, "head": -1.11, "tail": 3.78, "dir": "rise"}, {"st": 6.58, "head": 6.81, "tail": 6.62, "dir": "flat"}, {"st": 5.18, "head": 6.29, "tail": 4.41, "dir": "fall"}, {"st": 3.3, "head": 4.61, "tail": 2.77, "dir": "fall"}, {"st": 1.19, "head": 1.98, "tail": -2.33, "dir": "fall"}, null, null, {"st": 8.79, "head": 6.27, "tail": 9.85, "dir": "rise"}, {"st": -2.46, "head": 2.39, "tail": -2.51, "dir": "fall"}, null, {"st": -0.44, "head": -2.49, "tail": -1.71, "dir": "flat"}, {"st": 2.7, "head": -3.24, "tail": 3.82, "dir": "rise"}, {"st": 3.55, "head": 4.09, "tail": 3.29, "dir": "fall"}, {"st": -1.82, "head": -1.73, "tail": -1.21, "dir": "flat"}, {"st": -1.8, "head": -1.16, "tail": -4.03, "dir": "fall"}]}, {"n": 7, "section": "Change in me", "text": "My project hasn’t solved this problem. Not yet. But it reshaped how I see the world. Now, whenever I come across a new app or gadget, I ask one question: “Who might this leave behind?”", "tokens": ["My", "project", "hasn’t", "solved", "this", "problem.", "Not", "yet.", "But", "it", "reshaped", "how", "I", "see", "the", "world.", "Now,", "whenever", "I", "come", "across", "a", "new", "app", "or", "gadget,", "I", "ask", "one", "question:", "“Who", "might", "this", "leave", "behind?”"], "times": [[83.241, 83.385], [83.477, 83.977], [84.03, 84.425], [84.438, 84.82], [84.872, 85.004], [85.017, 85.451], [85.871, 86.147], [86.213, 86.503], [86.923, 87.015], [87.015, 87.146], [87.173, 87.752], [87.804, 88.028], [88.12, 88.173], [88.291, 88.462], [88.541, 88.62], [88.633, 89.094], [89.994, 90.27], [90.599, 90.967], [90.98, 91.046], [91.125, 91.283], [91.336, 91.612], [91.625, 91.73], [91.757, 91.967], [92.02, 92.217], [92.309, 92.402], [92.441, 92.915], [93.335, 93.466], [93.585, 93.808], [93.835, 94.045], [94.098, 94.611], [95.511, 95.879], [95.932, 96.169], [96.208, 96.34], [96.366, 96.643], [96.656, 97.169]], "stress": ["app", "behind", "gadget", "one", "reshaped", "solved", "world", "yet"], "stress_at": [false, false, false, true, false, false, false, true, false, false, true, false, false, false, false, true, false, false, false, false, false, false, false, true, false, true, false, false, true, false, false, false, false, false, true], "breaks": [0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 2, 0, 0, 1, 0, 2], "note": "Honest on “Not yet”, a small smile on “changed something in me”. Ask the last question to the whole room.", "end": "fall", "words": 35, "dur": 14.01, "band": "", "start": 83.317, "stop": 97.324, "pause": 1.6, "pitch": [{"st": 1.94, "head": 2.22, "tail": 1.99, "dir": "flat"}, {"st": 3.8, "head": 3.67, "tail": -0.64, "dir": "fall"}, {"st": 0.28, "head": 0.32, "tail": 1.03, "dir": "flat"}, {"st": 0.72, "head": 0.93, "tail": -0.45, "dir": "fall"}, null, {"st": -0.96, "head": -0.45, "tail": -4.0, "dir": "fall"}, {"st": 3.91, "head": 2.2, "tail": 6.17, "dir": "rise"}, {"st": -1.63, "head": 1.18, "tail": -3.81, "dir": "fall"}, null, {"st": 2.01, "head": 2.36, "tail": 1.62, "dir": "flat"}, {"st": 3.96, "head": 2.68, "tail": 1.37, "dir": "fall"}, {"st": -0.3, "head": -0.76, "tail": -0.25, "dir": "flat"}, {"st": -2.15, "head": -2.01, "tail": -2.18, "dir": "flat"}, {"st": -1.77, "head": -1.99, "tail": -1.9, "dir": "flat"}, {"st": 1.32, "head": 1.33, "tail": 0.22, "dir": "fall"}, {"st": 0.15, "head": 1.28, "tail": -4.06, "dir": "fall"}, {"st": 2.58, "head": 2.42, "tail": 2.42, "dir": "flat"}, {"st": 4.97, "head": 2.09, "tail": 8.79, "dir": "rise"}, {"st": 9.79, "head": 8.88, "tail": 10.31, "dir": "rise"}, {"st": 4.98, "head": 6.02, "tail": 3.9, "dir": "fall"}, {"st": 1.09, "head": 2.83, "tail": 0.68, "dir": "fall"}, {"st": -1.68, "head": -1.05, "tail": -2.3, "dir": "fall"}, {"st": -1.17, "head": -1.55, "tail": -0.29, "dir": "rise"}, {"st": 1.38, "head": 1.9, "tail": 0.53, "dir": "fall"}, null, {"st": -1.05, "head": -1.41, "tail": -2.96, "dir": "fall"}, null, {"st": 0.11, "head": -0.28, "tail": 1.41, "dir": "rise"}, {"st": 2.0, "head": 0.32, "tail": 2.6, "dir": "rise"}, {"st": 3.0, "head": 4.9, "tail": -2.64, "dir": "fall"}, null, {"st": 3.54, "head": 3.52, "tail": 5.94, "dir": "rise"}, {"st": 8.18, "head": 8.38, "tail": 7.72, "dir": "flat"}, {"st": 2.11, "head": 6.65, "tail": -0.62, "dir": "fall"}, {"st": -2.66, "head": -2.25, "tail": -3.57, "dir": "fall"}]}, {"n": 8, "section": "Closing", "text": "Because one day, our fingerprints will fade too. And when that day comes, I hope someone will still recognize us. Thank you.", "tokens": ["Because", "one", "day,", "our", "fingerprints", "will", "fade", "too.", "And", "when", "that", "day", "comes,", "I", "hope", "someone", "will", "still", "recognize", "us.", "Thank", "you."], "times": [[98.838, 99.143], [99.189, 99.478], [99.539, 99.799], [100.219, 100.417], [100.478, 101.179], [101.255, 101.453], [101.469, 101.865], [101.926, 102.2], [103.1, 103.253], [103.314, 103.542], [103.573, 103.786], [103.786, 104.015], [104.106, 104.579], [105.021, 105.311], [105.448, 105.707], [105.768, 106.21], [106.24, 106.423], [106.454, 106.789], [106.82, 107.49], [107.506, 107.811], [108.711, 109.05], [109.077, 109.281]], "stress": ["our", "recognize", "still", "too"], "stress_at": [false, false, false, true, false, false, false, true, false, false, false, false, false, false, false, false, false, true, true, false, false, false], "breaks": [0, 0, 1, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 2, 0, 0], "note": "Softer and slower to the last word. Pause, say “Thank you”, then bow.", "end": "fall", "words": 22, "dur": 10.59, "band": "", "start": 98.924, "stop": 109.516, "pause": 0.0, "pitch": [{"st": 2.44, "head": 2.5, "tail": 4.07, "dir": "rise"}, {"st": 4.35, "head": 4.35, "tail": 6.61, "dir": "rise"}, {"st": 5.07, "head": 9.37, "tail": 0.04, "dir": "fall"}, {"st": -0.56, "head": -3.59, "tail": -0.56, "dir": "rise"}, {"st": 4.56, "head": -0.65, "tail": -3.36, "dir": "fall"}, {"st": -1.84, "head": -2.11, "tail": -1.71, "dir": "flat"}, {"st": -0.49, "head": -1.64, "tail": -0.35, "dir": "rise"}, {"st": -0.5, "head": -0.72, "tail": -0.5, "dir": "flat"}, {"st": 2.83, "head": 2.82, "tail": 2.84, "dir": "flat"}, {"st": 3.28, "head": 3.28, "tail": 5.83, "dir": "rise"}, {"st": 8.06, "head": 8.31, "tail": 5.79, "dir": "fall"}, {"st": 2.32, "head": 1.95, "tail": 1.73, "dir": "flat"}, {"st": -3.04, "head": -1.18, "tail": -4.59, "dir": "fall"}, null, {"st": 0.79, "head": 0.67, "tail": 6.18, "dir": "rise"}, {"st": 1.87, "head": 5.88, "tail": -1.55, "dir": "fall"}, {"st": -2.54, "head": -2.62, "tail": -2.22, "dir": "flat"}, {"st": -1.3, "head": -1.48, "tail": 3.17, "dir": "rise"}, {"st": 0.41, "head": 2.91, "tail": -4.4, "dir": "fall"}, {"st": -4.45, "head": -4.37, "tail": -4.8, "dir": "flat"}, {"st": 6.11, "head": 6.11, "tail": 7.14, "dir": "rise"}, {"st": -0.99, "head": 6.09, "tail": -2.87, "dir": "fall"}]}], "pitch_ref": 193.2, "pitch_span": [-3.81, 8.18]};
+const LOG_URL = "https://script.google.com/macros/s/AKfycby32rFjJAI50Cj8M3d_UAKBWnMJYNrcHtZkwm5ozshwjX5qojyUNA322CBjCQH1rkRdlw/exec";      /* the teacher's Apps Script web app; empty = keep the log in this browser */
+const S = D.sentences, LIMIT = D.limit;
+const $ = (id) => document.getElementById(id);
+const aud = $("aud");
+const takes = [];                   /* the latest take of each line: what the curve shows */
+const bests = [];                   /* the closest take of each line: what goes into the speech */
+const MICON = '<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5"></circle></svg>';
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* stress is marked word by word from the reading version, so "grandmother" is bold where it is
+   stressed and plain where it is not */
+const isStress = (s, k) => s.stress_at ? !!s.stress_at[k] : s.stress.includes(norm(s.tokens[k]));
+const markAfter = (s, k) => (s.breaks && s.breaks[k] && k < s.tokens.length - 1)
+  ? '<span class="bk' + (s.breaks[k] === 2 ? " long" : "") + '" aria-hidden="true">' + (s.breaks[k] === 2 ? "//" : "/") + "</span>" : "";
+/* a part is drawn as one melody panel per sentence: a forty-word curve would be too fine to read */
+function chunks(s) {
+  if (s._chunks) return s._chunks;
+  const out = [];
+  let cur = [];
+  s.tokens.forEach((tk, k) => {
+    cur.push(k);
+    const end = /[.?!][\u201d\u2019"']?$/.test(tk) || (cur.length >= 12 && /[,:;][\u201d\u2019"']?$/.test(tk)) || cur.length >= 18;
+    if (end) { out.push(cur); cur = []; }
+  });
+  if (cur.length) out.push(cur);
+  return (s._chunks = out);
+}
+const tunesOf = (s, w, take) => chunks(s).map((idx) => tune(s, w, take, idx)).join("");
+const fmt = (t) => { t = Math.max(0, t); return Math.floor(t / 60) + ":" + String(Math.floor(t % 60)).padStart(2, "0"); };
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const norm = (w) => w.toLowerCase().replace(/’/g, "'").replace(/[^a-z0-9']/g, "");
+
+/* facts and rubric numbers */
+$("f-len").textContent = fmt(D.duration);
+$("f-words").textContent = D.words;
+$("f-avg").textContent = D.avg_wpm;
+$("f-parts").textContent = S.length;
+$("dur").textContent = fmt(D.duration);
+$("track").setAttribute("aria-valuemax", String(D.duration));
+
+/* the melody of each line: where the guide voice starts and lands on every word */
+const AX = 32, TH = 80, TOP = 11, BOT = 47, BASE = 54;
+const span = D.pitch_span || [-6, 6];
+const ty = (st) => TOP + (span[1] - Math.max(span[0], Math.min(span[1], st))) / ((span[1] - span[0]) || 1) * (BOT - TOP);
+const xy = (p) => p[0].toFixed(1) + "," + p[1].toFixed(1);
+
+/* Catmull-Rom through the points, written as cubic beziers: a sung line, not a bar chart */
+function smooth(pts) {
+  let d = "M" + xy(pts[0]);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || pts[i + 1];
+    d += "C" + xy([p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6]) +
+         " " + xy([p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6]) + " " + xy(p2);
+  }
+  return d;
+}
+
+/* drawn to the exact pixel width of its column: the whole line at once, never a sideways drag */
+function tune(s, w, take, idx) {
+  if (!s.pitch) return "";
+  const pts = idx.map((k) => s.pitch[k]);
+  if (!pts.some((p) => p)) return "";
+  const toks = idx.map((k) => s.tokens[k]);
+  const n = pts.length;
+  const TW = Math.max(14, (w - AX) / n);
+  const cell = (i) => AX + i * TW;
+  const ins = Math.min(8, TW * 0.14);
+  const FS = Math.max(6.5, Math.min(9, TW / 4.6));
+  const hit = idx.map((k) => isStress(s, k));
+  const wrong = (i) => take && take.words && take.words[idx[i]] === false;
+
+  const bands = toks.map((t, i) =>
+    '<rect class="band' + (hit[i] ? " s" : "") + (wrong(i) ? " miss" : "") + '" x="' + cell(i).toFixed(1) +
+    '" y="' + (TOP - 5) + '" width="' + TW.toFixed(1) + '" height="' + (BASE - TOP + 5) +
+    '" rx="4"></rect>').join("");
+
+  const rows3 = [["Rise", span[1], "grid"], ["Flat", 0, "zero"], ["Fall", span[0], "grid"]];
+  const axis = rows3.map(([lab, st, cls]) => {
+    const y = ty(st).toFixed(1);
+    return '<line class="' + cls + '" x1="' + AX + '" y1="' + y + '" x2="' + w + '" y2="' + y + '"></line>' +
+      '<text class="ax" x="' + (AX - 6) + '" y="' + (ty(st) + 3).toFixed(1) + '" text-anchor="end">' + lab + "</text>";
+  }).join("");
+
+  /* a word with no voiced sound breaks the line, so the curve is drawn in runs */
+  const arcs = (list) => {
+    const segs = [];
+    let cur = [];
+    list.forEach((p, i) => {
+      if (!p) { if (cur.length > 1) segs.push(cur); cur = []; return; }
+      cur.push([cell(i) + ins, ty(p.head)], [cell(i) + TW - ins, ty(p.tail)]);
+    });
+    if (cur.length > 1) segs.push(cur);
+    return segs;
+  };
+
+  const segs = arcs(pts);
+  const paint = segs.map((seg) =>
+    '<path class="area" d="' + smooth(seg) + "L" + xy([seg[seg.length - 1][0], BASE]) +
+    "L" + xy([seg[0][0], BASE]) + 'Z"></path>').join("") +
+    segs.map((seg) => '<path class="curve" d="' + smooth(seg) + '"></path>').join("") +
+    (take && take.mine
+      ? arcs(idx.map((k) => take.mine[k])).map((seg) => '<path class="mine" d="' + smooth(seg) + '"></path>').join("")
+      : "");
+
+  /* the word stays whole: when the cell is narrower than the word, the glyphs are squeezed, not cut */
+  const labs = toks.map((t, i) => {
+    const word = t.replace(/^[^A-Za-z']+|[^A-Za-z']+$/g, "") || t;
+    const room = TW - 3, natural = word.length * FS * 0.6;
+    const fit = natural > room ? ' textLength="' + room.toFixed(1) + '" lengthAdjust="spacingAndGlyphs"' : "";
+    return '<text class="lab' + (hit[i] ? " s" : "") + '" x="' + (cell(i) + TW / 2).toFixed(1) +
+      '" y="' + (TH - 7) + '" font-size="' + FS.toFixed(2) + '" text-anchor="middle"' + fit + ">" +
+      esc(word) + "</text>";
+  }).join("");
+
+  return '<svg width="100%" height="' + TH + '" viewBox="0 0 ' + w.toFixed(1) + " " + TH +
+    '" role="img" aria-label="How the guide voice rises and falls across this sentence">' +
+    bands + axis + paint + labs + "</svg>";
+}
+
+/* script */
+const rows = [], words = [], tunes = [];
+S.forEach((s, i) => {
+  const h = document.createElement("div");
+  h.className = "sec";
+  h.innerHTML = '<p class="part-n">Part ' + s.n + " of " + S.length + "</p><h2>" + esc(s.section) +
+    "</h2><p>" + esc(D.sections[s.section] || "") + "</p>";
+  $("script").appendChild(h);
+  const toks = s.tokens.map((tk, k) =>
+    '<span class="w' + (isStress(s, k) ? " s" : "") + '">' + esc(tk) + "</span>" + markAfter(s, k)).join(" ");
+  const rest = s.pause > 0
+    ? '<span class="rest"><i style="width:' + Math.round(s.pause * 34) + 'px"></i>rest ' + s.pause.toFixed(2).replace(/0$/, "") + " s</span>"
+    : '<span class="rest">end</span>';
+  const row = document.createElement("div");
+  row.className = "line";
+  row.innerHTML =
+    '<button class="num" type="button" aria-label="Play part ' + s.n + '">' + s.n + "</button>" +
+    '<div><p class="say">' + toks + "</p>" +
+    '<p class="note">' + esc(s.note) + "</p>" +
+    (s.pitch && s.pitch.some((p) => p) ? '<div class="tune"></div>' : "") +
+    '<div class="take"><button class="mic" type="button">' + MICON + "Record this part</button>" +
+    '<span class="score"></span></div></div>' +
+    '<div class="meta"><span class="tempo"><b>' + s.dur.toFixed(1) + " s</b> &middot; " + s.words + " words" +
+    "</span>" + rest + "</div>";
+  row.addEventListener("click", (e) => { if (!e.target.closest(".take")) playLine(i); });
+  $("script").appendChild(row);
+  rows.push(row);
+  words.push([...row.querySelectorAll(".w")]);
+  tunes.push([]);
+});
+
+/* the melody panels are filled in at the width their column actually has, and refilled when it changes */
+const panels = rows.map((row) => row.querySelector(".tune"));
+let tuneW = 0;
+function drawTunes() {
+  const host = panels.find(Boolean);
+  if (!host) return;
+  const w = Math.round(host.clientWidth);
+  if (!w || w === tuneW) return;
+  tuneW = w;
+  panels.forEach((el, i) => {
+    if (!el) return;
+    el.innerHTML = tunesOf(S[i], w, takes[i]);
+    tunes[i] = [...el.querySelectorAll(".band")];
+  });
+  if (live >= 0) { liveDot = null; setWord(live, aud.currentTime); }
+}
+
+/* timeline */
+const blks = S.map((s) => {
+  const b = document.createElement("div");
+  b.className = "blk";
+  b.style.left = (s.start / LIMIT * 100) + "%";
+  b.style.width = ((s.stop - s.start) / LIMIT * 100) + "%";
+  $("blocks").appendChild(b);
+  return b;
+});
+$("margin").style.left = (D.duration / LIMIT * 100) + "%";
+
+/* state */
+let mode = "listen";
+try { const m = localStorage.getItem("premier-mode"); if (m === "listen" || m === "repeat") mode = m; } catch (e) {}
+$("mode-" + mode).checked = true;
+let stopAt = null, single = -1, gated = new Set();
+let waitEnd = 0, waitLen = 0, afterWait = null;
+let live = -1, liveWord = null, liveDot = null;
+const canRecord = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+let micAsked = false, micOK = false;
+let whole = null;          /* the speech recorded in one go, tidied: { blob, ext, url, seconds, at, whole } */
+let use = "whole";         /* which recording Send, Listen and Save act on: "whole" or "lines" */
+
+/* A whole part said back takes longer than the guide, and nobody can echo forty words at its
+   exact pace: the turn is the part's length plus a fifth, plus a breath either side. */
+const GAP = 2.0, SLACK = 1.2;
+
+/* The guide is paused the instant a line ends and the microphone opens in the same moment, but
+   the sound is not gone yet: Bluetooth speakers are 0.1-0.3 s behind, and the room rings on after.
+   That tail landed at the head of every take, was counted as the student's voice, and came
+   through in the finished speech. So a take ignores its first SETTLE seconds after anything
+   was last heard from the speakers. Takes kept before this was measured lose OLD_SKIP. */
+const SETTLE = 0.45, OLD_SKIP = 0.35;
+let heardAt = 0;
+const settle = () => Math.max(0, SETTLE - (performance.now() - heardAt) / 1000);
+const skipOf = (t) => (t && typeof t.skip === "number" ? t.skip : OLD_SKIP);
+const cut = (x, sec, rate) => x.subarray(Math.min(x.length, Math.round(sec * rate)));
+function hush() {
+  const run = $("run-audio");
+  if (!aud.paused || (mineAudio && !mineAudio.paused) || (run && !run.paused)) heardAt = performance.now();
+  aud.pause();
+  if (mineAudio) { mineAudio.pause(); mineAudio = null; }
+  if (run) run.pause();
+}
+
+function setHint() {
+  $("hint").textContent =
+    mode === "listen" ? "Click any part to play from there."
+    : micOK ? "Every turn is recorded and scored against the guide."
+    : canRecord ? "Allow the microphone and every turn is recorded and scored."
+    : "Click a part to drill it on its own.";
+}
+setHint();
+document.querySelectorAll('input[name="mode"]').forEach((r) => r.addEventListener("change", async () => {
+  mode = r.value;
+  try { localStorage.setItem("premier-mode", mode); } catch (e) {}
+  gated.clear();
+  setHint();
+  /* the microphone has to be in hand before the first gap arrives, so ask for it now */
+  if (mode === "repeat" && canRecord && !micAsked) { await armMic("repeat mode"); setHint(); }
+}));
+
+function setIcon(playing) {
+  $("icon").setAttribute("d", playing ? "M5 3.5h3.5v13H5zM11.5 3.5H15v13h-3.5z" : "M5 3.5v13l11-6.5z");
+  $("play").setAttribute("aria-label", playing ? "Pause" : "Play");
+}
+function indexAt(t) {
+  for (let i = S.length - 1; i >= 0; i--) if (t >= S[i].start - 0.05) return i;
+  return -1;
+}
+function follow(el) {
+  const r = el.getBoundingClientRect(), top = $("player").getBoundingClientRect().bottom;
+  if (r.top < top + 8 || r.bottom > innerHeight - 24) el.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+}
+function setLive(i, scroll) {
+  if (i === live) return;
+  if (live >= 0) { rows[live].classList.remove("live"); blks[live].classList.remove("live"); }
+  live = i;
+  blks.forEach((b, k) => b.classList.toggle("done", k < i));
+  if (i >= 0) {
+    rows[i].classList.add("live");
+    blks[i].classList.add("live");
+    if (scroll) follow(rows[i]);
+  }
+}
+function setWord(i, t) {
+  let el = null, dot = null;
+  if (i >= 0 && t <= S[i].stop + 0.15) {
+    const tm = S[i].times;
+    for (let k = 0; k < tm.length; k++) {
+      const until = k + 1 < tm.length ? tm[k + 1][0] - 0.02 : tm[k][1] + 0.15;
+      if (t >= tm[k][0] - 0.02 && t < until) {
+        el = words[i][k];
+        dot = tunes[i][k] || null;
+        break;
+      }
+    }
+  }
+  if (el !== liveWord) {
+    if (liveWord) liveWord.classList.remove("on");
+    if (el) el.classList.add("on");
+    liveWord = el;
+  }
+  if (dot !== liveDot) {
+    if (liveDot) liveDot.classList.remove("on");
+    if (dot) dot.classList.add("on");
+    liveDot = dot;
+  }
+}
+function tick() {
+  const t = aud.currentTime;
+  if (!aud.paused) heardAt = performance.now();
+  $("head").style.left = (t / LIMIT * 100) + "%";
+  $("now").textContent = fmt(t);
+  $("track").setAttribute("aria-valuenow", t.toFixed(1));
+  $("track").setAttribute("aria-valuetext", fmt(t));
+  const i = indexAt(t);
+  setLive(i, !aud.paused);
+  setWord(i, t);
+  if (!aud.paused) {
+    if (stopAt !== null && t >= stopAt) {
+      const k = single;
+      stopAt = null; single = -1;
+      aud.pause();
+      if (mode === "repeat") yourTurn(k, null);
+    } else if (stopAt === null && mode === "repeat" && i >= 0 && t >= S[i].stop && !gated.has(i)) {
+      gated.add(i);
+      aud.pause();
+      yourTurn(i, () => aud.play());
+    }
+  }
+  if (!aud.paused) requestAnimationFrame(tick);
+}
+
+function waiting() { return waitEnd > 0; }
+
+/* keep = the gap ran its course, so the take is worth measuring. Anything else - a pause,
+   a click on another line, a drag of the playhead - throws the half-said line away. */
+function endWait(keep) {
+  waitEnd = 0; afterWait = null;
+  $("turn").hidden = true;
+  $("turn-fill").style.width = "0";
+  $("turn-label").textContent = "Your turn";
+  if (rec && rec.state === "recording") { rec._drop = !keep; rec.stop(); }
+}
+
+function yourTurn(i, then) {
+  waitLen = (S[i].stop - S[i].start) * SLACK + GAP;
+  waitEnd = performance.now() + waitLen * 1000;
+  afterWait = then;
+  $("turn").hidden = false;
+  setIcon(true);
+  /* in Repeat after me the gap records itself: no button to find, no line missed */
+  if (mode === "repeat" && stream && stream.active && !(rec && rec.state === "recording")) {
+    beginTake(i, null);
+    $("turn-label").textContent = "Recording you";
+  }
+  const step = () => {
+    if (!waitEnd) return;
+    const left = (waitEnd - performance.now()) / 1000;
+    $("turn-fill").style.width = Math.min(100, (1 - left / waitLen) * 100) + "%";
+    if (left > 0) return requestAnimationFrame(step);
+    const f = afterWait;
+    endWait(true);
+    if (f) f(); else setIcon(false);
+  };
+  requestAnimationFrame(step);
+}
+
+function playFrom(t) {
+  dropTake();
+  endWait();
+  stopAt = null; single = -1;
+  gated = new Set([...gated].filter((k) => S[k].stop <= t + 0.01));
+  aud.currentTime = t;
+  aud.play();
+}
+function playLine(i) {
+  dropTake();
+  if (mode === "listen") return playFrom(Math.max(0, S[i].start - 0.05));
+  endWait();
+  stopAt = S[i].stop + 0.05; single = i;
+  aud.currentTime = Math.max(0, S[i].start - 0.05);
+  aud.play();
+}
+
+$("play").addEventListener("click", async () => {
+  if (waiting()) { endWait(); setIcon(false); return; }
+  if (!aud.paused) { aud.pause(); return; }
+  if (mode === "repeat" && canRecord && !micAsked) { await armMic("play in repeat mode"); setHint(); }
+  const t = aud.currentTime >= D.duration - 0.1 ? 0 : aud.currentTime;
+  if (t === 0) gated.clear();
+  playFrom(t);
+});
+aud.addEventListener("play", () => { setIcon(true); requestAnimationFrame(tick); });
+aud.addEventListener("pause", () => { heardAt = performance.now(); if (!waiting()) setIcon(false); tick(); });
+aud.addEventListener("ended", () => { if (!waiting()) setIcon(false); });
+aud.addEventListener("seeked", () => { if (aud.paused) tick(); });
+
+function seekTo(t) {
+  t = Math.min(D.duration, Math.max(0, t));
+  endWait();
+  if (aud.paused) setIcon(false);
+  stopAt = null; single = -1;
+  gated = new Set([...gated].filter((k) => S[k].stop <= t + 0.01));
+  aud.currentTime = t;
+  tick();
+}
+$("track").addEventListener("click", (e) => {
+  const r = e.currentTarget.getBoundingClientRect();
+  seekTo((e.clientX - r.left) / r.width * LIMIT);
+});
+$("track").addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+    e.preventDefault();
+    seekTo(aud.currentTime + (e.key === "ArrowRight" ? 5 : -5));
+  }
+});
+
+/* ======================================================================
+   Who is practising. The name rides along with every row the teacher sees.
+   ====================================================================== */
+const SESSION = Math.random().toString(36).slice(2, 10);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+let who = "", visit = 0, openedAt = 0;
+const tally = { takes: 0, lines: new Set(), best: 0 };
+
+function log(event, detail) {
+  const now = new Date();
+  const queue = store.get("premier-queue", []);
+  queue.push(Object.assign({
+    at: now.toISOString(), local: now.toLocaleString("en-GB"),
+    name: who, session: SESSION, visit: visit, event: event, page: "premier",
+    minutes: openedAt ? +((now - openedAt) / 60000).toFixed(1) : 0
+  }, detail));
+  store.set("premier-queue", queue.slice(-300));
+  flush(false);
+}
+
+/* nothing is lost if the wifi drops: the rows wait in this browser and go with the next one */
+function flush(beacon) {
+  const queue = store.get("premier-queue", []);
+  if (!queue.length || !LOG_URL) return;
+  store.set("premier-queue", []);
+  const putBack = () => store.set("premier-queue", queue.concat(store.get("premier-queue", [])).slice(-300));
+  const body = new Blob([JSON.stringify({ rows: queue })], { type: "text/plain;charset=utf-8" });
+  if (beacon && navigator.sendBeacon) {
+    if (!navigator.sendBeacon(LOG_URL, body)) putBack();
+    return;
+  }
+  fetch(LOG_URL, { method: "POST", mode: "no-cors", body: body, keepalive: true }).catch(putBack);
+}
+
+(function askWho() {
+  const last = store.get("premier-name", "");
+  const seen = store.get("premier-visits", {});
+  $("who").value = last;
+  if (last && seen[last.toLowerCase()]) {
+    $("again").hidden = false;
+    $("again").textContent = "Welcome back. You have opened this page " + seen[last.toLowerCase()] +
+      (seen[last.toLowerCase()] === 1 ? " time before." : " times before.");
+  }
+  $("gate").hidden = false;
+  setTimeout(() => $("who").focus(), 60);
+})();
+
+$("gate-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = $("who").value.trim().replace(/\s+/g, " ").slice(0, 40);
+  if (!name) { $("who").focus(); return; }
+  who = name;
+  store.set("premier-name", who);
+  const seen = store.get("premier-visits", {});
+  visit = (seen[who.toLowerCase()] || 0) + 1;
+  seen[who.toLowerCase()] = visit;
+  store.set("premier-visits", seen);
+  openedAt = Date.now();
+  $("gate").hidden = true;
+  log("opened", { detail: "visit " + visit + " from this browser" });
+  loadTakes();          /* whatever this student recorded last time comes back */
+});
+
+addEventListener("pagehide", () => {
+  if (!openedAt) return;
+  log("left", { takes: tally.takes, lines: tally.lines.size, score: tally.best,
+    detail: tally.takes + " takes on " + tally.lines.size + " parts" });
+  flush(true);
+});
+document.addEventListener("visibilitychange", () => { if (document.hidden) flush(true); });
+
+/* ======================================================================
+   Pitch, measured exactly the way the guide was measured (pitch.py):
+   YIN on 40 ms frames every 10 ms, anywhere from 70 to 900 Hz.
+
+   This used to be autocorrelation with a 400 Hz ceiling. A girl's voice sits
+   seven or more semitones above the guide's and rises past 400 Hz, where that
+   tracker grabbed the note an octave down: a perfect copy of the guide raised
+   seven semitones scored 30-77% and was marked with red words. Lifting the
+   ceiling alone made autocorrelation grab the octave above instead. YIN takes
+   the first lag whose normalised difference dips below THRESH - the period
+   itself - and holds steady across the whole range.
+   ====================================================================== */
+const SR = 16000, FRAME = 0.04, HOP = 0.01, FMIN = 70, FMAX = 900;
+const THRESH = 0.15, APERIODIC = 0.35, QUIET = 0.006;
+const TOL = 1.4;   /* semitones of slope a word may miss by before it is called wrong */
+
+function track(x) {
+  const n = Math.round(FRAME * SR), hop = Math.round(HOP * SR);
+  const tmin = Math.floor(SR / FMAX), tmax = Math.min(n >> 1, Math.ceil(SR / FMIN)), W = n - tmax;
+  const count = 1 + Math.max(0, Math.floor((x.length - n) / hop));
+  const win = new Float64Array(n);
+  for (let i = 0; i < n; i++) win[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (n - 1));
+  const dn = new Float64Array(tmax + 1);
+  const f0 = new Float64Array(count).fill(NaN);
+  for (let k = 0; k < count; k++) {
+    const off = k * hop;
+    /* silence is decided exactly as it always was: RMS of the Hann-windowed frame */
+    let mean = 0;
+    for (let i = 0; i < n; i++) mean += x[off + i];
+    mean /= n;
+    let power = 0;
+    for (let i = 0; i < n; i++) { const v = (x[off + i] - mean) * win[i]; power += v * v; }
+    if (power <= 0 || Math.sqrt(power / n) < QUIET) continue;
+    /* difference function, then its cumulative mean normalisation */
+    let running = 0;
+    dn[0] = 1;
+    for (let t = 1; t <= tmax; t++) {
+      let d = 0;
+      for (let j = 0; j < W; j++) { const v = x[off + j] - x[off + j + t]; d += v * v; }
+      running += d;
+      dn[t] = running > 0 ? d * t / running : 1;
+    }
+    /* the first dip under the threshold, followed down to its bottom; failing that, the lowest point */
+    let tau = -1;
+    for (let t = tmin; t <= tmax; t++) {
+      if (dn[t] < THRESH) { tau = t; while (tau < tmax && dn[tau + 1] < dn[tau]) tau++; break; }
+    }
+    if (tau < 0) {
+      let low = Infinity;
+      for (let t = tmin; t <= tmax; t++) if (dn[t] < low) { low = dn[t]; tau = t; }
+    }
+    if (dn[tau] > APERIODIC) continue;                                  // no clear period: unvoiced
+    const a = dn[Math.max(1, tau - 1)], b = dn[tau], c = dn[Math.min(tmax, tau + 1)];
+    const den = a - 2 * b + c;
+    const shift = den !== 0 ? Math.max(-1, Math.min(1, 0.5 * (a - c) / den)) : 0;
+    f0[k] = SR / (tau + shift);
+  }
+  return despike(f0);
+}
+
+/* A value that disagrees with its neighbours by more than five semitones is a slip, not
+   a pitch, and one such frame is enough to swamp a whole line's score. pitch.py drops
+   the same frames. Eight neighbours each side, not three: slips come in runs at the start
+   of a voiced stretch, and with three the run outvoted the real pitch - a faithful copy of
+   line 10 read a little slowly scored 70 instead of 96. */
+const REACH = 8;
+function despike(f0) {
+  const out = Float64Array.from(f0);
+  for (let i = 0; i < f0.length; i++) {
+    if (isNaN(f0[i])) continue;
+    const near = [];
+    for (let j = Math.max(0, i - REACH), end = Math.min(f0.length - 1, i + REACH); j <= end; j++) {
+      if (j !== i && !isNaN(f0[j])) near.push(f0[j]);
+    }
+    if (near.length < 3) continue;
+    near.sort((a, b) => a - b);
+    if (Math.abs(12 * Math.log2(f0[i] / near[near.length >> 1])) > 5) out[i] = NaN;
+  }
+  return out;
+}
+
+/* semitones from this speaker's own middle, so a child's voice and the guide's compare fairly */
+function semitones(f0) {
+  const voiced = Array.from(f0).filter((v) => v > 0 && isFinite(v)).sort((a, b) => a - b);
+  if (voiced.length < 8) return null;
+  const ref = voiced[voiced.length >> 1];
+  const st = new Float64Array(f0.length);
+  for (let i = 0; i < f0.length; i++) st[i] = (f0[i] > 0 && isFinite(f0[i])) ? 12 * Math.log2(f0[i] / ref) : NaN;
+  return { ref: ref, st: st };
+}
+
+let actx = null;
+async function pcm16k(buf) { return pcmAt(buf, SR); }
+
+/* decoded to mono at the rate asked for: 16 kHz to measure pitch, full rate to hand in */
+async function pcmAt(buf, rate) {
+  actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+  const decoded = await actx.decodeAudioData(buf);
+  try {
+    const off = new OfflineAudioContext(1, Math.max(1, Math.ceil(decoded.duration * rate)), rate);
+    const src = off.createBufferSource();
+    src.buffer = decoded;
+    src.connect(off.destination);
+    src.start();
+    return (await off.startRendering()).getChannelData(0);
+  } catch (e) {
+    const ch = decoded.getChannelData(0), step = decoded.sampleRate / rate;   // older Safari: decimate by hand
+    const out = new Float32Array(Math.floor(ch.length / step));
+    for (let i = 0; i < out.length; i++) out[i] = ch[Math.floor(i * step)];
+    return out;
+  }
+}
+
+let guidePcm = null;
+async function guideAudio() {
+  if (!guidePcm) guidePcm = await pcm16k(await (await fetch(aud.currentSrc || aud.src)).arrayBuffer());
+  return guidePcm;
+}
+
+/* ======================================================================
+   Lining the two readings up. Nobody speaks at the guide's exact speed, so
+   the curves are stretched onto each other before they are compared.
+   ====================================================================== */
+function fill(st) {
+  const out = Float64Array.from(st);
+  const at = [];
+  for (let i = 0; i < out.length; i++) if (!isNaN(out[i])) at.push(i);
+  if (!at.length) return null;
+  for (let i = 0; i < at[0]; i++) out[i] = out[at[0]];
+  for (let i = at[at.length - 1] + 1; i < out.length; i++) out[i] = out[at[at.length - 1]];
+  for (let k = 1; k < at.length; k++) {
+    const a = at[k - 1], b = at[k];
+    for (let i = a + 1; i < b; i++) out[i] = out[a] + (out[b] - out[a]) * (i - a) / (b - a);
+  }
+  return out;
+}
+
+/* A pause is not a melody. Every unvoiced stretch longer than PAUSE_CAP frames is cut to that
+   length on both sides before they are lined up - the narrow band below cannot absorb a comma
+   held half a second longer than the guide's, and a perfect copy that did so fell to 22%.
+   Frame numbers are kept, so everything after the alignment still reads the real clock. */
+const PAUSE_CAP = 12;
+function pausesCapped(st) {
+  const at = [];
+  let run = 0;
+  for (let i = 0; i < st.length; i++) {
+    if (isNaN(st[i])) { if (++run <= PAUSE_CAP) at.push(i); }
+    else { run = 0; at.push(i); }
+  }
+  return { st: Float64Array.from(at, (i) => st[i]), at: at };
+}
+
+/* The band is deliberately narrow and a sideways step costs extra. Given a free hand,
+   the warp will bend any English sentence onto any other - a different line of this very
+   script scored in the nineties before this was tightened. */
+const BAND = 0.06, SIDESTEP = 0.4;
+
+function dtw(a, b) {
+  const A = a.length, B = b.length, W = B + 1;
+  const band = Math.max(8, Math.round(BAND * Math.max(A, B)));
+  const cost = new Float64Array((A + 1) * W).fill(Infinity);
+  cost[0] = 0;
+  for (let i = 1; i <= A; i++) {
+    const mid = Math.round(i * B / A);
+    for (let j = Math.max(1, mid - band), top = Math.min(B, mid + band); j <= top; j++) {
+      const d = Math.abs(a[i - 1] - b[j - 1]);
+      cost[i * W + j] = Math.min(cost[(i - 1) * W + j - 1] + d,
+        cost[(i - 1) * W + j] + d + SIDESTEP, cost[i * W + j - 1] + d + SIDESTEP);
+    }
+  }
+  const path = [];
+  let i = A, j = B;
+  while (i > 0 && j > 0) {
+    path.push([i - 1, j - 1]);
+    const up = cost[(i - 1) * W + j], left = cost[i * W + j - 1], both = cost[(i - 1) * W + j - 1];
+    if (!isFinite(up) && !isFinite(left) && !isFinite(both)) break;
+    if (both <= up && both <= left) { i--; j--; } else if (up <= left) { i--; } else { j--; }
+  }
+  return path.reverse();
+}
+
+/* How far apart the two melodies sit, in semitones, once each is centred on its own
+   middle. Distance, not correlation: every English sentence drifts downwards, so two
+   unrelated lines correlate at .9 while sitting three semitones apart. FAR semitones
+   of daylight is a zero; a faithful copy measures under half of one. */
+const FAR = 4;
+
+function apart(xs, ys) {
+  const n = xs.length;
+  if (n < 10) return NaN;
+  let mx = 0, my = 0;
+  for (let i = 0; i < n; i++) { mx += xs[i]; my += ys[i]; }
+  mx /= n; my /= n;
+  let sq = 0;
+  for (let i = 0; i < n; i++) {
+    const d = Math.min(6, Math.abs((xs[i] - mx) - (ys[i] - my)));   // one stray frame must not decide a line
+    sq += d * d;
+  }
+  return Math.sqrt(sq / n);
+}
+
+const median = (v) => { const c = Array.from(v).sort((a, b) => a - b); return c[c.length >> 1]; };
+/* how far a voice travels: from its 10th to its 90th percentile, in semitones. The ends are
+   left out so one squeak or one creak cannot make a flat reading look lively. */
+function rangeOf(st) {
+  const v = Array.from(st).filter((x) => !isNaN(x)).sort((a, b) => a - b);
+  if (v.length < 10) return NaN;
+  return v[Math.floor(v.length * 0.9)] - v[Math.floor(v.length * 0.1)];
+}
+const shape = (slope) => slope > 0.8 ? "rise" : slope < -0.8 ? "fall" : "flat";
+
+/* With the microphone's own gain control off, a soft reading can sit under the silence gate the
+   guide was measured with. The copy that is measured - never the recording itself - is brought
+   up to the guide's level first. */
+const GUIDE_P99 = 0.37;
+function levelled(x) {
+  const a = [];
+  for (let i = 0; i < x.length; i += 5) a.push(Math.abs(x[i]));
+  a.sort((m, n) => m - n);
+  const p99 = a[Math.floor(0.99 * (a.length - 1))] || 0;
+  if (p99 < 1e-4) return x;
+  const g = Math.min(30, GUIDE_P99 / p99), out = new Float32Array(x.length);
+  for (let i = 0; i < x.length; i++) out[i] = x[i] * g;
+  return out;
+}
+
+async function compare(i, blob, skip) {
+  const s = S[i];
+  const mineF0 = track(levelled(cut(await pcm16k(await blob.arrayBuffer()), skip, SR)));
+  let lo = -1, hi = -1;
+  for (let k = 0; k < mineF0.length; k++) if (mineF0[k] > 0) { if (lo < 0) lo = k; hi = k; }
+  if (lo < 0 || hi - lo < 15) return { error: "I could not hear a voice in that. Move closer to the microphone and try again." };
+
+  /* snapped to the 10 ms grid the guide was measured on, so a frame here is the same
+     frame pitch.py measured: without this the word arcs land either side of the
+     rise/fall threshold and a perfect copy is marked wrong */
+  const g = await guideAudio();
+  const step = Math.round(HOP * SR);
+  const from = Math.max(0, Math.round((s.start - 0.1) * SR / step) * step);
+  const to = Math.min(g.length, Math.round((s.stop + 0.1) * SR));
+  const mine = semitones(mineF0.slice(lo, hi + 1));
+  const guide = semitones(track(g.subarray(from, to)));
+  if (!mine || !guide) return { error: "That take was too short to measure. Say the whole part and try again." };
+
+  /* both contours are cut back to where a voice is actually sounding before they are
+     lined up: the padding the guide slice carries is not in the take, and stretching
+     one against the other's silence drags the whole path off the words */
+  let head0 = -1, tail0 = -1;
+  for (let k = 0; k < guide.st.length; k++) if (!isNaN(guide.st[k])) { if (head0 < 0) head0 = k; tail0 = k; }
+  const gc = pausesCapped(guide.st.slice(head0, tail0 + 1)), mc = pausesCapped(mine.st);
+  const path = dtw(fill(gc.st), fill(mc.st)).map((p) => [gc.at[p[0]], mc.at[p[1]]]);
+  const clock = (gi) => from / SR + (gi + head0) * HOP + FRAME / 2;
+
+  /* the take, redrawn on the guide's clock, for the overall match */
+  const spread = [];
+  for (let k = 0; k <= tail0 - head0; k++) spread.push([]);
+  for (let k = 0; k < path.length; k++) {
+    const v = mine.st[path[k][1]];
+    if (!isNaN(v)) spread[path[k][0]].push(v);
+  }
+  const xs = [], ys = [];
+  spread.forEach((v, k) => {
+    const a = guide.st[k + head0];
+    if (v.length && !isNaN(a)) { xs.push(a); ys.push(median(v)); }
+  });
+  const off = apart(xs, ys);
+  if (isNaN(off)) return { error: "That take was too short to measure. Say the whole part and try again." };
+  const score = Math.max(0, Math.round(100 * (1 - off / FAR)));
+
+  /* for the word arcs the warp is only used to find where each word begins and ends in
+     the take; the arc itself is then read off the student's own frames, in their order */
+  const edges = s.tokens.map(() => [Infinity, -Infinity]);
+  for (let k = 0; k < path.length; k++) {
+    const t = clock(path[k][0]);
+    for (let n = 0; n < s.times.length; n++) {
+      if (t >= s.times[n][0] && t <= Math.max(s.times[n][1], s.times[n][0] + 0.02)) {
+        edges[n][0] = Math.min(edges[n][0], path[k][1]);
+        edges[n][1] = Math.max(edges[n][1], path[k][1]);
+        break;
+      }
+    }
+  }
+  const held = edges.map(([a, b]) => {
+    const v = [];
+    if (isFinite(a)) for (let j = a; j <= b; j++) if (!isNaN(mine.st[j])) v.push(mine.st[j]);
+    return v;
+  });
+  /* the student's line is drawn against its own middle; lift it to where the guide's
+     line sits on the axis, so the same reading in a deeper voice lands on the guide,
+     and only a flatter one looks flatter */
+  const anchor = median(s.pitch.filter((p) => p).map((p) => p.st)) || 0;
+  const drawn = held.map((v) => {
+    if (v.length < 3) return null;
+    const third = Math.max(1, Math.floor(v.length / 3));
+    const head = median(v.slice(0, third)), tail = median(v.slice(-third));
+    return { head: head + anchor, tail: tail + anchor, dir: shape(tail - head), slope: tail - head };
+  });
+  /* a word counts as wrong only if it both lands in a different band and misses the
+     guide's own movement by more than TOL semitones: rise / flat / fall is a hard edge,
+     and a word sitting on it must not turn red over a tenth of a semitone */
+  const last = s.tokens.length - 1;
+  const words = drawn.map((m, k) => {
+    if (!m || !s.pitch[k]) return null;
+    /* The line's last word answers to the arrow the script gives it wherever the guide's own voice
+       strays from that arrow: the recording rises then drops on "witches?" though the question
+       must rise, and lifts slightly on "admit." though the line must fall. Copying the arrow is
+       right; copying the recording there is not. */
+    if (k === last && (s.end === "rise") !== (s.pitch[k].dir === "rise")) {
+      return s.end === "rise" ? m.dir === "rise" : m.dir !== "rise";
+    }
+    const want = s.pitch[k].tail - s.pitch[k].head;
+    return m.dir === s.pitch[k].dir || Math.abs(m.slope - want) <= TOL;
+  });
+
+  return {
+    score: score, off: off, mine: drawn, words: words,
+    range: rangeOf(mine.st), guideRange: rangeOf(guide.st),
+    ok: words.filter((v) => v === true).length,
+    judged: words.filter((v) => v !== null).length,
+    dur: (hi - lo) * HOP
+  };
+}
+
+/* ======================================================================
+   Recording a line, and what comes back
+   ====================================================================== */
+let stream = null, rec = null, recBtn = null, recStop = 0, idle = 0, mineAudio = null;
+
+function strip(i, html) { rows[i].querySelector(".score").innerHTML = html; }
+
+function drawOne(i) {
+  const el = panels[i];
+  if (!el || !tuneW) return;
+  el.innerHTML = tunesOf(S[i], tuneW, takes[i]);
+  tunes[i] = [...el.querySelectorAll(".band")];
+  if (live === i) { liveDot = null; setWord(i, aud.currentTime); }
+}
+
+function extFor(type) {
+  return /mp4|m4a|aac/.test(type || "") ? "m4a" : /ogg/.test(type || "") ? "ogg" : "webm";
+}
+
+function showScore(i) {
+  const t = takes[i];
+  if (!t) return strip(i, "");
+  const off = t.dur - S[i].dur;
+  const timing = Math.abs(off) < 0.15 ? "the guide's length"
+    : Math.abs(off).toFixed(1) + " s " + (off > 0 ? "slower" : "faster") + " than the guide";
+  strip(i,
+    "<span>Take " + t.n + "</span>" +
+    '<span title="' + t.off.toFixed(2) + ' semitones away from the guide"><b>' + t.score +
+    "%</b> melody match</span>" +
+    (t.judged ? "<span>" + t.ok + " of " + t.judged + " words move the right way</span>" : "") +
+    (isFinite(t.range) && isFinite(t.guideRange)
+      ? '<span class="' + (t.range < t.guideRange * 0.65 ? "low" : "") + '" title="how far your voice moves, low note to high note">voice range <b>' +
+        t.range.toFixed(1) + "</b> of the guide&rsquo;s " + t.guideRange.toFixed(1) + " semitones" +
+        (t.range < t.guideRange * 0.65 ? " &middot; move your voice more" : "") + "</span>"
+      : "") +
+    "<span>" + timing + "</span>" +
+    '<button class="link" data-do="mine" type="button">Play mine</button>' +
+    '<button class="link" data-do="guide" type="button">Play the guide</button>' +
+    '<button class="link" data-do="save" type="button">Save this take</button>' +
+    '<span class="legend"><i></i>you</span>' +
+    /* which take the finished speech will use: always the closest one so far, never simply the last */
+    (bests[i] && bests[i] !== t
+      ? '<span class="pick">In your speech: take ' + bests[i].n + ", <b>" + bests[i].score + "%</b> " +
+        '<button class="link" data-do="best" type="button">Play it</button></span>'
+      : '<span class="pick">&#10003; This take is in your speech</span>'));
+}
+
+function playMine(i, which) {
+  if (mineAudio) { mineAudio.pause(); mineAudio = null; }
+  const t = which === "best" ? bests[i] : takes[i];
+  if (!t) return;
+  dropTake();
+  aud.pause();
+  mineAudio = new Audio(t.url);
+  mineAudio.addEventListener("pause", () => { heardAt = performance.now(); });
+  mineAudio.play();
+}
+
+/* the speakers and the microphone never run together: a take still going when anything
+   starts to play is thrown away, or the guide would be in it */
+function dropTake() {
+  if (recording() && !waiting()) { rec._drop = true; stopRec(); }
+}
+
+function saveTake(i) {
+  const t = takes[i];
+  if (!t) return;
+  const name = "Fingerprint_part" + String(S[i].n).padStart(2, "0") + "_take" + t.n +
+    (who ? "_" + who.replace(/[^A-Za-z0-9]+/g, "-") : "") + "." + t.ext;
+  const a = document.createElement("a");
+  a.href = t.url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  log("saved", { line: S[i].n, take: t.n, score: t.score, detail: "downloaded " + name });
+}
+
+function stopRec() { if (rec && rec.state === "recording") rec.stop(); }
+function recording() { return !!(rec && rec.state === "recording"); }
+
+/* Asked for once and remembered. Repeat after me needs the microphone in hand before the
+   first gap arrives, so the prompt goes up when the mode is chosen, not when time is short. */
+async function armMic(why) {
+  if (stream && stream.active) return true;
+  if (!canRecord) return false;
+  micAsked = true;
+  try {
+    /* the voice as it is: automatic gain would undo the quiet section the script asks for,
+       and noise suppression smears the consonants. The guide is paused while you speak,
+       so there is no echo to cancel. */
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 } });
+    micOK = true;
+  } catch (e) {
+    micOK = false;
+    log("mic refused", { detail: why + ": " + String((e && e.name) || e) });
+  }
+  return micOK;
+}
+
+function letMicGo() {
+  clearTimeout(idle);
+  if (mode === "repeat") return;        // another gap is moments away; keep it
+  idle = setTimeout(() => {
+    if (stream && !recording()) { stream.getTracks().forEach((t) => t.stop()); stream = null; }
+  }, 60000);
+}
+
+/* one take: btn is the line's own Record button, or null when the gap is driving */
+function beginTake(i, btn) {
+  const chunks = [];
+  let mine;
+  try { mine = new MediaRecorder(stream, { audioBitsPerSecond: 128000 }); }
+  catch (e) { mine = new MediaRecorder(stream); }
+  const type = mine.mimeType || "audio/webm";
+  const skip = settle();
+  rec = mine;
+  recBtn = btn || null;
+  mine._drop = false;
+  if (btn) { btn.classList.add("rec"); btn.innerHTML = MICON + "Stop"; }
+  strip(i, btn ? "<span>Listening. Say the whole part, then press Stop.</span>" : "<span>Listening&hellip;</span>");
+  mine.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+  mine.onstop = async () => {
+    clearTimeout(recStop);
+    if (rec === mine) rec = null;
+    if (btn) { btn.classList.remove("rec"); btn.innerHTML = MICON + "Record again"; }
+    letMicGo();
+    if (mine._drop) { showScore(i); return; }
+    strip(i, "<span>Listening back&hellip;</span>");
+    const blob = new Blob(chunks, { type: type });
+    let res;
+    try { res = await compare(i, blob, skip); }
+    catch (e) { res = { error: "Something went wrong reading that take: " + ((e && e.message) || e) }; }
+    if (res.error) {
+      strip(i, '<span class="bad">' + esc(res.error) + "</span>");
+      log("take failed", { line: S[i].n, detail: res.error });
+      return;
+    }
+    const before = takes[i], oldBest = bests[i];
+    takes[i] = Object.assign(res, { blob: blob, url: URL.createObjectURL(blob), skip: skip,
+      ext: extFor(type), n: before ? before.n + 1 : 1 });
+    /* a retake only goes into the speech if it comes closer to the guide than the one already there */
+    if (!oldBest || res.score >= oldBest.score) bests[i] = takes[i];
+    [before, oldBest].forEach((t) => {
+      if (t && t.url && t !== takes[i] && t !== bests[i]) URL.revokeObjectURL(t.url);
+    });
+    forgetSpeech();                      /* any speech put together earlier is now out of date */
+    drawOne(i);
+    showScore(i);
+    keepTake(i);
+    runBar();
+    tally.takes++;
+    tally.lines.add(i);
+    tally.best = Math.max(tally.best, res.score);
+    log("take", { line: S[i].n, take: takes[i].n, score: res.score,
+      semitonesOff: +res.off.toFixed(2), words: res.ok + " of " + res.judged,
+      range: isFinite(res.range) ? +res.range.toFixed(1) : "", guideRange: isFinite(res.guideRange) ? +res.guideRange.toFixed(1) : "",
+      seconds: +res.dur.toFixed(2), how: btn ? "button" : "repeat gap",
+      detail: S[i].section + ", take " + takes[i].n + ": melody " + res.score + "%" +
+        (isFinite(res.range) ? ", range " + res.range.toFixed(1) + " of " + res.guideRange.toFixed(1) : "") });
+  };
+  mine.start();
+}
+
+async function toggleRec(i, btn) {
+  if (recording()) { stopRec(); return; }
+  clearTimeout(idle);
+  hush();
+  strip(i, "<span>Getting the microphone ready&hellip;</span>");
+  if (!(await armMic("record button"))) {
+    strip(i, '<span class="bad">The browser would not hand over the microphone. Allow it next to the address bar, then press Record again.</span>');
+    return;
+  }
+  setHint();
+  beginTake(i, btn);
+  recStop = setTimeout(stopRec, (S[i].stop - S[i].start) * 1500 + 6000);
+}
+
+/* ======================================================================
+   The run: takes stay on this computer, so the curves and the sound of every
+   line are still here on the next visit, and the whole pass can leave as one file.
+   ====================================================================== */
+const VAULT = "premier-takes", SHELF = "takes";
+const slot = (i) => (who || "?").toLowerCase() + "#" + S[i].n;
+
+function vault() {
+  return new Promise((ok, no) => {
+    const req = indexedDB.open(VAULT, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(SHELF);
+    req.onsuccess = () => ok(req.result);
+    req.onerror = () => no(req.error);
+  });
+}
+
+/* what is kept of a take: the sound, and everything needed to redraw its curve */
+function packed(t) {
+  return { blob: t.blob, ext: t.ext, n: t.n, score: t.score, off: t.off, mine: t.mine,
+    words: t.words, ok: t.ok, judged: t.judged, dur: t.dur, skip: t.skip, at: t.at || Date.now(),
+    range: t.range, guideRange: t.guideRange };
+}
+
+async function keepTake(i) {
+  try {
+    const db = await vault();
+    const shelf = db.transaction(SHELF, "readwrite").objectStore(SHELF);
+    if (takes[i] && takes[i].blob) shelf.put(packed(takes[i]), slot(i));
+    if (bests[i] && bests[i].blob) shelf.put(packed(bests[i]), slot(i) + "/best");
+  } catch (e) {}
+}
+
+async function loadTakes() {
+  let found = 0;
+  const shelfGet = (shelf, key) => new Promise((done) => {
+    const req = shelf.get(key);
+    req.onsuccess = () => done(req.result && req.result.blob ? req.result : null);
+    req.onerror = () => done(null);
+  });
+  try {
+    const db = await vault();
+    const shelf = db.transaction(SHELF, "readonly").objectStore(SHELF);
+    await Promise.all(S.map(async (s, i) => {
+      const [last, best] = await Promise.all([shelfGet(shelf, slot(i)), shelfGet(shelf, slot(i) + "/best")]);
+      if (last) { takes[i] = Object.assign({}, last, { url: URL.createObjectURL(last.blob) }); found++; }
+      /* the same take on both shelves is one take on the page */
+      if (best && last && best.n === last.n) bests[i] = takes[i];
+      else if (best) bests[i] = Object.assign({}, best, { url: URL.createObjectURL(best.blob) });
+      else if (last) bests[i] = takes[i];          /* kept before bests existed: the last take stands in */
+    }));
+    const w = await shelfGet(db.transaction(SHELF, "readonly").objectStore(SHELF), wholeSlot());
+    if (w) {
+      whole = Object.assign({}, w, { url: URL.createObjectURL(w.blob), whole: true });
+      try { if (localStorage.getItem("premier-use") === "lines") use = "lines"; } catch (e) {}
+    }
+  } catch (e) {}
+  S.forEach((s, i) => { if (takes[i]) { drawOne(i); showScore(i); tally.lines.add(i); } });
+  runBar();
+  if (found) log("takes restored", { takes: found, detail: found + " takes came back from the last visit" });
+}
+
+let clearArmed = 0;
+async function clearTakes() {
+  /* a second click within four seconds, so a slip of the mouse cannot wipe a whole speech */
+  const btn = $("run-clear");
+  if (!clearArmed) {
+    btn.textContent = "Click again to delete every take";
+    clearArmed = setTimeout(() => { clearArmed = 0; btn.textContent = "Clear my takes"; }, 4000);
+    return;
+  }
+  clearTimeout(clearArmed);
+  clearArmed = 0;
+  btn.textContent = "Clear my takes";
+  try {
+    const db = await vault();
+    const shelf = db.transaction(SHELF, "readwrite").objectStore(SHELF);
+    S.forEach((s, i) => { shelf.delete(slot(i)); shelf.delete(slot(i) + "/best"); });
+    shelf.delete(wholeSlot());
+  } catch (e) {}
+  if (whole && whole.url) URL.revokeObjectURL(whole.url);
+  whole = null;
+  S.forEach((s, i) => {
+    [takes[i], bests[i]].forEach((t) => { if (t && t.url) URL.revokeObjectURL(t.url); });
+    const had = takes[i] || bests[i];
+    takes[i] = null;
+    bests[i] = null;
+    if (had) { drawOne(i); showScore(i); }
+  });
+  forgetSpeech();
+  tally.lines.clear();
+  runBar();
+  log("takes cleared", { detail: "the student cleared the saved takes" });
+}
+
+/* Always on show, even before the first take: while it hid until then, a fresh browser gave no
+   sign that the speech could be sent at all. With nothing recorded the buttons wait, greyed out. */
+function runBar() {
+  const scores = [], missing = [];
+  S.forEach((s, i) => { if (bests[i]) scores.push(bests[i].score); else missing.push(s.n); });
+  /* which recording the buttons below act on: the one-go recording when there is one and it was
+     chosen, else the lines; with only one of the two, that one */
+  if (!whole) use = "lines";
+  else if (!scores.length) use = "whole";
+  $("use").hidden = !(whole && scores.length);
+  $("use-" + use).checked = true;
+  $("onego-line").textContent = whole
+    ? "One-go recording: " + fmt(whole.seconds) + (whole.seconds > 120 ? " (over 2:00)" : "") +
+      ", made " + hhmm(whole.at) + ". Press again to replace it."
+    : canRecord ? "The whole script on one screen, read straight through, no guide playing."
+    : "Recording needs Chrome or Safari on the https link.";
+  $("onego-open").textContent = whole ? "Record it in one go again" : "Record it in one go";
+  busy(working);
+  if (!scores.length) {
+    $("run-line").textContent = "No parts recorded yet.";
+    $("run-missing").textContent = "Record the parts in Repeat after me and they gather here. " +
+      "When all " + S.length + " are in, or after a one-go recording, send it to your teacher from this box.";
+    return;
+  }
+  const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  $("run-line").textContent = scores.length + " of " + S.length + " parts recorded  ·  " +
+    "your speech averages " + avg + "% melody match";
+  $("run-missing").textContent = missing.length
+    ? "Still to record: part" + (missing.length > 1 ? "s " : " ") + listed(missing) + "."
+    : "Every part is recorded.";
+}
+
+function listed(ns) {
+  if (ns.length < 2) return String(ns[0]);
+  return ns.slice(0, -1).join(", ") + " and " + ns[ns.length - 1];
+}
+
+function wavOf(pcm, sr) {
+  const n = pcm.length, buf = new ArrayBuffer(44 + n * 2), view = new DataView(buf);
+  const tag = (at, s) => { for (let i = 0; i < s.length; i++) view.setUint8(at + i, s.charCodeAt(i)); };
+  tag(0, "RIFF"); view.setUint32(4, 36 + n * 2, true); tag(8, "WAVEfmt ");
+  view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+  view.setUint32(24, sr, true); view.setUint32(28, sr * 2, true);
+  view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+  tag(36, "data"); view.setUint32(40, n * 2, true);
+  for (let i = 0; i < n; i++) {
+    const v = Math.max(-1, Math.min(1, pcm[i]));
+    view.setInt16(44 + i * 2, v < 0 ? v * 0x8000 : v * 0x7fff, true);
+  }
+  return new Blob([buf], { type: "audio/wav" });
+}
+
+function today() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+
+/* ======================================================================
+   The speech, put together from the closest take of every line.
+   Each take is cut down to the voice, every line is brought to one loudness,
+   and the rests between lines are the guide's own. A rest is filled with the
+   student's own room - the take's natural tail and head, and between them a
+   stretch of that room's quiet - because dead digital silence between two
+   takes sounds like the recording dropping out.
+   ====================================================================== */
+const OUT_SR = 44100;      /* the file's rate: what every upload form and player expects */
+const LEAD = 0.4, TAIL = 0.5;   /* the guide's own air before the first word and after the last */
+const FIT = 118;           /* the whole speech must end by 1:58, two seconds inside the 2:00 limit */
+const XF = 0.08;           /* crossfade where one room meets another */
+let run = null;            /* the speech last put together, until a take changes */
+
+/* where the voice is in a take. The pitch track anchors it - clicks and breaths are not
+   voiced - then it reaches out along the energy for the consonants either side, which are */
+function voiceSpan(x, rate, f0) {
+  const hop = Math.round(0.01 * rate), n = Math.floor(x.length / hop);
+  if (n < 20) return null;
+  const db = new Float64Array(n);
+  for (let k = 0; k < n; k++) {
+    let p = 0;
+    for (let j = k * hop, end = j + hop; j < end; j++) p += x[j] * x[j];
+    db[k] = 10 * Math.log10(p / hop + 1e-12);
+  }
+  const sorted = Array.from(db).sort((a, b) => a - b);
+  const floor = sorted[Math.floor(n * 0.2)], peak = sorted[Math.floor(n * 0.99)];
+  const gate = Math.min(peak - 20, Math.max(floor + 10, peak - 38));
+
+  let v0 = -1, v1 = -1;
+  for (let k = 0; k + 2 < f0.length; k++) if (f0[k] > 0 && f0[k + 1] > 0 && f0[k + 2] > 0) { v0 = k; break; }
+  for (let k = f0.length - 1; k >= 2; k--) if (f0[k] > 0 && f0[k - 1] > 0 && f0[k - 2] > 0) { v1 = k; break; }
+  if (v0 < 0 || v1 <= v0) return null;
+  /* a pitch frame is 40 ms wide and starts every 10 ms: its middle sits two energy frames in */
+  let a = Math.min(n - 1, v0 + 1), b = Math.min(n - 1, v1 + 3);
+  /* Out along the energy for the unvoiced sounds. A final "t", "d" or "tch" is a moment of
+     silence and then a burst, so a short dip is stepped over rather than taken as the end -
+     stopping at the dip cut the release off "don't", "witch", "believed" and "admit". */
+  for (let k = a - 1, seen = a, stop = Math.max(0, a - 25); k >= stop; k--) {   /* 250 ms back, 80 ms dips */
+    if (db[k] > gate) { seen = k; a = k; } else if (seen - k > 8) break;
+  }
+  for (let k = b + 1, seen = b, stop = Math.min(n - 1, b + 35); k <= stop; k++) { /* 350 ms on, 120 ms dips */
+    if (db[k] > gate) { seen = k; b = k; } else if (k - seen > 12) break;
+  }
+
+  let e = 0, c = 0;
+  for (let k = a; k <= b; k++) if (db[k] > gate) { e += Math.pow(10, db[k] / 10); c++; }
+
+  /* the room: the quietest 300 ms outside the voice, or anywhere if the take is tight */
+  const win = 30;
+  let at = -1, low = Infinity;
+  const look = (from, to) => {
+    for (let k = from; k + win <= to; k += 2) {
+      let s = 0;
+      for (let j = k; j < k + win; j++) s += Math.pow(10, db[j] / 10);
+      if (s < low) { low = s; at = k; }
+    }
+  };
+  look(0, Math.max(0, a - 5));
+  look(Math.min(n, b + 20), n);
+  if (at < 0) look(0, n);
+
+  return { start: a * hop, end: Math.min(x.length, (b + 1) * hop),
+    level: 10 * Math.log10(e / Math.max(1, c)),
+    room: at < 0 ? null : [at * hop, Math.min(x.length, (at + win) * hop)] };
+}
+
+/* as long as asked, made of the take's own quiet: copies laid end to end with long
+   overlaps, every other one backwards, so no loop can be heard in it */
+function roomTone(x, room, seconds, gain) {
+  const len = Math.max(1, Math.round(seconds * OUT_SR));
+  const out = new Float32Array(len);
+  if (!room) return out;
+  const src = x.subarray(room[0], room[1]), m = src.length;
+  if (m < 64) return out;
+  const fade = Math.min(Math.floor(m / 3), Math.round(0.05 * OUT_SR));
+  const step = m - fade;
+  for (let start = 0, flip = false; start < len; start += step, flip = !flip) {
+    for (let j = 0; j < m && start + j < len; j++) {
+      const v = src[flip ? m - 1 - j : j] * gain;
+      let w = 1;
+      if (j < fade && start > 0) w = Math.sin((j / fade) * Math.PI / 2);
+      else if (j >= m - fade) w = Math.cos(((j - (m - fade)) / fade) * Math.PI / 2);
+      out[start + j] += v * w;          /* sin and cos: equal power, since the copies are unrelated noise */
+    }
+  }
+  return out;
+}
+
+/* pieces laid end to end, each seam an equal-power crossfade no longer than either side can give */
+function joined(pieces) {
+  let total = 0;
+  for (let k = 0; k < pieces.length; k++) total += pieces[k].pcm.length - (k ? pieces[k].overlap : 0);
+  const out = new Float32Array(Math.max(1, total));
+  let at = 0;
+  pieces.forEach((p, k) => {
+    const o = k ? p.overlap : 0;
+    at -= o;
+    for (let j = 0; j < p.pcm.length; j++) {
+      if (j < o) {
+        const t = (j + 0.5) / o;
+        out[at + j] = out[at + j] * Math.cos(t * Math.PI / 2) + p.pcm[j] * Math.sin(t * Math.PI / 2);
+      } else {
+        out[at + j] = p.pcm[j];
+      }
+    }
+    at += p.pcm.length;
+  });
+  return out;
+}
+
+async function buildSpeech(tell) {
+  const lines = [];
+  for (let i = 0; i < S.length; i++) {
+    const t = bests[i];
+    if (!t || !t.blob) continue;
+    tell("Listening to part " + S[i].n + "…");
+    const raw = await t.blob.arrayBuffer();
+    const skip = skipOf(t);
+    const x = cut(await pcmAt(raw.slice(0), OUT_SR), skip, OUT_SR);
+    const span = voiceSpan(x, OUT_SR, track(levelled(cut(await pcmAt(raw.slice(0), SR), skip, SR))));
+    if (span) lines.push({ i: i, x: x, span: span, take: t });
+  }
+  if (!lines.length) return null;
+
+  /* Loudness. The script wants the voice to drop from line 7 to line 16 and come back at 17, so
+     lines are NOT made equal - that would iron the quiet section flat. A line is only moved when it
+     stands out from its own neighbours, the mark of a take recorded nearer or further from the
+     microphone, and then only by what exceeds STEADY dB. A whole quiet section is its own neighbour
+     and stays quiet. */
+  /* Each side is asked separately and the line is judged by the side it agrees with better:
+     the first line of the quiet section agrees with the lines after it, the last with the lines
+     before it, so a section's edges are never dragged back toward the loud part. */
+  const STEADY = 4, LEFT_IN = 1, REACH = 8;
+  const levelOf = (from, to) => {
+    const v = [];
+    for (let j = Math.max(0, from); j <= Math.min(lines.length - 1, to); j++) v.push(lines[j].span.level);
+    return v.length ? median(v) : null;
+  };
+  lines.forEach((l, k) => {
+    const left = levelOf(k - 3, k - 1), right = levelOf(k + 1, k + 3);
+    const offs = [left, right].filter((v) => v !== null).map((v) => l.span.level - v);
+    const off = offs.length ? offs.reduce((a, b) => (Math.abs(b) < Math.abs(a) ? b : a)) : 0;
+    const fix = Math.abs(off) <= STEADY ? 0 : -(off - Math.sign(off) * LEFT_IN);
+    l.moved = Math.max(-REACH, Math.min(REACH, fix));
+    l.gain = Math.pow(10, l.moved / 20);
+  });
+
+  /* The guide's rests, with the long ones eased. They were designed at 0.2-1.2 s and then all
+     stretched about 2.2 times to bring the guide to 1:48; in the guide that reads as drama, but
+     between two separate takes a 2.7 s hole sounds like the recording stopped. Rests up to KNEE
+     stay as they are; beyond it only OVER of the extra is kept, so the longest rests are still the
+     longest (after lines 21, 16, 10 and 26) and the rhythm keeps its shape. */
+  const KNEE = 1.1, OVER = 0.4;
+  const eased = (p) => (p <= KNEE ? p : KNEE + (p - KNEE) * OVER);
+  const spoken = lines.reduce((s, l) => s + (l.span.end - l.span.start) / OUT_SR, 0);
+  const rests = lines.map((l, k) => (k < lines.length - 1 ? eased(S[l.i].pause) : 0));
+  /* and pulled in evenly only if the speech would otherwise run past 1:58 */
+  const resting = rests.reduce((a, b) => a + b, 0);
+  let squeeze = 1;
+  if (LEAD + spoken + resting + TAIL > FIT && resting > 0) {
+    squeeze = Math.max(0.6, (FIT - LEAD - TAIL - spoken) / resting);
+  }
+
+  const pieces = [];
+  const xf = Math.round(XF * OUT_SR);
+  lines.forEach((l, k) => {
+    tell("Putting part " + S[l.i].n + " in place…");
+    const before = k === 0 ? LEAD : rests[k - 1] * squeeze;
+    const after = k === lines.length - 1 ? TAIL : rests[k] * squeeze;
+    /* the take's own air either side of the voice: up to half the rest less a crossfade, so there
+       is always room for a stretch of room tone between two takes and the rest comes out exact */
+    const head = Math.min(l.span.start, Math.round(Math.max(0, Math.min(before / 2 - XF, 0.35)) * OUT_SR));
+    const tail = Math.min(l.x.length - l.span.end, Math.round(Math.max(0, Math.min(after / 2 - XF, 0.6)) * OUT_SR));
+    const from = l.span.start - head, to = l.span.end + tail;
+    const pcm = new Float32Array(to - from);
+    for (let j = 0; j < pcm.length; j++) pcm[j] = l.x[from + j] * l.gain;
+
+    /* the rest before this line: its missing middle is room tone from the line before it */
+    const prev = pieces.length ? pieces[pieces.length - 1] : null;
+    const have = (prev ? prev.tail : 0) + head;
+    const lap1 = prev ? Math.min(xf, prev.tail, Math.round(0.5 * OUT_SR)) : 0;
+    const lap2 = Math.min(xf, head);
+    const needed = Math.round(before * OUT_SR) - have + lap1 + lap2;
+    if (needed > lap1 + lap2 + Math.round(0.01 * OUT_SR)) {
+      const src = prev ? prev.line : l;
+      pieces.push({ pcm: roomTone(src.x, src.span.room, needed / OUT_SR, src.gain), overlap: lap1, tail: 0 });
+      pieces.push({ pcm: pcm, overlap: lap2, tail: tail, line: l });
+    } else {
+      pieces.push({ pcm: pcm, overlap: prev ? Math.min(lap1, head) : 0, tail: tail, line: l });
+    }
+  });
+  /* the air after the last word */
+  const last = pieces[pieces.length - 1];
+  const more = Math.round(TAIL * OUT_SR) - last.tail;
+  if (more > xf) pieces.push({ pcm: roomTone(last.line.x, last.line.span.room, (more + xf) / OUT_SR, last.line.gain),
+    overlap: Math.min(xf, last.tail), tail: 0 });
+
+  tell("Mixing…");
+  const out = joined(pieces);
+  let peak = 0;
+  for (let j = 0; j < out.length; j++) peak = Math.max(peak, Math.abs(out[j]));
+  const lift = peak > 0 ? Math.min(4, 0.89 / peak) : 1;          /* peaks at -1 dB, never pushed past 12 dB */
+  const edge = Math.round(0.01 * OUT_SR);
+  for (let j = 0; j < out.length; j++) {
+    let w = lift;
+    if (j < edge) w *= j / edge;
+    else if (j >= out.length - edge) w *= (out.length - 1 - j) / edge;
+    out[j] *= w;
+  }
+  const scores = lines.map((l) => l.take.score);
+  return {
+    pcm: out, seconds: out.length / OUT_SR, lines: lines.length, squeeze: squeeze,
+    average: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length),
+    missing: S.filter((s, i) => !lines.some((l) => l.i === i)).map((s) => s.n),
+    used: lines.map((l) => ({ i: l.i, take: l.take })),
+    levels: lines.map((l) => ({ n: S[l.i].n, db: +l.span.level.toFixed(1), moved: +l.moved.toFixed(1) }))
+  };
+}
+
+/* MP3 for the file itself: small enough to send, and what upload forms accept.
+   The encoder is fetched only when a speech is first put together. */
+let lameLoad = null;
+function lame() {
+  if (window.lamejs) return Promise.resolve(window.lamejs);
+  lameLoad = lameLoad || new Promise((ok, no) => {
+    const s = document.createElement("script");
+    s.src = "https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js";
+    s.integrity = "sha384-xuasJXVcyv3hZq0eYpelEkBC8l4yufatZXDsKuyCU2rqfhDCb+ftuE/mSfZAteiK";
+    s.crossOrigin = "anonymous";
+    s.onload = () => (window.lamejs ? ok(window.lamejs) : no(new Error("no encoder")));
+    s.onerror = () => { lameLoad = null; no(new Error("no encoder")); };
+    document.head.appendChild(s);
+  });
+  return lameLoad;
+}
+
+/* Let the page repaint between chunks of work. Not setTimeout: in a background tab the browser
+   holds timers back to once a second or slower, and the encoder crawled to a halt the moment
+   another tab was in front. A message to itself is not held back. */
+function breathe() {
+  return new Promise((ok) => {
+    const ch = new MessageChannel();
+    ch.port1.onmessage = () => ok();
+    ch.port2.postMessage(0);
+  });
+}
+
+async function encoded(pcm, tell) {
+  try {
+    const L = await lame();
+    const enc = new L.Mp3Encoder(1, OUT_SR, 128);
+    const block = 1152, chunks = [];
+    const ints = new Int16Array(pcm.length);
+    for (let j = 0; j < pcm.length; j++) {
+      const v = Math.max(-1, Math.min(1, pcm[j]));
+      ints[j] = v < 0 ? v * 0x8000 : v * 0x7fff;
+    }
+    for (let j = 0, round = 0; j < ints.length; j += block, round++) {
+      const b = enc.encodeBuffer(ints.subarray(j, j + block));
+      if (b.length) chunks.push(new Int8Array(b));
+      if (round % 300 === 0) {
+        tell("Saving as MP3… " + Math.round(100 * j / ints.length) + "%");
+        await breathe();
+      }
+    }
+    const end = enc.flush();
+    if (end.length) chunks.push(new Int8Array(end));
+    return { blob: new Blob(chunks, { type: "audio/mpeg" }), ext: "mp3" };
+  } catch (e) {
+    return { blob: wavOf(pcm, OUT_SR), ext: "wav" };    /* no encoder to be had: a WAV plays everywhere */
+  }
+}
+
+function forgetSpeech() {
+  if (run && run.url) URL.revokeObjectURL(run.url);
+  run = null;
+  $("run-audio").hidden = true;
+  $("run-audio").removeAttribute("src");
+}
+
+function status(html) {
+  $("run-status").hidden = !html;
+  $("run-status").innerHTML = html || "";
+}
+
+async function speech() {
+  if (use === "whole" && whole) {
+    return Object.assign({}, whole, { lines: S.length, squeeze: 1, missing: [], used: [],
+      name: "Fingerprint_speech_onego_" + (who ? who.replace(/[^A-Za-z0-9]+/g, "-") + "_" : "") + today() + "." + whole.ext });
+  }
+  if (run) return run;
+  const made = await buildSpeech((m) => status("<span>" + esc(m) + "</span>"));
+  if (!made) return null;
+  const file = await encoded(made.pcm, (m) => status("<span>" + esc(m) + "</span>"));
+  made.pcm = null;
+  run = Object.assign(made, file, {
+    url: URL.createObjectURL(file.blob),
+    name: "Fingerprint_speech_" + (who ? who.replace(/[^A-Za-z0-9]+/g, "-") + "_" : "") + today() + "." + file.ext
+  });
+  return run;
+}
+
+function describe(r) {
+  const secs = Math.round(r.seconds), m = Math.floor(secs / 60), s = secs % 60;
+  if (r.whole) return m + ":" + String(s).padStart(2, "0") + "  ·  recorded in one go";
+  return m + ":" + String(s).padStart(2, "0") + "  ·  " + r.lines + (r.lines === 1 ? " part  ·  " : " parts  ·  ") +
+    (r.squeeze < 0.999 ? "rests shortened to " + Math.round(r.squeeze * 100) + "% to finish by 1:58"
+      : "rests follow the guide");
+}
+
+let working = false;
+function busy(on) {
+  working = on;
+  const none = use === "whole" ? !whole : !bests.some(Boolean);
+  ["run-send", "run-listen", "run-save"].forEach((id) => { $(id).disabled = on || none; });
+  $("run-clear").disabled = on || (!bests.some(Boolean) && !whole);
+  $("onego-open").disabled = on || !canRecord;
+}
+
+async function listenSpeech() {
+  busy(true);
+  try {
+    const r = await speech();
+    if (!r) { status('<span class="bad">No take could be used yet. Record a few parts first.</span>'); return; }
+    status("<span>" + describe(r) + "</span>" + (r.seconds > 120 ? '<span class="bad">Over 2:00: read faster or trim a rest.</span>' : ""));
+    $("run-audio").src = r.url;
+    $("run-audio").hidden = false;
+    $("run-audio").play().catch(() => {});
+    log("speech heard", { seconds: +r.seconds.toFixed(1), score: r.average, detail: describe(r) });
+  } catch (e) {
+    status('<span class="bad">That could not be put together: ' + esc(String((e && e.message) || e)) + "</span>");
+  } finally { busy(false); }
+}
+
+async function saveSpeech() {
+  busy(true);
+  try {
+    const r = await speech();
+    if (!r) return;
+    const a = document.createElement("a");
+    a.href = r.url;
+    a.download = r.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    log("speech saved", { seconds: +r.seconds.toFixed(1), score: r.average, detail: "downloaded " + r.name });
+  } finally { busy(false); }
+}
+
+function asText(blob) {
+  return new Promise((ok, no) => {
+    const fr = new FileReader();
+    fr.onload = () => ok(String(fr.result).split(",")[1] || "");
+    fr.onerror = () => no(fr.error);
+    fr.readAsDataURL(blob);
+  });
+}
+
+let sendAnyway = false;
+async function sendSpeech() {
+  if (!LOG_URL) {
+    status('<span class="bad">Sending is not set up on this copy of the page. Use Save a copy and send the file to your teacher.</span>');
+    return;
+  }
+  const missing = use === "whole" && whole ? [] : S.filter((s, i) => !bests[i]).map((s) => s.n);
+  if (missing.length && !sendAnyway) {
+    status('<span class="bad">Part' + (missing.length > 1 ? "s " : " ") + listed(missing) + " still have no take.</span>" +
+      '<button class="link" id="run-anyway" type="button">Send it anyway</button>');
+    $("run-anyway").addEventListener("click", () => { sendAnyway = true; sendSpeech(); });
+    return;
+  }
+  sendAnyway = false;
+  busy(true);
+  try {
+    const r = await speech();
+    if (!r) { status('<span class="bad">No take could be used yet.</span>'); return; }
+    status("<span>Sending " + describe(r) + "…</span>");
+    /* the finished file, and beside it the take each line came from, in case a line needs another look */
+    const parts = await Promise.all(r.used.map(async (u) => ({
+      name: "part" + String(S[u.i].n).padStart(2, "0") + "_take" + u.take.n + "_" + u.take.score + "pct." + (u.take.ext || "webm"),
+      mime: u.take.blob.type || "audio/webm",
+      data: await asText(u.take.blob)
+    })));
+    const body = JSON.stringify({ upload: {
+      name: r.name, mime: r.blob.type, data: await asText(r.blob),
+      page: "premier", student: who, seconds: +r.seconds.toFixed(1), lines: r.lines, average: r.average,
+      missing: r.missing, squeeze: +r.squeeze.toFixed(2), parts: parts
+    } });
+    let reply = null;
+    try {
+      const res = await fetch(LOG_URL, { method: "POST", body: new Blob([body], { type: "text/plain;charset=utf-8" }) });
+      reply = await res.json();
+    } catch (e) {
+      /* the browser may refuse to show the answer even when the file has arrived */
+      status('<span>Sent, but the page could not hear back. Ask your teacher whether it arrived before sending again.</span>');
+      log("speech sent", { seconds: +r.seconds.toFixed(1), score: r.average, detail: "sent, no reply read: " + r.name });
+      return;
+    }
+    if (reply && reply.ok) {
+      const at = new Date();
+      status('<span class="good">✓ Sent to your teacher at ' + String(at.getHours()).padStart(2, "0") + ":" +
+        String(at.getMinutes()).padStart(2, "0") + "</span><span>" + describe(r) + "</span>");
+      log("speech sent", { seconds: +r.seconds.toFixed(1), score: r.average, detail: "sent " + r.name });
+    } else {
+      status('<span class="bad">Your teacher\'s folder did not take it' + (reply && reply.error ? ": " + esc(reply.error) : "") +
+        ". Use Save a copy and send the file instead.</span>");
+    }
+  } catch (e) {
+    status('<span class="bad">That did not send: ' + esc(String((e && e.message) || e)) + "</span>");
+  } finally { busy(false); }
+}
+
+/* ======================================================================
+   In one go: the whole script on one screen and the microphone open from the
+   first word to the last. No guide plays, so nothing can leak into it. The take
+   is cut down to the voice at either end and brought to the same peak as the
+   line-by-line speech; nothing in between is touched.
+   ====================================================================== */
+const ONEGO_MAX = 130;     /* the microphone closes itself here, well past the limit */
+const wholeSlot = () => (who || "?").toLowerCase() + "#whole";
+const hhmm = (ms) => { const d = new Date(ms || Date.now()); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
+let stageRec = null, stageT0 = 0, stageTimer = 0, stageCount = 0;
+
+(function stageScript() {
+  let html = "";
+  S.forEach((s) => {
+    html += "<h3>" + esc(s.section) + "</h3>";
+    /* the first words of each part stay when the words are hidden: the cue, as on stage */
+    const toks = s.tokens.map((tk, k) => {
+      const word = isStress(s, k) ? '<span class="s">' + esc(tk) + "</span>" : esc(tk);
+      return (k >= 3 ? '<span class="hw">' + word + "</span>" : word) + markAfter(s, k).replace('class="bk', 'class="r bk');
+    }).join(" ");
+    const rest = s.pause > 0 ? '<span class="r" title="rest ' + s.pause.toFixed(1) + ' s">//</span>' : "";
+    html += '<p><span class="n">' + s.n + "</span>" + toks + rest + "</p>";
+  });
+  $("stage-script").innerHTML = html;
+})();
+
+function stageMsg(html) { $("stage-msg").innerHTML = html; }
+function stageIdle() {
+  stageMsg(whole
+    ? "Your last one-go recording is " + fmt(whole.seconds) + ". Start again to replace it, or close this and send it."
+    : "Read the whole script straight through. The guide does not play, so headphones are not needed. " +
+      "Aim to finish between 1:45 and 1:58. <b>/</b> is a breath, <b>//</b> a real stop. " +
+      "Press <b>Hide the words</b> to practise it from memory.");
+  $("stage-audio").hidden = !whole;
+  if (whole) $("stage-audio").src = whole.url;
+}
+
+function openStage() {
+  endWait();
+  dropTake();
+  hush();
+  setIcon(false);
+  $("stage").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("stage-now").textContent = "0:00";
+  $("stage-fill").style.width = "0";
+  $("stage-clock").classList.remove("over");
+  $("stage-meter").classList.remove("over");
+  stageIdle();
+  $("stage-go").focus();
+}
+function closeStage() {
+  if (stageCount) { clearInterval(stageCount); stageCount = 0; resetGo(); }
+  if (stageRec && stageRec.state === "recording") stageRec.stop();    /* closing keeps what was said */
+  $("stage-audio").pause();
+  $("stage").hidden = true;
+  document.body.style.overflow = "";
+  $("onego-open").focus();
+}
+function resetGo() {
+  $("stage-go").classList.remove("rec");
+  $("stage-go").textContent = whole ? "Record again" : "Start recording";
+  $("stage-go").disabled = false;
+}
+
+function stageTick() {
+  const t = (performance.now() - stageT0) / 1000;
+  $("stage-now").textContent = fmt(t);
+  $("stage-fill").style.width = Math.min(100, t / 120 * 100) + "%";
+  const over = t > FIT;
+  $("stage-clock").classList.toggle("over", over);
+  $("stage-meter").classList.toggle("over", over);
+  if (t >= ONEGO_MAX && stageRec && stageRec.state === "recording") stageRec.stop();
+}
+
+async function stageGo() {
+  if (stageRec && stageRec.state === "recording") { stageRec.stop(); return; }
+  if (stageCount) { clearInterval(stageCount); stageCount = 0; resetGo(); stageIdle(); return; }
+  $("stage-audio").pause();
+  hush();
+  stageMsg("Getting the microphone ready&hellip;");
+  if (!(await armMic("one go"))) {
+    stageMsg('<span class="bad">The browser would not hand over the microphone. Allow it next to the address bar, then press Start again.</span>');
+    return;
+  }
+  setHint();
+  $("stage-audio").hidden = true;
+  /* three seconds to breathe and look at line 1; the microphone is not recording yet */
+  let n = 3;
+  $("stage-go").textContent = "Cancel";
+  stageMsg("Starting in <b>" + n + "</b>&hellip;");
+  stageCount = setInterval(() => {
+    if (--n > 0) { stageMsg("Starting in <b>" + n + "</b>&hellip;"); return; }
+    clearInterval(stageCount);
+    stageCount = 0;
+    stageStart();
+  }, 1000);
+}
+
+function stageStart() {
+  clearTimeout(idle);
+  const chunks = [];
+  let mine;
+  try { mine = new MediaRecorder(stream, { audioBitsPerSecond: 128000 }); }
+  catch (e) { mine = new MediaRecorder(stream); }
+  const type = mine.mimeType || "audio/webm";
+  const skip = settle();
+  stageRec = mine;
+  mine.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+  mine.onstop = async () => {
+    clearInterval(stageTimer);
+    stageRec = null;
+    letMicGo();
+    $("stage-go").classList.remove("rec");
+    $("stage-go").disabled = true;
+    stageMsg("Tidying the ends&hellip;");
+    try {
+      const made = await tidyWhole(new Blob(chunks, { type: type }), skip);
+      if (!made) { stageMsg('<span class="bad">I could not hear a voice in that. Check the microphone and try again.</span>'); return; }
+      if (whole && whole.url) URL.revokeObjectURL(whole.url);
+      whole = Object.assign(made, { url: URL.createObjectURL(made.blob), at: Date.now(), whole: true });
+      use = "whole";
+      try { localStorage.setItem("premier-use", use); } catch (e) {}
+      keepWhole();
+      runBar();
+      const s = whole.seconds;
+      stageMsg((s > 120 ? '<span class="bad">' + fmt(s) + ": over the 2:00 limit. Read a little faster or shorten the long rests.</span>"
+        : s > FIT ? '<span class="bad">' + fmt(s) + ": under 2:00, but past 1:58. Too close to the limit.</span>"
+        : s < 105 ? "<span>" + fmt(s) + ": inside the limit, but quicker than 1:45. Let the pauses breathe.</span>"
+        : '<span class="good">' + fmt(s) + ": right in the window.</span>") +
+        " Listen back below. It is now the recording that gets sent; close this to send it.");
+      $("stage-audio").src = whole.url;
+      $("stage-audio").hidden = false;
+      log("one go", { seconds: +s.toFixed(1), detail: "recorded the whole speech in one go: " + fmt(s) });
+    } catch (e) {
+      stageMsg('<span class="bad">That could not be read: ' + esc(String((e && e.message) || e)) + "</span>");
+    } finally { resetGo(); }
+  };
+  mine.start(1000);
+  stageT0 = performance.now();
+  $("stage-go").classList.add("rec");
+  $("stage-go").textContent = "Stop";
+  stageMsg("Recording. Press <b>Stop</b> after your last word.");
+  stageTimer = setInterval(stageTick, 200);
+  stageTick();
+}
+
+/* the voice, from its first sound to its last, with the guide's own air either side */
+async function tidyWhole(blob, skip) {
+  const x = cut(await pcmAt(await blob.arrayBuffer(), OUT_SR), skip, OUT_SR);
+  const hop = Math.round(0.01 * OUT_SR), n = Math.floor(x.length / hop);
+  if (n < 100) return null;
+  const db = new Float64Array(n);
+  for (let k = 0; k < n; k++) {
+    let p = 0;
+    for (let j = k * hop, end = j + hop; j < end; j++) p += x[j] * x[j];
+    db[k] = 10 * Math.log10(p / hop + 1e-12);
+  }
+  const sorted = Array.from(db).sort((a, b) => a - b);
+  const floor = sorted[Math.floor(n * 0.2)], peak = sorted[Math.floor(n * 0.99)];
+  if (peak - floor < 12) return null;
+  const gate = Math.min(peak - 20, Math.max(floor + 10, peak - 38));
+  /* five loud frames in a row: a click or a knock on the desk is shorter than a syllable */
+  const loud = (k) => { for (let j = k; j < k + 5; j++) if (!(db[j] > gate)) return false; return true; };
+  let a = -1, b = -1;
+  for (let k = 0; k + 5 <= n; k++) if (loud(k)) { a = k; break; }
+  for (let k = n - 5; k >= 0; k--) if (loud(k)) { b = k + 4; break; }
+  if (a < 0 || b <= a) return null;
+  /* a final consonant can trail under the gate; give it 150 ms more before the air starts */
+  const from = Math.max(0, a * hop - Math.round(LEAD * OUT_SR));
+  const to = Math.min(x.length, (b + 1) * hop + Math.round((TAIL + 0.15) * OUT_SR));
+  const out = x.slice(from, to);
+  let top = 0;
+  for (let j = 0; j < out.length; j++) top = Math.max(top, Math.abs(out[j]));
+  const lift = top > 0 ? Math.min(4, 0.89 / top) : 1;
+  const edge = Math.round(0.01 * OUT_SR);
+  for (let j = 0; j < out.length; j++) {
+    let w = lift;
+    if (j < edge) w *= j / edge;
+    else if (j >= out.length - edge) w *= (out.length - 1 - j) / edge;
+    out[j] *= w;
+  }
+  const file = await encoded(out, (m) => stageMsg(esc(m)));
+  return { blob: file.blob, ext: file.ext, seconds: out.length / OUT_SR };
+}
+
+async function keepWhole() {
+  try {
+    const db = await vault();
+    db.transaction(SHELF, "readwrite").objectStore(SHELF).put(
+      { blob: whole.blob, ext: whole.ext, seconds: whole.seconds, at: whole.at }, wholeSlot());
+  } catch (e) {}
+}
+
+$("onego-open").addEventListener("click", openStage);
+$("stage-go").addEventListener("click", stageGo);
+$("stage-close").addEventListener("click", closeStage);
+$("stage-hide").addEventListener("click", () => {
+  const blind = $("stage-script").classList.toggle("blind");
+  $("stage-hide").textContent = blind ? "Show the words" : "Hide the words";
+  $("stage-hide").setAttribute("aria-pressed", String(blind));
+  log(blind ? "words hidden" : "words shown", { detail: "one-go screen" });
+});
+$("stage").addEventListener("keydown", (e) => { if (e.key === "Escape") closeStage(); });
+document.querySelectorAll('input[name="use"]').forEach((r) => r.addEventListener("change", () => {
+  use = r.value;
+  try { localStorage.setItem("premier-use", use); } catch (e) {}
+  $("run-audio").pause();
+  $("run-audio").hidden = true;
+  status("");
+  runBar();
+}));
+$("run-send").addEventListener("click", sendSpeech);
+$("run-listen").addEventListener("click", listenSpeech);
+$("run-save").addEventListener("click", saveSpeech);
+$("run-clear").addEventListener("click", clearTakes);
+
+$("script").addEventListener("click", (e) => {
+  const btn = e.target.closest(".take button");
+  if (!btn) return;
+  e.stopPropagation();
+  const i = rows.indexOf(btn.closest(".line"));
+  if (i < 0) return;
+  if (btn.classList.contains("mic")) return toggleRec(i, btn);
+  const act = btn.dataset.do;
+  if (act === "mine") playMine(i);
+  else if (act === "best") playMine(i, "best");
+  else if (act === "guide") playLine(i);
+  else if (act === "save") saveTake(i);
+});
+
+if (!canRecord) {
+  document.querySelectorAll(".take .mic").forEach((b) => {
+    b.disabled = true;
+    b.textContent = "Recording needs Chrome or Safari on the https link";
+  });
+}
+
+runBar();
+drawTunes();
+const host = panels.find(Boolean);
+if (host && window.ResizeObserver) {
+  new ResizeObserver(() => requestAnimationFrame(drawTunes)).observe(host.parentElement);
+} else {
+  addEventListener("resize", drawTunes);
+}
+tick();
+</script>
